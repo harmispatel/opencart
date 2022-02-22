@@ -14,7 +14,9 @@ class Users extends Authenticatable
 
     public $table = "oc_user";
 
-    protected $primarykey = 'user_id';
+    protected $primaryKey = 'user_id';
+
+    public $timestamps = false;
 
     /**
      * The attributes that should be hidden for serialization.

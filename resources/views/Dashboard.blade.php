@@ -22,44 +22,71 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        @if(Session::has('success'))
+        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                {{ Session::get('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+       @endif
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <!-- col start -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                {{-- <h3>{{ count($categoriescount) }}</h3> --}}
-                <p>Categories</p>
-              </div>
-              <div class="icon">
-                <i class="fas fa-list-alt"></i>
-              </div>
-              <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+            <!-- col start -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>{{ (isset($users)) ? count($users) : 0 }}</h3>
+                    <p>Users</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-user-alt"></i>
+                </div>
+                <a href="{{ route('users') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
             </div>
-          </div>
-          <!-- ./col -->
-          <!-- col start -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                {{-- <h3>{{ count($subcategoriescount) }}</h3> --}}
-                <p>Sub Categories</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-columns"></i>
-              </div>
-              <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <!-- ./col -->
+
+            <!-- col start -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>0</h3>
+                    <p>Categories</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-list-alt"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
             </div>
-          </div>
-          <!-- ./col -->
+            <!-- ./col -->
+
+            <!-- col start -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                <div class="inner">
+                    <h3>0</h3>
+                    <p>Sub Categories</p>
+                </div>
+                <div class="icon">
+                    <i class="fa fa-columns"></i>
+                </div>
+                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+
           <!-- col start -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                {{-- <h3>{{ count($productscount) }}</h3> --}}
+                <h3>0</h3>
                 <p>Product</p>
               </div>
               <div class="icon">
@@ -69,6 +96,7 @@
             </div>
           </div>
           <!-- ./col -->
+
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->

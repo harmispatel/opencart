@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,6 +38,7 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-        return view('Dashboard');
+        $data['users'] = Users::get();
+        return view('dashboard',$data);
     }
 }

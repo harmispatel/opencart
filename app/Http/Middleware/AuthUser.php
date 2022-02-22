@@ -4,8 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+use function PHPUnit\Framework\returnSelf;
+
+class AuthUser
 {
     /**
      * Handle an incoming request.
@@ -16,6 +19,14 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
+        if(!empty(auth()->user()))
+        {
 
+        }
+        else
+        {
+            return redirect()->route('admin')->with('error','Access Denied!');
+        }
+        return $next($request);
     }
 }
