@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AllUserController;
 use App\Http\Controllers\UserGroupController;
 use Illuminate\Support\Facades\Auth;
@@ -58,3 +59,7 @@ Route::get('category', [CategoryController::class, 'index'])->name('category');
 Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
 Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
 Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+
+
+//Products
+Route::get('product',[ProductController::class, 'index'])->name('product');
