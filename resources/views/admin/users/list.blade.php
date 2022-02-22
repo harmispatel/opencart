@@ -40,22 +40,24 @@
                                     Users List
                                 </h3>
                                 <a href="{{ route('adduser') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                <a href="#" class="btn btn-sm btn-danger ml-1"><i class="fa fa-trash"></i></a>
+                                <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                             </div>
                             {{-- End Card Header --}}
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
                                     <table class="table table-striped" id="usersGroup">
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" style="display: none" role="alert">
-                                            <p id="success-message" class="mb-0"></p>
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                              </button>
-                                        </div>
+                                        @if(Session::has('success'))
+                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                                                {{ Session::get('success') }}
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                       @endif
                                         <thead class="text-center">
                                             <th>
-                                                <input type="checkbox">
+                                                <input type="checkbox" id="delall">
                                             </th>
                                             <th>Username</th>
                                             <th>Status</th>
@@ -66,7 +68,7 @@
                                             @foreach ($users as $user)
                                                 <tr>
                                                     <td>
-                                                        <input type="checkbox" name="" id="{{ $user->id }}">
+                                                        <input type="checkbox" name="del_all" class="del_all" value="{{ $user->user_id }}">
                                                     </td>
                                                     <td>
                                                         {{ $user->username }}
@@ -86,7 +88,7 @@
                                                         {{ date('d/m/Y',strtotime($user->created_at)) }}
                                                     </td>
                                                     <td>
-                                                        <a href="" class="btn btn-sm btn-primary rounded">
+                                                        <a href="{{ route('edituser',$user->user_id) }}" class="btn btn-sm btn-primary rounded">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
                                                     </td>
@@ -125,52 +127,79 @@ $(document).ready(function() {
     $('#usersGroup').DataTable();
 } );
 
-// Delete Category
-// function deleteCat(id)
-// {
 
-//     swal({
-//             title: "Are you sure You want to Delete It ?",
-//             text: "Once deleted, you will not be able to recover this Record",
-//             icon: "warning",
-//             buttons: true,
-//             dangerMode: true,
-//         })
-//         .then((willDelete) => {
-//             if (willDelete)
-//             {
+// Select All Checkbox
+$('#delall').on('click', function(e) {
+    if($(this).is(':checked',true))
+    {
+        $(".del_all").prop('checked', true);
+    }
+    else
+    {
+        $(".del_all").prop('checked',false);
+    }
+});
+// End Select All Checkbox
 
-//                 $.ajax({
-//                         type: "POST",
-//                         url: '{{ url("/deleteCategory") }}',
-//                         data: {"_token": "{{ csrf_token() }}",'id':id},
-//                         dataType : 'JSON',
-//                         success: function (data)
-//                         {
-//                             if(data.success == 1)
-//                             {
-//                                 swal("Your Record has been deleted!", {
-//                                     icon: "success",
-//                                 });
+// Delete User
+$('.deletesellected').click(function()
+{
 
-//                                 $('.cat-list').html('');
-//                                 getCategories();
-//                             }
-//                         }
-//                 });
+    var checkValues = $('.del_all:checked').map(function()
+    {
+        return $(this).val();
+    }).get();
 
-//             }
-//             else
-//             {
-//                 swal("Cancelled");
-//             }
-//         });
+    if(checkValues !='')
+    {
+        swal({
+            title: "Are you sure You want to Delete It ?",
+            text: "Once deleted, you will not be able to recover this Record",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete)
+            {
 
+                $.ajax({
+                        type: "POST",
+                        url: '{{ url("deleteuser") }}',
+                        data: {"_token": "{{ csrf_token() }}",'id':checkValues},
+                        dataType : 'JSON',
+                        success: function (data)
+                        {
+                            if(data.success == 1)
+                            {
+                                swal("Your Record has been deleted!", {
+                                    icon: "success",
+                                });
 
-// }
-// End Delete Category
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 1500);
+                            }
+                        }
+                });
 
+            }
+            else
+            {
+                swal("Cancelled", "", "error");
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+        });
+    }
+    else
+    {
+        swal("Please select atleast One User", "", "warning");
+    }
+});
 
+// End Delete User
 
 
 </script>

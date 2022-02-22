@@ -30,18 +30,28 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/logout', [LoginController::class, 'logout']);
-
 Route::get('admin', [HomeController::class, 'adminLogin'])->name('admin');
-
+Route::get('login', [HomeController::class, 'adminLogin'])->name('login');
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
 
+// Group
+Route::group(['middleware' => 'AuthUser'],function ()
+{
+
+// Dashboard
+Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
 
 //Users
 Route::get('users', [AllUserController::class, 'index'])->name('users');
 Route::get('adduser', [AllUserController::class, 'add'])->name('adduser');
 Route::post('storeuser', [AllUserController::class, 'store'])->name('storeuser');
+Route::post('deleteuser', [AllUserController::class, 'deletemultiuser'])->name('deleteuser');
+Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
+Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
+
+Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
+Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
 
 // Users Group
@@ -58,3 +68,6 @@ Route::get('category', [CategoryController::class, 'index'])->name('category');
 Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
 Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
 Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+
+});
+

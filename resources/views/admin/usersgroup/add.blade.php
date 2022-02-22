@@ -48,6 +48,7 @@
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">
+
                                     <div class="form-group">
                                         <label for="usergroupname">User Group Name</label>
                                         <input type="text" name="usergroupName" id="usergroupName" class="form-control {{ ($errors->has('usergroupName')) ? 'is-invalid' : '' }}">
@@ -57,6 +58,70 @@
                                             </div>
                                         @endif
                                     </div>
+
+                                    {{-- <div class="form-group" >
+                                        <label for="permissions">Access Permissions</label>
+
+                                        <div class="container" style="overflow-y: scroll; box-sizing: border-box; max-height: 150px;border: 1px solid #d7dbdf;border-radius: 5px;padding:10px;">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label>Category</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--view</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--add</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--edit</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                            </div><hr>
+
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label>Sub Category</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--view</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--add</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--edit</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                            </div><hr>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label>Sub Category</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--view</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--add</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>--edit</label>
+                                                    <input type="checkbox" name="" id="">
+                                                </div>
+                                            </div><hr>
+                                        </div>
+
+                                    </div> --}}
+
                                 </div>
                                 {{-- End Card Body --}}
 
