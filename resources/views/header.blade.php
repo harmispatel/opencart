@@ -31,6 +31,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css" integrity="sha512-g9k+CnZOpfd3BjCvr9L6M9F1u42RbYxtiurifk4KmqTNTyZRnKixRgZl6SzPESunaaCnyelHhKicHWcQUwALYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Select Box -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+  <!--SummerNote-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -58,20 +63,20 @@
                 Not Found
             @endif
           </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            @if(!empty(user_details()))
-                <a href="{{ route('profile',user_details()->user_id) }}" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item text-center bg-red">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              @if(!empty(user_details()))
+              <a href="{{ route('profile',user_details()->user_id) }}" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
+              <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item text-center bg-red">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
             @else
-                <a href="#" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
-                <a href="#" class="dropdown-item text-center bg-red">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
+            <a href="#" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
+            <a href="#" class="dropdown-item text-center bg-red">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
             @endif
             <div class="dropdown-divider"></div>
         </li>
@@ -110,7 +115,16 @@
                     <p>Categories</p>
                 </a>
               </li>
+
+
           {{-- @endif --}}
+
+          <li class="nav-item">
+            <a href="{{ route('product') }}" class="nav-link">
+                <i class="nav-icon fas fa-list-alt"></i>
+                <p>Products</p>
+            </a>
+          </li>
 
           {{-- @if(auth()->user()->user_group_id == 1) --}}
           {{-- Categories --}}
