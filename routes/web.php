@@ -72,6 +72,7 @@ Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->na
 
 
 //Products
-Route::get('product',[ProductController::class, 'index'])->name('product');
+Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
+Route::get('addproduct',[ProductController::class, 'index'])->name('addproduct');
 });
 

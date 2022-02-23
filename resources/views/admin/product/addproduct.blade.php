@@ -1,7 +1,7 @@
 @include('header')
 
-<link rel="stylesheet" href="sweetalert2.min.css">
-
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {{-- Section of List Category --}}
 <section>
     <div class="content-wrapper">
@@ -133,7 +133,7 @@
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-save">
                                         Save</i></button>
-                                <a href="{{ route('product') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
+                                <a href="{{ route('addproduct') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
                                         Back</i></a>
                             </div>
                         </div>
@@ -279,7 +279,7 @@
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-save">
                                         Save</i></button>
-                                <a href="{{ route('product') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
+                                <a href="{{ route('addproduct') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
                                         Back</i></a>
                             </div>
                         </div>
@@ -300,18 +300,20 @@
                         </div>
                         <div class="mb-3">
                             <label for="categories" class="form-label">Categories</label>
-                            <select class="form-control" name="categories[]" id="categories" multiple="multiple">
-                                {{-- <option selected>---None---</option> --}}
-                                @foreach ($result['category'] as $category)
+                                
+                                <select class="js-example-basic-multiple"  name="categories[]" multiple="multiple" style="width: 100%">
+                                    @foreach ($result['category'] as $category)
                                     <option value="{{ $category->name }}">{{ $category->name }}</option>
                                 @endforeach
-                              </select>
+                                  </select>
+                                
+                                
                         </div>
 
                         <div class="mb-3">
                             <label for="filters" class="form-label">Filters</label>
-                            <select class="form-control" name="filters[]" id="filters" multiple="multiple">
-                                <option selected>---None---</option>
+                            <select class="js-example-basic-multiple" name="filters[]" id="filters" multiple="multiple" style="width: 100%">
+                                
                               </select>
                         </div>
                         <div class="mb-3">
@@ -322,14 +324,16 @@
                         </div>
                         <div class="mb-3">
                             <label for="downloads" class="form-label">Downloads</label>
-                            <select class="form-control" name="downloads[]" id="downloads" multiple="multiple">
-                                <option selected>---None---</option>
+                            <select class="js-example-basic-multiple" name="downloads[]"  multiple="multiple" style="width: 100%">
                               </select>
                         </div>
 
                         <div class="mb-3">
                             <label for="related_products" class="form-label">Related Products</label>
-                            <select class="form-control" name="related_products[]" id="related_products" multiple="multiple">
+                            <select class="js-example-basic-multiple" name="related_products[]"  multiple="multiple" style="width: 100%">
+                                @foreach ($result['releted_product'] as $releted_product)
+                                    <option value="{{ $releted_product->name }}">{{ $releted_product->name }}</option>
+                                @endforeach
                               </select>
                         </div>
 
@@ -337,7 +341,7 @@
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-save">
                                         Save</i></button>
-                                <a href="{{ route('product') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
+                                <a href="{{ route('addproduct') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
                                         Back</i></a>
                             </div>
                         </div>
@@ -346,32 +350,271 @@
                 </div>
 
                 <div class="tab-pane fade" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
-                    attribute
+                   <form action="">
+                    <div class="tab-pane" id="tab-attribute">
+                        <div class="table-responsive">
+                          <table id="attribute" class="table table-striped table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                <td class="text-left">Attribute</td>
+                                <td class="text-left">Text</td>
+                                <td></td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                           </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colspan="2"></td>
+                                <td class="text-right"><button type="button" onclick="addAttribute();" data-toggle="tooltip" title="Add Attribute" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
+                   </form>
                 </div>
 
                 <div class="tab-pane fade" id="option" role="tabpanel" aria-labelledby="option-tab">
-                    option
+                    <div class="mb-3">
+                        <select  name="option" id="option" class="form-control" placeholder="Option" >
+                            <option selected disabled>---None---</option>
+                            @foreach ($result['option'] as $option)
+                            <option value="{{ $option->type }}">{{ $option->type }}</option>
+                        @endforeach
+                          </select>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="recurring" role="tabpanel" aria-labelledby="recurring-tab">
-                    recurring
+                    <form action="">
+                        <div class="tab-pane" id="tab-attribute">
+                            <div class="table-responsive">
+                              <table id="attribute" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <td class="text-left"><b>Recurring Profile</b></td>
+                                    <td class="text-left"><b>Customer Group</b></td>
+                                    <td></td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                               </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td colspan="2"></td>
+                                    <td class="text-right"><button type="button" onclick="recurring();" data-toggle="tooltip" title="Add Attribute" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>
+                       </form>
                 </div>
                 <div class="tab-pane fade" id="discount" role="tabpanel" aria-labelledby="discount-tab">
-                    discount
+                    <form action="">
+                        <div class="tab-pane" id="tab-discount">
+                            <div class="table-responsive">
+                              <table id="discount" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <td class="text-left"><b>Customer Group</b></td>
+                                    <td class="text-left"><b>Quantity</b></td>
+                                    <td class="text-left"><b>Priority</b></td>
+                                    <td class="text-left"><b>Price</b></td>
+                                    <td class="text-left"><b>Date Start</b></td>
+                                    <td class="text-left"><b>Date End</b></td>
+                                    <td></td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                               </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td colspan="6"></td>
+                                    <td class="text-right"><button type="button" onclick="discount();" data-toggle="tooltip" title="Add discount" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>
+                       </form>
                 </div>
                 <div class="tab-pane fade" id="special" role="tabpanel" aria-labelledby="special-tab">
-                    special
+                    <form action="">
+                        <div class="tab-pane" id="tab-special">
+                            <div class="table-responsive">
+                              <table id="special" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <td class="text-left"><b>Customer Group</b></td>
+                                    <td class="text-left"><b>Priority</b></td>
+                                    <td class="text-left"><b>Price</b></td>
+                                    <td class="text-left"><b>Date Start</b></td>
+                                    <td class="text-left"><b>Date End</b></td>
+                                    <td></td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                               </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td colspan="6"></td>
+                                    <td class="text-right"><button type="button" onclick="special();" data-toggle="tooltip" title="Add discount" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>
+                       </form>
                 </div>
                 <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
-                    image
+                    <form action="" method="" enctype="multipart/form-data">
+                        <div class="tab-pane" id="tab-image">
+                            <div class="table-responsive">
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    <input type="file" name="image" class="form-control" id="image" >
+                                    <img src="{{ asset('public/admin/image/en-gb.png') }}" height="100px" width="100px">
+                                </div>
+                              <table id="image" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <td class="text-left"><b>
+                                        Additional Images</b></td>
+                                    <td class="text-right"><b>Sort Order</b></td>
+                                    <td></td>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                               </tbody>
+                                <tfoot>
+                                  <tr>
+                                    <td colspan="2"></td>
+                                    <td class="text-right"><button type="button" onclick="product_image();" data-toggle="tooltip" title="Add discount" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                                  </tr>
+                                </tfoot>
+                              </table>
+                            </div>
+                          </div>
+                       </form>
                 </div>
                 <div class="tab-pane fade" id="reward_points" role="tabpanel" aria-labelledby="reward_points-tab">
-                    reward_points
+                    <form>
+                        <div class="mb-3">
+                            <label for="reward_points" class="form-label">Points</label>
+                            <input type="text" class="form-control" id="reward_points" placeholder="Points">
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-left"><b>Customer Group</b></td>
+                                            <td class="text-right"><b>Reward Points</b></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left">Default</td>
+                                            <td class="text-left">
+                                                <div class="input-group">
+                                                    <input type="text" name="name" class="form-control">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+    
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                            Save</i></button>
+                                    <a href="{{ route('addproduct') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left">
+                                            Back</i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
-                    seo
-                </div>
+                    <div class="alert alert-info"><i class="fa fa-info-circle"></i> Do not use spaces, instead replace spaces with - and make sure the SEO URL is globally unique.</div>
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-left">Stores</td>
+                                            <td class="text-left">Keyword</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left">Default</td>
+                                            <td class="text-left">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1"><img
+                                                            src="{{ asset('public/admin/image/en-gb.png') }}"></span>
+                                                    <input type="text" name="keyword" placeholder="Keyword"
+                                                        class="form-control">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                            Save</i></button>
+                                    <a href="{{ route('category') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left">
+                                            Back</i></a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                  
                 <div class="tab-pane fade" id="design" role="tabpanel" aria-labelledby="design-tab">
-                    design
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <td class="text-left">Stores</td>
+                                        <td class="text-left">Layout Override</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left">Default</td>
+                                        <td class="text-left">
+                                            <div class="input-group">
+                                                <select type="select" name="categor" value="" placeholder=""
+                                                    class="form-control">
+                                                    <option value=""></option>
+                                                    @foreach ($result['product_layout'] as $item)
+                                                        <option value="{{ $item->name }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                        Save</i></button>
+                                <a href="{{ route('addproduct') }}" class="btn btn-danger"><i
+                                        class="fa fa-arrow-left">
+                                        Back</i></a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 </section>
 {{-- End Form Section --}}

@@ -120,7 +120,7 @@
           {{-- @endif --}}
 
           <li class="nav-item">
-            <a href="{{ route('product') }}" class="nav-link">
+            <a href="{{ route('productlist') }}" class="nav-link">
                 <i class="nav-icon fas fa-list-alt"></i>
                 <p>Products</p>
             </a>
