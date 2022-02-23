@@ -22,13 +22,8 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- daterangepicker -->
-<<<<<<< HEAD
 {{-- <script src="{{ asset('public/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
-=======
-<script src="{{ asset('public/plugins/moment/moment.min.js') }}"></script>
-<script src="{{ asset('public/plugins/daterangepicker/daterangepicker.js') }}"></script>
->>>>>>> 39e6f446e6b2e0af490c6596ca57a47fe9f24586
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{ asset('public/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 <!-- overlayScrollbars -->
