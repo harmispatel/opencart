@@ -52,16 +52,18 @@ integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfoo
 integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
 </script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-<script>
+
+<script type="text/javascript">
+
     $('#summernote').summernote({
         height: 250,
     });
-</script>
-<script>
-$(document).ready(function() {
-    $('#categories').select2();
-});
-</script>
-</body>
 
+    $(document).ready(function() {
+        // $('#categories').select2();
+    });
+
+</script>
+
+</body>
 </html>
