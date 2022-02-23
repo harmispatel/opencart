@@ -65,7 +65,7 @@ class CategoryController extends Controller
         // print_r($_POST);
         // exit();
 
-       
+
 
         $data = DB::table('oc_category_description')->insert([
             'language_id' =>"1",
@@ -78,7 +78,7 @@ class CategoryController extends Controller
         $errors = "Insert success";
         return redirect()->back()->withErrors($errors);
 
-        
+
 
     }
 
@@ -89,7 +89,7 @@ class CategoryController extends Controller
             echo '<pre>';
             print_r($category_layout);
             exit();
-    
+
             // return view('newcategory')->with('category_layout', $category_layout);
             return view('newcategory', ['category_layout' => $category_layout]);
     }

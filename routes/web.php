@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AllUserController;
 use App\Http\Controllers\UserGroupController;
+use App\Http\Controllers\PermissionController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -40,36 +41,43 @@ Route::get('login', [HomeController::class, 'adminLogin'])->name('login');
 Route::group(['middleware' => 'AuthUser'],function ()
 {
 
-// Dashboard
-Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
+        // Dashboard
+        Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
 
-//Users
-Route::get('users', [AllUserController::class, 'index'])->name('users');
-Route::get('adduser', [AllUserController::class, 'add'])->name('adduser');
-Route::post('storeuser', [AllUserController::class, 'store'])->name('storeuser');
-Route::post('deleteuser', [AllUserController::class, 'deletemultiuser'])->name('deleteuser');
-Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
-Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
+        //Users
+        Route::get('users', [AllUserController::class, 'index'])->name('users');
+        Route::get('adduser', [AllUserController::class, 'add'])->name('adduser');
+        Route::post('storeuser', [AllUserController::class, 'store'])->name('storeuser');
+        Route::post('deleteuser', [AllUserController::class, 'deletemultiuser'])->name('deleteuser');
+        Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
+        Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
 
-Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
-Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
+        Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
+        Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
 
-// Users Group
-Route::get('usersgroup', [UserGroupController::class, 'index'])->name('usersgroup');
-Route::get('addusergroup', [UserGroupController::class, 'add'])->name('addusergroup');
-Route::post('storeusergroup', [UserGroupController::class, 'store'])->name('storeusergroup');
-Route::post('deleteusersgroup', [UserGroupController::class, 'deletemultiusergroup'])->name('deleteusersgroup');
-Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
-Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
+        // Permissions
+        Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
 
-// Category
-Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
-Route::get('category', [CategoryController::class, 'index'])->name('category');
-Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
-Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
-Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
 
+        // Users Group
+        Route::get('usersgroup', [UserGroupController::class, 'index'])->name('usersgroup');
+        Route::get('addusergroup', [UserGroupController::class, 'add'])->name('addusergroup');
+        Route::post('storeusergroup', [UserGroupController::class, 'store'])->name('storeusergroup');
+        Route::post('deleteusersgroup', [UserGroupController::class, 'deletemultiusergroup'])->name('deleteusersgroup');
+        Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
+        Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
+
+        // Category
+        Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
+        Route::get('category', [CategoryController::class, 'index'])->name('category');
+        Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
+        Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
+        Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+
+
+        //Products
+        Route::get('product',[ProductController::class, 'index'])->name('product');
 
 //Products
 Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
