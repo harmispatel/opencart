@@ -64,7 +64,7 @@ Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('e
 Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
 
 // Category
-Route::post('categoryAdd', [CategoryController::class, 'categoryAdd'])->name('categoryAdd');
+Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
 Route::get('category', [CategoryController::class, 'index'])->name('category');
 Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
 Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');

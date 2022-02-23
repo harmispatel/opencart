@@ -59,7 +59,13 @@ integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifw
     $('#summernote').summernote({
         height: 250,
     });
+
+    $(document).ready(function() {
+        // $('#categories').select2();
+    });
+
 </script>
+<<<<<<< HEAD
 <script>
          
             $(document).ready(function() {
@@ -178,5 +184,8 @@ function addAttribute() {
     </script>
     
 </body>
+=======
+>>>>>>> 6148eaad47c8f3475a14bb032494f6f2da790e60
 
+</body>
 </html>

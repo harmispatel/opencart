@@ -1,6 +1,6 @@
 @include('header')
 
-<link rel="stylesheet" href="sweetalert2.min.css">
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 {{-- Section of List Category --}}
 <section>
@@ -31,10 +31,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
-                     
+
                             <div class="card-header d-flex justify-content-between
                             p-2" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
+                                <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list"></i>
                                     Category List
                                 </h3>

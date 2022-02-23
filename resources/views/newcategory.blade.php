@@ -27,7 +27,7 @@
                 <div class="card-header d-flex justify-content-between
                         p-2"
                     style="background: #f6f6f6">
-                    <h3 class="card-title pt-2" style="color: black">
+                    <h3 class="card-title pt-2 m-0" style="color: black">
                         <i class="fas fa-pencil-alt"></i>
                         Add Category
                     </h3>
@@ -38,57 +38,257 @@
 
         {{-- List Section Start --}}
         <section class="content">
+            @if (count($errors) > 0)
+                @if ($errors->any())
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+            @endif
             <div class="card-body">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {{-- <form action="{{ route('insert') }}" method="POST" enctype="multipart/form-data"> --}}
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Genral</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Data</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">SEO</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Design</a>
-                        </li>
-                    </ul>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="genral-tab" data-toggle="tab" href="#genral" role="tab"
+                            aria-controls="genral" aria-selected="true">Genral</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab"
+                            aria-controls="data" aria-selected="false">Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="seo-tab" data-toggle="tab" href="#seo" role="tab"
+                            aria-controls="seo" aria-selected="false">SEO</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="design-tab" data-toggle="tab" href="#design" role="tab"
+                            aria-controls="design" aria-selected="false">Design</a>
+                    </li>
+                </ul>
 
-                    <div class="mt-3">
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="category">
+                {{-- @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif --}}
+                <div class="tab-content pt-4" id="myTabContent">
+                    <div class="tab-pane fade show active" id="genral" role="tabpanel" aria-labelledby="genral-tab">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="english-tab" data-toggle="tab" href="#english" role="tab"
+                                    aria-controls="english" aria-selected="true"><img
+                                        src="{{ asset('public/admin/image/en-gb.png') }}"> English</a>
+                            </li>
+                        </ul>
+                        <form action="{{ route('categoryinsert') }}" method="POST" enctype="multipart/form-data">
+                            {{ @csrf_field() }}
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category Name</label>
+                                <input type="text" name="category" class="form-control" id="category"
+                                    placeholder="Category Name">
+                                @if ($errors->has('category'))
+                                    <div style="color: red">{{ $errors->first('category') }}.</div>
+                                @endif
                             </div>
-                        </div>
-                        <div class="form-floating">
-                            <label for="description" class="form-label">Description</label>
+                            <div class="mb-3">
+                                <label for="summernote" class="form-label">Description</label>
+                                <textarea class="form-control" placeholder="Leave a comment here" name="description"
+                                    id="summernote" style="height: 200px"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="matatitle" class="form-label">Meta Tag Title</label>
+                                <input type="text" class="form-control" name="matatitle" id="matatitle"
+                                    placeholder="Mata Tag Title">
+                                @if ($errors->has('matatitle'))
+                                    <div style="color: red">{{ $errors->first('matatitle') }}</div>
+                                @endif
+                            </div>
+                            <div class="mb-3">
+                                <label for="metadesc" class="form-label">Meta Tag Description</label>
+                                <textarea class="form-control" placeholder="Meta Tag Description" name="metadesc"
+                                    id="metadesc" style="height: 100px"></textarea>
+                                <label for="metadesc"></label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="metakey" class="form-label">Meta Tag Keywords</label>
+                                <textarea class="form-control" placeholder="Meta Tag Keywords" name="metakey"
+                                    id="metakey" style="height: 100px"></textarea>
+                                <label for="metakey"></label>
 
-                            <textarea class="form-control" placeholder="Leave a comment here" name="description" id="description" style="height: 100px"></textarea>
-                            <label for="description"></label>
-                          </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
-
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                            Save</i></button>
+                                    <a href="{{ route('category') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left">
+                                            Back</i></a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
-                    <div class="card-footer">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"> Save</i></button>
-                            <a href="{{ route('category') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
-                                    Back</i></a>
-                        </div>
+                    {{-- data --}}
+                    <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            {{ @csrf_field() }}
+                            {{-- <div class="mb-3">
+                                <label for="parent" class="form-label">Parent</label>
+                                <input type="text" name="parent" class="form-control" id="parent"
+                                    placeholder="Parent">
+                            </div> --}}
+                            <div class="mb-3">
+                                <label class="form-label" for="parent">Parent</label>
+                                <select class="form-control" id="parent" name="parent">
+                                    <option value="">Select</option>
+                                    @foreach ($parents as $parent)
+                                        <option value="{{ $parent->category_id }}">{{ $parent->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="filters" class="form-label">Filters</label>
+                                <input class="form-control" placeholder="Filters" name="filters" id="filters"></input>
+                                <div id="category-filter" class="well bg-white mt-1 well-sm"
+                                    style="height: 150px; overflow: auto;">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="filters" class="form-label">Store</label>
+                                <div class="well well-sm bg-white" style="height: 150px; overflow: auto;">
+                                    <div class="checkbox p-3">
+                                        <label>
+                                            <input type="checkbox" name="category_store[]" value="0" checked="checked">
+                                            Default
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image">Image</label>
+                                <input type="file" name="image" style="padding:3px;" id="image" class="form-control "
+                                    value="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="top" class="form-label">Top</label><br>
+                                <input type="checkbox" class="ml-3" id="top" name="top" value="0">
+                            </div>
+                            <div class="mb-3">
+                                <label for="columns" class="form-label">Columns</label>
+                                <input type="text" class="form-control" id="columns" value="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="sortorder" class="form-label">Sort Order</label>
+                                <input type="text" class="form-control" name="sortorder" id="sortorder" value="0">
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="custom-select" name="status" id="status">
+                                    <option selected value="1">Enable</option>
+                                    <option value="2">Desable</option>
+                                </select>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                            Save</i></button>
+                                    <a href="{{ route('category') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left">
+                                            Back</i></a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
 
+                    {{-- SEO --}}
+                    <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-left">Stores</td>
+                                            <td class="text-left">Keyword</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left">Default</td>
+                                            <td class="text-left">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="basic-addon1"><img
+                                                            src="{{ asset('public/admin/image/en-gb.png') }}"></span>
+                                                    <input type="text" name="keyword" placeholder="Keyword"
+                                                        class="form-control">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
 
-                </form>
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                            Save</i></button>
+                                    <a href="{{ route('category') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left">
+                                            Back</i></a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    {{-- design --}}
+                    <div class="tab-pane fade" id="design" role="tabpanel" aria-labelledby="design-tab">
+                        <form action="" method="POST" enctype="multipart/form-data">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td class="text-left">Stores</td>
+                                            <td class="text-left">Layout Override</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left">Default</td>
+                                            <td class="text-left">
+                                                <div class="input-group">
+                                                    <select type="select" name="categor" value="" placeholder=""
+                                                        class="form-control">
+                                                        <option value=""></option>
+                                                        @foreach ($category_layout as $item)
+                                                            <option value="{{ $item->layout_id }}">
+                                                                {{ $item->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <div class="card-footer">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                            Save</i></button>
+                                    <a href="{{ route('category') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left">
+                                            Back</i></a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
             </div>
         </section>
         {{-- End Form Section --}}
