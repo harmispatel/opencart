@@ -1,6 +1,6 @@
 @include('header')
 
-<link rel="stylesheet" href="sweetalert2.min.css">
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 {{-- Section of Add Users Group --}}
 <section>
