@@ -1,6 +1,6 @@
 @include('header')
 
-<link rel="stylesheet" href="sweetalert2.min.css">
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 {{-- Section of List Category --}}
 <section>
@@ -146,7 +146,7 @@
                             <label for="model" class="form-label">Model</label>
                             <input type="text" class="form-control" id="model" placeholder="Model">
                         </div>
-                       
+
                         <div class="mb-3">
                             <label for="sku" class="form-label">SKU</label>
                             <input type="text" class="form-control" id="sku" placeholder="SKU">

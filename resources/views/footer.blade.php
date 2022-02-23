@@ -49,12 +49,12 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     $('#summernote').summernote({
         height: 250,
     });
-</script>
-<script>
-$(document).ready(function() {
-    $('#categories').select2();
-});
-</script>
-</body>
 
+    $(document).ready(function() {
+        // $('#categories').select2();
+    });
+
+</script>
+
+</body>
 </html>

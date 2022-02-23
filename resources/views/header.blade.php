@@ -62,21 +62,21 @@
             @endif
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              @if(!empty(user_details()))
+              <a href="{{ route('profile',user_details()->user_id) }}" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
+              <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item text-center bg-red">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+            @else
+            <a href="#" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
+            <a href="#" class="dropdown-item text-center bg-red">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            @endif
             <div class="dropdown-divider"></div>
-                @if(!empty(user_details()))
-                    <a href="{{ route('profile',user_details()->user_id) }}" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
-                    <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item text-center bg-red">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                @else
-                    <a href="#" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
-                    <a href="#" class="dropdown-item text-center bg-red">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                @endif
         </li>
       </ul>
 
