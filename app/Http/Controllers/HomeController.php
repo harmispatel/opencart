@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Users;
+use App\Models\Product;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,6 +41,8 @@ class HomeController extends Controller
     public function adminHome()
     {
         $data['users'] = Users::get();
+        $data['product'] = Product::get();
+
         return view('dashboard',$data);
     }
 }

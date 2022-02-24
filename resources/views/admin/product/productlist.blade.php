@@ -44,7 +44,7 @@
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
-                                    <table class="table table-striped ">
+                                    <table class="table">
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert" style="display: none" role="alert">
                                             <p id="success-message" class="mb-0"></p>
                                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -54,20 +54,30 @@
                                         <thead class="text-center">
                                             <th><input type="checkbox" name="checkall" id="delall"></th>
                                             <th>Image</th>
-                                            <th><a href="#">Product Name</a></th>
-                                            <th><a href="#">Model</a></th>
-                                            <th><a href="#">Quantity</a></th>
-                                            <th><a href="#">Status</a></th>
+                                            <th><a >Product Name</a></th>
+                                            <th><a>Model</a></th>
+                                            <th><a>Price</a></th>
+                                            <th><a>Quantity</a></th>
+                                            <th><a>Status</a></th>
                                             <th>Action</th>
                                         </thead>
                                         <tbody class="text-center cat-list">
-                                            <td><input type="checkbox" name="checkall" class="del_all"></td>
-                                            <td>Category</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
+                                            @foreach ($show_product as $value)
+                                            <tr>
+                                                <td><input type="checkbox" name="checkall" class="del_all"></td>
+                                                <td>
+                                                    <img src="{{ asset('public/admin/image/'.$value->image)}}" width="60px">
+                                                </td>
+                                                <td>{{ $value->name}}</td>
+                                                <td>{{ $value->model }}</td>
+                                                <td>{{ $value->price }}</td>
+                                                <td>{{ $value->quantity }}</td>
+                                                <td>{{ $value->status }}</td>
+                                                <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
+
+                                                @endforeach
+                                                {{-- <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td> --}}
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -83,6 +93,10 @@
 </section>
 {{-- End Section of Add Category --}}
 @include('footer')
-
+<script>
+   $(document).ready( function () {
+    $('.table').DataTable();
+} );
+</script>
 
 

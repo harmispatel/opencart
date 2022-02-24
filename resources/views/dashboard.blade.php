@@ -11,7 +11,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">Dashboard</li>
+              {{-- <li class="breadcrumb-item active">Dashboard</li> --}}
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -86,13 +86,13 @@
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                <h3>0</h3>
+                <h3>{{ (isset($product)) ? count($product) : 0 }}</h3>
                 <p>Product</p>
               </div>
               <div class="icon">
                 <i class="fab fa-product-hunt"></i>
               </div>
-              <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('productlist') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
