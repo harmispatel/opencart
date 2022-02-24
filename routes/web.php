@@ -64,8 +64,14 @@ Route::group(['middleware' => 'AuthUser'], function () {
   Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
 
+<<<<<<< HEAD
   // Permissions
   Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
+=======
+        // Permissions
+        Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
+        Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
+>>>>>>> b5d07a00e9f5a1de8cd819f680dce1cde393b7d8
 
 
   // Users Group
@@ -76,12 +82,14 @@ Route::group(['middleware' => 'AuthUser'], function () {
   Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
   Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
 
-  // Category
-  Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
-  Route::get('category', [CategoryController::class, 'index'])->name('category');
-  Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
-  Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
-  Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+        // Category
+        Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
+        Route::get('category', [CategoryController::class, 'index'])->name('category');
+        Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
+        Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
+        Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+        Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
+        Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
 
   //Products
   Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');

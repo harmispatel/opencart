@@ -30,6 +30,15 @@
                 </button>
             </div>
        @endif
+
+       @if(Session::has('error'))
+        <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
+                {{ Session::get('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+       @endif
         <!-- Small boxes (Stat box) -->
         <div class="row">
 

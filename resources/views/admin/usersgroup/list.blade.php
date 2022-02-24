@@ -39,7 +39,11 @@
                                     <i class="fa fa-list"></i>
                                     Users Group List
                                 </h3>
-                                <a href="{{ route('addusergroup') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+
+                                @if (check_user_role(10) == 1)
+                                    <a href="{{ route('addusergroup') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                @endif
+
                                 <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                             </div>
                             {{-- End Card Header --}}
