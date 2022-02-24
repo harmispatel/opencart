@@ -51,7 +51,7 @@
                     </div>
                 @endif
             @endif
-            <form action="{{ route('categoryinsert') }}" id="catform" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('categoryupdate') }}" id="catform" method="POST" enctype="multipart/form-data">
                 {{ @csrf_field() }}
                 <div class="card-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -85,8 +85,8 @@
 
                             <div class="mb-3">
                                 <label for="category" class="form-label">Category Name</label>
-                                <input type="text" name="category" class="form-control" id="category"
-                                    placeholder="Category Name">
+                                <input type="text" name="category" class="form-control" id="category" placeholder="Category Name" value="{{ $data->name }}">
+                                <input type="hidden" name="id" class="form-control" id="id" value="{{ $data->category_id }}">
                                 @if ($errors->has('category'))
                                     <div style="color: red">{{ $errors->first('category') }}.</div>
                                 @endif
@@ -94,12 +94,12 @@
                             <div class="mb-3">
                                 <label for="summernote" class="form-label">Description</label>
                                 <textarea class="form-control" placeholder="Leave a comment here" name="description"
-                                    id="summernote" style="height: 200px"></textarea>
+                                    id="summernote" style="height: 200px">{{ $data->description }}</textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="matatitle" class="form-label">Meta Tag Title</label>
                                 <input type="text" class="form-control" name="matatitle" id="matatitle"
-                                    placeholder="Mata Tag Title">
+                                    placeholder="Mata Tag Title" value="{{ $data->meta_title }}">
                                 @if ($errors->has('matatitle'))
                                     <div style="color: red">{{ $errors->first('matatitle') }}</div>
                                 @endif
@@ -107,13 +107,13 @@
                             <div class="mb-3">
                                 <label for="metadesc" class="form-label">Meta Tag Description</label>
                                 <textarea class="form-control" placeholder="Meta Tag Description" name="metadesc"
-                                    id="metadesc" style="height: 100px"></textarea>
+                                    id="metadesc" style="height: 100px">{{ $data->meta_description }}</textarea>
                                 <label for="metadesc"></label>
                             </div>
                             <div class="mb-3">
                                 <label for="metakey" class="form-label">Meta Tag Keywords</label>
                                 <textarea class="form-control" placeholder="Meta Tag Keywords" name="metakey"
-                                    id="metakey" style="height: 100px"></textarea>
+                                    id="metadesc" style="height: 100px">{{ $data->meta_keyword }}</textarea>
                                 <label for="metakey"></label>
 
                             </div>
@@ -125,7 +125,7 @@
                             <div class="mb-3">
                                 <label for="parent">Parent</label>
                                 <select class="form-control" name="parent" id="parent">
-                                    <option value="" selected>Choose</option>
+                                    <option value="{{ $data->parent_id }}" selected>Choose</option>
 
                                     @foreach ($fetchparent as $data)
                                         @if (!empty($data->cat_name))
@@ -181,24 +181,25 @@
                             <div class="mb-3">
                                 <label for="image">Image</label>
                                 <input type="file" name="image" style="padding:3px;" id="image" class="form-control">
+                                {{-- <img src="{{asset('/public/admin/image/'.$data->image)}}" width="100px"> --}}
                             </div>
                             <div class="mb-3">
                                 <label for="top" class="form-label">Top</label><br>
-                                <input type="checkbox" class="ml-3" id="top" name="top" value="1">
+                                <input type="checkbox" class="ml-3" id="top" name="top" value="1" {{ ($data->top == '1')? 'checked' : "" }}>
                             </div>
                             <div class="mb-3">
                                 <label for="columns" class="form-label">Columns</label>
-                                <input type="text" class="form-control" name="columns" id="columns" value="1">
+                                <input type="text" class="form-control" name="columns" id="columns" value="{{ $data->column }}">
                             </div>
                             <div class="mb-3">
                                 <label for="sortorder" class="form-label">Sort Order</label>
-                                <input type="text" class="form-control" name="sortorder" id="sortorder" value="0">
+                                <input type="text" class="form-control" name="sortorder" id="sortorder" value="{{ $data->sort_order }}">
                             </div>
                             <div class="mb-3">
                                 <label for="status" class="form-label">Status</label>
                                 <select class="custom-select" name="status" id="status">
-                                    <option selected value="1">Enable</option>
-                                    <option value="2">Desable</option>
+                                    <option selected value="1" {{ ($data->status == '1')? 'selected' : "" }}>Enable</option>
+                                    <option value="2" {{ ($data->status == '2')? 'selected' : "" }}>Desable</option>
                                 </select>
                             </div>
                         </div>
@@ -272,3 +273,5 @@
 </section>
 {{-- End Section of Add Category --}}
 @include('footer')
+
+

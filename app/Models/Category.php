@@ -9,4 +9,6 @@ class Category extends Model
 {
     use HasFactory;
     protected $table = 'oc_category_description';
+    protected $primaryKey = "category_id";
+    public $timestamps = false;
 }

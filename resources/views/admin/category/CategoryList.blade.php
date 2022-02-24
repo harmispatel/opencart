@@ -66,13 +66,71 @@
                                 </thead>
                                 <tbody class="text-center cat-list">
                                     @foreach ($fetchparent as $data)
-                                    <tr>
-                                            <td><input type="checkbox" name="checkall" class="del_all"></td>
-                                            <td>{{ $data->cat_name }}</td>
-                                            <td>{{ $data->parent_id }}</td>
-                                            <td><a href="" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" name="checkall" class="del_all">
+                                            </td>
+                                            <td>
+                                                @if (!empty($data->cat_name))
+                                                    {{ $data->cat_name }}
+                                                @endif
+
+                                            </td>
+                                            <td>{{ $data->sort_order }}</td>
+                                            <td>
+                                                <a href="{{ 'categoryedit/' . $data->category_id }}" class="btn btn-sm btn-primary rounded">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            </td>
                                         </tr>
-                                        @endforeach
+
+                                        @php
+                                            $subcat = get_subcat($data->category_id);
+                                        @endphp
+
+                                        @if (!empty($subcat))
+                                            @foreach ($subcat as $scat)
+                                                <tr>
+                                                    <td>
+                                                        <input type="checkbox" name="checkall" class="del_all">
+                                                    </td>
+                                                    <td> {{ $data->cat_name }} > {{ $scat->cat_name }} </td>
+                                                    <td>{{ $scat->sort_order }}</td>
+                                                    <td>
+                                                        <a href="{{ 'categoryedit/' . $scat->category_id }}" class="btn btn-sm btn-primary rounded">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+
+                                                @php
+                                                    $dsubcat = depend_subcat($scat->category_id);
+                                                @endphp
+
+                                                @if(!empty($dsubcat))
+
+                                                    @foreach ($dsubcat as $dcat)
+                                                        <tr>
+                                                            <td>
+                                                                <input type="checkbox" name="checkall" class="del_all">
+                                                            </td>
+                                                            <td> {{ $data->cat_name }} > {{ $scat->cat_name }} > {{ $dcat->cat_name }} </td>
+                                                            <td>{{ $dcat->sort_order }}</td>
+                                                            <td>
+                                                                <a href="{{ 'categoryedit/' . $dcat->category_id }}" class="btn btn-sm btn-primary rounded">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+
+                                                @endif
+
+                                            @endforeach
+                                        @endif
+
+
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
