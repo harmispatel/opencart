@@ -31,9 +31,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css" integrity="sha512-g9k+CnZOpfd3BjCvr9L6M9F1u42RbYxtiurifk4KmqTNTyZRnKixRgZl6SzPESunaaCnyelHhKicHWcQUwALYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Select Box -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
-{{-- Summernote --}}
-<link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
- 
+
+  {{-- Summernote --}}
+  <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -51,7 +52,7 @@
 
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown p-0">
-          <a class="nav-link p-0" data-toggle="dropdown" href="#">
+          <a class="nav-link p-0 text-uppercase" style="color: rgb(71, 69, 69); font-weight: 700;font-family: verdana" data-toggle="dropdown" href="#">
             {{-- <i class="far fa-user"></i> --}}
             @if(!empty(user_details()))
                 <img src="{{ ( (user_details()->image != '') || (user_details()->image != null) ) ? asset('public/admin/users/'.user_details()->image) : asset('public/admin/users/blank.png') }}" alt="User Avatar" class="m-0 img-circle" width="40" height="40">
@@ -62,21 +63,21 @@
             @endif
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-              @if(!empty(user_details()))
-              <a href="{{ route('profile',user_details()->user_id) }}" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
-              <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item text-center bg-red">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
-            @else
-            <a href="#" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
-            <a href="#" class="dropdown-item text-center bg-red">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            @endif
             <div class="dropdown-divider"></div>
+                @if(!empty(user_details()))
+                    <a href="{{ route('profile',user_details()->user_id) }}" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="dropdown-item text-center bg-red">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                @else
+                    <a href="#" class="dropdown-item bg-dark"><i class="fa fa-user-circle pr-2"></i> Your Profile</a>
+                    <a href="#" class="dropdown-item text-center bg-red">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                @endif
         </li>
       </ul>
 
@@ -97,28 +98,79 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+           @if(!empty(sidebar()))
+                @foreach (sidebar() as $item)
+                    @if( ($item->alias != '') || ($item->alias) != null )
+                        <li class="nav-item">
+                            <a href="{{ route($item->alias) }}" class="nav-link {{ (request()->is($item->alias)) ? 'active' : ''}}">
+                                <i class="nav-icon {{ $item->icon_class }}"></i>
+                                <p>{{ $item->main_menu }}</p>
+                            </a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="nav-icon {{ $item->icon_class }}"></i>
+                                <p>{{ $item->main_menu }} <i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                @php
+                                    $submenus = submenu($item->id);
+                                @endphp
+
+                                @if(!empty($submenus))
+                                    @foreach($submenus as $submenu)
+                                        @if(!empty($submenu->slugurl))
+                                            <li class="nav-item pl-2">
+
+                                                @if($submenu->url_id == 1)
+                                                    <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}">
+                                                @else
+                                                    <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
+                                                @endif
+
+                                                <i class="nav-icon {{ $submenu->icon_class }}"></i>
+                                                <p>{{ $submenu->alias }}</p>
+                                                </a>
+                                            </li>
+                                        @else
+                                            <li class="nav-item pl-2">
+                                                <a href="" class="nav-link">
+                                                <i class="nav-icon {{ $submenu->icon_class }}"></i>
+                                                <p>{{ $submenu->alias }}</p>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                @endif
+
+                            </ul>
+                         </li>
+                    @endif
+                @endforeach
+           @endif
+
         {{-- Dashboard --}}
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a href="{{ route('dashboard') }}" class="nav-link {{ (request()->is('dashboard')) ? 'active' : ''}}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>Dashboard</p>
             </a>
-          </li>
+          </li> --}}
 
           {{-- @if(auth()->user()->user_group_id == 1) --}}
             {{-- Categories --}}
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{ route('category') }}" class="nav-link {{ (request()->is('category')) ? 'active' : ''}}">
                     <i class="nav-icon fas fa-list-alt"></i>
                     <p>Categories</p>
                 </a>
-              </li>
-
-
+              </li> --}}
           {{-- @endif --}}
 
           <li class="nav-item">
-            <a href="{{ route('product') }}" class="nav-link">
+            <a href="{{ route('productlist') }}" class="nav-link">
                 <i class="nav-icon fas fa-list-alt"></i>
                 <p>Products</p>
             </a>
@@ -126,7 +178,7 @@
 
           {{-- @if(auth()->user()->user_group_id == 1) --}}
           {{-- Categories --}}
-          <li class="nav-item {{ (request()->is('usersgroup') || request()->is('users')) ? 'menu-open' : ''}}">
+          {{-- <li class="nav-item {{ (request()->is('usersgroup') || request()->is('users')) ? 'menu-open' : ''}}">
               <a href="" class="nav-link {{ (request()->is('usersgroup') || request()->is('users')) ? 'active' : ''}}">
                   <i class="nav-icon fas fa-user-alt"></i>
                   <p>Users <i class="right fas fa-angle-left"></i></p>
@@ -145,7 +197,7 @@
                   </a>
                 </li>
             </ul>
-            </li>
+            </li> --}}
         {{-- @endif --}}
 
         </ul>

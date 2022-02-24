@@ -1,6 +1,6 @@
 @include('header')
 
-<link rel="stylesheet" href="sweetalert2.min.css">
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 {{-- Section of Edit Profile --}}
 <section>
@@ -152,7 +152,7 @@
                                 <div class="card-footer">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary"><i class="fa fa-save"> Update</i></button>
-                                        <a href="{{ route('users') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
+                                        <a href="{{ route('dashboard') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
                                     </div>
                                 </div>
                                 {{-- End Card Footer --}}
