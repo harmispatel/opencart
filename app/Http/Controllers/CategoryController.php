@@ -150,7 +150,6 @@ class CategoryController extends Controller
 
 
 
-
     // Function of edit Category
     public function categoryedit($id)
     {
