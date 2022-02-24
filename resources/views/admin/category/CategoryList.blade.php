@@ -32,17 +32,22 @@
                     <div class="col-md-12">
                         {{-- Card Start --}}
 
-                        <div class="card-header d-flex justify-content-between
-                            p-2"
-                            style="background: #f6f6f6">
+                        <div class="card-header" style="background: #f6f6f6">
                             <h3 class="card-title pt-2 m-0" style="color: black">
                                 <i class="fa fa-list"></i>
                                 Category List
                             </h3>
-                            <a href="{{ route('newcategory') }}" class="btn btn-sm btn-success ml-auto"><i
-                                    class="fa fa-plus"></i></a>
-                            <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
-                                    class="fa fa-trash"></i></a>
+
+                            <div class="container" style="text-align: right">
+                                @if(check_user_role(18) == 1)
+                                    <a href="{{ route('newcategory') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                @endif
+
+                                @if(check_user_role(20) == 1)
+                                    <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                @endif
+                            </div>
+
                         </div>
                         {{-- End Card Header --}}
 
@@ -70,7 +75,13 @@
                                             <td><input type="checkbox" name="checkall" class="del_all"></td>
                                             <td>{{ $data->cat_name }}</td>
                                             <td>{{ $data->parent_id }}</td>
-                                            <td><a href="" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
+                                            <td>
+                                                @if(check_user_role(19) == 1)
+                                                    <a href="" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                         </tr>
                                         @endforeach
                                 </tbody>

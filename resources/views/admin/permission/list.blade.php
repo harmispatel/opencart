@@ -55,7 +55,7 @@
                                         <table class="table table-striped" id="usersGroup">
 
                                             <thead>
-                                                <tr>
+                                                <tr  class="bg-dark">
                                                     <th>Actions</th>
                                                     @foreach ($user_roles as $userrole)
                                                         <th>{{ $userrole->name }}</th>
@@ -66,7 +66,7 @@
                                             <tbody>
 
                                                 @foreach ($pactions as $paction)
-                                                    <tr>
+                                                    <tr style="background: #58595ad9">
 
                                                         <td>
                                                             <b>
@@ -82,7 +82,7 @@
 
                                                                 $query = get_rel_userrole_action($where);
 
-                                                                $checked = !empty($query) ? 'checked' : '';
+                                                                $checked = (!empty($query)) ? 'checked' : '';
 
                                                             @endphp
 
@@ -108,7 +108,7 @@
                                                                 $actionId=$value1->id;
                                                             @endphp
 
-                                                            <tr>
+                                                            <tr style="background: #a6adb3d9">
 
                                                                 <td>
                                                                     <b>
@@ -129,12 +129,57 @@
                                                                     @endphp
 
                                                                     <td>
-                                                                        <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}_{{ $paction->id }}_{{ $actionId }}_0" {{ $checked }}>
+                                                                        <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}_{{ $paction->id }}_{{ $actionId }}_0" {{ $checked }} class="checkbox">
                                                                     </td>
 
                                                                 @endforeach
 
                                                             </tr>
+
+                                                            @php
+                                                                $fetchsubaction = submenuaction($value1->id);
+                                                            @endphp
+
+                                                            @if (count($fetchsubaction))
+
+                                                                @foreach ($fetchsubaction as $key => $value2)
+
+                                                                    @php
+                                                                        $subactionId=$value2->id;
+                                                                    @endphp
+
+                                                                    <tr style="background: rgb(228, 227, 227)">
+
+                                                                        <td>
+                                                                            <b>
+                                                                                - - - {{ $value2->name }}
+                                                                            </b>
+                                                                        </td>
+
+                                                                        @foreach ($user_roles as $userrole)
+
+                                                                            @php
+
+                                                                                $where = array('role_id'=>$userrole->user_group_id, 'menu_id'=>$paction->id, 'action_id'=>$value1->id, 'subaction_id'=>$value2->id);
+
+                                                                                $query = get_rel_userrole_action($where);
+
+                                                                                $checked = !empty($query) ? 'checked' : '';
+
+                                                                            @endphp
+
+                                                                            <td>
+                                                                                <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}_{{ $paction->id }}_{{ $actionId }}_{{ $subactionId }}" {{ $checked }} class="checkbox">
+                                                                            </td>
+
+                                                                        @endforeach
+
+                                                                    </tr>
+
+                                                                @endforeach
+
+                                                            @endif
+
                                                         @endforeach
 
                                                     @endif
@@ -173,15 +218,17 @@
     var passchedkId=0;
 
     $('.checkbox').change(function(){
-            passchedkId=$(this).val();
+            var passchedkId=$(this).val();
             var checkboxVal=this.checked ? 1 : 0;
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url:'',
-                data: {passchedkId:passchedkId,ischeckked:checkboxVal},
+                url:'{{ url("storerelation") }}',
+                data: {"_token": "{{ csrf_token() }}",passchedkId:passchedkId,ischeckked:checkboxVal},
                 success: function(response) {
                     console.log(response);
+                    alert('sucess');
+                    // location.reload();
                 }
 
             });

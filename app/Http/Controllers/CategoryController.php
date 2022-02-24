@@ -11,63 +11,66 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
 
+
+
+    // Function of List All Category
     function index()
     {
-        // $fetchparent = DB::table('oc_category_description')->select('category_id','name')->get();
+        // Check User Permission
+        if(check_user_role(17) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
 
-
+        // Fetch Categories
         $fetchparent = CategoryDetail::where('oc_category.parent_id','=',0)->where('oc_category.top','=',1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-
-            // $leagues = DB::table('oc_category')
-            // ->select('')
-            // ->join('oc_category_description', 'countries.country_id', '=', 'leagues.country_id')
-            // ->where('countries.country_name')
-            // ->get();
-
 
         return view('admin.category.CategoryList', ['fetchparent' => $fetchparent]);
     }
+
+
+
+    // Function of Add Category View
     function newcategory()
     {
+
+        // Check User Permission
+        if(check_user_role(18) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
+
+        // Fetch Category Layout
         $category_layout = DB::table('oc_layout')->select('layout_id', 'name')->get();
-        $fetchparent = DB::table('oc_category_description')->select('category_id', 'name')->get();
 
+        // Fetch Category Description
+        $fetchparent = CategoryDetail::where('oc_category.parent_id','=',0)->where('oc_category.top','=',1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
 
-        // $fetchparent = CategoryDetail::all('parent_id');
-        // $fetchparent = CategoryDetail::select('oc_category_description.*,oc_category.*')
-        // ->from('oc_category')
-        // ->leftJoin('oc_category_description', 'oc_category_description.name', '=', 'oc_category.parent_id')
-        // ->get();
+        return view('admin.category.newcategory', ['category_layout' => $category_layout, 'fetchparent' => $fetchparent]);
 
-
-        // echo '<pre>';
-        // print_r($fetchparent);
-        // exit();
-        // return view('newcategory');
-
-
-        return view('admin.category.newcategory', ['category_layout' => $category_layout, 'parents' => $fetchparent]);
     }
 
-    function getcategory()
-    {
-        // $categories = Category::get();
-        // $categories = DB::table('oc_category')
-        //     ->join('oc_category', 'users.id', '=', 'contacts.user_id')
-        //     ->join('orders', 'users.id', '=', 'orders.user_id')
-        //     ->select('users.*', 'contacts.phone', 'orders.price')
-        //     ->get();
-    }
 
+
+    // Function of Delete Category
     function deleteCategory()
     {
+        // Check User Permission
+        if(check_user_role(20) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
 
+        //Fetch Single Category
         $category = Category::where('id', $_POST['id'])->first();
 
+        // Delete Category Image
         if (file_exists('public/admin/category/' . $category->image)) {
             unlink('public/admin/category/' . $category->image);
         }
 
+        // Delete Selected Category
         $category = Category::where('id', $_POST['id'])->delete();
 
         return response()->json([
@@ -75,61 +78,83 @@ class CategoryController extends Controller
         ]);
     }
 
+
+
+    // Function of Insert Category
     function categoryinsert(Request $request)
     {
+        // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
             'matatitle' => 'required',
         ]);
 
+        // Insert Category Details
         $catdetail = new CategoryDetail;
-        if ($request->hasFile('image')) {
+
+        // Insert Category Image
+        if ($request->hasFile('image'))
+        {
             $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/image/'), $imgname);
             $catdetail->image = $imgname;
         }
-        $catdetail->parent_id = $request->top;
-        $catdetail->top = $request->top;
-        $catdetail->column = $request->columns;
-        $catdetail->sort_order = $request->sortorder;
-        $catdetail->status = $request->status;
+
+        $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
+        $catdetail->top = isset($request->top) ? $request->top : 0 ;
+        $catdetail->column = isset($request->columns) ? $request->columns : 0;
+        $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
+        $catdetail->status = isset($request->status) ? $request->status : 0;
+        date_default_timezone_set('Asia/Kolkata');
+        $catdetail->date_added = date("Y-m-d h:i:s");
+        $catdetail->date_modified = date("Y-m-d h:i:s");
         $catdetail->save();
+        $lastid = $catdetail->id;
 
 
+        // Insert Category
         $cat = new Category;
+        $cat->category_id = $lastid;
         $cat->language_id = '1';
-        $cat->name = $request->category;
-        $cat->description = $request->description;
-        $cat->meta_title = $request->matatitle;
-        $cat->meta_description = $request->metadesc;
-        $cat->meta_keyword = $request->metakey;
+        $cat->name = isset($request->category) ? $request->category : "";
+        $cat->description = isset($request->description) ? $request->description : "";
+        $cat->meta_title = isset($request->matatitle) ? $request->matatitle : "";
+        $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
+        $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
 
         $cat->save();
+        $errors = "Insert success";
 
-        // $data = DB::table('oc_category_description')->insert([
-        //     'language_id' =>"1",
-        //     'name'=> $request->category,
-        //     'description'=> $request->description,
-        //     'meta_title'=> $request->matatitle,
-        //     'meta_description'=> $request->metadesc,
-        //     'meta_keyword'=> $request->metakey,
-        // ]);
-        // $errors = "Insert success";
-        // return redirect()->back()->withErrors($errors);
-
-
+        return redirect()->back()->withErrors($errors);
 
     }
 
-    public function categorylayout()
+
+
+
+    // Function of edit Category
+    public function categoryedit($id)
     {
+
+        // Check User Permission
+        if(check_user_role(19) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
+        // Fetch Category Layout
         $category_layout = DB::table('oc_layout')->select('layout_id', 'name')->get();
 
-        echo '<pre>';
-        print_r($category_layout);
-        exit();
+        // Get Single Category Description
+        $data=Category::where('oc_category_description.category_id','=',$id)->join('oc_category','oc_category_description.category_id','=','oc_category.category_id')->first();
 
-        // return view('newcategory')->with('category_layout', $category_layout);
-        return view('newcategory', ['category_layout' => $category_layout]);
+        // Get Single Category
+        $fetchparent = CategoryDetail::where('oc_category.parent_id','=',0)->where('oc_category.top','=',1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+
+        return view('admin.category.categoryedit',['data'=>$data, 'fetchparent'=> $fetchparent , 'category_layout'=> $category_layout]);
+
     }
+
+
+
 }

@@ -30,6 +30,15 @@
                 </button>
             </div>
        @endif
+
+       @if(Session::has('error'))
+        <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
+                {{ Session::get('error') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+       @endif
         <!-- Small boxes (Stat box) -->
         <div class="row">
 
@@ -86,13 +95,13 @@
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                <h3>0</h3>
+                <h3>{{ (isset($products)) ? count($products) : 0 }}</h3>
                 <p>Product</p>
               </div>
               <div class="icon">
                 <i class="fab fa-product-hunt"></i>
               </div>
-              <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('productlist') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
