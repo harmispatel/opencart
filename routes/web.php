@@ -58,6 +58,7 @@ Route::group(['middleware' => 'AuthUser'],function ()
 
         // Permissions
         Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
+        Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
 
 
         // Users Group
@@ -80,9 +81,14 @@ Route::group(['middleware' => 'AuthUser'],function ()
 
         //Products
         Route::get('product',[ProductController::class, 'index'])->name('product');
+        Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
+        Route::get('addproduct',[ProductController::class, 'index'])->name('addproduct');
 
-//Products
-Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
-Route::get('addproduct',[ProductController::class, 'index'])->name('addproduct');
+        //Recurring Profiles
+        Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
+
+        //Filters
+        Route::get('filter', [FiltersController::class,'filters'])->name('filter');
+
 });
 

@@ -55,6 +55,15 @@ function submenu($menu_id)
 
 
 
+function submenuofsubmenu($submenu_id)
+{
+    $submenu_of_submenu = Submenu::where('menu_id',$submenu_id)->get();
+    return $submenu_of_submenu;
+}
+
+
+
+
 // Function of Submenu Actions
 function submenuaction($smenu_id)
 {
@@ -169,3 +178,13 @@ function depend_subcat($value1)
     $subcat1 = CategoryDetail::where('parent_id',$value1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();;
     return $subcat1;
 }
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+?>
+>>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
