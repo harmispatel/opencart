@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Product List</h1>
+                        <h1>Reviews</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('productlist') }}">Product List</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('review') }}">Reviews</a></li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -35,9 +35,9 @@
                             p-2" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list"></i>
-                                    Product List
+                                    Reviews
                                 </h3>
-                                <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                 <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                             </div>
                             {{-- End Card Header --}}
@@ -53,30 +53,22 @@
                                         </div>
                                         <thead class="text-center">
                                             <th><input type="checkbox" name="checkall" id="delall"></th>
-                                            <th>Image</th>
-                                            <th><a >Product Name</a></th>
-                                            <th><a>Model</a></th>
-                                            <th><a>Price</a></th>
-                                            <th><a>Quantity</a></th>
-                                            <th><a>Status</a></th>
+                                            <th>Product</th>
+                                            <th>Author</th>
+                                            <th>Rating</th>
+                                            <th>Status</th>
+                                            <th>Date Added</th>
                                             <th>Action</th>
                                         </thead>
                                         <tbody class="text-center cat-list">
-                                            @foreach ($show_product as $value)
                                             <tr>
                                                 <td><input type="checkbox" name="checkall" class="del_all"></td>
-                                                <td>
-                                                    <img src="{{ asset('public/admin/image/'.$value->image)}}" width="60px">
-                                                </td>
-                                                <td>{{ $value->name}}</td>
-                                                <td>{{ $value->model }}</td>
-                                                <td>{{ $value->price }}</td>
-                                                <td>{{ $value->quantity }}</td>
-                                                <td>{{ $value->status }}</td>
+                                                <td>name</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                                <td>1</td>
                                                 <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
-
-                                                @endforeach
-                                                {{-- <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td> --}}
                                             </tr>
                                         </tbody>
                                     </table>

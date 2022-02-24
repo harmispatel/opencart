@@ -53,15 +53,10 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     $('#summernote').summernote({
         height: 250,
     });
-
-    $(document).ready(function() {
-        // $('#categories').select2();
-    });
-
 </script>
 <script>
          
-            $(document).ready(function() {
+    $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
 </script>
@@ -155,12 +150,21 @@ function addAttribute() {
     <script>
         
         $(document).ready(function(){
-            $('#option').change(function (){ 
-      
-               alert("hello word");
             
-                
+                $.ajax({
+                type: "get",
+                url: "/option",
+                dataType: "json",
+                success: function(response) {
+                    $.each(response.option, function(key, item) {
+                       
+                      console.log(item);
+               
+
+                    });
+                }
             });
+           
         });
     </script>
     <script>
