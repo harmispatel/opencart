@@ -71,23 +71,6 @@
                                 </thead>
                                 <tbody class="text-center cat-list">
                                     @foreach ($fetchparent as $data)
-<<<<<<< HEAD
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" name="checkall" class="del_all">
-                                            </td>
-                                            <td>
-                                                @if (!empty($data->cat_name))
-                                                    {{ $data->cat_name }}
-                                                @endif
-
-                                            </td>
-                                            <td>{{ $data->sort_order }}</td>
-                                            <td>
-                                                <a href="{{ 'categoryedit/' . $data->category_id }}" class="btn btn-sm btn-primary rounded">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-=======
                                     <tr>
                                             <td><input type="checkbox" name="checkall" class="del_all"></td>
                                             <td>{{ $data->cat_name }}</td>
@@ -98,7 +81,6 @@
                                                 @else
                                                     -
                                                 @endif
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                             </td>
                                         </tr>
 
