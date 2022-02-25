@@ -85,6 +85,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
         Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
         Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
         Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
+        Route::post('categorydelete/', [CategoryController::class, 'categorydelete'])->name('categorydelete');
 
   //Products
   Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
