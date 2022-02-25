@@ -57,7 +57,7 @@ function submenu($menu_id)
 
 function submenuofsubmenu($submenu_id)
 {
-    $submenu_of_submenu = Submenu::where('menu_id',$submenu_id)->get();
+    $submenu_of_submenu = Submenu::where('parent_id',$submenu_id)->get();
     return $submenu_of_submenu;
 }
 
@@ -182,6 +182,18 @@ function depend_subcat($value1)
 
 
 
+//
+function fetch_mainmenu_submenucolumn($id)
+{
+    $subMenu = SubMenu::where('menu_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl')->get()->toArray();
+
+    $arr = array_map(function ($value) {
+        return $value['slugurl'];
+    }, $subMenu);
+
+    return $arr;
+
+}
 
 
 ?>

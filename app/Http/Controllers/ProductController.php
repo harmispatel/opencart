@@ -12,6 +12,13 @@ class ProductController extends Controller
 {
     function index()
     {
+
+        // Check User Permission
+        if(check_user_role(59) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $manufacturer = DB::table('oc_manufacturer')->select('*')->get();
         $category = DB::table('oc_category_description')->select('*')->get();
         $releted_product = DB::table('oc_product_description')->select('*')->get();
@@ -35,12 +42,19 @@ class ProductController extends Controller
         // return response()->json([
         //     'posts' => $option,
         // ]);
-       
+
 
         return view('admin.product.addproduct', ['result' => $result ,'option'=>$option]);
     }
+
     public function productlist()
     {
+        // Check User Permission
+        if(check_user_role(58) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $show_product = Product::join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->get();
         return view('admin.product.productlist', ['show_product' => $show_product]);
     }
@@ -53,5 +67,5 @@ class ProductController extends Controller
         ]);
     }
 
-    
+
 }
