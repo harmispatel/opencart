@@ -147,3 +147,4 @@
   <!-- /.content-wrapper -->
 
   @include('footer')
+

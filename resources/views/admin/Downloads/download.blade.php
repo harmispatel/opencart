@@ -37,8 +37,18 @@
                                     <i class="fa fa-list"></i>
                                     Downloads
                                 </h3>
-                                <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+
+                                <div class="container" style="text-align: right">
+                                    @if(check_user_role(75) == 1)
+                                        <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                    @endif
+
+                                    @if(check_user_role(77) == 1)
+                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                    @endif
+                                </div>
+
+
                             </div>
                             {{-- End Card Header --}}
 
@@ -62,8 +72,14 @@
                                                 <td><input type="checkbox" name="checkall" class="del_all"></td>
                                                 <td>name</td>
                                                 <td>Date Added</td>
-                                                <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
-                                            </tr> --}}
+                                                <td>
+                                                    @if(check_user_role(76) == 1)
+                                                        <a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

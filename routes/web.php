@@ -55,73 +55,70 @@ Route::get('login', [HomeController::class, 'adminLogin'])->name('login');
 // Group
 Route::group(['middleware' => 'AuthUser'], function () {
 
-  // Dashboard
-  Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
+    // Dashboard
+    Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
 
-  //Users
-  Route::get('users', [AllUserController::class, 'index'])->name('users');
-  Route::get('adduser', [AllUserController::class, 'add'])->name('adduser');
-  Route::post('storeuser', [AllUserController::class, 'store'])->name('storeuser');
-  Route::post('deleteuser', [AllUserController::class, 'deletemultiuser'])->name('deleteuser');
-  Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
-  Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
-
-  Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
-  Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
+    //Users
+    Route::get('users', [AllUserController::class, 'index'])->name('users');
+    Route::get('adduser', [AllUserController::class, 'add'])->name('adduser');
+    Route::post('storeuser', [AllUserController::class, 'store'])->name('storeuser');
+    Route::post('deleteuser', [AllUserController::class, 'deletemultiuser'])->name('deleteuser');
+    Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
+    Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
 
 
-  // Permissions
-  Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
-  Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
+    // User Profile
+    Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
+    Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
 
-  // Users Group
-  Route::get('usersgroup', [UserGroupController::class, 'index'])->name('usersgroup');
-  Route::get('addusergroup', [UserGroupController::class, 'add'])->name('addusergroup');
-  Route::post('storeusergroup', [UserGroupController::class, 'store'])->name('storeusergroup');
-  Route::post('deleteusersgroup', [UserGroupController::class, 'deletemultiusergroup'])->name('deleteusersgroup');
-  Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
-  Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
+    // Permissions
+    Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
+    Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
 
-  // Category
-  Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
-  Route::get('category', [CategoryController::class, 'index'])->name('category');
-  Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
-  Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
-  Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
-  Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
-  Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
 
-  //Products
-  Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
-  Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
-  Route::get('option', [ProductController::class, 'option'])->name('option');
+    // Users Group
+    Route::get('usersgroup', [UserGroupController::class, 'index'])->name('usersgroup');
+    Route::get('addusergroup', [UserGroupController::class, 'add'])->name('addusergroup');
+    Route::post('storeusergroup', [UserGroupController::class, 'store'])->name('storeusergroup');
+    Route::post('deleteusersgroup', [UserGroupController::class, 'deletemultiusergroup'])->name('deleteusersgroup');
+    Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
+    Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
 
-  //Recurring Profiles
-  Route::get('addRecurring', [RecurringProfilesController::class, 'index'])->name('addRecurring');
-  Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
-  Route::post('addRecurring', [RecurringProfilesController::class, 'addRecurring'])->name('addRecurring');
+    // Category
+    Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
+    Route::get('category', [CategoryController::class, 'index'])->name('category');
+    Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
+    Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
+    Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+    Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
+    Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
 
-  //Filters
-  Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
+    //Products
+    Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
+    Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
+    Route::get('option', [ProductController::class, 'option'])->name('option');
 
-  //Manufacturers
-  Route::get('manufacturer', [ManufacturersController::class, 'manufacturer'])->name('manufacturer');
+    // Attributes
+    Route::get('attribute', [AttributesController::class, 'attribute'])->name('attribute');
+    Route::get('attributegroup', [AttributesController::class, 'attributegroup'])->name('attributegroup');
 
-  //Downloads
-  Route::get('download', [DownloadsController::class, 'download'])->name('download');
+    //Options
+    Route::get('option', [OptionController::class, 'options'])->name('option');
 
-  //Reviews
-  Route::get('review', [ReviewsController::class, 'reviews'])->name('review');
+    //Recurring Profiles
+    Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
 
-  //Informations
-  Route::get('information', [InformationController::class, 'informations'])->name('information');
+    //Filters
+    Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
 
-  //Options
-  Route::get('option', [OptionController::class, 'options'])->name('option');
+    //Manufacturers
+    Route::get('manufacturer', [ManufacturersController::class, 'manufacturer'])->name('manufacturer');
 
-  //Attributes
-  Route::get('attribute', [AttributesController::class, 'attribute'])->name('attribute');
-  Route::get('attributegroup', [AttributesController::class, 'attributegroup'])->name('attributegroup');
-  
+    //Downloads
+    Route::get('download', [DownloadsController::class, 'download'])->name('download');
+
+    //Reviews
+    Route::get('review', [ReviewsController::class, 'reviews'])->name('review');
+
 });

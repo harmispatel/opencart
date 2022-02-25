@@ -185,7 +185,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="top" class="form-label">Top</label><br>
-                                <input type="checkbox" class="ml-3" id="top" name="top" value="1" {{ ($data->top == '1')? 'checked' : "" }}>
+                                <input type="checkbox" class="ml-3" id="top" name="top" {{ ($data->top == '1')? 'checked' : "" }}>
                             </div>
                             <div class="mb-3">
                                 <label for="columns" class="form-label">Columns</label>
