@@ -109,22 +109,14 @@
                     @foreach (sidebar() as $item)
                         @if( ($item->alias != '') || ($item->alias) != null )
                             <li class="nav-item">
-<<<<<<< HEAD
-                                <a href="{{ route($item->alias) }}" class="nav-link {{ (request()->is($item->alias)) ? 'active' : ''}}">
-=======
                                 <a href="{{ route($item->alias) }}" class="nav-link {{ (request()->is($item->alias)) ? 'active' : ''}}" style="padding-left: 4px;">
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                     <i class="nav-icon {{ $item->icon_class }}"></i>
                                     <p>{{ $item->main_menu }}</p>
                                 </a>
                             </li>
                         @else
                             <li class="nav-item">
-<<<<<<< HEAD
-                                <a href="" class="nav-link">
-=======
                                 <a href="" class="nav-link" style="padding-left: 4px;">
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                     <i class="nav-icon {{ $item->icon_class }}"></i>
                                     <p>{{ $item->main_menu }} <i class="right fas fa-angle-left"></i></p>
                                 </a>
@@ -229,11 +221,7 @@
                                                                 <a href="{{ route($value1->slugurl) }}" class="nav-link {{ request()->is($value1->slugurl) ? 'active' : ''}}">
                                                             @endif
 
-<<<<<<< HEAD
-                                                            <i class="nav-icon {{ $value1->icon_class }}"></i>
-=======
                                                             <i class="nav-icon {{ $value1->icon_class }}" style="font-size: 12px;"></i>
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                             <p>{{ $value1->alias }}</p>
                                                             </a>
                                                         </li>
