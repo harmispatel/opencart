@@ -64,14 +64,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
   Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
 
-<<<<<<< HEAD
   // Permissions
   Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
-=======
-        // Permissions
-        Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
-        Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
->>>>>>> b5d07a00e9f5a1de8cd819f680dce1cde393b7d8
+  Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
 
 
   // Users Group
