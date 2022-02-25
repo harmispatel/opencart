@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Information extends Model
+class InformationDescription extends Model
 {
     use HasFactory;
-    protected $table='oc_information';
+    protected $table='oc_information_description';
 }

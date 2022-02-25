@@ -13,6 +13,12 @@ use App\Http\Controllers\FiltersController;
 use App\Http\Controllers\ManufacturersController;
 use App\Http\Controllers\DownloadsController;
 use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\InformationController;
+use App\Http\Controllers\OptionController;
+use App\Http\Controllers\AttributesController;
+
+
+
 
 
 
@@ -64,14 +70,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
   Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
 
-<<<<<<< HEAD
   // Permissions
   Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
-=======
-        // Permissions
-        Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
-        Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
->>>>>>> b5d07a00e9f5a1de8cd819f680dce1cde393b7d8
+  Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
 
 
   // Users Group
@@ -82,14 +83,14 @@ Route::group(['middleware' => 'AuthUser'], function () {
   Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
   Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
 
-        // Category
-        Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
-        Route::get('category', [CategoryController::class, 'index'])->name('category');
-        Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
-        Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
-        Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
-        Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
-        Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
+  // Category
+  Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
+  Route::get('category', [CategoryController::class, 'index'])->name('category');
+  Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
+  Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
+  Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
+  Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
+  Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
 
   //Products
   Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
@@ -97,7 +98,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
   Route::get('option', [ProductController::class, 'option'])->name('option');
 
   //Recurring Profiles
+  Route::get('addRecurring', [RecurringProfilesController::class, 'index'])->name('addRecurring');
   Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
+  Route::post('addRecurring', [RecurringProfilesController::class, 'addRecurring'])->name('addRecurring');
 
   //Filters
   Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
@@ -110,4 +113,15 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
   //Reviews
   Route::get('review', [ReviewsController::class, 'reviews'])->name('review');
+
+  //Informations
+  Route::get('information', [InformationController::class, 'informations'])->name('information');
+
+  //Options
+  Route::get('option', [OptionController::class, 'options'])->name('option');
+
+  //Attributes
+  Route::get('attribute', [AttributesController::class, 'attribute'])->name('attribute');
+  Route::get('attributegroup', [AttributesController::class, 'attributegroup'])->name('attributegroup');
+  
 });

@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Downloads</h1>
+                        <h1>Information</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('download') }}">Downloads</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('information') }}">Information</a></li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -35,7 +35,7 @@
                             p-2" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list"></i>
-                                    Downloads
+                                    Information
                                 </h3>
                                 <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                 <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
@@ -53,17 +53,19 @@
                                         </div>
                                         <thead class="text-center">
                                             <th><input type="checkbox" name="checkall" id="delall"></th>
-                                            <th>Download Name</th>
-                                            <th>Date Added</th>
+                                            <th>Information Title</th>
+                                            <th>Sort Order</th>
                                             <th>Action</th>
                                         </thead>
                                         <tbody class="text-center cat-list">
-                                            {{-- <tr>
-                                                <td><input type="checkbox" name="checkall" class="del_all"></td>
-                                                <td>name</td>
-                                                <td>Date Added</td>
-                                                <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
-                                            </tr> --}}
+                                                @foreach ($information as $informations )
+                                                    <tr>
+                                                        <td><input type="checkbox" name="checkall" class="del_all"></td>
+                                                        <td>{{ $informations->title }}</td>
+                                                        <td>{{ $informations->sort_order }}</td>
+                                                        <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
+                                                    </tr>
+                                                @endforeach
                                         </tbody>
                                     </table>
                                 </div>
