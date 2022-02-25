@@ -60,6 +60,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
     Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
 
+
+    // User Profile
     Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
     Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
 
@@ -90,6 +92,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
     Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
     Route::get('option', [ProductController::class, 'option'])->name('option');
+
+    // Attributes
+    Route::get('attribute', [AttributesController::class, 'attribute'])->name('attribute');
+    Route::get('attributegroup', [AttributesController::class, 'attributegroup'])->name('attributegroup');
+
+    //Options
+    Route::get('option', [OptionController::class, 'options'])->name('option');
 
     //Recurring Profiles
     Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');

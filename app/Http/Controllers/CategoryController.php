@@ -17,7 +17,7 @@ class CategoryController extends Controller
     function index()
     {
         // Check User Permission
-        if(check_user_role(17) != 1)
+        if(check_user_role(50) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -35,7 +35,7 @@ class CategoryController extends Controller
     {
 
         // Check User Permission
-        if(check_user_role(18) != 1)
+        if(check_user_role(55) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -57,7 +57,7 @@ class CategoryController extends Controller
     function deleteCategory()
     {
         // Check User Permission
-        if(check_user_role(20) != 1)
+        if(check_user_role(57) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -134,7 +134,7 @@ class CategoryController extends Controller
     {
 
         // Check User Permission
-        if(check_user_role(19) != 1)
+        if(check_user_role(56) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
