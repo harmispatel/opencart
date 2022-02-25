@@ -156,11 +156,7 @@
 
                                                                         <td>
                                                                             <b>
-<<<<<<< HEAD
-                                                                                - - {{ $value2->name }}
-=======
                                                                                 - - - {{ $value2->name }}
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                                             </b>
                                                                         </td>
 
