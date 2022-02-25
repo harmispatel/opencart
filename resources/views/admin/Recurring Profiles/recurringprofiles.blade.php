@@ -31,14 +31,23 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
-                            <div class="card-header d-flex justify-content-between
-                            p-2" style="background: #f6f6f6">
+                            <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list"></i>
                                     Recurring Profiles
                                 </h3>
-                                <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+
+                                <div class="container" style="text-align: right">
+                                    @if(check_user_role(63) == 1)
+                                        <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                    @endif
+
+                                    @if(check_user_role(65) == 1)
+                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                    @endif
+                                </div>
+
+
                             </div>
                             {{-- End Card Header --}}
 
@@ -62,7 +71,13 @@
                                                 <td><input type="checkbox" name="checkall" class="del_all"></td>
                                                 <td>name</td>
                                                 <td>Sort Order</td>
-                                                <td><a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>
+                                                <td>
+                                                    @if(check_user_role(64) == 1)
+                                                        <a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -109,22 +109,35 @@
                     @foreach (sidebar() as $item)
                         @if( ($item->alias != '') || ($item->alias) != null )
                             <li class="nav-item">
-<<<<<<< HEAD
                                 <a href="{{ route($item->alias) }}" class="nav-link {{ (request()->is($item->alias)) ? 'active' : ''}}">
-=======
-                                <a href="{{ route($item->alias) }}" class="nav-link {{ (request()->is($item->alias)) ? 'active' : ''}}" style="padding-left: 4px;">
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                     <i class="nav-icon {{ $item->icon_class }}"></i>
                                     <p>{{ $item->main_menu }}</p>
                                 </a>
                             </li>
                         @else
-                            <li class="nav-item">
-<<<<<<< HEAD
-                                <a href="" class="nav-link">
-=======
-                                <a href="" class="nav-link" style="padding-left: 4px;">
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
+
+                            @php
+                                $arr = fetch_mainmenu_submenucolumn($item->id);
+                                $activecls = '';
+  		                        $stylecss = '';
+
+                                $str = Request::segment(1).Request::segment(2);
+                                $str1 = Request::segment(1).Request::segment(2).Request::segment(3);
+                                $str2 = Request::segment(1).Request::segment(2).Request::segment(3).Request::segment(4);
+
+                                if(count($arr))
+                                {
+                                    if(in_array($str, $arr) || in_array($str1, $arr) || in_array($str2, $arr) )
+                                    {
+                                        $activecls = "active";
+                                        $stylecss = 'menu-open';
+                                    }
+                                }
+
+                            @endphp
+
+                            <li class="nav-item {{ $stylecss }}">
+                                <a href="" class="nav-link {{ $activecls }}">
                                     <i class="nav-icon {{ $item->icon_class }}"></i>
                                     <p>{{ $item->main_menu }} <i class="right fas fa-angle-left"></i></p>
                                 </a>
@@ -136,40 +149,24 @@
 
                                     @if(!empty($submenus))
                                         @foreach($submenus as $submenu)
+
                                             @if(!empty($submenu->slugurl))
                                                 <li class="nav-item pl-2">
 
                                                     @if($submenu->url_id == 1)
-<<<<<<< HEAD
                                                         <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}">
                                                     @else
                                                         <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
                                                     @endif
 
-                                                    <i class="nav-icon {{ $submenu->icon_class }}"></i>
-                                                    <p>{{ $submenu->alias }}</p>
-                                                    </a>
-                                                </li>
-                                            @else
-                                                <li class="nav-item pl-2">
-                                                    <a href="" class="nav-link">
-                                                    <i class="nav-icon {{ $submenu->icon_class }}"></i>
-                                                    <p>{{ $submenu->alias }}</p>
-                                                    </a>
-=======
-                                                        <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}" style="padding-left: 5px;">
-                                                    @else
-                                                        <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}" style="padding-left: 5px;">
-                                                    @endif
-
-                                                            <i class="nav-icon {{ $submenu->icon_class }}" style="font-size: 12px;"></i>
+                                                            <i class="nav-icon {{ $submenu->icon_class }}"></i>
                                                             <p>{{ $submenu->alias }}</p>
                                                         </a>
                                                 </li>
                                             @else
                                                 <li class="nav-item pl-2">
-                                                    <a href="" class="nav-link" style="padding-left: 5px;">
-                                                    <i class="nav-icon {{ $submenu->icon_class }}" style="font-size: 12px;"></i>
+                                                    <a href="" class="nav-link">
+                                                    <i class="nav-icon {{ $submenu->icon_class }}"></i>
                                                     <p>{{ $submenu->alias }}</p> <i class="right fas fa-angle-left"></i>
                                                     </a>
 
@@ -183,8 +180,15 @@
                                                             @foreach($submenusofsubmenu as $subofsubmenu)
                                                                 @if(!empty($subofsubmenu->slugurl))
                                                                     <li class="nav-item pl-2">
-                                                                        <a href="{{ route($subofsubmenu->slugurl) }}" class="nav-link {{ request()->is($subofsubmenu->slugurl) ? 'active' : ''}}" style="padding-left: 5px;">
-                                                                            <i class="nav-icon {{ $subofsubmenu->icon_class }}" style="font-size: 12px;"></i>
+                                                                        <a href="{{ route($subofsubmenu->slugurl) }}" class="nav-link {{ request()->is($subofsubmenu->slugurl) ? 'active' : ''}}">
+                                                                            <i class="nav-icon {{ $subofsubmenu->icon_class }}"></i>
+                                                                            <p>{{ $subofsubmenu->alias }}</p>
+                                                                        </a>
+                                                                    </li>
+                                                                @else
+                                                                    <li class="nav-item pl-2">
+                                                                        <a href="" class="nav-link">
+                                                                            <i class="nav-icon {{ $subofsubmenu->icon_class }}"></i>
                                                                             <p>{{ $subofsubmenu->alias }}</p>
                                                                         </a>
                                                                     </li>
@@ -194,7 +198,6 @@
 
                                                     </ul>
 
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                 </li>
                                             @endif
                                         @endforeach
@@ -247,21 +250,54 @@
                                                                 <a href="{{ route($value1->slugurl) }}" class="nav-link {{ request()->is($value1->slugurl) ? 'active' : ''}}">
                                                             @endif
 
-<<<<<<< HEAD
                                                             <i class="nav-icon {{ $value1->icon_class }}"></i>
-=======
-                                                            <i class="nav-icon {{ $value1->icon_class }}" style="font-size: 12px;"></i>
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                             <p>{{ $value1->alias }}</p>
                                                             </a>
                                                         </li>
                                                     @else
+
                                                         <li class="nav-item pl-2">
                                                             <a href="" class="nav-link">
                                                             <i class="nav-icon {{ $value1->icon_class }}"></i>
-                                                            <p>{{ $value1->alias }}</p>
+                                                            <p>{{ $value1->alias }}</p> <i class="right fas fa-angle-left"></i>
                                                             </a>
+
+                                                            <ul class="nav nav-treeview">
+
+                                                                {{-- @php
+                                                                    $submenusofsubmenu = submenuofsubmenu($value1->id);
+                                                                @endphp --}}
+
+                                                                @php
+                                                                    $where = array('role_id'=>$useraccess,'oc_userrole_actions.menu_id'=>$value1->id,'subaction_id'=>0);
+                                                                    $submenusofsubmenu= fetch_otherusers_mainmenu_submenu($where);
+                                                                @endphp
+
+                                                                @if(!empty($submenusofsubmenu))
+                                                                    @foreach($submenusofsubmenu as $subofsubmenu)
+                                                                        @if(!empty($subofsubmenu->slugurl))
+                                                                            <li class="nav-item pl-2">
+                                                                                <a href="{{ route($subofsubmenu->slugurl) }}" class="nav-link {{ request()->is($subofsubmenu->slugurl) ? 'active' : ''}}">
+                                                                                    <i class="nav-icon {{ $subofsubmenu->icon_class }}"></i>
+                                                                                    <p>{{ $subofsubmenu->alias }}</p>
+                                                                                </a>
+                                                                            </li>
+                                                                        @else
+                                                                            <li class="nav-item pl-2">
+                                                                                <a href="" class="nav-link">
+                                                                                    <i class="nav-icon {{ $subofsubmenu->icon_class }}"></i>
+                                                                                    <p>{{ $subofsubmenu->alias }}</p>
+                                                                                </a>
+                                                                            </li>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+
+                                                            </ul>
+
                                                         </li>
+
+
                                                     @endif
                                                 @endforeach
                                             @endif

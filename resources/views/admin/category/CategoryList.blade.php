@@ -39,11 +39,11 @@
                             </h3>
 
                             <div class="container" style="text-align: right">
-                                @if(check_user_role(18) == 1)
+                                @if(check_user_role(55) == 1)
                                     <a href="{{ route('newcategory') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                 @endif
 
-                                @if(check_user_role(20) == 1)
+                                @if(check_user_role(57) == 1)
                                     <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                                 @endif
                             </div>
@@ -71,34 +71,16 @@
                                 </thead>
                                 <tbody class="text-center cat-list">
                                     @foreach ($fetchparent as $data)
-<<<<<<< HEAD
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" name="checkall" class="del_all">
-                                            </td>
-                                            <td>
-                                                @if (!empty($data->cat_name))
-                                                    {{ $data->cat_name }}
-                                                @endif
-
-                                            </td>
-                                            <td>{{ $data->sort_order }}</td>
-                                            <td>
-                                                <a href="{{ 'categoryedit/' . $data->category_id }}" class="btn btn-sm btn-primary rounded">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-=======
                                     <tr>
                                             <td><input type="checkbox" name="checkall" class="del_all"></td>
                                             <td>{{ $data->cat_name }}</td>
                                             <td>{{ $data->parent_id }}</td>
                                             <td>
-                                                @if(check_user_role(19) == 1)
+                                                @if(check_user_role(56) == 1)
                                                     <a href="" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
                                                 @else
                                                     -
                                                 @endif
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                             </td>
                                         </tr>
 
@@ -115,9 +97,11 @@
                                                     <td> {{ $data->cat_name }} > {{ $scat->cat_name }} </td>
                                                     <td>{{ $scat->sort_order }}</td>
                                                     <td>
-                                                        <a href="{{ 'categoryedit/' . $scat->category_id }}" class="btn btn-sm btn-primary rounded">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
+                                                        @if(check_user_role(56) == 1)
+                                                            <a href="{{ 'categoryedit/' . $scat->category_id }}" class="btn btn-sm btn-primary rounded">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
 
@@ -135,9 +119,11 @@
                                                             <td> {{ $data->cat_name }} > {{ $scat->cat_name }} > {{ $dcat->cat_name }} </td>
                                                             <td>{{ $dcat->sort_order }}</td>
                                                             <td>
-                                                                <a href="{{ 'categoryedit/' . $dcat->category_id }}" class="btn btn-sm btn-primary rounded">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </a>
+                                                                @if(check_user_role(56) == 1)
+                                                                    <a href="{{ 'categoryedit/' . $dcat->category_id }}" class="btn btn-sm btn-primary rounded">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
