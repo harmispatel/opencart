@@ -140,23 +140,6 @@
                                                 <li class="nav-item pl-2">
 
                                                     @if($submenu->url_id == 1)
-<<<<<<< HEAD
-                                                        <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}">
-                                                    @else
-                                                        <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
-                                                    @endif
-
-                                                    <i class="nav-icon {{ $submenu->icon_class }}"></i>
-                                                    <p>{{ $submenu->alias }}</p>
-                                                    </a>
-                                                </li>
-                                            @else
-                                                <li class="nav-item pl-2">
-                                                    <a href="" class="nav-link">
-                                                    <i class="nav-icon {{ $submenu->icon_class }}"></i>
-                                                    <p>{{ $submenu->alias }}</p>
-                                                    </a>
-=======
                                                         <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}" style="padding-left: 5px;">
                                                     @else
                                                         <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}" style="padding-left: 5px;">
@@ -194,7 +177,6 @@
 
                                                     </ul>
 
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                 </li>
                                             @endif
                                         @endforeach
