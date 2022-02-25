@@ -129,11 +129,7 @@
                                                                     @endphp
 
                                                                     <td>
-<<<<<<< HEAD
-                                                                        <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}{{ $paction->id }}{{ $actionId }}_0" {{ $checked }} class="checkbox">
-=======
                                                                         <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}_{{ $paction->id }}_{{ $actionId }}_0" {{ $checked }} class="checkbox">
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                                     </td>
 
                                                                 @endforeach
@@ -173,11 +169,7 @@
                                                                             @endphp
 
                                                                             <td>
-<<<<<<< HEAD
-                                                                                <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}{{ $paction->id }}{{ $actionId }}_{{ $subactionId }}" {{ $checked }} class="checkbox">
-=======
                                                                                 <input type="checkbox" name="access[]" id="menu_id" value="{{ $userrole->user_group_id }}_{{ $paction->id }}_{{ $actionId }}_{{ $subactionId }}" {{ $checked }} class="checkbox">
->>>>>>> c97dd0dc749d4b87f307b1cd55e967f1f86950fe
                                                                             </td>
 
                                                                         @endforeach
