@@ -165,7 +165,7 @@ function check_user_role_for_single_menu($action_id)
 //Function of Get Sub Category
 function get_subcat($value)
 {
-    $subcat = CategoryDetail::where('parent_id',$value)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();;
+    $subcat = CategoryDetail::where('oc_category.parent_id',$value)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
     return $subcat;
 }
 
@@ -175,7 +175,7 @@ function get_subcat($value)
 // Function of Subcategory of Category
 function depend_subcat($value1)
 {
-    $subcat1 = CategoryDetail::where('parent_id',$value1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();;
+    $subcat1 = CategoryDetail::where('oc_category.parent_id',$value1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();;
     return $subcat1;
 }
 

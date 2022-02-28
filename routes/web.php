@@ -13,6 +13,12 @@ use App\Http\Controllers\FiltersController;
 use App\Http\Controllers\ManufacturersController;
 use App\Http\Controllers\DownloadsController;
 use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\InformationController;
+use App\Http\Controllers\OptionController;
+use App\Http\Controllers\AttributesController;
+
+
+
 
 
 

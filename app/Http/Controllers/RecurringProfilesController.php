@@ -16,4 +16,12 @@ class RecurringProfilesController extends Controller
 
         return view('admin.Recurring Profiles.recurringprofiles');
     }
+
+    public function index(){
+        return view('admin.Recurring Profiles.addRecurring');
+    }
+
+    public function addRecurring(){
+        return view('admin.Recurring Profiles.addRecurring');
+    }
 }

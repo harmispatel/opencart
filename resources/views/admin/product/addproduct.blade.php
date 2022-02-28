@@ -364,6 +364,11 @@
                     {{-- start Option --}}
                     <div class="tab-pane fade" id="option" role="tabpanel" aria-labelledby="option-tab">
                         <div class="mb-3">
+                            <ul>
+                                <li>
+                                    <a onclick="$(\'#option-tab\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a>
+                                </li>
+                            </ul>
                             <select name="option" id="option"  placeholder="Option" style="width: 20%">
                                 <option selected disabled>---None---</option>
                                 @foreach ($option as $option)
@@ -475,7 +480,7 @@
                                 <div class="mb-3">
                                     <label for="image" class="form-label">Image</label>
                                     <input type="file" name="image" class="form-control" id="image">
-                                    <img src="{{ asset('public/admin/image/en-gb.png') }}" height="100px"
+                                    <img src="{{ asset('public/admin/image/no_image.png') }}" height="100px"
                                         width="100px">
                                 </div>
                                 <table id="image" class="table table-striped table-bordered table-hover">

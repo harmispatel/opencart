@@ -68,7 +68,7 @@
                                             <th>Action</th>
                                         </thead>
                                         <tbody class="text-center cat-list">
-                                            <tr>
+                                            {{-- <tr>
                                                 <td><input type="checkbox" name="checkall" class="del_all"></td>
                                                 <td>name</td>
                                                 <td>Date Added</td>
