@@ -124,10 +124,11 @@
                                 $str = Request::segment(1).Request::segment(2);
                                 $str1 = Request::segment(1).Request::segment(2).Request::segment(3);
                                 $str2 = Request::segment(1).Request::segment(2).Request::segment(3).Request::segment(4);
+                                $str3 = Request::segment(1);
 
                                 if(count($arr))
                                 {
-                                    if(in_array($str, $arr) || in_array($str1, $arr) || in_array($str2, $arr) )
+                                    if(in_array($str, $arr) || in_array($str1, $arr) || in_array($str2, $arr) || in_array($str3, $arr) )
                                     {
                                         $activecls = "active";
                                         $stylecss = 'menu-open';
@@ -164,8 +165,29 @@
                                                         </a>
                                                 </li>
                                             @else
-                                                <li class="nav-item pl-2">
-                                                    <a href="" class="nav-link">
+
+                                            @php
+                                                $subarr = fetch_mainmenu_submenucolumn($submenu->parent_id);
+                                                $subactivecls = '';
+                                                $substylecss = '';
+
+                                                $substr = Request::segment(1).Request::segment(2);
+                                                $substr1 = Request::segment(1).Request::segment(2).Request::segment(3);
+                                                $substr2 = Request::segment(1).Request::segment(2).Request::segment(3).Request::segment(4);
+
+                                                if(count($subarr))
+                                                {
+                                                    if(in_array($substr, $subarr) || in_array($substr1, $subarr) || in_array($substr2, $subarr) )
+                                                    {
+                                                        $subactivecls = "bg-primary";
+                                                        $substylecss = 'menu-open';
+                                                    }
+                                                }
+
+                                            @endphp
+
+                                                <li class="nav-item pl-2 {{ $substylecss }}">
+                                                    <a href="" class="nav-link {{ $subactivecls }}">
                                                     <i class="nav-icon {{ $submenu->icon_class }}"></i>
                                                     <p>{{ $submenu->alias }}</p> <i class="right fas fa-angle-left"></i>
                                                     </a>
@@ -232,8 +254,29 @@
                                     </li>
                                 @else
 
-                                    <li class="nav-item">
-                                        <a href="" class="nav-link">
+                                    @php
+                                        $arr = fetch_mainmenu_submenucolumn($value->id);
+                                        $activecls = '';
+                                        $stylecss = '';
+
+                                        $str = Request::segment(1).Request::segment(2);
+                                        $str1 = Request::segment(1).Request::segment(2).Request::segment(3);
+                                        $str2 = Request::segment(1).Request::segment(2).Request::segment(3).Request::segment(4);
+                                        $str3 = Request::segment(1);
+
+                                        if(count($arr))
+                                        {
+                                            if(in_array($str, $arr) || in_array($str1, $arr) || in_array($str2, $arr) || in_array($str3, $arr) )
+                                            {
+                                                $activecls = "active";
+                                                $stylecss = 'menu-open';
+                                            }
+                                        }
+
+                                    @endphp
+
+                                    <li class="nav-item {{ $stylecss }}">
+                                        <a href="" class="nav-link {{ $activecls }}">
                                             <i class="nav-icon {{ $value->icon_class }}"></i>
                                             <p>{{ $value->main_menu }} <i class="right fas fa-angle-left"></i></p>
                                         </a>
@@ -256,8 +299,28 @@
                                                         </li>
                                                     @else
 
-                                                        <li class="nav-item pl-2">
-                                                            <a href="" class="nav-link">
+                                                        @php
+                                                            $subarr = fetch_mainmenu_submenucolumn($value1->parent_id);
+                                                            $subactivecls = '';
+                                                            $substylecss = '';
+
+                                                            $substr = Request::segment(1).Request::segment(2);
+                                                            $substr1 = Request::segment(1).Request::segment(2).Request::segment(3);
+                                                            $substr2 = Request::segment(1).Request::segment(2).Request::segment(3).Request::segment(4);
+
+                                                            if(count($subarr))
+                                                            {
+                                                                if(in_array($substr, $subarr) || in_array($substr1, $subarr) || in_array($substr2, $subarr) )
+                                                                {
+                                                                    $subactivecls = "bg-primary";
+                                                                    $substylecss = 'menu-open';
+                                                                }
+                                                            }
+
+                                                    @endphp
+
+                                                        <li class="nav-item pl-2 {{ $substylecss }}">
+                                                            <a href="" class="nav-link {{ $subactivecls }}">
                                                             <i class="nav-icon {{ $value1->icon_class }}"></i>
                                                             <p>{{ $value1->alias }}</p> <i class="right fas fa-angle-left"></i>
                                                             </a>
@@ -269,7 +332,7 @@
                                                                 @endphp --}}
 
                                                                 @php
-                                                                    $where = array('role_id'=>$useraccess,'oc_userrole_actions.menu_id'=>$value1->id,'subaction_id'=>0);
+                                                                    $where = array('role_id'=>$useraccess,'oc_userrole_actions.menu_id'=>$value1->id);
                                                                     $submenusofsubmenu= fetch_otherusers_mainmenu_submenu($where);
                                                                 @endphp
 

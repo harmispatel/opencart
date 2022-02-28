@@ -73,7 +73,7 @@
                                                 <tr style="background: rgb(168, 168, 168);">
                                                     {{-- TD for main Menu List --}}
                                                     <td>
-                                                        <b>{{ $paction->main_menu }}</b>
+                                                        <b>{{ $paction->main_menu }} <i class="{{ $paction->icon_class }}"></i></b>
                                                     </td>
                                                     {{-- End TD for main Menu List --}}
 
@@ -124,7 +124,7 @@
                                                         <tr style="background: rgb(214, 214, 214);">
                                                             {{-- TD for Sub Menu List --}}
                                                             <td style="padding-left: 20px;">
-                                                                <b>- {{ $value1->name }}</b>
+                                                                <b>- {{ $value1->alias }} <i class="{{ $value1->icon_class }}"></i></b>
                                                             </td>
                                                             {{-- End TD for Sub Menu List --}}
 
@@ -172,7 +172,7 @@
                                                                 <tr style="background: rgb(245, 240, 240);">
                                                                     {{-- TD for Sub Menu of Submenu List --}}
                                                                     <td style="padding-left: 28px;">
-                                                                        <b> - - {{ $value2->name }}</b>
+                                                                        <b> - - {{ $value2->alias }} <i class="{{ $value2->icon_class }}"></i></b>
                                                                     </td>
                                                                     {{-- End TD for Sub Menu of Submenu List --}}
 

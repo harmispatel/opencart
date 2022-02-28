@@ -33,18 +33,22 @@
                         {{-- Card Start --}}
                         <div class="card card-primary">
                             {{-- Card Header --}}
-                            <div class="card-header d-flex justify-content-between
-                            p-2" style="background: #f6f6f6">
+                            <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list"></i>
                                     Users Group List
                                 </h3>
 
-                                @if (check_user_role(10) == 1)
-                                    <a href="{{ route('addusergroup') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                @endif
+                                <div class="container" style="text-align: right">
+                                    @if(check_user_role(87) == 1)
+                                        <a href="{{ route('addusergroup') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                    @endif
 
-                                <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                    @if(check_user_role(89) == 1)
+                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                    @endif
+                                </div>
+
                             </div>
                             {{-- End Card Header --}}
 
@@ -74,9 +78,13 @@
                                                         {{ $usergroup->name }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ route('editusersgroup',$usergroup->user_group_id) }}" class="btn btn-sm btn-primary rounded">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
+                                                        @if(check_user_role(88) == 1)
+                                                            <a href="{{ route('editusersgroup',$usergroup->user_group_id) }}" class="btn btn-sm btn-primary rounded">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        @else
+                                                            -
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

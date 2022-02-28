@@ -14,6 +14,13 @@ class PermissionController extends Controller
 
     public function index()
     {
+
+        // Check User Permission
+        if(check_user_role(90) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $data['menus'] = MainMenu::orderBy('menu_order','ASC')->get();
         $data['actions'] = SubMenu::get();
         $data['user_roles'] = UserGroup::where('user_group_id','!=',1)->get();

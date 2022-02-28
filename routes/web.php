@@ -113,7 +113,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
 
     //Manufacturers
-    Route::get('manufacturer', [ManufacturersController::class, 'manufacturer'])->name('manufacturer');
+    Route::get('manufacturer', [ManufacturersController::class, 'index'])->name('manufacturer');
+    Route::get('addmanufacturer', [ManufacturersController::class, 'add'])->name('addmanufacturer');
+    Route::post('storemanufacturer', [ManufacturersController::class, 'store'])->name('storemanufacturer');
+    Route::post('deletemanufacturer', [ManufacturersController::class, 'deletemultimanufacturer'])->name('deletemanufacturer');
+    Route::get('editmanufacturer/{id}', [ManufacturersController::class, 'edit'])->name('editmanufacturer');
+    Route::post('updatemanufacturer', [ManufacturersController::class, 'update'])->name('updatemanufacturer');
 
     //Downloads
     Route::get('download', [DownloadsController::class, 'download'])->name('download');

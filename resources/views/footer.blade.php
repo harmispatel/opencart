@@ -47,6 +47,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- Summernote --}}
 <script src="{{ asset('public/plugins/summernote/summernote.min.js') }}"></script>
 
+
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
@@ -55,13 +56,13 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     });
 </script>
 <script>
-         
+
     $(document).ready(function() {
     $('.js-example-basic-multiple').select2();
 });
 </script>
     <script>
-        
+
 var attribute_row = 0;
 
 function addAttribute() {
@@ -134,7 +135,7 @@ function addAttribute() {
     // <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg">
     var image_row=0;
     function product_image(){
-       
+
         html ='<tr id="image-row' + image_row + '">';
         html +='<td><input type="file" name="image" class="form-control"><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg" weight="100px" height="100px"></td>';
         html +='<td class="right"><input type="text" name="product_sort[' + image_row + '][image_id]" class="form-control" placeholder="Sort Order"></td>';
@@ -144,27 +145,27 @@ function addAttribute() {
         image_row++;
     }
 
-    
-   
+
+
     </script>
     <script>
-        
+
         $(document).ready(function(){
-            
+
                 $.ajax({
                 type: "get",
                 url: "/option",
                 dataType: "json",
                 success: function(response) {
                     $.each(response.option, function(key, item) {
-                       
+
                       console.log(item);
-               
+
 
                     });
                 }
             });
-           
+
         });
     </script>
     <script>
@@ -179,7 +180,7 @@ function addAttribute() {
         }
     });
     </script>
-    
+
 </body>
 
 </body>
