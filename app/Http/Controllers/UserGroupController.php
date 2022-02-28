@@ -15,12 +15,24 @@ class UserGroupController extends Controller
      */
     public function index()
     {
+        // Check User Permission
+        if(check_user_role(86) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $data['usersgroup'] = UserGroup::get();
         return view('admin.usersgroup.list',$data);
     }
 
     public function add()
     {
+        // Check User Permission
+        if(check_user_role(87) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         return view('admin.usersgroup.add');
     }
 
@@ -42,6 +54,13 @@ class UserGroupController extends Controller
 
     function deletemultiusergroup(Request $request)
     {
+
+        // Check User Permission
+        if(check_user_role(89) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if(count($ids) > 0)
@@ -55,6 +74,12 @@ class UserGroupController extends Controller
 
     function edit($id)
     {
+        // Check User Permission
+        if(check_user_role(88) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $userGroup = UserGroup::where('user_group_id',$id)->first();
         if(empty($userGroup))
         {

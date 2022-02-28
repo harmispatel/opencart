@@ -33,14 +33,22 @@
                         {{-- Card Start --}}
                         <div class="card card-primary">
                             {{-- Card Header --}}
-                            <div class="card-header d-flex justify-content-between
-                            p-2" style="background: #f6f6f6">
+                            <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list"></i>
                                     Users List
                                 </h3>
-                                <a href="{{ route('adduser') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+
+                                <div class="container" style="text-align: right">
+                                    @if(check_user_role(83) == 1)
+                                        <a href="{{ route('adduser') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                    @endif
+
+                                    @if(check_user_role(85) == 1)
+                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                    @endif
+                                </div>
+
                             </div>
                             {{-- End Card Header --}}
 
@@ -88,8 +96,12 @@
                                                         {{ date('d/m/Y',strtotime($user->created_at)) }}
                                                     </td>
                                                     <td>
-                                                        <a href="{{ route('edituser',$user->user_id) }}" class="btn btn-sm btn-primary rounded">
+                                                        @if(check_user_role(84) == 1)
+                                                            <a href="{{ route('edituser',$user->user_id) }}" class="btn btn-sm btn-primary rounded">
                                                             <i class="fa fa-edit"></i>
+                                                        @else
+                                                            -
+                                                        @endif
                                                         </a>
                                                     </td>
                                                 </tr>

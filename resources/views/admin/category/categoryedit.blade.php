@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Add New Category</h1>
+                        <h1>Update Category</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
@@ -27,7 +27,7 @@
                 <div class="card-header d-flex p-2" style="background: #f6f6f6">
                     <h3 class="card-title pt-2 m-0" style="color: black">
                         <i class="fas fa-pencil-alt"></i>
-                        Add Category
+                        Update Category
                     </h3>
                     <div class="form-group ml-auto">
                         <button type="submit" form="catform" class="btn btn-primary"><i
@@ -125,22 +125,22 @@
                             <div class="mb-3">
                                 <label for="parent">Parent</label>
                                 <select class="form-control" name="parent" id="parent">
-                                    <option value="{{ $data->parent_id }}" selected>Choose</option>
+                                    <option value="{{ $data->category_id }}" selected>Choose</option>
 
-                                    @foreach ($fetchparent as $data)
-                                        @if (!empty($data->cat_name))
+                                    @foreach ($fetchparent as $data1)
+                                        @if (!empty($data1->cat_name))
                                             <option value="{{ $data->category_id }}">
-                                                {{ $data->cat_name }}
+                                                {{ $data1->cat_name }}
                                             </option>
                                         @endif
                                         @php
-                                            $subcat = get_subcat($data->category_id);
+                                            $subcat = get_subcat($data1->category_id);
                                         @endphp
 
                                         @if (!empty($subcat))
                                             @foreach ($subcat as $scat)
                                                 <option value="{{ $scat->category_id }}">
-                                                    {{ $data->cat_name }} > {{ $scat->cat_name }}
+                                                    {{ $data1->cat_name }} > {{ $scat->cat_name }}
                                                 </option>
 
                                                 @php
@@ -150,7 +150,7 @@
                                                 @if (!empty($dsubcat))
                                                     @foreach ($dsubcat as $dcat)
                                                         <option value="{{ $dcat->category_id }}">
-                                                            {{ $data->cat_name }} > {{ $scat->cat_name }} > {{ $dcat->cat_name }}
+                                                            {{ $data1->cat_name }} > {{ $scat->cat_name }} > {{ $dcat->cat_name }}
                                                         </option>
                                                     @endforeach
                                                 @endif
@@ -185,7 +185,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="top" class="form-label">Top</label><br>
-                                <input type="checkbox" class="ml-3" id="top" name="top" {{ ($data->top == '1')? 'checked' : "" }}>
+                                <input type="checkbox" class="ml-3" id="top" name="top" value="1" {{ ($data->top) ? 'checked' : "" }}>
                             </div>
                             <div class="mb-3">
                                 <label for="columns" class="form-label">Columns</label>
@@ -271,7 +271,7 @@
 
     </div>
 </section>
-{{-- End Section of Add Category --}}
+{{-- End Section of update Category --}}
 @include('footer')
 
 

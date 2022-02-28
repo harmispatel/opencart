@@ -12,12 +12,25 @@ class AllUserController extends Controller
 
     public function index()
     {
+
+        // Check User Permission
+        if(check_user_role(82) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $data['users'] = Users::get();
         return view('admin.users.list',$data);
     }
 
     public function add()
     {
+        // Check User Permission
+        if(check_user_role(83) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $data['usersgroup'] = UserGroup::get();
         return view('admin.users.add',$data);
     }
@@ -63,6 +76,13 @@ class AllUserController extends Controller
 
     function deletemultiuser(Request $request)
     {
+
+        // Check User Permission
+        if(check_user_role(85) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if(count($ids) > 0)
@@ -90,6 +110,13 @@ class AllUserController extends Controller
 
     function edit($id)
     {
+
+        // Check User Permission
+        if(check_user_role(84) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $user = Users::where('user_id',$id)->first();
         if(empty($user))
         {
@@ -153,6 +180,13 @@ class AllUserController extends Controller
 
     function userprofile($id)
     {
+
+        // Check User Permission
+        if(check_user_role(91) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $user = Users::where('user_id',$id)->first();
         if(empty($user))
         {

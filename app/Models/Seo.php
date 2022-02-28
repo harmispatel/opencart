@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Manufacturers extends Model
+class Seo extends Model
 {
-    use HasFactory;
-    protected $table='oc_manufacturer';
-    protected $primaryKey = 'manufacturer_id';
+    public $table = "oc_seo_url";
+    protected $primaryKey = 'tag_id';
     public $timestamps = false;
 }
