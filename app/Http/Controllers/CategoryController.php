@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
-
 use App\Models\Category;
 use App\Models\CategoryDetail;
+use App\Models\CategoryLayout;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -23,7 +22,13 @@ class CategoryController extends Controller
         }
 
         // Fetch Categories
+        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
         $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+
+
+        // echo '<pre>';
+        // print_r($fetchparent->toArray());
+        // exit();
 
         return view('admin.category.CategoryList', ['fetchparent' => $fetchparent]);
     }
@@ -42,7 +47,7 @@ class CategoryController extends Controller
 
 
         // Fetch Category Layout
-        $category_layout = DB::table('oc_layout')->select('layout_id', 'name')->get();
+        $category_layout = CategoryLayout::select('layout_id', 'name')->get();
 
         $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
 
@@ -67,11 +72,11 @@ class CategoryController extends Controller
             $catdetail->image = $imgname;
         }
 
-        $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
-        $catdetail->top = isset($request->top) ? $request->top : 0;
-        $catdetail->column = isset($request->columns) ? $request->columns : 0;
-        $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
-        $catdetail->status = isset($request->status) ? $request->status : 0;
+        $catdetail->parent_id = $request->parent;
+        $catdetail->top =  isset($request->top) ? $request->top : 0;
+        $catdetail->column =  $request->columns;
+        $catdetail->sort_order = $request->sortorder;
+        $catdetail->status = $request->status;
         date_default_timezone_set('Asia/Kolkata');
         $catdetail->date_modified = date("Y-m-d h:i:s");
         $catdetail->update();
@@ -101,10 +106,7 @@ class CategoryController extends Controller
   
         function categorydelete(Request $request)
         {
-            // echo 'Hello';
-            // exit();
             $ids = $request['id'];
-    
             if(count($ids) > 0)
             {
                 Category::whereIn('category_id',$ids)->delete();
@@ -177,14 +179,17 @@ class CategoryController extends Controller
         }
 
         // Fetch Category Layout
-        $category_layout = DB::table('oc_layout')->select('layout_id', 'name')->get();
-
+        $category_layout = CategoryLayout::select('layout_id', 'name')->get();
+        
         // Get Single Category Description
         $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
-
+        
         // Get Single Category
         $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-
+        
+        // echo '<pre>';
+        // print_r($data);
+        // exit();
         return view('admin.category.categoryedit', ['data' => $data, 'fetchparent' => $fetchparent, 'category_layout' => $category_layout]);
     }
 }

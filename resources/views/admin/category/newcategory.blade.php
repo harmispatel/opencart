@@ -16,8 +16,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('category') }}">Category List </li>
-                            </a>
+                            <li class="breadcrumb-item active"><a href="{{ route('category') }}">Category List </li></a>
                             <li class="breadcrumb-item active">All</li>
                         </ol>
                     </div>
@@ -205,6 +204,8 @@
 
                         {{-- SEO --}}
                         <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+                            <div class="alert alert-info"><i class="fa fa-info-circle"></i> Do not use spaces, instead
+                                replace spaces with - and make sure the SEO URL is globally unique.</div>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover">
                                     <thead>
