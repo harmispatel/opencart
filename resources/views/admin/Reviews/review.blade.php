@@ -39,7 +39,7 @@
 
                                 <div class="container" style="text-align: right">
                                     @if(check_user_role(79) == 1)
-                                        <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                        <a href="addReview" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
                                     @if(check_user_role(81) == 1)

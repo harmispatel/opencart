@@ -364,18 +364,15 @@
                     {{-- start Option --}}
                     <div class="tab-pane fade" id="option" role="tabpanel" aria-labelledby="option-tab">
                         <div class="mb-3">
-                            <ul>
-                                <li>
-                                    <a onclick="$(\'#option-tab\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a>
-                                </li>
-                            </ul>
-                            <select name="option" id="option"  placeholder="Option" style="width: 20%">
+                              
+                            <select name="option_showww" id="option_showww"  placeholder="Option" class="form-control">
                                 <option selected disabled>---None---</option>
                                 @foreach ($option as $option)
                                     <option value="{{ $option->type }}">{{ $option->type }}</option>
                                 @endforeach
                             </select>
                         </div>
+                         <div id="appandoption"></div>
                     </div>
                     {{-- end Option --}}
 

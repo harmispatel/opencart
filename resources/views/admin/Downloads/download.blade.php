@@ -40,7 +40,7 @@
 
                                 <div class="container" style="text-align: right">
                                     @if(check_user_role(75) == 1)
-                                        <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                        <a href="{{ route('addDownload') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
                                     @if(check_user_role(77) == 1)
@@ -68,7 +68,7 @@
                                             <th>Action</th>
                                         </thead>
                                         <tbody class="text-center cat-list">
-                                            {{-- <tr>
+                                            <tr>
                                                 <td><input type="checkbox" name="checkall" class="del_all"></td>
                                                 <td>name</td>
                                                 <td>Date Added</td>

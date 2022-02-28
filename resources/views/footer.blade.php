@@ -129,7 +129,7 @@ function addAttribute() {
         html +='<td class="text-right"><a onclick="$(\'#special-row' + special_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         html +='</tr>';
         $('#special tbody').append(html);;
-        discount_row++;
+        special_row++;
     }
     // <img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg">
     var image_row=0;
@@ -144,28 +144,141 @@ function addAttribute() {
         image_row++;
     }
 
+
+    var filter_row=0;
+
+    function addfilter(){
+      
+        html='<tr id="filter-row' + filter_row + '">';
+        html +='<td class="left"><input type="text" name="filter[' + filter_row + '][filter_id]"  class="form-control" placeholder="filter Nmae"></td>';
+        html +='<td class="left"><input type="test" name="sort_order[' + filter_row + '][filter_id]" class="form-control" placeholder="Sort Order"></td>';
+        html +='<td class="text-right"><a onclick="$(\'#filter-row' + filter_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+        html +='</tr>';
+        $('#filter tbody').append(html);;
+        filter_row++;
+    }
+
+
+     var option_row=0;
+        function  addoption(){
+        html='<tr id="option-row' + option_row + '">';
+        html +='<td class="left"><input type="text" name="option[' + option_row + '][option_id]"  class="form-control" placeholder="Option Value Name"></td>';
+        html +='<td><input type="file" name="image" class="form-control"><img src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"weight="80px" height="80px"></td>';
+        html +='<td class="left"><input type="test" name="sort_order[' + option_row + '][option_id]" class="form-control" placeholder="Sort Order"></td>';
+        html +='<td class="text-right"><a onclick="$(\'#option-row' + option_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+        html +='</tr>';
+        $('#option tbody').append(html);;
+        option_row++;
+        
+     }
     
    
     </script>
     <script>
-        
-        $(document).ready(function(){
-            
-                $.ajax({
-                type: "get",
-                url: "/option",
-                dataType: "json",
-                success: function(response) {
-                    $.each(response.option, function(key, item) {
-                       
-                      console.log(item);
-               
-
-                    });
+          $('#option_showww').on('change', function (e) { 
+             
+            //  alert(this.value);
+            var optionval = this.value;
+            var option_rows = 0;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-           
-        });
+
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('getoptionhtml') }}",
+                    dataType: "json",
+                    data: {type: optionval},
+                    success: function(response) {
+                        html = '';
+                        $.each(response.option, function(key, item) {
+                            html += '<div class="tab-pane" id="tab-option' + option_rows + '">';
+                            html += '<div class="form-group">';
+		                    html += '<label class="col-sm-2 control-label" for="input-required' + option_rows + '">Required</label>';
+		                    html += '<div class="col-sm-12"><select name="product_option[' + option_rows + '][required]" id="input-required' + option_rows + '" class="form-control">';
+		                    html += '<option value="1">Yes</option>';
+		                    html += '<option value="0">No</option>';
+		                    html += '</select></div>';
+		                    html += '</div>';
+
+                           if(item['type'] == 'text'){
+                             
+                            html += '<div class="form-group">';
+			                html += '<label class="col-sm-2 control-label" for="input-value' + option_rows + '">Option Value</label>';
+                            html += '<div class="col-sm-12"><input type="text" name="product_option[' + option_rows + '][value]" value="" placeholder="Option Value" id="input-value' + option_rows + '" class="form-control" /></div>';
+			                html += '</div>';
+                            html +='</div>';
+                           }
+
+                            if (item['type'] == 'textarea') {
+			                    html += '	<div class="form-group">';
+			                    html += '	  <label class="col-sm-2 control-label" for="input-value' + option_rows + '">Option Value</label>';
+			                    html += '<div class="col-sm-12"><textarea name="product_option[' + option_rows+ '][value]" rows="5" placeholder="Option Value" id="input-value' + option_rows + '" class="form-control"></textarea></div>';
+			                    html += '</div>';
+                                html +='</div>';
+		                    }
+
+                            if(item['type'] == 'date')
+                            {
+                                html += '<div class="form-group">';
+			                    html += '<label class="col-sm-2 control-label" for="input-value' + option_rows + '">Option Value</label>';
+                                html +='<div class="col-sm-6"><input type="date" name="product_option[' + option_rows+ '][value]" class="form-control"></div>';
+                                html +='</div>';
+                                html +='</div>';
+                            }
+
+                            if(item['type'] == 'datetime'){
+                                html += '<div class="form-group">';
+			                    html += '<label class="col-sm-2 control-label" for="input-value' + option_rows + '">Option Value</label>';
+                                html +='<div class="col-sm-6"><input type="date" name="product_option[' + option_rows+ '][value]" class="form-control"></div>';
+                                html +='</div>';
+                                html +='</div>';
+                            }
+
+                            if(item['type'] == 'time'){
+                                html += '<div class="form-group">';
+			                    html += '<label class="col-sm-2 control-label" for="input-value' + option_rows + '">Option Value</label>';
+                                html +='<div class="col-sm-6"><input type="time" name="product_option[' + option_rows+ '][value]" class="form-control"></div>';
+                                html +='</div>';
+                                html +='</div>';
+                            }
+
+                            if(item['type'] == 'redio' || item['type'] == 'size' || item['type'] == 'checkbox' || item['type'] == 'select'){
+                                html += '<div class="table-responsive">';
+			                    html += '<table id="option-value' + option_rows + '" class="table table-striped table-bordered table-hover">';
+			                    html += '<thead>';
+			                    html += '<tr>';
+			                    html += '<td class="text-left">Option Value</td>';
+			                    html += '<td class="text-right">Quantity</td>';
+			                    html += '<td class="text-left">Subtract Stock</td>';
+			                    html += '<td class="text-right">Price</td>';
+			                    html += '<td class="text-right">Points</td>';
+			                    html += '<td class="text-right">Weight</td>';
+			                    html += '<td></td>';
+			                    html += '</tr>';
+			                    html += '</thead>';
+			                    html += '<tbody>';
+			                    html += '</tbody>';
+			                    html += '<tfoot>';
+			                    html += '<tr>';
+			                    html += '<td colspan="6"></td>';
+			                    html += '<td class="text-left"><button type="button" onclick="addOptionValue(' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
+			                    html += '      </tr>';
+			                    html += '    </tfoot>';
+			                    html += '  </table>';
+			                    html += '</div>';
+                                
+                            }
+               
+                             
+                        });
+                        $('#appandoption').append(html);
+                    }
+                });
+          });   
+        
     </script>
     <script>
         $('#delall').on('click', function(e) {

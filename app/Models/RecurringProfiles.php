@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class RecurringProfiles extends Model
 {
     use HasFactory;
-    protected $table='';
+    protected $table='oc_recurring';
 }

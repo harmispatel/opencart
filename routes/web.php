@@ -97,28 +97,46 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Products
     Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
     Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
-    Route::get('option', [ProductController::class, 'option'])->name('option');
+    Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
+    
 
     // Attributes
+    Route::get('addAttribute',[AttributesController::class,'index'])->name('addAttribute');
     Route::get('attribute', [AttributesController::class, 'attribute'])->name('attribute');
     Route::get('attributegroup', [AttributesController::class, 'attributegroup'])->name('attributegroup');
+    Route::get('addAttributeGroup', [AttributesController::class, 'index1'])->name('addAttributeGroup');
+
+
 
     //Options
+    Route::get('addOption',[OptionController::class,'index'])->name('addOption');
     Route::get('option', [OptionController::class, 'options'])->name('option');
-
+    
     //Recurring Profiles
+    Route::get('addRecurring', [RecurringProfilesController::class, 'index'])->name('addRecurring');
     Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
+    Route::post('addRecurring', [RecurringProfilesController::class, 'addRecurring'])->name('addRecurring');
 
     //Filters
     Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
+    Route::get('addFilter', [FiltersController::class, 'index'])->name('addFilter');
+
 
     //Manufacturers
     Route::get('manufacturer', [ManufacturersController::class, 'manufacturer'])->name('manufacturer');
 
     //Downloads
     Route::get('download', [DownloadsController::class, 'download'])->name('download');
+    Route::get('addDownload',[DownloadsController::class,'index'])->name('addDownload');
 
+    //Informations
+    Route::get('information', [InformationController::class, 'informations'])->name('information');
+    Route::get('addInformation',[InformationController::class,'index'])->name('addInformation');
+    
+   
     //Reviews
     Route::get('review', [ReviewsController::class, 'reviews'])->name('review');
-
+    Route::get('addReview',[ReviewsController::class,'index'])->name('addReview');
+    
+    
 });

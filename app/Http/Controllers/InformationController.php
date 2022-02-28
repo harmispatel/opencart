@@ -18,4 +18,8 @@ class InformationController extends Controller
 
        return view('admin.Informations.information',['information'=>$information]);
     }
+    public function index(){
+      return view('admin.Informations.addInformation');
+    }
+    
 }

@@ -24,7 +24,15 @@ class AttributesController extends Controller
     {
         return view('admin.Attributes.attributegroup');
     }
+     public function index(){
+        
+        $data =AttributesGroupDescription::all();
+         return view('admin.Attributes.addAttribute',['data'=>$data]);
+     }
     public function addAttribute(){
         
+    }
+    public function index1(){
+        return view('admin.Attributes.addAttributeGroup');
     }
 }

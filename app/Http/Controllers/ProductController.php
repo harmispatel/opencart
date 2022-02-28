@@ -59,9 +59,11 @@ class ProductController extends Controller
         return view('admin.product.productlist', ['show_product' => $show_product]);
     }
 
-    public function option(){
+    public function getoptionhtml(Request $request){
+        
+         
 
-        $option = DB::table('oc_option')->select('*')->get();
+        $option = DB::table('oc_option')->where('type',$request->type)->get();
         return response()->json([
             'option' => $option,
         ]);

@@ -17,4 +17,8 @@ class FiltersController extends Controller
 
         return view('admin.Filters.filter');
     }
+
+    public function index(){
+        return view('admin.Filters.addFilter');
+    }
 }

@@ -10,15 +10,15 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Attributes</h1>
-                        
+                        <h1>Options</h1>
+
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-left">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('attribute') }}">Attributes
-                                    </li>
+                            <li class="breadcrumb-item active"><a href="{{ route('option') }}">Options
+                            </li>
                             </a>
                             {{-- <li class="breadcrumb-item active">All</li> --}}
                         </ol>
@@ -27,7 +27,7 @@
                     <div class="form-group ml-auto">
                         <button type="submit" form="catform" class="btn btn-primary"><i
                                 class="fa fa-save">Save</i></button>
-                        <a href="{{ route('addRecurring') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
+                        <a href="{{ route('addOption') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
                                 Back</i></a>
                     </div>
                 </div>
@@ -36,47 +36,70 @@
                     style="background: #f6f6f6">
                     <h3 class="card-title pt-2" style="color: black">
                         <i class="fas fa-pencil-alt"></i>
-                        Attributes
+                       Add Options
                     </h3>
 
                 </div>
-                </section>
+                {{-- </section>
         {{-- End Header Section --}}
 
                 {{-- List Section Start --}}
                 {{-- <section class="content"> --}}
-                <form action="{{ route('addAttribute') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('addOption') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
+                   <div><h3>Option</h3></div>
                     <div class="mb-3">
-                        <label for="attribute" class="form-label">Attribute Name</label>
+                        <label for="option" class="form-label">Option Name</label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon1"><img
                                     src="{{ asset('public/admin/image/en-gb.png') }}"></span>
-                            <input type="text" name="attribute" placeholder="Attribute Name"
+                            <input type="text" name="option" placeholder="Option Name"
                                 class="form-control">
                         </div>
-                        
                     </div>
 
                     <div class="mb-3">
-                        <label for="attributegroup" class="form-label">Attribute Group</label>
-                       <select name="attributegroup" id="attributegroup" class="form-control" >
-                           <option></option>
-                           @foreach ($data as $attribute )
-                           <option value="{{ $attribute->name }}">{{ $attribute->name }}</option>
-                           @endforeach
-                           
-                       </select>
+                        <label for="Type" class="form-label">Type</label>
+                        <select name="option" id="type" class="form-control">
+                            @foreach ($option as $options )
+                            <option value="{{ $options->name }}">{{ $options->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="sortorder" class="form-label">Sort Order</label>
-                        <input type="text" name="sortorder" class="form-control" id="sortorder" 
+                        <input type="text" name="sort_order" class="form-control" id="sortorder"
                             placeholder="Sort Order">
                     </div>
 
+                    <h3>Option Values</h3>
 
-
+                    <div class="table-responsive">
+                        <table id="option" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">
+                                        Option Value Name</th>
+                                        <th>Image</th>
+                                    <th class="text-right">Sort Order</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td class="text-right"><button type="button" onclick="addoption();"
+                                            data-toggle="tooltip" title="option" class="btn btn-primary"><i
+                                                class="fa fa-plus-circle"></i></button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </form>
         </section>
         {{-- End Form Section --}}

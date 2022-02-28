@@ -27,7 +27,7 @@
                     <div class="form-group ml-auto">
                         <button type="submit" form="catform" class="btn btn-primary"><i
                                 class="fa fa-save">Save</i></button>
-                        <a href="{{ route('category') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
+                        <a href="{{ route('addRecurring') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
                                 Back</i></a>
                     </div>
                 </div>
@@ -46,7 +46,8 @@
 
                 {{-- List Section Start --}}
                 {{-- <section class="content"> --}}
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('addRecurring') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="mb-3">
                         <label for="recurring" class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" id="recurring" placeholder="Name">
@@ -56,7 +57,7 @@
 
                     <div class="mb-3">
                         <label for="Price" class="form-label">Price</label>
-                        <input type="text" name="name" class="form-control" id="Price" value="0" placeholder="Price">
+                        <input type="text" name="Price" class="form-control" id="Price" value="0" placeholder="Price">
                     </div>
 
                     <div class="mb-3">

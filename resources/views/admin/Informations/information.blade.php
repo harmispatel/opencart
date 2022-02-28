@@ -37,7 +37,7 @@
                                     <i class="fa fa-list"></i>
                                     Information
                                 </h3>
-                                <a href="#" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                <a href="{{ route('addInformation') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                 <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                             </div>
                             {{-- End Card Header --}}

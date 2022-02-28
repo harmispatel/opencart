@@ -19,4 +19,8 @@ class DownloadsController extends Controller
         return view('admin.Downloads.download');
 
    }
+
+   public function index(){
+       return view('admin.Downloads.addDownload');
+   }
 }

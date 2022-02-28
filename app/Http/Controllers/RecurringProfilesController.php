@@ -21,7 +21,12 @@ class RecurringProfilesController extends Controller
         return view('admin.Recurring Profiles.addRecurring');
     }
 
-    public function addRecurring(){
+    public function addRecurring(Request $request){
+         
+        //   print_r($request->price);die;
+
+         $recurring= new RecurringProfiles();
+
         return view('admin.Recurring Profiles.addRecurring');
     }
 }
