@@ -16,7 +16,8 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active"><a href="{{ route('recurringprofiles') }}">Recurring Profiles</a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('recurringprofiles') }}">Recurring
+                                    Profiles</a></li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -31,73 +32,151 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
-                            <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
-                                    <i class="fa fa-list"></i>
-                                    Recurring Profiles
-                                </h3>
+                        <div class="card-header" style="background: #f6f6f6">
+                            <h3 class="card-title pt-2" style="color: black">
+                                <i class="fa fa-list"></i>
+                                Recurring Profiles
+                            </h3>
 
-                                <div class="container" style="text-align: right">
-                                    @if(check_user_role(63) == 1)
-                                        <a href="addRecurring" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                    @endif
+                            <div class="container" style="text-align: right">
+                                @if (check_user_role(63) == 1)
+                                    <a href="addRecurring" class="btn btn-sm btn-success ml-auto"><i
+                                            class="fa fa-plus"></i></a>
+                                @endif
 
-                                    @if(check_user_role(65) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
-                                    @endif
-                                </div>
-
-
+                                @if (check_user_role(65) == 1)
+                                    <a href="" class="btn btn-sm btn-danger ml-1 deletesellected"><i
+                                            class="fa fa-trash"></i></a>
+                                @endif
                             </div>
-                            {{-- End Card Header --}}
 
-                                {{-- Card Body --}}
-                                <div class="card-body">
-                                    <table class="table">
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" style="display: none" role="alert">
-                                            <p id="success-message" class="mb-0"></p>
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                              </button>
-                                        </div>
-                                        <thead class="text-center">
-                                            <th><input type="checkbox" name="checkall" id="delall"></th>
-                                            <th>Name</th>
-                                            <th>Sort Order</th>
-                                            <th>Action</th>
-                                        </thead>
-                                        <tbody class="text-center cat-list">
-                                            <tr>
-                                                <td><input type="checkbox" name="checkall" class="del_all"></td>
-                                                <td>name</td>
-                                                <td>Sort Order</td>
-                                                <td>
-                                                    @if(check_user_role(64) == 1)
-                                                        <a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+
                         </div>
-                        {{-- End Card --}}
+                        {{-- End Card Header --}}
+
+                        {{-- Card Body --}}
+                        <div class="card-body">
+                            <table class="table">
+                                <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                                    style="display: none" role="alert">
+                                    <p id="success-message" class="mb-0"></p>
+                                    <button type="button" class="close" data-dismiss="alert"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <thead class="text-center">
+                                    <th><input type="checkbox" name="checkall" id="delall"></th>
+                                    <th>Name</th>
+                                    <th>Sort Order</th>
+                                    <th>Action</th>
+                                </thead>
+                                <tbody class="text-center cat-list">
+                                    @foreach ($recuring as $recuring)
+                                        <tr>
+                                            <td><input type="checkbox" name="del_all" class="del_all" value="{{ $recuring->recurring_id }}"></td>
+                                            <td>{{ $recuring->name }}</td>
+                                            <td>{{ $recuring->sort_order }}</td>
+                                            <td>
+                                                @if (check_user_role(64) == 1)
+                                                    <a href="{{ route('edit',$recuring->recurring_id)  }}" class="btn btn-sm btn-primary rounded"><i
+                                                            class="fa fa-edit"></i></a>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    {{-- End Card --}}
                 </div>
             </div>
-        </section>
-        {{-- End Form Section --}}
-
     </div>
+</section>
+{{-- End Form Section --}}
+
+</div>
 </section>
 {{-- End Section of Add Category --}}
 @include('footer')
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-   $(document).ready( function () {
-    $('.table').DataTable();
-} );
+    $(document).ready(function() {
+        $('.table').DataTable();
+    });
 </script>
+ <script>
+      // Select All Checkbox
+    $('#delall').on('click', function(e) {
+        if($(this).is(':checked',true))
+        {
+            $(".del_all").prop('checked', true);
+        }
+        else
+        {
+            $(".del_all").prop('checked',false);
+        }
+    });
+    // End Select All Checkbox
 
 
+    // Delete User
+    $('.deletesellected').click(function()
+    {
+
+        var checkValues = $('.del_all:checked').map(function()
+        {
+            return $(this).val();
+        }).get();
+
+        if(checkValues !='')
+        {
+            swal({
+                title: "Are you sure You want to Delete It ?",
+                text: "Once deleted, you will not be able to recover this Record",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete)
+                {
+
+                    $.ajax({
+                            type: "POST",
+                            url: '{{ url("deleterecurring") }}',
+                            data: {"_token": "{{ csrf_token() }}",'id':checkValues},
+                            dataType : 'JSON',
+                            success: function (data)
+                            {
+                                if(data.success == 1)
+                                {
+                                    swal("Your Record has been deleted!", {
+                                        icon: "success",
+                                    });
+
+                                    setTimeout(function(){
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            }
+                    });
+                }
+                else
+                {
+                    swal("Cancelled", "", "error");
+                    setTimeout(function(){
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        }
+        else
+        {
+            swal("Please select atleast One Recurring Profile", "", "warning");
+        }
+    });
+ </script>

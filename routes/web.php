@@ -101,6 +101,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
     
+    
 
     // Attributes
     Route::get('addAttribute',[AttributesController::class,'index'])->name('addAttribute');
@@ -115,9 +116,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'options'])->name('option');
     
     //Recurring Profiles
-    Route::get('addRecurring', [RecurringProfilesController::class, 'index'])->name('addRecurring');
-    Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
-    Route::post('addRecurring', [RecurringProfilesController::class, 'addRecurring'])->name('addRecurring');
+    Route::get('recurringprofiles', [RecurringProfilesController::class, 'index'])->name('recurringprofiles');
+    Route::get('addRecurring', [RecurringProfilesController::class, 'add'])->name('addRecurring');
+    Route::post('addRecurring',[RecurringProfilesController::class, 'store'])->name('addRecurring');
+    Route::post('deleterecurring', [RecurringProfilesController::class, 'deleterecurring'])->name('deleterecurring');
+    Route::get('edit/{id}', [RecurringProfilesController::class, 'edit'])->name('edit');
+    
 
     //Filters
     Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
