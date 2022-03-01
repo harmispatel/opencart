@@ -44,7 +44,7 @@
                                 <div class="container" style="text-align: right">
                                     <button type="submit" form="manuForm" class="btn btn-sm btn-primary"><i
                                             class="fa fa-save"></i> Save</button>
-                                    <a href="{{ route('addRecurring') }}" class="btn btn-sm btn-danger"><i
+                                    <a href="" class="btn btn-sm btn-danger"><i
                                             class="fa fa-arrow-left"></i> Back</a>
                                 </div>
 
@@ -52,7 +52,7 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Strat --}}
-                            <form action="{{ route('addRecurring') }}" id="manuForm" method="POST"
+                            <form action="" id="manuForm" method="POST"
                                 enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
@@ -64,9 +64,10 @@
 
 
                                             <div class="mb-3">
+                                                <input type="hidden" name="id" id="id" value="{{ $recuring->recurring_id }}">
                                                 <label for="recurring" class="form-label">Name</label>
                                                 <input type="text" name="name" class="form-control" id="recurring"
-                                                    placeholder="Name">
+                                                    placeholder="Name" value="">
                                                     @error('name')
                                                     <div class="alert alert-danger mt-1 mb-1">Profile Name must be greater than 3 and less than 255 characters!</div>
                                                     @enderror
@@ -77,7 +78,7 @@
                                             <div class="mb-3">
                                                 <label for="Price" class="form-label">Price</label>
                                                 <input type="text" name="price" class="form-control" id="Price"
-                                                    value="0" placeholder="Price">
+                                                    value="{{ $recuring->Price }}" placeholder="Price">
                                             </div>
 
                                             <div class="mb-3">
@@ -130,7 +131,6 @@
                                                 <input type="text" name="trial_cycle" class="form-control"
                                                     id="trialcycle" value="1" placeholder="Trial cycle">
                                             </div>
-
                                             <div class="mb-3">
                                                 <label for="trialfrequency" class="form-label">Trial
                                                     frequency</label>

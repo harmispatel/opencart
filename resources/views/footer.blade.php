@@ -230,7 +230,7 @@ function addAttribute() {
                                 html +='</div>';
                             }
 
-                            if(item['type'] == 'datetime'){
+                            if(item['type'] == 'Date&Time'){
                                 html += '<div class="form-group">';
 			                    html += '<label class="col-sm-2 control-label" for="input-value' + option_rows + '">Option Value</label>';
                                 html +='<div class="col-sm-6"><input type="date" name="product_option[' + option_rows+ '][value]" class="form-control"></div>';
@@ -246,7 +246,7 @@ function addAttribute() {
                                 html +='</div>';
                             }
 
-                            if(item['type'] == 'redio' || item['type'] == 'size' || item['type'] == 'checkbox' || item['type'] == 'select'){
+                            if(item['type'] == 'radio' || item['type'] == 'Size' || item['type'] == 'checkbox' || item['type'] == 'select'){
                                 html += '<div class="table-responsive">';
 			                    html += '<table id="option-value' + option_rows + '" class="table table-striped table-bordered table-hover">';
 			                    html += '<thead>';
@@ -257,7 +257,7 @@ function addAttribute() {
 			                    html += '<td class="text-right">Price</td>';
 			                    html += '<td class="text-right">Points</td>';
 			                    html += '<td class="text-right">Weight</td>';
-			                    html += '<td></td>';
+                                html += '<td class="text-right">Action</td>';
 			                    html += '</tr>';
 			                    html += '</thead>';
 			                    html += '<tbody>';
@@ -265,34 +265,36 @@ function addAttribute() {
 			                    html += '<tfoot>';
 			                    html += '<tr>';
 			                    html += '<td colspan="6"></td>';
-			                    html += '<td class="text-left"><button type="button" onclick="addOptionValue(' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
-			                    html += '      </tr>';
-			                    html += '    </tfoot>';
-			                    html += '  </table>';
+			                    html += '<td class="text-right"><button type="button" onclick="addOptionValue(' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
+			                    html += '</tr>';
+			                    html += '</tfoot>';
+			                    html += '</table>';
 			                    html += '</div>';
-                                
                             }
-               
-                             
                         });
                         $('#appandoption').append(html);
+                        
                     }
                 });
-          });   
-        
+          });  
+
+          var addoption_row =0;
+         function addOptionValue(){
+            html = '<tr id="option-row' + addoption_row + '" >';
+            html +='<td></td>';
+            html +='<td><div><input type="text" name="quantity[' + addoption_row+ '][value]" class="form-control" placeholder="Quantity"></div></td>';
+            html +='<td><select name="Subtract[' + addoption_row+ '][value]" class="form-control"><option value="1">Yes</option><option value="0">No</option></select></td>';
+            html +='<td><select name="price[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Price"></div></td>';
+            html +='<td><select name="points[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Points"></div></td>';
+            html +='<td><select name="Weight[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Weight"></div></td>';
+            html +='<td class="text-right"><a onclick="$(\'#option-row' + addoption_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+            html +='</tr>';
+            $('#option tbody').append(html);;
+            addoption_row++;
+         }
+
     </script>
-    <script>
-        $('#delall').on('click', function(e) {
-        if($(this).is(':checked',true))
-        {
-            $(".del_all").prop('checked', true);
-        }
-        else
-        {
-            $(".del_all").prop('checked',false);
-        }
-    });
-    </script>
+   
 
 </body>
 

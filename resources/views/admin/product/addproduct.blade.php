@@ -368,7 +368,7 @@
                             <select name="option_showww" id="option_showww"  placeholder="Option" class="form-control">
                                 <option selected disabled>---None---</option>
                                 @foreach ($option as $option)
-                                    <option value="{{ $option->type }}">{{ $option->type }}</option>
+                                    <option value="{{ $option->name }}">{{ $option->name }}</option>
                                 @endforeach
                             </select>
                         </div>

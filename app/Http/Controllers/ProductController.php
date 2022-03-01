@@ -38,10 +38,8 @@ class ProductController extends Controller
         $result['lenght_class'] = $lenght_class;
         $result['weight_class'] = $weight_class;
 
-        $option = DB::table('oc_option')->select('*')->get();
-        // return response()->json([
-        //     'posts' => $option,
-        // ]);
+        $option = DB::table('oc_option_description')->select('*')->get();
+        
 
 
         return view('admin.product.addproduct', ['result' => $result ,'option'=>$option]);
@@ -68,6 +66,8 @@ class ProductController extends Controller
             'option' => $option,
         ]);
     }
+
+   
 
 
 }
