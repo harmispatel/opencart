@@ -1,0 +1,61 @@
+/* Autocomplete CSS */
+.ui-autocomplete
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: default;
+    background-color:#fff;
+    border: 1px solid #aaaaaa;
+    max-height: 200px;
+    overflow-y: auto;   /* prevent horizontal scrollbar */
+    overflow-x: hidden; /* add padding to account for vertical scrollbar */
+    z-index:1000 !important;
+    list-style: none;
+    padding-left: 0;
+}
+.ui-autocomplete li
+{
+    padding-left: 8px;
+}
+.ui-autocomplete li:hover
+{
+    background: rgb(211, 207, 200);
+}
+/* End Autocomplete css */
+
+
+
+
+
+
+
+
+/* Rating Stars CSS */
+.wrapper-star {
+    display: inline-block;
+  }
+
+  .wrapper-star *
+  {
+    float: right;
+  }
+
+  .wrapper-star input
+  {
+    display: none;
+  }
+
+  .wrapper-star label {
+    font-size: 30px;
+  }
+
+  .wrapper-star input:checked ~ label {
+    color: green;
+  }
+
+  .wrapper-star label:hover,
+  .wrapper-star label:hover ~ label {
+    color: green;
+  }
+  /* End Rating Stars CSS */

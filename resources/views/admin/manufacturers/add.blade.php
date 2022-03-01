@@ -39,12 +39,10 @@
                                     <i class="fas fa-pencil-alt"></i>
                                     Add Manufacturer
                                 </h3>
-
                                 <div class="container" style="text-align: right">
                                     <button type="submit" form="manuForm" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
                                     <a href="{{ route('manufacturer') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
                                 </div>
-
                             </div>
                             {{-- End Card Header --}}
 

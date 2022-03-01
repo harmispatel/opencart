@@ -9,4 +9,6 @@ class Reviews extends Model
 {
     use HasFactory;
     protected $table='oc_review';
+    protected $primaryKey = 'review_id';
+    public $timestamps = false;
 }

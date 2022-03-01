@@ -96,10 +96,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('categorydelete/', [CategoryController::class, 'categorydelete'])->name('categorydelete');
 
     //Products
-    Route::get('productlist', [ProductController::class, 'productlist'])->name('productlist');
-    Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
+    Route::get('products', [ProductController::class, 'index'])->name('products');
+    Route::get('addproduct', [ProductController::class, 'add'])->name('addproduct');
     Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
-    
+    Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
+
+    Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
+
 
     // Attributes
     Route::get('addAttribute',[AttributesController::class,'index'])->name('addAttribute');
@@ -112,7 +115,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Options
     Route::get('addOption',[OptionController::class,'index'])->name('addOption');
     Route::get('option', [OptionController::class, 'options'])->name('option');
-    
+
     //Recurring Profiles
     Route::get('addRecurring', [RecurringProfilesController::class, 'index'])->name('addRecurring');
     Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
@@ -138,11 +141,15 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Informations
     Route::get('information', [InformationController::class, 'informations'])->name('information');
     Route::get('addInformation',[InformationController::class,'index'])->name('addInformation');
-    
-   
+
+
     //Reviews
-    Route::get('review', [ReviewsController::class, 'reviews'])->name('review');
-    Route::get('addReview',[ReviewsController::class,'index'])->name('addReview');
-    
-    
+    Route::get('review', [ReviewsController::class, 'index'])->name('review');
+    Route::get('addreview',[ReviewsController::class,'add'])->name('addreview');
+    Route::post('storereview',[ReviewsController::class,'store'])->name('storereview');
+    Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
+    Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
+    Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
+
+
 });

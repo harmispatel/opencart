@@ -101,7 +101,7 @@
               <div class="icon">
                 <i class="fab fa-product-hunt"></i>
               </div>
-              <a href="{{ route('productlist') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ route('products') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->

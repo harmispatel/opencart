@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="{{ asset('public/plugins/jqvmap/jqvmap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('public/dist/css/adminlte.min.css') }}">
+  <!-- Custom style -->
+  <link rel="stylesheet" href="{{ asset('public/dist/css/custom.css') }}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{ asset('public/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
   <!-- Daterange picker -->
