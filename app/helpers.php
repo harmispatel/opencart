@@ -159,6 +159,16 @@ function check_user_role_for_single_menu($action_id)
 
 }
 
+function getmaincat()
+{
+    $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+
+    foreach ($fetchparent as $main) {
+        $subcat = CategoryDetail::where('oc_category.parent_id',$main->category_id)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+    }
+
+    return $fetchparent;
+}
 
 
 

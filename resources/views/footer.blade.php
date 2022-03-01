@@ -47,6 +47,8 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- Summernote --}}
 <script src="{{ asset('public/plugins/summernote/summernote.min.js') }}"></script>
 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 

@@ -120,7 +120,7 @@
 
                                     @foreach ($fetchparent as $data)
                                     <tr>
-                                            <td><input type="checkbox" name="checkall" class="del_all"></td>
+                                            <td><input type="checkbox" name="del_all" value="{{ $data->category_id }}" class="del_all"></td>
                                             <td>{{ $data->cat_name }}</td>
                                             <td>{{ $data->sort_order }}</td>
                                             <td>
