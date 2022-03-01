@@ -47,6 +47,8 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- Summernote --}}
 <script src="{{ asset('public/plugins/summernote/summernote.min.js') }}"></script>
 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -248,7 +250,10 @@ function addAttribute() {
                             }
 
                             if(item['type'] == 'radio' || item['type'] == 'Size' || item['type'] == 'checkbox' || item['type'] == 'select'){
+<<<<<<< HEAD
 
+=======
+>>>>>>> 04ff87622e8f02fe530912b22c2bbe60a5e55620
                                 html += '<div class="table-responsive">';
 			                    html += '<table id="option-value' + option_rows + '" class="table table-striped table-bordered table-hover">';
 			                    html += '<thead>';
@@ -267,8 +272,12 @@ function addAttribute() {
 			                    html += '<tfoot>';
 			                    html += '<tr>';
 			                    html += '<td colspan="6"></td>';
+<<<<<<< HEAD
 
 			                    html += '<td class="text-right"><button type="button" onclick="addOptionValue('+item['option_id']+',' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
+=======
+			                    html += '<td class="text-right"><button type="button" onclick="addOptionValue(' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
+>>>>>>> 04ff87622e8f02fe530912b22c2bbe60a5e55620
 			                    html += '</tr>';
 			                    html += '</tfoot>';
 			                    html += '</table>';
@@ -282,52 +291,22 @@ function addAttribute() {
           });
 
           var addoption_row =0;
-         function addOptionValue(optionTypeId){
-            $.ajax({
-                type: "post",
-                url: "{{ route('addOptionValue') }}",
-                dataType: "json",
-                data: {optionTypeId:optionTypeId},
-                success: function(response) {
-                    selectoption = "";
-                    html = '<tr id="option-row' + addoption_row + '" >';
-                    $.each(response.option_value, function(key, item) {
-                        // console.log(item.name);
-                        selectoption += '<option value="'+item.option_value_id+'">'+item.name+'</option>';
-                    });
-
-                    // console.log(selectoption); return false;
-
-                    // html +='<td><select><option>checkbox 1</option><option>checkbox 2</option><option>checkbox 3</option><option>checkbox 4</option></select></td>';
-                    html +='<td><select>'+selectoption+'</select></td>';
-                    html +='<td><div><input type="text" name="quantity[' + addoption_row+ '][value]" class="form-control" placeholder="Quantity"></div></td>';
-                    html +='<td><select name="Subtract[' + addoption_row+ '][value]" class="form-control"><option value="1">Yes</option><option value="0">No</option></select></td>';
-                    html +='<td><select name="price[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Price"></div></td>';
-                    html +='<td><select name="points[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Points"></div></td>';
-                    html +='<td><select name="Weight[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Weight"></div></td>';
-                    html +='<td class="text-right"><a onclick="$(\'#option-row' + addoption_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
-                    html +='</tr>';
-                    $('#option tbody').append(html);;
-                    addoption_row++;
-
-                }
-            });
-
+         function addOptionValue(){
+            html = '<tr id="option-row' + addoption_row + '" >';
+            html +='<td></td>';
+            html +='<td><div><input type="text" name="quantity[' + addoption_row+ '][value]" class="form-control" placeholder="Quantity"></div></td>';
+            html +='<td><select name="Subtract[' + addoption_row+ '][value]" class="form-control"><option value="1">Yes</option><option value="0">No</option></select></td>';
+            html +='<td><select name="price[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Price"></div></td>';
+            html +='<td><select name="points[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Points"></div></td>';
+            html +='<td><select name="Weight[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Weight"></div></td>';
+            html +='<td class="text-right"><a onclick="$(\'#option-row' + addoption_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+            html +='</tr>';
+            $('#option tbody').append(html);;
+            addoption_row++;
          }
 
     </script>
-    <script>
-        $('#delall').on('click', function(e) {
-        if($(this).is(':checked',true))
-        {
-            $(".del_all").prop('checked', true);
-        }
-        else
-        {
-            $(".del_all").prop('checked',false);
-        }
-    });
-    </script>
+
 
 </body>
 

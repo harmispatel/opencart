@@ -16,13 +16,7 @@ use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\InformationController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\AttributesController;
-
-
-
-
-
-
-
+use App\Http\Controllers\OrdersController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -89,8 +83,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
     Route::get('category', [CategoryController::class, 'index'])->name('category');
     Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
-    Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
-    Route::post('deleteCategory', [CategoryController::class, 'deleteCategory'])->name('deleteCategory');
     Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
     Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
     Route::post('categorydelete/', [CategoryController::class, 'categorydelete'])->name('categorydelete');
@@ -99,9 +91,20 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('products', [ProductController::class, 'index'])->name('products');
     Route::get('addproduct', [ProductController::class, 'add'])->name('addproduct');
     Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
-    Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
+     Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
 
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
+
+
+    //Orders
+    Route::get('orders', [OrdersController::class, 'index'])->name('orders');
+    Route::get('view', [OrdersController::class, 'view'])->name('view');
+    Route::get('edit', [OrdersController::class, 'edit'])->name('edit');
+    Route::post('update', [OrdersController::class, 'update'])->name('update');
+    Route::post('delete', [OrdersController::class, 'delete'])->name('delete');
+    // Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
+    // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
+
 
 
     // Attributes
@@ -117,9 +120,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'options'])->name('option');
 
     //Recurring Profiles
-    Route::get('addRecurring', [RecurringProfilesController::class, 'index'])->name('addRecurring');
-    Route::get('recurringprofiles', [RecurringProfilesController::class, 'recurring'])->name('recurringprofiles');
-    Route::post('addRecurring', [RecurringProfilesController::class, 'addRecurring'])->name('addRecurring');
+    Route::get('recurringprofiles', [RecurringProfilesController::class, 'index'])->name('recurringprofiles');
+    Route::get('addRecurring', [RecurringProfilesController::class, 'add'])->name('addRecurring');
+    Route::post('addRecurring',[RecurringProfilesController::class, 'store'])->name('addRecurring');
+    Route::post('deleterecurring', [RecurringProfilesController::class, 'deleterecurring'])->name('deleterecurring');
+    Route::get('edit/{id}', [RecurringProfilesController::class, 'edit'])->name('edit');
+
 
     //Filters
     Route::get('filter', [FiltersController::class, 'filters'])->name('filter');

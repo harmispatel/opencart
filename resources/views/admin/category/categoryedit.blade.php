@@ -125,7 +125,7 @@
                             <div class="mb-3">
                                 <label for="parent">Parent</label>
                                 <select class="form-control" name="parent" id="parent">
-                                    <option value="{{ $data->category_id }}" selected>Choose</option>
+                                    <option value="{{ $data->category_id }}" selected></option>
 
                                     @foreach ($fetchparent as $data1)
                                         @if (!empty($data1->cat_name))

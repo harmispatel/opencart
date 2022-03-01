@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RecurringProfiles extends Model
+class Orders extends Model
 {
     use HasFactory;
-    protected $table='oc_recurring';
-    protected $prinarykey='recurring_id';
+    protected $table = "oc_order";
 }
