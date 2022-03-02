@@ -46,7 +46,7 @@ class OrdersController extends Controller
         // echo '<pre>';
         // print_r($orderhistory->toArray());
         // exit();
-        // return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus]);
+        return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus]);
     }
     public function editorder()
     {
