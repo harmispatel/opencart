@@ -47,7 +47,7 @@
                                     Order List
                                 </h3>
 
-                                <div class="container" style="text-align: right">
+                                {{-- <div class="container" style="text-align: right">
                                     @if (check_user_role(71) == 1)
                                         <a href="" class="btn btn-sm btn-success ml-auto"><i
                                                 class="fa fa-plus"></i></a>
@@ -57,7 +57,7 @@
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
                                                 class="fa fa-trash"></i></a>
                                     @endif
-                                </div>
+                                </div> --}}
                             </div>
                             {{-- End Card Header --}}
 
@@ -106,27 +106,27 @@
                                                 <td>{{ date('d-m-Y', strtotime($order->date_added)) }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($order->date_modified)) }}</td>
                                                 <td>
-
                                                     <div class="btn-group">
                                                         <div class="btn-group dropleft" role="group">
                                                             <button type="button"
-                                                                class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
-                                                                data-toggle="dropdown" aria-expanded="false"
-                                                                data-toggle="tooltip" data-placement="top" title="View"
-                                                                style="background-color: #1F91CF">
+                                                                class="btn btn-secondary dropdown-toggle dropdown-toggle-split bg-info"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
                                                                 <span class="sr-only">Toggle Dropleft</span>
                                                             </button>
                                                             <div class="dropdown-menu">
-                                                                <a class="dropdown-item" href="{{ route('edit') }}"><i
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('editorder') }}"><i
                                                                         class="fas fa-pencil-alt"> Edit</i></a>
-                                                                <a class="dropdown-item" href="{{ route('delete') }}"><i
+                                                                <a class="dropdown-item"
+                                                                    href="{{ route('deleteorder') }}"><i
                                                                         class="fa fa-trash"> Delete</i></a>
                                                             </div>
                                                         </div>
-                                                        <a href="{{ route('view') }}"> <button type="button" class="btn btn-secondary"
-                                                            data-toggle="tooltip" data-placement="top" title="View"
-                                                            style="background-color: #1F91CF">
-                                                            <i class="fa fa-eye text-white"></i>
+                                                        <a href="{{ route('vieworder',$order->order_id)}}"><button type="button"
+                                                                data-toggle="tooltip" data-placement="top" title="View"
+                                                                class="btn btn-secondary bg-info rounded-0" id="view">
+                                                                <i class="fa fa-eye text-white"></i>
                                                         </button></a>
                                                     </div>
                                                 </td>
