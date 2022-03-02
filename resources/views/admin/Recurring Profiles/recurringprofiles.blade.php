@@ -45,7 +45,7 @@
                                 @endif
 
                                 @if (check_user_role(65) == 1)
-                                    <a href="" class="btn btn-sm btn-danger ml-1 deletesellected"><i
+                                    <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
                                             class="fa fa-trash"></i></a>
                                 @endif
                             </div>
