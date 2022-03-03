@@ -9,4 +9,6 @@ class InformationDescription extends Model
 {
     use HasFactory;
     protected $table='oc_information_description';
+    protected $primaryKey = 'information_id';
+    public $timestamps = false;
 }

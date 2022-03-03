@@ -9,5 +9,6 @@ class RecurringProfiles extends Model
 {
     use HasFactory;
     protected $table='oc_recurring';
-    protected $prinarykey='recurring_id';
+    protected $primaryKey='recurring_id';
+
 }

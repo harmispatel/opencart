@@ -27,8 +27,8 @@
 <!-- Bootstrap 4 -->
 <script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- daterangepicker -->
-{{-- <script src="{{ asset('public/plugins/moment/moment.min.js') }}"></script>
-<script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
+<script src="{{ asset('public/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('public/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{ asset('public/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 <!-- overlayScrollbars -->
@@ -158,13 +158,14 @@ function addAttribute() {
     function addfilter(){
 
         html='<tr id="filter-row' + filter_row + '">';
-        html +='<td class="left"><input type="text" name="filter[' + filter_row + '][filter_id]"  class="form-control" placeholder="filter Nmae"></td>';
-        html +='<td class="left"><input type="test" name="sort_order[' + filter_row + '][filter_id]" class="form-control" placeholder="Sort Order"></td>';
+        html +='<td class="left"><input type="text" name="mulfilter[]" id="mulfilter" class="form-control" placeholder="filter Name"> <span id="error"></span></td>';
+        html +='<td class="left"><input type="test" name="mulsort_order[]" class="form-control" placeholder="Sort Order"></td>';
         html +='<td class="text-right"><a onclick="$(\'#filter-row' + filter_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         html +='</tr>';
         $('#filter tbody').append(html);;
         filter_row++;
     }
+
 
 
      var option_row=0;
@@ -181,6 +182,19 @@ function addAttribute() {
      }
 
 
+    </script>
+    <script>
+        function errorMessage() {
+            var error = document.getElementById("error")
+            if (isNaN(document.getElementById("mulfilter").value))
+            {
+                // Changing content and color of content
+                error.textContent = "Filter Group Name must be between 1 and 64 characters!";
+                error.style.color = "red"
+            } else {
+                error.textContent = ""
+            }
+        }
     </script>
     <script>
           $('#option_showww').on('change', function (e) {
@@ -273,6 +287,7 @@ function addAttribute() {
 			                    html += '<tfoot>';
 			                    html += '<tr>';
 			                    html += '<td colspan="6"></td>';
+			                    // html += '<td class="text-right"><button type="button" onclick="addOptionValue('+item['option_id']+',' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
 			                    html += '<td class="text-right"><button type="button" onclick="addOptionValue(' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
 			                    html += '</tr>';
 			                    html += '</tfoot>';
@@ -287,7 +302,29 @@ function addAttribute() {
           });
 
           var addoption_row =0;
-         function addOptionValue(){
+         function addOptionValue(optionTypeId){
+
+            // alert(optionTypeId); return false;
+
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
+
+            //     $.ajax({
+            //         type: "post",
+            //         url: "{{ route('addOptionValue') }}",
+            //         dataType: "json",
+            //         data: {optionTypeId: optionTypeId},
+            //         success: function(response) {
+            //             console.log(response.option_value); return false;
+            //             $.each(response.option_value, function(key, item) {
+            //                 console.log(item);
+            //             });            return false;
+            //         }
+            //     });
+
             html = '<tr id="option-row' + addoption_row + '" >';
             html +='<td></td>';
             html +='<td><div><input type="text" name="quantity[' + addoption_row+ '][value]" class="form-control" placeholder="Quantity"></div></td>';
