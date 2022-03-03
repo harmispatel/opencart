@@ -131,8 +131,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Filters
     Route::get('filter', [FiltersController::class, 'index'])->name('filter');
-    Route::get('addFilter', [FiltersController::class, 'add'])->name('addFilter');
-    Route::post('addFilter',[FiltersController::class, 'store'])->name('addFilter');
+    Route::get('addfilter', [FiltersController::class, 'add'])->name('addfilter');
+    Route::post('storeFilter',[FiltersController::class, 'store'])->name('storeFilter');
+    Route::get('editfilter/{id}',[FiltersController::class, 'store'])->name('editfilter');
+    Route::post('deletefilter',[FiltersController::class, 'delete'])->name('deletefilter');
 
 
 

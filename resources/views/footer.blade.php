@@ -158,16 +158,13 @@ function addAttribute() {
     function addfilter(){
 
         html='<tr id="filter-row' + filter_row + '">';
-        html +='<td class="left"><input type="text" name="mulfilter[]" id="mulfilter" class="form-control" placeholder="filter Name"> <span id="error"></span></td>';
+        html +='<td class="left"><input type="text" name="mulfilter[]"  class="form-control" placeholder="filter Name" required></td>';
         html +='<td class="left"><input type="test" name="mulsort_order[]" class="form-control" placeholder="Sort Order"></td>';
         html +='<td class="text-right"><a onclick="$(\'#filter-row' + filter_row + '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         html +='</tr>';
         $('#filter tbody').append(html);;
         filter_row++;
     }
-
-
-
      var option_row=0;
         function  addoption(){
         html='<tr id="option-row' + option_row + '">';
@@ -178,24 +175,9 @@ function addAttribute() {
         html +='</tr>';
         $('#option tbody').append(html);;
         option_row++;
-
      }
-
-
     </script>
-    <script>
-        function errorMessage() {
-            var error = document.getElementById("error")
-            if (isNaN(document.getElementById("mulfilter").value))
-            {
-                // Changing content and color of content
-                error.textContent = "Filter Group Name must be between 1 and 64 characters!";
-                error.style.color = "red"
-            } else {
-                error.textContent = ""
-            }
-        }
-    </script>
+   
     <script>
           $('#option_showww').on('change', function (e) {
 
