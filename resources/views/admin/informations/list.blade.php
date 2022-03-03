@@ -48,11 +48,11 @@
                                 </h3>
 
                                 <div class="container" style="text-align: right">
-                                    @if(check_user_role(79) == 1)
+                                    @if(check_user_role(101) == 1)
                                         <a href="{{ route('addinformation') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if(check_user_role(81) == 1)
+                                    @if(check_user_role(103) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
@@ -84,7 +84,7 @@
                                                 <td>{{ $information->oname }}</td>
                                                 <td>{{ $information->sort_order }}</td>
                                                 <td>
-                                                    @if(check_user_role(80) == 1)
+                                                    @if(check_user_role(102) == 1)
                                                         <a href="{{ route('editinformation',$information->information_id) }}" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
                                                     @else
                                                         -

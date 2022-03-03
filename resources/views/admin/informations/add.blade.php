@@ -47,7 +47,7 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Strat --}}
-                            <form action="{{ route('updateinformation') }}" id="manuForm" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('storeinformation') }}" id="manuForm" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">

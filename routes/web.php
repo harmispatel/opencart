@@ -154,6 +154,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storeinformation',[InformationController::class,'store'])->name('storeinformation');
     Route::post('deleteinformation',[InformationController::class,'delete'])->name('deleteinformation');
     Route::get('editinformation/{id}', [InformationController::class, 'edit'])->name('editinformation');
+    Route::post('updateinformation', [InformationController::class, 'update'])->name('updateinformation');
 
 
     //Reviews

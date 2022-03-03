@@ -47,7 +47,7 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Strat --}}
-                            <form action="{{ route('storeinformation') }}" id="manuForm" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('updateinformation') }}" id="manuForm" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">
@@ -75,6 +75,7 @@
                                         <div class="tab-pane fade show active" id="genral" role="tabpanel" aria-labelledby="genral-tab">
 
                                             <div class="form-group">
+                                                <input type="hidden" name="id" id="id" value="{{ $information->information_id }}">
                                                 <label for="infotitle" class="form-label">Information Title</label>
                                                 <input type="text" name="infotitle" class="form-control {{ ($errors->has('infotitle')) ? 'is-invalid' : '' }}" id="infotitle" value="{{ $information->title }}">
                                                 @if($errors->has('infotitle'))
