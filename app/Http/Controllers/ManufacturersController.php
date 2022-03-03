@@ -82,7 +82,6 @@ class ManufacturersController extends Controller
             $seo = new Seo;
             $seo->store_id = 0;
             $seo->language_id = 1;
-            $seo->tag_id = $manufacturer_id;
             $seo->query = 'manufacturer_id='.$manufacturer_id;
             $seo->keyword = $request['keyword'];
             $seo->save();
@@ -136,7 +135,11 @@ class ManufacturersController extends Controller
            ManufacturerstoStore::whereIn('manufacturer_id',$ids)->delete();
 
            // Delete Manufacturer SEO
-           Seo::whereIn('tag_id',$ids)->delete();
+           foreach($ids as $id)
+           {
+               $query = 'manufacturer_id='.$id;
+               Seo::where('query',$query)->delete();
+           }
 
            return response()->json([
                'success' => 1,
@@ -167,7 +170,8 @@ class ManufacturersController extends Controller
         $data['manufacturer'] = $manufacturer;
 
         // Giv Manufacturer SEO Details to Array
-        $data['seo'] = Seo::where('tag_id',$id)->first();
+        $query = 'manufacturer_id='.$id;
+        $data['seo'] = Seo::select('keyword')->where('query',$query)->first();
 
         return view('admin.manufacturers.edit',$data);
     }

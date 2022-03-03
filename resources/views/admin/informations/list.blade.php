@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of List Reviews --}}
+{{-- Section of List Informations --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -18,13 +18,13 @@
                 @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Reviews</h1>
+                        <h1>Informations</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Reviews</li>
+                            <li class="breadcrumb-item active">Informations</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -44,12 +44,12 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Reviews List
+                                    Informations List
                                 </h3>
 
                                 <div class="container" style="text-align: right">
                                     @if(check_user_role(79) == 1)
-                                        <a href="{{ route('addreview') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                        <a href="{{ route('addinformation') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
                                     @if(check_user_role(81) == 1)
@@ -63,65 +63,29 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered">
-                                    {{-- Alert  Message Div --}}
-                                    <div class="alert alert-success del-alert alert-dismissible" id="alert" style="display: none" role="alert">
-                                        <p id="success-message" class="mb-0"></p>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    {{-- End Alert Message Div --}}
-
                                     {{-- Table Head Start --}}
                                     <thead class="text-center">
                                         <th>
                                             <input type="checkbox" name="checkall" id="delall">
                                         </th>
-                                        <th>Product</th>
-                                        <th>Auther</th>
-                                        <th>Rating</th>
-                                        <th>Status</th>
-                                        <th>Date Added</th>
+                                        <th>Information Title</th>
+                                        <th>Sort Order</th>
                                         <th>Action</th>
                                     </thead>
                                     {{-- End Table Head --}}
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
-                                        @foreach ($reviews as $review )
+                                        @foreach ($informations as $information )
                                             <tr>
                                                 <td>
-                                                    <input type="checkbox" name="del_all" class="del_all" value="{{ $review->review_id }}">
+                                                    <input type="checkbox" name="del_all" class="del_all" value="{{ $information->information_id }}">
                                                 </td>
-                                                <td>{{ $review->pname }}</td>
-                                                <td>{{ $review->author }}</td>
-                                                <td>
-                                                    @php
-                                                        for($i=1; $i<=5; $i++)
-                                                        {
-                                                            if($review->rating >= $i)
-                                                            {
-                                                                echo "<label style='color: goldenrod;font-size: 25px;'>&#10038;</label>";
-                                                            }
-                                                            else
-                                                            {
-                                                                echo "<label style='color: lightgray;font-size: 25px;'>&#10038;</label>";
-                                                            }
-                                                        }
-
-                                                    @endphp
-                                                </td>
-                                                <td>
-                                                    @if ($review->status == 1)
-                                                        Enabled
-                                                    @else
-                                                        Disabled
-                                                    @endif
-                                                </td>
-                                                <td>{{ date('d-m-Y',strtotime($review->date_added)) }}</td>
+                                                <td>{{ $information->oname }}</td>
+                                                <td>{{ $information->sort_order }}</td>
                                                 <td>
                                                     @if(check_user_role(80) == 1)
-                                                        <a href="{{ route('editreview',$review->review_id) }}" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
+                                                        <a href="{{ route('editinformation',$information->information_id) }}" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
                                                     @else
                                                         -
                                                     @endif
@@ -202,7 +166,7 @@
 
                     $.ajax({
                             type: "POST",
-                            url: '{{ url("deletereview") }}',
+                            url: '{{ url("deleteinformation") }}',
                             data: {"_token": "{{ csrf_token() }}",'id':checkValues},
                             dataType : 'JSON',
                             success: function (data)
@@ -232,7 +196,7 @@
         }
         else
         {
-            swal("Please select atleast One Review", "", "warning");
+            swal("Please select atleast One Information", "", "warning");
         }
     });
 

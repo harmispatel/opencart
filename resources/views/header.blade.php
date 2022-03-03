@@ -26,8 +26,6 @@
   <link rel="stylesheet" href="{{ asset('public/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{ asset('public/plugins/daterangepicker/daterangepicker.css') }}">
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/style/stylesheet.css') }}">
   <!-- DataTable -->
   <link href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link href="//cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css" rel="stylesheet">
@@ -37,9 +35,8 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
 {{-- bootstrap --}}
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-  {{-- Summernote --}}
-  <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
+{{-- Summernote --}}
+<link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

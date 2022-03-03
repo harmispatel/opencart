@@ -145,8 +145,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('addDownload',[DownloadsController::class,'index'])->name('addDownload');
 
     //Informations
-    Route::get('information', [InformationController::class, 'informations'])->name('information');
-    Route::get('addInformation',[InformationController::class,'index'])->name('addInformation');
+    Route::get('information', [InformationController::class, 'index'])->name('information');
+    Route::get('addinformation',[InformationController::class,'add'])->name('addinformation');
+    Route::post('storeinformation',[InformationController::class,'store'])->name('storeinformation');
+    Route::post('deleteinformation',[InformationController::class,'delete'])->name('deleteinformation');
+    Route::get('editinformation/{id}', [InformationController::class, 'edit'])->name('editinformation');
 
 
     //Reviews
