@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Userss</h1>
+                        <h1>Users</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
