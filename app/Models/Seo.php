@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Seo extends Model
 {
     public $table = "oc_seo_url";
-    protected $primaryKey = 'tag_id';
+    protected $primaryKey = 'query';
     public $timestamps = false;
 }

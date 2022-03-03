@@ -33,8 +33,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css" integrity="sha512-g9k+CnZOpfd3BjCvr9L6M9F1u42RbYxtiurifk4KmqTNTyZRnKixRgZl6SzPESunaaCnyelHhKicHWcQUwALYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Select Box -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
-  {{-- Summernote --}}
-  <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
+{{-- bootstrap --}}
+
+{{-- Summernote --}}
+<link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
