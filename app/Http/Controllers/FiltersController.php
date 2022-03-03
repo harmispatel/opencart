@@ -7,70 +7,120 @@ use App\Models\Filters;
 use App\Models\FilterDescription;
 use App\Models\FilterGroup;
 use App\Models\FilterGroupDescription;
+use PhpParser\Node\Expr\Empty_;
 
 class FiltersController extends Controller
 {
+
+
+
+    // Function of List All Filtergroup
     public function index()
     {
         // Check User Permission
-        if(check_user_role(66) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
-        }
-        return view('admin.Filters.filter');
+        // if (check_user_role(66) != 1) 
+        // {
+        //     return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        // }
+
+        // Get All Filter Group
+        $data['filtergroups'] = FilterGroup::select('oc_filter_group.*','fgd.name')->leftJoin('oc_filter_group_description as fgd','fgd.filter_group_id','=','oc_filter_group.filter_group_id')->get();
+
+        return view('admin.filters.list',$data);
     }
-    public function add(){
-        return view('admin.Filters.addFilter');
+
+
+
+    public function add()
+    {
+        return view('admin.filters.add');
     }
-     public function store(Request $request){
+
+
+
+    function store(Request $request)
+    {
+
+        // Sort Order
+        $sort_order=$request->sort_order;
+
+        // Insert Filter Group
+        $filtergroup = new FilterGroup();
+        $filtergroup->sort_order = isset($sort_order) ? $sort_order :0;
+        $filtergroup->created_at = date('Y-m-d');
+        $filtergroup->save();
+
+        // Insert Filter Group Description
+        $filtergroupdescription = new FilterGroupDescription();
+        $filtergroupdescription->filter_group_id = $filtergroup->id;
+        $filtergroupdescription->language_id = 1;
+        $filtergroupdescription->name = $request['filter'];
+        $filtergroupdescription->created_at = date('Y-m-d');
+        $filtergroupdescription->save();
+
+
 
         
-        $this->validate($request, [
-            'filter' => 'required|min:2|max:64',
-            // 'mulfilter' => 'required|min:2|max:64',
+        if(!empty($request->mulfilter)) 
+        {
 
-        ]);
-
-
-
-         $filter_Group = new FilterGroup();
-         $filter_Group->sort_order=$request['sort_order'];
-         $filter_Group->save();
-
+            $mulfilter = $request['mulfilter'];
+            $order = $request['mulsort_order'];
             
-           if(!empty($request->mulsort_order)){
-            
-             $abc=$request->mulsort_order;
+            foreach ($mulfilter as $key=>$filtername) 
+            {
+    
+                $filter = new Filters();
+                $filter->filter_group_id = $filtergroup->id;
+                $filter->sort_order = isset($order[$key]) ? $order[$key] : 0;
+                $filter->save();
 
-             foreach ($abc as $value) {
-                //  echo $value;die;
-                $filter_Group = new FilterGroup();
-                $filter_Group->sort_order=$value;
-                // $filter_Group->save();
-             }
+                $filterdscription = new FilterDescription();
+                $filterdscription->filter_id = $filter->id;
+                $filterdscription->language_id = 1;
+                $filterdscription->filter_group_id = $filtergroup->id;
+                $filterdscription->name = $filtername;
+                $filterdscription->save();
 
-           }
-         
+            }
+        }
 
-        //  $filter =new Filters();
-        //  $filter->filter_group_id=$filter_Group->id;
-        //  $filter->sort_order=$request['sort_order'];
-        //  $filter->save();
+        return redirect()->route('filter')->with("success","Filter Inserted Successfully...");
+    }
 
-        //  $filter_group_Description=new FilterGroupDescription();
-        //  $filter_group_Description->filter_group_id=$filter_Group->id;
-        //  $filter_group_Description->language_id=1;
-        //  $filter_group_Description->name=$request['filter'];
-        //  $filter_group_Description->save();
 
-        //  $filter_description=new FilterDescription();
-        //  $filter_description->filter_id=$filter->id;
-        //  $filter_description->language_id=1;
-        //  $filter_description->filter_group_id=$filter_Group->id;
-        //  $filter_description->name=$request['filter'];
-        //  $filter_description->save();
 
-         return redirect()->route('addFilter')->with('status',"Filter Inserted Successfully...");
-         
-     }
+    function delete(Request $request)
+    {
+        // Check User Permission
+    //    if(check_user_role(103) != 1)
+    //    {
+    //        return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+    //    }
+
+       //Multiple Id's
+       $ids = $request['id'];
+
+       // When not empty ids Then Delete Otherwise Not
+       if(count($ids) > 0)
+       {
+           // Delete FilterGroup
+           FilterGroup::whereIn('filter_group_id',$ids)->delete();
+
+           // Delete FilterGroup Description
+           FilterGroupDescription::whereIn('filter_group_id',$ids)->delete();
+
+           // Delete Filter
+           Filters::whereIn('filter_group_id',$ids)->delete();
+
+           // Delete Filter Description
+           FilterDescription::whereIn('filter_group_id',$ids)->delete();
+
+           return response()->json([
+               'success' => 1,
+           ]);
+       }
+    }
+
+
 }
