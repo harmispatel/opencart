@@ -9,4 +9,6 @@ class OrderHistory extends Model
 {
     use HasFactory;
     protected $table = "oc_order_history";
+    public $timestamps = false;
+    protected $fillable = ['order_id', 'notify', 'comment', 'date_added'];
 }

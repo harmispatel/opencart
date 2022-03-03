@@ -102,7 +102,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');
     Route::post('deleteorder', [OrdersController::class, 'deleteorder'])->name('deleteorder');
-    Route::get('orderdata', [OrdersController::class, 'getorderhistory'])->name('orderdata');
+    Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
+    Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
 

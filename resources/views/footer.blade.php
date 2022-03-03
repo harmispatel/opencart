@@ -255,10 +255,6 @@ function addAttribute() {
                             }
 
                             if(item['type'] == 'radio' || item['type'] == 'Size' || item['type'] == 'checkbox' || item['type'] == 'select'){
-<<<<<<< HEAD
-
-=======
->>>>>>> 04ff87622e8f02fe530912b22c2bbe60a5e55620
                                 html += '<div class="table-responsive">';
 			                    html += '<table id="option-value' + option_rows + '" class="table table-striped table-bordered table-hover">';
 			                    html += '<thead>';
@@ -277,12 +273,7 @@ function addAttribute() {
 			                    html += '<tfoot>';
 			                    html += '<tr>';
 			                    html += '<td colspan="6"></td>';
-<<<<<<< HEAD
-
-			                    html += '<td class="text-right"><button type="button" onclick="addOptionValue('+item['option_id']+',' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
-=======
 			                    html += '<td class="text-right"><button type="button" onclick="addOptionValue(' + option_rows + ');" data-toggle="tooltip" title="Add Option Value" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>';
->>>>>>> 04ff87622e8f02fe530912b22c2bbe60a5e55620
 			                    html += '</tr>';
 			                    html += '</tfoot>';
 			                    html += '</table>';
