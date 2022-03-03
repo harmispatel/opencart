@@ -98,11 +98,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Orders
     Route::get('orders', [OrdersController::class, 'index'])->name('orders');
-    Route::get('view', [OrdersController::class, 'view'])->name('view');
-    Route::get('edit', [OrdersController::class, 'edit'])->name('edit');
-    Route::post('update', [OrdersController::class, 'update'])->name('update');
-    Route::post('delete', [OrdersController::class, 'delete'])->name('delete');
-    // Route::get('addproduct', [ProductController::class, 'index'])->name('addproduct');
+    Route::get('vieworder/{id}', [OrdersController::class, 'vieworder'])->name('vieworder');
+    Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
+    Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');
+    Route::post('deleteorder', [OrdersController::class, 'deleteorder'])->name('deleteorder');
+    Route::get('orderdata', [OrdersController::class, 'getorderhistory'])->name('orderdata');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
 
@@ -125,11 +125,15 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('addRecurring',[RecurringProfilesController::class, 'store'])->name('addRecurring');
     Route::post('deleterecurring', [RecurringProfilesController::class, 'deleterecurring'])->name('deleterecurring');
     Route::get('edit/{id}', [RecurringProfilesController::class, 'edit'])->name('edit');
+    Route::post('updaterecurring',[RecurringProfilesController::class, 'update'])->name('updaterecurring');
+
 
 
     //Filters
-    Route::get('filter', [FiltersController::class, 'filters'])->name('filter');
-    Route::get('addFilter', [FiltersController::class, 'index'])->name('addFilter');
+    Route::get('filter', [FiltersController::class, 'index'])->name('filter');
+    Route::get('addFilter', [FiltersController::class, 'add'])->name('addFilter');
+    Route::post('addFilter',[FiltersController::class, 'store'])->name('addFilter');
+
 
 
     //Manufacturers

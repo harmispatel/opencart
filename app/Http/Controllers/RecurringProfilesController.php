@@ -61,9 +61,35 @@ class RecurringProfilesController extends Controller
     }
 
     public function edit($id){
+
         $recuring = RecurringProfiles::where('recurring_id',$id)->first();
         $data['recuring'] = $recuring;
         $data['description'] = RecurringDescription::where('recurring_id',$id)->first();
-        return view('admin.Recurring Profiles.edit',$data);
+        return view('admin.Recurring Profiles.edit',['data'=>$data]);
+    }
+
+    public function update(Request $request){
+ 
+       $recuring_id = $request->id;
+      
+        $recurings = RecurringProfiles::find($recuring_id);
+        $recurings->price = $request['price'];
+        $recurings->frequency = $request['frequency'];
+        $recurings->duration = $request['duration'];
+        $recurings->cycle = $request['cycle'];
+        $recurings->trial_status = $request['trial_status'];
+        $recurings->trial_price = $request['trial_price'];
+        $recurings->trial_frequency = $request['trial_frequency'];
+        $recurings->trial_duration = $request['trial_duration'];
+        $recurings->trial_cycle = $request['trial_cycle'];
+        $recurings->status = $request['status'];
+        $recurings->sort_order = $request['sort_order'];
+        $recurings->update();
+        $recuring_description =RecurringDescription::find($recuring_id);
+        $recuring_description->recurring_id = $recuring_id;
+        $recuring_description->language_id = 1;
+        $recuring_description->name = $request['name'];
+        $recuring_description->update();
+        return redirect()->route('recurringprofiles')->with('success', "Recurring Update Successfully..");
     }
 }

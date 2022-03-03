@@ -9,5 +9,5 @@ class RecurringDescription extends Model
 {
     use HasFactory;
     protected $table ='oc_recurring_description';
-    protected $prinarykey='recurring_id';
+    protected $primaryKey='recurring_id';
 }
