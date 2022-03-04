@@ -104,6 +104,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deleteorder', [OrdersController::class, 'deleteorder'])->name('deleteorder');
     Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
+    Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
+    Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
+
+    // Order returns
+    Route::get('returns', [OrdersController::class, 'returns'])->name('returns');
+    Route::get('addnewreturns', [OrdersController::class, 'addnewreturns'])->name('addnewreturns');
+
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
 

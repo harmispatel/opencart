@@ -64,7 +64,7 @@
                             {{-- Card Body --}}
                             <div class="card-body">
                                 {{-- Table --}}
-                                <table class="table table-bordered">
+                                <table class="table table-bordered" id="table">
                                     {{-- Alert  Message Div --}}
                                     <div class="alert alert-success del-alert alert-dismissible" id="alert"
                                         style="display: none" role="alert">
@@ -78,9 +78,7 @@
 
                                     {{-- Table Head Start --}}
                                     <thead class="text-center">
-                                        <th>
-                                            <input type="checkbox" name="checkall" id="delall">
-                                        </th>
+                                        <th><input type="checkbox" name="checkall" id="delall"></th>
                                         <th>Order Id</th>
                                         <th>Customer</th>
                                         <th>Status</th>
@@ -95,10 +93,7 @@
                                     <tbody class="text-center review-list">
                                         @foreach ($orders as $order)
                                             <tr>
-                                                <td>
-                                                    <input type="checkbox" name="del_all" class="del_all"
-                                                        value="{{ $order->order_id }}">
-                                                </td>
+                                                <td><input type="checkbox" name="del_all" value="{{ $order->order_id }}" class="del_all"></td>
                                                 <td>{{ $order->order_id }}</td>
                                                 <td>{{ $order->firstname }} {{ $order->lastname }}</td>
                                                 <td>{{ $order->name }}</td>
@@ -109,9 +104,7 @@
                                                     <div class="btn-group">
                                                         <div class="btn-group dropleft" role="group">
                                                             <button type="button"
-                                                                class="btn btn-secondary dropdown-toggle dropdown-toggle-split bg-info"
-                                                                data-toggle="dropdown" aria-haspopup="true"
-                                                                aria-expanded="false">
+                                                                class="btn btn-info dropdown-toggle dropdown-toggle-split rounded-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <span class="sr-only">Toggle Dropleft</span>
                                                             </button>
                                                             <div class="dropdown-menu">
@@ -123,11 +116,8 @@
                                                                         class="fa fa-trash"> Delete</i></a>
                                                             </div>
                                                         </div>
-                                                        <a href="{{ route('vieworder',$order->order_id)}}"><button type="button"
-                                                                data-toggle="tooltip" data-placement="top" title="View"
-                                                                class="btn btn-secondary bg-info rounded-0" id="view">
-                                                                <i class="fa fa-eye text-white"></i>
-                                                        </button></a>
+                                                        <a href="{{ route('vieworder',$order->order_id)}}"><button type="button" data-toggle="tooltip" data-placement="top" title="View" class="btn btn-info rounded-0" id="view"><i class="fa fa-eye text-white"></i></button></a>
+                                                        {{-- <button type="button" data-toggle="tooltip" data-placement="top" title="View" class="btn btn-info rounded-right" id="view"><a href="{{ route('vieworder',$order->order_id)}}"><i class="fa fa-eye text-white"></i></a></button> --}}
                                                     </div>
                                                 </td>
                                             </tr>
@@ -159,71 +149,69 @@
 <script type="text/javascript">
     // Data Table of Manufacturers List
     $(document).ready(function() {
-        $('.table').DataTable();
-    });
+        $('#table').DataTable();
+        // Select All Checkbox
+        $('#delall').on('click', function(e) {
+            if ($(this).is(':checked', true)) {
+                $(".del_all").prop('checked', true);
+            } else {
+                $(".del_all").prop('checked', false);
+            }
+        });
+        // End Select All Checkbox
 
+        // Delete Orders
+        $('.deletesellected').click(function() {
 
+            var checkValues = $('.del_all:checked').map(function() {
+                return $(this).val();
+            }).get();
 
-    // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        if ($(this).is(':checked', true)) {
-            $(".del_all").prop('checked', true);
-        } else {
-            $(".del_all").prop('checked', false);
-        }
-    });
-    // End Select All Checkbox
+            if (checkValues != '') {
+                swal({
+                        title: "Are you sure You want to Delete It ?",
+                        text: "Once deleted, you will not be able to recover this Record",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
 
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ url('categorydelete') }}',
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    'id': checkValues
+                                },
+                                dataType: 'JSON',
+                                success: function(data) {
+                                    if (data.success == 1) {
+                                        swal("Your Record has been deleted!", {
+                                            icon: "success",
+                                        });
 
-    // Delete User
-    $('.deletesellected').click(function() {
-
-        var checkValues = $('.del_all:checked').map(function() {
-            return $(this).val();
-        }).get();
-
-        if (checkValues != '') {
-            swal({
-                    title: "Are you sure You want to Delete It ?",
-                    text: "Once deleted, you will not be able to recover this Record",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-
-                        $.ajax({
-                            type: "POST",
-                            url: '{{ url('deleteorder') }}',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id': checkValues
-                            },
-                            dataType: 'JSON',
-                            success: function(data) {
-                                if (data.success == 1) {
-                                    swal("Your Record has been deleted!", {
-                                        icon: "success",
-                                    });
-
-                                    setTimeout(function() {
-                                        location.reload();
-                                    }, 1500);
+                                        setTimeout(function() {
+                                            location.reload();
+                                        }, 1500);
+                                    }
                                 }
-                            }
-                        });
+                            });
 
-                    } else {
-                        swal("Cancelled", "", "error");
-                        setTimeout(function() {
-                            location.reload();
-                        }, 1000);
-                    }
-                });
-        } else {
-            swal("Please select atleast One User", "", "warning");
-        }
+                        } else {
+                            swal("Cancelled", "", "error");
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+                    });
+            } else {
+                swal("Please select atleast One User", "", "warning");
+            }
+        });
 
-    // End Delete User
+        // End Delete Order
+
+    });
 </script>
