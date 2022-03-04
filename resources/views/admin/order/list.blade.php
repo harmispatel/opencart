@@ -101,7 +101,7 @@
                                                 </td>
                                                 <td>{{ $order->order_id }}</td>
                                                 <td>{{ $order->firstname }} {{ $order->lastname }}</td>
-                                                <td>{{ $order->order_status_id }}</td>
+                                                <td>{{ $order->name }}</td>
                                                 <td>{{ $order->total }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($order->date_added)) }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($order->date_modified)) }}</td>
@@ -195,7 +195,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: '{{ url('deletemanufacturer') }}',
+                            url: '{{ url('deleteorder') }}',
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 'id': checkValues
@@ -224,7 +224,6 @@
         } else {
             swal("Please select atleast One User", "", "warning");
         }
-    });
 
     // End Delete User
 </script>
