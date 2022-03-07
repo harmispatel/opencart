@@ -189,6 +189,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
     Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
     Route::post('storecountry', [CountryController::class, 'store'])->name('storecountry');
+    Route::post('deletecountry', [CountryController::class, 'deletecountry'])->name('deletecounty');
+    Route::get('editcountry/{id}', [CountryController::class, 'edit'])->name('editcountry');
+    Route::post('updatecountry', [CountryController::class, 'update'])->name('updatecountry');
+
+
 
 
 });
