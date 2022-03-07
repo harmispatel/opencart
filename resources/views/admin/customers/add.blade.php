@@ -340,19 +340,22 @@
     function addAddress()
     {
         // New Address List Add
-        html  = '<li class="list-group-item pt-1 pb-1">';
-        html += '<a href="#tab-address' + address_row + '"><i class="fa fa-minus-circle" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address' + address_row + '\\\']\').parent().remove(); $(\'#tab-address' + address_row + '\').remove();"></i> Address ' + address_row + '</a>';
-        html += '</li>';
-        $('#address').append(html);
+        // html  = '<li class="list-group-item pt-1 pb-1">';
+        // html += '<a href="#tab-address' + address_row + '"><i class="fa fa-minus-circle" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address' + address_row + '\\\']\').parent().remove(); $(\'#tab-address' + address_row + '\').remove();"></i> Address ' + address_row + '</a>';
+        // html += '</li>';
+        // $('#address').append(html);
 
 
         // New Textarea Add
-        textbox  = '<div class="form-group" id="tab-address'+address_row+'">';
-        textbox  += '<label>Address '+address_row+'</label>';
-        textbox  += '<textarea name="address" id="address" class="form-control" placeholder="Address '+address_row+'"></textarea>';
-        textbox  += '</div>';
-        $('#muladdress').append(textbox);
-        address_row++;
+        // textbox  = '<div class="form-group" id="tab-address'+address_row+'">';
+        // textbox  += '<label>Address '+address_row+'</label>';
+        // textbox  += '<textarea name="address" id="address" class="form-control" placeholder="Address '+address_row+'"></textarea>';
+        // textbox  += '</div>';
+        // $('#muladdress').append(textbox);
+        // address_row++;
+
+
+
     }
 
 
