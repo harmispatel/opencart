@@ -86,6 +86,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deletecustomer', [CustomerController::class, 'delete'])->name('deletecustomer');
     Route::get('editcustomer/{id}', [CustomerController::class, 'edit'])->name('editcustomer');
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
+    Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
+    Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
 
     // User Profile
     Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
@@ -120,7 +122,17 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');
     Route::post('deleteorder', [OrdersController::class, 'deleteorder'])->name('deleteorder');
-    Route::get('orderdata', [OrdersController::class, 'getorderhistory'])->name('orderdata');
+    Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
+    Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
+    Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
+    Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
+
+    // Order returns
+    Route::get('returns', [OrdersController::class, 'returns'])->name('returns');
+    Route::get('addnewreturns', [OrdersController::class, 'addnewreturns'])->name('addnewreturns');
+    Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
+    Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
+
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
 
@@ -193,6 +205,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
     Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
     Route::post('storecountry', [CountryController::class, 'store'])->name('storecountry');
+    Route::post('deletecountry', [CountryController::class, 'deletecountry'])->name('deletecounty');
+    Route::get('editcountry/{id}', [CountryController::class, 'edit'])->name('editcountry');
+    Route::post('updatecountry', [CountryController::class, 'update'])->name('updatecountry');
+
+
 
 
 });

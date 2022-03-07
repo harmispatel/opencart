@@ -54,7 +54,7 @@
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
-                                    <table class="table table-striped" id="usersGroup">
+                                    <table class="table table-striped" id="table">
                                         @if(Session::has('success'))
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
                                                 {{ Session::get('success') }}
@@ -68,6 +68,7 @@
                                                 <input type="checkbox" id="delall">
                                             </th>
                                             {{-- <th>Country Id</th> --}}
+                                            {{-- <th><input type="checkbox" id="delall"></th> --}}
                                             <th>Country Name</th>
                                             <th>IOS Code(2)</th>
                                             <th>IOS Code(3)</th>
@@ -79,7 +80,9 @@
                                         <tbody class="text-center cat-list">
                                             @foreach($countries as $country)
                                                 <tr>
-                                                    <td>{{ $country->country_id  }}</td>
+                                                    <td><input type="checkbox" name="del_all" value="{{ $country->country_id }}"
+                                                        class="del_all"></td>
+
                                                     <td>{{ $country->name }}</td>
                                                     <td>{{ $country->iso_code_2 }}</td>
                                                     <td>{{ $country->iso_code_3 }}</td>
@@ -91,6 +94,18 @@
                                                         @else
                                                             Disabled
                                                         @endif
+                                                    </td>
+                                                    <td>
+                                                        {{ date('d/m/Y',strtotime($country->created_at)) }}
+                                                    </td>
+                                                    <td>
+                                                        @if(check_user_role(84) == 1)
+                                                            <a href="{{ route('editcountry',$country->country_id) }}" class="btn btn-sm btn-primary rounded">
+                                                            <i class="fa fa-edit"></i>
+                                                        @else
+                                                            -
+                                                        @endif
+                                                        </a>
                                                     </td>
                                                     
 
@@ -148,7 +163,7 @@
 
     </div>
 </section>
-{{-- End Section of List Users --}}
+{{-- End Section of List Country --}}
 
 
 
@@ -176,7 +191,7 @@ $('#delall').on('click', function(e) {
 });
 // End Select All Checkbox
 
-// Delete User
+// Delete country
 $('.deletesellected').click(function()
 {
 
@@ -200,7 +215,7 @@ $('.deletesellected').click(function()
 
                 $.ajax({
                         type: "POST",
-                        url: '{{ url("deleteuser") }}',
+                        url: '{{ url("deletecountry") }}',
                         data: {"_token": "{{ csrf_token() }}",'id':checkValues},
                         dataType : 'JSON',
                         success: function (data)
@@ -234,7 +249,7 @@ $('.deletesellected').click(function()
     }
 });
 
-// End Delete User
+// End Delete 
 
 
 </script>

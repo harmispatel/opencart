@@ -71,11 +71,21 @@
                                             <div class="row">
 
                                                 <div class="col-md-2">
-                                                    <ul class="list-group" id="address">
+                                                    {{-- <ul class="list-group" id="address">
                                                         <li class="list-group-item active">
-                                                            <a href="#tab-customer" data-toggle="tab" class="text-white">General</a>
+                                                            <a href="#tab-customer" data-toggle="tab" style="color: black">General</a>
                                                         </li>
                                                         <li class="list-group-item" id="address-add">
+                                                            <a onclick="addAddress();">
+                                                                <i class="fa fa-plus-circle"></i> Add Address
+                                                            </a>
+                                                        </li>
+                                                      </ul> --}}
+                                                      <ul class="nav nav-pills nav-stacked list-group" id="address">
+                                                        <li class="active">
+                                                            <a href="#tab-customer" data-toggle="tab">General</a>
+                                                        </li>
+                                                        <li id="address-add">
                                                             <a onclick="addAddress();">
                                                                 <i class="fa fa-plus-circle"></i> Add Address
                                                             </a>
@@ -339,31 +349,120 @@
 
     function addAddress()
     {
-        // New Address List Add
-        html  = '<li class="list-group-item pt-1 pb-1">';
-        html += '<a href="#tab-address' + address_row + '"><i class="fa fa-minus-circle" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address' + address_row + '\\\']\').parent().remove(); $(\'#tab-address' + address_row + '\').remove();"></i> Address ' + address_row + '</a>';
-        html += '</li>';
-        $('#address').append(html);
+
+        html  = '<div class="tab-pane" id="tab-address' + address_row + '">';
+
+        html += '<h3>Address '+address_row+'</h3>';
+        html += '<input type="hidden" name="address[' + address_row + '][address_id]" value="" />';
+
+        // First Name
+        html += '<div class="form-group">';
+        html += '<label for="firstname' + address_row + '">First Name</label>';
+        html += '<input type="text" name="address[' + address_row + '][firstname]" placeholder="First Name" id="firstname' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // Last Name
+        html += '<div class="form-group">';
+        html += '<label for="lastname' + address_row + '">Last Name</label>';
+        html += '<input type="text" name="address[' + address_row + '][lastname]" placeholder="Last Name" id="lastname' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // Company
+        html += '<div class="form-group">';
+        html += '<label for="company' + address_row + '">Company</label>';
+        html += '<input type="text" name="address[' + address_row + '][company]" placeholder="Company" id="company' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // Address 1
+        html += '<div class="form-group">';
+        html += '<label for="address_1' + address_row + '">Address 1</label>';
+        html += '<input type="text" name="address[' + address_row + '][address_1]" placeholder="Address 1" id="address_1' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // Address 2
+        html += '<div class="form-group">';
+        html += '<label for="address_2' + address_row + '">Address 2</label>';
+        html += '<input type="text" name="address[' + address_row + '][address_2]" placeholder="Address 2" id="address_2' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // City
+        html += '<div class="form-group">';
+        html += '<label for="city' + address_row + '">City</label>';
+        html += '<input type="text" name="address[' + address_row + '][city]" placeholder="City" id="city' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // Pincode
+        html += '<div class="form-group">';
+        html += '<label for="postcode' + address_row + '">Postcode</label>';
+        html += '<input type="text" name="address[' + address_row + '][postcode]" placeholder="Postcode" id="postcode' + address_row + '" class="form-control" />';
+        html += '</div>';
+
+        // Country
+        html += '<div class="form-group">';
+        html += '<label for="country_id' + address_row + '">Country</label>';
+        html += '<select name="address[' + address_row + '][country_id]" id="country_id' + address_row + '" class="form-control" onchange="region('+address_row+')">';
+        html += '<option value=""> --- Please Select Country --- </option>';
+        html += '@foreach($countries as $country)';
+        html += '<option value="{{ $country->country_id }}" id="abc">{{$country->name}}</option>';
+        html += '@endforeach';
+        html += '</select>';
+        html += '</div>';
+
+        // Region
+        html += '<div class="form-group">';
+        html += '<label for="zone_id' + address_row + '">Region / State</label>';
+        html += '<select name="address[' + address_row + '][zone_id]" id="zone_id' + address_row + '" class="form-control zone_id"><option value=""> --- Please Select Region --- </option><option value="0"> --- None --- </option></select>';
+        html += '</div>';
+
+        // Default Address
+        html += '<div class="form-group">';
+        html += '<label>Default Address</label>';
+        html += '<div class="form-control"><input type="radio" name="address[' + address_row + '][default]" value="1" /> <label>Allow</label></div>';
+        html += '  </div>';
+
+        html += '</div>';
 
 
-        // New Textarea Add
-        textbox  = '<div class="form-group" id="tab-address'+address_row+'">';
-        textbox  += '<label>Address '+address_row+'</label>';
-        textbox  += '<textarea name="address" id="address" class="form-control" placeholder="Address '+address_row+'"></textarea>';
-        textbox  += '</div>';
-        $('#muladdress').append(textbox);
+
+        $('#genral .tab-content').append(html);
+
+        $('#address-add').before('<li class="list-group-item"><a href="#tab-address' + address_row + '" data-toggle="tab" style="color: black"><i class="fa fa-minus-circle" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address' + address_row + '\\\']\').parent().remove(); $(\'#tab-address' + address_row + '\').remove();"></i> Address ' + address_row + '</a></li>');
+
+        $('#address a[href=\'#tab-address' + address_row + '\']').tab('show');
+
+
         address_row++;
     }
 
 
 
-    // Payment Method Hide Show
-    $('input[name=\'payment\']').on('change', function() {
-        $('.payment').hide();
-        $('#payment-' + this.value).show();
+// Region
+function region(row_id){
+
+    var country_id = $('#country_id'+row_id+' :selected').val();
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('getRegionbyCountry') }}",
+        data: {'country_id':country_id,"_token": "{{ csrf_token() }}",},
+        dataType: "json",
+        success: function (response) {
+            $('.zone_id').text('');
+            $('.zone_id').append(response);
+        }
     });
 
-    $('input[name=\'payment\']:checked').trigger('change');
-    // End Payment Method
+}
+// End Region
+
+
+// Payment Method Hide Show
+$('input[name=\'payment\']').on('change', function() {
+    $('.payment').hide();
+    $('#payment-' + this.value).show();
+});
+
+$('input[name=\'payment\']:checked').trigger('change');
+// End Payment Method
 
 </script>
