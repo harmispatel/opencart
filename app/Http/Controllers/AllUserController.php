@@ -18,7 +18,7 @@ class AllUserController extends Controller
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
-
+    
         $data['users'] = Users::get();
         return view('admin.users.list',$data);
     }

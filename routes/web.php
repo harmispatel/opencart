@@ -17,6 +17,9 @@ use App\Http\Controllers\InformationController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\AttributesController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\CustomerGroupController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CountryController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -60,6 +63,29 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('edituser/{id}', [AllUserController::class, 'edit'])->name('edituser');
     Route::post('updateusers', [AllUserController::class, 'update'])->name('updateusers');
 
+    // Users Group
+    Route::get('usersgroup', [UserGroupController::class, 'index'])->name('usersgroup');
+    Route::get('addusergroup', [UserGroupController::class, 'add'])->name('addusergroup');
+    Route::post('storeusergroup', [UserGroupController::class, 'store'])->name('storeusergroup');
+    Route::post('deleteusersgroup', [UserGroupController::class, 'deletemultiusergroup'])->name('deleteusersgroup');
+    Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
+    Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
+
+    // Customer Group
+    Route::get('customersgroup', [CustomerGroupController::class, 'index'])->name('customersgroup');
+    Route::get('addcustomergroup', [CustomerGroupController::class, 'add'])->name('addcustomergroup');
+    Route::post('storecustomergroup', [CustomerGroupController::class, 'store'])->name('storecustomergroup');
+    Route::post('deletecustomergroup', [CustomerGroupController::class, 'delete'])->name('deletecustomergroup');
+    Route::get('editcustomergroup/{id}', [CustomerGroupController::class, 'edit'])->name('editcustomergroup');
+    Route::post('updatecustomergroup', [CustomerGroupController::class, 'update'])->name('updatecustomergroup');
+
+    //Customers
+    Route::get('customers', [CustomerController::class, 'index'])->name('customers');
+    Route::get('addcustomer', [CustomerController::class, 'add'])->name('addcustomer');
+    Route::post('storecustomer', [CustomerController::class, 'store'])->name('storecustomer');
+    Route::post('deletecustomer', [CustomerController::class, 'delete'])->name('deletecustomer');
+    Route::get('editcustomer/{id}', [CustomerController::class, 'edit'])->name('editcustomer');
+    Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
 
     // User Profile
     Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
@@ -70,14 +96,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('permissions', [PermissionController::class, 'index'])->name('permissions');
     Route::post('storerelation', [PermissionController::class, 'storerelation'])->name('storerelation');
 
-
-    // Users Group
-    Route::get('usersgroup', [UserGroupController::class, 'index'])->name('usersgroup');
-    Route::get('addusergroup', [UserGroupController::class, 'add'])->name('addusergroup');
-    Route::post('storeusergroup', [UserGroupController::class, 'store'])->name('storeusergroup');
-    Route::post('deleteusersgroup', [UserGroupController::class, 'deletemultiusergroup'])->name('deleteusersgroup');
-    Route::get('editusersgroup/{id}', [UserGroupController::class, 'edit'])->name('editusersgroup');
-    Route::post('updateusersgroup', [UserGroupController::class, 'update'])->name('updateusersgroup');
 
     // Category
     Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
@@ -174,6 +192,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
     Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
+
+    // Countries
+    Route::get('countries', [CountryController::class, 'index'])->name('countries');
+    Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
+    Route::post('storecountry', [CountryController::class, 'store'])->name('storecountry');
 
 
 });
