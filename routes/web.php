@@ -120,8 +120,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');
     Route::post('deleteorder', [OrdersController::class, 'deleteorder'])->name('deleteorder');
-    Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
-    Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
+    Route::get('orderdata', [OrdersController::class, 'getorderhistory'])->name('orderdata');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
 
@@ -188,6 +187,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Countries
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
+    Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
+    Route::post('storecountry', [CountryController::class, 'store'])->name('storecountry');
 
 
 });

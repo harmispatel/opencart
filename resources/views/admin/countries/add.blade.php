@@ -10,13 +10,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Country</h1>
+                        <h1>Countries</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('users') }}">Users</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('countries') }}">Countries</a></li>
                             <li class="breadcrumb-item active">Add</li>
                         </ol>
                     </div>
@@ -44,14 +44,14 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Strat --}}
-                            <form action="{{ route('storeuser') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('storecountry') }}" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">
 
                                     <div class="form-group">
                                         <label for="name">Country Name</label>
-                                        <input type="text" name="name" id="name" class="form-control {{ ($errors->has('name')) ? 'is-invalid' : '' }}" value="{{ old('name') }}">
+                                        <input type="text" name="name" id="name" class="form-control {{ ($errors->has('username')) ? 'is-invalid' : '' }}" value="{{ old('name') }}">
                                         @if($errors->has('name'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('name') }}
@@ -59,8 +59,8 @@
                                         @endif
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="username">Users Group</label>
+                                    {{-- <div class="form-group">
+                                        <label for="iso_code_2">Users Group</label>
                                         <select name="usersgroup" id="usersgroup" class="form-control {{ ($errors->has('usersgroup')) ? 'is-invalid' : '' }}">
                                             <option value="">Select User Group</option>
                                             @foreach ($usersgroup as $usergroup)
@@ -73,67 +73,64 @@
                                                 {{ $errors->first('usersgroup') }}
                                             </div>
                                         @endif
-                                    </div>
+                                    </div> --}}
 
                                     <div class="form-group">
-                                        <label for="firstname">Firstname</label>
-                                        <input type="text" name="firstname" id="firstname" class="form-control {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}" value="{{ old('firstname') }}">
-                                        @if($errors->has('firstname'))
+                                        <label for="iso_code_2">IOS Code (2)</label>
+                                        <input type="text" name="iso_code_2" id="iso_code_2" class="form-control {{ ($errors->has('iso_code_2')) ? 'is-invalid' : '' }}" value="{{ old('iso_code_2') }}"  minlength="2" maxlength="2">
+                                        @if($errors->has('iso_code_2'))
                                             <div class="invalid-feedback">
-                                                {{ $errors->first('firstname') }}
+                                                {{ $errors->first('iso_code_2') }}
                                             </div>
                                         @endif
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="lastname">Lastname</label>
-                                        <input type="text" name="lastname" id="lastname" class="form-control {{ ($errors->has('lastname')) ? 'is-invalid' : '' }}" value="{{ old('lastname') }}">
-                                        @if($errors->has('lastname'))
+                                        <label for="iso_code_3">IOS Code (3)</label>
+                                        <input type="text" name="iso_code_3" id="iso_code_3" class="form-control {{ ($errors->has('iso_code_3')) ? 'is-invalid' : '' }}" value="{{ old('iso_code_3') }}" minlength="3" maxlength="3">
+                                        @if($errors->has('iso_code_3'))
                                             <div class="invalid-feedback">
-                                                {{ $errors->first('lastname') }}
+                                                {{ $errors->first('iso_code_3') }}
                                             </div>
                                         @endif
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email">E-mail</label>
-                                        <input type="text" name="email" id="email" class="form-control {{ ($errors->has('email')) ? 'is-invalid' : '' }}" value="{{ old('email') }}">
-                                        @if($errors->has('email'))
+                                        <label for="address_format">Address Format</label>
+                                        <input type="text" name="address_format" id="address_format" class="form-control {{ ($errors->has('address_format')) ? 'is-invalid' : '' }}" value="{{ old('address_format') }}">
+                                        @if($errors->has('address_format'))
                                             <div class="invalid-feedback">
-                                                {{ $errors->first('email') }}
+                                                {{ $errors->first('address_format') }}
                                             </div>
                                         @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="postcode_required">Postcode Required</label>
+                                        <select name="postcode_required" id="postcode_required" class="form-control">
+                                            <option value="1" selected>Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="image">Image</label>
-                                        <input type="file" name="image" style="padding:3px;" id="image" class="form-control {{ ($errors->has('image')) ? 'is-invalid' : '' }}" value="{{ old('image') }}">
-                                        @if($errors->has('image'))
+                                    {{-- <div class="form-group">
+                                        <label for="postcode_required">Postcode Required</label>
+                                        <input type="postcode_required" name="postcode_required" id="postcode_required" class="form-control {{ ($errors->has('postcode_required')) ? 'is-invalid' : '' }}">
+                                        @if($errors->has('postcode_required'))
                                             <div class="invalid-feedback">
-                                                {{ $errors->first('image') }}
+                                                {{ $errors->first('postcode_required') }}
                                             </div>
                                         @endif
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="form-group">
-                                        <label for="password">Password</label>
-                                        <input type="password" name="password" id="password" class="form-control {{ ($errors->has('password')) ? 'is-invalid' : '' }}">
-                                        @if($errors->has('password'))
+                                    {{-- <div class="form-group">
+                                        <label for="status">Status</label>
+                                        <input type="status" name="status" id="status" class="form-control {{ ($errors->has('status')) ? 'is-invalid' : '' }}">
+                                        @if($errors->has('status'))
                                             <div class="invalid-feedback">
-                                                {{ $errors->first('password') }}
+                                                {{ $errors->first('status') }}
                                             </div>
                                         @endif
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="confirm">Confirm Password</label>
-                                        <input type="password" name="confirm" id="confirm" class="form-control {{ ($errors->has('confirm')) ? 'is-invalid' : '' }}">
-                                        @if($errors->has('confirm'))
-                                            <div class="invalid-feedback">
-                                                {{ $errors->first('confirm') }}
-                                            </div>
-                                        @endif
-                                    </div>
+                                    </div> --}}
 
                                     <div class="form-group">
                                         <label for="status">Status</label>
@@ -149,7 +146,7 @@
                                 {{-- Start Card Footer --}}
                                 <div class="card-footer">
                                         <button type="submit" class="btn btn-primary"><i class="fa fa-save"> Save</i></button>
-                                        <a href="{{ route('usersgroup') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
+                                        <a href="{{ route('countries') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
                                 </div>
                                 {{-- End Card Footer --}}
 
