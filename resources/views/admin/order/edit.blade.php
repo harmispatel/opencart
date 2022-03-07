@@ -24,7 +24,8 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Orders</li>
+                            <li class="breadcrumb-item"><a href="{{ route('orders') }}">Orders</a></li>
+                            <li class="breadcrumb-item active">Edit order</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -44,10 +45,10 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Order List
+                                    Edit Order
                                 </h3>
 
-                                <div class="container" style="text-align: right">
+                                {{-- <div class="container" style="text-align: right">
                                     @if (check_user_role(71) == 1)
                                         <a href="" class="btn btn-sm btn-success ml-auto"><i
                                                 class="fa fa-plus"></i></a>
@@ -57,24 +58,44 @@
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
                                                 class="fa fa-trash"></i></a>
                                     @endif
-                                </div>
+                                </div> --}}
                             </div>
                             {{-- End Card Header --}}
 
                             {{-- Card Body --}}
                             <div class="card-body">
-                                {{-- Table --}}
+
+                                {{-- Edit form --}}
                                
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" id="customerdetails-tab" data-toggle="tab" href="#customerdetails" role="tab" aria-controls="customerdetails" aria-selected="true">1.Costomer Details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" id="product-tab" data-toggle="tab" href="#product" role="tab" aria-controls="product" aria-selected="false">2.Product</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">3.Payment Details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" id="shiping-tab" data-toggle="tab" href="#shiping" role="tab" aria-controls="shiping" aria-selected="false">4.Shiping Details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" id="totals-tab" data-toggle="tab" href="#totals" role="tab" aria-controls="totals" aria-selected="false">5.Totals</a>
+                                    </li>
+                                  </ul>
+                                  <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="customerdetails" role="tabpanel" aria-labelledby="customerdetails-tab">1</div>
+                                    <div class="tab-pane fade" id="product" role="tabpanel" aria-labelledby="product-tab">2</div>
+                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">3</div>
+                                    <div class="tab-pane fade" id="shiping" role="tabpanel" aria-labelledby="shiping-tab">4</div>
+                                    <div class="tab-pane fade" id="totals" role="tabpanel" aria-labelledby="totals-tab">5</div>
+                                  </div>
 
 
 
 
-
-
-
-
-                                
-                                {{-- End Table --}}
+                                {{-- Edit form end --}}
                             </div>
                             {{-- End Card Body --}}
                         </div>
@@ -94,4 +115,3 @@
 {{-- End Footer --}}
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-

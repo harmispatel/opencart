@@ -48,17 +48,17 @@
                                     Order View
                                 </h3>
 
-                                {{-- <div class="container" style="text-align: right">
-                                    @if (check_user_role(71) == 1)
-                                        <a href="" class="btn btn-sm btn-success ml-auto"><i
-                                                class="fa fa-plus"></i></a>
-                                    @endif
+                                <div class="container" style="text-align: right">
+                                    <a href="{{ route('invoice', $orders->order_id) }}" target="_blank"
+                                        data-toggle="tooltip" title="" class="btn btn-info"
+                                        data-original-title="Print Invoice"><i class="fa fa-print"></i></a>
 
-                                    @if (check_user_role(73) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
-                                                class="fa fa-trash"></i></a>
-                                    @endif
-                                </div> --}}
+                                    <a href="{{ route('shipping', $orders->order_id) }}" target="_blank"
+                                        data-toggle="tooltip" title="" class="btn btn-info"
+                                        data-original-title="Print Shipping List"><i class="fa fa-truck"></i></a>
+                                    <a href="{{ route('orders') }}" class="btn btn-danger"><i
+                                            class="fa fa-arrow-left"></i></a>
+                                </div>
                             </div>
                             {{-- End Card Header --}}
 
@@ -81,7 +81,7 @@
                                                                     data-original-title="Store"><i
                                                                         class="fa fa-shopping-cart fa-fw"></i></button>
                                                             </td>
-                                                            <td><a href="#" target="_blank">Your Store</a></td>
+                                                            <td><a href="#" >Your Store</a></td>
                                                         </tr>
                                                         <tr>
                                                             <td><button data-toggle="tooltip" title=""
@@ -307,7 +307,7 @@
                                         <div class="tab-pane fade show active" id="nav-history" role="tabpanel"
                                             aria-labelledby="nav-history-tab">
                                             <div class="table-responsive">
-                                                <table class="table table-bordered" id="table">
+                                                <table class="table table-bordered" id="ordertable">
                                                     <thead>
                                                         <tr>
                                                             <td class="text-left">Date Added</td>
@@ -433,6 +433,13 @@
 
 <script>
     $(document).ready(function() {
+        $('#ordertable').dataTable({
+            // "searching": false,
+            // "bLengthChange": false,
+            // "ordering": false
+        });
+    });
+    $(document).ready(function() {
 
         getorderdetail();
 
@@ -447,15 +454,18 @@
                 url: "{{ url('orderdata', $orders->order_id) }}",
                 dataType: "JSON",
                 success: function(response) {
+                    // if (response.status == 200) {
+                    //     $.each(response.orderhistory, function(key, data) {
+                    //         $('#orderdetail').append('<tr>\
+                    //                     <td>' + data.date_added + '</td>\
+                    //                     <td>' + data.comment + '</td>\
+                    //                     <td>' + data.name + '</td>\
+                    //                     <td>' + (data.notify == 1 ? "Yes" : "No") + '</td>\
+                    //                 </tr>')
+                    //     });
                     if (response.status == 200) {
-                        $.each(response.orderhistory, function(key, data) {
-                            $('#orderdetail').append('<tr>\
-                                        <td>' + data.date_added + '</td>\
-                                        <td>' + data.comment + '</td>\
-                                        <td>' + data.name + '</td>\
-                                        <td>' + (data.notify == 1 ? "Yes" : "No") + '</td>\
-                                    </tr>')
-                        });
+                        // console.log(response.orderhistory);
+                        $('#orderdetail').html(response.orderhistory);
                     }
                 }
             });
@@ -480,6 +490,7 @@
                     $('#orderdetail').html('')
                     getorderdetail();
                     $('#orderhistoryform').trigger('reset');
+                    // $('#table').DataTable();
 
                     // }
                 },
@@ -488,5 +499,7 @@
                 }
             });
         });
+
+
     });
 </script>
