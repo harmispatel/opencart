@@ -128,6 +128,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Order returns
     Route::get('returns', [OrdersController::class, 'returns'])->name('returns');
     Route::get('addnewreturns', [OrdersController::class, 'addnewreturns'])->name('addnewreturns');
+    Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
+    Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
 
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 

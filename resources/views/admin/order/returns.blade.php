@@ -48,14 +48,23 @@
                                 </h3>
 
                                 <div class="container" style="text-align: right">
-                                    <a href="{{ route('addnewreturns') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                    <a href="{{ route('addnewreturns') }}" class="btn btn-sm btn-success ml-auto"><i
+                                            class="fa fa-plus"></i></a>
 
                                     <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
                                             class="fa fa-trash"></i></a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}
-
+                            @if (count($errors) > 0)
+                                @if ($errors->any())
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        {{ $errors->first() }}
+                                    </div>
+                                @endif
+                            @endif
                             {{-- Card Body --}}
                             <div class="card-body">
                                 {{-- Table --}}
@@ -95,43 +104,27 @@
                                             {{-- @foreach ($orders as $order) --}}
                                             @foreach ($returns as $return)
                                                 <tr>
-                                                    <td><input type="checkbox" name="del_all" value="{{ 'sd' }}" class="del_all"></td>
+                                                    <td><input type="checkbox" name="del_all"
+                                                            value="{{ 'sd' }}" class="del_all"></td>
                                                     <td>{{ $return->return_id }}</td>
                                                     <td>{{ $return->order_id }}</td>
                                                     <td>{{ $return->firstname }} {{ $return->lastname }}</td>
                                                     <td>{{ $return->product }}</td>
                                                     <td>{{ $return->model }}</td>
                                                     <td>{{ $return->name }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime( $return->date_added )) }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime( $return->date_modified )) }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($return->date_added)) }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($return->date_modified)) }}</td>
                                                     <td>
-                                                        <a href="#" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                                        <a href="#" class="btn btn-primary"><i
+                                                                class="fa fa-edit"></i></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                            {{-- @endforeach --}}
                                         </tbody>
-                                        {{-- End Table Body --}}
                                     </table>
-                                    {{-- End Table --}}
                                 </div>
-                                {{-- End Card Body --}}
-
-
-
-
-
-
-
-
-
-
-
-                                {{-- End Table --}}
                             </div>
-                            {{-- End Card Body --}}
                         </div>
-                        {{-- End Card --}}
                     </div>
                 </div>
             </div>
