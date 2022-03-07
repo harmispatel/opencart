@@ -286,29 +286,29 @@ function addAttribute() {
           var addoption_row =0;
          function addOptionValue(optionTypeId){
 
-            // alert(optionTypeId); return false;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-
-            //     $.ajax({
-            //         type: "post",
-            //         url: "{{ route('addOptionValue') }}",
-            //         dataType: "json",
-            //         data: {optionTypeId: optionTypeId},
-            //         success: function(response) {
-            //             console.log(response.option_value); return false;
-            //             $.each(response.option_value, function(key, item) {
-            //                 console.log(item);
-            //             });            return false;
-            //         }
-            //     });
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('addOptionValue') }}",
+                    dataType: "json",
+                    data: {optionTypeId: optionTypeId},
+                    success: function(response) {
+                        console.log(response.option_value); return false;
+                        $.each(response.option_value, function(key, item) {
+                            console.log(item);
+                           var data ='<option value=""></option>';
+                          
+                        });            return false;
+                    }
+                });
 
             html = '<tr id="option-row' + addoption_row + '" >';
-            html +='<td></td>';
+            html +='<td><select class="form-control">'+data+'</select></td>';
             html +='<td><div><input type="text" name="quantity[' + addoption_row+ '][value]" class="form-control" placeholder="Quantity"></div></td>';
             html +='<td><select name="Subtract[' + addoption_row+ '][value]" class="form-control"><option value="1">Yes</option><option value="0">No</option></select></td>';
             html +='<td><select name="price[' + addoption_row+ '][value]" class="form-control"><option value="1">+</option><option value="0">-</option></select><div><input type="text" name="product_option[' + addoption_row+ '][value]" class="form-control" placeholder="Price"></div></td>';

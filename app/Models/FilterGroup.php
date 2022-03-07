@@ -9,4 +9,5 @@ class FilterGroup extends Model
 {
     use HasFactory;
     protected $table='oc_filter_group';
+    protected $primaryKey='filter_group_id';
 }

@@ -9,4 +9,5 @@ class FilterDescription extends Model
 {
     use HasFactory;
     protected $table='oc_filter_description';
+    protected $primaryKey='filter_id';
 }

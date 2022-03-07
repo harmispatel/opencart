@@ -85,7 +85,7 @@
                                                 <td>{{ $filtergroup->sort_order }}</td>
                                                 <td>
                                                     @if(check_user_role(80) == 1)
-                                                        <a href="{{ route('editreview',$filtergroup->filter_group_id) }}" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
+                                                        <a href="{{ route('editfilter',$filtergroup->filter_group_id) }}" class="btn btn-sm btn-primary rounded" ><i class="fa fa-edit"></i></a>
                                                     @else
                                                         -
                                                     @endif
