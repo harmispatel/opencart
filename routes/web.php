@@ -86,6 +86,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deletecustomer', [CustomerController::class, 'delete'])->name('deletecustomer');
     Route::get('editcustomer/{id}', [CustomerController::class, 'edit'])->name('editcustomer');
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
+    Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
+    Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
 
     // User Profile
     Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
