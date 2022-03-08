@@ -89,13 +89,13 @@
                                                         <label class="col-sm-2 control-label" for="input-order-id">Order
                                                             ID</label>
                                                         <div class="col-sm-12">
-                                                            <input type="text" name="order_id" value="{{ old('order_id') }}"
-                                                                placeholder="Order ID" id="input-order-id"
-                                                                class="form-control">
-                                                                @if ($errors->has('order_id'))
+                                                            <input type="text" name="order_id"
+                                                                value="{{ old('order_id') }}" placeholder="Order ID"
+                                                                id="input-order-id" class="form-control">
+                                                            @if ($errors->has('order_id'))
                                                                 <div style="color: red">
                                                                     {{ $errors->first('order_id') }}.</div>
-                                                            @endif                                                        
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -103,7 +103,8 @@
                                                             for="input-date-ordered">Order Date</label>
                                                         <div class="col-sm-5">
                                                             <div class="input-group date">
-                                                                <input type="date" name="date_ordered" value="{{ old('date_ordered') }}"
+                                                                <input type="date" name="date_ordered"
+                                                                    value="{{ old('date_ordered') }}"
                                                                     placeholder="Order Date"
                                                                     data-date-format="YYYY-MM-DD"
                                                                     id="input-date-ordered" class="form-control">
@@ -120,7 +121,8 @@
                                                                 id="customer_id" onchange="getcustomer()">
                                                                 <option value="0">Select Customer</option>
                                                                 @foreach ($customers as $customer)
-                                                                    <option value="{{ $customer->customer_id }}" {{ (old('customer_id') == $customer->customer_id) ? 'selected' : '' }}>
+                                                                    <option value="{{ $customer->customer_id }}"
+                                                                        {{ old('customer_id') == $customer->customer_id ? 'selected' : '' }}>
                                                                         {{ $customer->firstname }}
                                                                         {{ $customer->lastname }}</option>
                                                                 @endforeach
@@ -132,10 +134,11 @@
                                                         <label class="col-sm-2 control-label"
                                                             for="input-firstname">First Name</label>
                                                         <div class="col-sm-12">
-                                                            <input type="text" name="firstname" value="{{ old('firstname') }}"
+                                                            <input type="text" name="firstname"
+                                                                value="{{ old('firstname') }}"
                                                                 placeholder="First Name" id="input-firstname"
                                                                 class="form-control">
-                                                                @if ($errors->has('firstname'))
+                                                            @if ($errors->has('firstname'))
                                                                 <div style="color: red">
                                                                     {{ $errors->first('firstname') }}.</div>
                                                             @endif
@@ -145,10 +148,10 @@
                                                         <label class="col-sm-2 control-label" for="input-lastname">Last
                                                             Name</label>
                                                         <div class="col-sm-12">
-                                                            <input type="text" name="lastname" value="{{ old('lastname') }}"
-                                                                placeholder="Last Name" id="input-lastname"
-                                                                class="form-control">
-                                                                @if ($errors->has('lastname'))
+                                                            <input type="text" name="lastname"
+                                                                value="{{ old('lastname') }}" placeholder="Last Name"
+                                                                id="input-lastname" class="form-control">
+                                                            @if ($errors->has('lastname'))
                                                                 <div style="color: red">
                                                                     {{ $errors->first('lastname') }}.</div>
                                                             @endif
@@ -158,10 +161,10 @@
                                                         <label class="col-sm-2 control-label"
                                                             for="input-email">E-Mail</label>
                                                         <div class="col-sm-12">
-                                                            <input type="text" name="email" value="{{ old('email') }}"
-                                                                placeholder="E-Mail" id="input-email"
-                                                                class="form-control">
-                                                                @if ($errors->has('email'))
+                                                            <input type="text" name="email"
+                                                                value="{{ old('email') }}" placeholder="E-Mail"
+                                                                id="input-email" class="form-control">
+                                                            @if ($errors->has('email'))
                                                                 <div style="color: red">
                                                                     {{ $errors->first('email') }}.</div>
                                                             @endif
@@ -171,10 +174,11 @@
                                                         <label class="col-sm-2 control-label"
                                                             for="input-telephone">Telephone</label>
                                                         <div class="col-sm-12">
-                                                            <input type="text" name="telephone" value="{{ old('telephone') }}"
+                                                            <input type="text" name="telephone"
+                                                                value="{{ old('telephone') }}"
                                                                 placeholder="Telephone" id="input-telephone"
                                                                 class="form-control">
-                                                                @if ($errors->has('telephone'))
+                                                            @if ($errors->has('telephone'))
                                                                 <div style="color: red">
                                                                     {{ $errors->first('telephone') }}.</div>
                                                             @endif
@@ -194,14 +198,14 @@
                                                                 {{-- <option value="{{ old('product') }}"></option> --}}
                                                                 <option value="0">Select Product</option>
                                                                 @foreach ($orderproduct as $product)
-                                                                    <option value="{{ $product->order_product_id }}">
-                                                                        {{ $product->name }}</option>
+                                                                <option value="{{ $product->order_product_id }}">
+                                                                    {{ $product->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @if ($errors->has('product'))
-                                                            <div style="color: red">
-                                                                {{ $errors->first('product') }}.</div>
-                                                        @endif
+                                                                <div style="color: red">
+                                                                    {{ $errors->first('product') }}.</div>
+                                                            @endif
                                                         </div>
                                                     </div>
 
@@ -211,7 +215,7 @@
                                                         <div class="col-sm-12">
                                                             <input type="text" name="model" value="" placeholder="Model"
                                                                 id="input-model" class="form-control">
-                                                                @if ($errors->has('model'))
+                                                            @if ($errors->has('model'))
                                                                 <div style="color: red">
                                                                     {{ $errors->first('model') }}.</div>
                                                             @endif
@@ -221,9 +225,9 @@
                                                         <label class="col-sm-2 control-label"
                                                             for="input-quantity">Quantity</label>
                                                         <div class="col-sm-12">
-                                                            <input type="text" name="quantity" value="{{ old('quantity') }}"
-                                                                placeholder="Quantity" id="input-quantity"
-                                                                class="form-control">
+                                                            <input type="text" name="quantity"
+                                                                value="{{ old('quantity') }}" placeholder="Quantity"
+                                                                id="input-quantity" class="form-control">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -234,7 +238,7 @@
                                                                 class="form-control">
                                                                 <option value="0">Select Reason</option>
                                                                 @foreach ($returnreason as $reason)
-                                                                    <option value="{{ $reason->return_reason_id }}" >
+                                                                    <option value="{{ $reason->return_reason_id }}">
                                                                         {{ $reason->name }}</option>
                                                                 @endforeach
                                                             </select>
@@ -256,7 +260,8 @@
                                                             for="input-comment">Comment</label>
                                                         <div class="col-sm-12">
                                                             <textarea name="comment" rows="5" placeholder="Comment"
-                                                                id="input-comment" class="form-control">{{ old('comment') }}</textarea>
+                                                                id="input-comment"
+                                                                class="form-control">{{ old('comment') }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -266,7 +271,7 @@
                                                             <select name="return_action_id" id="input-return-action"
                                                                 class="form-control">
                                                                 @foreach ($returnaction as $action)
-                                                                    <option value="{{ $action->return_action_id }}" >
+                                                                    <option value="{{ $action->return_action_id }}">
                                                                         {{ $action->name }}</option>
                                                                 @endforeach
                                                             </select>
@@ -279,7 +284,8 @@
                                                             <select name="return_status_id" id="input-return-status"
                                                                 class="form-control">
                                                                 @foreach ($return as $status)
-                                                                    <option value="{{ $status->return_status_id }}" >{{ $status->name }}</option>
+                                                                    <option value="{{ $status->return_status_id }}">
+                                                                        {{ $status->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -347,7 +353,6 @@
     }
 
     function getproduct() {
-        console.log("HEllo");
         var product_id = $('#product_id :selected').val();
 
         $.ajax({
@@ -361,10 +366,6 @@
             success: function(response) {
                 $('#input-model').val(response.model);
                 $('#input-model').val(response.model);
-
-
-
-
             }
         });
 
