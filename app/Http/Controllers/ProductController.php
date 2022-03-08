@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductDescription;
+use App\Models\Category;
+use App\Models\ProductIcon;
+
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -42,6 +46,13 @@ class ProductController extends Controller
          $tex_class = DB::table('oc_tax_class')->select('*')->get();
          $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
          $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
+         $category = Category::select('*')->get();
+         $product_icon = ProductIcon::select('*')->get();
+
+        //  echo '<pre>';
+        //  print_r($productIcon);
+        //  exit();
+
          $result['manufacturer'] = $manufacturer;
          $result['category'] = $category;
          $result['releted_product'] = $releted_product;
@@ -51,10 +62,19 @@ class ProductController extends Controller
          $result['tex_class'] = $tex_class;
          $result['lenght_class'] = $lenght_class;
          $result['weight_class'] = $weight_class;
+         $result['category'] = $category;
+         $result['product_icon'] = $product_icon;
+
+
 
          $option = DB::table('oc_option_description')->select('*')->get();
 
          return view('admin.product.add', ['result' => $result ,'option'=>$option]);
+    }
+
+    public function store(Request $request){
+        
+
     }
 
     public function getoptionhtml(Request $request){
@@ -72,6 +92,18 @@ class ProductController extends Controller
         return response()->json([
             'option_value' => $option_value,
         ]);
+    }
+    public function deleteproduct(Request $request)
+    {
+        $ids = $request['id'];
+        print_r($ids);die;
+        if (count($ids) > 0) {
+            Product::whereIn('product_id', $ids)->delete();
+            ProductDescription::whereIn('product_id', $ids)->delete();
+            return response()->json([
+                'success' => 1,
+            ]);
+        }
     }
 
 
