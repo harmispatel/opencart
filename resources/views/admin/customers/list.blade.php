@@ -2,6 +2,29 @@
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
+
+<style>
+
+/* Loader CSS */
+.loader_div
+{
+    position: absolute;
+    top: 30%;
+    bottom: 0%;
+    left: 10%;
+    right: 0%;
+    z-index: 99;
+    opacity:0.7;
+    display: none;
+    background: url('{{ asset('public/admin/gif/gif3.gif') }}') center center no-repeat;
+    background-size :150px;
+}
+/* End Loader CSS */
+
+</style>
+
+
+
 {{-- Section of List Customers --}}
 <section>
     <div class="content-wrapper">
@@ -69,9 +92,11 @@
                                             <input type="checkbox" name="checkall" id="delall">
                                         </th>
                                         <th>Customer Name</th>
+                                        <th>Shop</th>
                                         <th>E-mail</th>
                                         <th>Customer Group</th>
                                         <th>Status</th>
+                                        <th>Approved</th>
                                         <th>IP</th>
                                         <th>Date Added</th>
                                         <th>Action</th>
@@ -79,15 +104,14 @@
                                     {{-- End Table Head --}}
 
                                     {{-- Table Body Start --}}
-                                    <tbody class="customergroup-list">
-                                        @foreach ($customers as $customer )
+                                    <tbody class="customers" id="customers">
+                                        {{-- @foreach ($customers as $customer )
                                             <tr>
                                                 <td>
                                                     <input type="checkbox" name="del_all" class="del_all" value="{{ $customer->customer_id }}">
                                                 </td>
-                                                <td>
-                                                    {{ $customer->firstname }} {{ $customer->lastname }}
-                                                </td>
+                                                <td>{{ $customer->firstname }} {{ $customer->lastname }}</td>
+                                                <td>-</td>
                                                 <td>{{ $customer->email }}</td>
                                                 <td>{{ $customer->groupname }}</td>
                                                 <td>
@@ -97,11 +121,11 @@
                                                         Disabled
                                                     @endif
                                                 </td>
+                                                <td>-</td>
                                                 <td> {{ $customer->ip }} </td>
                                                 <td> {{ date('d-m-Y',strtotime($customer->date_added)) }} </td>
                                                 <td>
                                                     @if(check_user_role(102) == 1)
-                                                        {{-- <a href="{{ route('editcustomergroup',$customer->customer_id) }}" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a> --}}
 
                                                         <div class="btn-group">
                                                             <a href="{{ route('editcustomer',$customer->customer_id) }}" class="btn btn-sm btn-primary">
@@ -125,7 +149,7 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -139,6 +163,7 @@
             </div>
         </section>
         {{-- End Form Section --}}
+        <div id="loader_div" class="loader_div"></div>
 
     </div>
 </section>
@@ -156,9 +181,32 @@
     $(document).ready(function(){
 
         // Data Table of Manufacturers List
-        $('.table').DataTable();
+        // $('.table').DataTable();
+
+        $(".loader_div").show();
+
+        getallCustomers();
 
     });
+
+
+    function getallCustomers(){
+
+        $.ajax({
+            type: "GET",
+            url: "{{ url('getcustomers') }}",
+            dataType: "json",
+            success: function (response) {
+                $('.table tbody').html('');
+                $('.table tbody').append(response);
+                $('.table').DataTable({
+                    "scrollX": true,
+                });
+                $(".loader_div").hide();
+            }
+        });
+
+    }
 
 
 

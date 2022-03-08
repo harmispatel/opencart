@@ -65,13 +65,14 @@
 
                                     {{-- Table Head --}}
                                     <thead class="text-center">
-                                        <th><input type="checkbox" name="checkall" id="delall"></th>
+                                        <th>
+                                            <input type="checkbox" name="checkall" id="delall">
+                                        </th>
                                         <th>Image</th>
-                                        <th><a >Product Name</a></th>
-                                        <th><a>Model</a></th>
-                                        <th><a>Price</a></th>
-                                        <th><a>Quantity</a></th>
-                                        <th><a>Status</a></th>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Sort Order</th>
                                         <th>Action</th>
                                     </thead>
                                     {{-- End Table Head --}}
@@ -84,13 +85,22 @@
                                                     <input type="checkbox" name="checkall" class="del_all">
                                                 </td>
                                                 <td>
-                                                    <img src="{{ asset('public/admin/image/'.$value->image)}}" width="60px">
+                                                    @if( ($value->image != '') || ($value->image != NULL) )
+                                                        <img src="{{ asset('public/admin/product/'.$value->image)}}" width="40px">
+                                                    @else
+                                                        <img src="public/admin/product/no_image.jpg">
+                                                    @endif
                                                 </td>
                                                 <td>{{ $value->name}}</td>
-                                                <td>{{ $value->model }}</td>
                                                 <td>{{ $value->price }}</td>
-                                                <td>{{ $value->quantity }}</td>
-                                                <td>{{ $value->status }}</td>
+                                                <td>
+                                                    @if ($value->status == 1)
+                                                        Enabled
+                                                    @else
+                                                        Disabled
+                                                    @endif
+                                                </td>
+                                                <td>{{ $value->sort_order }}</td>
                                                 <td>
                                                     @if(check_user_role(60) == 1)
                                                         <a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>

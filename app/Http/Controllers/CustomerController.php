@@ -14,9 +14,68 @@ class CustomerController extends Controller
     public function index()
     {
         // Get all Customers
-        $data['customers'] = Customer::select('oc_customer.*','cgd.name as groupname')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer.customer_group_id')->get();
+        // $data['customers'] = Customer::select('oc_customer.*','cgd.name as groupname')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer.customer_group_id')->get();
 
-        return view('admin.customers.list',$data);
+        return view('admin.customers.list');
+    }
+
+
+    function getcustomers()
+    {
+        $customers = Customer::select('oc_customer.*','cgd.name as groupname')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer.customer_group_id')->get();
+
+        if(!empty($customers))
+        {
+            $html = '';
+
+            foreach($customers as $customer)
+            {
+                $cust_id = $customer->customer_id;
+
+                $edit_url = route('editcustomer',$customer->customer_id);
+
+                $html .= '<tr>';
+                $html .= '<td><input type="checkbox" name="del_all" class="del_all" value="'.$cust_id.'"></td>';
+                $html .= '<td>'.$customer->firstname.' '.$customer->lastname.'</td>';
+                $html .= '<td>-</td>';
+                $html .= '<td>'.$customer->email.'</td>';
+                $html .= '<td>'.$customer->groupname.'</td>';
+                $html .= '<td>';
+
+                if($customer->status == 1)
+                {
+                    $html .= 'Enabled';
+                }
+                else
+                {
+                    $html .= 'Disabled';
+                }
+
+                $html .= '</td>';
+                $html .= '<td>-</td>';
+                $html .= '<td>'.$customer->ip.'</td>';
+                $html .= '<td>'.date('d-m-Y',strtotime($customer->date_added)).'</td>';
+
+                // $html .= '<td><a href="'.$edit_url.'" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>';
+
+                $html .= '<td>';
+                    $html .= '<div class="btn-group">';
+                        $html .= '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                        $html .= '<button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white">';
+                            $html .= '<span class="caret"></span>';
+                        $html .= '</button>';
+                        $html .= '<ul class="dropdown-menu dropdown-menu-right">';
+                            $html .= '<li class="dropdown-header">Login into Store</li>';
+                            $html .= ' <li class="text-center"><a href="" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li>';
+                        $html .= '</ul>';
+                    $html .= '</div>';
+                $html .= '</td>';
+
+                $html .= '</tr>';
+            }
+            return response()->json($html);
+        }
+
     }
 
 
