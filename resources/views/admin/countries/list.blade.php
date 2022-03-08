@@ -54,34 +54,35 @@
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
-                                    <table class="table table-striped" id="table">
+                                    <table class="table table-bordered" id="country">
                                         @if(Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                                            <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
                                                 {{ Session::get('success') }}
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                       @endif
+                                        @endif
                                         <thead class="text-center">
                                             <th>
                                                 <input type="checkbox" id="delall">
                                             </th>
-                                            {{-- <th>Country Id</th> --}}
-                                            {{-- <th><input type="checkbox" id="delall"></th> --}}
                                             <th>Country Name</th>
                                             <th>IOS Code(2)</th>
                                             <th>IOS Code(3)</th>
                                             <th>Address</th>
                                             <th>PostCode</th>
                                             <th>Status</th>
+                                            <th>Date</th>
                                             <th>Action</th>
                                         </thead>
-                                        <tbody class="text-center cat-list">
+                                        <tbody class="text-center">
                                             @foreach($countries as $country)
                                                 <tr>
-                                                    <td><input type="checkbox" name="del_all" value="{{ $country->country_id }}"
-                                                        class="del_all"></td>
+                                                    <td>
+                                                        <input type="checkbox" name="del_all" value="{{ $country->country_id }}"
+                                                        class="del_all">
+                                                    </td>
 
                                                     <td>{{ $country->name }}</td>
                                                     <td>{{ $country->iso_code_2 }}</td>
@@ -96,54 +97,19 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{ date('d/m/Y',strtotime($country->created_at)) }}
+                                                        {{ date('d-m-Y',strtotime($country->created_at)) }}
                                                     </td>
                                                     <td>
                                                         @if(check_user_role(84) == 1)
                                                             <a href="{{ route('editcountry',$country->country_id) }}" class="btn btn-sm btn-primary rounded">
-                                                            <i class="fa fa-edit"></i>
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
                                                         @else
                                                             -
                                                         @endif
-                                                        </a>
                                                     </td>
-                                                    
-
                                                 </tr>
                                             @endforeach
-                                            {{-- @foreach ($users as $user)
-                                                <tr>
-                                                    <td>
-                                                        <input type="checkbox" name="del_all" class="del_all" value="{{ $user->user_id }}">
-                                                    </td>
-                                                    <td>
-                                                        {{ $user->username }}
-                                                    </td>
-                                                    <td>
-                                                        @if($user->status == 1)
-                                                           @php
-                                                             echo '<span class="badge badge-success">Enabled</span>';
-                                                           @endphp
-                                                        @else
-                                                            @php
-                                                                echo '<span class="badge badge-danger">Disabled</span>';
-                                                            @endphp
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        {{ date('d/m/Y',strtotime($user->created_at)) }}
-                                                    </td>
-                                                    <td>
-                                                        @if(check_user_role(84) == 1)
-                                                            <a href="{{ route('edituser',$user->user_id) }}" class="btn btn-sm btn-primary rounded">
-                                                            <i class="fa fa-edit"></i>
-                                                        @else
-                                                            -
-                                                        @endif
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -174,8 +140,8 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-    $('#usersGroup').DataTable();
-} );
+    $('#country').DataTable();
+});
 
 
 // Select All Checkbox
