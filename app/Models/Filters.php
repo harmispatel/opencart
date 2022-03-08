@@ -9,4 +9,5 @@ class Filters extends Model
 {
     use HasFactory;
     protected $table='oc_filter';
+    protected $primaryKey='filter_id';
 }

@@ -164,8 +164,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('filter', [FiltersController::class, 'index'])->name('filter');
     Route::get('addfilter', [FiltersController::class, 'add'])->name('addfilter');
     Route::post('storeFilter',[FiltersController::class, 'store'])->name('storeFilter');
-    Route::get('editfilter/{id}',[FiltersController::class, 'store'])->name('editfilter');
+    Route::get('editfilter/{id}',[FiltersController::class, 'edit'])->name('editfilter');
     Route::post('deletefilter',[FiltersController::class, 'delete'])->name('deletefilter');
+    Route::post('updatefilter',[FiltersController::class,'update'])->name('updatefilter');
+
+    // Route::get('showId',[FiltersController::class, 'showId'])->name('showId');
+
 
 
 
@@ -202,6 +206,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
     Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
     Route::post('storecountry', [CountryController::class, 'store'])->name('storecountry');
+    Route::post('deletecountry', [CountryController::class, 'deletecountry'])->name('deletecounty');
+    Route::get('editcountry/{id}', [CountryController::class, 'edit'])->name('editcountry');
+    Route::post('updatecountry', [CountryController::class, 'update'])->name('updatecountry');
+
+
 
 
 });

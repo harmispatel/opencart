@@ -58,18 +58,17 @@ class ProductController extends Controller
     }
 
     public function getoptionhtml(Request $request){
-
-
-
         $option = DB::table('oc_option')->where('type',$request->type)->get();
         return response()->json([
             'option' => $option,
         ]);
     }
-
     public function addOptionValue(Request $request){
+       echo '<pre>';
+       print_r($request->optionTypeId);
+       exit();   
         $option_value = DB::table('oc_option_value_description')->where('option_id',$request->optionTypeId)->get();
-
+        print_r($option_value);die;
         return response()->json([
             'option_value' => $option_value,
         ]);
