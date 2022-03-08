@@ -49,13 +49,13 @@
 
                             <div class="container" style="text-align: right">
                                 @if (check_user_role(55) == 1)
-                                    <a href="{{ route('newcategory') }}" class="btn btn-sm btn-success ml-auto"><i
-                                            class="fa fa-plus"></i></a>
+                                    <a href="{{ route('newcategory') }}" class="btn btn-sm btn-primary ml-auto px-1">Insert<i
+                                            class="pl-1 fa fa-plus"></i></a>
                                 @endif
 
                                 @if (check_user_role(57) == 1)
-                                    <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
-                                            class="fa fa-trash"></i></a>
+                                    <a href="#" class="btn  btn-sm btn-danger ml-1 deletesellected">Delete<i
+                                            class="pl-1 fa fa-trash"></i></a>
                                 @endif
                             </div>
 
@@ -81,45 +81,6 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center cat-list">
-
-                                    {{-- @foreach ($fetchparent as $data)
-                                        <tr>
-                                            <td><input type="checkbox" name="del_all" value="{{ $data->category_id }}" class="del_all"></td>
-                                            <td>
-                                                {{ $data->cat_name }}
-                                                @php
-                                                    $getsubcat = [];
-                                                    $getsubcat = get_subcat($data->category_id);
-                                                    
-                                                    // echo '<pre>';
-                                                    // print_r(count($getsubcat));
-                                                    
-                                                @endphp
-                                                @if (count($getsubcat) > 0)
-                                                    @foreach ($getsubcat as $key => $value)
-                                                        > {{ $value->cat_name }}
-                                                    @endforeach
-                                                @endif
-
-
-
-
-                                            </td>
-
-
-                                            <td>{{ $data->sort_order }}</td>
-                                            <td>
-                                                @if (check_user_role(56) == 1)
-                                                    <a href="{{ 'categoryedit/' . $data->category_id }}"
-                                                        class="btn btn-sm btn-primary rounded"><i
-                                                            class="fa fa-edit"></i></a>
-                                                @else
-                                                    -
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach --}}
-
                                     @foreach ($fetchparent as $data)
                                         <tr>
                                             <td><input type="checkbox" name="del_all" value="{{ $data->category_id }}"
@@ -128,7 +89,7 @@
                                             <td>{{ $data->sort_order }}</td>
                                             <td>
                                                 @if (check_user_role(56) == 1)
-                                                    <a href="" class="btn btn-sm btn-primary rounded"><i
+                                                    <a href="categoryedit/{{ $data->category_id }}" class="btn btn-sm btn-primary rounded"><i
                                                             class="fa fa-edit"></i></a>
                                                 @else
                                                     -

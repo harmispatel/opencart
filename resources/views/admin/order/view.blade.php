@@ -490,16 +490,18 @@
                     $('#orderdetail').html('')
                     getorderdetail();
                     $('#orderhistoryform').trigger('reset');
-                    // $('#table').DataTable();
-
+                    // $('#ordertable').DataTable();
+                    
                     // }
                 },
                 error: function(response) {
                     $('#alertmessage').text("Error: Facing some error!");
+                    // $('#ordertable').DataTable();
                 }
             });
         });
 
-
+        
+        // $('#ordertable').DataTable();
     });
 </script>
