@@ -48,7 +48,7 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Start --}}
-                            <form action="" method="POST" id="catform" enctype="multipart/form-data">
+                            <form action="{{ route('storeproduct') }}" method="POST" id="catform" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">
@@ -56,9 +56,9 @@
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="genral-tab" data-toggle="tab" href="#genral" role="tab"
-                                                aria-controls="genral" aria-selected="true">Genral</a>
+                                                aria-controls="genral" aria-selected="true"><i class="fa fa-table-cells"></i>Genral</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a class="nav-link" id="data-tab" data-toggle="tab" href="#data" role="tab"
                                                 aria-controls="data" aria-selected="false">Data</a>
                                         </li>
@@ -69,12 +69,12 @@
                                         <li class="nav-item">
                                             <a class="nav-link" id="attribute-tab" data-toggle="tab" href="#attribute" role="tab"
                                                 aria-controls="attribute" aria-selected="false">Attribute</a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nav-item">
                                             <a class="nav-link" id="option-tab" data-toggle="tab" href="#option" role="tab"
                                                 aria-controls="option" aria-selected="false">Option</a>
                                         </li>
-                                        <li class="nav-item">
+                                        {{-- <li class="nav-item">
                                             <a class="nav-link" id="recurring-tab" data-toggle="tab" href="#recurring" role="tab"
                                                 aria-controls="recurring" aria-selected="false">Recurring</a>
                                         </li>
@@ -101,7 +101,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link" id="design-tab" data-toggle="tab" href="#design" role="tab"
                                                 aria-controls="design" aria-selected="false">Design</a>
-                                        </li>
+                                        </li> --}}
                                     </ul>
                                     {{-- End Tab Links --}}
 
@@ -114,43 +114,81 @@
                                                         aria-controls="english" aria-selected="true">English</a>
                                                 </li>
                                             </ul>
+
+                                            <div class="mb-3">
+                                                <label for="category" class="form-label">Category</label>
+                                                <select name="category" id="category" class="form-control">
+                                                    <option disabled selected>select</option>
+                                                    @foreach ($result['category'] as  $category)
+                                                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            
+
                                             <div class="mb-3">
                                                 <label for="product" class="form-label">Product Name</label>
-                                                <input type="text" class="form-control" id="product" placeholder="Product Name">
+                                                <input type="text" class="form-control" name="product" id="product" placeholder="Product Name">
                                             </div>
+
+                                            <div class="mb-3">
+                                                <label for="category" class="form-label">Product Icon</label>
+                                                <select name="product_icon[]" id="product_icon" class="form-control" multiple>
+                                                    @foreach ($result['product_icon'] as $productIcon)
+                                                    <option value="{{ $productIcon->icon_name }}">{{ $productIcon->icon_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="day" class="form-label">select the days availiable</label>
+                                                <div>
+                                                    <input type="checkbox" name="day[]" value="Mon"> Mon &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="checkbox" name="day[]" value="Tue"> Tue &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="checkbox" name="day[]" value="Wed"> Wed &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="checkbox" name="day[]" value="Thu"> Thu &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="checkbox" name="day[]" value="Fir"> Fir &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="checkbox" name="day[]" value="Sat"> Sat &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="checkbox" name="day[]" value="Sun"> Sun &nbsp;&nbsp;&nbsp;&nbsp;
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="order" class="form-label">Order Type</label>
+                                                <div>
+                                                    <input type="radio" name="order_type[]" value="both"> Both &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="radio" name="order_type[]" value="delivery"> Delivery Only &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="radio" name="order_type[]" value="collection"> Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
+                                                </div>
+                                            </div>
+                                            
+
                                             <div class="form-floating">
                                                 <label for="summernote" class="form-label">Description</label>
                                                 <textarea class="form-control" placeholder="Leave a comment here" name="description"
                                                     id="summernote" style="height: 200px"></textarea>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="matatitle" class="form-label">Meta Tag Title</label>
-                                                <input type="text" class="form-control" name="matatitle" id="matatitle"
-                                                    placeholder="Mata Tag Title">
+
+                                            <div class="class=mb-3">
+                                                <label for="price" class="form-label">Price</label>
+                                                <div>
+                                                Main Price <input type="text" name="price" class="form-control">
+                                                Delivery Price <input type="text" name="price" class="form-control">
+                                                Collection Price <input type="text" name="price" class="form-control">
+                                                </div>
                                             </div>
+
                                             <div class="form-floating">
-                                                <label for="metadesc" class="form-label">Meta Tag Description</label>
-                                                <textarea class="form-control" placeholder="Meta Tag Description" name="metadesc"
-                                                    id="metadesc" style="height: 100px"></textarea>
-                                                <label for="metadesc"></label>
+                                                <label for="image" class="form-label">Image</label>
+                                                <input type="file" name="image" class="form-control">
                                             </div>
-                                            <div class="form-floating">
-                                                <label for="metakey" class="form-label">Meta Tag Keywords</label>
-                                                <textarea class="form-control" placeholder="Meta Tag Keywords" name="metakey" id="metakey"
-                                                    style="height: 100px"></textarea>
-                                                <label for="metakey"></label>
-                                            </div>
-                                            <div class="form-floating">
-                                                <label for="producttag" class="form-label">Product Tags</label>
-                                                <textarea class="form-control" placeholder="Product Tags" name="producttag"
-                                                    id="producttag" style="height: 100px"></textarea>
-                                                <label for="producttag"></label>
-                                            </div>
+                                            
                                         </div>
                                         {{-- end Genral --}}
 
                                         {{-- start Data --}}
-                                        <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
+                                        {{-- <div class="tab-pane fade" id="data" role="tabpanel" aria-labelledby="data-tab">
                                             <div class="mb-3">
                                                 <label for="model" class="form-label">Model</label>
                                                 <input type="text" class="form-control" id="model" placeholder="Model">
@@ -287,10 +325,10 @@
                                                 <input type="text" class="form-control" id="sort_order" value="1">
                                             </div>
                                         </div>
-                                        {{-- end Data --}}
+                                        end Data --}}
 
                                         {{-- start Links --}}
-                                        <div class="tab-pane fade" id="links" role="tabpanel" aria-labelledby="links-tab">
+                                        {{-- <div class="tab-pane fade" id="links" role="tabpanel" aria-labelledby="links-tab">
                                             <div class="mb-3">
                                                 <label for="manufacturer" class="form-label">Manufacturer</label>
                                                 <select name="Manufacturer" class="form-control" id="Manufacturer">
@@ -339,11 +377,11 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- end links --}}
 
                                         {{-- start Attribute --}}
-                                        <div class="tab-pane fade" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
+                                        {{-- <div class="tab-pane fade" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
 
                                             <div class="tab-pane" id="tab-attribute">
                                                 <div class="table-responsive">
@@ -369,26 +407,34 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- end Attribute --}}
 
                                         {{-- start Option --}}
                                         <div class="tab-pane fade" id="option" role="tabpanel" aria-labelledby="option-tab">
-                                            <div class="mb-3">
 
-                                                <select name="option_showww" id="option_showww"  placeholder="Option" class="form-control">
-                                                    <option selected disabled>---None---</option>
-                                                    @foreach ($option as $option)
-                                                        <option value="{{ $option->name }}">{{ $option->name }}</option>
-                                                    @endforeach
+
+
+                                            <div class="form-floating">
+                                                <label for="status" class="form-label">Status</label>
+                                                
+                                                <select name="status" id="status" class="form-control">
+                                                    <option value="0">Enabled</option>
+                                                    <option value="1">Deabled</option>
                                                 </select>
                                             </div>
-                                             <div id="appandoption"></div>
+
+                                            <div class="form-floating">
+                                                <label for="sort_order" class="form-label">Sort Order</label>
+                                                <input type="text" name="sort_order" value="10" class="form-control">
+                                            </div>
+
+                                            
                                         </div>
                                         {{-- end Option --}}
 
                                         {{-- Start Recurring --}}
-                                        <div class="tab-pane fade" id="recurring" role="tabpanel" aria-labelledby="recurring-tab">
+                                        {{-- <div class="tab-pane fade" id="recurring" role="tabpanel" aria-labelledby="recurring-tab">
                                             <div class="tab-pane" id="tab-attribute">
                                                 <div class="table-responsive">
                                                     <table id="attribute" class="table table-striped table-bordered table-hover">
@@ -413,11 +459,11 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- end Recurring --}}
 
                                         {{-- Start Discount --}}
-                                        <div class="tab-pane fade" id="discount" role="tabpanel" aria-labelledby="discount-tab">
+                                        {{-- <div class="tab-pane fade" id="discount" role="tabpanel" aria-labelledby="discount-tab">
                                             <div class="tab-pane" id="tab-discount">
                                                 <div class="table-responsive">
                                                     <table id="discount" class="table table-striped table-bordered table-hover">
@@ -446,11 +492,11 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- End Discount --}}
 
                                         {{-- Start Special --}}
-                                        <div class="tab-pane fade" id="special" role="tabpanel" aria-labelledby="special-tab">
+                                        {{-- <div class="tab-pane fade" id="special" role="tabpanel" aria-labelledby="special-tab">
                                             <div class="tab-pane" id="tab-special">
                                                 <div class="table-responsive">
                                                     <table id="special" class="table table-striped table-bordered table-hover">
@@ -478,11 +524,11 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- End Special --}}
 
                                         {{-- Start Image --}}
-                                        <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
+                                        {{-- <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
                                             <div class="tab-pane" id="tab-image">
                                                 <div class="table-responsive">
                                                     <div class="mb-3">
@@ -514,11 +560,11 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- End Image --}}
 
                                         {{-- Start Reward Ppoints --}}
-                                        <div class="tab-pane fade" id="reward_points" role="tabpanel" aria-labelledby="reward_points-tab">
+                                        {{-- <div class="tab-pane fade" id="reward_points" role="tabpanel" aria-labelledby="reward_points-tab">
                                             <div class="mb-3">
                                                 <label for="reward_points" class="form-label">Points</label>
                                                 <input type="text" class="form-control" id="reward_points" placeholder="Points">
@@ -544,11 +590,11 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- End Reward Ppoints --}}
 
                                         {{-- Start SEO --}}
-                                        <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+                                        {{-- <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
                                             <div class="alert alert-info"><i class="fa fa-info-circle"></i> Do not use spaces, instead
                                                 replace spaces with - and make sure the SEO URL is globally unique.</div>
                                             <div class="table-responsive">
@@ -576,11 +622,11 @@
                                             </div>
                                             <div class="card-footer">
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         {{-- End SEO --}}
 
                                         {{-- Start Design --}}
-                                        <div class="tab-pane fade" id="design" role="tabpanel" aria-labelledby="design-tab">
+                                        {{-- <div class="tab-pane fade" id="design" role="tabpanel" aria-labelledby="design-tab">
 
                                             <div class="table-responsive">
                                                 <table class="table table-bordered table-hover">
@@ -611,8 +657,8 @@
                                             </div>
                                         </div>
                                         {{-- End Design --}}
-                                    </div>
-                                </div>
+                                    {{-- </div>
+                                </div> --}} 
                                 {{-- End Card Body --}}
                             </form>
                             {{-- Form End --}}
