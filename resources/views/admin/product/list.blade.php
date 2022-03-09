@@ -39,12 +39,14 @@
                                     Product List
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    @if(check_user_role(59) == 1)
-                                        <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
+                                    @if (check_user_role(59) == 1)
+                                        <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i
+                                                class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if(check_user_role(61) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
+                                    @if (check_user_role(61) == 1)
+                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
+                                                class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
                             </div>
@@ -55,9 +57,11 @@
                                 {{-- Table Start --}}
                                 <table class="table table-bordered">
                                     {{-- Alert Message div --}}
-                                    <div class="alert alert-success del-alert alert-dismissible" id="alert" style="display: none" role="alert">
+                                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                                        style="display: none" role="alert">
                                         <p id="success-message" class="mb-0"></p>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                            aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -79,13 +83,13 @@
 
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
-                                        @foreach ($show_product as $value)
+                                        {{-- @foreach ($show_product as $value)
                                             <tr>
                                                 <td>
                                                     <input type="checkbox" name="checkall" class="del_all">
                                                 </td>
                                                 <td>
-                                                    @if( ($value->image != '') || ($value->image != NULL) )
+                                                    @if ($value->image != '' || $value->image != null)
                                                         <img src="{{ asset('public/admin/product/'.$value->image)}}" width="40px">
                                                     @else
                                                         <img src="public/admin/product/no_image.jpg" >
@@ -102,14 +106,14 @@
                                                 </td>
                                                 <td>{{ $value->sort_order }}</td>
                                                 <td>
-                                                    @if(check_user_role(60) == 1)
+                                                    @if (check_user_role(60) == 1)
                                                         <a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -129,80 +133,126 @@
 {{-- End Section of Add Category --}}
 @include('footer')
 <script>
-   $(document).ready( function () {
-    $('.table').DataTable();
-} );
+    $(document).ready(function() {
+        getallproduct();
+    });
+
+    function getallproduct() {
+
+        var table = $('.table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('getproduct') }}",
+            columns: [{
+                    data: 'checkbox',
+                    name: 'checkbox',
+                    orderable: false,
+                    searchable: true
+                },
+                {
+                    'data': 'image',
+                    'name': 'image'
+                },
+                {
+                    'data': 'name',
+                    'name': 'name'
+                },
+                {
+                    'data': 'price',
+                    'name': 'price'
+                },
+                {
+                    'data': 'status',
+                    'name': 'status'
+                },
+                {
+                    'data': 'sort_order',
+                    'name': 'sort_order'
+                },
+                {
+                    'data': 'action',
+                    'name': 'action'
+                },
+            ]
+        });
+
+    }
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     // Select All Checkbox
-  $('#delall').on('click', function(e) {
-      if($(this).is(':checked',true))
-      {
-          $(".del_all").prop('checked', true);
-      }
-      else
-      {
-          $(".del_all").prop('checked',false);
-      }
-  });
-  // End Select All Checkbox
+    $('#delall').on('click', function(e) {
+        if ($(this).is(':checked', true)) {
+            $(".del_all").prop('checked', true);
+        } else {
+            $(".del_all").prop('checked', false);
+        }
+    });
+    // End Select All Checkbox
 
 
-  // Delete User
-  $('.deletesellected').click(function()
-  {
+    // Delete User
+    $('.deletesellected').click(function() {
 
-      var checkValues = $('.del_all:checked').map(function()
-      {
-          return $(this).val();
-      }).get();
+        var checkValues = $('.del_all:checked').map(function() {
+            return $(this).val();
+        }).get();
 
-      if(checkValues !='')
-      {
-          swal({
-              title: "Are you sure You want to Delete It ?",
-              text: "Once deleted, you will not be able to recover this Record",
-              icon: "warning",
-              buttons: true,
-              dangerMode: true,
-          })
-          .then((willDelete) => {
-              if (willDelete)
-              {
+        if (checkValues != '') {
+            swal({
+                    title: "Are you sure You want to Delete It ?",
+                    text: "Once deleted, you will not be able to recover this Record",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
 
-                  $.ajax({
-                          type: "POST",
-                          url: '{{ url("deleteproduct") }}',
-                          data: {"_token": "{{ csrf_token() }}",'id':checkValues},
-                          dataType : 'JSON',
-                          success: function (data)
-                          {
-                              if(data.success == 1)
-                              {
-                                  swal("Your Record has been deleted!", {
-                                      icon: "success",
-                                  });
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ url('deleteproduct') }}',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'id': checkValues
+                            },
+                            dataType: 'JSON',
+                            success: function(data) {
+                                if (data.success == 1) {
+                                    swal("Your Record has been deleted!", {
+                                        icon: "success",
+                                    });
 
-                                  setTimeout(function(){
-                                      location.reload();
-                                  }, 1500);
-                              }
-                          }
-                  });
-              }
-              else
-              {
-                  swal("Cancelled", "", "error");
-                  setTimeout(function(){
-                      location.reload();
-                  }, 1000);
-              }
-          });
-      }
-      else
-      {
-          swal("Please select atleast One Product", "", "warning");
-      }
-  });
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            }
+                        });
+                    } else {
+                        swal("Cancelled", "", "error");
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                });
+        } else {
+            swal("Please select atleast One Product", "", "warning");
+        }
+    });
 </script>
-

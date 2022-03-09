@@ -9,4 +9,6 @@ class Product extends Model
 {
     use HasFactory;
     protected $table = 'oc_product';
+    public $timestamps=false;
+    
 }
