@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductDescription extends Model
+class Reward extends Model
 {
+    
     use HasFactory;
-    protected $table = 'oc_product_description';
+    protected $table = 'oc_product_reward';
     public $timestamps=false;
-    protected $primaryKey='product_id';
-
 }

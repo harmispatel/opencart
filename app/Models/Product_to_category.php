@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductDescription extends Model
+class Product_to_category extends Model
 {
+   
     use HasFactory;
-    protected $table = 'oc_product_description';
+    protected $table = 'oc_product_to_category';
     public $timestamps=false;
-    protected $primaryKey='product_id';
 
 }
