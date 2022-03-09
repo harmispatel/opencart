@@ -149,6 +149,8 @@ class OrdersController extends Controller
             'model' => 'required',
         ]);
 
+        $product = OrderProduct::where('order_product_id',$request->product)->first();
+        $productname = $product->name;
 
         $proreturn = new ReturnProduct;
         $proreturn->order_id = $request->order_id;
@@ -160,12 +162,10 @@ class OrdersController extends Controller
         $proreturn->lastname = $request->lastname;
         $proreturn->email = $request->email;
         $proreturn->telephone = $request->telephone;
-        $proreturn->product = $request->product;
+        $proreturn->product = $productname;
         $proreturn->model = $request->model;
-        // $proreturn->quantity = $request->quantity;
         $proreturn->quantity = isset($request->quantity) ? $request->quantity : 0;
         $proreturn->opened = $request->opened;
-        // $proreturn->comment = $request->comment;
         $proreturn->comment = isset($request->comment) ? $request->comment : '';
         $proreturn->return_reason_id = $request->return_reason_id;
         $proreturn->return_action_id = $request->return_action_id;

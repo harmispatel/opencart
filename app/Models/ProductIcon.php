@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class ProductIcon extends Model
 {
     use HasFactory;
-    protected $table = 'oc_product';
-    public $timestamps=false;
-    
+    protected $table='oc_product_icons';
 }

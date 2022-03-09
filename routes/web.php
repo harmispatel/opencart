@@ -110,10 +110,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Products
     Route::get('products', [ProductController::class, 'index'])->name('products');
+    Route::get('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');
     Route::get('addproduct', [ProductController::class, 'add'])->name('addproduct');
     Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
-     Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
-
+    Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
+    Route::post('deleteproduct', [ProductController::class, 'deleteproduct'])->name('deleteproduct');
+    Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
+     
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
 
 
