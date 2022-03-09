@@ -81,7 +81,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center cat-list">
-                                    @foreach ($fetchparent as $data)
+                                    {{-- @foreach ($fetchparent as $data)
                                         <tr>
                                             <td><input type="checkbox" name="del_all" value="{{ $data->category_id }}"
                                                     class="del_all"></td>
@@ -144,7 +144,7 @@
                                                 @endif
                                             @endforeach
                                         @endif
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>
@@ -162,9 +162,35 @@
 @include('footer')
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ <script>
+     $(document).ready(function(){
+
+// $(".loader_div").show();
+
+getallcategory();
+
+});
+
+
+function getallcategory(){
+
+var table = $('#table').DataTable({
+processing: true,
+serverSide: true,
+// "scrollX": true,
+ajax: "{{ route('getcategory') }}",
+columns: [
+    {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
+    {data: 'cat_name', name:'cat_name'},
+    {data: 'sort_order', name: 'sort_order'},
+    {data: 'action', name: 'action'},
+]
+});
+}
+ </script>
 <script>
     $(document).ready(function() {
-        $('#table').DataTable();
+        // $('#table').DataTable();
         // Select All Checkbox
         $('#delall').on('click', function(e) {
             if ($(this).is(':checked', true)) {

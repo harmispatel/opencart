@@ -102,6 +102,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Category
     Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
     Route::get('category', [CategoryController::class, 'index'])->name('category');
+    Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
+
     Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
     Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
     Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
@@ -120,6 +122,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Orders
     Route::get('orders', [OrdersController::class, 'index'])->name('orders');
+    Route::get('getorders', [OrdersController::class, 'getorders'])->name('getorders');
+
     Route::get('vieworder/{id}', [OrdersController::class, 'vieworder'])->name('vieworder');
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');

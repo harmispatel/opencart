@@ -80,48 +80,36 @@
                                     <thead class="text-center">
                                         <th><input type="checkbox" name="checkall" id="delall"></th>
                                         <th>Order Id</th>
+                                        <th>Order Type</th>
+                                        <th>Shop</th>
                                         <th>Customer</th>
                                         <th>Status</th>
                                         <th>Total</th>
                                         <th>Date Added</th>
-                                        <th>Date Modified</th>
+                                        <th>Payment Type</th>
                                         <th>Action</th>
                                     </thead>
                                     {{-- End Table Head --}}
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
-                                        @foreach ($orders as $order)
+                                        {{-- @foreach ($orders as $order)
                                             <tr>
                                                 <td><input type="checkbox" name="del_all" value="{{ $order->order_id }}" class="del_all"></td>
                                                 <td>{{ $order->order_id }}</td>
+                                                <td>{{ $order->flag_post_code }}</td>
+                                                <td>{{ $order->store_name }}</td>
                                                 <td>{{ $order->firstname }} {{ $order->lastname }}</td>
                                                 <td>{{ $order->name }}</td>
                                                 <td>{{ $order->total }}</td>
                                                 <td>{{ date('d-m-Y', strtotime($order->date_added)) }}</td>
-                                                <td>{{ date('d-m-Y', strtotime($order->date_modified)) }}</td>
+                                                <td>{{ $order->payment_code }}</td>
+
                                                 <td>
-                                                    <div class="btn-group">
-                                                        <div class="btn-group dropleft" role="group">
-                                                            <button type="button"
-                                                                class="btn btn-info dropdown-toggle dropdown-toggle-split rounded-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <span class="sr-only">Toggle Dropleft</span>
-                                                            </button>
-                                                            <div class="dropdown-menu">
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('editorder') }}"><i
-                                                                        class="fas fa-pencil-alt"> Edit</i></a>
-                                                                <a class="dropdown-item"
-                                                                    href="{{ route('deleteorder') }}"><i
-                                                                        class="fa fa-trash"> Delete</i></a>
-                                                            </div>
-                                                        </div>
-                                                        <a href="{{ route('vieworder',$order->order_id)}}"><button type="button" data-toggle="tooltip" data-placement="top" title="View" class="btn btn-info rounded-0" id="view"><i class="fa fa-eye text-white"></i></button></a>
-                                                        {{-- <button type="button" data-toggle="tooltip" data-placement="top" title="View" class="btn btn-info rounded-right" id="view"><a href="{{ route('vieworder',$order->order_id)}}"><i class="fa fa-eye text-white"></i></a></button> --}}
-                                                    </div>
+                                                  <a href="{{ route('vieworder',$order->order_id)}}"><button type="button rounded" data-toggle="tooltip" data-placement="top" title="View" class="btn btn-info rounded-0" id="view"><i class="fa fa-eye text-white"></i></button></a>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -146,10 +134,54 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+<script>
+    $(document).ready(function(){
+
+// $(".loader_div").show();
+
+getallorders();
+
+});
+
+
+function getallorders(){
+
+var table = $('#table').DataTable({
+processing: true,
+serverSide: true,
+
+ajax: "{{ route('getorders') }}",
+columns: [
+    {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
+    {data: 'order_id', name: 'order_id'},
+    {data: 'flag_post_code', name: 'flag_post_code'},
+    {data: 'store_name', name: 'store_name'},
+    {data: 'firstname', name: 'firstname'},
+    {data: 'name', name: 'name'},
+    {data: 'total', name: 'total'},
+    {data: 'date_added', name: 'date_added'},
+    {data: 'payment_code', name: 'payment_code'},
+    {data: 'action', name: 'action'},
+]
+});
+
+}
+    
+    
+    
+</script>   
+
+
+
 <script type="text/javascript">
     // Data Table of Manufacturers List
+
+    
+
+
+
     $(document).ready(function() {
-        $('#table').DataTable();
+        // $('#table').DataTable();
         // Select All Checkbox
         $('#delall').on('click', function(e) {
             if ($(this).is(':checked', true)) {

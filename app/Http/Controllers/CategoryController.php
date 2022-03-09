@@ -6,7 +6,7 @@ use App\Models\Category;
 use App\Models\CategoryDetail;
 use App\Models\CategoryLayout;
 use Illuminate\Http\Request;
-
+use DataTables;
 class CategoryController extends Controller
 {
 
@@ -30,6 +30,28 @@ class CategoryController extends Controller
         // exit();
 
         return view('admin.category.CategoryList', ['fetchparent' => $fetchparent]);
+    }
+
+    public function getcategory(Request $request){
+        if ($request->ajax()) {
+            $data =CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+
+                $edit_url = route('categoryedit',$row->category_id);
+                $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+
+                return $btn;
+            })
+            ->addColumn('checkbox', function($row){
+                $cid = $row->category_id;
+                $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
+                return $checkbox;
+            })
+            ->rawColumns(['action','checkbox'])
+            ->make(true);
+        }
     }
 
 
@@ -203,12 +225,12 @@ class CategoryController extends Controller
         $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
 
         // Get Single Category
-        $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
 
-        echo '<pre>';
-        print_r($data->toArray());
-        exit();
+        // echo '<pre>';
+        // print_r($data->toArray());
+        // exit();
     
-        return view('admin.category.categoryedit', ['data' => $data, 'fetchparent' => $fetchparent, 'category_layout' => $category_layout]);
+        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout]);
     }
 }
