@@ -1,9 +1,5 @@
 <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0-rc
-    </div>
+    <strong>Powered by Best <a href="">Epos.</a> All Rights Reserved.</strong>
 </footer>
 
 <!-- Control Sidebar -->
@@ -177,7 +173,7 @@ function addAttribute() {
         option_row++;
      }
     </script>
-   
+
     <script>
           $('#option_showww').on('change', function (e) {
 
@@ -302,7 +298,7 @@ function addAttribute() {
                         $.each(response.option_value, function(key, item) {
                             console.log(item);
                            var data ='<option value=""></option>';
-                          
+
                         });            return false;
                     }
                 });

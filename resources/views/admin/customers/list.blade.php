@@ -180,10 +180,7 @@
 
     $(document).ready(function(){
 
-        // Data Table of Manufacturers List
-        // $('.table').DataTable();
-
-        $(".loader_div").show();
+        // $(".loader_div").show();
 
         getallCustomers();
 
@@ -192,19 +189,24 @@
 
     function getallCustomers(){
 
-        $.ajax({
-            type: "GET",
-            url: "{{ url('getcustomers') }}",
-            dataType: "json",
-            success: function (response) {
-                $('.table tbody').html('');
-                $('.table tbody').append(response);
-                $('.table').DataTable({
-                    "scrollX": true,
-                });
-                $(".loader_div").hide();
-            }
-        });
+        var table = $('.table').DataTable({
+        processing: true,
+        serverSide: true,
+        "scrollX": true,
+        ajax: "{{ route('getcustomers') }}",
+        columns: [
+            {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
+            {data: 'customer_name', name: 'customer_name'},
+            {data: 'shop', name: 'shop'},
+            {data: 'email', name: 'email'},
+            {data: 'customer_group', name: 'customer_group'},
+            {data: 'status', name: 'status'},
+            {data: 'approved', name: 'approved'},
+            {data: 'ip', name: 'ip'},
+            {data: 'date_added', name: 'date_added'},
+            {data: 'action', name: 'action'},
+        ]
+    });
 
     }
 

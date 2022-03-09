@@ -41,7 +41,7 @@
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     <button type="submit" form="manuForm" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                                    <a href="{{ route('information') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
+                                    <a href="{{ route('customers') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}
@@ -57,56 +57,37 @@
                                             <a class="nav-link active" id="genral-tab" data-toggle="tab" href="#genral" role="tab" aria-controls="genral" aria-selected="true">General</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="affiliate-tab" data-toggle="tab" href="#affiliate" role="tab" aria-controls="data" aria-selected="false">Affiliate</a>
+                                            <a class="nav-link" id="ip-tab" data-toggle="tab" href="#ip" role="tab" aria-controls="data" aria-selected="false">IP Addresses</a>
                                         </li>
                                     </ul>
                                     {{-- End Tabs Link --}}
 
-
+                                    {{-- Tab Content --}}
                                     <div class="tab-content pt-4" id="myTabContent">
 
                                         {{-- Genral Tab --}}
                                         <div class="tab-pane fade show active" id="genral" role="tabpanel" aria-labelledby="genral-tab">
-
                                             <div class="row">
-
                                                 <div class="col-md-2">
-                                                    {{-- <ul class="list-group" id="address">
-                                                        <li class="list-group-item active">
-                                                            <a href="#tab-customer" data-toggle="tab" style="color: black">General</a>
+                                                    {{-- Inner Tab Links --}}
+                                                    <ul class="nav nav-pills nav-stacked list-group" style="display: grid!important" id="address">
+                                                        <li class="nav-item">
+                                                            <a href="#tab-customer" class="nav-link active" data-toggle="tab" role="tab" aria-controls="data">General</a>
                                                         </li>
-                                                        <li class="list-group-item" id="address-add">
-                                                            <a onclick="addAddress();">
-                                                                <i class="fa fa-plus-circle"></i> Add Address
+                                                        <li class="nav-item" id="address-add">
+                                                            <a href="#" class="nav-link" onclick="addAddress();">Add  Address
+                                                                <i class="fa fa-plus-circle pl-4"></i>
                                                             </a>
                                                         </li>
-                                                      </ul> --}}
-                                                      <ul class="nav nav-pills nav-stacked list-group" id="address">
-                                                        <li class="active">
-                                                            <a href="#tab-customer" data-toggle="tab">General</a>
-                                                        </li>
-                                                        <li id="address-add">
-                                                            <a onclick="addAddress();">
-                                                                <i class="fa fa-plus-circle"></i> Add Address
-                                                            </a>
-                                                        </li>
-                                                      </ul>
+                                                    </ul>
+                                                    {{-- End Inner Tab Links --}}
                                                 </div>
-
                                                 <div class="col-md-10">
+                                                    {{-- Genral Customer Tab --}}
                                                     <div class="tab-content">
                                                         <div class="tab-pane active" id="tab-customer">
 
-                                                            <h3>Customer Details</h3>
-                                                            <div class="form-group">
-                                                                <label for="customergroup">Customer Group</label>
-                                                                <select name="customer_group_id" id="customergroup" class="form-control">
-                                                                    @foreach ($customergroups as $group)
-                                                                        <option value="{{ $group->customer_group_id }}" {{ (old('customer_group_id') == $group->customer_group_id) ? 'selected' : '' }}>{{ $group->gname }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-
+                                                            <h3>General</h3>
                                                             <div class="form-group">
                                                                 <label for="firstname">First Name</label>
                                                                 <input type="text" name="firstname" id="firstname" class="form-control {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}" placeholder="First Name" value="{{ old('firstname') }}">
@@ -146,10 +127,17 @@
                                                                     </div>
                                                                 @endif
                                                             </div>
-                                                            <hr style="background: black;margin-top: 25px;">
 
+                                                            <div class="form-group">
+                                                                <label for="fax">Fax</label>
+                                                                <input type="text" name="fax" id="fax" class="form-control {{ ($errors->has('fax')) ? 'is-invalid' : '' }}" placeholder="Fax" value="{{ old('fax') }}">
+                                                                @if($errors->has('fax'))
+                                                                    <div class="invalid-feedback">
+                                                                        {{ $errors->first('fax') }}
+                                                                    </div>
+                                                                @endif
+                                                            </div>
 
-                                                            <h3>Password</h3>
                                                             <div class="form-group">
                                                                 <label for="password">Password</label>
                                                                 <input type="password" name="password" id="password" class="form-control {{ ($errors->has('password')) ? 'is-invalid' : '' }}">
@@ -159,6 +147,7 @@
                                                                     </div>
                                                                 @endif
                                                             </div>
+
                                                             <div class="form-group">
                                                                 <label for="password">Confirm Password</label>
                                                                 <input type="password" name="confirm" id="confirm" class="form-control {{ ($errors->has('confirm')) ? 'is-invalid' : '' }}">
@@ -168,10 +157,7 @@
                                                                     </div>
                                                                 @endif
                                                             </div>
-                                                            <hr style="background: black;margin-top: 25px;">
 
-
-                                                            <h3>Other</h3>
                                                             <div class="form-group">
                                                                 <label for="newsletter">Newsletter</label>
                                                                 <select name="newsletter" id="newsletter" class="form-control">
@@ -179,6 +165,7 @@
                                                                     <option value="0" {{ (old('newsletter') == 1) ? '' : 'selected' }}>Disabled</option>
                                                                 </select>
                                                             </div>
+
                                                             <div class="form-group">
                                                                 <label for="status">Status</label>
                                                                 <select name="status" id="status" class="form-control">
@@ -186,137 +173,51 @@
                                                                     <option value="0">Disabled</option>
                                                                 </select>
                                                             </div>
+
                                                             <div class="form-group">
-                                                                <label for="safe">Safe</label>
-                                                                <select name="safe" id="safe" class="form-control">
-                                                                    <option value="1" {{ (old('safe') == 1) ? 'selected' : '' }}>Yes</option>
-                                                                    <option value="0" {{ (old('safe') == 1) ? '' : 'selected' }}>No</option>
+                                                                <label for="customergroup">Customer Group</label>
+                                                                <select name="customer_group_id" id="customergroup" class="form-control">
+                                                                    @foreach ($customergroups as $group)
+                                                                        <option value="{{ $group->customer_group_id }}" {{ (old('customer_group_id') == $group->customer_group_id) ? 'selected' : '' }}>{{ $group->gname }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
 
                                                         </div>
                                                     </div>
+                                                    {{-- End Genral Customer Tab --}}
                                                 </div>
-
-
-
-
-
                                             </div>
-
-                                            {{-- <div class="form-group">
-                                                <label for="infotitle" class="form-label">Information Title</label>
-                                                <input type="text" name="infotitle" class="form-control {{ ($errors->has('infotitle')) ? 'is-invalid' : '' }}" id="infotitle">
-                                                @if($errors->has('infotitle'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('infotitle') }}
-                                                    </div>
-                                                @endif
-                                            </div> --}}
-
                                         </div>
                                         {{-- End Genral Tab --}}
 
-
-                                        {{-- Affiliate Tab --}}
-                                        <div class="tab-pane fade" id="affiliate" role="tabpanel" aria-labelledby="affiliate-tab">
-
-                                            <h3>Affiliate Details</h3>
-                                            <div class="form-group">
-                                                <label for="company">Company</label>
-                                                <input type="text" name="company" placeholder="Company" id="company" class="form-control"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="website">Website</label>
-                                                <input type="text" name="website" placeholder="Website" id="website" class="form-control"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="trackcode">Tracking Code</label>
-                                                <input type="text" name="trackcode" placeholder="Tracking Code" id="trackcode" class="form-control"/>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="commission">Commission (%)</label>
-                                                <input type="number" name="commission" value="5" id="commission" class="form-control"/>
-                                            </div>
-                                            <hr style="background: black;margin-top: 25px;">
-
-
-                                            <h3>Payment Details</h3>
-                                            <div class="form-group">
-                                                <label for="tax">Tax ID</label>
-                                                <input type="text" name="tax" id="tax" placeholder="Tax ID" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="paymentmethod">Payment Method</label>
-                                                <div class="form-control">
-
-                                                    {{-- Cheque --}}
-                                                    <label for="">Cheque</label>
-                                                    <input type="radio" name="payment" id="payment" value="cheque" class="mr-2" checked>
-                                                    {{-- End Chque --}}
-
-                                                    {{-- Paypal --}}
-                                                    <label for="">Paypal</label>
-                                                    <input type="radio" name="payment" id="payment" value="paypal" class="mr-2">
-                                                    {{-- End Paypal --}}
-
-                                                     {{-- Bank Transfer --}}
-                                                     <label for="">Bank Transfer</label>
-                                                     <input type="radio" name="payment" id="payment" value="bank" class="mr-2">
-                                                     {{-- End Bank Transfer --}}
-
+                                        {{-- IP Tab --}}
+                                        <div class="tab-pane fade show" id="ip" role="tabpanel" aria-labelledby="ip-tab">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>IP</th>
+                                                                <th>Total Accounts</th>
+                                                                <th>Date Added</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">Result Not Found!</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
-
-                                            <div id="payment-cheque" class="payment">
-                                                <div class="form-group">
-                                                    <label for="cheque">Cheque Payee Name</label>
-                                                    <input type="text" name="cheque" placeholder="Cheque Payee Name" id="cheque" class="form-control" />
-                                                </div>
-                                            </div>
-
-                                            <div id="payment-paypal" class="payment">
-                                                <div class="form-group">
-                                                    <label for="paypal">PayPal Email Account</label>
-                                                    <input type="text" name="paypal" placeholder="PayPal Email Account" id="paypal" class="form-control" />
-                                                </div>
-                                            </div>
-
-                                            <div id="payment-bank" class="payment">
-                                                <div class="form-group">
-                                                    <label for="bankname">Bank Name</label>
-                                                    <input type="text" name="bankname" placeholder="Bank Name" id="bankname" class="form-control" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="branchnumber">Branch Number</label>
-                                                    <input type="text" name="branchnumber" placeholder="Branch Number" id="branchnumber" class="form-control" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="swiftcode">SWIFT Code</label>
-                                                    <input type="text" name="swiftcode" placeholder="SWIFT Code" id="swiftcode" class="form-control" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="accountname">Account Name</label>
-                                                    <input type="text" name="accountname" placeholder="Account Name" id="accountname" class="form-control" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="accountnumber">Account Number</label>
-                                                    <input type="text" name="accountnumber" placeholder="Account Number" id="accountnumber" class="form-control" />
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="affiliate">Status</label>
-                                                <select name="affiliate" id="affiliate" class="form-control">
-                                                    <option value="1">Enabled</option>
-                                                    <option value="0" selected>Disabled</option>
-                                                </select>
-                                            </div>
-
                                         </div>
-                                        {{-- End Affiliate Tab --}}
+                                        {{-- End IP Tab --}}
 
                                     </div>
+                                    {{-- End Tab Content --}}
+
                                 </div>
                                 {{-- End Card Body --}}
 
@@ -350,86 +251,26 @@
     function addAddress()
     {
 
-        html  = '<div class="tab-pane" id="tab-address' + address_row + '">';
+        html  = '<div id="tab-address-' + address_row + '" class="tab-pane">';
 
         html += '<h3>Address '+address_row+'</h3>';
-        html += '<input type="hidden" name="address[' + address_row + '][address_id]" value="" />';
+        html += '  <input type="hidden" name="address[' + address_row + '][address_id]" value="" />';
 
-        // First Name
+         // First Name
         html += '<div class="form-group">';
         html += '<label for="firstname' + address_row + '">First Name</label>';
         html += '<input type="text" name="address[' + address_row + '][firstname]" placeholder="First Name" id="firstname' + address_row + '" class="form-control" />';
         html += '</div>';
 
-        // Last Name
-        html += '<div class="form-group">';
-        html += '<label for="lastname' + address_row + '">Last Name</label>';
-        html += '<input type="text" name="address[' + address_row + '][lastname]" placeholder="Last Name" id="lastname' + address_row + '" class="form-control" />';
         html += '</div>';
-
-        // Company
-        html += '<div class="form-group">';
-        html += '<label for="company' + address_row + '">Company</label>';
-        html += '<input type="text" name="address[' + address_row + '][company]" placeholder="Company" id="company' + address_row + '" class="form-control" />';
-        html += '</div>';
-
-        // Address 1
-        html += '<div class="form-group">';
-        html += '<label for="address_1' + address_row + '">Address 1</label>';
-        html += '<input type="text" name="address[' + address_row + '][address_1]" placeholder="Address 1" id="address_1' + address_row + '" class="form-control" />';
-        html += '</div>';
-
-        // Address 2
-        html += '<div class="form-group">';
-        html += '<label for="address_2' + address_row + '">Address 2</label>';
-        html += '<input type="text" name="address[' + address_row + '][address_2]" placeholder="Address 2" id="address_2' + address_row + '" class="form-control" />';
-        html += '</div>';
-
-        // City
-        html += '<div class="form-group">';
-        html += '<label for="city' + address_row + '">City</label>';
-        html += '<input type="text" name="address[' + address_row + '][city]" placeholder="City" id="city' + address_row + '" class="form-control" />';
-        html += '</div>';
-
-        // Pincode
-        html += '<div class="form-group">';
-        html += '<label for="postcode' + address_row + '">Postcode</label>';
-        html += '<input type="text" name="address[' + address_row + '][postcode]" placeholder="Postcode" id="postcode' + address_row + '" class="form-control" />';
-        html += '</div>';
-
-        // Country
-        html += '<div class="form-group">';
-        html += '<label for="country_id' + address_row + '">Country</label>';
-        html += '<select name="address[' + address_row + '][country_id]" id="country_id' + address_row + '" class="form-control" onchange="region('+address_row+')">';
-        html += '<option value=""> --- Please Select Country --- </option>';
-        html += '@foreach($countries as $country)';
-        html += '<option value="{{ $country->country_id }}" id="abc">{{$country->name}}</option>';
-        html += '@endforeach';
-        html += '</select>';
-        html += '</div>';
-
-        // Region
-        html += '<div class="form-group">';
-        html += '<label for="zone_id' + address_row + '">Region / State</label>';
-        html += '<select name="address[' + address_row + '][zone_id]" id="zone_id' + address_row + '" class="form-control zone_id"><option value=""> --- Please Select Region --- </option><option value="0"> --- None --- </option></select>';
-        html += '</div>';
-
-        // Default Address
-        html += '<div class="form-group">';
-        html += '<label>Default Address</label>';
-        html += '<div class="form-control"><input type="radio" name="address[' + address_row + '][default]" value="1" /> <label>Allow</label></div>';
-        html += '  </div>';
-
-        html += '</div>';
-
-
 
         $('#genral .tab-content').append(html);
 
-        $('#address-add').before('<li class="list-group-item"><a href="#tab-address' + address_row + '" data-toggle="tab" style="color: black"><i class="fa fa-minus-circle" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address' + address_row + '\\\']\').parent().remove(); $(\'#tab-address' + address_row + '\').remove();"></i> Address ' + address_row + '</a></li>');
+        // $('select[name=\'address[' + address_row + '][country_id]\']').trigger('change');
 
-        $('#address a[href=\'#tab-address' + address_row + '\']').tab('show');
+        $('#address-add').before('<li class="nav-item"><a href="#tab-address-' + address_row + '" data-toggle="tab" class="nav-link"> Address ' + address_row + ' <i class="fa fa-minus-circle pl-4" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address-' + address_row + '\\\']\').parent().remove(); $(\'#tab-address-' + address_row + '\').remove();"></i></a></li>');
 
+        // $('#address a[href=\'#tab-address-' + address_row + '\']').tab('show');
 
         address_row++;
     }

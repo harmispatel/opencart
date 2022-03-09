@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Customer;
+use App\Models\Orders;
 use App\Models\Users;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -39,10 +42,12 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-        $data['users'] = Users::get();
-        $data['product'] = Product::get();
+        $customers = Customer::count();
+        $product = Product::count();
+        $categories = Category::count();
+        $orders = Orders::count();
 
-        return view('dashboard',$data);
+        return view('dashboard',['customers'=>$customers,'orders'=>$orders,'product'=>$product,'categories'=>$categories]);
 
     }
 }

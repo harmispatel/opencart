@@ -47,13 +47,13 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>{{ (isset($users)) ? count($users) : 0 }}</h3>
-                    <p>Users</p>
+                    <h3>{{ (isset($customers)) ? $customers : 0 }}</h3>
+                    <p>Customers</p>
                 </div>
                 <div class="icon">
-                    <i class="fas fa-user-alt"></i>
+                    <i class="fas fa-users"></i>
                 </div>
-                <a href="{{ route('users') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('customers') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -63,13 +63,13 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>0</h3>
+                    <h3>{{ (isset($categories)) ? $categories : 0 }}</h3>
                     <p>Categories</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-list-alt"></i>
                 </div>
-                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('category') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -79,13 +79,13 @@
                 <!-- small box -->
                 <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>0</h3>
-                    <p>Sub Categories</p>
+                    <h3>{{ (isset($orders)) ? $orders : 0 }}</h3>
+                    <p>Orders</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-columns"></i>
+                    <i class="fa fa-shopping-cart"></i>
                 </div>
-                <a href="" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('orders') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -95,7 +95,7 @@
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                <h3>{{ (isset($product)) ? count($product) : 0 }}</h3>
+                <h3>{{ (isset($product)) ? $product : 0 }}</h3>
                 <p>Product</p>
               </div>
               <div class="icon">
