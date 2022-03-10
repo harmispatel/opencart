@@ -93,23 +93,7 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
-                                        {{-- @foreach ($orders as $order)
-                                            <tr>
-                                                <td><input type="checkbox" name="del_all" value="{{ $order->order_id }}" class="del_all"></td>
-                                                <td>{{ $order->order_id }}</td>
-                                                <td>{{ $order->flag_post_code }}</td>
-                                                <td>{{ $order->store_name }}</td>
-                                                <td>{{ $order->firstname }} {{ $order->lastname }}</td>
-                                                <td>{{ $order->name }}</td>
-                                                <td>{{ $order->total }}</td>
-                                                <td>{{ date('d-m-Y', strtotime($order->date_added)) }}</td>
-                                                <td>{{ $order->payment_code }}</td>
-
-                                                <td>
-                                                  <a href="{{ route('vieworder',$order->order_id)}}"><button type="button rounded" data-toggle="tooltip" data-placement="top" title="View" class="btn btn-info rounded-0" id="view"><i class="fa fa-eye text-white"></i></button></a>
-                                                </td>
-                                            </tr>
-                                        @endforeach --}}
+                                   
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -180,7 +164,6 @@ columns: [
 
 
 
-    $(document).ready(function() {
         // $('#table').DataTable();
         // Select All Checkbox
         $('#delall').on('click', function(e) {
@@ -245,5 +228,4 @@ columns: [
 
         // End Delete Order
 
-    });
 </script>
