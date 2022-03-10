@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of Add Country --}}
+{{-- Section of Add Users --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Country</h1>
+                        <h1>Users</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
@@ -38,7 +38,7 @@
                             p-2" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fas fa-pencil-alt"></i>
-                                    Add Country
+                                    Add User
                                 </h3>
                             </div>
                             {{-- End Card Header --}}
@@ -50,11 +50,11 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="name">Country Name</label>
-                                        <input type="text" name="name" id="name" class="form-control {{ ($errors->has('name')) ? 'is-invalid' : '' }}" value="{{ old('name') }}">
-                                        @if($errors->has('name'))
+                                        <label for="username">User Name</label>
+                                        <input type="text" name="username" id="username" class="form-control {{ ($errors->has('username')) ? 'is-invalid' : '' }}" value="{{ old('username') }}">
+                                        @if($errors->has('username'))
                                             <div class="invalid-feedback">
-                                                {{ $errors->first('name') }}
+                                                {{ $errors->first('username') }}
                                             </div>
                                         @endif
                                     </div>
@@ -149,7 +149,7 @@
                                 {{-- Start Card Footer --}}
                                 <div class="card-footer">
                                         <button type="submit" class="btn btn-primary"><i class="fa fa-save"> Save</i></button>
-                                        <a href="{{ route('usersgroup') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
+                                        <a href="{{ route('users') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
                                 </div>
                                 {{-- End Card Footer --}}
 

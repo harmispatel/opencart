@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductDescription;
 use App\Models\Category;
-use App\Models\ProductIcon;
+use App\Models\ProductIcons;
 use App\Models\Reward;
 use App\Models\Product_to_category;
 use App\Models\ProductStore;
@@ -28,6 +28,16 @@ class ProductController extends Controller
     }
 
 
+    function bulkproducts()
+    {
+        return view('admin.product.bulkproducts');
+    }
+
+
+    function importproducts()
+    {
+        return view('admin.product.importproducts');
+    }
 
 
     function add()
