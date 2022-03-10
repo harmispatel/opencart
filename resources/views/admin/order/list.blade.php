@@ -93,10 +93,6 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
-<<<<<<< HEAD
-
-=======
->>>>>>> 79bfc1751e95ce171f658649b3bcba78fb2f7f3c
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -184,18 +180,6 @@
         });
 
     }
-<<<<<<< HEAD
-</script>
-
-
-
-<script type="text/javascript">
-    // Data Table of Manufacturers List
-
-
-
-
-=======
     // End Order Datatable
 
     // Select All Checkbox
@@ -259,7 +243,6 @@
         }
     });
     // End Delete Order
->>>>>>> 79bfc1751e95ce171f658649b3bcba78fb2f7f3c
 
     // $('#table').DataTable();
     // Select All Checkbox
