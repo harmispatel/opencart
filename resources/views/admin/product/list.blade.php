@@ -12,6 +12,7 @@
                     <div class="col-sm-6">
                         <h1>Product List</h1>
                     </div>
+
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -34,10 +35,18 @@
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2 m-0" style="color: black">
-                                    <i class="fa fa-list pr-2"></i>
-                                    Product List
-                                </h3>
+                                <h2 class="card-title pt-2 m-0" style="color: black">
+                                    <i class="fa fa-cog fw"></i>&nbsp;&nbsp;
+                                    category &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <select name="category" id="categorys" style="width: 70%">
+                                        @foreach ($category as $categorys)
+                                            <option value="{{ $categorys->category_id }}">{{ $categorys->name }}
+                                            </option>
+                                        @endforeach
+
+                                    </select>
+                                </h2>
+                                {{-- <h3>category</h3> --}}
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(59) == 1)
                                         <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i
@@ -57,14 +66,16 @@
                                 {{-- Table Start --}}
                                 <table class="table table-bordered">
                                     {{-- Alert Message div --}}
-                                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                        style="display: none" role="alert">
-                                        <p id="success-message" class="mb-0"></p>
-                                        <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                                    @if (Session::has('success'))
+                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                                            role="alert">
+                                            {{ Session::get('success') }}
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    @endif
                                     {{-- End Alert Message div --}}
 
                                     {{-- Table Head --}}
@@ -73,47 +84,17 @@
                                             <input type="checkbox" name="checkall" id="delall">
                                         </th>
                                         <th>Image</th>
-                                        <th>Product Name</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
-                                        <th>Sort Order</th>
-                                        <th>Action</th>
+                                        <th id="name">Product Name</th>
+                                        <th id="price">Price</th>
+                                        <th id="status">Status</th>
+                                        <th id="sort_order">Sort Order</th>
+                                        <th id="action">Action</th>
                                     </thead>
                                     {{-- End Table Head --}}
 
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
-                                        {{-- @foreach ($show_product as $value)
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" name="checkall" class="del_all">
-                                                </td>
-                                                <td>
-                                                    @if ($value->image != '' || $value->image != null)
-                                                        <img src="{{ asset('public/admin/product/'.$value->image)}}" width="40px">
-                                                    @else
-                                                        <img src="public/admin/product/no_image.jpg" >
-                                                    @endif
-                                                </td>
-                                                <td>{{ $value->name}}</td>
-                                                <td>{{ $value->price }}</td>
-                                                <td>
-                                                    @if ($value->status == 1)
-                                                        Enabled
-                                                    @else
-                                                        Disabled
-                                                    @endif
-                                                </td>
-                                                <td>{{ $value->sort_order }}</td>
-                                                <td>
-                                                    @if (check_user_role(60) == 1)
-                                                        <a href="#" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach --}}
+
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -132,66 +113,6 @@
 </section>
 {{-- End Section of Add Category --}}
 @include('footer')
-<script>
-    $(document).ready(function() {
-        getallproduct();
-    });
-
-    function getallproduct() {
-
-        var table = $('.table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('getproduct') }}",
-            columns: [{
-                    data: 'checkbox',
-                    name: 'checkbox',
-                    orderable: false,
-                    searchable: true
-                },
-                {
-                    'data': 'image',
-                    'name': 'image'
-                },
-                {
-                    'data': 'name',
-                    'name': 'name'
-                },
-                {
-                    'data': 'price',
-                    'name': 'price'
-                },
-                {
-                    'data': 'status',
-                    'name': 'status'
-                },
-                {
-                    'data': 'sort_order',
-                    'name': 'sort_order'
-                },
-                {
-                    'data': 'action',
-                    'name': 'action'
-                },
-            ]
-        });
-
-    }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
@@ -255,4 +176,93 @@
             swal("Please select atleast One Product", "", "warning");
         }
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+        $('#categorys').change(function() {
+            var categoryval = this.value;
+           
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+
+            $.ajax({
+                type: "post",
+                url: "{{ route('getproductbycategory') }}",
+                dataType: "json",
+                data: {
+                    category_id: categoryval
+                },
+                success: function(result) {
+                    $('.table tbody').html('');
+                    $('.table tbody').html(result);
+                }
+
+            });
+        });
+
+    });
+</script>
+
+<script>
+
+$(document).ready(function(){
+
+// $(".loader_div").show();
+
+getallproduct();
+
+});
+
+function getallproduct() {
+
+var table = $('.table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "{{ route('getproduct') }}",
+    columns: [{
+            data: 'checkbox',
+            name: 'checkbox',
+            orderable: false,
+            searchable: true
+        },
+        {
+            'data': 'image',
+            'name': 'image'
+        },
+        {
+            'data': 'name',
+            'name': 'name'
+        },
+        {
+            'data': 'price',
+            'name': 'price'
+        },
+        {
+            'data': 'status',
+            'name': 'status'
+        },
+        {
+            'data': 'sort_order',
+            'name': 'sort_order'
+        },
+        {
+            'data': 'action',
+            'name': 'action'
+        },
+    ]
+});
+
+}
+        
+
+
+
+
+
 </script>

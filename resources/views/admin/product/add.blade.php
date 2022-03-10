@@ -2,18 +2,7 @@
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<style type="text/css">
-    .ui-dialog {
-        position: fixed;
-        top: 32% !important;
-        right: 0;
-        margin: 0 auto;
-        transform: translateY(-30%);
-        box-shadow: 0 0 35px #9a9a9a;
-        -webkit-box-shadow: 0 0 35px #9a9a9a;
-    }
 
-</style>
 
 {{-- Section of Add Product --}}
 <section>
@@ -49,7 +38,7 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fas fa-pencil-alt"></i>
-                                    Add Product
+                                    Add Product 
                                 </h3>
                                 <div class="container" style="text-align: right;">
                                     <button type="submit" form="catform" class="btn btn-sm btn-primary"><i
