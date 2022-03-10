@@ -7,10 +7,9 @@ use App\Models\CategoryDetail;
 use App\Models\CategoryLayout;
 use Illuminate\Http\Request;
 use DataTables;
+
 class CategoryController extends Controller
 {
-
-
 
     // Function of List All Category
     function index()
@@ -20,14 +19,8 @@ class CategoryController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        // Fetch Categories
-        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
         $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
 
-
-        // echo '<pre>';
-        // print_r($fetchparent->toArray());
-        // exit();
 
         return view('admin.category.CategoryList', ['fetchparent' => $fetchparent]);
     }
@@ -52,6 +45,13 @@ class CategoryController extends Controller
             ->rawColumns(['action','checkbox'])
             ->make(true);
         }
+    }
+
+
+
+    function bulkcategory()
+    {
+        return view('admin.category.bulkcategory');
     }
 
 
@@ -225,12 +225,13 @@ class CategoryController extends Controller
         $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
 
         // Get Single Category
-        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->g
 
+        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout]);
         // echo '<pre>';
         // print_r($data->toArray());
         // exit();
-    
+
         return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout]);
     }
 }

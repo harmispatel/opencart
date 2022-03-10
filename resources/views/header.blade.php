@@ -167,7 +167,7 @@
                                                 </li>
                                             @else
 
-                                            @php
+                                            {{-- @php
                                                 $subarr = fetch_mainmenu_submenucolumn($submenu->parent_id);
                                                 $subactivecls = '';
                                                 $substylecss = '';
@@ -185,10 +185,10 @@
                                                     }
                                                 }
 
-                                            @endphp
+                                            @endphp --}}
 
-                                                <li class="nav-item pl-2 {{ $substylecss }}">
-                                                    <a href="" class="nav-link {{ $subactivecls }}">
+                                                <li class="nav-item pl-2">
+                                                    <a href="" class="nav-link">
                                                     <i class="nav-icon {{ $submenu->icon_class }}"></i>
                                                     <p>{{ $submenu->alias }}</p> <i class="right fas fa-angle-left"></i>
                                                     </a>
@@ -300,7 +300,7 @@
                                                         </li>
                                                     @else
 
-                                                        @php
+                                                        {{-- @php
                                                             $subarr = fetch_mainmenu_submenucolumn($value1->parent_id);
                                                             $subactivecls = '';
                                                             $substylecss = '';
@@ -318,10 +318,10 @@
                                                                 }
                                                             }
 
-                                                    @endphp
+                                                    @endphp --}}
 
-                                                        <li class="nav-item pl-2 {{ $substylecss }}">
-                                                            <a href="" class="nav-link {{ $subactivecls }}">
+                                                        <li class="nav-item pl-2">
+                                                            <a href="" class="nav-link">
                                                             <i class="nav-icon {{ $value1->icon_class }}"></i>
                                                             <p>{{ $value1->alias }}</p> <i class="right fas fa-angle-left"></i>
                                                             </a>

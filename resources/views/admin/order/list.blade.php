@@ -93,7 +93,10 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 79bfc1751e95ce171f658649b3bcba78fb2f7f3c
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -181,6 +184,7 @@
         });
 
     }
+<<<<<<< HEAD
 </script>
 
 
@@ -191,6 +195,71 @@
 
 
 
+=======
+    // End Order Datatable
+
+    // Select All Checkbox
+    $('#delall').on('click', function(e) {
+        if ($(this).is(':checked', true)) {
+            $(".del_all").prop('checked', true);
+        } else {
+            $(".del_all").prop('checked', false);
+        }
+    });
+    // End Select All Checkbox
+
+    // Delete Orders
+    $('.deletesellected').click(function() {
+
+        var checkValues = $('.del_all:checked').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (checkValues != '') {
+            swal({
+                    title: "Are you sure You want to Delete It ?",
+                    text: "Once deleted, you will not be able to recover this Record",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ url('categorydelete') }}',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'id': checkValues
+                            },
+                            dataType: 'JSON',
+                            success: function(data) {
+                                if (data.success == 1) {
+                                    swal("Your Record has been deleted!", {
+                                        icon: "success",
+                                    });
+
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            }
+                        });
+
+                    } else {
+                        swal("Cancelled", "", "error");
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                });
+        } else {
+            swal("Please select atleast One User", "", "warning");
+        }
+    });
+    // End Delete Order
+>>>>>>> 79bfc1751e95ce171f658649b3bcba78fb2f7f3c
 
     // $('#table').DataTable();
     // Select All Checkbox

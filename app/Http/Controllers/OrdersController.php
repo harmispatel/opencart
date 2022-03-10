@@ -22,7 +22,7 @@ class OrdersController extends Controller
         return view('admin.order.list');
     }
 
-    // View order 
+    // View order
     public function vieworder($id)
     {
         // $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id' )->get();
@@ -36,7 +36,7 @@ class OrdersController extends Controller
 
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders'=>$productorders]);
     }
-   
+
     public function getorders(Request $request){
         if ($request->ajax()) {
             $data = Orders::join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id');
@@ -46,7 +46,7 @@ class OrdersController extends Controller
 
                 $edit_url = route('vieworder',$row->order_id);
                 $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
-               
+
 
                 return $btn;
             })
@@ -190,11 +190,11 @@ class OrdersController extends Controller
     public function getcustomer(Request $request)
     {
         $customer_id = $request->customer;
-        
+
         if (!empty($customer_id)) {
             $cusomers = Customer::select('firstname','lastname','email','telephone')->where('customer_id', $customer_id)->first();
             return response()->json($cusomers);
-            
+
         }
         $product_id = $request->product;
         if (!empty($product_id)) {
