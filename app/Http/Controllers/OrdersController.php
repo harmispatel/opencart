@@ -19,29 +19,22 @@ class OrdersController extends Controller
     // View Order List
     public function index()
     {
-        // $orders = Orders::limit(10)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->get();
-        // $orders = Orders::limit(5000)->get();
-
-        // echo '<pre>';
-        // print_r($orders->toArray());
-        // exit();
         return view('admin.order.list');
-        // return view('admin.order.list');
     }
 
     // View order 
     public function vieworder($id)
     {
-        // $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
-        // $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
+        // $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id' )->get();
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->first();
         $orderstatus = OrderStatus::all();
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+        $productorders = OrderProduct::where('oc_order_product.order_id', '=' , $id)->get();
         // echo '<pre>';
-        // print_r($orders->toArray());
+        // print_r($ordertotal->toArray());
         // exit();
 
-        return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal]);
+        return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders'=>$productorders]);
     }
    
     public function getorders(Request $request){
@@ -67,9 +60,6 @@ class OrdersController extends Controller
         }
     }
 
-    
-
-
     // Get Order History
     public function getorderhistory($id)
     {
@@ -90,8 +80,6 @@ class OrdersController extends Controller
             'orderhistory' => $html,
         ]);
     }
-
-
 
     // Order History Insert
     public function orderhistoryinsert(Request $request)
@@ -132,7 +120,8 @@ class OrdersController extends Controller
     public function invoice($id)
     {
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
-        return view('admin.order.invoice', ["orders" => $orders]);
+        $productorders = OrderProduct::where('oc_order_product.order_id', '=' , $id)->get();
+        return view('admin.order.invoice', ["orders" => $orders, 'productorders'=>$productorders]);
     }
     public function shipping($id)
     {
@@ -191,17 +180,11 @@ class OrdersController extends Controller
         date_default_timezone_set('Asia/Kolkata');
         $proreturn->date_added = date("Y-m-d h:i:s");
         $proreturn->date_modified = date("Y-m-d h:i:s");
-        // echo '<pre>';
-        // print_r($proreturn->toArray());
-        // exit();
         $proreturn->save();
 
         $errors = "Insert success";
 
         return redirect()->route('returns')->withErrors($errors);
-
-
-
 
     }
     public function getcustomer(Request $request)

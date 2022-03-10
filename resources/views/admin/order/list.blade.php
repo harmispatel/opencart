@@ -93,7 +93,7 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
-                                   
+
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -119,113 +119,140 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
 
-// $(".loader_div").show();
+        // $(".loader_div").show();
 
-getallorders();
+        getallorders();
 
-});
+    });
 
 
-function getallorders(){
+    function getallorders() {
 
-var table = $('#table').DataTable({
-processing: true,
-serverSide: true,
+        var table = $('#table').DataTable({
+            processing: true,
+            serverSide: true,
 
-ajax: "{{ route('getorders') }}",
-columns: [
-    {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
-    {data: 'order_id', name: 'order_id'},
-    {data: 'flag_post_code', name: 'flag_post_code'},
-    {data: 'store_name', name: 'store_name'},
-    {data: 'firstname', name: 'firstname'},
-    {data: 'name', name: 'name'},
-    {data: 'total', name: 'total'},
-    {data: 'date_added', name: 'date_added'},
-    {data: 'payment_code', name: 'payment_code'},
-    {data: 'action', name: 'action'},
-]
-});
+            ajax: "{{ route('getorders') }}",
+            columns: [{
+                    data: 'checkbox',
+                    name: 'checkbox',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'order_id',
+                    name: 'order_id'
+                },
+                {
+                    data: 'flag_post_code',
+                    name: 'flag_post_code'
+                },
+                {
+                    data: 'store_name',
+                    name: 'store_name'
+                },
+                {
+                    data: 'firstname',
+                    name: 'firstname'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'total',
+                    name: 'total'
+                },
+                {
+                    data: 'date_added',
+                    name: 'date_added'
+                },
+                {
+                    data: 'payment_code',
+                    name: 'payment_code'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ]
+        });
 
-}
-    
-    
-    
-</script>   
+    }
+</script>
 
 
 
 <script type="text/javascript">
     // Data Table of Manufacturers List
 
-    
 
 
 
-        // $('#table').DataTable();
-        // Select All Checkbox
-        $('#delall').on('click', function(e) {
-            if ($(this).is(':checked', true)) {
-                $(".del_all").prop('checked', true);
-            } else {
-                $(".del_all").prop('checked', false);
-            }
-        });
-        // End Select All Checkbox
 
-        // Delete Orders
-        $('.deletesellected').click(function() {
+    // $('#table').DataTable();
+    // Select All Checkbox
+    $('#delall').on('click', function(e) {
+        if ($(this).is(':checked', true)) {
+            $(".del_all").prop('checked', true);
+        } else {
+            $(".del_all").prop('checked', false);
+        }
+    });
+    // End Select All Checkbox
 
-            var checkValues = $('.del_all:checked').map(function() {
-                return $(this).val();
-            }).get();
+    // Delete Orders
+    $('.deletesellected').click(function() {
 
-            if (checkValues != '') {
-                swal({
-                        title: "Are you sure You want to Delete It ?",
-                        text: "Once deleted, you will not be able to recover this Record",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                        if (willDelete) {
+        var checkValues = $('.del_all:checked').map(function() {
+            return $(this).val();
+        }).get();
 
-                            $.ajax({
-                                type: "POST",
-                                url: '{{ url('categorydelete') }}',
-                                data: {
-                                    "_token": "{{ csrf_token() }}",
-                                    'id': checkValues
-                                },
-                                dataType: 'JSON',
-                                success: function(data) {
-                                    if (data.success == 1) {
-                                        swal("Your Record has been deleted!", {
-                                            icon: "success",
-                                        });
+        if (checkValues != '') {
+            swal({
+                    title: "Are you sure You want to Delete It ?",
+                    text: "Once deleted, you will not be able to recover this Record",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
 
-                                        setTimeout(function() {
-                                            location.reload();
-                                        }, 1500);
-                                    }
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ url('categorydelete') }}',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'id': checkValues
+                            },
+                            dataType: 'JSON',
+                            success: function(data) {
+                                if (data.success == 1) {
+                                    swal("Your Record has been deleted!", {
+                                        icon: "success",
+                                    });
+
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 1500);
                                 }
-                            });
+                            }
+                        });
 
-                        } else {
-                            swal("Cancelled", "", "error");
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000);
-                        }
-                    });
-            } else {
-                swal("Please select atleast One User", "", "warning");
-            }
-        });
+                    } else {
+                        swal("Cancelled", "", "error");
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+                });
+        } else {
+            swal("Please select atleast One User", "", "warning");
+        }
+    });
 
-        // End Delete Order
-
+    // End Delete Order
 </script>
