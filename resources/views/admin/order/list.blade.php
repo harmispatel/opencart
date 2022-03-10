@@ -93,7 +93,6 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
-
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
