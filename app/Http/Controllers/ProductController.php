@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductDescription;
 use App\Models\Category;
-use App\Models\ProductIcon;
+use App\Models\ProductIcons;
 use App\Models\Reward;
 use App\Models\Product_to_category;
 use App\Models\ProductStore;
@@ -33,6 +33,16 @@ class ProductController extends Controller
     }
 
 
+    function bulkproducts()
+    {
+        return view('admin.product.bulkproducts');
+    }
+
+
+    function importproducts()
+    {
+        return view('admin.product.importproducts');
+    }
 
 
     function add()
@@ -53,7 +63,7 @@ class ProductController extends Controller
          $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
          $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
          $category = Category::select('*')->get();
-         $product_icon = ProductIcon::select('*')->get();
+         $product_icon = ProductIcons::select('*')->get();
 
         //  echo '<pre>';
         //  print_r($productIcon);
@@ -79,8 +89,8 @@ class ProductController extends Controller
     }
 
     public function store(Request $request){
-        
-       
+
+
         $product= new Product();
         $product->model=isset($request->model) ? $request->model :0;
         $product->sku=isset($request->sku) ? $request->sku :0;
@@ -136,12 +146,12 @@ class ProductController extends Controller
 
         $product_category= new Product_to_category();
         $product_category->product_id= $product->id;
-        $product_category->category_id=isset($request->category) ? $request->category :0; 
+        $product_category->category_id=isset($request->category) ? $request->category :0;
         $product_category->save();
 
         $productstore= new ProductStore();
         $productstore->product_id= $product->id;
-        $productstore->store_id=isset($request->store_id) ? $request->store_id :0; 
+        $productstore->store_id=isset($request->store_id) ? $request->store_id :0;
         $productstore->save();
         return redirect()->route('products')->with('success', "Product Inserted Successfully..");
 
@@ -162,7 +172,7 @@ class ProductController extends Controller
 
                 return $btn;
             })
-            
+
             ->addColumn('image', function($row){
                 if(!empty($row->image)){
                     $image_path = asset('public/admin/product/'.$row->image);
@@ -171,10 +181,10 @@ class ProductController extends Controller
                     $image_path = asset('public/admin/product/no_image.jpg');
                     $image = '<img src="'.$image_path.'" alt="Not Found" width="40">';
                 }
-               
+
                 return $image;
             })
-            
+
             ->addColumn('checkbox', function($row){
                 $pid = $row->product_id;
                 $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$pid.'">';
@@ -198,7 +208,7 @@ class ProductController extends Controller
     public function addOptionValue(Request $request){
        echo '<pre>';
        print_r($request->optionTypeId);
-       exit();   
+       exit();
         $option_value = DB::table('oc_option_value_description')->where('option_id',$request->optionTypeId)->get();
         print_r($option_value);die;
         return response()->json([

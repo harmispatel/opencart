@@ -13,42 +13,55 @@ use App\Models\ReturnAction;
 use App\Models\ReturnProduct;
 use App\Models\ReturnReason;
 use Illuminate\Http\Request;
-
+use DataTables;
 class OrdersController extends Controller
 {
     // View Order List
     public function index()
     {
-        $orders = Orders::join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->get();
-
-        return view('admin.order.list', ['orders' => $orders]);
+        return view('admin.order.list');
     }
 
-    // View order 
+    // View order
     public function vieworder($id)
     {
-        $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
+
+        $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->first();
         $orderstatus = OrderStatus::all();
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
-        // echo '<pre>';
-        // print_r($ordertotal->toArray());
-        // exit();
 
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal]);
     }
 
+    public function getorders(Request $request){
+        if ($request->ajax()) {
+            $data = Orders::join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id');
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+
+                $edit_url = route('vieworder',$row->order_id);
+                $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
+
+
+                return $btn;
+            })
+            ->addColumn('checkbox', function($row){
+                $cid = $row->order_id;
+                $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
+                return $checkbox;
+            })
+            ->rawColumns(['action','checkbox'])
+            ->make(true);
+        }
+    }
+
+
+
+
     // Get Order History
     public function getorderhistory($id)
     {
-        // $orderhistory = OrderHistory::where('order_id',$id)->join('oc_order_status','oc_order_history.order_status_id', '=' , 'oc_order_status.order_status_id')->get();
-
-        // if ($orderhistory) {
-        //     return response()->json([
-        //         "status" => 200,
-        //         "orderhistory" => $orderhistory,
-        //     ]);
-        // }
-
 
         $orderhistory = OrderHistory::where('order_id', $id)->join('oc_order_status', 'oc_order_history.order_status_id', '=', 'oc_order_status.order_status_id')->get();
 
@@ -118,11 +131,6 @@ class OrdersController extends Controller
     public function returns()
     {
         $returns = OrderReturn::join('oc_return', 'oc_return_status.return_status_id', '=', 'oc_return.return_status_id')->get();
-        // echo '<pre>';
-        // print_r($returns->toArray());
-        // exit();
-
-
         return view('admin.order.returns', ['returns' => $returns]);
     }
 
@@ -188,11 +196,11 @@ class OrdersController extends Controller
     public function getcustomer(Request $request)
     {
         $customer_id = $request->customer;
-        
+
         if (!empty($customer_id)) {
             $cusomers = Customer::select('firstname','lastname','email','telephone')->where('customer_id', $customer_id)->first();
             return response()->json($cusomers);
-            
+
         }
         $product_id = $request->product;
         if (!empty($product_id)) {

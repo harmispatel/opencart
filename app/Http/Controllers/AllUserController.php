@@ -18,7 +18,7 @@ class AllUserController extends Controller
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
-    
+
         $data['users'] = Users::get();
         return view('admin.users.list',$data);
     }
@@ -58,7 +58,9 @@ class AllUserController extends Controller
         $data->status = $request['status'];
         $data->salt = genratetoken(9);
         $data->code = '';
-        $data->ip = '';
+        $data->ip = $_SERVER['REMOTE_ADDR'];
+        $data->user_shop = isset($request->user_shop) ? $request->user_shop : 0;
+        $data->accessdirectory = isset($request->accessdirectory) ? $request->accessdirectory : '';
         $data->date_added = date('Y-m-d');
 
         if($request->hasFile('image'))

@@ -20,16 +20,17 @@ class CategoryController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        // Fetch Categories
-        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
         $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
 
 
-        // echo '<pre>';
-        // print_r($fetchparent->toArray());
-        // exit();
-
         return view('admin.category.CategoryList', ['fetchparent' => $fetchparent]);
+    }
+
+
+
+    function bulkcategory()
+    {
+        return view('admin.category.bulkcategory');
     }
 
 
@@ -208,7 +209,7 @@ class CategoryController extends Controller
         echo '<pre>';
         print_r($data->toArray());
         exit();
-    
+
         return view('admin.category.categoryedit', ['data' => $data, 'fetchparent' => $fetchparent, 'category_layout' => $category_layout]);
     }
 }

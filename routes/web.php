@@ -20,6 +20,17 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\FreeItemController;
+use App\Http\Controllers\GallaryController;
+use App\Http\Controllers\LayoutController;
+use App\Http\Controllers\LoyaltyController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\NewOrderController;
+use App\Http\Controllers\ProductIconsController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -101,8 +112,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 
     // Category
-    Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
     Route::get('category', [CategoryController::class, 'index'])->name('category');
+    Route::get('bulkcategory', [CategoryController::class, 'bulkcategory'])->name('bulkcategory');
+    Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
     Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
     Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
     Route::post('categoryupdate/', [CategoryController::class, 'categoryupdate'])->name('categoryupdate');
@@ -110,18 +122,20 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Products
     Route::get('products', [ProductController::class, 'index'])->name('products');
+    Route::get('bulkproducts', [ProductController::class, 'bulkproducts'])->name('bulkproducts');
+    Route::get('importproducts', [ProductController::class, 'importproducts'])->name('importproducts');
     Route::get('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');
     Route::get('addproduct', [ProductController::class, 'add'])->name('addproduct');
     Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
     Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
     Route::post('deleteproduct', [ProductController::class, 'deleteproduct'])->name('deleteproduct');
     Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
-     
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
 
 
     //Orders
     Route::get('orders', [OrdersController::class, 'index'])->name('orders');
+    Route::get('getorders', [OrdersController::class, 'getorders'])->name('getorders');
     Route::get('vieworder/{id}', [OrdersController::class, 'vieworder'])->name('vieworder');
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');
@@ -149,9 +163,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 
 
-    //Options
-    Route::get('addOption',[OptionController::class,'index'])->name('addOption');
-    Route::get('option', [OptionController::class, 'options'])->name('option');
+    //Menu Options
+    Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
 
     //Recurring Profiles
     Route::get('recurringprofiles', [RecurringProfilesController::class, 'index'])->name('recurringprofiles');
@@ -172,9 +185,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updatefilter',[FiltersController::class,'update'])->name('updatefilter');
 
     // Route::get('showId',[FiltersController::class, 'showId'])->name('showId');
-
-
-
 
     //Manufacturers
     Route::get('manufacturer', [ManufacturersController::class, 'index'])->name('manufacturer');
@@ -214,6 +224,50 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updatecountry', [CountryController::class, 'update'])->name('updatecountry');
 
 
+    // Transactions
+    Route::get('transactions', [TransactionsController::class, 'index'])->name('transactions');
 
+
+    // New Order
+    Route::get('neworders', [NewOrderController::class, 'index'])->name('neworders');
+
+    // Loyalty
+    Route::get('loyalty', [LoyaltyController::class, 'index'])->name('loyalty');
+
+    // Coupons
+    Route::get('coupons', [CouponController::class, 'index'])->name('coupons');
+
+    // Vouchers
+    Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
+    Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
+
+    // Free Item
+    Route::get('freeitems', [FreeItemController::class, 'freeitems'])->name('freeitems');
+    Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
+
+    // Gallary
+    Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
+    Route::get('uploadgallary', [GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+
+    // Layouts
+    Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
+    Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
+    Route::get('bannerandblocks', [LayoutController::class, 'bannerandblocks'])->name('bannerandblocks');
+
+    // Messages
+    Route::get('messages', [MessageController::class, 'index'])->name('messages');
+    Route::get('sendmessages', [MessageController::class, 'add'])->name('sendmessages');
+
+    // Settings
+    Route::get('mapandcategory', [SettingsController::class, 'mapandcategory'])->name('mapandcategory');
+    Route::get('shopsettings', [SettingsController::class, 'shopsettings'])->name('shopsettings');
+    Route::get('appsettings', [SettingsController::class, 'appsettings'])->name('appsettings');
+    Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
+    Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
+    Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
+    Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
+
+    // Product icons
+    Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
 
 });
