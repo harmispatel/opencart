@@ -44,7 +44,7 @@
             {{-- Login Section Start --}}
             <div class="login-box m-auto">
                 <div class="login-logo">
-                    <a href=""><b>Admin</b>LTE</a>
+                    <a href=""><b>Manager</b></a>
                 </div>
                 <!-- /.login-logo -->
                 <div class="card">

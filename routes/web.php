@@ -81,6 +81,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Customers
     Route::get('customers', [CustomerController::class, 'index'])->name('customers');
+    Route::get('getcustomers', [CustomerController::class, 'getcustomers'])->name('getcustomers');
     Route::get('addcustomer', [CustomerController::class, 'add'])->name('addcustomer');
     Route::post('storecustomer', [CustomerController::class, 'store'])->name('storecustomer');
     Route::post('deletecustomer', [CustomerController::class, 'delete'])->name('deletecustomer');
