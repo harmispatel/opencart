@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\CustomerGroupDescription;
 use App\Models\OrderHistory;
 use App\Models\OrderProduct;
 use App\Models\OrderReturn;
@@ -12,6 +13,7 @@ use App\Models\OrderTotal;
 use App\Models\ReturnAction;
 use App\Models\ReturnProduct;
 use App\Models\ReturnReason;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use DataTables;
 class OrdersController extends Controller
@@ -58,6 +60,18 @@ class OrdersController extends Controller
             ->rawColumns(['action','checkbox'])
             ->make(true);
         }
+    }
+
+    // Add new order 
+    public function ordersinsert()
+    {
+        $data['stores'] = Store::get();
+        $data['cusomers'] = CustomerGroupDescription::get();
+        // $data['cusomersdetail'] = Customer::limit(5000)->get();
+        // echo '<pre>';
+        // print_r($stores->toArray());
+        // exit();
+        return view('admin.order.addneworder', $data);
     }
 
     // Get Order History
@@ -121,7 +135,8 @@ class OrdersController extends Controller
     {
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
         $productorders = OrderProduct::where('oc_order_product.order_id', '=' , $id)->get();
-        return view('admin.order.invoice', ["orders" => $orders, 'productorders'=>$productorders]);
+        $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+        return view('admin.order.invoice', ["orders" => $orders, 'productorders'=>$productorders, 'ordertotal'=>$ordertotal]);
     }
     public function shipping($id)
     {
@@ -187,20 +202,20 @@ class OrdersController extends Controller
         return redirect()->route('returns')->withErrors($errors);
 
     }
-    public function getcustomer(Request $request)
+    public function getcustomername(Request $request)
     {
         $customer_id = $request->customer;
 
         if (!empty($customer_id)) {
-            $cusomers = Customer::select('firstname','lastname','email','telephone')->where('customer_id', $customer_id)->first();
+            $cusomers = Customer::select('customer_id','firstname','lastname','email','telephone')->where('customer_id', $customer_id)->first();
             return response()->json($cusomers);
 
         }
-        $product_id = $request->product;
-        if (!empty($product_id)) {
-            $product = OrderProduct::select('order_product_id','name','model')->where('order_product_id','=', $product_id)->first();
-            return response()->json($product);
-        }
+        // $product_id = $request->product;
+        // if (!empty($product_id)) {
+        //     $product = OrderProduct::select('order_product_id','name','model')->where('order_product_id','=', $product_id)->first();
+        //     return response()->json($product);
+        // }
 
     }
 

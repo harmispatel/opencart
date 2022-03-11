@@ -32,8 +32,19 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
-                        <div class="card card-primary text-center">
-                            <h1>Comming Soon</h1>
+                        <div class="card card-primary ">
+                            <h1><i class="fa fa-image"></i>Csv Import</h1>
+                            <form action="" method="POST" enctype="multipart/form-data">
+                               
+                                <div class="form-group">
+                                    <label for="csvfile" class="form-label">Choose CSV File</label>
+                                    <input type="file" name="csvfile" id="csvfile" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" id="submit" name="import"class="btn btn-primary">Import</button>
+                                </div>
+                            </form>
+                           
                         </div>
                         {{-- End Card --}}
                     </div>

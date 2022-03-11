@@ -11,11 +11,11 @@
 
 </head>
 
-<body>
+<body class="px-2">
 
     <div style="page-break-after: always;">
         <h3 class="text-right">Invoice</h3>
-        <table class="store table-bordered w-100">
+        <table class="store table table-bordered w-100">
             <tbody>
                 <tr>
                     <td>{{ $orders->firstname }} {{ $orders->lastname }}<br>
@@ -49,7 +49,7 @@
                 </tr>
             </tbody>
         </table>
-        <table class="address table-bordered w-100 mt-3">
+        <table class="table table-bordered w-100 mt-3">
             <tbody>
                 <tr class="heading table-secondary">
                     <td width="50%"><b>To</b></td>
@@ -65,22 +65,22 @@
                 </tr>
             </tbody>
         </table>
-        <table class="product mt-3 table-bordered w-100">
-            <table class="table">
+        <table class="table table-bordered w-100 mt-3">
+            <table class="table table-bordered">
                 <thead class="table-secondary">
                     <tr>
                         <td class="left">Product</td>
                         <td class="left">Model</td>
                         <td class="right">Quantity</td>
-                        <td class="right">Unit Price</td>
-                        <td class="right">Total</td>
+                        <td class="right" align="right">Unit Price</td>
+                        <td class="right" align="right">Total</td>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($productorders as $order)
                         <tr>
                             <td class="left">{{ htmlspecialchars_decode($order->name) }}
-                                <br>
+                               
                                 {{-- {{ echo $orders->toppings  }} --}}
                                 @php
                                     echo $order->toppings;
@@ -88,41 +88,19 @@
                             </td>
                             <td class="left">{{ $order->model }}</td>
                             <td class="right">{{ $order->quantity }}</td>
-                            <td class="right">{{ $order->price }}</td>
-                            <td class="right">{{ $order->total }}</td>
+                            <td class="right" align="right">{{ $order->price }}</td>
+                            <td class="right" align="right">{{ $order->total }}</td>
                         </tr>
                     @endforeach
                 </tbody>
-                <tbody id="totals">
+                @foreach ($ordertotal as $total)
+                <tbody id="totals" class="table table-bordered">
                     <tr>
-                        <td colspan="4" class="right">Sub-Total:</td>
-                        <td class="right">{{ $orders->total }}</td>
+                        <td colspan="4" class="right">{{ $total->code }}</td>
+                        <td align="right">{{ $total->text }}</td>
                     </tr>
                 </tbody>
-                <tbody id="totals">
-                    <tr>
-                        <td colspan="4" class="right">Coupon(VALEN10):</td>
-                        <td class="right">£-2.10</td>
-                    </tr>
-                </tbody>
-                <tbody id="totals">
-                    <tr>
-                        <td colspan="4" class="right">Delivery:</td>
-                        <td class="right">£1.00</td>
-                    </tr>
-                </tbody>
-                <tbody id="totals">
-                    <tr>
-                        <td colspan="4" class="right">Service Charge:</td>
-                        <td class="right">£0.50</td>
-                    </tr>
-                </tbody>
-                <tbody id="totals">
-                    <tr>
-                        <td colspan="4" class="right">Total to pay:</td>
-                        <td class="right">£20.40</td>
-                    </tr>
-                </tbody>
+                @endforeach
             </table>
         </table>
     </div>

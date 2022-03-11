@@ -100,13 +100,13 @@
                                             <div class="mb-3">
                                                 <label for="product" class="form-label">Product Name</label>
                                                 <input type="text" class="form-control" name="product" id="product"
-                                                    placeholder="Product Name">
+                                                    placeholder="Product Name" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="category" class="form-label">Product Icon</label>
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
-                                                    multiple>
+                                                    multiple required>
                                                     @foreach ($result['product_icon'] as $productIcon)
                                                         <option value="{{ $productIcon->id }}">
                                                             {{ $productIcon->icon_name }}</option>

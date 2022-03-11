@@ -30,8 +30,7 @@
                         Add Category
                     </h3>
                     <div class="form-group ml-auto">
-                        <button type="submit" form="catform" class="btn btn-primary"><i
-                                class="fa fa-save">Save</i></button>
+                        <button type="submit" form="catform" class="btn btn-primary"><i class="fa fa-save">Save</i></button>
                         <a href="{{ route('category') }}" class="btn btn-danger"><i class="fa fa-arrow-left">
                                 Back</i></a>
                     </div>
@@ -43,23 +42,21 @@
         {{-- List Section Start --}}
         <section class="content">
             @if (count($errors) > 0)
-                @if ($errors->any())
-                    <div class="alert alert-success alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        {{ $errors->first() }}
-                    </div>
-                @endif
+            @if ($errors->any())
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ $errors->first() }}
+            </div>
+            @endif
             @endif
             <form action="{{ route('categoryinsert') }}" id="catform" method="POST" enctype="multipart/form-data">
                 {{ @csrf_field() }}
                 <div class="card-body">
                     <div class="mb-3">
                         <label for="category" class="form-label">Category Name</label>
-                        <input type="text" name="category" class="form-control" id="category"
-                            placeholder="Category Name">
+                        <input type="text" name="category" class="form-control" id="category" placeholder="Category Name">
                         @if ($errors->has('category'))
-                            <div style="color: red">{{ $errors->first('category') }}.</div>
+                        <div style="color: red">{{ $errors->first('category') }}.</div>
                         @endif
                     </div>
                     <div class="mb-3">
@@ -93,13 +90,12 @@
                             <label class="form-check-label" for="inlineCheckbox7">Sat</label>
                         </div>
                         @if ($errors->has('days'))
-                            <div style="color: red">{{ $errors->first('days') }}.</div>
+                        <div style="color: red">{{ $errors->first('days') }}.</div>
                         @endif
                     </div>
                     <div class="mb-3">
                         <label for="summernote" class="form-label">Description</label>
-                        <textarea class="form-control" placeholder="Leave a comment here" name="description"
-                            id="description" style="height: 100px"></textarea>
+                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="description" style="height: 100px"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="image">Image</label>

@@ -8,7 +8,7 @@
         {{-- Header Section --}}
         <section class="content-header">
             <div class="container-fluid">
-                @if (Session::has('success'))
+                @if(Session::has('success'))
                     <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
                         {{ Session::get('success') }}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -23,7 +23,8 @@
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Orders</li>
                         </ol>
                     </div>
@@ -47,17 +48,18 @@
                                     Order List
                                 </h3>
 
-                                {{-- <div class="container" style="text-align: right">
-                                    @if (check_user_role(71) == 1)
-                                        <a href="" class="btn btn-sm btn-success ml-auto"><i
-                                                class="fa fa-plus"></i></a>
+                                <div class="container" style="text-align: right">
+                                    @if(check_user_role(71) == 1)
+                                        <a href="{{ route('ordersinsert') }}"
+                                            class="btn btn-sm btn-primary ml-auto px-1">Insert<i
+                                                class="pl-1 fa fa-plus"></i></a>
                                     @endif
 
-                                    @if (check_user_role(73) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
-                                                class="fa fa-trash"></i></a>
+                                    @if(check_user_role(73) == 1)
+                                        <a href="#" class="btn btn-sm btn-danger ml-auto px-1">Delete<i
+                                                class="pl-1 fa fa-trash"></i></a>
                                     @endif
-                                </div> --}}
+                                </div>
                             </div>
                             {{-- End Card Header --}}
 
@@ -65,12 +67,11 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered" id="table">
-                                    {{-- Alert  Message Div --}}
+                                    {{-- Alert Message Div --}}
                                     <div class="alert alert-success del-alert alert-dismissible" id="alert"
                                         style="display: none" role="alert">
                                         <p id="success-message" class="mb-0"></p>
-                                        <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -118,7 +119,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         // $(".loader_div").show();
 
@@ -246,7 +247,7 @@
 
     // $('#table').DataTable();
     // Select All Checkbox
-    $('#delall').on('click', function(e) {
+    $('#delall').on('click', function (e) {
         if ($(this).is(':checked', true)) {
             $(".del_all").prop('checked', true);
         } else {
@@ -256,9 +257,9 @@
     // End Select All Checkbox
 
     // Delete Orders
-    $('.deletesellected').click(function() {
+    $('.deletesellected').click(function () {
 
-        var checkValues = $('.del_all:checked').map(function() {
+        var checkValues = $('.del_all:checked').map(function () {
             return $(this).val();
         }).get();
 
@@ -275,19 +276,19 @@
 
                         $.ajax({
                             type: "POST",
-                            url: '{{ url('categorydelete') }}',
+                            url: '{{ url("deleteorder") }}',
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 'id': checkValues
                             },
                             dataType: 'JSON',
-                            success: function(data) {
+                            success: function (data) {
                                 if (data.success == 1) {
                                     swal("Your Record has been deleted!", {
                                         icon: "success",
                                     });
 
-                                    setTimeout(function() {
+                                    setTimeout(function () {
                                         location.reload();
                                     }, 1500);
                                 }
@@ -296,7 +297,7 @@
 
                     } else {
                         swal("Cancelled", "", "error");
-                        setTimeout(function() {
+                        setTimeout(function () {
                             location.reload();
                         }, 1000);
                     }
@@ -307,4 +308,5 @@
     });
 
     // End Delete Order
+
 </script>

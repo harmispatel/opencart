@@ -378,54 +378,7 @@
 
            @endif
 
-        {{-- Dashboard --}}
-          {{-- <li class="nav-item">
-            <a href="{{ route('dashboard') }}" class="nav-link {{ (request()->is('dashboard')) ? 'active' : ''}}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>Dashboard</p>
-            </a>
-          </li> --}}
-
-          {{-- @if(auth()->user()->user_group_id == 1) --}}
-            {{-- Categories --}}
-            {{-- <li class="nav-item">
-                <a href="{{ route('category') }}" class="nav-link {{ (request()->is('category')) ? 'active' : ''}}">
-                    <i class="nav-icon fas fa-list-alt"></i>
-                    <p>Categories</p>
-                </a>
-              </li> --}}
-          {{-- @endif --}}
-
-          {{-- <li class="nav-item">
-            <a href="{{ route('productlist') }}" class="nav-link">
-                <i class="nav-icon fas fa-list-alt"></i>
-                <p>Products</p>
-            </a>
-          </li> --}}
-
-          {{-- @if(auth()->user()->user_group_id == 1) --}}
-          {{-- Categories --}}
-          {{-- <li class="nav-item {{ (request()->is('usersgroup') || request()->is('users')) ? 'menu-open' : ''}}">
-              <a href="" class="nav-link {{ (request()->is('usersgroup') || request()->is('users')) ? 'active' : ''}}">
-                  <i class="nav-icon fas fa-user-alt"></i>
-                  <p>Users <i class="right fas fa-angle-left"></i></p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item pl-2">
-                  <a href="{{ route('users') }}" class="nav-link {{ request()->is('users') ? 'active' : ''}}">
-                    <i class="fa fa-user nav-icon"></i>
-                    <p>Users</p>
-                  </a>
-                </li>
-                <li class="nav-item pl-2">
-                  <a href="{{ route('usersgroup') }}" class="nav-link {{ request()->is('usersgroup') ? 'active' : ''}}">
-                    <i class="fa fa-users nav-icon"></i>
-                    <p>User Groups</p>
-                  </a>
-                </li>
-            </ul>
-            </li> --}}
-        {{-- @endif --}}
+       
 
         </ul>
       </nav>

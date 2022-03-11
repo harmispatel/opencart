@@ -99,6 +99,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
     Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
 
+
     // User Profile
     Route::get('profile/{id}', [AllUserController::class, 'userprofile'])->name('profile');
     Route::post('updateuserprofile', [AllUserController::class, 'updateprofile'])->name('updateuserprofile');
@@ -111,6 +112,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Category
     Route::get('category', [CategoryController::class, 'index'])->name('category');
+    Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
     Route::get('bulkcategory', [CategoryController::class, 'bulkcategory'])->name('bulkcategory');
     Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
     Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
@@ -129,11 +131,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
     Route::post('deleteproduct', [ProductController::class, 'deleteproduct'])->name('deleteproduct');
     Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
+    Route::get('editproduct/{id}', [ProductController::class, 'edit'])->name('editproduct');
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
 
 
     //Orders
     Route::get('orders', [OrdersController::class, 'index'])->name('orders');
+    Route::get('ordersinsert', [OrdersController::class, 'ordersinsert'])->name('ordersinsert');
     Route::get('getorders', [OrdersController::class, 'getorders'])->name('getorders');
     Route::get('vieworder/{id}', [OrdersController::class, 'vieworder'])->name('vieworder');
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
@@ -143,14 +147,18 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
+    Route::get('getcustomername', [OrdersController::class, 'getcustomername'])->name('getcustomername');
 
     // Order returns
     Route::get('returns', [OrdersController::class, 'returns'])->name('returns');
     Route::get('addnewreturns', [OrdersController::class, 'addnewreturns'])->name('addnewreturns');
     Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
     Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
-
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
+
+    // Oto complete customer
+    // Route::get('autocomcustomer', [autocomplete::class, 'autocomcustomer'])->name('autocomplete');
+    // Route::get('/autocomplete-search', [autocomplete::class, 'autocompleteSearch']);
 
 
 
@@ -268,6 +276,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
+
+    //option
+    Route::get('option', [OptionController::class, 'index'])->name('option');
+
 
 });
 

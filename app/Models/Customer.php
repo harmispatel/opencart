@@ -9,7 +9,10 @@ use App\Models\CustomerGroup;
 
 class Customer extends Model
 {
-    public $table = "oc_customer";
+    protected $table = "oc_customer";
+    protected $fillable = [
+        'firstname'
+    ];
     protected $primaryKey = 'customer_id';
     public $timestamps = false;
 
