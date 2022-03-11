@@ -232,36 +232,15 @@
                                                     </tr>
                                                 @endforeach
                                             </tbody>
+                                            @foreach ($ordertotal as $total)
                                             <tbody id="totals">
                                                 <tr>
-                                                    <td colspan="4" class="right">Sub-Total:</td>
-                                                    <td class="right">{{ $orders->total }}</td>
+                                                    <td colspan="4" class="right">{{ $total->code }}</td>
+                                                    <td class="right">{{ $total->text }}</td>
                                                 </tr>
                                             </tbody>
-                                            <tbody id="totals">
-                                                <tr>
-                                                    <td colspan="4" class="right">Coupon(VALEN10):</td>
-                                                    <td class="right">£-2.10</td>
-                                                </tr>
-                                            </tbody>
-                                            <tbody id="totals">
-                                                <tr>
-                                                    <td colspan="4" class="right">Delivery:</td>
-                                                    <td class="right">£1.00</td>
-                                                </tr>
-                                            </tbody>
-                                            <tbody id="totals">
-                                                <tr>
-                                                    <td colspan="4" class="right">Service Charge:</td>
-                                                    <td class="right">£0.50</td>
-                                                </tr>
-                                            </tbody>
-                                            <tbody id="totals">
-                                                <tr>
-                                                    <td colspan="4" class="right">Total to pay:</td>
-                                                    <td class="right">£20.40</td>
-                                                </tr>
-                                            </tbody>
+                                            @endforeach
+                                        
                                         </table>
                                     </div>
                                     <div class="alert alert-success alert-dismissible" role="alert" id="alert"
