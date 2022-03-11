@@ -34,7 +34,6 @@ function genratetoken($length = 32) {
 
 
 
-
 // Function of Sidebar Menu
 function sidebar()
 {

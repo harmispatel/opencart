@@ -48,9 +48,7 @@ use Illuminate\Support\Facades\Auth;
 //     return view('welcome');
 // });
 
-Route::get('/', function () {
-  return view('welcome');
-});
+
 
 Auth::routes();
 
@@ -271,4 +269,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
 
+});
+
+
+
+// ---------------------------------------------------------------------------------------------
+// FRONTEND
+Route::get('/', function () {
+    return view('frontend.pages.home');
 });

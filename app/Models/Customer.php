@@ -13,9 +13,4 @@ class Customer extends Model
     protected $primaryKey = 'customer_id';
     public $timestamps = false;
 
-    // function customer()
-    // {
-    //     return $this->hasMany(CustomerGroup::class);
-    // }
-
 }

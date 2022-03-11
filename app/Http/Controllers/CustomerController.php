@@ -6,6 +6,8 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Country;
 use App\Models\Region;
+use App\Models\CustomerAddress;
+use App\Models\CustomerIP;
 use Illuminate\Http\Request;
 use DataTables;
 
@@ -88,59 +90,7 @@ class CustomerController extends Controller
         }
 
         return view('admin.customers.list');
-        // $customers = Customer::select('oc_customer.*','cgd.name as groupname')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer.customer_group_id')->get();
 
-        // if(!empty($customers))
-        // {
-        //     $html = '';
-
-        //     foreach($customers as $customer)
-        //     {
-        //         $cust_id = $customer->customer_id;
-
-        //         $edit_url = route('editcustomer',$customer->customer_id);
-
-        //         $html .= '<tr>';
-        //         $html .= '<td><input type="checkbox" name="del_all" class="del_all" value="'.$cust_id.'"></td>';
-        //         $html .= '<td>'.$customer->firstname.' '.$customer->lastname.'</td>';
-        //         $html .= '<td>-</td>';
-        //         $html .= '<td>'.$customer->email.'</td>';
-        //         $html .= '<td>'.$customer->groupname.'</td>';
-        //         $html .= '<td>';
-
-        //         if($customer->status == 1)
-        //         {
-        //             $html .= 'Enabled';
-        //         }
-        //         else
-        //         {
-        //             $html .= 'Disabled';
-        //         }
-
-        //         $html .= '</td>';
-        //         $html .= '<td>-</td>';
-        //         $html .= '<td>'.$customer->ip.'</td>';
-        //         $html .= '<td>'.date('d-m-Y',strtotime($customer->date_added)).'</td>';
-
-        //         // $html .= '<td><a href="'.$edit_url.'" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a></td>';
-
-        //         $html .= '<td>';
-        //             $html .= '<div class="btn-group">';
-        //                 $html .= '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
-        //                 $html .= '<button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white">';
-        //                     $html .= '<span class="caret"></span>';
-        //                 $html .= '</button>';
-        //                 $html .= '<ul class="dropdown-menu dropdown-menu-right">';
-        //                     $html .= '<li class="dropdown-header">Login into Store</li>';
-        //                     $html .= ' <li class="text-center"><a href="" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li>';
-        //                 $html .= '</ul>';
-        //             $html .= '</div>';
-        //         $html .= '</td>';
-
-        //         $html .= '</tr>';
-        //     }
-        //     return response()->json($html);
-        // }
 
     }
 
@@ -158,15 +108,105 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
+
+
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email',
             'phone' => 'required|min:10',
-            'fax' => 'required',
             'password' => 'min:6|required_with:confirm|same:confirm',
             'confirm' => 'min:6|required_with:password|same:password',
         ]);
+
+        $customer = new Customer;
+        $customer->store_id = isset($request->store_id) ? $request->store_id : 0;
+        $customer->firstname = isset($request->firstname) ? $request->firstname : '';
+        $customer->lastname = isset($request->lastname) ? $request->lastname : '';
+        $customer->email = isset($request->email) ? $request->email : '';
+        $customer->telephone = isset($request->phone) ? $request->phone : '';
+        $customer->fax = isset($request->fax) ? $request->fax : '';
+        $customer->password = isset($request->password) ? bcrypt($request->password) : '';
+        $customer->salt = genratetoken(9);
+        $customer->cart = isset($request->cart) ? $request->cart : '';
+        $customer->wishlist = isset($request->wishlist) ? $request->wishlist : '';
+        $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
+        $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
+        $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : '';
+        $customer->ip =  $_SERVER['REMOTE_ADDR'];
+        $customer->status = isset($request->status) ? $request->status : 1;
+        $customer->approved = isset($request->approved) ? $request->approved : 1;
+        $customer->token = isset($request->token) ? $request->token : '';
+        $customer->date_added = date('Y-m-d');
+        $customer->gender_id = isset($request->gender_id) ? $request->gender_id : 1;
+
+        $customer->save();
+
+
+
+        // Customer IP
+        $customer_ip = new CustomerIP;
+        $customer_ip->customer_id = $customer->customer_id;
+        $customer_ip->ip = $_SERVER['REMOTE_ADDR'];
+        $customer_ip->date_added = date('Y-m-d');
+        $customer_ip->save();
+
+
+        $address = $request->address;
+
+        if(!empty($address))
+        {
+            foreach($address as  $val)
+            {
+
+                $fname = $val['fname'];
+                $lname = $val['lname'];
+                $company = $val['company'];
+                $companyId = $val['companyId'];
+                $taxid = $val['taxid'];
+                $add_1 = $val['add_1'];
+                $add_2 = $val['add_2'];
+                $city = $val['city'];
+                $postcode = $val['postcode'];
+                $country_id = $val['country_id'];
+                $region_id = $val['region_id'];
+                $default = isset($val['default']) ? $val['default'] : '';
+
+                if( (!empty($fname)) && (!empty($lname)) && (!empty($add_1)) && (!empty($add_2)) && (!empty($country_id)) && (!empty($region_id)) && (!empty($postcode)) )
+                {
+                    $cust_address = new CustomerAddress;
+                    $cust_address->customer_id = $customer->customer_id;
+                    $cust_address->firstname = isset($fname) ? $fname : '';
+                    $cust_address->lastname = isset($lname) ? $lname : '';
+                    $cust_address->company = isset($company) ? $company : '';
+                    $cust_address->company_id = isset($companyId) ? $companyId : '';
+                    $cust_address->tax_id = isset($taxid) ? $taxid : '';
+                    $cust_address->address_1 = isset($add_1) ? $add_1 : '';
+                    $cust_address->address_2 = isset($add_2) ? $add_2 : '';
+                    $cust_address->city = isset($city) ? $city : '';
+                    $cust_address->postcode = isset($postcode) ? $postcode : '';
+                    $cust_address->country_id = isset($country_id) ? $country_id : '';
+                    $cust_address->zone_id = isset($region_id) ? $region_id : '';
+                    $cust_address->phone = isset($request->phone) ? $request->phone : '';
+                    $cust_address->billing = isset($request->billing) ? $request->billing : 0;
+                    $cust_address->card_name = isset($request->cardname) ? $request->cardname : '';
+                    $cust_address->save();
+
+                    if(($default != '') || (!empty($default)))
+                    {
+                        $cust_update = Customer::find($customer->customer_id);
+                        $cust_update->address_id = $cust_address->address_id;
+                        $cust_update->update();
+                    }
+
+                }
+
+            }
+        }
+
+        return response()->json('success');
+
+
     }
 
 
