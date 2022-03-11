@@ -10,10 +10,9 @@ use App\Models\ProductIcons;
 use App\Models\Reward;
 use App\Models\Product_to_category;
 use App\Models\ProductStore;
+use App\Models\ProductToppingType;
+
 use DataTables;
-
-
-
 
 
 use Illuminate\Support\Facades\DB;
@@ -57,7 +56,7 @@ class ProductController extends Controller
         $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
         $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
         $category = Category::select('*')->get();
-        $product_icon = ProductIcon::select('*')->get();
+        $product_icon = ProductIcons::select('*')->get();
 
         //  echo '<pre>';
         //  print_r($productIcon);
@@ -154,57 +153,47 @@ class ProductController extends Controller
     function getproductbycategory(Request $request)
     {
         $category_id = $request->category_id;
-          $data=Product_to_category::select('p.*','pd.name as pname')->join('oc_product as p','p.product_id','=','oc_product_to_category.product_id')->join('oc_product_description as pd','pd.product_id','=','p.product_id')->where('category_id',$category_id)->get();
+        $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->get();
 
-          $html = '';
+        $html = '';
 
-         if(count($data) > 0)
-         {
-            foreach($data as $category)
-            {
-                
+        if (count($data) > 0) {
+            foreach ($data as $category) {
 
-               $html .= '<tr>';
-               $html .= '<td><input type="checkbox"></td>';
-             
 
-               if(!empty($category->image))
-               {
-                    $image_path = asset('public/admin/product/'.$category->image);
-                    $html .= '<td><img src="'.$image_path.'" alt="Not Found" width="40"></td>';
-               }
-               else
-               {
-                $image_path = asset('public/admin/product/no_image.jpg');
-                $html .= '<td><img src="'.$image_path.'" alt="Not Found" width="40"></td>';
-               }
+                $html .= '<tr>';
 
-               $html .= '<td>'.$category->pname.'</td>';
-               $html .= '<td>'.$category->price.'</td>';
-   
-               if($category->status == 1)
-               {
-                   $html .= '<td>Enabled</td>';
-               }
-               else
-               {
-                   $html .= '<td>Disabled</td>';
-               }
-   
-               $html .= '<td>'.$category->sort_order.'</td>';
-               $edit_url = route('editcustomer',$category->product_id);
-                
-               $html .= '<td><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
-               $html .= '</tr>';
+                $html .= '<td><input type="checkbox"></td>';
+
+
+                if (!empty($category->image)) {
+                    $image_path = asset('public/admin/product/' . $category->image);
+                    $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
+                } else {
+                    $image_path = asset('public/admin/product/no_image.jpg');
+                    $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
+                }
+
+                $html .= '<td>' . $category->pname . '</td>';
+                $html .= '<td>' . $category->price . '</td>';
+
+                if ($category->status == 1) {
+                    $html .= '<td>Enabled</td>';
+                } else {
+                    $html .= '<td>Disabled</td>';
+                }
+
+                $html .= '<td>' . $category->sort_order . '</td>';
+                $edit_url = route('editproduct', $category->product_id);
+
+                $html .= '<td><a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
+                $html .= '</tr>';
             }
             return response()->json($html);
-         }
-         else
-         {
-             $html .= '<tr><td colspan="7">Product Not Available</td></tr>';
-             return response()->json($html);
-         }
-
+        } else {
+            $html .= '<tr><td colspan="7">Product Not Available</td></tr>';
+            return response()->json($html);
+        }
     }
 
     public function getproduct(Request $request)
@@ -218,36 +207,36 @@ class ProductController extends Controller
 
         if ($request->ajax()) {
             // $data =  Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id');
-            $data =ProductDescription::select('*')->join('oc_product','oc_product_description.product_id','=','oc_product.product_id')->get();
+            $data = ProductDescription::select('*')->join('oc_product', 'oc_product_description.product_id', '=', 'oc_product.product_id')->get();
             return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function($row){
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
 
-                $edit_url = route('editcustomer',$row->product_id);
-                $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                    $edit_url = route('editproduct', $row->product_id);
+                    $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
-                return $btn;
-            })
+                    return $btn;
+                })
 
-            ->addColumn('image', function($row){
-                if(!empty($row->image)){
-                    $image_path = asset('public/admin/product/'.$row->image);
-                    $image = '<img src="'.$image_path.'" alt="Not Found" width="40">';
-                }else{
-                    $image_path = asset('public/admin/product/no_image.jpg');
-                    $image = '<img src="'.$image_path.'" alt="Not Found" width="40">';
-                }
+                ->addColumn('image', function ($row) {
+                    if (!empty($row->image)) {
+                        $image_path = asset('public/admin/product/' . $row->image);
+                        $image = '<img src="' . $image_path . '" alt="Not Found" width="40">';
+                    } else {
+                        $image_path = asset('public/admin/product/no_image.jpg');
+                        $image = '<img src="' . $image_path . '" alt="Not Found" width="40">';
+                    }
 
-                return $image;
-            })
+                    return $image;
+                })
 
-            ->addColumn('checkbox', function($row){
-                $pid = $row->product_id;
-                $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$pid.'">';
-                return $checkbox;
-            })
-            ->rawColumns(['action','checkbox','image'])
-            ->make(true);
+                ->addColumn('checkbox', function ($row) {
+                    $pid = $row->product_id;
+                    $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $pid . '">';
+                    return $checkbox;
+                })
+                ->rawColumns(['action', 'checkbox', 'image'])
+                ->make(true);
         }
     }
 
@@ -292,5 +281,22 @@ class ProductController extends Controller
                 'success' => 1,
             ]);
         }
+    }
+
+
+
+    public function edit($id){
+       
+        
+        $product=Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->join('oc_product_to_category','oc_product.product_id','=','oc_product_to_category.product_id')->join('oc_product_topping_type','oc_product.product_id','=','oc_product_topping_type.id_product')->where('oc_product.product_id',$id)->first();
+       
+        $category = Category::select('*')->get();
+        $product_icon = ProductIcons::select('*')->get();
+        $result['category'] = $category;
+        $result['product_icon'] = $product_icon;
+        // $result['getcategory'] = $getcategory;
+
+
+        return view('admin.product.edit',['product'=>$product,'result' => $result]);
     }
 }

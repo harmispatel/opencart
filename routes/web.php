@@ -131,6 +131,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('getproductsearch', [ProductController::class, 'searchproduct'])->name('getproductsearch');
     Route::post('deleteproduct', [ProductController::class, 'deleteproduct'])->name('deleteproduct');
     Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
+    Route::get('editproduct/{id}', [ProductController::class, 'edit'])->name('editproduct');
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
 
 
@@ -270,5 +271,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
+
+    //option
+    Route::get('option', [OptionController::class, 'index'])->name('option');
+
 
 });
