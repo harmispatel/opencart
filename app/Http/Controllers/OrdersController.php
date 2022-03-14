@@ -16,6 +16,8 @@ use App\Models\ReturnReason;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Database\Schema\ForeignKeyDefinition;
+
 class OrdersController extends Controller
 {
     // View Order List
@@ -66,7 +68,7 @@ class OrdersController extends Controller
     public function ordersinsert()
     {
         $data['stores'] = Store::get();
-        $data['cusomers'] = CustomerGroupDescription::get();
+        $data['Customers'] = CustomerGroupDescription::get();
         // $data['cusomersdetail'] = Customer::limit(5000)->get();
         // echo '<pre>';
         // print_r($stores->toArray());
@@ -217,6 +219,18 @@ class OrdersController extends Controller
         //     return response()->json($product);
         // }
 
+    }
+
+    public function autocomplete(Request $request)
+    {
+        // $res = Orders::select("customer_id","firstname","lastname","customer_group_id","email","telephone","fax")
+        $res = Orders::
+        where("firstname","LIKE",'%'. $request->term. '%')
+        ->orWhere("lastname","LIKE",'%'. $request->term. '%')
+        ->get();      
+       
+       
+        return response()->json($res);
     }
 
 }
