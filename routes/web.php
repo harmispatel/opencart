@@ -172,6 +172,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Menu Options
     Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
+    Route::get('addmenuoptions', [OptionController::class, 'add'])->name('addmenuoptions');
+
 
     //Recurring Profiles
     Route::get('recurringprofiles', [RecurringProfilesController::class, 'index'])->name('recurringprofiles');
