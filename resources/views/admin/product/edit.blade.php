@@ -54,7 +54,9 @@
                             <form action="" method="POST" id="catform" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
-                                <input type="hidden" id="{{ $product->id }}" name="product_id">
+
+                                <input type="hidden" id="product_id" value="{{ $product->product_id }}"
+                                    name="product_id">
                                 <div class="card-body">
                                     {{-- Tab Links --}}
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -76,7 +78,7 @@
                                         {{-- Genreal --}}
                                         <div class="tab-pane fade show active" id="genral" role="tabpanel"
                                             aria-labelledby="genral-tab">
-                                            
+
                                             <div class="mb-3">
                                                 <label for="category" class="form-label">Category</label>
                                                 <select name="category" id="category" class="form-control">
@@ -88,13 +90,13 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
+                                            <hr>
                                             <div class="mb-3">
                                                 <label for="product" class="form-label">Product Name</label>
                                                 <input type="text" class="form-control" name="product" id="product"
                                                     placeholder="Product Name" value="{{ $product->name }}" required>
                                             </div>
-
+                                            <hr>
                                             <div class="mb-3">
                                                 <label for="category" class="form-label">Product Icon</label>
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
@@ -105,7 +107,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
+                                            <hr>
                                             <div class="mb-3">
                                                 <label for="day" class="form-label">select the days
                                                     availiable</label>
@@ -136,7 +138,7 @@
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>
-
+                                            <hr>
                                             <div class="mb-3" id="order_types">
                                                 <label for="order" class="form-label">Order Type</label>
                                                 <div>
@@ -153,15 +155,14 @@
                                                     Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>
-
+                                            <hr>
 
                                             <div class="form-floating">
                                                 <label for="summernote" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Leave a comment here"
-                                                    name="description" id="summernote"
+                                                <textarea class="form-control" placeholder="Leave a comment here" name="description" id="summernote"
                                                     style="height: 200px">{{ $product->description }}</textarea>
                                             </div>
-
+                                            <hr>
                                             <div class="class=mb-3">
                                                 <label for="price" class="form-label">Price</label>
                                                 <div>
@@ -174,6 +175,52 @@
                                                         class="form-control"
                                                         value="{{ $product->collection_price }}">
                                                 </div>
+                                            </div>
+                                            <hr>
+
+                                            <div class="class=mb-3">
+                                                <label for="size" class="form-label">Size Price</label>
+                                                <br>
+                                                <div>
+
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Size</th>
+                                                                <th>Main Price</th>
+                                                                <th>Delivery Price</th>
+                                                                <th>Collection Price</th>
+                                                            </tr>
+                                                            @foreach ($result['header'] as $header)
+                                                                <tr>
+                                                                    <td><label for="">{{ $header->size }}</label>
+                                                                    </td>
+
+                                                                    @php
+                                                                        $product_size = getProductSize($header->id_size, $product->product_id);
+                                                                    @endphp
+                                                                    <td>
+                                                                        <input type="text" name="mainprice"
+                                                                            id="mainprice"
+                                                                            value="{{ $product_size->price }}">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="deliveryprice"
+                                                                            id="deliveryprice"
+                                                                            value="{{ $product_size->delivery_price }}">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text" name="collectionprice"
+                                                                            id="collectionprice"
+                                                                            value="{{ $product_size->collection_price }}">
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </thead>
+                                                    </table>
+
+                                                </div>
+
                                             </div>
 
 
@@ -188,55 +235,34 @@
                                         {{-- start Option --}}
                                         <div class="tab-pane fade" id="option" role="tabpanel"
                                             aria-labelledby="option-tab">
+                                                
+                                            {{-- @php
+                                               
+                                                if ($product->product_id == $result['toppingType']->id_product)
+                                                {
+                                                    echo 123;
+                                                } else {
+                                                    echo 'hello';
+                                                }
+                                            @endphp --}}
                                             {{-- <h2>Extra Toppings</h2> --}}
-                                            <div  style="margin-bottom: 10px;">
+                                            <div style="margin-bottom: 10px;">
                                                 <input type="radio" name="typetopping" class="avtive"
                                                     value="select"
-                                                    {{ $product->typetopping == 'select' ? 'checked' : '' }} onclick="radiocheck()">
+                                                    {{ $product->typetopping == 'select' ? 'checked' : '' }}
+                                                    onclick="radiocheck()">
                                                 Dropdown
                                                 &nbsp;&nbsp;&nbsp;&nbsp;
 
                                                 <input type="radio" name="typetopping" value="checkbox"
-                                                    {{ $product->typetopping == 'checkbox' ? 'checked' : '' }} onclick="radiocheck()">
+                                                    {{ $product->typetopping == 'checkbox' ? 'checked' : '' }}
+                                                    onclick="radiocheck()">
                                                 Checkbox
                                                 &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             </div>
-                                            {{-- <div style="margin-bottom: 10px;">
-                                                <input type="radio" onclick="$('.checkbox_123').hide();" name="typetopping[]" class="avtive" value="select" {{ $product->typetopping == 'select' ? 'checked' : '' }}> Dropdown
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                                <input type="radio" onclick="$('.checkbox_123').show();"name="typetopping[]" value="checkbox"{{ $product->typetopping == 'checkbox' ? 'checked' : '' }}> Checkbox
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                            </div> --}}
 
                                             <div id="text"></div>
-                                            {{-- @if ($product->typetopping == 'checkbox')
-                                            <div class="checkbox_123" style="display: block;margin-bottom: 10px;">
-                                                <div>
-                                                    <label>Minimum</label>
-                                               <input type="text" name="minimum" value="0" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label>Maximum</label>
-                                               <input type="text" name="maximum" value="0" class="form-control">
-                                                </div>
-                                            </div>
-                                            @elseif ($product->typetopping == 'select')
-
-                                            <div class="checkbox_123" style="display: block;margin-bottom: 10px;">
-                                                <div>
-                                                    <label>Minimum</label>
-                                               <input type="text" name="minimum" value="0" class="form-control">
-                                                </div>
-                                                <div>
-                                                    <label>Maximum</label>
-                                               <input type="text" name="maximum" value="0" class="form-control">
-                                                </div>
-                                            </div>
-                                            @endif --}}
-
 
                                             <div style="margin-bottom: 10px;">
                                                 <input type="radio" name="enable[]" value="1"
@@ -295,23 +321,21 @@
 <script>
     $(document).ready(function() {
 
-        
+
     });
 
     function radiocheck() {
         var data = $('input[name=typetopping]:checked').val();
-        
+
         var html = '';
-        if(data == 'select')
-        {
+        if (data == 'select') {
             $("#text").html('');
         }
-        if(data == 'checkbox') 
-        {
-            html ='<div><lable>Minimum</lable></div>';
-            html +='<div><input type="text" name="minimum" value="0" class="form-control"></div>';
-            html +='<div><lable>Maximum</lable></div>';
-            html +='<div><input type="text" name="maximum" value="0" class="form-control"></div>';
+        if (data == 'checkbox') {
+            html = '<div><lable>Minimum</lable></div>';
+            html += '<div><input type="text" name="minimum" value="0" class="form-control"></div>';
+            html += '<div><lable>Maximum</lable></div>';
+            html += '<div><input type="text" name="maximum" value="0" class="form-control"></div>';
         }
         $("#text").append(html);
     }

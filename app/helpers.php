@@ -5,6 +5,7 @@ use App\Models\SubMenu;
 use App\Models\Permission;
 use App\Models\CategoryDetail;
 use App\Models\CustomerIP;
+use App\Models\ToppingProductPriceSize;
 
 // Function of User Details
 function user_details()
@@ -106,6 +107,11 @@ function fetch_otherusers_mainmenu_submenu($where)
 }
 
 
+function getProductSize($sizeid,$productid)
+{
+    $size = ToppingProductPriceSize::where('id_size',$sizeid)->where('id_product',$productid)->first();
+    return $size;
+}
 
 
 // Function of Check Userrole of Submenus

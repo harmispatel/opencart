@@ -199,8 +199,8 @@
                     category_id: categoryval
                 },
                 success: function(result) {
-                    $('.table tbody').html('');
-                    $('.table tbody').html(result);
+                    $('.table').html('');
+                    $('.table').html(result);
                 }
 
             });

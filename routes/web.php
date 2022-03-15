@@ -153,7 +153,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
-    Route::get('getcustomername', [OrdersController::class, 'getcustomername'])->name('getcustomername');
+    Route::get('getproduct/{id}', [OrdersController::class, 'getproduct'])->name('getproduct');
+
+    Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
+    Route::get('address/{id}', [OrdersController::class, 'address'])->name('address');
 
     // Order returns
     Route::get('returns', [OrdersController::class, 'returns'])->name('returns');

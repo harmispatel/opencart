@@ -11,6 +11,9 @@ use App\Models\Reward;
 use App\Models\Product_to_category;
 use App\Models\ProductStore;
 use App\Models\ProductToppingType;
+use App\Models\ToppingSize;
+use App\Models\ToppingProductPriceSize;
+
 
 use DataTables;
 
@@ -50,23 +53,16 @@ class ProductController extends Controller
         $category = DB::table('oc_category_description')->select('*')->get();
         $releted_product = DB::table('oc_product_description')->select('*')->get();
         $product_layout = DB::table('oc_layout')->select('*')->get();
-        // $option = DB::table('oc_option')->select('*')->get();
         $stok_status = DB::table('oc_stock_status')->select('*')->get();
         $tex_class = DB::table('oc_tax_class')->select('*')->get();
         $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
         $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
         $category = Category::select('*')->get();
         $product_icon = ProductIcons::select('*')->get();
-
-        //  echo '<pre>';
-        //  print_r($productIcon);
-        //  exit();
-
         $result['manufacturer'] = $manufacturer;
         $result['category'] = $category;
         $result['releted_product'] = $releted_product;
         $result['product_layout'] = $product_layout;
-        // $result['option'] = $option;
         $result['stok_status'] = $stok_status;
         $result['tex_class'] = $tex_class;
         $result['lenght_class'] = $lenght_class;
@@ -154,18 +150,37 @@ class ProductController extends Controller
     {
         $category_id = $request->category_id;
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->get();
-
+        $headers = ToppingSize::where('id_category', $category_id)->get();
+        $head_count = count($headers) + 1;
         $html = '';
+        $html .= '<tr>';
+        $html .= '<th><input type="checkbox" name="checkall" id="delall"></th>';
+        $html .= '<th>Image</th>';
+        $html .= '<th>Product Name</th>';
+        if (isset($head_count)) {
+            $html .= '<th colspan="' . $head_count . '" class="text-center">Price</th>';
+        } else {
+            $html .= '<th class="text-center">Price</th>';
+        }
+        $html .= '<th>Status</th>';
+        $html .= '<th>Sort Order</th>';
+        $html .= '<th>Action</th>';
+        $html .= '</tr>';
+
+        $html .= '<tr><td colspan="3"></td><th style="background:lightgray">Main Price</th>';
+
+        if (count($headers) > 0) {
+            foreach ($headers as $header) {
+                $html .= '<th style="background:lightgray">' . $header->size . '</th>';
+            }
+        }
+        $html .= '<td colspan="3"></td> </tr>';
 
         if (count($data) > 0) {
             foreach ($data as $category) {
 
-
                 $html .= '<tr>';
-
                 $html .= '<td><input type="checkbox"></td>';
-
-
                 if (!empty($category->image)) {
                     $image_path = asset('public/admin/product/' . $category->image);
                     $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
@@ -173,16 +188,17 @@ class ProductController extends Controller
                     $image_path = asset('public/admin/product/no_image.jpg');
                     $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
                 }
-
                 $html .= '<td>' . $category->pname . '</td>';
+                $sizes = ToppingProductPriceSize::where('id_product', $category->product_id)->get();
                 $html .= '<td>' . $category->price . '</td>';
-
+                foreach ($sizes as $size) {
+                    $html .= '<td>' . $size->price . '</td>';
+                }
                 if ($category->status == 1) {
                     $html .= '<td>Enabled</td>';
                 } else {
                     $html .= '<td>Disabled</td>';
                 }
-
                 $html .= '<td>' . $category->sort_order . '</td>';
                 $edit_url = route('editproduct', $category->product_id);
 
@@ -198,26 +214,16 @@ class ProductController extends Controller
 
     public function getproduct(Request $request)
     {
-        // $data = $request->category_id;
-        //   $category=Product_to_category::select('p.*','pd.name as pname')->join('oc_product as p','p.product_id','=','oc_product_to_category.product_id')->join('oc_product_description as pd','pd.product_id','=','p.product_id')->where('category_id',$data)->get()->toArray();
-
-        //   echo '<pre>';
-        //   print_r($category);
-        //   exit;
-
         if ($request->ajax()) {
-            // $data =  Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id');
             $data = ProductDescription::select('*')->join('oc_product', 'oc_product_description.product_id', '=', 'oc_product.product_id')->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-
                     $edit_url = route('editproduct', $row->product_id);
                     $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
                     return $btn;
                 })
-
                 ->addColumn('image', function ($row) {
                     if (!empty($row->image)) {
                         $image_path = asset('public/admin/product/' . $row->image);
@@ -229,7 +235,6 @@ class ProductController extends Controller
 
                     return $image;
                 })
-
                 ->addColumn('checkbox', function ($row) {
                     $pid = $row->product_id;
                     $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $pid . '">';
@@ -285,18 +290,24 @@ class ProductController extends Controller
 
 
 
-    public function edit($id){
-       
-        
-        $product=Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->join('oc_product_to_category','oc_product.product_id','=','oc_product_to_category.product_id')->join('oc_product_topping_type','oc_product.product_id','=','oc_product_topping_type.id_product')->where('oc_product.product_id',$id)->first();
-       
+    public function edit($id)
+    {
+        $product=Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id',$id)->first();
+        $header=ToppingSize::where('id_category', $product->category_id)->get();
+        $price = ToppingProductPriceSize::where('id_product',$id)->get();
         $category = Category::select('*')->get();
         $product_icon = ProductIcons::select('*')->get();
+        // $toppingType =ProductToppingType::where('id_product',$product->product_id)->first();
+    //    echo '<pre>';
+    //    print_r($toppingType);
+    //    exit();
+
         $result['category'] = $category;
         $result['product_icon'] = $product_icon;
-        // $result['getcategory'] = $getcategory;
+        $result['header']=$header;
+        $result['price']=$price;
+        // $result['toppingType']=$toppingType;
 
-
-        return view('admin.product.edit',['product'=>$product,'result' => $result]);
+        return view('admin.product.edit', ['product' => $product, 'result' => $result]);
     }
 }

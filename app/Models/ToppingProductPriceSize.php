@@ -5,11 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class ToppingProductPriceSize extends Model
 {
     use HasFactory;
-    protected $table = 'oc_product';
-    protected $primaryKey = 'product_id';
-    public $timestamps=false;
-    
+    protected $table='oc_topping_product_price_size';
+    public $timestamp=false;
 }
