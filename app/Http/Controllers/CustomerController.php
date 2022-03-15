@@ -7,7 +7,10 @@ use App\Models\CustomerGroup;
 use App\Models\Country;
 use App\Models\Region;
 use App\Models\CustomerAddress;
+use App\Models\CustomerHistory;
 use App\Models\CustomerIP;
+use App\Models\CustomerReward;
+use App\Models\CustomerTransaction;
 use Illuminate\Http\Request;
 use DataTables;
 
@@ -95,6 +98,124 @@ class CustomerController extends Controller
     }
 
 
+    function getcustomerhistory(Request $request)
+    {
+        $customer_id = $request->cust_id;
+
+        $cust_history = CustomerHistory::where('customer_id',$customer_id)->get();
+
+        $html = '';
+
+        if(count($cust_history) > 0)
+        {
+            foreach($cust_history as $history)
+            {
+                $html .= '<tr>';
+                $html .= '<td>'.$history['date_added'].'</td>';
+                $html .= '<td>'.$history['comment'].'</td>';
+                $html .= '</tr>';
+            }
+            return response()->json($html);
+        }
+        else
+        {
+            $html .= '<tr>';
+            $html .= '<td colspan="2" class="text-center">History Not Avavilable</td>';
+            $html .= '</tr>';
+            return response()->json($html);
+        }
+
+    }
+
+    function getcustomertransactions(Request $request)
+    {
+        $customer_id = $request->cust_id;
+
+        $cust_transaction = CustomerTransaction::where('customer_id',$customer_id)->get();
+
+        $cust_sum = CustomerTransaction::where('customer_id',$customer_id)->sum('oc_customer_transaction.amount');
+
+        $html = '';
+        $sum = '';
+
+        if(count($cust_transaction) > 0)
+        {
+            foreach($cust_transaction as $transaction)
+            {
+                $html .= '<tr>';
+                $html .= '<td>'.$transaction['date_added'].'</td>';
+                $html .= '<td>'.$transaction['description'].'</td>';
+                $html .= '<td>'.number_format($transaction['amount']).'</td>';
+                $html .= '</tr>';
+            }
+
+            $sum .= '<div class="col-md-12 bg-secondary p-2"><b>Total Balance -: '.number_format($cust_sum).'</b></div>';
+
+
+            return response()->json([
+                'transaction' => $html,
+                'sum' => $sum,
+            ]);
+        }
+        else
+        {
+            $html .= '<tr>';
+            $html .= '<td colspan="3" class="text-center">Transaction Not Avavilable</td>';
+            $html .= '</tr>';
+
+            $sum .= '<div class="col-md-12 bg-secondary p-2"><b>Total Balance -: 0</b></div>';
+
+            return response()->json([
+                'transaction' => $html,
+                'sum' => $sum,
+            ]);
+        }
+    }
+
+    function getcustomerrewardpoints(Request $request)
+    {
+        $customer_id = $request->cust_id;
+
+        $cust_reward = CustomerReward::where('customer_id',$customer_id)->get();
+
+        $cust_sum = CustomerReward::where('customer_id',$customer_id)->sum('oc_customer_reward.points');
+
+        $html = '';
+        $sum = '';
+
+        if(count($cust_reward) > 0)
+        {
+            foreach($cust_reward as $reward)
+            {
+                $html .= '<tr>';
+                $html .= '<td>'.$reward['date_added'].'</td>';
+                $html .= '<td>'.$reward['description'].'</td>';
+                $html .= '<td>'.$reward['points'].'</td>';
+                $html .= '</tr>';
+            }
+
+            $sum .= '<div class="col-md-12 bg-secondary p-2"><b>Total Balance -: '.$cust_sum.'</b></div>';
+            return response()->json([
+                'rewards' => $html,
+                'sum' => $sum,
+            ]);
+        }
+        else
+        {
+            $html .= '<tr>';
+            $html .= '<td colspan="3" class="text-center">Rewards Not Avavilable</td>';
+            $html .= '</tr>';
+
+            $sum .= '<div class="col-md-12 bg-secondary p-2"><b>Total Balance -: 0</b></div>';
+
+            return response()->json([
+                'rewards' => $html,
+                'sum' => $sum,
+            ]);
+        }
+    }
+
+
     public function add()
     {
         $data['customergroups'] = CustomerGroup::select('oc_customer_group.customer_group_id','cgd.name as gname')->join('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer_group.customer_group_id')->get();
@@ -105,6 +226,60 @@ class CustomerController extends Controller
         return view('admin.customers.add',$data);
     }
 
+
+    function storecustomerhistory(Request $request)
+    {
+        $request->validate([
+            'comment' => 'required',
+        ]);
+
+        $cust_address = new CustomerHistory;
+        $cust_address->customer_id = $request->cid;
+        $cust_address->comment = $request->comment;
+        $cust_address->date_added = date('Y-m-d');
+        $cust_address->save();
+
+        return response()->json('success');
+
+    }
+
+    function storecustomertransaction(Request $request)
+    {
+        $request->validate([
+            'trdescription' => 'required',
+            'tramount' => 'required',
+        ]);
+
+        $cust_transaction = new CustomerTransaction();
+        $cust_transaction->customer_id = $request->trcid;
+        $cust_transaction->order_id = 0;
+        $cust_transaction->description = $request->trdescription;
+        $cust_transaction->amount = $request->tramount;
+        $cust_transaction->date_added = date('Y-m-d');
+        $cust_transaction->save();
+
+        return response()->json('success');
+
+    }
+
+    function storecustomerrewardpoint(Request $request)
+    {
+        $request->validate([
+            'rdescription' => 'required',
+            'rpoints' => 'required',
+        ]);
+
+        $cust_reward = new CustomerReward;
+        $cust_reward->customer_id = $request->rcid;
+        $cust_reward->order_id = 0;
+        $cust_reward->description = $request->rdescription;
+        $cust_reward->points = $request->rpoints;
+        $cust_reward->date_added = date('Y-m-d');
+        $cust_reward->save();
+
+        return response()->json('success');
+
+    }
 
     public function store(Request $request)
     {
@@ -213,6 +388,7 @@ class CustomerController extends Controller
         $data['customergroups'] = CustomerGroup::select('oc_customer_group.*','cgd.name as gname')->join('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer_group.customer_group_id')->get();
         $data['countries'] = Country::get();
         $data['customer'] = Customer::find($id);
+        $data['ips'] = CustomerIP::where('customer_id','=',$id)->get();
         return view('admin.customers.edit',$data);
     }
 

@@ -46,15 +46,21 @@
                             </div>
                             {{-- End Card Header --}}
 
-                            {{-- Form Strat --}}
-                            <form id="manuForm" enctype="multipart/form-data">
-                                {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">
                                     {{-- Tabs Link --}}
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="genral-tab" data-toggle="tab" href="#genral" role="tab" aria-controls="genral" aria-selected="true">General</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="data" aria-selected="false" onclick="getCustomerHistory()">History</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" onclick="getCustomerTransactions()" id="transactions-tab" data-toggle="tab" href="#transactions" role="tab" aria-controls="data" aria-selected="false">Transactions</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" onclick="getCustomerRewardpoints()" id="reward-tab" data-toggle="tab" href="#reward" role="tab" aria-controls="data" aria-selected="false">Reward Points</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" id="ip-tab" data-toggle="tab" href="#ip" role="tab" aria-controls="data" aria-selected="false">IP Addresses</a>
@@ -67,6 +73,8 @@
 
                                         {{-- Genral Tab --}}
                                         <div class="tab-pane fade show active" id="genral" role="tabpanel" aria-labelledby="genral-tab">
+                                            <form id="manuForm" enctype="multipart/form-data">
+                                            {{ @csrf_field() }}
                                             <div class="row">
                                                 <div class="col-md-2">
                                                     {{-- Inner Tab Links --}}
@@ -138,16 +146,16 @@
                                                             <div class="form-group">
                                                                 <label for="newsletter">Newsletter</label>
                                                                 <select name="newsletter" id="newsletter" class="form-control">
-                                                                    <option value="1">Enabled</option>
-                                                                    <option value="0" selected>Disabled</option>
+                                                                    <option value="1" {{ ($customer->newsletter == 1) ? 'selected' : '' }}>Enabled</option>
+                                                                    <option value="0" {{ ($customer->newsletter == 0) ? 'selected' : '' }}>Disabled</option>
                                                                 </select>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="status">Status</label>
                                                                 <select name="status" id="status" class="form-control">
-                                                                    <option value="1">Enabled</option>
-                                                                    <option value="0">Disabled</option>
+                                                                    <option value="1" {{ ($customer->status == 1) ? 'selected' : '' }}>Enabled</option>
+                                                                    <option value="0" {{ ($customer->status == 0) ? 'selected' : '' }}>Disabled</option>
                                                                 </select>
                                                             </div>
 
@@ -165,8 +173,142 @@
                                                     {{-- End Genral Customer Tab --}}
                                                 </div>
                                             </div>
+                                            </form>
                                         </div>
                                         {{-- End Genral Tab --}}
+
+                                        {{-- History Tab --}}
+                                        <div class="tab-pane fade show" id="history" role="tabpanel" aria-labelledby="history-tab">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered" id="custHistory">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date Added</th>
+                                                                <th>Comment</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form enctype="multipart/form-data" id="historyForm">
+                                                        <div class="form-group">
+                                                            <label for="">Comment</label>
+                                                            <input type="hidden" name="cid" id="cid" value="{{ $customer->customer_id }}">
+                                                            <textarea name="comment" id="comment" class="form-control" placeholder="Comment"></textarea>
+                                                            <div class="invalid-feedback" style="display: none" id="commentError">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <a href="#" onclick="addCustomerHistory()" class="btn btn-sm btn-primary">Add History</a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- End History Tab --}}
+
+                                        {{-- Transaction Tab --}}
+                                        <div class="tab-pane fade show" id="transactions" role="tabpanel" aria-labelledby="transactions-tab">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered" id="custTransaction">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date Added</th>
+                                                                <th>Description</th>
+                                                                <th>Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row" id="custTransactionSum">
+
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form enctype="multipart/form-data" id="transactionForm">
+                                                        <div class="form-group">
+                                                            <label for="">Description</label>
+                                                            <input type="hidden" name="trcid" id="trcid" value="{{ $customer->customer_id }}">
+                                                            <textarea name="trdescription" id="trdescription" class="form-control" placeholder="Description"></textarea>
+                                                            <div class="invalid-feedback" style="display: none" id="trdescriptionError">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">Amount</label>
+                                                            <input type="number" name="tramount" id="tramount" class="form-control" placeholder="1000">
+                                                            <div class="invalid-feedback" style="display: none" id="tramountError">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <a href="#" onclick="addCustomerTransaction()" class="btn btn-sm btn-primary">Add Transaction</a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- End Transaction Tab --}}
+
+                                        {{-- Reward Points Tab --}}
+                                        <div class="tab-pane fade show" id="reward" role="tabpanel" aria-labelledby="reward-tab">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table class="table table-bordered" id="custRewardpoints">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Date Added</th>
+                                                                <th>Description</th>
+                                                                <th>Points</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row" id="custRewardpointsSum">
+
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <form enctype="multipart/form-data" id="rewardForm">
+                                                        <div class="form-group">
+                                                            <label for="">Description</label>
+                                                            <input type="hidden" name="rcid" id="rcid" value="{{ $customer->customer_id }}">
+                                                            <textarea name="rdescription" id="rdescription" class="form-control" placeholder="Description"></textarea>
+                                                            <div class="invalid-feedback" style="display: none" id="rdescriptionError">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">Points</label>
+                                                            <input type="number" name="rpoints" id="rpoints" class="form-control" placeholder="350">
+                                                            <div class="invalid-feedback" style="display: none" id="rpointsError">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <a href="#" onclick="addCustomerRewardpoint()" class="btn btn-sm btn-primary">Add Reward Points</a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- End Reward Points Tab --}}
 
                                         {{-- IP Tab --}}
                                         <div class="tab-pane fade show" id="ip" role="tabpanel" aria-labelledby="ip-tab">
@@ -182,9 +324,32 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td colspan="4" class="text-center">Result Not Found!</td>
-                                                            </tr>
+                                                            @if (count($ips) > 0)
+                                                                @foreach ($ips as $ip)
+                                                                    <tr>
+                                                                        <td>{{ $ip->ip }}</td>
+                                                                        <td>
+                                                                            @php
+                                                                                $searchip = $ip->ip;
+                                                                                $total_ip = gettotalip($searchip);
+                                                                            @endphp
+                                                                            {{ $total_ip }}
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ date('d/m/Y',strtotime( $ip->date_sadded)) }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#">Add Ban IP</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @else
+
+                                                                <tr>
+                                                                    <td colspan="4" class="text-center">Ip Not Found</td>
+                                                                </tr>
+
+                                                            @endif
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -197,9 +362,6 @@
 
                                 </div>
                                 {{-- End Card Body --}}
-
-                            </form>
-                            {{-- Form End --}}
 
 
                         </div>
@@ -467,5 +629,268 @@ $('input[name=\'payment\']').on('change', function() {
 
 $('input[name=\'payment\']:checked').trigger('change');
 // End Payment Method
+
+
+$(document).ready(function(){
+    // getCustomerHistory();
+});
+
+
+// Get Customer History
+function getCustomerHistory()
+{
+    var cust_id = $('#cid').val();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('getcustomerhistory') }}",
+        data: { cust_id : cust_id },
+        dataType: "json",
+        success: function (response) {
+            $('#custHistory tbody').html('');
+            $('#custHistory tbody').html(response);
+            $('#custHistory').DataTable();
+        }
+    });
+}
+
+
+// Add Customer History
+function addCustomerHistory()
+{
+
+    var form_data = new FormData(document.getElementById('historyForm'));
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('storecustomerhistory') }}",
+        data: form_data,
+        dataType: "json",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (response) {
+            getCustomerHistory();
+            $('#historyForm').trigger('reset');
+            $('#commentError').text('').hide();
+            $('#comment').attr('class','form-control');
+        },
+        error : function (message) {
+
+            var comment = message.responseJSON.errors.comment;
+
+            // Comment
+            if(comment)
+            {
+                $('#commentError').text('').show();
+                $('#comment').attr('class','form-control is-invalid');
+                $('#commentError').text(comment);
+            }
+            else
+            {
+                $('#commentError').text('').hide();
+                $('#comment').attr('class','form-control');
+            }
+
+        }
+    });
+
+}
+
+
+// Get Customer Transactions
+function getCustomerTransactions()
+{
+    var cust_id = $('#cid').val();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('getcustomertransactions') }}",
+        data: { cust_id : cust_id },
+        dataType: "json",
+        success: function (response) {
+            $('#custTransaction tbody').html('');
+            $('#custTransaction tbody').html(response.transaction);
+            $('#custTransactionSum').html('');
+            $('#custTransactionSum').html(response.sum);
+            $('#custTransaction').DataTable();
+        }
+    });
+}
+
+
+
+// Add Customer Transaction
+function addCustomerTransaction()
+{
+
+    var form_data = new FormData(document.getElementById('transactionForm'));
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('storecustomertransaction') }}",
+        data: form_data,
+        dataType: "json",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (response) {
+            getCustomerTransactions();
+            $('#transactionForm').trigger('reset');
+            $('#trdescriptionError').text('').hide();
+            $('#trdescription').attr('class','form-control');
+            $('#tramountError').text('').hide();
+            $('#tramount').attr('class','form-control');
+        },
+        error : function (message) {
+
+            var description = message.responseJSON.errors.trdescription;
+            var amount = message.responseJSON.errors.tramount;
+
+            // Description
+            if(description)
+            {
+                $('#trdescriptionError').text('').show();
+                $('#trdescription').attr('class','form-control is-invalid');
+                $('#trdescriptionError').text(description);
+            }
+            else
+            {
+                $('#trdescriptionError').text('').hide();
+                $('#trdescription').attr('class','form-control');
+            }
+
+            // Amount
+            if(amount)
+            {
+                $('#tramountError').text('').show();
+                $('#tramount').attr('class','form-control is-invalid');
+                $('#tramountError').text(amount);
+            }
+            else
+            {
+                $('#tramountError').text('').hide();
+                $('#tramount').attr('class','form-control');
+            }
+
+        }
+    });
+
+}
+
+
+
+// Get Customer Reward Points
+function getCustomerRewardpoints()
+{
+    var cust_id = $('#cid').val();
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('getcustomerrewardpoints') }}",
+        data: { cust_id : cust_id },
+        dataType: "json",
+        success: function (response) {
+            $('#custRewardpoints tbody').html('');
+            $('#custRewardpoints tbody').html(response.rewards);
+            $('#custRewardpointsSum').html('');
+            $('#custRewardpointsSum').html(response.sum);
+            $('#custRewardpoints').DataTable();
+        }
+    });
+}
+
+
+function addCustomerRewardpoint()
+{
+    var form_data = new FormData(document.getElementById('rewardForm'));
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('storecustomerrewardpoint') }}",
+        data: form_data,
+        dataType: "json",
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function (response) {
+            getCustomerRewardpoints();
+            $('#rewardForm').trigger('reset');
+            $('#rdescriptionError').text('').hide();
+            $('#rdescription').attr('class','form-control');
+            $('#rpointsError').text('').hide();
+            $('#rpoints').attr('class','form-control');
+        },
+        error : function (message) {
+
+            var description = message.responseJSON.errors.rdescription;
+            var points = message.responseJSON.errors.rpoints;
+
+            // Description
+            if(description)
+            {
+                $('#rdescriptionError').text('').show();
+                $('#rdescription').attr('class','form-control is-invalid');
+                $('#rdescriptionError').text(description);
+            }
+            else
+            {
+                $('#rdescriptionError').text('').hide();
+                $('#rdescription').attr('class','form-control');
+            }
+
+            // Amount
+            if(points)
+            {
+                $('#rpointsError').text('').show();
+                $('#rpoints').attr('class','form-control is-invalid');
+                $('#rpointsError').text(points);
+            }
+            else
+            {
+                $('#rpointsError').text('').hide();
+                $('#rpoints').attr('class','form-control');
+            }
+
+        }
+    });
+}
+
 
 </script>

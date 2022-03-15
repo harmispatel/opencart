@@ -4,8 +4,7 @@ use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
 use App\Models\CategoryDetail;
-
-
+use App\Models\CustomerIP;
 
 // Function of User Details
 function user_details()
@@ -15,6 +14,12 @@ function user_details()
 }
 
 
+// Get Total Ip Count
+function gettotalip($ip)
+{
+    $ip = CustomerIP::where('ip',$ip)->count();
+    return $ip;
+}
 
 
 // Function of Genrate Token
