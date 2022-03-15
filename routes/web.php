@@ -156,9 +156,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
-    // Oto complete customer
+    // auto complete customer
     // Route::get('autocomcustomer', [autocomplete::class, 'autocomcustomer'])->name('autocomplete');
     // Route::get('/autocomplete-search', [autocomplete::class, 'autocompleteSearch']);
+    Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
+    // Route::get('search', [AutoCompleteController::class, 'index'])->name('search');
 
 
 
@@ -172,6 +174,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Menu Options
     Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
+    Route::get('addmenuoptions', [OptionController::class, 'add'])->name('addmenuoptions');
+
 
     //Recurring Profiles
     Route::get('recurringprofiles', [RecurringProfilesController::class, 'index'])->name('recurringprofiles');

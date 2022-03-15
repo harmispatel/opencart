@@ -13,4 +13,9 @@ class OptionController extends Controller
    {
        return view('admin.menuoptions.list');
    }
+
+   function add()
+   {
+       return view('admin.menuoptions.add');
+   }
 }

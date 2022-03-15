@@ -71,102 +71,94 @@
                                 <select class="form-control">
                                     <option value="0">Default</option>
                                     @foreach ($stores as $store)
-                                    <option value="{{ $store->store_id }}">{{ $store->name }}</option>
+                                    <option value="{{ $store->store_id }}">{{ htmlspecialchars_decode($store->name) }}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group" id="#search">
                                 <label for="exampleInputEmail1">Customer</label>
-                                {{-- <input type="text" id="search" name="search" placeholder="Search"
-                                    class="form-control typeahead" /> --}}
-                                <select class="form-control">
-                                    <option value="0">--None--</option>
-                                    {{-- @foreach ($cusomersdetail as $detail)
-                                    <option value="{{ $detail->customer_id }}">{{ $detail->firstname }} {{
-                                        $detail->lasstname }}</option>
-                                    @endforeach --}}
-                                </select>
-
+                                <input type="text" id="cname" name="cname" value="" class="form-control"
+                                    placeholder="Customer name">
+                                <input type="hidden" id="customerid" class="form-control" value="">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Customer Group</label>
                                 <select class="form-control" name="cgroup">
-                                    @foreach ($cusomers as $cusomer)
-                                    <option value="{{ $cusomer->customer_group_id }}">{{ $cusomer->name }}</option>
+                                    @foreach ($Customers as $Customer)
+                                    <option value="{{ $Customer->customer_group_id }}">{{ $Customer->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* First Name</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="fname" type="text" value="" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Last Name</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="lname" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* E-Mail</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="email" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Telephone</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="phone" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Fax</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="fax" value="" type="text" placeholder="Default input">
 
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-payment" role="tabpanel" aria-labelledby="nav-payment-tab">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Choose Address</label>
-                                <select class="form-control">
-                                    <option>Default select</option>
+                                <select class="form-control" id="address">
+                                    {{-- <option>Default select</option> --}}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* First Name</label>
-                                <input class="form-control" type="text" placeholder="Default input">
-
+                                <input class="form-control" id="pfname" value="" type="text" placeholder="Default input">
+                                
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Last Name</label>
-                                <select class="form-control">
-                                    <option>Default select</option>
-                                </select>
+                                <input class="form-control" id="plname" value="" type="text" placeholder="Default input">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Company</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="pcompany" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Company ID</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="pcompanyid" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Address 1</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="address1" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Address 2</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="address2" value="" type="text" placeholder="Default input">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* City</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" id="pcity" value="" type="text" placeholder="Default input">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Postcode</label>
-                                <input class="form-control" type="text" placeholder="Default input">
+                                <input class="form-control" pposotcode type="text" placeholder="Default input">
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Country</label>
@@ -420,59 +412,75 @@
 @include('footer')
 
 <script type="text/javascript">
+    $('#cname').autocomplete({
+    source : function(requete, reponse){
 
-$.ajax({
-    type: "get",
-    url: "{{ url('getcustomername') }}",
-    dataType: "json",
-    success: function (response) {
-        console.log(response.firstname);
-    }
-});
+        $.ajax({
+            url :  "{{ url('autocomplete') }}",
+             data: {
+                    term : requete.term
+             },
+            dataType : 'json', 
+            success : function(data){
 
+                reponse($.map(data, function(object){
+                    return {
+                        customer_id: object.customer_id,
+                        label: object.firstname +" "+ object.lastname,
+                        fname: object.firstname,
+                        lname: object.lastname,
+                        email: object.email,
+                        fax: object.fax,
+                        phone: object.telephone,
 
-    function getcustomer() {
-
-var customer_id = $('#customer_id :selected').val();
-
-$.ajax({
-    type: "POST",
-    url: "{{ url('getcustomer') }}",
-    data: {
-        'customer': customer_id,
-        "_token": "{{ csrf_token() }}",
+                        // pyment dteil 
+                        address1: object.payment_firstname+" "+object.payment_lastname+","+object.payment_address_1+","+object.payment_city,
+                        // address2: object.payment_firstname+" "+object.payment_lastname+","+object.payment_address_2+","+object.payment_city,
+                        address2: (object.payment_address_2 != "") ? object.payment_firstname+" "+object.payment_lastname+","+object.payment_address_2+","+object.payment_city : '',
+                        pfname : object.payment_firstname,
+                        plname : object.payment_lastname,
+                        };
+                }));
+            }
+        });
     },
-    dataType: "json",
-    success: function(response) {
-        // alert("Success");
-        console.log(response.firstname);
-        // $('#input-firstname').val(response.firstname);
-        // $('#input-lastname').val(response.lastname);
-        // $('#input-email').val(response.email);
-        // $('#input-telephone').val(response.telephone);
 
+    minLength: 3,
+    // delay:500,
 
-    }
-});
+    select: function( event, ui ) {
+        //  console.log(  ui.item.label ); 
+        //  console.log( ui.item.customer_id ); 
+         $(' #fname ' ).val(  ui.item.fname ); 
+         $(' #lname ' ).val(  ui.item.lname ); 
+         $(' #email ' ).val(  ui.item.email ); 
+         $(' #customerid ').val( ui.item.customer_id ); 
+         $(' #fax ').val( ui.item.fax ); 
+         $(' #phone ').val( ui.item.phone ); 
 
-}
+        //  payment detail
+        console.log(ui.item.address);
+        // $('#address').html(ui.item.address);
+        // $('#address').html("<option>"+ ui.item.address +"</option>");
 
-// function getproduct() {
-// var product_id = $('#product_id :selected').val();
-
-// $.ajax({
-//     type: "POST",
-//     url: "{{ url('getcustomer') }}",
-//     data: {
-//         'product': product_id,
-//         "_token": "{{ csrf_token() }}",
-//     },
-//     dataType: "json",
-//     success: function(response) {
-//         $('#input-model').val(response.model);
-//         $('#input-model').val(response.model);
-//     }
+//         $('select_tags').on('change', function() {
+//     alert( $(this).find(":selected").val() );
 // });
+        $('#address').html("<option>--None--</option>\
+                            <option>"+ ui.item.address1 +"</option>\
+                            <option>"+ ui.item.address2 +"</option>");
+        $('#pfname').val(ui.item.pfname);
+        $('#plname').val(ui.item.plname);
+        
+         return false;
+      } ,
 
-// }
+    messages: {
+        noResults: '',
+        results: function() {}
+    }
+
+
+}); 
+
 </script>
