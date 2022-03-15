@@ -108,12 +108,10 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-
-
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:oc_customer,email',
             'phone' => 'required|min:10',
             'password' => 'min:6|required_with:confirm|same:confirm',
             'confirm' => 'min:6|required_with:password|same:password',
@@ -172,7 +170,7 @@ class CustomerController extends Controller
                 $region_id = $val['region_id'];
                 $default = isset($val['default']) ? $val['default'] : '';
 
-                if( (!empty($fname)) && (!empty($lname)) && (!empty($add_1)) && (!empty($add_2)) && (!empty($country_id)) && (!empty($region_id)) && (!empty($postcode)) )
+                if(!empty($fname) && !empty($lname))
                 {
                     $cust_address = new CustomerAddress;
                     $cust_address->customer_id = $customer->customer_id;
@@ -184,9 +182,9 @@ class CustomerController extends Controller
                     $cust_address->address_1 = isset($add_1) ? $add_1 : '';
                     $cust_address->address_2 = isset($add_2) ? $add_2 : '';
                     $cust_address->city = isset($city) ? $city : '';
-                    $cust_address->postcode = isset($postcode) ? $postcode : '';
-                    $cust_address->country_id = isset($country_id) ? $country_id : '';
-                    $cust_address->zone_id = isset($region_id) ? $region_id : '';
+                    $cust_address->postcode = isset($postcode) ? $postcode : 0;
+                    $cust_address->country_id = isset($country_id) ? $country_id : 0;
+                    $cust_address->zone_id = isset($region_id) ? $region_id : 0;
                     $cust_address->phone = isset($request->phone) ? $request->phone : '';
                     $cust_address->billing = isset($request->billing) ? $request->billing : 0;
                     $cust_address->card_name = isset($request->cardname) ? $request->cardname : '';
@@ -212,7 +210,10 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
-        //
+        $data['customergroups'] = CustomerGroup::select('oc_customer_group.*','cgd.name as gname')->join('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer_group.customer_group_id')->get();
+        $data['countries'] = Country::get();
+        $data['customer'] = Customer::find($id);
+        return view('admin.customers.edit',$data);
     }
 
 
@@ -224,7 +225,26 @@ class CustomerController extends Controller
 
     public function delete(Request $request)
     {
-        //
+        $ids = $request['id'];
+
+        if(count($ids) > 0)
+        {
+            // Delete Customer
+            Customer::whereIn('customer_id',$ids)->delete();
+
+            // Delete Customer IP
+            CustomerIP::whereIn('customer_id',$ids)->delete();
+
+            // Delete Customer Addresses
+            foreach($ids as $id)
+            {
+                CustomerAddress::where('customer_id',$id)->delete();
+            }
+
+            return response()->json([
+                'success' => 1,
+            ]);
+        }
     }
 
 
