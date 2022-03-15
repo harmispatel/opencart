@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
 use App\Models\Customer;
+use App\Models\CustomerAddress;
 use App\Models\CustomerGroupDescription;
 use App\Models\OrderHistory;
 use App\Models\OrderProduct;
@@ -35,7 +37,7 @@ class OrdersController extends Controller
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
         $productorders = OrderProduct::where('oc_order_product.order_id', '=' , $id)->get();
         // echo '<pre>';
-        // print_r($ordertotal->toArray());
+        // print_r($orders->toArray());
         // exit();
 
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders'=>$productorders]);
@@ -69,6 +71,7 @@ class OrdersController extends Controller
     {
         $data['stores'] = Store::get();
         $data['Customers'] = CustomerGroupDescription::get();
+        $data['countries'] = Country::get();
         // $data['cusomersdetail'] = Customer::limit(5000)->get();
         // echo '<pre>';
         // print_r($stores->toArray());
@@ -204,33 +207,68 @@ class OrdersController extends Controller
         return redirect()->route('returns')->withErrors($errors);
 
     }
-    public function getcustomername(Request $request)
+    public function getproduct($id)
     {
-        $customer_id = $request->customer;
+        $productorders = Orders::select('*')->join('oc_order_product as op', 'op.order_id' ,'=', 'oc_order.order_id' )->where('oc_order.customer_id', '=' , $id)->get();
+    //  echo '<pre>';
+    //  print_r($productorders->toArray());
+    //  exit();
 
-        if (!empty($customer_id)) {
-            $cusomers = Customer::select('customer_id','firstname','lastname','email','telephone')->where('customer_id', $customer_id)->first();
-            return response()->json($cusomers);
+                $html = '';
+                foreach ($productorders as $order){
+                    $html .= '<tr>';
+                    $html .= '<td class="left"><a href="#">'.htmlspecialchars_decode($order->name).'</a><br>'.$order->toppings.'</td>';
+                    $html .= '<td class="left">'. $order->model .'</td>';
+                    $html .= '<td class="right">'. $order->quantity  .'</td>';
+                    $html .= '<td class="right">'. $order->price  .'</td>';
+                    $html .= '<td class="right">'. $order->total  .'</td>';
+                    $html .= '</tr>';
+                 }
+                // @foreach ($ordertotal as $total)
+                // <tbody id="totals">
+                //     <tr>
+                //         <td colspan="4" class="right">{{ $total->code }}</td>
+                //         <td class="right">{{ $total->text }}</td>
+                //     </tr>
+                // </tbody>
+                // @endforeach
 
-        }
-        // $product_id = $request->product;
-        // if (!empty($product_id)) {
-        //     $product = OrderProduct::select('order_product_id','name','model')->where('order_product_id','=', $product_id)->first();
-        //     return response()->json($product);
-        // }
+            return response()->json($html);
 
     }
 
     public function autocomplete(Request $request)
     {
-        // $res = Orders::select("customer_id","firstname","lastname","customer_group_id","email","telephone","fax")
-        $res = Orders::
-        where("firstname","LIKE",'%'. $request->term. '%')
+ 
+        $res = Customer::where("firstname","LIKE",'%'. $request->term. '%')
         ->orWhere("lastname","LIKE",'%'. $request->term. '%')
         ->get();      
        
-       
         return response()->json($res);
+    }
+
+    public function getaddress($id)
+    {
+        // ->join('oc_country', 'oc_address.country_id','=', 'oc_address.country_id' )
+        $addr = CustomerAddress::where('customer_id', '=', $id)->get();
+        $productorders = OrderProduct::where('oc_order_product.order_id', '=' , $id)->get();
+        // echo '<pre>';
+        // print_r($addr->toArray());
+        // exit();
+
+        $html = "";
+        $html .= "<option value='0'>--None--</option>";
+        foreach($addr as $address)
+            {
+                $html .= '<option value="'.$address->address_id.'">'.$address->firstname .' '. $address->lastname. ','. $address->address_1 .', '. $address->city .'</option>';
+            }
+        return response()->json($html);
+    }
+
+    public function address($id)
+    {
+        $address = CustomerAddress::where('address_id', '=', $id)->first();
+        return response()->json($address);
     }
 
 }
