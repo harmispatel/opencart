@@ -104,6 +104,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storecustomertransaction', [CustomerController::class, 'storecustomertransaction'])->name('storecustomertransaction');
     Route::post('getcustomerrewardpoints', [CustomerController::class, 'getcustomerrewardpoints'])->name('getcustomerrewardpoints');
     Route::post('storecustomerrewardpoint', [CustomerController::class, 'storecustomerrewardpoint'])->name('storecustomerrewardpoint');
+    Route::post('delCustomerAddress', [CustomerController::class, 'delCustomerAddress'])->name('delCustomerAddress');
 
 
     // User Profile

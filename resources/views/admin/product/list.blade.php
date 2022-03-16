@@ -94,7 +94,7 @@
 
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
-                                        
+
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -224,7 +224,7 @@ function getallproduct() {
 var table = $('.table').DataTable({
     processing: true,
     serverSide: true,
-    
+
     ajax: "{{ route('getproduct') }}",
     columns: [{
             data: 'checkbox',

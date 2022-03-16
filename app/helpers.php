@@ -5,6 +5,7 @@ use App\Models\SubMenu;
 use App\Models\Permission;
 use App\Models\CategoryDetail;
 use App\Models\CustomerIP;
+use App\Models\Region;
 use App\Models\ToppingProductPriceSize;
 
 // Function of User Details
@@ -20,6 +21,13 @@ function gettotalip($ip)
 {
     $ip = CustomerIP::where('ip',$ip)->count();
     return $ip;
+}
+
+
+function getZonebyId($zid)
+{
+    $zone = Region::where('zone_id',$zid)->first();
+    return $zone;
 }
 
 

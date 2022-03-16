@@ -337,15 +337,15 @@ class CustomerController extends Controller
                 $company = $val['company'];
                 $companyId = $val['companyId'];
                 $taxid = $val['taxid'];
-                $add_1 = $val['add_1'];
-                $add_2 = $val['add_2'];
+                $add_one = $val['add_one'];
+                $add_two = $val['add_two'];
                 $city = $val['city'];
                 $postcode = $val['postcode'];
                 $country_id = $val['country_id'];
                 $region_id = $val['region_id'];
                 $default = isset($val['default']) ? $val['default'] : '';
 
-                if(!empty($fname) && !empty($lname))
+                if(!empty($fname) && !empty($lname) && !empty($add_one) && !empty($city) && !empty($postcode) && !empty($country_id) && !empty($region_id))
                 {
                     $cust_address = new CustomerAddress;
                     $cust_address->customer_id = $customer->customer_id;
@@ -354,8 +354,8 @@ class CustomerController extends Controller
                     $cust_address->company = isset($company) ? $company : '';
                     $cust_address->company_id = isset($companyId) ? $companyId : '';
                     $cust_address->tax_id = isset($taxid) ? $taxid : '';
-                    $cust_address->address_1 = isset($add_1) ? $add_1 : '';
-                    $cust_address->address_2 = isset($add_2) ? $add_2 : '';
+                    $cust_address->address_1 = isset($add_one) ? $add_one : '';
+                    $cust_address->address_2 = isset($add_two) ? $add_two : '';
                     $cust_address->city = isset($city) ? $city : '';
                     $cust_address->postcode = isset($postcode) ? $postcode : 0;
                     $cust_address->country_id = isset($country_id) ? $country_id : 0;
@@ -387,15 +387,169 @@ class CustomerController extends Controller
     {
         $data['customergroups'] = CustomerGroup::select('oc_customer_group.*','cgd.name as gname')->join('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer_group.customer_group_id')->get();
         $data['countries'] = Country::get();
+        $data['regions'] = Region::get();
         $data['customer'] = Customer::find($id);
         $data['ips'] = CustomerIP::where('customer_id','=',$id)->get();
+        $data['addresses'] = CustomerAddress::where('customer_id',$id)->orderBy('address_id','ASC')->get();
         return view('admin.customers.edit',$data);
     }
 
 
     public function update(Request $request)
     {
-        //
+        $customer_id = $request->customer_id;
+
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required',
+            'phone' => 'required|min:10',
+        ]);
+
+
+        $email = $request->email;
+        $dup_email = Customer::where('customer_id','!=',$customer_id)->where('email','=',$email)->first();
+
+        if(!empty($dup_email))
+        {
+            $request->validate([
+                'email' => 'required|email|unique:oc_customer,email',
+            ]);
+        }
+
+        if(($request->password != '' || !empty($request->password)))
+        {
+            $request->validate([
+                'password' => 'min:6|required_with:confirm|same:confirm',
+                'confirm' => 'min:6|required_with:password|same:password',
+            ]);
+        }
+
+
+        $customer = Customer::find($customer_id);
+        // $customer->store_id = isset($request->store_id) ? $request->store_id : 0;
+        $customer->firstname = isset($request->firstname) ? $request->firstname : '';
+        $customer->lastname = isset($request->lastname) ? $request->lastname : '';
+        $customer->email = isset($request->email) ? $request->email : '';
+        $customer->telephone = isset($request->phone) ? $request->phone : '';
+        $customer->fax = isset($request->fax) ? $request->fax : '';
+
+        if(($request->password != '' || !empty($request->password)))
+        {
+            $customer->password = isset($request->password) ? bcrypt($request->password) : '';
+        }
+
+        // $customer->cart = isset($request->cart) ? $request->cart : '';
+        // $customer->wishlist = isset($request->wishlist) ? $request->wishlist : '';
+        $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
+        // $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
+        $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : '';
+        $customer->status = isset($request->status) ? $request->status : 1;
+        // $customer->approved = isset($request->approved) ? $request->approved : 1;
+        // $customer->token = isset($request->token) ? $request->token : '';
+        // $customer->gender_id = isset($request->gender_id) ? $request->gender_id : 1;
+        $customer->update();
+
+
+
+        // Customer IP
+        $cip = $_SERVER['REMOTE_ADDR'];
+        $customer_ip = CustomerIP::where('customer_id',$customer_id)->where('ip',$cip)->first();
+
+        if(empty($customer_ip) || $customer_ip == '')
+        {
+            $customerIp = new CustomerIP;
+            $customerIp->customer_id = $customer->customer_id;
+            $customerIp->ip = $cip;
+            $customerIp->date_added = date('Y-m-d');
+            $customerIp->save();
+        }
+
+
+
+        // Customer Address
+        $address = $request->address;
+
+        foreach($address as  $val)
+        {
+
+            $fname = $val['fname'];
+            $lname = $val['lname'];
+            $company = $val['company'];
+            $companyId = $val['companyId'];
+            $taxid = $val['taxid'];
+            $add_one = $val['add_one'];
+            $add_two = $val['add_two'];
+            $city = $val['city'];
+            $postcode = $val['postcode'];
+            $country_id = $val['country_id'];
+            $region_id = $val['region_id'];
+            $default = isset($val['default']) ? $val['default'] : '';
+
+                if(!empty($val['address_id']))
+                {
+                    $cust_address_update = CustomerAddress::find($val['address_id']);
+                    $cust_address_update->firstname = isset($fname) ? $fname : '';
+                    $cust_address_update->lastname = isset($lname) ? $lname : '';
+                    $cust_address_update->company = isset($company) ? $company : '';
+                    $cust_address_update->company_id = isset($companyId) ? $companyId : '';
+                    $cust_address_update->tax_id = isset($taxid) ? $taxid : '';
+                    $cust_address_update->address_1 = isset($add_one) ? $add_one : '';
+                    $cust_address_update->address_2 = isset($add_two) ? $add_two : '';
+                    $cust_address_update->city = isset($city) ? $city : '';
+                    $cust_address_update->postcode = isset($postcode) ? $postcode : '';
+                    $cust_address_update->country_id = isset($country_id) ? $country_id : 0;
+                    $cust_address_update->zone_id = isset($region_id) ? $region_id : 0;
+                    $cust_address_update->phone = isset($request->phone) ? $request->phone : '';
+                    $cust_address_update->billing = isset($request->billing) ? $request->billing : 0;
+                    $cust_address_update->card_name = isset($request->cardname) ? $request->cardname : '';
+                    $cust_address_update->update();
+
+                    if(($default != '') || (!empty($default)))
+                    {
+                        $cust_update = Customer::find($customer_id);
+                        $cust_update->address_id = $val['address_id'];
+                        $cust_update->update();
+                    }
+
+                }
+                else
+                {
+                    if(!empty($fname) && !empty($lname) && !empty($add_one) && !empty($city) && !empty($postcode) && !empty($country_id) && !empty($region_id))
+                    {
+                        $cust_address = new CustomerAddress;
+                        $cust_address->customer_id = $customer_id;
+                        $cust_address->firstname = isset($fname) ? $fname : '';
+                        $cust_address->lastname = isset($lname) ? $lname : '';
+                        $cust_address->company = isset($company) ? $company : '';
+                        $cust_address->company_id = isset($companyId) ? $companyId : '';
+                        $cust_address->tax_id = isset($taxid) ? $taxid : '';
+                        $cust_address->address_1 = isset($add_one) ? $add_one : '';
+                        $cust_address->address_2 = isset($add_two) ? $add_two : '';
+                        $cust_address->city = isset($city) ? $city : '';
+                        $cust_address->postcode = isset($postcode) ? $postcode : 0;
+                        $cust_address->country_id = isset($country_id) ? $country_id : 0;
+                        $cust_address->zone_id = isset($region_id) ? $region_id : 0;
+                        $cust_address->phone = isset($request->phone) ? $request->phone : '';
+                        $cust_address->billing = isset($request->billing) ? $request->billing : 0;
+                        $cust_address->card_name = isset($request->cardname) ? $request->cardname : '';
+                        $cust_address->save();
+
+                        if(($default != '') || (!empty($default)))
+                        {
+                            $cust_update = Customer::find($customer_id);
+                            $cust_update->address_id = $cust_address->address_id;
+                            $cust_update->update();
+                        }
+                    }
+                }
+
+        }
+
+
+        $url = route('customers');
+        return response()->json($url);
+
     }
 
 
@@ -409,7 +563,10 @@ class CustomerController extends Controller
             Customer::whereIn('customer_id',$ids)->delete();
 
             // Delete Customer IP
-            CustomerIP::whereIn('customer_id',$ids)->delete();
+            foreach($ids as $id)
+            {
+                CustomerIP::where('customer_id',$id)->delete();
+            }
 
             // Delete Customer Addresses
             foreach($ids as $id)
@@ -421,6 +578,21 @@ class CustomerController extends Controller
                 'success' => 1,
             ]);
         }
+    }
+
+
+    function delCustomerAddress(Request $request)
+    {
+
+        $address_id = $request->add_id;
+
+        // Delete Customer Address
+        CustomerAddress::where('address_id',$address_id)->delete();
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
     }
 
 

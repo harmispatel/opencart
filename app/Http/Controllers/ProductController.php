@@ -200,9 +200,9 @@ class ProductController extends Controller
                     $html .= '<td>Disabled</td>';
                 }
                 $html .= '<td>' . $category->sort_order . '</td>';
-                $edit_url = route('editproduct', $category->product_id);
+                $edit_url = route('editproduct',$category->product_id);
 
-                $html .= '<td><a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
+                $html .= '<td><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
                 $html .= '</tr>';
             }
             return response()->json($html);
@@ -220,7 +220,7 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $edit_url = route('editproduct', $row->product_id);
-                    $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                    $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
                     return $btn;
                 })
