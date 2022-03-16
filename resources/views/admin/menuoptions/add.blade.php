@@ -104,9 +104,9 @@
                                             <tbody>
                                                 <tr>
                                                     <td><label>Group Title:</label></td>
-                                                    <td><input name="show_group_title" type="checkbox" value="1"
+                                                    <td><input name="show_group_title" type="radio" value="1"
                                                             class="" /> Enable
-                                                            <input name="show_group_title" type="checkbox" value="1"
+                                                            <input name="show_group_title" type="radio" value="0"
                                                             checked /> Disable</td>
                                                 </tr>
                                                 <tr>

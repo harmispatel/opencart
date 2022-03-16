@@ -139,6 +139,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
     Route::get('editproduct/{id}', [ProductController::class, 'edit'])->name('editproduct');
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
+    Route::post('updateproduct',[ProductController::class, 'update'])->name('updateproduct');
+
 
 
     //Orders
@@ -267,6 +269,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
     Route::get('uploadgallary', [GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+    
 
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
