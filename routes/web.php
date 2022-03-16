@@ -153,7 +153,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
-    Route::get('getproduct/{id}', [OrdersController::class, 'getproduct'])->name('getproduct');
+    Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
+    Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
     Route::get('address/{id}', [OrdersController::class, 'address'])->name('address');
@@ -165,11 +166,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
 
-    // auto complete customer
-    // Route::get('autocomcustomer', [autocomplete::class, 'autocomcustomer'])->name('autocomplete');
-    // Route::get('/autocomplete-search', [autocomplete::class, 'autocompleteSearch']);
+
     Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
-    // Route::get('search', [AutoCompleteController::class, 'index'])->name('search');
+    Route::get('autocompleteproduct', [OrdersController::class, 'autocompleteproduct'])->name('autocompleteproduct');
 
 
 
