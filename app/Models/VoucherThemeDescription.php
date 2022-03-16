@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductToppingType extends Model
+class VoucherThemeDescription extends Model
 {
     use HasFactory;
-    protected $table='oc_product_topping_type';
-    public $timestamps=false;
-    
+    protected $table = "oc_voucher_theme_description";
 }

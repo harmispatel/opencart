@@ -43,7 +43,7 @@
                                 <div class="container" style="text-align: right;">
                                     <button type="submit" form="catform" class="btn btn-sm btn-primary"><i
                                             class="fa fa-save"></i> Save</button>
-                                    <a href="{{ route('category') }}" class="btn btn-sm btn-danger"><i
+                                    <a href="{{ route('products') }}" class="btn btn-sm btn-danger"><i
                                             class="fa fa-arrow-left">
                                             Back</i></a>
                                 </div>
@@ -51,7 +51,8 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Start --}}
-                            <form action="" method="POST" id="catform" enctype="multipart/form-data">
+                            <form action="{{ route('updateproduct') }}" method="POST" id="catform"
+                                enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
 
@@ -92,13 +93,13 @@
                                             </div>
                                             <hr>
                                             <div class="mb-3">
-                                                <label for="product" class="form-label">Product Name</label>
+                                                <label for="product" class="form-label"><span class="text-danger">*</span>Product Name</label>
                                                 <input type="text" class="form-control" name="product" id="product"
                                                     placeholder="Product Name" value="{{ $product->name }}" required>
                                             </div>
                                             <hr>
                                             <div class="mb-3">
-                                                <label for="category" class="form-label">Product Icon</label>
+                                                <label for="category" class="form-label"><span class="text-danger">*</span>Product Icon</label>
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
                                                     multiple required>
                                                     @foreach ($result['product_icon'] as $productIcon)
@@ -200,17 +201,20 @@
                                                                         $product_size = getProductSize($header->id_size, $product->product_id);
                                                                     @endphp
                                                                     <td>
-                                                                        <input type="text" name="mainprice"
+                                                                        <input type="hidden"
+                                                                            name="id_product_price_size[]"
+                                                                            value="{{ $product_size->id_product_price_size }}">
+                                                                        <input type="text" name="mainprices[]"
                                                                             id="mainprice"
                                                                             value="{{ $product_size->price }}">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" name="deliveryprice"
+                                                                        <input type="text" name="deliveryprices[]"
                                                                             id="deliveryprice"
                                                                             value="{{ $product_size->delivery_price }}">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="text" name="collectionprice"
+                                                                        <input type="text" name="collectionprices[]"
                                                                             id="collectionprice"
                                                                             value="{{ $product_size->collection_price }}">
                                                                     </td>
@@ -235,52 +239,54 @@
                                         {{-- start Option --}}
                                         <div class="tab-pane fade" id="option" role="tabpanel"
                                             aria-labelledby="option-tab">
-                                                
-                                            {{-- @php
-                                               
-                                                if ($product->product_id == $result['toppingType']->id_product)
-                                                {
-                                                    echo 123;
-                                                } else {
-                                                    echo 'hello';
-                                                }
-                                            @endphp --}}
-                                            {{-- <h2>Extra Toppings</h2> --}}
-                                            <div style="margin-bottom: 10px;">
-                                                <input type="radio" name="typetopping" class="avtive"
-                                                    value="select"
-                                                    {{ $product->typetopping == 'select' ? 'checked' : '' }}
-                                                    onclick="radiocheck()">
-                                                Dropdown
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                                <input type="radio" name="typetopping" value="checkbox"
-                                                    {{ $product->typetopping == 'checkbox' ? 'checked' : '' }}
-                                                    onclick="radiocheck()">
-                                                Checkbox
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                            </div>
 
-                                            <div id="text"></div>
+                                            @if ($product->product_id == $result['toppingType']->id_product)
+                                                <h2>{{ $result['toppingType']->name_topping }}</h2>
+                                                <div style="margin-bottom: 10px;">
+                                                    <input type="radio" name="typetopping" class="avtive"
+                                                        value="select"
+                                                        {{ $result['toppingType']->typetopping == 'select' ? 'checked' : '' }}
+                                                        onclick="radiocheck()">
+                                                    Dropdown
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                            <div style="margin-bottom: 10px;">
-                                                <input type="radio" name="enable[]" value="1"
-                                                    {{ $product->enable == 1 ? 'checked' : '' }}> Enable
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="radio" name="enable[]" value="0"
-                                                    {{ $product->enable == 0 ? 'checked' : '' }}> Disable
-                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                            </div>
-                                            <div class="form-floating">
-                                                <label for="rename" class="form-label">Rename to</label>
-                                                <input type="text" name="rename" class="form-control">
-                                            </div>
-                                            <div class="form-floating"
-                                                style="padding-bottom:20px;border-bottom: 1px solid #000000;margin-bottom:10px;">
-                                                <label for="sort_order" class="form-label">Sort Order</label>
-                                                <input type="text" name="sort_order" value="0" class="form-control">
-                                            </div>
+                                                    <input type="radio" name="typetopping" value="checkbox"
+                                                        {{ $result['toppingType']->typetopping == 'checkbox' ? 'checked' : '' }}
+                                                        onclick="radiocheck()">
+                                                    Checkbox
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                                </div>
+
+                                                <div id="text"></div>
+
+                                                <div style="margin-bottom: 10px;">
+                                                    <input type="radio" name="enable[]" value="1"
+                                                        {{ $result['toppingType']->enable == 1 ? 'checked' : '' }}>
+                                                    Enable
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="radio" name="enable[]" value="0"
+                                                        {{ $result['toppingType']->enable == 0 ? 'checked' : '' }}>
+                                                    Disable
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                </div>
+                                                <div class="form-floating">
+                                                    <label for="rename" class="form-label">Rename to</label>
+                                                    <input type="text" name="renamegroup" class="form-control">
+                                                </div>
+                                                <div class="form-floating"
+                                                    style="padding-bottom:20px;border-bottom: 1px solid #000000;margin-bottom:10px;">
+                                                    <label for="sort_order" class="form-label">Sort Order</label>
+                                                    <input type="text" name="topping_sort_order" value="0"
+                                                        class="form-control">
+                                                </div>
+                                            @else
+                                                {{ "No Topping" }}
+                                            @endif
+
+                                            <hr>
 
 
                                             <div class="form-floating">
@@ -321,7 +327,15 @@
 <script>
     $(document).ready(function() {
 
+        var data = $('input[name=typetopping]:checked').val();
 
+        if (data == 'checkbox') {
+            html = '<div><lable>Minimum</lable></div>';
+            html += '<div><input type="text" name="minimum" value="0" class="form-control"></div>';
+            html += '<div><lable>Maximum</lable></div>';
+            html += '<div><input type="text" name="maximum" value="0" class="form-control"></div>';
+        }
+        $("#text").append(html);
     });
 
     function radiocheck() {
@@ -332,7 +346,7 @@
             $("#text").html('');
         }
         if (data == 'checkbox') {
-            html = '<div><lable>Minimum</lable></div>';
+            html += '<div><lable>Minimum</lable></div>';
             html += '<div><input type="text" name="minimum" value="0" class="form-control"></div>';
             html += '<div><lable>Maximum</lable></div>';
             html += '<div><input type="text" name="maximum" value="0" class="form-control"></div>';

@@ -13,6 +13,8 @@ use App\Models\ProductStore;
 use App\Models\ProductToppingType;
 use App\Models\ToppingSize;
 use App\Models\ToppingProductPriceSize;
+use App\Models\Topping;
+
 
 
 use DataTables;
@@ -119,7 +121,7 @@ class ProductController extends Controller
         $product->save();
 
         $product_description = new ProductDescription();
-        $product_description->product_id = $product->id;
+        $product_description->product_id = $product->product_id;
         $product_description->language_id = 1;
         $product_description->name = isset($request->product) ? $request->product : 0;
         $product_description->description = isset($request->description) ? $request->description : 0;
@@ -129,18 +131,18 @@ class ProductController extends Controller
         $product_description->save();
 
         $reward = new Reward();
-        $reward->product_id = $product->id;
+        $reward->product_id = $product->product_id;
         $reward->customer_group_id = 1;
         $reward->points = 0;
         $reward->save();
 
         $product_category = new Product_to_category();
-        $product_category->product_id = $product->id;
+        $product_category->product_id = $product->product_id;
         $product_category->category_id = isset($request->category) ? $request->category : 0;
         $product_category->save();
 
         $productstore = new ProductStore();
-        $productstore->product_id = $product->id;
+        $productstore->product_id = $product->product_id;
         $productstore->store_id = isset($request->store_id) ? $request->store_id : 0;
         $productstore->save();
         return redirect()->route('products')->with('success', "Product Inserted Successfully..");
@@ -154,7 +156,7 @@ class ProductController extends Controller
         $head_count = count($headers) + 1;
         $html = '';
         $html .= '<tr>';
-        $html .= '<th><input type="checkbox" name="checkall" id="delall"></th>';
+        $html .= '<th><input type="checkbox" name="checkall" id="delall" value="' . $category_id . '"></th>';
         $html .= '<th>Image</th>';
         $html .= '<th>Product Name</th>';
         if (isset($head_count)) {
@@ -180,7 +182,7 @@ class ProductController extends Controller
             foreach ($data as $category) {
 
                 $html .= '<tr>';
-                $html .= '<td><input type="checkbox"></td>';
+                $html .= '<td><input type="checkbox" name="del_all" class="del_all" value="' . $category->product_id . '"></td>';
                 if (!empty($category->image)) {
                     $image_path = asset('public/admin/product/' . $category->image);
                     $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
@@ -235,6 +237,22 @@ class ProductController extends Controller
 
                     return $image;
                 })
+                // ->addColumn('name', function ($row) {
+                //     $name = $row->name . ' ' . $row->name;
+                //     return $name;
+                // })
+                // ->addColumn('price', function ($row) {
+                //     $price = $row->price . ' ' . $row->price;
+                //     return $price;
+                // })->addColumn('status', function ($row) {
+                //     $status = $row->status . ' ' . $row->status;
+                //     return $status;
+                // })
+                // ->addColumn('sort_order', function ($row) {
+                //     $sort_order = $row->sort_order . ' ' . $row->sort_order;
+                //     return $sort_order;
+                // })
+
                 ->addColumn('checkbox', function ($row) {
                     $pid = $row->product_id;
                     $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $pid . '">';
@@ -292,22 +310,118 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product=Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id',$id)->first();
-        $header=ToppingSize::where('id_category', $product->category_id)->get();
-        $price = ToppingProductPriceSize::where('id_product',$id)->get();
+        $product = Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id', $id)->first();
+        $header = ToppingSize::where('id_category', $product->category_id)->get();
+        $price = ToppingProductPriceSize::where('id_product', $id)->get();
         $category = Category::select('*')->get();
         $product_icon = ProductIcons::select('*')->get();
-        // $toppingType =ProductToppingType::where('id_product',$product->product_id)->first();
-    //    echo '<pre>';
-    //    print_r($toppingType);
-    //    exit();
+        $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $product->product_id)->first();
 
         $result['category'] = $category;
         $result['product_icon'] = $product_icon;
-        $result['header']=$header;
-        $result['price']=$price;
-        // $result['toppingType']=$toppingType;
+        $result['header'] = $header;
+        $result['price'] = $price;
+        $result['toppingType'] = $toppingType;
 
         return view('admin.product.edit', ['product' => $product, 'result' => $result]);
+    }
+
+    public function update(Request $request)
+    {
+        $product_id = $request->product_id;
+
+        $product = Product::find($product_id);
+
+        $product->model = isset($request->model) ? $request->model : 0;
+        $product->sku = isset($request->sku) ? $request->sku : 0;
+        $product->upc = isset($request->upc) ? $request->upc : 0;
+        $product->ean = isset($request->ean) ? $request->ean : 0;
+        $product->jan = isset($request->jan) ? $request->jan : 0;
+        $product->isbn = isset($request->isbn) ? $request->isbn : 0;
+        $product->mpn = isset($request->mpn) ? $request->mpn : 0;
+        $product->location = isset($request->location) ? $request->location : 0;
+        $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
+        $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
+        $product->date_available = isset($request->date_available) ? $request->date_available : 0;
+        $product->date_added = isset($request->date_added) ? $request->date_added : 0;
+        $product->date_modified = isset($request->date_modified) ? $request->date_modified : 0;
+        $product->tax_class_id = isset($request->tax_class_id) ? $request->tax_class_id : 0;
+        $product->price = isset($request->mainprice) ? $request->mainprice : 0;
+        $product->delivery_price = isset($request->deliveryprice) ? $request->deliveryprice : 0;
+        $product->collection_price = isset($request->collectionprice) ? $request->collectionprice : 0;
+        $product->status = isset($request->status) ? $request->status : 0;
+        $product->sort_order = isset($request->sort_order) ? $request->sort_order : 0;
+        $icon = $request['product_icons'];
+        $product_icons = implode(',', $icon);
+        $product->product_icons = isset($product_icons) ? $product_icons : 0;
+        $data = $request['order_type'];
+        $order_type = implode('', $data);
+        $product->order_type = isset($order_type) ? $order_type : 0;
+        $day = $request['day'];
+        $days = implode(',', $day);
+        $product->availibleday = isset($days) ? $days : 0;
+        if ($request->hasFile('image')) {
+            $Image = $request->file('image');
+            $filename = time() . '.' . $Image->getClientOriginalExtension();
+            $Image->move(public_path('admin/product/'), $filename);
+            $product->image = $filename;
+        }
+        $product->update();
+
+        $product_description = ProductDescription::find($product_id);
+
+        $product_description->language_id = 1;
+        $product_description->name = isset($request->product) ? $request->product : 0;
+        $product_description->description = isset($request->description) ? $request->description : 0;
+        $product_description->meta_description = isset($request->meta_description) ? $request->meta_description : '';
+        $product_description->meta_keyword = isset($request->meta_keyword) ? $request->meta_keyword : '';
+        $product_description->tag = isset($request->tag) ? $request->tag : '';
+        $product_description->update();
+
+        $reward = Reward::find($product_id);
+        $reward->customer_group_id = 1;
+        $reward->points = 0;
+        $reward->update();
+
+        $product_category = Product_to_category::find($product_id);
+        $product_category->category_id = isset($request->category) ? $request->category : 0;
+        $product_category->update();
+
+        // $productstore =ProductStore::find($product_id);
+        // $productstore->store_id =isset($request->store_id) ? $request->store_id : 0;
+        // $productstore->update();
+
+        $toppingtype = ProductToppingType::where('id_product', $product_id)->first();
+        $toppingtype->typetopping = $request->typetopping;
+        $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
+        $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
+        $toppingtype->choose = isset($request->choose) ? $request->choose : '';
+        $toppingtype->enable = $request->enable;
+        $toppingtype->renamegroup = $request->renamegroup;
+        $toppingtype->topping_sort_order = $request->topping_sort_order;
+        $toppingtype->update();
+
+        // $mainprice = isset($request->mainprices) ? $request->mainprices : "";
+        $mainprice =$request->mainprices;
+        $collectionprice =$request->collectionprices;
+        $deliveryprice =$request->deliveryprices;
+        $price_size_id = $request->id_product_price_size;
+
+        if(!empty($price_size_id)){
+            foreach($mainprice as $key => $mainprices){
+                $where = $price_size_id[$key];
+                $toppingProductPriceSize = ToppingProductPriceSize::find($where); 
+                $toppingProductPriceSize->price = $mainprices;
+                $toppingProductPriceSize->delivery_price = $deliveryprice[0];
+                $toppingProductPriceSize->collection_price = $collectionprice[1];
+                $toppingProductPriceSize->update();
+             }
+        }
+          
+       
+
+         
+
+        return redirect()->route('products')->with('success', "Product Updated Successfully..");
     }
 }

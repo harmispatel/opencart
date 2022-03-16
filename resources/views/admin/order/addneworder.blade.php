@@ -42,7 +42,16 @@
 
         {{-- List Section Start --}}
         <section class="content">
-            <form action="{{ route('categoryinsert') }}" id="catform" method="POST" enctype="multipart/form-data">
+            @if (count($errors) > 0)
+            @if ($errors->any())
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                {{ "Warning: Please check the form carefully for errors!" }}
+            </div>
+            @endif
+            @endif
+            <form action="{{ route('addneworders') }}" id="catform" method="POST" enctype="multipart/form-data">
                 {{ @csrf_field() }}
                 <div class="card-body">
 
@@ -68,7 +77,7 @@
                             aria-labelledby="nav-customer-tab">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Store</label>
-                                <select class="form-control">
+                                <select class="form-control" name="storename">
                                     <option value="0">Default</option>
                                     @foreach ($stores as $store)
                                     <option value="{{ $store->store_id }}">{{ htmlspecialchars_decode($store->name) }}
@@ -77,7 +86,7 @@
                                 </select>
                             </div>
                             <div class="form-group" id="#search">
-                                <label for="exampleInputEmail1">Customer</label>
+                                <label for="cname">Customer</label>
                                 <input type="text" id="cname" name="cname" value="" class="form-control"
                                     placeholder="Customer name">
                                 <input type="hidden" id="customerid" class="form-control" value="">
@@ -92,27 +101,39 @@
                             </div>
                             <div class="form-group">
                                 <label for="fname">* First Name</label>
-                                <input class="form-control" id="fname" type="text" value="" placeholder="First name">
-
+                                <input class="form-control" name="firstname" id="fname" type="text" value=""
+                                    placeholder="First name">
+                                @if ($errors->has('firstname'))
+                                <div style="color: red">{{ $errors->first('firstname') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="lname">* Last Name</label>
-                                <input class="form-control" id="lname" value="" type="text" placeholder="Last name">
-
+                                <input class="form-control" name="lastname" id="lname" value="" type="text"
+                                    placeholder="Last name">
+                                @if ($errors->has('lastname'))
+                                <div style="color: red">{{ $errors->first('lastname') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="email">* E-Mail</label>
-                                <input class="form-control" id="email" value="" type="text" placeholder="Email">
-
+                                <input class="form-control" name="email" id="email" value="" type="text"
+                                    placeholder="Email">
+                                @if ($errors->has('email'))
+                                <div style="color: red">{{ $errors->first('email') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="phone">* Telephone</label>
-                                <input class="form-control" id="phone" value="" type="text" placeholder="Telehone">
-
+                                <input class="form-control" name="phone" id="phone" value="" type="text"
+                                    placeholder="Telehone">
+                                @if ($errors->has('phone'))
+                                <div style="color: red">{{ $errors->first('phone') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="fax">Fax</label>
-                                <input class="form-control" id="fax" value="" type="text" placeholder="Fax">
+                                <input class="form-control" name="fax" id="fax" value="" type="text" placeholder="Fax">
 
                             </div>
                         </div>
@@ -125,56 +146,72 @@
                             </div>
                             <div class="form-group">
                                 <label for="pfname">* First Name</label>
-                                <input class="form-control" id="pfname" value="" type="text" placeholder="First name">
-
+                                <input class="form-control" name="pfirstname" id="pfname" value="" type="text" placeholder="First name">
+                                @if ($errors->has('pfirstname'))
+                                <div style="color: red">{{ $errors->first('pfirstname') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="plname">* Last Name</label>
-                                <input class="form-control" id="plname" value="" type="text" placeholder="Last name">
+                                <input class="form-control" name="plastname" id="plname" value="" type="text" placeholder="Last name">
+                                @if ($errors->has('plastname'))
+                                <div style="color: red">{{ $errors->first('plastname') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="pcompany">Company</label>
-                                <input class="form-control" id="pcompany" value="" type="text" placeholder="Company">
-
+                                <input class="form-control" name="pcompany" id="pcompany" value="" type="text" placeholder="Company">
+                                
                             </div>
                             <div class="form-group">
                                 <label for="pcompanyid">Company ID</label>
-                                <input class="form-control" id="pcompanyid" value="" type="text"
+                                <input class="form-control" name="pcompanyid" id="pcompanyid" value="" type="text"
                                     placeholder="Company id">
 
                             </div>
                             <div class="form-group">
                                 <label for="address1">* Address 1</label>
-                                <input class="form-control" id="address1" value="" type="text" placeholder="Address 1">
-
+                                <input class="form-control" name="paddress1" id="address1" value="" type="text" placeholder="Address 1">
+                                @if ($errors->has('paddress1'))
+                                <div style="color: red">{{ $errors->first('paddress1') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="address2">Address 2</label>
                                 <input class="form-control" id="address2" value="" type="text" placeholder="Address 2">
-
+                                
                             </div>
                             <div class="form-group">
                                 <label for="pcity">* City</label>
-                                <input class="form-control" id="pcity" value="" type="text" placeholder="City">
+                                <input class="form-control" name="pcity" id="pcity" value="" type="text" placeholder="City">
+                                @if ($errors->has('pcity'))
+                                <div style="color: red">{{ $errors->first('pcity') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="pposotcode">Postcode</label>
-                                <input class="form-control" id="ppostcode" type="text" placeholder="Postcode">
+                                <input class="form-control" name="ppostcode" id="ppostcode" type="text" placeholder="Postcode">
                             </div>
                             <div class="form-group">
                                 <label for="country_id">* Country</label>
-                                <select class="form-control country_id" id="country_id" onchange="statespayment();">
+                                <select class="form-control country_id" name="pcountry" id="country_id" onchange="statespayment();">
                                     <option>Select Country</option>
                                     @foreach ($countries as $country)
                                     <option value="{{ $country->country_id }}">{{ $country->name }}</option>
                                     @endforeach
                                 </select>
+                                @if ($errors->has('pcountry'))
+                                <div style="color: red">{{ $errors->first('pcountry') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="region">* Region / State</label>
-                                <select class="form-control zone_id" id="region">
+                                <select class="form-control zone_id" name="region" id="region">
                                     <option>Select Region/State</option>
                                 </select>
+                                @if ($errors->has('region'))
+                                <div style="color: red">{{ $errors->first('region') }}.</div>
+                                @endif
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-shipping" role="tabpanel" aria-labelledby="nav-shipping-tab">
@@ -186,50 +223,67 @@
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* First Name</label>
-                                <input class="form-control" id="sfname" value="" type="text" placeholder="First name">
-
+                                <input class="form-control" name="sfirstname" id="sfname" value="" name="sfname" type="text"
+                                    placeholder="First name">
+                                    @if ($errors->has('sfirstname'))
+                                    <div style="color: red">{{ $errors->first('sfirstname') }}.</div>
+                                    @endif
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Last Name</label>
-                                <input class="form-control" id="slname" value="" type="text" placeholder="Last name">
+                                <input class="form-control" name="slastname" id="slname" value="" type="text" placeholder="Last name">
+                                @if ($errors->has('slastname'))
+                                <div style="color: red">{{ $errors->first('slastname') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Company</label>
-                                <input class="form-control" id="scompany" value="" type="text" placeholder="Company">
+                                <input class="form-control" name="scompany" id="scompany" value="" type="text" placeholder="Company">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* Address 1</label>
-                                <input class="form-control" id="saddress1" value="" type="text" placeholder="Address 1">
-
+                                <input class="form-control" name="saddress1" id="saddress1" value="" type="text" placeholder="Address 1">
+                                @if ($errors->has('saddress1'))
+                                <div style="color: red">{{ $errors->first('saddress1') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Address 2</label>
-                                <input class="form-control" id="saddress2" value="" type="text" placeholder="Address 2">
+                                <input class="form-control" name="saddress2" id="saddress2" value="" type="text" placeholder="Address 2">
 
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">* City</label>
-                                <input class="form-control" id="scity" value="" type="text" placeholder="City">
+                                <input class="form-control" name="scity" id="scity" value="" type="text" placeholder="City">
+                                @if ($errors->has('scity'))
+                                <div style="color: red">{{ $errors->first('scity') }}.</div>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Postcode</label>
-                                <input class="form-control" id="spostcode" value="" type="text" placeholder="Postcode">
+                                <input class="form-control" name="spostcode" id="spostcode" value="" type="text" placeholder="Postcode">
                             </div>
                             <div class="form-group">
                                 <label for="country_id1">* Country</label>
-                                <select class="form-control country_id" id="country_id1" onchange="statesshipping();">
+                                <select class="form-control country_id" name="country_id1" id="country_id1" onchange="statesshipping();">
                                     <option>Select Country</option>
                                     @foreach ($countries as $country)
                                     <option value="{{ $country->country_id }}">{{ $country->name }}</option>
                                     @endforeach
+                                    @if ($errors->has('country_id1'))
+                                    <div style="color: red">{{ $errors->first('country_id1') }}.</div>
+                                    @endif
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="region1">* Region / State</label>
-                                <select class="form-control zone_id" id="region1">
+                                <select class="form-control zone_id" name="region1" id="region1">
                                     <option>Select Region/State</option>
                                 </select>
+                                @if ($errors->has('region1'))
+                                <div style="color: red">{{ $errors->first('region1') }}.</div>
+                                @endif
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-product" role="tabpanel" aria-labelledby="nav-product-tab">
@@ -244,10 +298,10 @@
                                             <td class="right">Total</td>
                                         </tr>
                                     </thead>
-                                    <tbody id="productdata">
-                                       
+                                    <tbody class="productdata">
+
                                     </tbody>
-                                
+
                                 </table>
                             </div>
 
@@ -256,14 +310,14 @@
                                 <form class="form-horizontal" id="orderhistoryform">
                                     {{ csrf_field() }}
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">Choose
-                                            Product</label>
-                                        <select name="order_status_id" id="input-order-status"
-                                            class="form-control"></select>
+                                        <label for="productname">Product name</label>
+                                        <input type="text" id="productname" name="productname" value=""
+                                            class="form-control" placeholder="Product name">
+                                        <input type="hidden" id="productid" class="form-control" value="">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">Quantity</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-comment">Quantity</label>
+                                        <input class="form-control" type="text" value="1" placeholder="Default input">
                                     </div>
                                     <div class="text-right">
                                         <button id="button-history" class="btn btn-primary">Add History</button>
@@ -285,7 +339,7 @@
                                             <td class="text-left">Total</td>
                                         </tr>
                                     </thead>
-                                    <tbody id="orderdetail">
+                                    <tbody class="productdata">
 
                                     </tbody>
                                 </table>
@@ -296,40 +350,38 @@
                                 <form class="form-horizontal" id="orderhistoryform">
                                     {{ csrf_field() }}
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">* Recipient's
-                                            Name</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-order-status">* Recipient's Name</label>
+                                        <input class="form-control" name="rname" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">* Recipient's
-                                            Email</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-order-status">* Recipient's Email</label>
+                                        <input class="form-control" name="remail" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">* Senders
-                                            Name</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-order-status">* Senders Name</label>
+                                        <input class="form-control" name="sendername" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">* Senders
-                                            Email</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-order-status">* Senders Email</label>
+                                        <input class="form-control" name="senderemail" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">* Gift Certificate
-                                            Theme</label>
-                                        <select class="form-control">
-                                            <option>Default select</option>
+                                        <label class="control-label" for="input-comment">* Gift Certificate Theme</label>
+                                        <select class="form-control" name="giftcertheme">
+                                            @foreach ($voucherdesc as $voucher)
+                                            <option value="{{ $voucher->voucher_theme_id }}">{{ $voucher->name }}
+                                            </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">Message</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1"
+                                        <label class="control-label" for="input-comment">Message</label>
+                                        <textarea class="form-control" name="message" id="exampleFormControlTextarea1"
                                             rows="3"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">* Amount</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-comment">* Amount</label>
+                                        <input class="form-control" name="amount" type="text" value="25.00" placeholder="Default input">
                                     </div>
                                     <div class="text-right">
                                         <button id="button-history" class="btn btn-primary">Add History</button>
@@ -351,7 +403,7 @@
                                             <td class="text-left">Total</td>
                                         </tr>
                                     </thead>
-                                    <tbody id="orderdetail">
+                                    <tbody class="productdata">
 
                                     </tbody>
                                 </table>
@@ -362,43 +414,44 @@
                                 <form class="form-horizontal" id="orderhistoryform">
                                     {{ csrf_field() }}
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">Shipping
-                                            Method</label>
+                                        <label class="control-label" for="input-order-status">Shipping Method</label>
                                         <input class="form-control" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">Payment
-                                            Method</label>
+                                        <label class="control-label" for="input-order-status">Payment Method</label>
+                                        <input class="form-control" name="paymentmethod" type="text" placeholder="Default input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="input-order-status">Coupon</label>
                                         <input class="form-control" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">Coupon</label>
+                                        <label class="control-label" for="input-order-status">Voucher</label>
                                         <input class="form-control" type="text" placeholder="Default input">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-order-status">Voucher</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">Reward</label>
+                                        <label class="control-label" for="input-comment">Reward</label>
                                         <select class="form-control">
                                             <option>Default select</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">Order Status</label>
+                                        <label class="control-label" for="input-comment">Order Status</label>
                                         <select class="form-control">
-                                            <option>Default select</option>
+                                            @foreach ($orderstatus as $status)
+                                            
+                                            <option value="{{ $status->order_status_id }}">{{ $status->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">Comment</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1"
+                                        <label class="control-label" for="input-comment">Comment</label>
+                                        <textarea class="form-control" name="comment" id="exampleFormControlTextarea1"
                                             rows="3"></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label" for="input-comment">Affiliate</label>
-                                        <input class="form-control" type="text" placeholder="Default input">
+                                        <label class="control-label" for="input-comment">Affiliate</label>
+                                        <input class="form-control" type="text" name="affiliate" placeholder="Default input">
                                     </div>
                                     <div class="text-right">
                                         <button id="button-history" class="btn btn-primary">Update Totals</button>
@@ -459,7 +512,7 @@ $.ajax({
         $.ajax({
             url :  "{{ url('autocomplete') }}",
              data: {
-                    term : requete.term
+                term : requete.term
              },
             dataType : 'json', 
             success : function(data){
@@ -504,10 +557,10 @@ $.ajax({
         var customerid = $(' #customerid ').val();
         $.ajax({
             type: "get",
-            url: "{{ url('getproduct') }}/"+customerid,
+            url: "{{ url('getproducts') }}/"+customerid,
             dataType: "json",
             success: function (response) {
-                $('#productdata').html(response);
+                $('.productdata').html(response);
             }
         });
         $('#paymentaddress').on('change', function() {
@@ -548,9 +601,6 @@ $.ajax({
                 }
             });
           });
-        //   $('#productdata')
-
-        
         //  return false;
       } ,
 
@@ -559,7 +609,54 @@ $.ajax({
         results: function() {}
     }
 
-
 }); 
+
+// for html code decode
+function htmlDecode(input) {
+  var doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
+
+    $('#productname').autocomplete({
+        source : function(requete, reponse){
+
+        $.ajax({
+            url :  "{{ url('autocompleteproduct') }}",
+             data: {
+                product : requete.term
+             },
+            dataType : 'json', 
+            success : function(data){
+
+                reponse($.map(data, function(object){
+                    return {
+                        // customer_id: object.,
+                        label: htmlDecode(object.name),
+                        proid : object.product_id
+                       
+                        };
+                }));
+            }
+        });
+    },
+
+    minLength: 1,
+    delay:500,
+
+    select: function( event, ui ) {
+         $(' #productid ' ).val(  ui.item.proid ); 
+       //  return false;
+      } ,
+
+    messages: {
+        noResults: '',
+        results: function() {}
+    }
+}); 
+
+
+
+
+
 
 </script>
