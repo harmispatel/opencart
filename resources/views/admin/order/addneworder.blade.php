@@ -504,7 +504,7 @@ $.ajax({
         var customerid = $(' #customerid ').val();
         $.ajax({
             type: "get",
-            url: "{{ url('getproduct') }}/"+customerid,
+            url: "{{ url('getproducts') }}/"+customerid,
             dataType: "json",
             success: function (response) {
                 $('#productdata').html(response);

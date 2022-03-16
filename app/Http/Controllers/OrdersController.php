@@ -207,7 +207,7 @@ class OrdersController extends Controller
         return redirect()->route('returns')->withErrors($errors);
 
     }
-    public function getproduct($id)
+    public function getproducts($id)
     {
         $productorders = Orders::select('*')->join('oc_order_product as op', 'op.order_id' ,'=', 'oc_order.order_id' )->where('oc_order.customer_id', '=' , $id)->get();
     //  echo '<pre>';

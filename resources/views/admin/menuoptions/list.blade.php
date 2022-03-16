@@ -35,8 +35,8 @@
                         <div class="card-header" style="background: #f6f6f6">
                             <h1 class="card-title pt-2 m-0" style="color: black">
                                 New Module &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" value="1" checked> Enable &nbsp;&nbsp;&nbsp;&nbsp;
-                                <input type="checkbox" value="0" > Disable
+                                <input type="radio" value="1" checked> Enable &nbsp;&nbsp;&nbsp;&nbsp;
+                                <input type="radio" value="0" > Disable
                             </h1>
 
                             {{-- <h3>category</h3> --}}

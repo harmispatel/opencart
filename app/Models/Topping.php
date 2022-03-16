@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductToppingType extends Model
+class Topping extends Model
 {
     use HasFactory;
-    protected $table='oc_product_topping_type';
-    public $timestamps=false;
-    
+    protected $table='oc_topping';
+    public $timestamp=false;
 }

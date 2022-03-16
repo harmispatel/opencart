@@ -9,5 +9,6 @@ class ToppingProductPriceSize extends Model
 {
     use HasFactory;
     protected $table='oc_topping_product_price_size';
-    public $timestamp=false;
+    protected $primaryKey='id_product';
+    public $timestamps=false;
 }
