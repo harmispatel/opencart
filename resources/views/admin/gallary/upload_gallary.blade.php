@@ -1,41 +1,49 @@
-<!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-  
-    <title>{{ config('app.name', 'File Manager') }}</title>
-  
-    <!-- Styles -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
-    <link href="{{ asset('public/vendor/file-manager/css/file-manager.css') }}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h2>Laravel File Manager Tutorial Example - ItSolutionStuff.Com </h2>
-        <div class="row">
-            <div class="col-md-12" id="fm-main-block">
-                <div id="fm"></div>
+@include('header')
+
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+{{-- Section of List Gallary --}}
+<section>
+    <div class="content-wrapper">
+        {{-- Header Section --}}
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Photo Gallary</h1>
+                    </div>
+                    {{-- Breadcrumb Start --}}
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Photo Gallary </li>
+                        </ol>
+                    </div>
+                    {{-- End Breadcumb --}}
+                </div>
             </div>
-        </div>
+        </section>
+        {{-- End Header Section --}}
+
+        {{-- List Section Start --}}
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+        {{-- End List Section --}}
+
     </div>
-  
-    <!-- File manager -->
-    <script src="{{ asset('public/vendor/file-manager/js/file-manager.js') }}"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('fm-main-block').setAttribute('style', 'height:' + window.innerHeight + 'px');
-  
-        fm.$store.commit('fm/setFileCallBack', function(fileUrl) {
-          window.opener.fmSetLink(fileUrl);
-          window.close();
-        });
-      });
-    </script>
-</body>
-</html>
+</section>
+{{-- End Section of List Users --}}
+
+
+
+@include('footer')
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
