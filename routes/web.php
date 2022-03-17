@@ -269,7 +269,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
-    Route::get('uploadgallary', [GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+    Route::get('uploadgallary',[GallaryController::class, 'uploadgallary'])->name('uploadgallary');
     
 
     // Layouts
@@ -299,7 +299,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 });
 
-
+    Route::group(['prefix' => 'upload', 'middleware' => ['web']], function (){
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
