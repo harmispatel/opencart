@@ -2,7 +2,7 @@
 <sidebar class="mobile-menu">
   <a class="close far fa-times-circle" href="#"></a>
   <a class="logo" href="#slide">
-    <img class="img-fluid" src="./assets/img/logo/logo.svg"/>
+    <img class="img-fluid" src="{{ asset('public/assets/img/logo/logo.svg') }}"/>
   </a>
   <div class="top">
     <ul class="menu">

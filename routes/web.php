@@ -105,6 +105,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('getcustomerrewardpoints', [CustomerController::class, 'getcustomerrewardpoints'])->name('getcustomerrewardpoints');
     Route::post('storecustomerrewardpoint', [CustomerController::class, 'storecustomerrewardpoint'])->name('storecustomerrewardpoint');
     Route::post('delCustomerAddress', [CustomerController::class, 'delCustomerAddress'])->name('delCustomerAddress');
+    Route::post('addcustomerbanip', [CustomerController::class, 'addcustomerbanip'])->name('addcustomerbanip');
+    Route::post('removecustomerbanip', [CustomerController::class, 'removecustomerbanip'])->name('removecustomerbanip');
 
 
     // User Profile
@@ -270,7 +272,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
     Route::get('uploadgallary', [GallaryController::class, 'uploadgallary'])->name('uploadgallary');
-    
+
 
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');

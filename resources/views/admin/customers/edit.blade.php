@@ -452,8 +452,16 @@
                                                                         <td>
                                                                             {{ date('d/m/Y',strtotime( $ip->date_sadded)) }}
                                                                         </td>
-                                                                        <td>
-                                                                            <a href="#">Add Ban IP</a>
+                                                                        <td id="banip{{$ip->customer_ip_id}}">
+                                                                            @php
+                                                                                $cip = $ip->ip;
+                                                                                $check_ban_ip = checkBanIp($cip);
+                                                                            @endphp
+                                                                            @if (!empty($check_ban_ip))
+                                                                                [<a href="#" class="text-danger" onclick="removeBanIP('{{$cip}}',{{ $ip->customer_ip_id }})">Remove Ban IP</a>]
+                                                                            @else
+                                                                                [<a href="#" class="text-success" onclick="addBanIP('{{$cip}}',{{ $ip->customer_ip_id }})">Add Ban IP</a>]
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -1008,6 +1016,58 @@ function addCustomerRewardpoint()
     });
 }
 
+
+
+// Add Ban IP
+function addBanIP(ip,tdid)
+{
+    var ban_ip = ip;
+    var td_id = tdid;
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('addcustomerbanip') }}",
+        data: { ip : ban_ip, td_id : td_id },
+        dataType: "json",
+        success: function (response) {
+            $('#banip'+td_id).html('');
+            $('#banip'+td_id).html(response);
+        }
+    });
+
+}
+
+
+// Remove Ban IP
+function removeBanIP(ip,tdid)
+{
+    var ban_ip = ip;
+    var td_id = tdid;
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('removecustomerbanip') }}",
+        data: { ip : ban_ip, td_id : td_id },
+        dataType: "json",
+        success: function (response) {
+            $('#banip'+td_id).html('');
+            $('#banip'+td_id).html(response);
+        }
+    });
+
+}
 
 
 // Delete Customer Address

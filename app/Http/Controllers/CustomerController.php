@@ -7,6 +7,7 @@ use App\Models\CustomerGroup;
 use App\Models\Country;
 use App\Models\Region;
 use App\Models\CustomerAddress;
+use App\Models\CustomerBanIp;
 use App\Models\CustomerHistory;
 use App\Models\CustomerIP;
 use App\Models\CustomerReward;
@@ -126,6 +127,38 @@ class CustomerController extends Controller
         }
 
     }
+
+
+    function addcustomerbanip(Request $request)
+    {
+        $ip = $request->ip;
+        $tdid = $request->td_id;
+        $banIp = new CustomerBanIp;
+        $banIp->ip = $ip;
+        $banIp->save();
+
+        $ipbtn = '';
+
+        $ipbtn .= '[<a href="#" onclick="removeBanIP('."'$ip'".','.$tdid.')" class="text-danger">Remove Ban IP</a>]';
+
+        return response()->json($ipbtn);
+
+    }
+
+    function removecustomerbanip(Request $request)
+    {
+        $ip = $request->ip;
+        $tdid = $request->td_id;
+        CustomerBanIp::where('ip',$ip)->delete();
+
+        $ipbtn = '';
+
+        $ipbtn .= '[<a href="#" onclick="addBanIP('."'$ip'".','.$tdid.')" class="text-success">Add Ban IP</a>]';
+
+        return response()->json($ipbtn);
+
+    }
+
 
     function getcustomertransactions(Request $request)
     {
