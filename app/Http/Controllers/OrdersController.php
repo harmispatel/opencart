@@ -20,7 +20,6 @@ use App\Models\Store;
 use App\Models\VoucherThemeDescription;
 use Illuminate\Http\Request;
 use DataTables;
-use Illuminate\Database\Schema\ForeignKeyDefinition;
 
 class OrdersController extends Controller
 {
@@ -33,14 +32,10 @@ class OrdersController extends Controller
     // View order
     public function vieworder($id)
     {
-        // $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id' )->get();
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->first();
         $orderstatus = OrderStatus::all();
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
         $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
-        // echo '<pre>';
-        // print_r($orders->toArray());
-        // exit();
 
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders]);
     }
@@ -323,7 +318,6 @@ class OrdersController extends Controller
     {
 
         $pro = ProductDescription::where("name", "LIKE", '%' . $request->product . '%')
-            // ->orWhere("lastname","LIKE",'%'. $request->product. '%')
             ->get();
 
         return response()->json($pro);
@@ -331,9 +325,7 @@ class OrdersController extends Controller
 
     public function getaddress($id)
     {
-        // ->join('oc_country', 'oc_address.country_id','=', 'oc_address.country_id' )
         $addr = CustomerAddress::where('customer_id', '=', $id)->get();
-        // $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
         $html = "";
         $html .= "<option>--None--</option>";
         foreach ($addr as $address) {

@@ -104,6 +104,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storecustomertransaction', [CustomerController::class, 'storecustomertransaction'])->name('storecustomertransaction');
     Route::post('getcustomerrewardpoints', [CustomerController::class, 'getcustomerrewardpoints'])->name('getcustomerrewardpoints');
     Route::post('storecustomerrewardpoint', [CustomerController::class, 'storecustomerrewardpoint'])->name('storecustomerrewardpoint');
+    Route::post('delCustomerAddress', [CustomerController::class, 'delCustomerAddress'])->name('delCustomerAddress');
+    Route::post('addcustomerbanip', [CustomerController::class, 'addcustomerbanip'])->name('addcustomerbanip');
+    Route::post('removecustomerbanip', [CustomerController::class, 'removecustomerbanip'])->name('removecustomerbanip');
 
 
     // User Profile
@@ -139,6 +142,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
     Route::get('editproduct/{id}', [ProductController::class, 'edit'])->name('editproduct');
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
+    Route::post('updateproduct',[ProductController::class, 'update'])->name('updateproduct');
+
 
 
     //Orders
@@ -259,6 +264,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
     Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
+    Route::post('voucherinsert', [VoucherController::class, 'voucherinsert'])->name('voucherinsert');
+    Route::get('voucherlist', [VoucherController::class, 'voucherlist'])->name('voucherlist');
+    Route::get('voucheredit/{id}', [VoucherController::class, 'voucheredit'])->name('voucheredit');
+    Route::post('voucherdelete', [VoucherController::class, 'voucherdelete'])->name('voucherdelete');
 
     // Free Item
     Route::get('freeitems', [FreeItemController::class, 'freeitems'])->name('freeitems');
@@ -266,7 +275,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
-    Route::get('uploadgallary', [GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+    Route::get('uploadgallary',[GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+
 
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
@@ -294,8 +304,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 
 });
-
-
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND

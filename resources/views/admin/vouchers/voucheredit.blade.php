@@ -67,31 +67,31 @@
                             aria-labelledby="nav-customer-tab">
                             <div class="form-group">
                                 <label for="code">*Code</label>
-                                <input type="text" class="form-control" name="code" id="code" aria-describedby="codehelp" placeholder="Code">
+                                <input type="text" class="form-control" name="code" id="code" value="{{ $vouchers->code }}" aria-describedby="codehelp" placeholder="Code">
                                 <small id="codehelp" class="form-text text-muted">The code the customer enters to activate the voucher.</small>
                                 @if ($errors->has('code'))
                                 <div style="color: red">{{ $errors->first('code') }}</div>
                                 @endif
                               </div>
                             
-                            <div class="form-group" id="#search">
+                            <div class="form-group">
                                 <label for="cname" style="min-width: 100px">* Appy for</label>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" checked>
+                                    <input class="form-check-input" type="radio" name="apply" id="delivery" value="{{ $vouchers->apply_shipping == 1 ? "checked" : ""}}" >
                                     <label class="form-check-label" for="delivery">Delivery</label>
                                   </div>
                                   <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="apply" id="collection" value="2">
+                                    <input class="form-check-input" type="radio" name="apply" id="collection" value="{{ $vouchers->apply_shipping == 2 ? "checked" : ""}}">
                                     <label class="form-check-label" for="collection">Collection</label>
                                   </div>
                                   <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="apply" id="both" value="3">
+                                    <input class="form-check-input" type="radio" name="apply" id="both" value="{{ $vouchers->apply_shipping == 3 ? "checked" : ""}}">
                                     <label class="form-check-label" for="both">Both</label>
                                   </div>
                             </div>
                             <div class="form-group">
                                 <label for="formname">* Form Name:</label>
-                                <input class="form-control" name="formname" id="formname" type="text" value=""
+                                <input class="form-control" name="formname" id="formname" type="text" value="{{ $vouchers->from_name }}"
                                     placeholder="Form name">
                                 @if ($errors->has('formname'))
                                 <div style="color: red">{{ $errors->first('formname') }}</div>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">* From E-Mail:</label>
-                                <input class="form-control" name="email" id="email" value="" type="email"
+                                <input class="form-control" name="email" id="email" value="{{ $vouchers->from_email }}" type="email"
                                     placeholder="Email">
                                 @if ($errors->has('email'))
                                 <div style="color: red">{{ $errors->first('email') }}</div>
@@ -107,7 +107,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="name">* To Name:</label>
-                                <input class="form-control" name="name" id="name" value="" type="text"
+                                <input class="form-control" name="name" id="name" value="{{ $vouchers->to_name }}" type="text"
                                     placeholder="Telehone">
                                 @if ($errors->has('name'))
                                 <div style="color: red">{{ $errors->first('name') }}</div>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="toemail">* To E-Mail:</label>
-                                <input class="form-control" name="toemail" id="toemail" value="" type="text" placeholder="Email">
+                                <input class="form-control" name="toemail" id="toemail" value="{{ $vouchers->to_email }}" type="text" placeholder="Email">
                                 @if ($errors->has('toemail'))
                                 <div style="color: red">{{ $errors->first('toemail') }}</div>
                                 @endif
@@ -123,6 +123,7 @@
                             <div class="form-group">
                                 <label for="theme">Theme:</label>
                                 <select class="form-control" id="theme" name="theme"> 
+                                    <option value="" selected></option>
                                     @foreach ($themes as $theme)
                                         <option value="{{ $theme->voucher_theme_id }}">{{ $theme->name }}</option>                                        
                                     @endforeach
@@ -130,14 +131,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="message">* Message:</label>
-                                    <textarea class="form-control" name="message" id="message" rows="3"></textarea>
+                                    <textarea class="form-control" name="message"  id="message" rows="3">{{ $vouchers->message }}</textarea>
                                 @if ($errors->has('message'))
                                 <div style="color: red">{{ $errors->first('message') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">
                                 <label for="amount">Amount:</label>
-                                <input class="form-control" name="amount" id="amount" value="" type="text"
+                                <input class="form-control" name="amount" id="amount" value="{{ $vouchers->from_email }}" type="text"
                                     placeholder="Ammout">
                                 @if ($errors->has('amount'))
                                 <div style="color: red">{{ $errors->first('amount') }}</div>

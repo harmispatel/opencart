@@ -42,7 +42,7 @@
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(55) == 1)
-                                        <a href="{{ route('newcategory') }}" class="btn btn-sm btn-primary ml-auto">
+                                        <a href="{{ route('giftvoucher') }}" class="btn btn-sm btn-primary ml-auto">
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     @endif
@@ -60,10 +60,12 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="table">
-                                    @if(Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                                    @if (Session::has('success'))
+                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                                            role="alert">
                                             {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
@@ -71,9 +73,15 @@
                                     {{-- Table Head --}}
                                     <thead class="text-center">
                                         <tr>
-                                            <th><input type="checkbox" id="delall"></th>
-                                            <th>Category Name</th>
-                                            <th>Sort Order</th>
+                                            <th><input type="checkbox" name="del_all" id="delall"></th>
+                                            <th>Code</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Amount</th>
+                                            <th>Apply for</th>
+                                            <th>Theme</th>
+                                            <th>Status</th>
+                                            <th>Date Added</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -81,7 +89,21 @@
 
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
-
+                                        @foreach ($vouchers as $voucher)
+                                        <tr>
+                                                <td><input type="checkbox" name="del_all" class="del_all" value="{{ $voucher->voucher_id }}"></td>
+                                                <td>{{ $voucher->code }}</td>
+                                                <td>{{ $voucher->from_name }}</td>
+                                                <td>{{ $voucher->to_name }}</td>
+                                                <td>{{ $voucher->amount }}</td>
+                                                <td>{{ $voucher->apply_shipping }}</td>
+                                                <td>{{ $voucher->name }}</td>
+                                                <td>{{ ($voucher->status == 1) ? "Enable" : "Desable" }}</td>
+                                                <td>{{ $voucher->date_added }}</td>
+                                                <td>[<a href="#">send</a>][<a href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}">Edit</a>]</td>
+                                                
+                                            </tr>
+                                            @endforeach
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -110,54 +132,30 @@
 
 
 <script type="text/javascript">
-
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         getallcategory();
     });
 
-    // Get All Category
-    function getallcategory()
-    {
-        var table = $('#table').DataTable({
-        processing: true,
-        serverSide: true,
-        // "scrollX": true,
-        ajax: "{{ route('getcategory') }}",
-        columns: [
-            {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
-            {data: 'cat_name', name:'cat_name'},
-            {data: 'sort_order', name: 'sort_order'},
-            {data: 'action', name: 'action'},
-        ]
-        });
-    }
+
     // End Get All Category
 
     // Select All Checkbox
-    $('#delall').on('click', function(e)
-    {
-        if ($(this).is(':checked', true))
-        {
+    $('#delall').on('click', function(e) {
+        if ($(this).is(':checked', true)) {
             $(".del_all").prop('checked', true);
-        }
-        else
-        {
+        } else {
             $(".del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
 
     // Delete Multiple User
-    $('.deletesellected').click(function()
-    {
-        var checkValues = $('.del_all:checked').map(function()
-        {
+    $('.deletesellected').click(function() {
+        var checkValues = $('.del_all:checked').map(function() {
             return $(this).val();
         }).get();
 
-        if(checkValues != '')
-        {
+        if (checkValues != '') {
             swal({
                     title: "Are you sure You want to Delete It ?",
                     text: "Once deleted, you will not be able to recover this Record",
@@ -165,48 +163,39 @@
                     buttons: true,
                     dangerMode: true,
                 })
-                .then((willDelete) =>
-                {
-                    if(willDelete)
-                    {
+                .then((willDelete) => {
+                    if (willDelete) {
                         $.ajax({
-                                type: "POST",
-                                url: '{{ url('categorydelete') }}',
-                                data: {
-                                        "_token": "{{ csrf_token() }}",
-                                        'id': checkValues
-                                      },
-                                dataType: 'JSON',
-                                success: function(data)
-                                {
-                                    if(data.success == 1)
-                                    {
-                                        swal("Your Record has been deleted!", {
-                                            icon: "success",
-                                        });
+                            type: "POST",
+                            url: '{{ url('voucherdelete') }}',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'id': checkValues
+                            },
+                            dataType: 'JSON',
+                            success: function(data) {
+                                if (data.success == 1) {
+                                    swal("Your Record has been deleted!", {
+                                        icon: "success",
+                                    });
 
-                                        setTimeout(function() {
-                                            location.reload();
-                                        }, 1500);
-                                    }
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 1500);
                                 }
+                            }
                         });
 
-                    }
-                    else
-                    {
+                    } else {
                         swal("Cancelled", "", "error");
                         setTimeout(function() {
                             location.reload();
                         }, 1000);
                     }
                 });
-        }
-        else
-        {
-            swal("Please select atleast One Catgory", "", "warning");
+        } else {
+            swal("Please select atleast One Record", "", "warning");
         }
     });
     // End Delete User
-
 </script>

@@ -224,14 +224,6 @@ class CategoryController extends Controller
         // Get Single Category Description
         $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
 
-        // Get Single Category
-        // $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->g
-
-        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout]);
-        // echo '<pre>';
-        // print_r($data->toArray());
-        // exit();
-
         return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout]);
     }
 }
