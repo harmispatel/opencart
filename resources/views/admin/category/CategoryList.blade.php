@@ -204,7 +204,7 @@
         }
         else
         {
-            swal("Please select atleast One User", "", "warning");
+            swal("Please select atleast One Catgory", "", "warning");
         }
     });
     // End Delete User

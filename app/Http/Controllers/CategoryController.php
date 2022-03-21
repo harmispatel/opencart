@@ -85,34 +85,54 @@ class CategoryController extends Controller
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
-            'matatitle' => 'required',
         ]);
+
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
 
         // update Category Image
-        if ($request->hasFile('image')) {
-            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
+        if ($request->hasFile('image'))
+        {
+            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+            if(!empty($image) || $image != '')
+            {
+                if(file_exists('public/admin/category/'.$image))
+                {
+                    unlink('public/admin/category/'.$image);
+                }
+            }
+
+            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/category/'), $imgname);
             $catdetail->image = $imgname;
         }
 
         // Insert Banner Image
-        if ($request->hasFile('banner')) {
-            $imgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-            $request->file('banner')->move(public_path('admin/category/banner'), $imgname);
+        if ($request->hasFile('banner'))
+        {
+            $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
+            if(!empty($banner) || $banner != '')
+            {
+                if(file_exists('public/admin/category/banner/'.$banner))
+                {
+                    unlink('public/admin/category/banner/'.$banner);
+                }
+            }
+
+            $bannerimgname = time().".". $request->file('banner')->getClientOriginalExtension();
+            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
+            $catdetail->img_banner = $bannerimgname;
         }
 
+        $availibleday = implode(",", $request->availibleday);
 
-        $catdetail->image = isset($imgname) ? $imgname : '';
-        $catdetail->img_banner = isset($imgname) ? $imgname : '';
-        $catdetail->parent_id = $request->parent;
         $catdetail->top =  isset($request->top) ? $request->top : 0;
-        $catdetail->column =  $request->columns;
+        $catdetail->column = isset($request->columns) ? $request->columns : 1;
         $catdetail->sort_order = $request->sortorder;
-        $catdetail->status = $request->status;
+        $catdetail->status = isset($request->status) ? $request->status : 0;
+        $catdetail->status = isset($request->status) ? $request->status : 0;
         date_default_timezone_set('Asia/Kolkata');
-        $catdetail->date_modified = date("Y-m-d h:i:s");
+        $catdetail->availibleday = $availibleday;
         $catdetail->update();
 
 
@@ -123,11 +143,9 @@ class CategoryController extends Controller
         $cat->description = isset($request->description) ? $request->description : "";
         $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
-
         $cat->update();
-        $errors = "Update success";
 
-        return redirect()->back()->withErrors($errors);
+        return redirect()->route('category')->with('success','Category has been updated Successfully.');
     }
 
 
@@ -140,12 +158,6 @@ class CategoryController extends Controller
 
         if (count($ids) > 0)
         {
-            // Delete Category
-            Category::whereIn('category_id', $ids)->delete();
-
-            // Delete Category Description
-            CategoryDetail::whereIn('category_id', $ids)->delete();
-
             // Delete Category Image & Banner Image
             foreach($ids as $id)
             {
@@ -167,6 +179,12 @@ class CategoryController extends Controller
                     }
                 }
             }
+
+             // Delete Category
+             Category::whereIn('category_id', $ids)->delete();
+
+             // Delete Category Description
+             CategoryDetail::whereIn('category_id', $ids)->delete();
 
             return response()->json([
                 'success' => 1,
@@ -208,7 +226,7 @@ class CategoryController extends Controller
 
         $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
         $catdetail->top = isset($request->top) ? $request->top : 0;
-        $catdetail->column = isset($request->columns) ? $request->columns : 0;
+        $catdetail->column = isset($request->columns) ? $request->columns : 1;
         $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
         $catdetail->status = isset($request->status) ? $request->status : 0;
         date_default_timezone_set('Asia/Kolkata');

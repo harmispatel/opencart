@@ -60,6 +60,7 @@
                                  <div class="card-body">
                                     <div class="form-group">
 
+                                        <input type="hidden" name="id" value="{{ $data->category_id }}">
                                         <label for="category" class="form-label">Category Name</label>
                                         <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->name }}">
                                         @if ($errors->has('category'))

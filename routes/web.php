@@ -301,10 +301,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 });
 
-    Route::group(['prefix' => 'upload', 'middleware' => ['web']], function (){
-    \UniSharp\LaravelFilemanager\Lfm::routes();
-    });
-
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
 Route::get('/', function () {
