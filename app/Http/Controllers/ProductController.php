@@ -143,7 +143,7 @@ class ProductController extends Controller
 
         $productstore = new ProductStore();
         $productstore->product_id = $product->product_id;
-        $productstore->store_id = isset($request->store_id) ? $request->store_id : 0;
+        $productstore->store_id = isset($request->store_id) ? $request->store_id : 1;
         $productstore->save();
         return redirect()->route('products')->with('success', "Product Inserted Successfully..");
     }
@@ -410,17 +410,17 @@ class ProductController extends Controller
         if(!empty($price_size_id)){
             foreach($mainprice as $key => $mainprices){
                 $where = $price_size_id[$key];
-                $toppingProductPriceSize = ToppingProductPriceSize::find($where); 
+                $toppingProductPriceSize = ToppingProductPriceSize::find($where);
                 $toppingProductPriceSize->price = $mainprices;
                 $toppingProductPriceSize->delivery_price = $deliveryprice[0];
                 $toppingProductPriceSize->collection_price = $collectionprice[1];
                 $toppingProductPriceSize->update();
              }
         }
-          
-       
 
-         
+
+
+
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");
     }

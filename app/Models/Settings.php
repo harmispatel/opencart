@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Settings extends Model
 {
-    use HasFactory;
+    protected $table='oc_setting';
+    protected $primaryKey = 'setting_id';
+    public $timestamps = false;
 }

@@ -50,7 +50,7 @@
                                         <button type="submit" class="btn btn-sm btn-primary ml-auto">
                                             <i class="fa fa-save"></i>
                                         </button>
-                                        <a href="{{ route('category') }}" class="btn btn-sm btn-danger ml-1 deletesellected">
+                                        <a href="{{ route('category') }}" class="btn btn-sm btn-danger ml-1">
                                             <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </div>

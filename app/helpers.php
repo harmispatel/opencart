@@ -6,7 +6,10 @@ use App\Models\Permission;
 use App\Models\CategoryDetail;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
+use App\Models\Option;
 use App\Models\Region;
+use App\Models\Settings;
+use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
 
 // Function of User Details
@@ -31,6 +34,40 @@ function checkBanIp($ip)
     $ip = CustomerBanIp::select('ip')->where('ip',$ip)->first();
     return $ip;
 }
+
+
+// Check New Model
+function checkNewModel()
+{
+    $setting = Settings::where('key','new_module_status')->first();
+    if($setting != '' || !empty($setting))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
+
+function get_sub_opt_names($sub_opt_ids)
+{
+    $arr = array();
+    $ids = explode(',',$sub_opt_ids);
+
+    foreach($ids as $id)
+    {
+        $getname = Topping::select('name_topping')->where('id_topping',$id)->first();
+        $name = $getname->name_topping;
+        $arr[] = $name;
+    }
+
+    $names = implode(',',$arr);
+    return $names;
+}
+
 
 
 function getZonebyId($zid)

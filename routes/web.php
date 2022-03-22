@@ -170,6 +170,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
     Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
+    Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
 
 
     Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
@@ -188,6 +189,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Menu Options
     Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
     Route::get('addmenuoptions', [OptionController::class, 'add'])->name('addmenuoptions');
+    Route::post('newmodel', [OptionController::class, 'newmodel'])->name('newmodel');
+    Route::get('gettoppings', [OptionController::class, 'gettoppings'])->name('gettoppings');
+    Route::post('inserttopping', [OptionController::class, 'insert'])->name('inserttopping');
+    Route::post('deletetopping', [OptionController::class, 'delete'])->name('deletetopping');
+    Route::get('edittopping/{id}', [OptionController::class, 'edit'])->name('edittopping');
+    Route::post('delToppingOption', [OptionController::class, 'delToppingOption'])->name('delToppingOption');
+    Route::post('storemapping', [OptionController::class, 'storemapping'])->name('storemapping');
 
 
     //Recurring Profiles

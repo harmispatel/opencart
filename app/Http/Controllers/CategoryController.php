@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\CategoryDetail;
 use App\Models\CategoryLayout;
+use App\Models\CategorytoStore;
 use Illuminate\Http\Request;
 use DataTables;
 
@@ -235,6 +236,13 @@ class CategoryController extends Controller
         $catdetail->availibleday = $availibleday;
         $catdetail->save();
         $lastid = $catdetail->category_id;
+
+
+        // Insert Into Category to Store
+        $cat_to_store = new CategorytoStore;
+        $cat_to_store->category_id = $lastid;
+        $cat_to_store->store_id = 1;
+        $cat_to_store->save();
 
         // Insert Category
         $cat = new Category;
