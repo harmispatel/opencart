@@ -12,13 +12,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Categories</h1>
+                        <h1>Gift Voucher</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Categories</li>
+                            <li class="breadcrumb-item active">Gift Voucher</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -38,7 +38,7 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Category List
+                                    Gift Voucher List
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(55) == 1)
@@ -96,10 +96,18 @@
                                                 <td>{{ $voucher->from_name }}</td>
                                                 <td>{{ $voucher->to_name }}</td>
                                                 <td>{{ $voucher->amount }}</td>
-                                                <td>{{ $voucher->apply_shipping }}</td>
+                                                <td>
+                                                    @if ($voucher->apply_shipping == 1)
+                                                        Delivery
+                                                    @elseif ($voucher->apply_shipping == 2)
+                                                        Collection
+                                                    @else
+                                                        Both
+                                                    @endif                                                    
+                                                </td>
                                                 <td>{{ $voucher->name }}</td>
                                                 <td>{{ ($voucher->status == 1) ? "Enable" : "Desable" }}</td>
-                                                <td>{{ $voucher->date_added }}</td>
+                                                <td>{{ strtotime($voucher->date_added) }}</td>
                                                 <td>[<a href="#">send</a>][<a href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}">Edit</a>]</td>
                                                 
                                             </tr>
@@ -132,6 +140,11 @@
 
 
 <script type="text/javascript">
+
+
+$(document).ready( function () {
+    $('#table').DataTable();
+} );
     $(document).ready(function() {
         getallcategory();
     });
