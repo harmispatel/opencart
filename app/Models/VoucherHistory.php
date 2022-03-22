@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Voucher extends Model
+class VoucherHistory extends Model
 {
     use HasFactory;
-    protected $table = "oc_voucher";
-    protected $primaryKey = 'voucher_id';
-    public $timestamps = false;
+    protected $table = 'oc_voucher_history';
 }

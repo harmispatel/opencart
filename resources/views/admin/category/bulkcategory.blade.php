@@ -80,6 +80,7 @@
                                                 <th scope="col">Active</th>
                                             </tr>
                                         </thead>
+                                        
                                         <tbody>
                                             <tr>
                                                 <th class="align-middle">
@@ -92,41 +93,38 @@
                                                 </td>
                                                 <td>Image</td>
                                                 <td>
-                                                    <label class="form-check-label "
-                                                        style="min-width: 100px">Size</label>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="size"
-                                                            id="sizee" value="1">
-                                                        <label class="form-check-label" for="sizee">Enable</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="size"
-                                                            id="sized" value="0" checked>
-                                                        <label class="form-check-label" for="sized">Disable</label>
+                                                    <div>
+                                                        <label for="size" class="" style="min-width: 100px">Size</label>
+                                                        <input type="radio" name="size" value="1"
+                                                            onclick="$('#size-value').show()"> Enable &nbsp;
+                                                        <input type="radio" name="size" value="0"
+                                                            onclick="$('#size-value').hide()" checked> Disable
                                                     </div>
 
 
-                                                    <table class="table d-none" id="addsize">
+                                                    <table class="table table-bordered" style="display: none"
+                                                        id="size-value">
                                                         <thead>
-                                                          <tr>
-                                                            <td class="">Size</td>
-                                                            <td class="">Sort Order</td>
-                                                            <td ></td>
-                                                          </tr>
+                                                            <tr>
+                                                                <th>Size</th>
+                                                                <th>Sort Order</th>
+                                                                <th>Action</th>
+                                                            </tr>
                                                         </thead>
-                                                        <tbody id="sizeadd">
-                                                          <tr>
-                                                          </tr>
-                                                        </tbody>           
-                                                        <tfoot class="">
-                                                          <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td><a class="btn btn-sm btn-primary" onclick="addzisefill();">Add</a></td>
-                                                          </tr>
+                                                        <tbody id="size-value-row">
+
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td colspan="3" class="text-center">
+                                                                    <a class="btn btn-sm btn-primary" onclick="addsizevalue()">ADD</a>
+                                                                </td>
+                                                            </tr>
                                                         </tfoot>
-                                                      </table>
-                                                    <br>
+                                                    </table>
+                                                    {{-- <br> --}}
                                                     <label class="form-check-label"
                                                         style="min-width: 100px">Option</label>
                                                     <div class="form-check form-check-inline">
@@ -154,7 +152,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <a class="btn btn-sm btn-primary" href="#" role="button">Delete</a>
+                                                    <a class="btn btn-sm btn-danger" href="#" role="button">Delete</a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -188,14 +186,21 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
-<script>
-    $('#sizee').on('click', function() {
+<script type="text/javascript">
+    // Add Size Function
+    var size_value_row = 0;
 
-
-    });
-
-    function addzisefill() {
-        console.log("click");
-        $('#sizeadd').append("");
+    function addsizevalue() {
+        size_value_row++;
+        html = '  <tr class="size_' + size_value_row + '">';
+        html += '    <td><input type="text" name="size[' + size_value_row +
+            '][size]" value="" / placeholder="Size" class="form-control"></td>';
+        html += '    <td><input type="text" name="size[' + size_value_row +
+            '][short_order]" value="" / placeholder="Sort Order" class="form-control"></td>';
+        html += '    <td><a onclick="$(\'.size_' + size_value_row +
+            '\').remove();" class="btn btn-sm bg-primary">Delete</a></td>';
+        // html += '    <td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm" style="background:#1bbc9b;color: white;">Edit</a></td>';
+        html += '  </tr>';
+        $('#size-value-row').append(html);
     }
 </script>

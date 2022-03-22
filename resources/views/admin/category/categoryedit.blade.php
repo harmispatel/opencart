@@ -102,6 +102,38 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <div class="col-md-12 pb-1" style="background: #1bbc9b;">
+                                            <label for="" class="m-0 p-1 text-white">OPTIONS</label>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <label for="size" class="pr-3">SIZE</label>
+                                            <input type="radio" name="size" value="1" onclick="$('#size-value').show()"> Enable &nbsp;
+                                            <input type="radio" name="size" value="0"  onclick="$('#size-value').hide()" checked> Disable
+                                        </div>
+                                        <div class="col-md-12">
+                                            <table class="table table-bordered" style="display: none" id="size-value">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Size</th>
+                                                        <th>Sort Order</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="size-value-row">
+
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="3" class="text-center">
+                                                            <a class="btn btn-sm" style="background:#1bbc9b;color: white;" onclick="addsizevalue()">ADD SIZE VALUE</a>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="image">Image</label>
                                         <input type="file" name="image" style="padding:3px;" id="image" class="form-control">
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
@@ -144,6 +176,30 @@
     </div>
 </section>
 {{-- End Section of Edit Category --}}
+
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
+
+
+{{-- SCRIPT --}}
+<script type="text/javascript">
+
+// Add Size Function
+var size_value_row = 0;
+function addsizevalue()
+{
+    size_value_row++;
+    html = '  <tr class="size_' + size_value_row + '">';
+    html += '    <td><input type="text" name="size[' + size_value_row + '][size]" value="" / placeholder="Size" class="form-control"></td>';
+    html += '    <td><input type="text" name="size[' + size_value_row + '][short_order]" value="" / placeholder="Sort Order" class="form-control"></td>';
+    html += '    <td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm" style="background:#1bbc9b;color: white;">Delete</a></td>';
+    // html += '    <td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm" style="background:#1bbc9b;color: white;">Edit</a></td>';
+    html += '  </tr>';
+    $('#size-value-row').append(html);
+}
+
+</script>
+{{-- END SCRIPT --}}
 
 
