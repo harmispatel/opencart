@@ -83,7 +83,7 @@
                                         <th>
                                             <input type="checkbox" name="checkall" id="delall">
                                         </th>
-                                        <th>Image</th>
+                                        <th id="image">Image</th>
                                         <th id="name">Product Name</th>
                                         <th id="price">Price</th>
                                         <th id="status">Status</th>
@@ -183,6 +183,7 @@
 
         $('#categorys').change(function() {
             var categoryval = this.value;
+            // var categoryval = $('#categorys :selected').val();
 
             $.ajaxSetup({
                 headers: {
