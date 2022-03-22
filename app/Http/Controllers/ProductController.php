@@ -143,7 +143,7 @@ class ProductController extends Controller
 
         $productstore = new ProductStore();
         $productstore->product_id = $product->product_id;
-        $productstore->store_id = isset($request->store_id) ? $request->store_id : 0;
+        $productstore->store_id = isset($request->store_id) ? $request->store_id : 1;
         $productstore->save();
         return redirect()->route('products')->with('success', "Product Inserted Successfully..");
     }

@@ -301,6 +301,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 });
 
+Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+    // echo '<pre>';
+    // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
+    // exit();
+});
+
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
 Route::get('/', function () {

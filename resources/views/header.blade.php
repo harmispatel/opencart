@@ -158,7 +158,7 @@
                                                     @if($submenu->url_id == 1)
                                                         <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}">
                                                     @else
-                                                        <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
+                                                        <a href="{{ URL::To($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
                                                     @endif
 
                                                             <i class="nav-icon {{ $submenu->icon_class }}"></i>
