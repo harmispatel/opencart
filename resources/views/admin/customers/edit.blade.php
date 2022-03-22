@@ -68,6 +68,20 @@
                                     </ul>
                                     {{-- End Tabs Link --}}
 
+
+                                    {{-- Dynamic Address Count --}}
+                                    @php
+                                        $count = count($addresses);
+                                        if ($count != '') {
+                                            $newcount = $count + 1;
+                                            echo '<input type="hidden" name="add_count" id="add_count" value="'.$newcount.'">';
+                                        }
+                                        else {
+                                            echo '<input type="hidden" name="add_count" id="add_count" value="1">';
+                                        }
+                                    @endphp
+                                    {{-- End Dynamic Address Count --}}
+
                                     {{-- Tab Content --}}
                                     <div class="tab-content pt-4" id="myTabContent">
 
@@ -82,6 +96,16 @@
                                                         <li class="nav-item">
                                                             <a href="#tab-customer" class="nav-link active" data-toggle="tab" role="tab" aria-controls="data">General</a>
                                                         </li>
+                                                        @if(!empty($addresses))
+                                                            @foreach ($addresses as $address)
+                                                                <li class="nav-item">
+                                                                    <a href="#tab-address-{{ $loop->iteration }}" data-toggle="tab" class="nav-link">
+                                                                        Address {{ $loop->iteration }}
+                                                                        <i class="fa fa-minus-circle pl-4" onclick="DelAddress({{ $address->address_id }})"></i>
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        @endif
                                                         <li class="nav-item" id="address-add">
                                                             <a href="#" class="nav-link" onclick="addAddress();">Add  Address
                                                                 <i class="fa fa-plus-circle pl-4"></i>
@@ -91,34 +115,35 @@
                                                     {{-- End Inner Tab Links --}}
                                                 </div>
                                                 <div class="col-md-10">
-                                                    {{-- Genral Customer Tab --}}
                                                     <div class="tab-content">
+                                                        {{-- Genral Customer Tab --}}
                                                         <div class="tab-pane active" id="tab-customer">
 
                                                             <h3>General</h3>
                                                             <div class="form-group">
-                                                                <label for="firstname">First Name</label>
+                                                                <input type="hidden" name="customer_id" value="{{ $customer->customer_id }}">
+                                                                <label for="firstname"><span class="text-danger">*</span> First Name</label>
                                                                 <input type="text" name="firstname" id="firstname" class="form-control" value="{{ $customer->firstname }}">
                                                                 <div class="invalid-feedback" style="display: none" id="fnameError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="lastname">Last Name</label>
+                                                                <label for="lastname"><span class="text-danger">*</span> Last Name</label>
                                                                 <input type="text" name="lastname" id="lastname" class="form-control" value="{{ $customer->lastname }}">
                                                                 <div class="invalid-feedback" style="display: none" id="lnameError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="email">Email</label>
+                                                                <label for="email"><span class="text-danger">*</span> Email</label>
                                                                 <input type="text" name="email" id="email" class="form-control" value="{{ $customer->email }}">
                                                                 <div class="invalid-feedback" style="display: none" id="emailError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="phone">Phone No.</label>
+                                                                <label for="phone"><span class="text-danger">*</span> Phone No.</label>
                                                                 <input type="text" name="phone" id="phone" class="form-control" value="{{ $customer->telephone }}">
                                                                 <div class="invalid-feedback" style="display: none" id="phoneError">
                                                                 </div>
@@ -169,8 +194,97 @@
                                                             </div>
 
                                                         </div>
+                                                        {{-- End Genral Customer Tab --}}
+
+                                                        {{-- Dynamic Address Tabs --}}
+                                                        @if(!empty($addresses))
+                                                            @foreach ($addresses as $address)
+                                                                <div id="tab-address-{{ $loop->iteration }}" class="tab-pane">
+                                                                    <h3>Address {{ $loop->iteration }}</h3>
+
+                                                                    <input type="hidden" name="address[{{ $loop->iteration }}][address_id]" value="{{ $address->address_id }}">
+
+                                                                    <div class="form-group">
+                                                                        <label for="fname{{ $loop->iteration }}"><span class="text-danger">*</span> First Name</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][fname]" id="fname{{ $loop->iteration }}" class="form-control" value="{{ $address->firstname }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="lname{{ $loop->iteration }}"><span class="text-danger">*</span> Last Name</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][lname]" id="lname{{ $loop->iteration }}" class="form-control" value="{{ $address->lastname }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="company{{ $loop->iteration }}">Company</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][company]" id="company{{ $loop->iteration }}" class="form-control" value="{{ $address->company }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="companyId{{ $loop->iteration }}">Company ID</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][companyId]" id="companyId{{ $loop->iteration }}" class="form-control" value="{{ $address->company_id }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="taxid{{ $loop->iteration }}">TAX ID</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][taxid]" id="taxid{{ $loop->iteration }}" class="form-control" value="{{ $address->tax_id }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="add_one{{ $loop->iteration }}"><span class="text-danger">*</span> Address One</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][add_one]" id="add_one{{ $loop->iteration }}" class="form-control" value="{{ $address->address_1 }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="add_two{{ $loop->iteration }}">Address Two</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][add_two]" id="add_two{{ $loop->iteration }}" class="form-control" value="{{ $address->address_2 }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="city{{ $loop->iteration }}"><span class="text-danger">*</span> City</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][city]" id="city{{ $loop->iteration }}" class="form-control" value="{{ $address->city }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="postcode{{ $loop->iteration }}"><span class="text-danger">*</span> Post Code</label>
+                                                                        <input type="text" name="address[{{ $loop->iteration }}][postcode]" id="postcode{{ $loop->iteration }}" class="form-control" value="{{ $address->postcode }}">
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="country_id{{ $loop->iteration }}"><span class="text-danger">*</span> Country</label>
+                                                                        <select name="address[{{ $loop->iteration }}][country_id]" id="country_id{{ $loop->iteration }}" class="form-control" onchange="region({{ $loop->iteration }})">
+                                                                        <option value=""> -- Select Country -- </option>
+                                                                        @foreach ($countries as $country)
+                                                                            <option value="{{ $country->country_id }}" {{ ($address->country_id == $country->country_id) ? 'selected' : '' }}>{{ $country->name }}</option>
+                                                                        @endforeach
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="region_id{{ $loop->iteration }}"><span class="text-danger">*</span> Region / State</label>
+                                                                        <select name="address[{{ $loop->iteration }}][region_id]" id="region_id{{ $loop->iteration }}" class="form-control">
+                                                                            @php
+                                                                                $zone_id = $address->zone_id;
+                                                                                $zone = getZonebyId($zone_id);
+                                                                            @endphp
+                                                                            @if(!empty($zone))
+                                                                                <option value="{{ $zone->zone_id }}">{{ $zone->name }}</option>
+                                                                            @else
+                                                                                <option value=""> -- Select Region -- </option>
+                                                                            @endif
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label for="deafault{{ $loop->iteration }}">Default Address</label>
+                                                                        <input type="radio" name="address[{{ $loop->iteration }}][default]" id="default{{ $loop->iteration }}" {{ ($customer->address_id == $address->address_id) ? 'checked' : '' }}>
+                                                                    </div>
+
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                        {{-- End Dynamic Address Tabs --}}
+
                                                     </div>
-                                                    {{-- End Genral Customer Tab --}}
                                                 </div>
                                             </div>
                                             </form>
@@ -338,8 +452,16 @@
                                                                         <td>
                                                                             {{ date('d/m/Y',strtotime( $ip->date_sadded)) }}
                                                                         </td>
-                                                                        <td>
-                                                                            <a href="#">Add Ban IP</a>
+                                                                        <td id="banip{{$ip->customer_ip_id}}">
+                                                                            @php
+                                                                                $cip = $ip->ip;
+                                                                                $check_ban_ip = checkBanIp($cip);
+                                                                            @endphp
+                                                                            @if (!empty($check_ban_ip))
+                                                                                [<a href="#" class="text-danger" onclick="removeBanIP('{{$cip}}',{{ $ip->customer_ip_id }})">Remove Ban IP</a>]
+                                                                            @else
+                                                                                [<a href="#" class="text-success" onclick="addBanIP('{{$cip}}',{{ $ip->customer_ip_id }})">Add Ban IP</a>]
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -385,7 +507,7 @@
 
 <script type="text/javascript">
 
-    var address_row = 1;
+    var address_row = $('#add_count').val();
 
     function addAddress()
     {
@@ -397,13 +519,13 @@
 
         // First Name
         html += '<div class="form-group">';
-        html += '<label for="fname' + address_row + '">First Name</label>';
+        html += '<label for="fname' + address_row + '"><span class="text-danger">*</span> First Name</label>';
         html += '<input type="text" name="address[' + address_row + '][fname]" placeholder="First Name" id="fname" class="form-control" />';
         html += '</div>';
 
         // Last Name
         html += '<div class="form-group">';
-        html += '<label for="lname' + address_row + '">Last Name</label>';
+        html += '<label for="lname' + address_row + '"><span class="text-danger">*</span> Last Name</label>';
         html += '<input type="text" name="address[' + address_row + '][lname]" placeholder="Last Name" id="lname' + address_row + '" class="form-control" />';
         html += '</div>';
 
@@ -427,38 +549,38 @@
 
         // Address 1
         html += '<div class="form-group">';
-        html += '<label for="add_1' + address_row + '">Address 1</label>';
-        html += '<input type="text" name="address[' + address_row + '][add_1]" placeholder="Address 1" id="add_1' + address_row + '" class="form-control" />';
+        html += '<label for="add_one' + address_row + '"><span class="text-danger">*</span> Address One</label>';
+        html += '<input type="text" name="address[' + address_row + '][add_one]" placeholder="Address One" id="add_one' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // Address 2
         html += '<div class="form-group">';
-        html += '<label for="add_2' + address_row + '">Address 2</label>';
-        html += '<input type="text" name="address[' + address_row + '][add_2]" placeholder="Address 2" id="add_2' + address_row + '" class="form-control" />';
+        html += '<label for="add_two' + address_row + '">Address Two</label>';
+        html += '<input type="text" name="address[' + address_row + '][add_two]" placeholder="Address Two" id="add_two' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // City
         html += '<div class="form-group">';
-        html += '<label for="city' + address_row + '">City</label>';
+        html += '<label for="city' + address_row + '"><span class="text-danger">*</span> City</label>';
         html += '<input type="text" name="address[' + address_row + '][city]" placeholder="City" id="city' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // Post Code
         html += '<div class="form-group">';
-        html += '<label for="postcode' + address_row + '">Post Code</label>';
+        html += '<label for="postcode' + address_row + '"><span class="text-danger">*</span> Post Code</label>';
         html += '<input type="number" name="address[' + address_row + '][postcode]" placeholder="Post Code" id="postcode' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // Country
         html += '<div class="form-group">';
-        html += '<label for="country_id' + address_row + '">Country</label>';
+        html += '<label for="country_id' + address_row + '"><span class="text-danger">*</span> Country</label>';
         html += '<select name="address[' + address_row + '][country_id]" id="country_id' + address_row + '" class="form-control" onchange="region('+address_row+')"><option value=""> -- Select Country -- </option>@foreach($countries as $country)<option value="{{ $country->country_id }}">{{ $country->name }}</option>@endforeach</select>';
         html += '</div>';
 
         // Region
         html += '<div class="form-group">';
-        html += '<label for="region_id' + address_row + '">Region / State</label>';
-        html += '<select name="address[' + address_row + '][region_id]" id="region_id' + address_row + '" class="form-control zone_id"><option value=""> -- Select Region -- </option></select>';
+        html += '<label for="region_id' + address_row + '"><span class="text-danger">*</span> Region / State</label>';
+        html += '<select name="address[' + address_row + '][region_id]" id="region_id' + address_row + '" class="form-control"><option value=""> -- Select Region -- </option></select>';
         html += '</div>';
 
         // Default Address
@@ -493,8 +615,8 @@
             data: {'country_id':country_id,"_token": "{{ csrf_token() }}",},
             dataType: "json",
             success: function (response) {
-                $('.zone_id').text('');
-                $('.zone_id').append(response);
+                $('#region_id'+row_id).text('');
+                $('#region_id'+row_id).append(response);
             }
         });
 
@@ -516,15 +638,17 @@ function savecustomer() {
 
     $.ajax({
         type: "POST",
-        url: "{{ url('storecustomer') }}",
+        url: "{{ url('updatecustomer') }}",
         data: form_data,
         dataType: "json",
         contentType: false,
         cache: false,
         processData: false,
         success: function (response) {
-            alert('Data Inserted');
-            window.location.replace('customers');
+            console.log(response);
+            alert('Customer Updated');
+            // location.reload();
+            window.location.href = response;
         },
         error : function (message) {
 
@@ -890,6 +1014,109 @@ function addCustomerRewardpoint()
 
         }
     });
+}
+
+
+
+// Add Ban IP
+function addBanIP(ip,tdid)
+{
+    var ban_ip = ip;
+    var td_id = tdid;
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('addcustomerbanip') }}",
+        data: { ip : ban_ip, td_id : td_id },
+        dataType: "json",
+        success: function (response) {
+            $('#banip'+td_id).html('');
+            $('#banip'+td_id).html(response);
+        }
+    });
+
+}
+
+
+// Remove Ban IP
+function removeBanIP(ip,tdid)
+{
+    var ban_ip = ip;
+    var td_id = tdid;
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "{{ url('removecustomerbanip') }}",
+        data: { ip : ban_ip, td_id : td_id },
+        dataType: "json",
+        success: function (response) {
+            $('#banip'+td_id).html('');
+            $('#banip'+td_id).html(response);
+        }
+    });
+
+}
+
+
+// Delete Customer Address
+function DelAddress(addId)
+{
+    var addId = addId;
+
+    swal({
+            title: "Are you sure You want to Delete It ?",
+            text: "Once deleted, you will not be able to recover this Record",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete)
+            {
+
+                $.ajax({
+                        type: "POST",
+                        url: "{{ url('delCustomerAddress') }}",
+                        data: {"_token": "{{ csrf_token() }}",'add_id':addId},
+                        dataType : 'JSON',
+                        success: function (data)
+                        {
+                            if(data.success == 1)
+                            {
+                                swal("Your Record has been deleted!", {
+                                    icon: "success",
+                                });
+
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 1500);
+                            }
+                        }
+                });
+
+            }
+            else
+            {
+                swal("Cancelled", "", "error");
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+        });
+
+
 }
 
 

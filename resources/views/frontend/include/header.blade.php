@@ -13,7 +13,7 @@
             <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
           </ul>
         </div>
-        <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s"><a class="logo" href="#slide"><img class="img-fluid" src="./assets/img/logo/logo.svg"/></a>
+        <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s"><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/img/logo/logo.svg') }}"/></a>
           <ul class="menu">
             <li class="active"><a class="text-uppercase" href="#">home</a></li>
             <li><a class="text-uppercase" href="#">member</a></li>

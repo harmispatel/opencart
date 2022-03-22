@@ -9,5 +9,6 @@ class ProductToppingType extends Model
 {
     use HasFactory;
     protected $table='oc_product_topping_type';
+    public $timestamps=false;
     
 }

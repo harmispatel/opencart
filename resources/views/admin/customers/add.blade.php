@@ -89,28 +89,28 @@
 
                                                             <h3>General</h3>
                                                             <div class="form-group">
-                                                                <label for="firstname">First Name</label>
+                                                                <label for="firstname"><span class="text-danger">*</span> First Name</label>
                                                                 <input type="text" name="firstname" id="firstname" class="form-control" placeholder="First Name">
                                                                 <div class="invalid-feedback" style="display: none" id="fnameError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="lastname">Last Name</label>
+                                                                <label for="lastname"><span class="text-danger">*</span> Last Name</label>
                                                                 <input type="text" name="lastname" id="lastname" class="form-control" placeholder="Last Name">
                                                                 <div class="invalid-feedback" style="display: none" id="lnameError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="email">Email</label>
+                                                                <label for="email"><span class="text-danger">*</span> Email</label>
                                                                 <input type="text" name="email" id="email" class="form-control" placeholder="E-mail">
                                                                 <div class="invalid-feedback" style="display: none" id="emailError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="phone">Phone No.</label>
+                                                                <label for="phone"><span class="text-danger">*</span> Phone No.</label>
                                                                 <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone">
                                                                 <div class="invalid-feedback" style="display: none" id="phoneError">
                                                                 </div>
@@ -122,14 +122,14 @@
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="password">Password</label>
+                                                                <label for="password"><span class="text-danger">*</span> Password</label>
                                                                 <input type="password" name="password" id="password" class="form-control">
                                                                 <div class="invalid-feedback" style="display: none" id="passwordError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="password">Confirm Password</label>
+                                                                <label for="password"><span class="text-danger">*</span> Confirm Password</label>
                                                                 <input type="password" name="confirm" id="confirm" class="form-control">
                                                                 <div class="invalid-feedback" style="display: none" id="confirmError">
                                                                 </div>
@@ -235,13 +235,13 @@
 
         // First Name
         html += '<div class="form-group">';
-        html += '<label for="fname' + address_row + '">First Name</label>';
+        html += '<label for="fname' + address_row + '"><span class="text-danger">*</span> First Name</label>';
         html += '<input type="text" name="address[' + address_row + '][fname]" placeholder="First Name" id="fname" class="form-control" />';
         html += '</div>';
 
         // Last Name
         html += '<div class="form-group">';
-        html += '<label for="lname' + address_row + '">Last Name</label>';
+        html += '<label for="lname' + address_row + '"><span class="text-danger">*</span> Last Name</label>';
         html += '<input type="text" name="address[' + address_row + '][lname]" placeholder="Last Name" id="lname' + address_row + '" class="form-control" />';
         html += '</div>';
 
@@ -265,38 +265,38 @@
 
         // Address 1
         html += '<div class="form-group">';
-        html += '<label for="add_1' + address_row + '">Address 1</label>';
-        html += '<input type="text" name="address[' + address_row + '][add_1]" placeholder="Address 1" id="add_1' + address_row + '" class="form-control" />';
+        html += '<label for="add_one' + address_row + '"><span class="text-danger">*</span> Address One</label>';
+        html += '<input type="text" name="address[' + address_row + '][add_one]" placeholder="Address One" id="add_one' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // Address 2
         html += '<div class="form-group">';
-        html += '<label for="add_2' + address_row + '">Address 2</label>';
-        html += '<input type="text" name="address[' + address_row + '][add_2]" placeholder="Address 2" id="add_2' + address_row + '" class="form-control" />';
+        html += '<label for="add_two' + address_row + '">Address Two</label>';
+        html += '<input type="text" name="address[' + address_row + '][add_two]" placeholder="Address Two" id="add_two' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // City
         html += '<div class="form-group">';
-        html += '<label for="city' + address_row + '">City</label>';
+        html += '<label for="city' + address_row + '"><span class="text-danger">*</span> City</label>';
         html += '<input type="text" name="address[' + address_row + '][city]" placeholder="City" id="city' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // Post Code
         html += '<div class="form-group">';
-        html += '<label for="postcode' + address_row + '">Post Code</label>';
+        html += '<label for="postcode' + address_row + '"><span class="text-danger">*</span> Post Code</label>';
         html += '<input type="number" name="address[' + address_row + '][postcode]" placeholder="Post Code" id="postcode' + address_row + '" class="form-control" />';
         html += '</div>';
 
         // Country
         html += '<div class="form-group">';
-        html += '<label for="country_id' + address_row + '">Country</label>';
+        html += '<label for="country_id' + address_row + '"><span class="text-danger">*</span> Country</label>';
         html += '<select name="address[' + address_row + '][country_id]" id="country_id' + address_row + '" class="form-control" onchange="region('+address_row+')"><option value=""> -- Select Country -- </option>@foreach($countries as $country)<option value="{{ $country->country_id }}">{{ $country->name }}</option>@endforeach</select>';
         html += '</div>';
 
         // Region
         html += '<div class="form-group">';
-        html += '<label for="region_id' + address_row + '">Region / State</label>';
-        html += '<select name="address[' + address_row + '][region_id]" id="region_id' + address_row + '" class="form-control zone_id"><option value=""> -- Select Region -- </option></select>';
+        html += '<label for="region_id' + address_row + '"><span class="text-danger">*</span> Region / State</label>';
+        html += '<select name="address[' + address_row + '][region_id]" id="region_id' + address_row + '" class="form-control"><option value=""> -- Select Region -- </option></select>';
         html += '</div>';
 
         // Default Address
@@ -331,8 +331,8 @@
             data: {'country_id':country_id,"_token": "{{ csrf_token() }}",},
             dataType: "json",
             success: function (response) {
-                $('.zone_id').text('');
-                $('.zone_id').append(response);
+                $('#region_id'+row_id).text('');
+                $('#region_id'+row_id).append(response);
             }
         });
 
@@ -365,6 +365,8 @@ function savecustomer() {
             window.location.replace('customers');
         },
         error : function (message) {
+
+            alert('Please Check Form Carfully');
 
             var first_name = message.responseJSON.errors.firstname;
             var last_name = message.responseJSON.errors.lastname;

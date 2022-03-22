@@ -11,7 +11,7 @@ use DataTables;
 class CategoryController extends Controller
 {
 
-    // Function of List All Category
+    // Function of Category View
     function index()
     {
         // Check User Permission
@@ -19,22 +19,23 @@ class CategoryController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-
-
-        return view('admin.category.CategoryList', ['fetchparent' => $fetchparent]);
+        return view('admin.category.CategoryList');
     }
 
-    public function getcategory(Request $request){
-        if ($request->ajax()) {
-            $data =CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-            return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function($row){
 
+
+
+    // Function of Get all Categories
+    public function getcategory(Request $request)
+    {
+        if($request->ajax())
+        {
+            $data =CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+
+            return DataTables::of($data)->addIndexColumn()
+            ->addColumn('action', function($row){
                 $edit_url = route('categoryedit',$row->category_id);
                 $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
-
                 return $btn;
             })
             ->addColumn('checkbox', function($row){
@@ -49,6 +50,8 @@ class CategoryController extends Controller
 
 
 
+
+    // Function of Bulk Category View
     function bulkcategory()
     {
         return view('admin.category.bulkcategory');
@@ -56,15 +59,14 @@ class CategoryController extends Controller
 
 
 
+
     // Function of Add Category View
     function newcategory()
     {
-
         // Check User Permission
         if (check_user_role(55) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
-
 
         // Fetch Category Layout
         $category_layout = CategoryLayout::select('layout_id', 'name')->get();
@@ -75,42 +77,63 @@ class CategoryController extends Controller
     }
 
 
+
+
+    // Function of Update Category
     public function categoryupdate(Request $request)
     {
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
-            'matatitle' => 'required',
         ]);
+
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
 
         // update Category Image
-        if ($request->hasFile('image')) {
-            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/image/'), $imgname);
+        if ($request->hasFile('image'))
+        {
+            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+            if(!empty($image) || $image != '')
+            {
+                if(file_exists('public/admin/category/'.$image))
+                {
+                    unlink('public/admin/category/'.$image);
+                }
+            }
+
+            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/category/'), $imgname);
             $catdetail->image = $imgname;
         }
 
         // Insert Banner Image
-        if ($request->hasFile('banner')) {
-            $imgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-            $request->file('banner')->move(public_path('admin/banner/'), $imgname);
+        if ($request->hasFile('banner'))
+        {
+            $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
+            if(!empty($banner) || $banner != '')
+            {
+                if(file_exists('public/admin/category/banner/'.$banner))
+                {
+                    unlink('public/admin/category/banner/'.$banner);
+                }
+            }
+
+            $bannerimgname = time().".". $request->file('banner')->getClientOriginalExtension();
+            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
+            $catdetail->img_banner = $bannerimgname;
         }
 
+        $availibleday = implode(",", $request->availibleday);
 
-        $catdetail->image = isset($imgname) ? $imgname : '';
-        $catdetail->img_banner = isset($imgname) ? $imgname : '';
-        $catdetail->parent_id = $request->parent;
         $catdetail->top =  isset($request->top) ? $request->top : 0;
-        $catdetail->column =  $request->columns;
+        $catdetail->column = isset($request->columns) ? $request->columns : 1;
         $catdetail->sort_order = $request->sortorder;
-        $catdetail->status = $request->status;
+        $catdetail->status = isset($request->status) ? $request->status : 0;
+        $catdetail->status = isset($request->status) ? $request->status : 0;
         date_default_timezone_set('Asia/Kolkata');
-        $catdetail->date_modified = date("Y-m-d h:i:s");
+        $catdetail->availibleday = $availibleday;
         $catdetail->update();
-
-        // $lastid = $catdetail->category_id;
 
 
         // update Category
@@ -120,24 +143,49 @@ class CategoryController extends Controller
         $cat->description = isset($request->description) ? $request->description : "";
         $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
-
         $cat->update();
-        $errors = "Update success";
 
-        return redirect()->back()->withErrors($errors);
+        return redirect()->route('category')->with('success','Category has been updated Successfully.');
     }
 
 
 
 
     // Function of Delete Category
-
     function categorydelete(Request $request)
     {
         $ids = $request['id'];
-        if (count($ids) > 0) {
-            Category::whereIn('category_id', $ids)->delete();
-            CategoryDetail::whereIn('category_id', $ids)->delete();
+
+        if (count($ids) > 0)
+        {
+            // Delete Category Image & Banner Image
+            foreach($ids as $id)
+            {
+                $category = CategoryDetail::where('category_id',$id)->first();
+                $image = isset($category['image']) ? $category['image'] : '';
+                $banner = isset($category['img_banner']) ? $category['img_banner'] : '';
+                if(!empty($image) || $image != '')
+                {
+                    if(file_exists('public/admin/category/'.$image))
+                    {
+                        unlink('public/admin/category/'.$image);
+                    }
+                }
+                if(!empty($banner) || $banner != '')
+                {
+                    if(file_exists('public/admin/category/banner/'.$banner))
+                    {
+                        unlink('public/admin/category/banner/'.$banner);
+                    }
+                }
+            }
+
+             // Delete Category
+             Category::whereIn('category_id', $ids)->delete();
+
+             // Delete Category Description
+             CategoryDetail::whereIn('category_id', $ids)->delete();
+
             return response()->json([
                 'success' => 1,
             ]);
@@ -146,40 +194,39 @@ class CategoryController extends Controller
 
 
 
+
     // Function of Insert Category
     function categoryinsert(Request $request)
     {
+
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
         ]);
 
-        // echo '<pre>';
-        // print_r($request->toArray());
-        // exit();
         // Insert Category Details
         $catdetail = new CategoryDetail;
 
         // Insert Category Image
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image'))
+        {
             $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/image/'), $imgname);
-            // $catdetail->image = $imgname;
-
+            $request->file('image')->move(public_path('admin/category'), $imgname);
         }
+
         // Insert Banner Image
         if ($request->hasFile('banner')) {
-            $imgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-            $request->file('banner')->move(public_path('admin/banner/'), $imgname);
+            $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
+            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
         }
 
         $catdetail->image = isset($imgname) ? $imgname : '';
-        $catdetail->img_banner = isset($imgname) ? $imgname : '';
+        $catdetail->img_banner = isset($bannerimgname) ? $bannerimgname : '';
         $availibleday = implode(",", $request->availibleday);
 
         $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
         $catdetail->top = isset($request->top) ? $request->top : 0;
-        $catdetail->column = isset($request->columns) ? $request->columns : 0;
+        $catdetail->column = isset($request->columns) ? $request->columns : 1;
         $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
         $catdetail->status = isset($request->status) ? $request->status : 0;
         date_default_timezone_set('Asia/Kolkata');
@@ -196,14 +243,16 @@ class CategoryController extends Controller
         $cat->name = $request->category;
         $cat->description = isset($request->description) ? $request->description : "";
         // $cat->meta_title = isset($request->matatitle) ? $request->matatitle : "";
-        $cat->slug = isset($request->slug) ? $request->slug : "";
+
+        $replaceslug = str_replace(' ','-',$request->category);
+        $slug = strtolower($replaceslug);
+
+        $cat->slug = $slug;
         $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
-
         $cat->save();
-        $errors = "Insert success";
 
-        return redirect()->route('category')->withErrors($errors);
+        return redirect()->route('category')->with('success','Category has been Inserted Successfully');
     }
 
 

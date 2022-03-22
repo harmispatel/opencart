@@ -4,7 +4,9 @@ use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
 use App\Models\CategoryDetail;
+use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
+use App\Models\Region;
 use App\Models\ToppingProductPriceSize;
 
 // Function of User Details
@@ -20,6 +22,21 @@ function gettotalip($ip)
 {
     $ip = CustomerIP::where('ip',$ip)->count();
     return $ip;
+}
+
+
+// Check Ban IP
+function checkBanIp($ip)
+{
+    $ip = CustomerBanIp::select('ip')->where('ip',$ip)->first();
+    return $ip;
+}
+
+
+function getZonebyId($zid)
+{
+    $zone = Region::where('zone_id',$zid)->first();
+    return $zone;
 }
 
 

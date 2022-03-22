@@ -98,13 +98,13 @@
 
 
                                             <div class="mb-3">
-                                                <label for="product" class="form-label">Product Name</label>
+                                                <label for="product" class="form-label"><span class="text-danger">*</span>Product Name</label>
                                                 <input type="text" class="form-control" name="product" id="product"
                                                     placeholder="Product Name" required>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="category" class="form-label">Product Icon</label>
+                                                <label for="category" class="form-label"><span class="text-danger">*</span>Product Icon</label>
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
                                                     multiple required>
                                                     @foreach ($result['product_icon'] as $productIcon)
