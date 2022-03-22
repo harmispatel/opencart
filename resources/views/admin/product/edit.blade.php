@@ -100,10 +100,16 @@
                                             <hr>
                                             <div class="mb-3">
                                                 <label for="category" class="form-label"><span class="text-danger">*</span>Product Icon</label>
+                                                    @php
+                                                        $array = explode(',',$product->product_icons);
+                                                        // echo '<pre>';
+                                                        // print_r($arr);
+                                                        // exit();
+                                                    @endphp
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
                                                     multiple required>
                                                     @foreach ($result['product_icon'] as $productIcon)
-                                                        <option value="{{ $productIcon->id }}">
+                                                        <option value="{{ $productIcon->id }}" {{ in_array($productIcon->id ,$array) == $productIcon->id ? 'selected' : '' }}>
                                                             {{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>

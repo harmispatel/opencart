@@ -268,10 +268,20 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Coupons
     Route::get('coupons', [CouponController::class, 'index'])->name('coupons');
+    Route::get('addcoupon', [CouponController::class, 'addcoupon'])->name('addcoupon');
+    Route::get('editcoupon/{id}', [CouponController::class, 'editcoupon'])->name('editcoupon');
+    Route::post('insertcoupon', [CouponController::class, 'insertcoupon'])->name('insertcoupon');
+    Route::post('coupondelete', [CouponController::class, 'coupondelete'])->name('coupondelete');
+    Route::post('couponupdate', [CouponController::class, 'couponupdate'])->name('couponupdate');
 
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
     Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
+    Route::post('voucherinsert', [VoucherController::class, 'voucherinsert'])->name('voucherinsert');
+    Route::get('voucherlist', [VoucherController::class, 'voucherlist'])->name('voucherlist');
+    Route::get('voucheredit/{id}', [VoucherController::class, 'voucheredit'])->name('voucheredit');
+    Route::post('voucherdelete', [VoucherController::class, 'voucherdelete'])->name('voucherdelete');
+    Route::post('voucherupdate', [VoucherController::class, 'voucherupdate'])->name('voucherupdate');
 
     // Free Item
     Route::get('freeitems', [FreeItemController::class, 'freeitems'])->name('freeitems');
@@ -307,6 +317,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'index'])->name('option');
 
 
+});
+
+Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+    // echo '<pre>';
+    // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
+    // exit();
 });
 
 // ---------------------------------------------------------------------------------------------

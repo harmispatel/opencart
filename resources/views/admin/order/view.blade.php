@@ -220,7 +220,6 @@
                                                     <tr>
                                                         <td class="left"><a href="#">{{ htmlspecialchars_decode($order->name) }}</a>
                                                             <br>
-                                                            {{-- {{ echo $orders->toppings  }} --}}
                                                             @php
                                                                 echo $order->toppings;
                                                             @endphp
