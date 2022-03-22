@@ -107,7 +107,7 @@
                                             <td>{{ $coupon->date_start }}</td>
                                             <td>{{ $coupon->date_end }}</td>
                                             <td>{{ ($coupon->status == 1) ? "Enable" : "Desable" }}</td>
-                                            <td>[ <a href="#">Edit</a> ]</td>
+                                            <td>[ <a href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}">Edit</a> ]</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

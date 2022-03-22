@@ -9,5 +9,6 @@ class Coupon extends Model
 {
     use HasFactory;
     protected $table = 'oc_coupon';
+    protected $primaryKey = "coupon_id";
     public $timestamps = false;
 }
