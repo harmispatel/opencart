@@ -80,6 +80,7 @@
                                                 <th scope="col">Active</th>
                                             </tr>
                                         </thead>
+                                        
                                         <tbody>
                                             <tr>
                                                 <th class="align-middle">
