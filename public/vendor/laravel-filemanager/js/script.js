@@ -48,6 +48,7 @@ $(document).ready(function () {
   });
 
   actions.reverse().forEach(function (action) {
+  
     $('#nav-buttons > ul').prepend(
       $('<li>').addClass('nav-item').append(
         $('<a>').addClass('nav-link d-none')
@@ -744,6 +745,7 @@ function use(items) {
       window.close();
     }
   } else {
+    
     console.log('window.opener not found');
     // No editor found, open/download file using browser's default method
     window.open(url);

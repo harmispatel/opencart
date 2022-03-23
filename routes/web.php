@@ -331,3 +331,4 @@ Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => 
 Route::get('/', function () {
     return view('frontend.pages.home');
 });
+

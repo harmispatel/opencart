@@ -246,9 +246,8 @@
                                         <div class="tab-pane fade" id="option" role="tabpanel"
                                             aria-labelledby="option-tab">
 
-
-
-                                            @if ($product->product_id == $result['toppingType']->id_product)
+                                            @if ($product->product_id == isset($result['toppingType']->id_product) ? $result['toppingType']->id_product : '')
+                                           
                                                 <h2>{{ $result['toppingType']->name_topping }}</h2>
                                                 <div style="margin-bottom: 10px;">
                                                     <input type="radio" name="typetopping" class="avtive"
