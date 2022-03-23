@@ -23,9 +23,6 @@ class CategoryController extends Controller
         return view('admin.category.CategoryList');
     }
 
-
-
-
     // Function of Get all Categories
     public function getcategory(Request $request)
     {
@@ -49,17 +46,11 @@ class CategoryController extends Controller
         }
     }
 
-
-
-
     // Function of Bulk Category View
     function bulkcategory()
     {
         return view('admin.category.bulkcategory');
     }
-
-
-
 
     // Function of Add Category View
     function newcategory()
@@ -76,9 +67,6 @@ class CategoryController extends Controller
 
         return view('admin.category.newcategory', ['category_layout' => $category_layout, 'fetchparent' => $fetchparent]);
     }
-
-
-
 
     // Function of Update Category
     public function categoryupdate(Request $request)
@@ -148,9 +136,6 @@ class CategoryController extends Controller
 
         return redirect()->route('category')->with('success','Category has been updated Successfully.');
     }
-
-
-
 
     // Function of Delete Category
     function categorydelete(Request $request)

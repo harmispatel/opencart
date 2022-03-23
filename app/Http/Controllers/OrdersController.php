@@ -59,6 +59,14 @@ class OrdersController extends Controller
                     $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $cid . '">';
                     return $checkbox;
                 })
+                ->addColumn('customer_name', function($row){
+                    $cname = $row->firstname.' '.$row->lastname;
+                    return $cname;
+                })
+                ->addColumn('date_added', function($row){
+                    $cust_date = date('d-m-Y',strtotime($row->date_added));
+                    return $cust_date;
+                })
                 ->rawColumns(['action', 'checkbox'])
                 ->make(true);
         }
@@ -206,8 +214,18 @@ class OrdersController extends Controller
     }
 
 
-    public function deleteorder()
+    public function deleteorder(Request $request)
     {
+        $ids = $request->id;
+        // echo '<pre>';
+        // print_r($request->id);
+        // exit();
+        if (count($ids) > 0) {
+            Orders::whereIn('order_id', $ids)->delete();
+            return response()->json([
+                'success' => 1,
+            ]);
+        }
         return view('admin.order.list');
     }
 

@@ -67,7 +67,7 @@
                                             href="#nav-General" role="tab" aria-controls="nav-General"
                                             aria-selected="true">General</a>
                                         <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history"
-                                            role="tab" aria-controls="nav-history" aria-selected="false">history</a>
+                                            role="tab" aria-controls="nav-history" aria-selected="false">History</a>
                                         {{-- <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a> --}}
                                     </div>
                                 </nav>
@@ -97,7 +97,7 @@
                                         <div class="form-group">
                                             <label for="apply" style="min-width: 100px">* Appy for</label>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" {{ $coupon->apply_shipping == 1 ? 'checked' : '' }}">
+                                                <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" {{ $coupon->apply_shipping == 1 ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="delivery">Delivery</label>
                                             </div>
                                             <div class="form-check form-check-inline">
@@ -119,12 +119,12 @@
             
                                         <div class="form-group">
                                             <label for="discount">Discount:</label>
-                                            <input class="form-control" name="discount" id="discount" value="{{ $coupon->discount }}" type="text"
+                                            <input class="form-control" name="discount" id="discount" value="{{ round($coupon->discount,2) }}" type="text"
                                                 placeholder="Discount">
                                         </div>
                                         <div class="form-group">
                                             <label for="tamount">Total Amount:</label>
-                                            <input class="form-control" name="tamount" id="tamount" value="{{ $coupon->total }}" type="text"
+                                            <input class="form-control" name="tamount" id="tamount" value="{{ round($coupon->total,2) }}" type="text"
                                                 placeholder="Discount">
                                             <small id="codenamehelp" class="form-text text-muted">The total amount that must reached
                                                 before the coupon is valid.</small>
@@ -139,7 +139,7 @@
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="clogin" id="clogin2"
-                                                    value="2" {{ $coupon->logged == 0 ? 'checked' : '' }}>
+                                                    value="0" {{ $coupon->logged == 0 ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="clogin2">No</label>
                                             </div>
                                             <small class="form-text text-muted">Customer must be logged in to
@@ -154,23 +154,43 @@
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="shipping" id="fshipping1"
-                                                    value="2" {{ $coupon->shipping == 0 ? 'checked' : '' }}>
+                                                    value="0" {{ $coupon->shipping == 0 ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="fshipping1">No</label>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="product">Products:</label>
-                                            <input class="form-control" name="product" id="product"  type="text"
+                                            <input class="form-control"  id="product" type="text"
                                                 placeholder="Products">
-                                            <small id="codenamehelp" class="form-text text-muted">Choose specific products the
-                                                coupon will apply to. Select no products to apply coupon to entire cart.</small>
+                                            <small id="codenamehelp" class="form-text text-muted">Choose specific
+                                                products the
+                                                coupon will apply to. Select no products to apply coupon to entire
+                                                cart.</small>
+                                        </div>
+                                        <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
+                                            style="width: 300px; height: 100px;" id="addproduct">
+                                            @foreach ($products as $product)
+                                            <div class="d-block product{{ $product->product_id }}">{{ $product->name }}<i class="float-right fa fa-minus-circle text-danger" onclick="$('.product{{$product->product_id}}').remove();"></i>
+                                                <input type="hidden" value="{{ $product->product_id }}" name="proid[]">
+                                            </div>
+                                            @endforeach
                                         </div>
                                         <div class="form-group">
                                             <label for="category">Category:</label>
-                                            <input class="form-control" name="category" id="category" type="text"
+                                            <input class="form-control" id="category" type="text"
                                                 placeholder="Category">
-                                            <small id="codenamehelp" class="form-text text-muted">Choose specific products the
-                                                coupon will apply to. Select no products to apply coupon to entire cart.</small>
+                                            <small id="codenamehelp" class="form-text text-muted">Choose specific
+                                                products the
+                                                coupon will apply to. Select no products to apply coupon to entire
+                                                cart.</small>
+                                        </div>
+                                        <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
+                                            style="width: 300px; height: 100px;" id="addcategory">
+                                            @foreach ($category as $cat)
+                                            <div class="d-block product{{ $cat->category_id }}">{{ $cat->name }}<i class="float-right fa fa-minus-circle text-danger" onclick="$('.product{{$cat->category_id}}').remove();"></i>
+                                                <input type="hidden" value="{{ $cat->category_id }}" name="catid[]">
+                                            </div>
+                                            @endforeach
                                         </div>
                                         <div class="form-group">
                                             <label for="sdate">Date Start:</label>
@@ -204,7 +224,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
-                               123
+                                        History
                                     </div>
                                     {{-- <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> --}}
                                 </div>
@@ -231,5 +251,99 @@
     $(document).ready( function () {
     $('#myTable').DataTable();
 } );
+
+
+    // for html code decode
+    function htmlDecode(input) {
+        var doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+    }
+
+    // Search Products
+    $('#product').autocomplete({
+        source: function(requete, reponse) {
+
+            $.ajax({
+                url: "{{ url('searchproduct') }}",
+                data: {
+                    product: requete.term
+                },
+                dataType: 'json',
+                success: function(data) {
+
+                    reponse($.map(data, function(object) {
+                        return {
+                            // customer_id: object.,
+                            label: htmlDecode(object.name),
+                            proid: object.product_id,
+
+                        };
+                    }));
+                }
+            });
+        },
+
+        minLength: 1,
+        delay: 500,
+
+        select: function(event, ui) {
+            $('#product').val("");
+            console.log(ui.item.label);
+            console.log(ui.item.proid);
+            $('#addproduct').append(' <div class="d-block product'+ui.item.proid+'">'+ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product'+ui.item.proid+'\').remove();"></i>\
+                                            <input type="hidden" value="'+ui.item.proid+'" name="proid[]">\
+                                        </div>');
+            return false;
+                                    },
+
+        messages: {
+            noResults: '',
+            results: function() {}
+        }
+
+    });
+
+    // Search category
+    $('#category').autocomplete({
+        source: function(requete, reponse) {
+
+            $.ajax({
+                url: "{{ url('searchcategory') }}",
+                data: {
+                    category: requete.term
+                },
+                dataType: 'json',
+                success: function(data) {
+
+                    reponse($.map(data, function(object) {
+                        return {
+                            // customer_id: object.,
+                            label: htmlDecode(object.name),
+                            catid: object.category_id,
+
+                        };
+                    }));
+                }
+            });
+        },
+
+        minLength: 1,
+        delay: 500,
+
+        select: function(event, ui) {
+            $('#category').val("");
+            console.log(ui.item.label);
+            console.log(ui.item.catid);
+            $('#addcategory').append(' <div class="d-block category'+ui.item.catid+'">'+ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category'+ui.item.catid+'\').remove();"></i>\
+                                            <input type="hidden" value="'+ui.item.catid+'" name="catid[]">\
+                                        </div>');
+        return false;
+        },
+
+        messages: {
+            noResults: '',
+            results: function() {}
+        }
+    });
 </script>
 

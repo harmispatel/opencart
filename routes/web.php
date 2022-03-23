@@ -273,6 +273,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('insertcoupon', [CouponController::class, 'insertcoupon'])->name('insertcoupon');
     Route::post('coupondelete', [CouponController::class, 'coupondelete'])->name('coupondelete');
     Route::post('couponupdate', [CouponController::class, 'couponupdate'])->name('couponupdate');
+    Route::get('searchproduct', [CouponController::class, 'products'])->name('searchproduct');
+    Route::get('searchcategory', [CouponController::class, 'searchcategory'])->name('searchcategory');
 
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
