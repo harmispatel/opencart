@@ -56,7 +56,7 @@
                                     @endif
 
                                     @if(check_user_role(73) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-auto px-1">Delete<i
+                                        <a href="#" class="btn btn-sm btn-danger ml-auto px-1 deletesellected">Delete<i
                                                 class="pl-1 fa fa-trash"></i></a>
                                     @endif
                                 </div>
@@ -154,8 +154,8 @@
                     name: 'store_name'
                 },
                 {
-                    data: 'firstname',
-                    name: 'firstname'
+                    data: 'customer_name',
+                    name: 'customer_name'
                 },
                 {
                     data: 'name',
@@ -213,7 +213,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: '{{ url('categorydelete') }}',
+                            url: '{{ url('deleteorder') }}',
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 'id': checkValues

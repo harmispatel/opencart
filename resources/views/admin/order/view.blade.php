@@ -382,6 +382,9 @@
                     $('#alert').show();
                     $('#alertmessage').text("Success: You have modified orders!");
                     $('#orderdetail').html('')
+                    setTimeout(() => {
+                        $('#alert').hide();
+                    }, 5000);
                     getorderdetail();
                     $('#orderhistoryform').trigger('reset');
                 },
