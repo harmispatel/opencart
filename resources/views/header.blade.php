@@ -36,6 +36,10 @@
 {{-- Summernote --}}
 <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
+
+<style>
+    .custom-nav > .nav-item > .nav-link {height: 40px !important;}
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -97,7 +101,7 @@
     <div class="sidebar" style="background: #3742;">
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column custom-nav" data-widget="treeview" role="menu" data-accordion="false">
 
            @if(!empty(sidebar()))
 
