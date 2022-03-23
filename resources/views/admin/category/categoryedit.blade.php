@@ -102,35 +102,76 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <div class="col-md-12 pb-1" style="background: #1bbc9b;">
-                                            <label for="" class="m-0 p-1 text-white">OPTIONS</label>
+                                        <div class="row">
+                                            <div class="col-md-12 pb-1" style="background: #1bbc9b;">
+                                                <label for="" class="m-0 p-1 text-white">OPTIONS</label>
+                                            </div>
                                         </div>
-                                        <div class="col-md-12 mt-2">
-                                            <label for="size" class="pr-3">SIZE</label>
-                                            <input type="radio" name="size" value="1" onclick="$('#size-value').show()"> Enable &nbsp;
-                                            <input type="radio" name="size" value="0"  onclick="$('#size-value').hide()" checked> Disable
-                                        </div>
-                                        <div class="col-md-12">
-                                            <table class="table table-bordered" style="display: none" id="size-value">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Size</th>
-                                                        <th>Sort Order</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="size-value-row">
 
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td colspan="3" class="text-center">
-                                                            <a class="btn btn-sm" style="background:#1bbc9b;color: white;" onclick="addsizevalue()">ADD SIZE VALUE</a>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
+                                        <div class="row">
+                                            <div class="col-md-12 mt-2">
+                                                <label for="sizeval" class="pr-3">SIZE</label>
+                                                <input type="radio" name="sizeval" value="1" onclick="$('#size-value').show()"> Enable &nbsp;
+                                                <input type="radio" name="sizeval" value="0"  onclick="$('#size-value').hide()" checked> Disable
+                                            </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="table table-bordered" style="display: none" id="size-value">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Size</th>
+                                                            <th>Sort Order</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="size-value-row">
+
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3" class="text-center">
+                                                                <a class="btn btn-sm" style="background:#1bbc9b;color: white;" onclick="addsizevalue()">ADD SIZE VALUE</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div><hr>
+
+                                        <div class="row">
+                                            <div class="col-md-12 mt-2">
+                                                <label for="options" class="pr-3">OPTIONS</label>
+                                                <input type="radio" name="options" value="1" onclick="$('#opt-btn').show()"> Enable &nbsp;
+                                                <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide()" checked> Disable
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12" id="groupTopping">
+
+                                            </div>
+                                            <div class="col-md-12">
+                                                <a class="btn btn-sm btn-primary mt-2" id="opt-btn" style="display: none;" onclick="addgroup()"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                        </div><hr>
+
+                                        <div class="row">
+                                            <div class="col-md-12 mt-2">
+                                                <label for="commentbox" class="pr-3">Comment Box</label>
+                                                <input type="radio" name="enable_comment" value="1" onclick="$('#numbercharacter').show()"> Enable &nbsp;
+                                                <input type="radio" name="enable_comment" value="0"  onclick="$('#numbercharacter').hide()" checked> Disable
+                                            </div>
+                                        </div>
+                                        <div class="row" id="numbercharacter" style="display: none;">
+                                            <div class="col-md-3">
+                                                <b>Maximum Character Allowed</b>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input type="text" name="numbercharacter" value="0" class="form-control">
+                                            </div>
+                                        </div><hr>
+
+
                                     </div>
 
                                     <div class="form-group">
@@ -197,6 +238,40 @@ function addsizevalue()
     // html += '    <td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm" style="background:#1bbc9b;color: white;">Edit</a></td>';
     html += '  </tr>';
     $('#size-value-row').append(html);
+}
+// End Add Size Function
+
+
+// Add Group Function
+var group_row = 0;
+function addgroup()
+{
+    group_row++;
+    html = '<div id="group_'+group_row+'" class="mt-2">';
+
+
+    html += '<a class="btn btn-sm btn-danger" onclick="$(\'#group_'+group_row+'\').remove()"><i class="fa fa-trash"></i></a>';
+
+
+    html += '<table class="table mt-1 table-bordered">';
+    html += '<tr><th>Select Option Group</th><td><select name="group['+group_row+'][id_group_option]">@foreach($optiongroups as $optiongroup)<option value="{{ $optiongroup->id_topping }}">{{ $optiongroup->name_topping }}</option>@endforeach</select></td></tr>';
+
+    html += '<tr><th>Select Free Group</th><td><input name="group['+group_row+'][set_option]" type="radio" value="1" onclick="$(\'.list_'+group_row+'\').hide();"> <label class="pr-3">Free</label><input name="group['+group_row+'][set_option]" type="radio" value="2" onclick="$(\'.list_'+group_row+'\').hide();"> <label  class="pr-3">Main Price</label><input name="group['+group_row+'][set_option]" type="radio" value="3" onclick="$(\'.list_'+group_row+'\').show();" checked> <label  class="pr-3">Set Price</label></td></tr>';
+
+    html += '<tr><th></th><td><input type="radio" name="group['+group_row+'][set_require]" value="1" checked> <label class="pr-3">Required</label><input type="radio" name="group['+group_row+'][set_require]" value="0"> <label class="pr-3">Optional</label></td></tr>';
+    html += '</table>';
+
+
+    html += '<table class="table mt-1 table-bordered list_'+group_row+'">';
+    html += '<thead>';
+    html += '<tr><th>Size</th><th>Top Price</th></tr>';
+    html += '</thead>';
+    html += '</table>';
+
+
+    html += '</div>';
+
+    $('#groupTopping').append(html);
 }
 
 </script>

@@ -177,7 +177,7 @@ $('#delall').on('click', function(e) {
 });
 // End Select All Checkbox
 
-// Delete User
+// Delete Menu Options
 $('.deletesellected').click(function()
 {
 

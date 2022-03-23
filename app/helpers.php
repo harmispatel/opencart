@@ -60,7 +60,7 @@ function get_sub_opt_names($sub_opt_ids)
     foreach($ids as $id)
     {
         $getname = Topping::select('name_topping')->where('id_topping',$id)->first();
-        $name = $getname->name_topping;
+        $name = isset($getname->name_topping) ? $getname->name_topping : '';
         $arr[] = $name;
     }
 

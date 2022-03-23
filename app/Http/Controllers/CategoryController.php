@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\CategoryDetail;
 use App\Models\CategoryLayout;
+use App\Models\CategoryPath;
 use App\Models\CategorytoStore;
+use App\Models\Topping;
 use Illuminate\Http\Request;
 use DataTables;
 
@@ -83,6 +85,9 @@ class CategoryController extends Controller
     // Function of Update Category
     public function categoryupdate(Request $request)
     {
+        echo '<pre>';
+        print_r($request->all());
+        exit();
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
@@ -226,7 +231,7 @@ class CategoryController extends Controller
         $availibleday = implode(",", $request->availibleday);
 
         $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
-        $catdetail->top = isset($request->top) ? $request->top : 0;
+        $catdetail->top = isset($request->top) ? $request->top : 1;
         $catdetail->column = isset($request->columns) ? $request->columns : 1;
         $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
         $catdetail->status = isset($request->status) ? $request->status : 0;
@@ -237,6 +242,12 @@ class CategoryController extends Controller
         $catdetail->save();
         $lastid = $catdetail->category_id;
 
+        // Category Path
+        $cat_path = new CategoryPath;
+        $cat_path->category_id = $lastid;
+        $cat_path->path_id = $lastid;
+        $cat_path->level = 0;
+        $cat_path->save();
 
         // Insert Into Category to Store
         $cat_to_store = new CategorytoStore;
@@ -278,9 +289,11 @@ class CategoryController extends Controller
         // Fetch Category Layout
         $category_layout = CategoryLayout::select('layout_id', 'name')->get();
 
+        $optiongroups = Topping::where('store_topping',1)->get();
+
         // Get Single Category Description
         $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
 
-        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout]);
+        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout, 'optiongroups' => $optiongroups]);
     }
 }

@@ -49,7 +49,7 @@
                         {{-- Card --}}
                         <div class="card">
                             {{-- Form --}}
-                            <form action="{{ route('inserttopping') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('updatetopping') }}" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
 
                                 {{-- Card Header --}}
@@ -236,7 +236,7 @@
                                                         <a class="btn btn-sm btn-success" id="mybtn1" onclick="show_add_form()">
                                                             <i class="fa fa-plus"></i>
                                                         </a>
-                                                        <a class="btn btn-sm btn-danger" id="">
+                                                        <a class="btn btn-sm btn-danger deletesellected" id="mybtn2">
                                                             <i class="fa fa-trash"></i>
                                                         </a>
                                                     </div>
@@ -267,8 +267,10 @@
                                                                     </thead>
                                                                     <tbody id="mapping_optn_tbody">
                                                                         @foreach ($optionsmappings as $omapping)
-                                                                            <tr>
-                                                                                <td></td>
+                                                                            <tr class="trow{{ $omapping->id }}">
+                                                                                <td>
+                                                                                    <input type="checkbox" name="del_all" class="del_all" value="{{ $omapping->id }}">
+                                                                                </td>
                                                                                 <td>
                                                                                     {{ $omapping->order_type }}
                                                                                 </td>
@@ -322,7 +324,7 @@
                                                                                     {{ $omapping->sort_order }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    <a class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                                                                    <a class="btn btn-sm btn-primary" onclick="editoptionmapping({{ $omapping->id }})"><i class="fa fa-edit"></i></a>
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
@@ -442,9 +444,9 @@
 
         html += '<td class="align-middle"><select name="order_type"><option value="*">*</option><option value="delivery">Delivery</option><option value="collection">Collection</option></select><input type="hidden" name="top_id" value="{{ $topping->id_topping }}"></td>';
 
-        html += '<td class="align-middle"><select name="category"><option value="*">*</option>@foreach($categoriesbystore as $category)<option value="{{ $category->category_id }}">{{ $category->cname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ $category->category_id }}">{{ $category->cname }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select name="product"><option value="*">*</option>@foreach($productsbystore as $product)<option value="{{ $product->product_id }}">{{ $product->pname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->product_id }}">{{ $product->pname }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="text" name="topping_rename"></td>';
 
@@ -505,6 +507,165 @@
             }
         });
     }
+    // End Store Mapping
+
+    // Edit Option Mapping
+    function editoptionmapping(id)
+    {
+        var mapping_id = id;
+        var trow = '.trow'+id;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('editmapping') }}",
+            data: { id : mapping_id },
+            dataType: "json",
+            success: function (response) {
+                $(trow).remove();
+                $('#mapping_optn_tbody').append(response);
+                $('#mybtn1').hide();
+                $('#mybtn2').hide();
+            }
+        });
+    }
+    // End Edit Option Mapping
+
+
+    // Update Option Mapping
+    function updateMapping(mapid)
+    {
+        var map_id = mapid;
+
+        var order_type = $('#order_type_'+map_id).val();
+        var category = $('#category_'+map_id).val();
+        var product = $('#product_'+map_id).val();
+        var rename = $('#topping_rename_'+map_id).val();
+        var size = $('#size_'+map_id).val();
+        var min_item = $('#min_item_'+map_id).val();
+        var max_item = $('#max_item_'+map_id).val();
+        var days = $('#days_'+map_id).val();
+        var start_time = $('#start_time_'+map_id).val();
+        var end_time = $('#end_time_'+map_id).val();
+        var num_free = $('#num_free_'+map_id).val();
+        var price = $('#price_'+map_id).val();
+        var sub_option = $('#sub_option_'+map_id).val();
+        var style = $('#style_'+map_id).val();
+        var sort_order = $('#sort_order_'+map_id).val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('updatemapping') }}",
+            data: {
+                'order_type' : order_type,
+                'map_id' : map_id,
+                'category' : category,
+                'product' : product,
+                'rename' : rename,
+                'size' : size,
+                'min_item' : min_item,
+                'max_item' : max_item,
+                'days' : days,
+                'start_time' : start_time,
+                'end_time' : end_time,
+                'num_free' : num_free,
+                'price' : price,
+                'sub_option' : sub_option,
+                'style' : style,
+                'sort_order' : sort_order,
+            },
+            dataType: "json",
+            success: function (response) {
+                alert('Mappings Updated Successfully..');
+                location.reload();
+            }
+        });
+    }
+    // End Update Option Mapping
+
+
+    // Select All Checkbox
+    $('#delall').on('click', function(e) {
+        if($(this).is(':checked',true))
+        {
+            $(".del_all").prop('checked', true);
+        }
+        else
+        {
+            $(".del_all").prop('checked',false);
+        }
+    });
+    // End Select All Checkbox
+
+    // Delete Option Topping
+    $('.deletesellected').click(function()
+    {
+
+        var checkValues = $('.del_all:checked').map(function()
+        {
+            return $(this).val();
+        }).get();
+
+        if(checkValues !='')
+        {
+            swal({
+                title: "Are you sure You want to Delete It ?",
+                text: "Once deleted, you will not be able to recover this Record",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete)
+                {
+
+                    $.ajax({
+                            type: "POST",
+                            url: '{{ url("deletemapping") }}',
+                            data: {"_token": "{{ csrf_token() }}",'id':checkValues},
+                            dataType : 'JSON',
+                            success: function (data)
+                            {
+                                if(data.success == 1)
+                                {
+                                    swal("Your Record has been deleted!", {
+                                        icon: "success",
+                                    });
+
+                                    setTimeout(function(){
+                                        location.reload();
+                                    }, 1500);
+                                }
+                            }
+                    });
+
+                }
+                else
+                {
+                    swal("Cancelled", "", "error");
+                    setTimeout(function(){
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        }
+        else
+        {
+            swal("Please select atleast One Product Mapping", "", "warning");
+        }
+    });
+    // End Delete Option Topping
 
 </script>
 {{-- END SCRIPT --}}

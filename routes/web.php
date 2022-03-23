@@ -194,8 +194,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('inserttopping', [OptionController::class, 'insert'])->name('inserttopping');
     Route::post('deletetopping', [OptionController::class, 'delete'])->name('deletetopping');
     Route::get('edittopping/{id}', [OptionController::class, 'edit'])->name('edittopping');
+    Route::post('updatetopping', [OptionController::class, 'update'])->name('updatetopping');
     Route::post('delToppingOption', [OptionController::class, 'delToppingOption'])->name('delToppingOption');
     Route::post('storemapping', [OptionController::class, 'storemapping'])->name('storemapping');
+    Route::post('editmapping', [OptionController::class, 'editmapping'])->name('editmapping');
+    Route::post('updatemapping', [OptionController::class, 'updatemapping'])->name('updatemapping');
+    Route::post('deletemapping', [OptionController::class, 'deletemapping'])->name('deletemapping');
 
 
     //Recurring Profiles
