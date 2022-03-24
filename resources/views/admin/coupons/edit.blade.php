@@ -3,7 +3,18 @@
 {{-- End Header --}}
 
 <link rel="stylesheet" href="sweetalert2.min.css">
-
+<style>
+    /* Custom Radio Button */
+    .radio
+    {
+        display: none;
+    }
+    .radio:checked + label {
+      background: dimgrey!important;
+      color: #fff;
+    }
+    </style>
+    
 {{-- Section of List Category --}}
 <section>
     <div class="content-wrapper">
@@ -18,7 +29,6 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('voucherlist') }}">Coupon</a></li>
                             <li class="breadcrumb-item active">Coupon</li>
                         </ol>
                     </div>
@@ -50,187 +60,268 @@
 
                             {{-- Card Body --}}
                             @if (count($errors) > 0)
-                            @if ($errors->any())
-                                <div class="alert alert-success alert-dismissible" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                                            aria-hidden="true">&times;</span></button>
-                                    {{ 'Warning: Please check the form carefully for errors!' }}
-                                </div>
+                                @if ($errors->any())
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        {{ 'Warning: Please check the form carefully for errors!' }}
+                                    </div>
+                                @endif
                             @endif
-                        @endif
-                        <form action="{{ route('couponupdate') }}" id="voucherform" method="POST">
-                            {{ @csrf_field() }}
-                            <div class="card-body">
-                                <nav>
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-General-tab" data-toggle="tab"
-                                            href="#nav-General" role="tab" aria-controls="nav-General"
-                                            aria-selected="true">General</a>
-                                        <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history"
-                                            role="tab" aria-controls="nav-history" aria-selected="false">History</a>
-                                        {{-- <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a> --}}
-                                    </div>
-                                </nav>
-                                <div class="tab-content" id="nav-tabContent">
-                                    <div class="tab-pane fade show active" id="nav-General" role="tabpanel"
-                                        aria-labelledby="nav-General-tab">
-                                        <div class="form-group">
-                                            <label for="code">*Code</label>
-                                            <input type="text" class="form-control" name="code" value="{{ $coupon->code }}" id="code"
-                                                aria-describedby="codehelp" placeholder="Code">
-                                            <input type="hidden" name="couponid" value="{{ $coupon->coupon_id }}">
-                                            @if ($errors->has('code'))
-                                                <div style="color: red">{{ $errors->first('code') }}</div>
-                                            @endif
+                            <form action="{{ route('couponupdate') }}" id="voucherform" method="POST">
+                                {{ @csrf_field() }}
+                                <div class="card-body">
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <a class="nav-item nav-link active" id="nav-General-tab" data-toggle="tab"
+                                                href="#nav-General" role="tab" aria-controls="nav-General"
+                                                aria-selected="true">General</a>
+                                            <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab"
+                                                href="#nav-history" role="tab" aria-controls="nav-history"
+                                                aria-selected="false">History</a>
+                                            {{-- <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</a> --}}
                                         </div>
-                                        <div class="form-group">
-                                            <label for="codename">* Coupon Name:</label>
-                                            <input type="text" class="form-control" name="codename" id="codename"
-                                                aria-describedby="codenamehelp" value="{{ $coupon->name }}" placeholder="Code Name">
-                                            <small id="codenamehelp" class="form-text text-muted">Enable to add into cart
+                                    </nav>
+                                    <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="nav-General" role="tabpanel"
+                                            aria-labelledby="nav-General-tab">
+                                            <div class="form-group">
+                                                <label for="coupon_name">* Coupon Name:</label>
+                                                <input type="text" class="form-control" name="coupon_name" id="coupon_name"
+                                                    aria-describedby="codenamehelp" value="{{ $coupon->name }}"
+                                                    placeholder="Code Name">
+                                                <small id="codenamehelp" class="form-text text-muted">Enable to add into
+                                                    cart
+                                                    automatically.</small>
+                                                @if ($errors->has('coupon_name'))
+                                                    <div style="color: red">{{ $errors->first('coupon_name') }}</div>
+                                                @endif
+                                            </div>
+                                            {{-- <div class="form-group">
+                                                <label for="code">*Code</label>
+                                                <input type="text" maxlength="10" class="form-control" name="code"
+                                                    value="{{ $coupon->code }}" id="code" aria-describedby="codehelp"
+                                                    placeholder="Code">
+                                                <input type="hidden" name="couponid" id="couponid"
+                                                    value="{{ $coupon->coupon_id }}">
+                                                @if ($errors->has('code'))
+                                                    <div style="color: red">{{ $errors->first('code') }}</div>
+                                                @endif
+                                            </div> --}}
+
+                                            <div class="form-group">
+                                                <label for="code">*Code</label>
+                                                <div class="d-flex  align-items-center">
+                                                <input type="text" maxlength="10" value="{{ $coupon->code }}" class="form-control" name="code" id="code" aria-describedby="codehelp" placeholder="Code">
+                                                <input type="hidden" name="couponid" id="couponid"
+                                                    value="{{ $coupon->coupon_id }}">
+                                                <div class="btn-group ml-2">
+                                                    <input type="radio" class="radio" id="enable" name="on_off" value="1" {{ $coupon->on_off == 1 ? "checked" : "" }}/>
+                                                    <label class="btn btn-sm" style="width: 50px; background: rgb(117,185,54);color:white;" for="enable">ON</label>
+                                                    <input type="radio" class="radio" id="disable" name="on_off" value="0"  {{ $coupon->on_off == 2 ? "checked" : "" }}/>
+                                                    <label class="btn btn-sm" style="width: 50px; background: rgb(178,178,178);color: white;" for="disable">OFF</label>
+                                                </div>
+                                                
+                                            </div>
+                                            <small id="codenamehelp" class="form-text text-muted">Enable to add into
+                                                cart
                                                 automatically.</small>
-                                            @if ($errors->has('code'))
-                                                <div style="color: red">{{ $errors->first('code') }}</div>
-                                            @endif
-                                        </div>
-            
-                                        <div class="form-group">
-                                            <label for="apply" style="min-width: 100px">* Appy for</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" {{ $coupon->apply_shipping == 1 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="delivery">Delivery</label>
+                                                @if ($errors->has('code'))
+                                                    <div style="color: red">{{ $errors->first('code') }}</div>
+                                                @endif
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="apply" id="collection" value="2" {{ $coupon->apply_shipping == 2 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="collection">Collection</label>
+
+
+                                     
+
+                                            <div class="form-group">
+                                                <label for="apply" style="min-width: 100px">* Appy for</label>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="apply"
+                                                        id="delivery" value="1"
+                                                        {{ $coupon->apply_shipping == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="delivery">Delivery</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="apply"
+                                                        id="collection" value="2"
+                                                        {{ $coupon->apply_shipping == 2 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="collection">Collection</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="apply" id="both"
+                                                        value="3"
+                                                        {{ $coupon->apply_shipping == 3 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="both">Both</label>
+                                                </div>
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="apply" id="both" value="3" {{ $coupon->apply_shipping == 3 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="both">Both</label>
+                                            <div class="form-group">
+                                                <label for="type">Type:</label>
+                                                <select class="form-control" id="type" name="type">
+                                                    <option value="P" {{ $coupon->type == 'P' ? 'selected' : '' }}>
+                                                        Percentage</option>
+                                                    <option value="F" {{ $coupon->type == 'F' ? 'selected' : '' }}>
+                                                        Fixed Amount</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="discount">Discount:</label>
+                                                <input class="form-control" name="discount" id="discount"
+                                                    value="{{ round($coupon->discount, 2) }}" type="text"
+                                                    placeholder="Discount">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tamount">Total Amount:</label>
+                                                <input class="form-control" name="tamount" id="tamount"
+                                                    value="{{ round($coupon->total, 2) }}" type="text"
+                                                    placeholder="Discount">
+                                                <small id="codenamehelp" class="form-text text-muted">The total amount
+                                                    that must reached
+                                                    before the coupon is valid.</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="clogin">Customer Login:</label>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="clogin"
+                                                        id="clogin1" value="1"
+                                                        {{ $coupon->logged == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="clogin1">Yes</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="clogin"
+                                                        id="clogin2" value="0"
+                                                        {{ $coupon->logged == 0 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="clogin2">No</label>
+                                                </div>
+                                                <small class="form-text text-muted">Customer must be logged in to
+                                                    use the coupon.</small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="discount">Free Shipping:</label>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="shipping"
+                                                        id="fshipping" value="1"
+                                                        {{ $coupon->shipping == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="fshipping">Yes</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="shipping"
+                                                        id="fshipping1" value="0"
+                                                        {{ $coupon->shipping == 0 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="fshipping1">No</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="product">Products:</label>
+                                                <input class="form-control" id="product" type="text"
+                                                    placeholder="Products">
+                                                <small id="codenamehelp" class="form-text text-muted">Choose specific
+                                                    products the
+                                                    coupon will apply to. Select no products to apply coupon to entire
+                                                    cart.</small>
+                                            </div>
+                                            <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
+                                                style="width: 300px; height: 100px;" id="addproduct">
+                                                @foreach ($products as $product)
+                                                    <div class="d-block product{{ $product->product_id }}">
+                                                        {{ html_entity_decode($product->name) }}<i
+                                                            class="float-right fa fa-minus-circle text-danger"
+                                                            onclick="$('.product{{ $product->product_id }}').remove();"></i>
+                                                        <input type="hidden" value="{{ $product->product_id }}"
+                                                            name="proid[]">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="category">Category:</label>
+                                                <input class="form-control" id="category" type="text"
+                                                    placeholder="Category">
+                                                <small id="codenamehelp" class="form-text text-muted">Choose specific
+                                                    products the
+                                                    coupon will apply to. Select no products to apply coupon to entire
+                                                    cart.</small>
+                                            </div>
+                                            <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
+                                                style="width: 300px; height: 100px;" id="addcategory">
+                                                @foreach ($category as $cat)
+                                                    <div class="d-block product{{ $cat->category_id }}">
+                                                        {{ html_entity_decode($cat->name) }}<i
+                                                            class="float-right fa fa-minus-circle text-danger"
+                                                            onclick="$('.product{{ $cat->category_id }}').remove();"></i>
+                                                        <input type="hidden" value="{{ $cat->category_id }}"
+                                                            name="catid[]">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="sdate">Date Start:</label>
+                                                <input class="form-control" name="sdate" id="sdate"
+                                                    value="{{ $coupon->date_start }}" type="date">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="edate">Date End:</label>
+                                                <input class="form-control" name="edate" id="edate"
+                                                    value="{{ $coupon->date_end }}" type="date">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="usercoupon">Uses Per Coupon:</label>
+                                                <input class="form-control" name="usercoupon" id="usercoupon"
+                                                    value="{{ $coupon->uses_total }}" type="text"
+                                                    placeholder="Uses Per Coupon">
+                                                <small id="codenamehelp" class="form-text text-muted">The maximum number
+                                                    of times the coupon can be used by any customer. Leave blank for
+                                                    unlimited.</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="usercostomer">Uses Per Customer:</label>
+                                                <input class="form-control" name="usercostomer" id="usercostomer"
+                                                    value="{{ $coupon->uses_customer }}" type="text"
+                                                    placeholder="Uses Per Customer">
+                                                <small id="codenamehelp" class="form-text text-muted">The maximum number
+                                                    of times the coupon can be used by a single customer. Leave blank
+                                                    for unlimited.</small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="status">Status:</label>
+                                                <select class="form-control" id="status" name="status">
+                                                    <option value="1" {{ $coupon->type == 1 ? 'selected' : '' }}>
+                                                        Enable</option>
+                                                    <option value="2" {{ $coupon->type == 2 ? 'selected' : '' }}>
+                                                        disable</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="type">Type:</label>
-                                            <select class="form-control" id="type" name="type">
-                                                <option value="P" {{ $coupon->type == 'P' ? 'selected' : '' }}>Percentage</option>
-                                                <option value="F" {{ $coupon->type == 'F' ? 'selected' : '' }}>Fixed Amount</option>
-                                            </select>
+                                        <div class="tab-pane fade" id="nav-history" role="tabpanel"
+                                            aria-labelledby="nav-history-tab">
+                                            <table class="table w-100" id="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Order Id</th>
+                                                        <th scope="col">Customer</th>
+                                                        <th scope="col">Amount</th>
+                                                        <th scope="col">Date Added</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        {{-- <th scope="row">1</th>
+                                                        <td>Mark</td>
+                                                        <td>Otto</td>
+                                                        <td>mdo</td> --}}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
-            
-                                        <div class="form-group">
-                                            <label for="discount">Discount:</label>
-                                            <input class="form-control" name="discount" id="discount" value="{{ round($coupon->discount,2) }}" type="text"
-                                                placeholder="Discount">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="tamount">Total Amount:</label>
-                                            <input class="form-control" name="tamount" id="tamount" value="{{ round($coupon->total,2) }}" type="text"
-                                                placeholder="Discount">
-                                            <small id="codenamehelp" class="form-text text-muted">The total amount that must reached
-                                                before the coupon is valid.</small>
-                                        </div>
-            
-                                        <div class="form-group">
-                                            <label for="clogin" >Customer Login:</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="clogin" id="clogin1"
-                                                    value="1" {{ $coupon->logged == 1 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="clogin1">Yes</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="clogin" id="clogin2"
-                                                    value="0" {{ $coupon->logged == 0 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="clogin2">No</label>
-                                            </div>
-                                            <small class="form-text text-muted">Customer must be logged in to
-                                                use the coupon.</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="discount" >Free Shipping:</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="shipping" id="fshipping"
-                                                    value="1" {{ $coupon->shipping == 1 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="fshipping">Yes</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="shipping" id="fshipping1"
-                                                    value="0" {{ $coupon->shipping == 0 ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="fshipping1">No</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="product">Products:</label>
-                                            <input class="form-control"  id="product" type="text"
-                                                placeholder="Products">
-                                            <small id="codenamehelp" class="form-text text-muted">Choose specific
-                                                products the
-                                                coupon will apply to. Select no products to apply coupon to entire
-                                                cart.</small>
-                                        </div>
-                                        <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
-                                            style="width: 300px; height: 100px;" id="addproduct">
-                                            @foreach ($products as $product)
-                                            <div class="d-block product{{ $product->product_id }}">{{ $product->name }}<i class="float-right fa fa-minus-circle text-danger" onclick="$('.product{{$product->product_id}}').remove();"></i>
-                                                <input type="hidden" value="{{ $product->product_id }}" name="proid[]">
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="category">Category:</label>
-                                            <input class="form-control" id="category" type="text"
-                                                placeholder="Category">
-                                            <small id="codenamehelp" class="form-text text-muted">Choose specific
-                                                products the
-                                                coupon will apply to. Select no products to apply coupon to entire
-                                                cart.</small>
-                                        </div>
-                                        <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
-                                            style="width: 300px; height: 100px;" id="addcategory">
-                                            @foreach ($category as $cat)
-                                            <div class="d-block product{{ $cat->category_id }}">{{ $cat->name }}<i class="float-right fa fa-minus-circle text-danger" onclick="$('.product{{$cat->category_id}}').remove();"></i>
-                                                <input type="hidden" value="{{ $cat->category_id }}" name="catid[]">
-                                            </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="sdate">Date Start:</label>
-                                            <input class="form-control" name="sdate" id="sdate" value="{{ $coupon->date_start }}" type="date">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="edate">Date End:</label>
-                                            <input class="form-control" name="edate" id="edate" value="{{ $coupon->date_end }}" type="date">
-                                        </div>
-            
-                                        <div class="form-group">
-                                            <label for="usercoupon">Uses Per Coupon:</label>
-                                            <input class="form-control" name="usercoupon" id="usercoupon" value="{{ $coupon->uses_total }}" type="text"
-                                                placeholder="Uses Per Coupon">
-                                            <small id="codenamehelp" class="form-text text-muted">The maximum number of times the coupon can be used by any customer. Leave blank for unlimited.</small>
-                                        </div>
-            
-                                        <div class="form-group">
-                                            <label for="usercostomer">Uses Per Customer:</label>
-                                            <input class="form-control" name="usercostomer" id="usercostomer" value="{{ $coupon->uses_customer }}" type="text"
-                                                placeholder="Uses Per Customer">
-                                            <small id="codenamehelp" class="form-text text-muted">The maximum number of times the coupon can be used by a single customer. Leave blank for unlimited.</small>
-                                        </div>
-            
-                                        <div class="form-group">
-                                            <label for="status">Status:</label>
-                                            <select class="form-control" id="status" name="status">
-                                                <option value="1" {{ $coupon->type == 1 ? 'selected' : '' }}>Enable</option>
-                                                <option value="2" {{ $coupon->type == 2 ? 'selected' : '' }}>disable</option>
-                                            </select>
-                                        </div>
+                                        {{-- <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> --}}
                                     </div>
-                                    <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
-                                        History
-                                    </div>
-                                    {{-- <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> --}}
                                 </div>
-                            </div>
-            
-                        </form>
+
+                            </form>
                             {{-- End Card Body --}}
                         </div>
                         {{-- End Card --}}
@@ -248,11 +339,6 @@
 {{-- End Footer --}}
 
 <script>
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-} );
-
-
     // for html code decode
     function htmlDecode(input) {
         var doc = new DOMParser().parseFromString(input, "text/html");
@@ -290,11 +376,13 @@
             $('#product').val("");
             console.log(ui.item.label);
             console.log(ui.item.proid);
-            $('#addproduct').append(' <div class="d-block product'+ui.item.proid+'">'+ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product'+ui.item.proid+'\').remove();"></i>\
-                                            <input type="hidden" value="'+ui.item.proid+'" name="proid[]">\
+            $('#addproduct').append(' <div class="d-block product' + ui.item.proid + '">' + ui.item.label +
+                '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product' + ui.item
+                .proid + '\').remove();"></i>\
+                                            <input type="hidden" value="' + ui.item.proid + '" name="proid[]">\
                                         </div>');
             return false;
-                                    },
+        },
 
         messages: {
             noResults: '',
@@ -334,10 +422,13 @@
             $('#category').val("");
             console.log(ui.item.label);
             console.log(ui.item.catid);
-            $('#addcategory').append(' <div class="d-block category'+ui.item.catid+'">'+ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category'+ui.item.catid+'\').remove();"></i>\
-                                            <input type="hidden" value="'+ui.item.catid+'" name="catid[]">\
+            $('#addcategory').append(' <div class="d-block category' + ui.item.catid + '">' + ui.item
+                .label +
+                '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category' + ui.item
+                .catid + '\').remove();"></i>\
+                                            <input type="hidden" value="' + ui.item.catid + '" name="catid[]">\
                                         </div>');
-        return false;
+            return false;
         },
 
         messages: {
@@ -347,3 +438,47 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+
+        getallcouponhistory();
+
+        function getallcouponhistory() {
+            var couponid = $('#couponid').val();
+            console.log(couponid);
+            $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+            var table = $('#table').DataTable({
+                    "serverSide": true,
+                    "processing": true,
+                   
+                    "ajax":{
+                    "url": "{{ url('getallcouponhistory') }}",
+                    // "dataType": "json",
+                    "type": "POST",
+                    "data":{couponid: couponid,}
+                    },
+                columns: [{
+                        data: 'order_id',
+                        name: 'order_id',
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name',
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount',
+                    },
+                    {
+                        data: 'date_added',
+                        name: 'date_added',
+                    },
+                ]
+            });
+        }
+    });
+</script>

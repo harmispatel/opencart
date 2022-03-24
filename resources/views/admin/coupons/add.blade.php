@@ -3,7 +3,17 @@
 <link rel="stylesheet" href="sweetalert2.min.css">
 <link rel="stylesheet" type="text/css"
     href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" />
-
+    <style>
+        /* Custom Radio Button */
+        .radio
+        {
+            display: none;
+        }
+        .radio:checked + label {
+          background: dimgrey!important;
+          color: #fff;
+        }
+        </style>
 
 {{-- Section of List Category --}}
 <section>
@@ -19,7 +29,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('voucherlist') }}">Voucher List</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('coupons') }}">Coupon List</a></li>
                             <li class="breadcrumb-item active">Add </li>
                         </ol>
                     </div>
@@ -72,24 +82,33 @@
                                         <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel"
                                             aria-labelledby="nav-customer-tab">
                                             <div class="form-group">
-                                                <label for="code">*Code</label>
-                                                <input type="text" class="form-control" name="code" id="code"
-                                                    aria-describedby="codehelp" placeholder="Code">
-                                                @if ($errors->has('code'))
-                                                    <div style="color: red">{{ $errors->first('code') }}</div>
+                                                <label for="coupon_name">* Coupon Name:</label>
+                                                <input type="text" class="form-control" name="coupon_name" id="coupon_name"
+                                                    aria-describedby="codenamehelp" placeholder="Code Name">
+                                                @if ($errors->has('coupon_name'))
+                                                    <div style="color: red">{{ $errors->first('coupon_name') }}</div>
                                                 @endif
                                             </div>
                                             <div class="form-group">
-                                                <label for="codename">* Coupon Name:</label>
-                                                <input type="text" class="form-control" name="codename" id="codename"
-                                                    aria-describedby="codenamehelp" placeholder="Code Name">
-                                                <small id="codenamehelp" class="form-text text-muted">Enable to add into
-                                                    cart
-                                                    automatically.</small>
+                                                <label for="code">*Code</label>
+                                                <div class="d-flex  align-items-center">
+                                                <input type="text" maxlength="10" class="form-control" name="code" id="code" aria-describedby="codehelp" placeholder="Code">
+                                                <div class="btn-group ml-2">
+                                                    <input type="radio" class="radio" id="enable" name="on_off" value="1" />
+                                                    <label class="btn btn-sm" style="width: 50px; background: rgb(117,185,54);color:white;" for="enable">ON</label>
+                                                    <input type="radio" class="radio" id="disable" name="on_off" value="0"  checked/>
+                                                    <label class="btn btn-sm" style="width: 50px; background: rgb(178,178,178);color: white;" for="disable">OFF</label>
+                                                </div>
+                                                
+                                            </div>
+                                            <small id="codenamehelp" class="form-text text-muted">Enable to add into
+                                                cart
+                                                automatically.</small>
                                                 @if ($errors->has('code'))
                                                     <div style="color: red">{{ $errors->first('code') }}</div>
                                                 @endif
                                             </div>
+
 
                                             <div class="form-group">
                                                 <label for="apply" style="min-width: 100px">* Appy for</label>
@@ -161,7 +180,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="product">Products:</label>
-                                                <input class="form-control"  id="product" type="text"
+                                                <input class="form-control" id="product" type="text"
                                                     placeholder="Products">
                                                 <small id="codenamehelp" class="form-text text-muted">Choose specific
                                                     products the
@@ -238,6 +257,21 @@
 
 
 <script>
+    function newModel(val) {
+        $.ajax({
+            type: "POST",
+            url: "{{ url('newmodel') }}",
+            data: {
+                'val': val,
+                "_token": "{{ csrf_token() }}",
+            },
+            dataType: "json",
+            success: function(response) {
+                $('#newModel').html('');
+                $('#newModel').html(response.html);
+            }
+        });
+    }
     // for html code decode
     function htmlDecode(input) {
         var doc = new DOMParser().parseFromString(input, "text/html");
@@ -275,11 +309,13 @@
             $('#product').val("");
             console.log(ui.item.label);
             console.log(ui.item.proid);
-            $('#addproduct').append(' <div class="d-block product'+ui.item.proid+'">'+ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product'+ui.item.proid+'\').remove();"></i>\
-                                            <input type="hidden" value="'+ui.item.proid+'" name="proid[]">\
+            $('#addproduct').append(' <div class="d-block product' + ui.item.proid + '">' + ui.item.label +
+                '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product' + ui.item
+                .proid + '\').remove();"></i>\
+                                            <input type="hidden" value="' + ui.item.proid + '" name="proid[]">\
                                         </div>');
             return false;
-                                    },
+        },
 
         messages: {
             noResults: '',
@@ -319,10 +355,13 @@
             $('#category').val("");
             console.log(ui.item.label);
             console.log(ui.item.catid);
-            $('#addcategory').append(' <div class="d-block category'+ui.item.catid+'">'+ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category'+ui.item.catid+'\').remove();"></i>\
-                                            <input type="hidden" value="'+ui.item.catid+'" name="catid[]">\
+            $('#addcategory').append(' <div class="d-block category' + ui.item.catid + '">' + ui.item
+                .label +
+                '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category' + ui.item
+                .catid + '\').remove();"></i>\
+                                            <input type="hidden" value="' + ui.item.catid + '" name="catid[]">\
                                         </div>');
-        return false;
+            return false;
         },
 
         messages: {

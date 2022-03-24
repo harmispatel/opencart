@@ -1,7 +1,17 @@
 @include('header')
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
-
+<style>
+    /* Custom Radio Button */
+    .radio
+    {
+        display: none;
+    }
+    .radio:checked + label {
+      background: dimgrey!important;
+      color: #fff;
+    }
+    </style>
 
 {{-- Section of List Coupons --}}
 <section>
@@ -90,25 +100,37 @@
                                     {{-- Table Body --}}
                                     <tbody class="cat-list">
                                         @foreach ($coupons as $coupon)
-                                        <tr>
-                                            <td><input type="checkbox" name="del_all" class="del_all" value="{{ $coupon->coupon_id }}"></td>
-                                            <td>{{ $coupon->name }}</td>
-                                            <td>{{ $coupon->code }}</td>
-                                            <td>{{ $coupon->discount }}</td>
-                                            <td>
-                                                @if ($coupon->apply_shipping == 1)
-                                                Delivery
-                                            @elseif ($coupon->apply_shipping == 2)
-                                                Collection
-                                            @else
-                                                Both
-                                            @endif
-                                            </td>
-                                            <td>{{ $coupon->date_start }}</td>
-                                            <td>{{ $coupon->date_end }}</td>
-                                            <td>{{ ($coupon->status == 1) ? "Enable" : "Desable" }}</td>
-                                            <td>[ <a href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}">Edit</a> ]</td>
-                                        </tr>
+                                            <tr>
+                                                <td><input type="checkbox" name="del_all" class="del_all"
+                                                        value="{{ $coupon->coupon_id }}"></td>
+                                                <td>{{ $coupon->name }}</td>
+                                                <td><div class="d-flex justify-content-between">
+                                                    {{ $coupon->code }}
+                                                        {{-- <div class="btn-group ml-2">
+                                                            <input type="radio" class="radio" id="enable" name="on_off" value="1" {{ $coupon->on_off == 1 ? "checked" : "" }}/>
+                                                            <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enable">ON</label>
+                                                            <input type="radio" class="radio" id="disable" name="on_off" value="0"  {{ $coupon->on_off == 0 ? "checked" : "" }}/>
+                                                            <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disable">OFF</label>
+                                                        </div> --}}
+                                                    </div>
+                                                </td>
+                                                <td>{{ $coupon->discount }}</td>
+                                                <td>
+                                                    @if ($coupon->apply_shipping == 1)
+                                                        Delivery
+                                                    @elseif ($coupon->apply_shipping == 2)
+                                                        Collection
+                                                    @else
+                                                        Both
+                                                    @endif
+                                                </td>
+                                                <td>{{ $coupon->date_start }}</td>
+                                                <td>{{ $coupon->date_end }}</td>
+                                                <td>{{ $coupon->status == 1 ? 'Enable' : 'Desable' }}</td>
+                                                <td>[ <a
+                                                        href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}">Edit</a>
+                                                    ]</td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                     {{-- End Table Body --}}
@@ -137,15 +159,12 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-$(document).ready( function () {
-    $('#myTable').DataTable();
-} );
+    $(document).ready(function() {
+        $('#myTable').DataTable();
+    });
 
-
-
-
-   // Select All Checkbox
-   $('#delall').on('click', function(e) {
+    // Select All Checkbox
+    $('#delall').on('click', function(e) {
         if ($(this).is(':checked', true)) {
             $(".del_all").prop('checked', true);
         } else {
@@ -203,6 +222,4 @@ $(document).ready( function () {
         }
     });
     // End Delete User
-
-
 </script>

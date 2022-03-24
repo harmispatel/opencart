@@ -162,9 +162,9 @@
                                         <div class="form-group">
                                             <label for="status">Status:</label>
                                             <select class="form-control" id="status" name="status">
-                                                <option value="1" {{ $vouchers->apply_shipping == 1 ? 'selected' : '' }}>Enable
+                                                <option value="1" {{ $vouchers->status == 1 ? 'selected' : '' }}>Enable
                                                 </option>
-                                                <option value="2" {{ $vouchers->apply_shipping == 2 ? 'selected' : '' }}>disable
+                                                <option value="2" {{ $vouchers->status == 2 ? 'selected' : '' }}>disable
                                                 </option>
                                             </select>
                                         </div>
