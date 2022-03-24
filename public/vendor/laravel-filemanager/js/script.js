@@ -503,6 +503,7 @@ function loadItems(page) {
           li.click(function () {
             // go to corresponding path
             goTo('/' + validSegments.slice(0, 1 + index).join('/'));
+            // alert("hello");
           });
         }
 
