@@ -279,6 +279,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('couponupdate', [CouponController::class, 'couponupdate'])->name('couponupdate');
     Route::get('searchproduct', [CouponController::class, 'products'])->name('searchproduct');
     Route::get('searchcategory', [CouponController::class, 'searchcategory'])->name('searchcategory');
+    Route::POST('getallcouponhistory', [CouponController::class, 'getallcouponhistory'])->name('getallcouponhistory');
 
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
