@@ -289,8 +289,23 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('voucherdelete', [VoucherController::class, 'voucherdelete'])->name('voucherdelete');
     Route::post('voucherupdate', [VoucherController::class, 'voucherupdate'])->name('voucherupdate');
 
+    // Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
+    Route::get('voucherthemeinsert', [VoucherController::class, 'voucherthemeinsert'])->name('voucherthemeinsert');
+    Route::post('voucherthemeinsert', [VoucherController::class, 'voucherthemestore'])->name('voucherthemeinsert');
+    Route::get('voucherthemelist', [VoucherController::class, 'voucherthemeshow'])->name('voucherthemelist');
+    Route::get('voucherthemeedit/{id}', [VoucherController::class, 'voucherthemeedit'])->name('voucherthemeedit');
+    Route::get('voucherthemeupdate/{id}', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
+    Route::post('voucherthemedelete', [VoucherController::class, 'voucherthemedelete'])->name('voucherthemedelete');
+    Route::post('voucherthemeupdate/{id}', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
+
     // Free Item
     Route::get('freeitems', [FreeItemController::class, 'freeitems'])->name('freeitems');
+    Route::get('addfreeitems', [FreeItemController::class, 'addfreeitems'])->name('addfreeitems');
+    Route::post('freeiteminsert',[FreeItemController::class, 'freeiteminsert'])->name('freeiteminsert');
+    Route::get('freeitemlist', [FreeItemController::class, 'freeitemlist'])->name('freeitemlist');
+    Route::get('freeitemedit/{id}', [FreeItemController::class, 'freeitemedit'])->name('freeitemedit');
+    Route::post('freeitemdelete', [VoucherController::class, 'freeitemdelete'])->name('freeitemdelete');
+    Route::post('freeitemupdate/{id}', [FreeItemController::class, 'freeitemupdate'])->name('freeitemupdate');
     Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
 
     // Gallary
