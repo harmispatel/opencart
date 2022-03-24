@@ -220,7 +220,6 @@
                                                     <tr>
                                                         <td class="left"><a href="#">{{ htmlspecialchars_decode($order->name) }}</a>
                                                             <br>
-                                                            {{-- {{ echo $orders->toppings  }} --}}
                                                             @php
                                                                 echo $order->toppings;
                                                             @endphp
@@ -383,6 +382,9 @@
                     $('#alert').show();
                     $('#alertmessage').text("Success: You have modified orders!");
                     $('#orderdetail').html('')
+                    setTimeout(() => {
+                        $('#alert').hide();
+                    }, 5000);
                     getorderdetail();
                     $('#orderhistoryform').trigger('reset');
                 },

@@ -83,7 +83,7 @@
                                         <th>
                                             <input type="checkbox" name="checkall" id="delall">
                                         </th>
-                                        <th>Image</th>
+                                        <th id="image">Image</th>
                                         <th id="name">Product Name</th>
                                         <th id="price">Price</th>
                                         <th id="status">Status</th>
@@ -94,7 +94,7 @@
 
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
-                                        
+
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -183,6 +183,7 @@
 
         $('#categorys').change(function() {
             var categoryval = this.value;
+            // var categoryval = $('#categorys :selected').val();
 
             $.ajaxSetup({
                 headers: {
@@ -224,7 +225,7 @@ function getallproduct() {
 var table = $('.table').DataTable({
     processing: true,
     serverSide: true,
-    
+
     ajax: "{{ route('getproduct') }}",
     columns: [{
             data: 'checkbox',

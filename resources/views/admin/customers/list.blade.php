@@ -105,51 +105,7 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="customers" id="customers">
-                                        {{-- @foreach ($customers as $customer )
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" name="del_all" class="del_all" value="{{ $customer->customer_id }}">
-                                                </td>
-                                                <td>{{ $customer->firstname }} {{ $customer->lastname }}</td>
-                                                <td>-</td>
-                                                <td>{{ $customer->email }}</td>
-                                                <td>{{ $customer->groupname }}</td>
-                                                <td>
-                                                    @if($customer->status == 1)
-                                                        Enabled
-                                                    @else
-                                                        Disabled
-                                                    @endif
-                                                </td>
-                                                <td>-</td>
-                                                <td> {{ $customer->ip }} </td>
-                                                <td> {{ date('d-m-Y',strtotime($customer->date_added)) }} </td>
-                                                <td>
-                                                    @if(check_user_role(102) == 1)
 
-                                                        <div class="btn-group">
-                                                            <a href="{{ route('editcustomer',$customer->customer_id) }}" class="btn btn-sm btn-primary">
-                                                                <i class="fa fa-edit"></i>
-                                                            </a>
-                                                            <button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white">
-                                                                <span class="caret"></span>
-                                                            </button>
-                                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                                <li class="dropdown-header">Login into Store</li>
-                                                                <li class="text-center">
-                                                                    <a href="" target="_blank">
-                                                                        <i class="fa fa-lock"></i> Your Store
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
-                                                          </div>
-
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach --}}
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -250,7 +206,7 @@
 
                     $.ajax({
                             type: "POST",
-                            url: '{{ url("deletecustomergroup") }}',
+                            url: '{{ url("deletecustomer") }}',
                             data: {"_token": "{{ csrf_token() }}",'id':checkValues},
                             dataType : 'JSON',
                             success: function (data)

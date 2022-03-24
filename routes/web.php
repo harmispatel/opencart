@@ -98,6 +98,15 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
     Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
+    Route::post('getcustomerhistory', [CustomerController::class, 'getcustomerhistory'])->name('getcustomerhistory');
+    Route::post('storecustomerhistory', [CustomerController::class, 'storecustomerhistory'])->name('storecustomerhistory');
+    Route::post('getcustomertransactions', [CustomerController::class, 'getcustomertransactions'])->name('getcustomertransactions');
+    Route::post('storecustomertransaction', [CustomerController::class, 'storecustomertransaction'])->name('storecustomertransaction');
+    Route::post('getcustomerrewardpoints', [CustomerController::class, 'getcustomerrewardpoints'])->name('getcustomerrewardpoints');
+    Route::post('storecustomerrewardpoint', [CustomerController::class, 'storecustomerrewardpoint'])->name('storecustomerrewardpoint');
+    Route::post('delCustomerAddress', [CustomerController::class, 'delCustomerAddress'])->name('delCustomerAddress');
+    Route::post('addcustomerbanip', [CustomerController::class, 'addcustomerbanip'])->name('addcustomerbanip');
+    Route::post('removecustomerbanip', [CustomerController::class, 'removecustomerbanip'])->name('removecustomerbanip');
 
 
     // User Profile
@@ -133,6 +142,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storeproduct',[ProductController::class, 'store'])->name('storeproduct');
     Route::get('editproduct/{id}', [ProductController::class, 'edit'])->name('editproduct');
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
+    Route::post('updateproduct',[ProductController::class, 'update'])->name('updateproduct');
+
 
 
     //Orders
@@ -147,7 +158,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
-    Route::get('getproduct/{id}', [OrdersController::class, 'getproduct'])->name('getproduct');
+    Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
+    Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
     Route::get('address/{id}', [OrdersController::class, 'address'])->name('address');
@@ -158,12 +170,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
     Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
     // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
+    Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
 
-    // auto complete customer
-    // Route::get('autocomcustomer', [autocomplete::class, 'autocomcustomer'])->name('autocomplete');
-    // Route::get('/autocomplete-search', [autocomplete::class, 'autocompleteSearch']);
+
     Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
-    // Route::get('search', [AutoCompleteController::class, 'index'])->name('search');
+    Route::get('autocompleteproduct', [OrdersController::class, 'autocompleteproduct'])->name('autocompleteproduct');
 
 
 
@@ -178,6 +189,17 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Menu Options
     Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
     Route::get('addmenuoptions', [OptionController::class, 'add'])->name('addmenuoptions');
+    Route::post('newmodel', [OptionController::class, 'newmodel'])->name('newmodel');
+    Route::get('gettoppings', [OptionController::class, 'gettoppings'])->name('gettoppings');
+    Route::post('inserttopping', [OptionController::class, 'insert'])->name('inserttopping');
+    Route::post('deletetopping', [OptionController::class, 'delete'])->name('deletetopping');
+    Route::get('edittopping/{id}', [OptionController::class, 'edit'])->name('edittopping');
+    Route::post('updatetopping', [OptionController::class, 'update'])->name('updatetopping');
+    Route::post('delToppingOption', [OptionController::class, 'delToppingOption'])->name('delToppingOption');
+    Route::post('storemapping', [OptionController::class, 'storemapping'])->name('storemapping');
+    Route::post('editmapping', [OptionController::class, 'editmapping'])->name('editmapping');
+    Route::post('updatemapping', [OptionController::class, 'updatemapping'])->name('updatemapping');
+    Route::post('deletemapping', [OptionController::class, 'deletemapping'])->name('deletemapping');
 
 
     //Recurring Profiles
@@ -250,18 +272,46 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Coupons
     Route::get('coupons', [CouponController::class, 'index'])->name('coupons');
+    Route::get('addcoupon', [CouponController::class, 'addcoupon'])->name('addcoupon');
+    Route::get('editcoupon/{id}', [CouponController::class, 'editcoupon'])->name('editcoupon');
+    Route::post('insertcoupon', [CouponController::class, 'insertcoupon'])->name('insertcoupon');
+    Route::post('coupondelete', [CouponController::class, 'coupondelete'])->name('coupondelete');
+    Route::post('couponupdate', [CouponController::class, 'couponupdate'])->name('couponupdate');
+    Route::get('searchproduct', [CouponController::class, 'products'])->name('searchproduct');
+    Route::get('searchcategory', [CouponController::class, 'searchcategory'])->name('searchcategory');
 
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
     Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
+    Route::post('voucherinsert', [VoucherController::class, 'voucherinsert'])->name('voucherinsert');
+    Route::get('voucherlist', [VoucherController::class, 'voucherlist'])->name('voucherlist');
+    Route::get('voucheredit/{id}', [VoucherController::class, 'voucheredit'])->name('voucheredit');
+    Route::post('voucherdelete', [VoucherController::class, 'voucherdelete'])->name('voucherdelete');
+    Route::post('voucherupdate', [VoucherController::class, 'voucherupdate'])->name('voucherupdate');
+
+    // Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
+    Route::get('voucherthemeinsert', [VoucherController::class, 'voucherthemeinsert'])->name('voucherthemeinsert');
+    Route::post('voucherthemeinsert', [VoucherController::class, 'voucherthemestore'])->name('voucherthemeinsert');
+    Route::get('voucherthemelist', [VoucherController::class, 'voucherthemeshow'])->name('voucherthemelist');
+    Route::get('voucherthemeedit/{id}', [VoucherController::class, 'voucherthemeedit'])->name('voucherthemeedit');
+    Route::get('voucherthemeupdate/{id}', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
+    Route::post('voucherthemedelete', [VoucherController::class, 'voucherthemedelete'])->name('voucherthemedelete');
+    Route::post('voucherthemeupdate/{id}', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
 
     // Free Item
     Route::get('freeitems', [FreeItemController::class, 'freeitems'])->name('freeitems');
+    Route::get('addfreeitems', [FreeItemController::class, 'addfreeitems'])->name('addfreeitems');
+    Route::post('freeiteminsert',[FreeItemController::class, 'freeiteminsert'])->name('freeiteminsert');
+    Route::get('freeitemlist', [FreeItemController::class, 'freeitemlist'])->name('freeitemlist');
+    Route::get('freeitemedit/{id}', [FreeItemController::class, 'freeitemedit'])->name('freeitemedit');
+    Route::post('freeitemdelete', [VoucherController::class, 'freeitemdelete'])->name('freeitemdelete');
+    Route::post('freeitemupdate/{id}', [FreeItemController::class, 'freeitemupdate'])->name('freeitemupdate');
     Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
 
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
-    Route::get('uploadgallary', [GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+    Route::get('uploadgallary',[GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+
 
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
@@ -290,10 +340,16 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 });
 
-
+Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+    // echo '<pre>';
+    // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
+    // exit();
+});
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
 Route::get('/', function () {
     return view('frontend.pages.home');
 });
+

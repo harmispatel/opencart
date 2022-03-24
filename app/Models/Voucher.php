@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Voucher extends Model
 {
     use HasFactory;
+    protected $table = "oc_voucher";
+    protected $primaryKey = 'voucher_id';
+    public $timestamps = false;
 }

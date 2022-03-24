@@ -36,6 +36,10 @@
 {{-- Summernote --}}
 <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
+
+<style>
+    .custom-nav > .nav-item > .nav-link {height: 40px !important;}
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -56,10 +60,10 @@
           <a class="nav-link p-0 text-uppercase" style="color: rgb(71, 69, 69); font-weight: 700;font-family: verdana" data-toggle="dropdown" href="#">
             {{-- <i class="far fa-user"></i> --}}
             @if(!empty(user_details()))
-                <img src="{{ ( (user_details()->image != '') || (user_details()->image != null) ) ? asset('public/admin/users/'.user_details()->image) : asset('public/admin/users/blank.png') }}" alt="User Avatar" class="m-0 img-circle" width="40" height="40">
+                <img src="{{ ( (user_details()->image != '') || (user_details()->image != null) ) ? asset('public/admin/users/'.user_details()->image) : asset('public/admin/users/blank.png') }}" class="m-0 img-circle" width="40" height="40">
                 {{ user_details()->username }}
             @else
-                <img src="{{ asset('public/admin/users/blank.png') }}" alt="User Avatar" class="m-0 img-circle" width="40" height="40">
+                <img src="{{ asset('public/admin/users/blank.png') }}" class="m-0 img-circle" width="40" height="40">
                 Not Found
             @endif
           </a>
@@ -97,7 +101,7 @@
     <div class="sidebar" style="background: #3742;">
       <!-- Sidebar Menu -->
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column custom-nav" data-widget="treeview" role="menu" data-accordion="false">
 
            @if(!empty(sidebar()))
 
@@ -158,7 +162,7 @@
                                                     @if($submenu->url_id == 1)
                                                         <a href="{{ route($submenu->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($submenu->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}">
                                                     @else
-                                                        <a href="{{ route($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
+                                                        <a href="{{ URL::To($submenu->slugurl) }}" class="nav-link {{ request()->is($submenu->slugurl) ? 'active' : ''}}">
                                                     @endif
 
                                                             <i class="nav-icon {{ $submenu->icon_class }}"></i>
