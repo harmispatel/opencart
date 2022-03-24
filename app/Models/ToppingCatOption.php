@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ToppingSize extends Model
+class ToppingCatOption extends Model
 {
-    use HasFactory;
-    protected $table='oc_topping_size';
-    protected $primaryKey = 'id_size';
+    protected $table='oc_topping_cat_option';
+    protected $primaryKey = 'id';
     public $timestamps=false;
 }

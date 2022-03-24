@@ -150,14 +150,14 @@
                                                 <label for="order" class="form-label">Order Type</label>
                                                 <div>
 
-                                                    <input type="radio" name="order_type[]" value="both"
+                                                    <input type="radio" name="order_type" value="both"
                                                         {{ $product->order_type == 'both' ? 'checked' : '' }}> Both
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="radio" name="order_type[]" value="delivery"
+                                                    <input type="radio" name="order_type" value="delivery"
                                                         {{ $product->order_type == 'delivery' ? 'checked' : '' }}>
                                                     Delivery
                                                     Only &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="radio" name="order_type[]" value="collection"
+                                                    <input type="radio" name="order_type" value="collection"
                                                         {{ $product->order_type == 'collection' ? 'checked' : '' }}>
                                                     Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
@@ -200,29 +200,32 @@
                                                             </tr>
                                                             @foreach ($result['header'] as $header)
                                                                 <tr>
-                                                                    <td><label for="">{{ $header->size }}</label>
+                                                                    <td><label for="">{{ $header->size }}</label><input type="hidden" name="id_size[]" value="{{ $header->id_size }}">
                                                                     </td>
 
                                                                     @php
                                                                         $product_size = getProductSize($header->id_size, $product->product_id);
                                                                     @endphp
                                                                     <td>
-                                                                        <input type="hidden"
+                                                                        @if(!empty($product_size) || $product_size != '')
+                                                                            <input type="hidden"
                                                                             name="id_product_price_size[]"
-                                                                            value="{{ $product_size->id_product_price_size }}">
+                                                                            value="{{ isset($product_size->id_product_price_size) ? $product_size->id_product_price_size : '' }}">
+                                                                        @endif
+
                                                                         <input type="text" name="mainprices[]"
                                                                             id="mainprice"
-                                                                            value="{{ $product_size->price }}">
+                                                                            value="{{ isset($product_size->price) ? $product_size->price : '' }}">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" name="deliveryprices[]"
                                                                             id="deliveryprice"
-                                                                            value="{{ $product_size->delivery_price }}">
+                                                                            value="{{ isset($product_size->delivery_price) ? $product_size->delivery_price : '' }}">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" name="collectionprices[]"
                                                                             id="collectionprice"
-                                                                            value="{{ $product_size->collection_price }}">
+                                                                            value="{{ isset($product_size->collection_price) ? $product_size->collection_price : '' }}">
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -247,7 +250,7 @@
                                             aria-labelledby="option-tab">
 
                                             @if ($product->product_id == isset($result['toppingType']->id_product) ? $result['toppingType']->id_product : '')
-                                           
+
                                                 <h2>{{ $result['toppingType']->name_topping }}</h2>
                                                 <div style="margin-bottom: 10px;">
                                                     <input type="radio" name="typetopping" class="avtive"

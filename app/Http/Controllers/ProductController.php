@@ -354,8 +354,7 @@ class ProductController extends Controller
         $icon = $request['product_icons'];
         $product_icons = implode(',', $icon);
         $product->product_icons = isset($product_icons) ? $product_icons : 0;
-        $data = $request['order_type'];
-        $order_type = implode('', $data);
+        $order_type = $request['order_type'];
         $product->order_type = isset($order_type) ? $order_type : 0;
         $day = $request['day'];
         $days = implode(',', $day);
@@ -378,10 +377,10 @@ class ProductController extends Controller
         $product_description->tag = isset($request->tag) ? $request->tag : '';
         $product_description->update();
 
-        $reward = Reward::find($product_id);
-        $reward->customer_group_id = 1;
-        $reward->points = 0;
-        $reward->update();
+        // $reward = Reward::find($product_id);
+        // $reward->customer_group_id = 1;
+        // $reward->points = 0;
+        // $reward->update();
 
         $product_category = Product_to_category::find($product_id);
         $product_category->category_id = isset($request->category) ? $request->category : 0;
@@ -390,36 +389,52 @@ class ProductController extends Controller
         // $productstore =ProductStore::find($product_id);
         // $productstore->store_id =isset($request->store_id) ? $request->store_id : 0;
         // $productstore->update();
+        $type_topping = isset($request->typetopping) ? $request->typetopping : '';
 
-        $toppingtype = ProductToppingType::where('id_product', $product_id)->first();
-        $toppingtype->typetopping = $request->typetopping;
-        $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
-        $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
-        $toppingtype->choose = isset($request->choose) ? $request->choose : '';
-        $toppingtype->enable = $request->enable;
-        $toppingtype->renamegroup = $request->renamegroup;
-        $toppingtype->topping_sort_order = $request->topping_sort_order;
-        $toppingtype->update();
+       if(!empty($type_topping) || $type_topping != '')
+       {
+            $toppingtype = ProductToppingType::find($product_id);
+            $toppingtype->typetopping =  $type_topping;
+            $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
+            $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
+            $toppingtype->choose = isset($request->choose) ? $request->choose : '';
+            $toppingtype->enable = $request->enable;
+            $toppingtype->renamegroup = $request->renamegroup;
+            $toppingtype->topping_sort_order = $request->topping_sort_order;
+            $toppingtype->update();
+       }
 
         // $mainprice = isset($request->mainprices) ? $request->mainprices : "";
         $mainprice =$request->mainprices;
         $collectionprice =$request->collectionprices;
         $deliveryprice =$request->deliveryprices;
         $price_size_id = $request->id_product_price_size;
-
-        if(!empty($price_size_id)){
-            foreach($mainprice as $key => $mainprices){
+        $id_size = $request->id_size;
+        if(!empty($price_size_id))
+        {
+            foreach($mainprice as $key => $mainprices)
+            {
                 $where = $price_size_id[$key];
                 $toppingProductPriceSize = ToppingProductPriceSize::find($where);
                 $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[0];
-                $toppingProductPriceSize->collection_price = $collectionprice[1];
+                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+                $toppingProductPriceSize->collection_price = $collectionprice[$key];
                 $toppingProductPriceSize->update();
              }
         }
-
-
-
+        else
+        {
+            foreach($mainprice as $key => $mainprices)
+            {
+                $toppingProductPriceSize = new ToppingProductPriceSize;
+                $toppingProductPriceSize->price = $mainprices;
+                $toppingProductPriceSize->id_size = $id_size[$key];
+                $toppingProductPriceSize->id_product = $product_id;
+                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+                $toppingProductPriceSize->collection_price = $collectionprice[$key];
+                $toppingProductPriceSize->save();
+             }
+        }
 
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");

@@ -61,6 +61,7 @@
                                     <div class="form-group">
 
                                         <input type="hidden" name="id" value="{{ $data->category_id }}">
+                                        <input type="hidden" name="top_cat_option_id" value="{{ isset($topcatoption->id) ? $topcatoption->id : '' }}">
                                         <label for="category" class="form-label">Category Name</label>
                                         <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->name }}">
                                         @if ($errors->has('category'))
@@ -108,16 +109,34 @@
                                             </div>
                                         </div>
 
+                                        {{-- Dynamic Topping Size Count --}}
+                                        @php
+                                            $count = count($toppingsizes);
+                                            if ($count != '') {
+                                                // $newcount = $count + 1;
+                                                echo '<input type="hidden" name="size_value_row" id="size_value_row" value="'.$count.'">';
+                                            }
+                                            else {
+                                                echo '<input type="hidden" name="size_value_row" id="size_value_row" value="1">';
+                                            }
+                                        @endphp
+                                        {{-- End Dynamic Topping Size Count --}}
+
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
                                                 <label for="sizeval" class="pr-3">SIZE</label>
-                                                <input type="radio" name="sizeval" value="1" onclick="$('#size-value').show()"> Enable &nbsp;
-                                                <input type="radio" name="sizeval" value="0"  onclick="$('#size-value').hide()" checked> Disable
+                                                @if ($topcatoption != '' || !empty($topcatoption))
+                                                    <input type="radio" name="sizeval" value="1" onclick="$('#size-value').show()" {{ ($topcatoption->enable_size == 1) ? 'checked' : '' }}> Enable &nbsp;
+                                                    <input type="radio" name="sizeval" value="0"  onclick="$('#size-value').hide()" {{ ($topcatoption->enable_size == 0) ? 'checked' : '' }}> Disable
+                                                @else
+                                                    <input type="radio" name="sizeval" value="1" onclick="$('#size-value').show()"> Enable &nbsp;
+                                                    <input type="radio" name="sizeval" value="0"  onclick="$('#size-value').hide()" checked> Disable
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <table class="table table-bordered" style="display: none" id="size-value">
+                                                <table class="table table-bordered" id="size-value" style="display:none;">
                                                     <thead>
                                                         <tr>
                                                             <th>Size</th>
@@ -126,7 +145,20 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="size-value-row">
-
+                                                        @foreach ($toppingsizes as $toppingsize)
+                                                            <tr class="size_{{ $loop->iteration }}">
+                                                                <td>
+                                                                    <input type="hidden" name="size[{{ $loop->iteration }}][size_id]" value="{{ $toppingsize->id_size }}">
+                                                                    <input type="text" name="size[{{ $loop->iteration }}][sizename]" value="{{ $toppingsize->size }}" class="form-control">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" name="size[{{ $loop->iteration }}][short_order]" value="{{ $toppingsize->short_order }}" class="form-control">
+                                                                </td>
+                                                                <td>
+                                                                    <a onclick="deleteOptionSize({{ $toppingsize->id_size }})" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
@@ -142,13 +174,114 @@
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
                                                 <label for="options" class="pr-3">OPTIONS</label>
-                                                <input type="radio" name="options" value="1" onclick="$('#opt-btn').show()"> Enable &nbsp;
-                                                <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide()" checked> Disable
+                                                @if ($topcatoption != '' || !empty($topcatoption))
+                                                    <input type="radio" name="options" value="1" onclick="$('#opt-btn').show();$('#groupTopping').show()" {{ ($topcatoption->enable_option == 1) ? 'checked' : '' }}> Enable &nbsp;
+                                                    <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide();$('#groupTopping').hide()" {{ ($topcatoption->enable_option == 0) ? 'checked' : '' }}> Disable
+                                                @else
+                                                    <input type="radio" name="options" value="1" onclick="$('#opt-btn').show();"> Enable &nbsp;
+                                                    <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide();" checked> Disable
+                                                @endif
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12" id="groupTopping">
 
+                                        <div class="row">
+                                            <div class="col-md-12" id="groupTopping" style="display: none;">
+                                                @php
+                                                    $group = unserialize($topcatoption->group);
+                                                    // Dynamic Topping Size Count
+                                                    if($group != '' || !empty($group))
+                                                    {
+                                                        $group_count = count($group);
+                                                    }
+                                                    else
+                                                    {
+                                                        $group_count = '';
+                                                    }
+                                                    if ($group_count != '') {
+                                                        // $newcount = $count + 1;
+                                                        echo '<input type="hidden" name="group_row_count" id="group_row_count" value="'.$group_count.'">';
+                                                    }
+                                                    else {
+                                                        echo '<input type="hidden" name="group_row_count" id="group_row_count" value="1">';
+                                                    }
+                                                    // End Dynamic Topping Size Count
+                                                @endphp
+                                                @if(!empty($group) || $group != '')
+                                                    @foreach ($group as $key => $value)
+                                                        <div id="group_{{ $key }}" class="mt-2">
+                                                            <a class="btn btn-sm btn-danger"  onclick="$('#group_{{ $key }}').remove()"><i class="fa fa-trash"></i></a>
+                                                            <table class="table mt-1 table-bordered">
+                                                                <tr>
+                                                                    <th>Select Option Group</th>
+                                                                    <td>
+                                                                        <select name="group[{{ $key }}][id_group_option]">
+                                                                            @foreach($optiongroups as $optiongroup)
+                                                                                <option value="{{ $optiongroup->id_topping }}" {{ ($optiongroup->id_topping == $value['id_group_option']) ? 'selected' : '' }}>{{ $optiongroup->name_topping }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th>Select Free Group</th>
+                                                                    <td>
+                                                                        <input name="group[{{ $key }}][set_option]" type="radio" value="1" onclick="$('.list_{{ $key }}').hide();" {{ ($value['set_option'] == 1) ? 'checked' : '' }}> <label class="pr-3">Free</label>
+
+                                                                        <input name="group[{{ $key }}][set_option]" type="radio" value="2" onclick="$('.list_{{ $key }}').hide();" {{ ($value['set_option'] == 2) ? 'checked' : '' }}> <label  class="pr-3">Main Price</label>
+
+                                                                        <input name="group[{{ $key }}][set_option]" type="radio" value="3" onclick="$('.list_{{ $key }}').show();" {{ ($value['set_option'] == 3) ? 'checked' : '' }}> <label  class="pr-3">Set Price</label>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <td>
+                                                                        <input type="radio" name="group[{{ $key }}][set_require]" value="1" {{ ($value['set_require'] == 1) ? 'checked' : '' }}> <label class="pr-3">Required</label>
+
+                                                                        <input type="radio" name="group[{{ $key }}][set_require]" value="0" {{ ($value['set_require'] == 0) ? 'checked' : '' }}> <label class="pr-3">Optional</label>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            @if( ($value['set_option'] == 1) || ($value['set_option'] == 2))
+                                                                <table class="table mt-1 table-bordered list_{{ $key }}" style="display: none;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Size</th>
+                                                                            <th>Top Price</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($toppingsizes as $toppingsize)
+                                                                            <tr class="size_{{ $key }}">
+                                                                                <td>{{ $toppingsize->size }}</td>
+                                                                                <td>
+                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ $value['size_val'][$toppingsize->id_size] }}">
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            @else
+                                                                <table class="table mt-1 table-bordered list_{{ $key }}">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Size</th>
+                                                                            <th>Top Price</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($toppingsizes as $toppingsize)
+                                                                            <tr class="size_{{ $key }}">
+                                                                                <td>{{ $toppingsize->size }}</td>
+                                                                                <td>
+                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ $value['size_val'][$toppingsize->id_size] }}">
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                @endif
                                             </div>
                                             <div class="col-md-12">
                                                 <a class="btn btn-sm btn-primary mt-2" id="opt-btn" style="display: none;" onclick="addgroup()"><i class="fa fa-plus"></i></a>
@@ -157,9 +290,15 @@
 
                                         <div class="row">
                                             <div class="col-md-12 mt-2">
-                                                <label for="commentbox" class="pr-3">Comment Box</label>
-                                                <input type="radio" name="enable_comment" value="1" onclick="$('#numbercharacter').show()"> Enable &nbsp;
-                                                <input type="radio" name="enable_comment" value="0"  onclick="$('#numbercharacter').hide()" checked> Disable
+                                                @if($topcatoption != '' || !empty($topcatoption))
+                                                    <label for="commentbox" class="pr-3">Comment Box</label>
+                                                    <input type="radio" name="enable_comment" value="1" onclick="$('#numbercharacter').show()" {{ ($topcatoption->enable_boxcomment == 1) ? 'checked' : '' }}> Enable &nbsp;
+                                                    <input type="radio" name="enable_comment" value="0"  onclick="$('#numbercharacter').hide()" {{ ($topcatoption->enable_boxcomment == 0) ? 'checked' : '' }}> Disable
+                                                @else
+                                                    <label for="commentbox" class="pr-3">Comment Box</label>
+                                                    <input type="radio" name="enable_comment" value="1" onclick="$('#numbercharacter').show()"> Enable &nbsp;
+                                                    <input type="radio" name="enable_comment" value="0"  onclick="$('#numbercharacter').hide()" checked> Disable
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="row" id="numbercharacter" style="display: none;">
@@ -167,7 +306,7 @@
                                                 <b>Maximum Character Allowed</b>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" name="numbercharacter" value="0" class="form-control">
+                                                <input type="text" name="numbercharacter" value="{{ $topcatoption->character }}" class="form-control">
                                             </div>
                                         </div><hr>
 
@@ -222,19 +361,45 @@
 @include('footer')
 {{-- End Footer --}}
 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 {{-- SCRIPT --}}
 <script type="text/javascript">
 
+
+$(document).ready(function(){
+
+    var sizeval = $("[name=sizeval]:checked").val();
+    if(sizeval == 1)
+    {
+        $('#size-value').show();
+    }
+
+    var enable_comment = $("[name=enable_comment]:checked").val();
+    if(enable_comment == 1)
+    {
+        $('#numbercharacter').show();
+    }
+
+    var options = $("[name=options]:checked").val();
+    if(options == 1)
+    {
+        $('#opt-btn').show();
+        $('#groupTopping').show();
+    }
+
+});
+
+
 // Add Size Function
-var size_value_row = 0;
+var size_value_row = $('#size_value_row').val();
 function addsizevalue()
 {
     size_value_row++;
-    html = '  <tr class="size_' + size_value_row + '">';
-    html += '    <td><input type="text" name="size[' + size_value_row + '][size]" value="" / placeholder="Size" class="form-control"></td>';
-    html += '    <td><input type="text" name="size[' + size_value_row + '][short_order]" value="" / placeholder="Sort Order" class="form-control"></td>';
-    html += '    <td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm" style="background:#1bbc9b;color: white;">Delete</a></td>';
+    html = '<tr class="size_' + size_value_row + '">';
+    html += '<td><input type="text" name="size[' + size_value_row + '][sizename]" value="" placeholder="Size" class="form-control"></td>';
+    html += '<td><input type="text" name="size[' + size_value_row + '][short_order]" value="" placeholder="Sort Order" class="form-control"></td>';
+    html += '<td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a></td>';
     // html += '    <td><a onclick="$(\'.size_' + size_value_row + '\').remove();" class="btn btn-sm" style="background:#1bbc9b;color: white;">Edit</a></td>';
     html += '  </tr>';
     $('#size-value-row').append(html);
@@ -243,7 +408,7 @@ function addsizevalue()
 
 
 // Add Group Function
-var group_row = 0;
+var group_row = $('#group_row_count').val();
 function addgroup()
 {
     group_row++;
@@ -266,6 +431,9 @@ function addgroup()
     html += '<thead>';
     html += '<tr><th>Size</th><th>Top Price</th></tr>';
     html += '</thead>';
+    html += '<tbody>';
+    html += '@foreach($toppingsizes as $toppingsize)<tr class="size_{{ $loop->iteration }}"><td>{{ $toppingsize->size }}</td><td><input type="text" class="form-control" name="group['+group_row+'][size_val][{{ $toppingsize->id_size }}]"></td></tr>@endforeach';
+    html += '</tbody>';
     html += '</table>';
 
 
@@ -273,6 +441,56 @@ function addgroup()
 
     $('#groupTopping').append(html);
 }
+//End Add Group Function
+
+
+// Delete Option Size
+function deleteOptionSize(id)
+{
+    var size_id = id;
+
+    swal({
+            title: "Are you sure You want to Delete It ?",
+            text: "Once deleted, you will not be able to recover this Record",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete)
+            {
+
+                $.ajax({
+                        type: "POST",
+                        url: "{{ url('delOptionSize') }}",
+                        data: {"_token": "{{ csrf_token() }}",'size_id':size_id},
+                        dataType : 'JSON',
+                        success: function (data)
+                        {
+                            if(data.success == 1)
+                            {
+                                swal("Your Record has been deleted!", {
+                                    icon: "success",
+                                });
+
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 1500);
+                            }
+                        }
+                });
+
+            }
+            else
+            {
+                swal("Cancelled", "", "error");
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+        });
+}
+// End Delete Option Size
 
 </script>
 {{-- END SCRIPT --}}

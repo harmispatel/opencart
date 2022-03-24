@@ -8,6 +8,8 @@ use App\Models\CategoryLayout;
 use App\Models\CategoryPath;
 use App\Models\CategorytoStore;
 use App\Models\Topping;
+use App\Models\ToppingCatOption;
+use App\Models\ToppingSize;
 use Illuminate\Http\Request;
 use DataTables;
 
@@ -70,16 +72,16 @@ class CategoryController extends Controller
         return view('admin.category.newcategory', ['category_layout' => $category_layout, 'fetchparent' => $fetchparent]);
     }
 
+
+
     // Function of Update Category
     public function categoryupdate(Request $request)
     {
-        echo '<pre>';
-        print_r($request->all());
-        exit();
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
         ]);
+
 
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
@@ -139,8 +141,114 @@ class CategoryController extends Controller
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
         $cat->update();
 
+
+        // Add Size & Update Size
+        $size = isset($request->size) ? $request->size : '';
+
+        if(!empty($size) || $size != '')
+        {
+            foreach($size as $val)
+            {
+                $sizename = $val['sizename'];
+                $sort_order = $val['short_order'];
+                $size_id = isset($val['size_id']) ? $val['size_id'] : '';
+
+                if( (!empty($size_id)) || ($size_id != ''))
+                {
+                    $update_topp_size = ToppingSize::find($size_id);
+                    $update_topp_size->size = isset($sizename) ? $sizename : '-';
+                    $update_topp_size->short_order = isset($sort_order) ? $sort_order : 0;
+                    $update_topp_size->update();
+                }
+                else
+                {
+                    if(!empty($sizename) || $sizename != '')
+                    {
+                        $topp_size = new ToppingSize;
+                        $topp_size->id_category = $request->id;
+                        $topp_size->size = isset($sizename) ? $sizename : '';
+                        $topp_size->short_order = isset($sort_order) ? $sort_order : 0;
+                        $topp_size->save();
+                    }
+                }
+
+            }
+        }
+
+
+        $top_cat_option = ToppingCatOption::where('id_category',$request->id)->first();
+
+        $group = isset($request->group) ? serialize($request->group) : '';
+
+
+        if($top_cat_option == '' || empty($top_cat_option))
+        {
+            $toppingCatOption = new ToppingCatOption;
+            $toppingCatOption->id_category = $request->id;
+            $toppingCatOption->enable_size = $request->sizeval;
+            $toppingCatOption->enable_option = $request->options;
+            $toppingCatOption->enable_boxcomment = $request->enable_comment;
+            $toppingCatOption->character = $request->numbercharacter;
+            $toppingCatOption->group = $group;
+            $toppingCatOption->save();
+        }
+        else
+        {
+            $toppingCatOptionupdate = ToppingCatOption::find($request->top_cat_option_id);
+            $toppingCatOptionupdate->enable_size = $request->sizeval;
+            $toppingCatOptionupdate->enable_option = $request->options;
+            $toppingCatOptionupdate->enable_boxcomment = $request->enable_comment;
+            $toppingCatOptionupdate->character = $request->numbercharacter;
+            $toppingCatOptionupdate->group = $group;
+            $toppingCatOptionupdate->update();
+        }
+
         return redirect()->route('category')->with('success','Category has been updated Successfully.');
     }
+
+
+    // Function of edit Category
+    public function categoryedit($id)
+    {
+
+        // Check User Permission
+        if (check_user_role(56) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
+
+        // Get Category Top Option
+        $topcatoption = ToppingCatOption::where('id_category',$id)->first();
+
+
+        // Get Topping Size
+        $toppingsizes = ToppingSize::where('id_category',$id)->get();
+
+        // Fetch Category Layout
+        $category_layout = CategoryLayout::select('layout_id', 'name')->get();
+
+        $optiongroups = Topping::where('store_topping',1)->get();
+
+        // Get Single Category Description
+        $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
+
+        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout, 'optiongroups' => $optiongroups, 'topcatoption' => $topcatoption, 'toppingsizes' => $toppingsizes]);
+    }
+
+
+    function delOptionSize(Request $request)
+    {
+
+        $size_id = $request->size_id;
+
+        // Delete Topping Option
+        ToppingSize::where('id_size',$size_id)->delete();
+
+        return response()->json([
+            'success' => 1,
+        ]);
+    }
+
 
     // Function of Delete Category
     function categorydelete(Request $request)
@@ -262,23 +370,5 @@ class CategoryController extends Controller
 
 
 
-    // Function of edit Category
-    public function categoryedit($id)
-    {
 
-        // Check User Permission
-        if (check_user_role(56) != 1) {
-            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
-        }
-
-        // Fetch Category Layout
-        $category_layout = CategoryLayout::select('layout_id', 'name')->get();
-
-        $optiongroups = Topping::where('store_topping',1)->get();
-
-        // Get Single Category Description
-        $data = Category::where('oc_category_description.category_id', '=', $id)->join('oc_category', 'oc_category_description.category_id', '=', 'oc_category.category_id')->first();
-
-        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout, 'optiongroups' => $optiongroups]);
-    }
 }
