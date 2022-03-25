@@ -188,6 +188,7 @@
                                             <div class="col-md-12" id="groupTopping" style="display: none;">
                                                 @php
                                                     $group = unserialize($topcatoption->group);
+                                                    unset($group["number_group"]);
                                                     // Dynamic Topping Size Count
                                                     if($group != '' || !empty($group))
                                                     {
@@ -253,13 +254,13 @@
                                                                             <tr class="size_{{ $key }}">
                                                                                 <td>{{ $toppingsize->size }}</td>
                                                                                 <td>
-                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ $value['size_val'][$toppingsize->id_size] }}">
+                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
                                                                     </tbody>
                                                                 </table>
-                                                            @else
+                                                            @elseif($value['set_option'] == 3)
                                                                 <table class="table mt-1 table-bordered list_{{ $key }}">
                                                                     <thead>
                                                                         <tr>
@@ -272,7 +273,7 @@
                                                                             <tr class="size_{{ $key }}">
                                                                                 <td>{{ $toppingsize->size }}</td>
                                                                                 <td>
-                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ $value['size_val'][$toppingsize->id_size] }}">
+                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach

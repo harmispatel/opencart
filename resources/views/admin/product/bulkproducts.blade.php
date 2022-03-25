@@ -39,10 +39,10 @@
                                     <i class="fa fa-cog fw"></i>&nbsp;&nbsp;
                                     category &nbsp;&nbsp;&nbsp;&nbsp;
                                     <select name="category" id="categorys" style="width: 70%">
-                                        {{-- @foreach ($category as $categorys)
+                                        @foreach ($category as $categorys)
                                             <option value="{{ $categorys->category_id }}">{{ $categorys->name }}
                                             </option>
-                                        @endforeach --}}
+                                        @endforeach
 
                                     </select>
                                 </h2>
@@ -64,47 +64,41 @@
                             {{-- Card Body --}}
                             <div class="card-body">
                                 {{-- Table Start --}}
-                                <table class="table table-bordered">
-                                    {{-- Alert Message div --}}
-                                    @if (Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                            role="alert">
-                                            {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
-                                    {{-- End Alert Message div --}}
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        {{-- Alert Message div --}}
+                                        @if (Session::has('success'))
+                                            <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                                                role="alert">
+                                                {{ Session::get('success') }}
+                                                <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        @endif
+                                        {{-- End Alert Message div --}}
 
-                                    {{-- Table Head --}}
-                                    <thead class="text-center">
-                                        <th>
-                                            <input type="checkbox" name="checkall" id="delall">
-                                        </th>
-                                        <th id="name">Product Name</th>
-                                        <th id="Description">Description</th>
-                                        <th id="price">Price</th>
-                                        <th id="image">Image</th>
-                                        <th id="option">Option</th>
-                                        <th id="action">Action</th>
-                                        {{-- <tr><td colspan="3"><td>1</td></tr> --}}
-                                    </thead>
-                                    {{-- End Table Head --}}
+                                        {{-- Table Head --}}
+                                        <thead class="text-center">
 
-                                    {{-- Table Body --}}
-                                    <tbody class="text-center cat-list">
-                                        <tr>
-                                            <td colspan="6"></td>
-                                            <td class="text-center"><button type="button" onclick="addProduct();"
-                                                    data-toggle="tooltip" title="Add Product"
-                                                    class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    {{-- End Table Body --}}
-                                </table>
+                                        </thead>
+                                        {{-- End Table Head --}}
+
+                                        {{-- Table Body --}}
+                                        <tbody class="text-center cat-list">
+                                            {{-- <tr>
+                                                <td colspan="6"></td>
+                                                <td class="text-center"><button type="button" onclick="addProduct();"
+                                                        data-toggle="tooltip" title="Add Product"
+                                                        class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+                                                </td>
+                                            </tr> --}}
+                                        </tbody>
+                                        {{-- End Table Body --}}
+                                    </table>
+                                </div>
+
                                 {{-- End Table --}}
                             </div>
                             {{-- End Card Body --}}
@@ -125,17 +119,95 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script type="text/javascript">
-     var product_row=0;
-    //  html ='';
-   function addProduct(){
-     html ='<tr>';
-     html +='<td></td>';   
-     html +='<td><input type="text" name="name" class="form-control"></td>';
-     html +='<td><textarea type="text" name="address" class="form-control" ></textarea></td>';   
-     html +='<td><input type="text" name="price" class="form-control"></td>';
-     html +='<td><input type="file" name="price" class="form-control"></td>';
-     html +=`<td><h5>hello</h5><div><input type="radio" name="typetopping" class="avtive" value="select">Dropdown&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="typetopping" value="checkbox">Checkbox&nbsp;&nbsp;&nbsp;&nbsp;</div></td></tr>`;
-     $('.cat-list').append(html);;
-   }
+
+
+<script>
+    $(document).ready(function() {
+
+        var categoryval = $('#categorys :selected').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "{{ route('getcategoryproduct') }}",
+            dataType: "json",
+            data: {
+                category_id: categoryval
+            },
+            success: function(result) {
+                $('.table').html('');
+                $('.table').html(result);
+            }
+
+        });
+    });
+
+    $('#categorys').change(function() {
+        var categoryval = this.value;
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('getcategoryproduct') }}",
+            dataType: "json",
+            data: {
+                category_id: categoryval
+            },
+            success: function(result) {
+                $('.table').html('');
+                $('.table').html(result);
+            }
+
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        var data = $('input[name=typetopping]:checked').val();
+
+        if (data == 'checkbox') {
+            html += '<div><lable>Default selected</lable></div>';
+            html += '<div><table><tbody><tr><td><input type="checkbox"></td><td>hello</td></tbody></table></div>';
+        } else if (data == 'select') {
+            html += '<div><lable>Default selected</lable></div>';
+            html += '<select  class="form-control"><option></option></select>';
+
+        }
+        $("#text").append(html);
+    });
+
+
+
+    function radiocheck() {
+        var data = $('input[name=typetopping]:checked').val();
+
+        var html = '';
+        if (data == 'select') {
+            $("#text").html('');
+        }else if(data == 'checkbox'){
+            $("#text").html('');
+        }
+
+        if (data == 'checkbox') {
+            html += '<div><lable>Default selected</lable></div>';
+            html += '<div><table><tbody><tr><td><input type="checkbox"></td><td>hello</td></tbody></table></div>';
+           
+        } else if (data == 'select') {
+
+            html += '<div><lable>Default selected</lable></div>';
+            html += '<select  class="form-control"><option></option></select>';
+
+        }
+        $("#text").append(html);
+    }
 </script>
