@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FreeItem;
 use App\Models\FreeItemadd;
+use App\Models\FreeRule;
 use Illuminate\Http\Request;
 
 class FreeItemController extends Controller
@@ -16,10 +17,25 @@ class FreeItemController extends Controller
         return view('admin.freeitems.freeitemlist',['data'=>$data]);
     }
 
+    // public function cartruleinsert(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'total_above' => 'required',
+    //     ]);
+
+    //     $cartrule = new FreeRule;
+
+    //     return view('admin.freeitems.cartrule');
+    // }
 
     public function cartrule()
     {
-        return view('admin.freeitems.cartrule');
+        $data['cartrul'] = FreeRule::get();
+        // echo '<pre>';
+        // print_r($data['cartrul']->toArray());
+        // exit();
+        return view('admin.freeitems.cartrule',$data);
     }
 
     public function addfreeitems()

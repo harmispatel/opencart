@@ -27,13 +27,7 @@
         {{-- End Header Section --}}
 
         {{-- List Section Start --}}
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{-- Card Start --}}
-                        <div class="card card-primary text-center">
-                           {{-- List Section Start --}}
+
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -93,7 +87,7 @@
                                         <tr>
                                                 <td><input type="checkbox" name="del_all" class="del_all" value="{{ $voucher->id_free_item  }}"></td>
                                               
-                                                <td>{{ $voucher->name_item }}</td>
+                                                <td>{{ html_entity_decode($voucher->name_item) }}</td>
                                                
                                                 <td>[<a href=" {{ url('freeitemedit/'.$voucher->id_free_item ) }}">Edit</a>]</td>
                                                 {{-- <td>[<a href="voucherthemeedit/{{$voucher->voucher_theme_id }}">Edit</a>]</td> --}}
@@ -113,13 +107,7 @@
             </div>
         </section>
         {{-- End Form Section --}}
-                        </div>
-                        {{-- End Card --}}
-                    </div>
-                </div>
-            </div>
-        </section>
-        {{-- End Form Section --}}
+             
 
     </div>
 </section>

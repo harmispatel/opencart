@@ -27,13 +27,7 @@
         {{-- End Header Section --}}
 
         {{-- List Section Start --}}
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        {{-- Card Start --}}
-                        <div class="card card-primary text-center">
-                           {{-- List Section Start --}}
+        
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -95,8 +89,7 @@
                                               
                                                 <td>{{ $voucher->name }}</td>
                                                
-                                                <td>[<a href=" {{ url('voucherthemeedit/'.$voucher->voucher_theme_id) }}">Edit</a>]</td>
-                                                {{-- <td>[<a href="voucherthemeedit/{{$voucher->voucher_theme_id }}">Edit</a>]</td> --}}
+                                                <td><a class="btn btn-sm btn-primary" href=" {{ url('voucherthemeedit/'.$voucher->voucher_theme_id) }}"><i class="fa fa-edit"></i></a></td>
                                                 
                                             </tr>
                                             @endforeach
@@ -113,13 +106,7 @@
             </div>
         </section>
         {{-- End Form Section --}}
-                        </div>
-                        {{-- End Card --}}
-                    </div>
-                </div>
-            </div>
-        </section>
-        {{-- End Form Section --}}
+                        
 
     </div>
 </section>

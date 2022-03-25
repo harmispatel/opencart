@@ -281,6 +281,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('searchproduct', [CouponController::class, 'products'])->name('searchproduct');
     Route::get('searchcategory', [CouponController::class, 'searchcategory'])->name('searchcategory');
     Route::POST('getallcouponhistory', [CouponController::class, 'getallcouponhistory'])->name('getallcouponhistory');
+    Route::POST('updonoff', [CouponController::class, 'updonoff'])->name('updonoff');
+    // Route::post('updonoff', [CouponController::class, 'updonoff'])->name('updonoff');
 
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
@@ -309,6 +311,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('freeitemdelete', [VoucherController::class, 'freeitemdelete'])->name('freeitemdelete');
     Route::post('freeitemupdate/{id}', [FreeItemController::class, 'freeitemupdate'])->name('freeitemupdate');
     Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
+    Route::get('addfreerule', [FreeItemController::class, 'addfreerule'])->name('addfreerule');
+    // Route::post('cartruleinsert', [FreeItemController::class, 'cartruleinsert'])->name('cartruleinsert');
 
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
