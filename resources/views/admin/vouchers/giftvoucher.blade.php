@@ -68,7 +68,7 @@
                             aria-labelledby="nav-customer-tab">
                             <div class="form-group">
                                 <label for="code">*Code</label>
-                                <input type="text" class="form-control" name="code" id="code" aria-describedby="codehelp" placeholder="Code">
+                                <input type="text" class="form-control" name="code" id="code" value="{{ old('code') }}" aria-describedby="codehelp" placeholder="Code">
                                 <small id="codehelp" class="form-text text-muted">The code the customer enters to activate the voucher.</small>
                                 @if ($errors->has('code'))
                                 <div style="color: red">{{ $errors->first('code') }}</div>
@@ -91,8 +91,8 @@
                                   </div>
                             </div>
                             <div class="form-group">
-                                <label for="formname">* Form Name:</label>
-                                <input class="form-control" name="formname" id="formname" type="text" value=""
+                                <label for="formname">* From Name:</label>
+                                <input class="form-control" name="formname" id="formname" type="text" value="{{ old('formname') }}"
                                     placeholder="Form name">
                                 @if ($errors->has('formname'))
                                 <div style="color: red">{{ $errors->first('formname') }}</div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">* From E-Mail:</label>
-                                <input class="form-control" name="email" id="email" value="" type="email"
+                                <input class="form-control" name="email" id="email" value="{{ old('email') }}" type="email"
                                     placeholder="Email">
                                 @if ($errors->has('email'))
                                 <div style="color: red">{{ $errors->first('email') }}</div>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="name">* To Name:</label>
-                                <input class="form-control" name="name" id="name" value="" type="text"
+                                <input class="form-control" name="name" id="name" value="{{ old('name') }}" type="text"
                                     placeholder="Telehone">
                                 @if ($errors->has('name'))
                                 <div style="color: red">{{ $errors->first('name') }}</div>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="toemail">* To E-Mail:</label>
-                                <input class="form-control" name="toemail" id="toemail" value="" type="text" placeholder="Email">
+                                <input class="form-control" name="toemail" id="toemail" value="{{ old('toemail') }}" type="text" placeholder="Email">
                                 @if ($errors->has('toemail'))
                                 <div style="color: red">{{ $errors->first('toemail') }}</div>
                                 @endif
@@ -131,14 +131,14 @@
                             </div>
                             <div class="form-group">
                                 <label for="message">* Message:</label>
-                                    <textarea class="form-control" name="message" id="message" rows="3"></textarea>
+                                    <textarea class="form-control" name="message" id="message" rows="3">{{ old('message') }}</textarea>
                                 @if ($errors->has('message'))
                                 <div style="color: red">{{ $errors->first('message') }}</div>
                                 @endif
                             </div>
                             <div class="form-group">
                                 <label for="amount">Amount:</label>
-                                <input class="form-control" name="amount" id="amount" value="" type="text"
+                                <input class="form-control" name="amount" id="" value="{{ old('amount') }}" type="text"
                                     placeholder="Ammout">
                                 @if ($errors->has('amount'))
                                 <div style="color: red">{{ $errors->first('amount') }}</div>

@@ -34,7 +34,77 @@ class ProductController extends Controller
 
     function bulkproducts()
     {
-        return view('admin.product.bulkproducts');
+        $category = Category::select('*')->get();
+        return view('admin.product.bulkproducts', ['category' => $category]);
+    }
+
+    function getcategoryproduct(Request $request)
+    {
+        $category_id = $request->category_id;
+        $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->first();
+        $headers = ToppingSize::where('id_category', $category_id)->get();
+        $head_count = count($headers) + 1;
+        $html = '';
+        $html .= '<tr>';
+        $html .= '<th style="min-width:220px!important">Product Name</th>';
+        $html .= '<th style="min-width:250px!important">Description:</th>';
+        if (isset($head_count)) {
+            $html .= '<th colspan="' . $head_count . '" class="text-center" style="min-width:100px!important">Price</th>';
+        } else {
+            $html .= '<th class="text-center" style="min-width:300px!important">Price</th>';
+        }
+        $html .= '<th style="min-width:240px!important">Image</th>';
+        $html .= '<th style="min-width:300px!important">Options</th>';
+        $html .= '<th>Action</th>';
+        $html .= '</tr>';
+        $html .= '<tr><td colspan="2"></td><th style="background:lightgray;min-width:100px;">Main Price</th>';
+        if (count($headers) > 0) {
+            foreach ($headers as $header) {
+                $html .= '<th style="background:lightgray;min-width:100px;">' . $header->size . '</th>';
+            }
+        }
+        $html .= '<td colspan="3"></td> </tr>';
+        $html .= '<tr>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="product" class="form-control"></textarea></td>';
+        $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product" class="form-control"></td>';
+        foreach ($sizes as $size) {
+            $html .= '<td style="vertical-align: middle;"><input type="text" name="product" class="form-control"></td>';
+        }
+        $html .= '<td style="vertical-align: middle;"><input type="file" name="image" class="form-control"></td>';
+        $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $data->product_id)->first();
+       
+        $html .= '<th>';
+        
+        if ($data->product_id == isset($toppingType->id_product) ? $toppingType->id_product : "") {
+            $html .= '<h6>' . $toppingType->name_topping . '</h6>
+            <div style="margin-bottom: 10px;"><input type="radio" name="typetopping" value="select" onclick="radiocheck()"'; 
+            ($toppingType->typetopping == "select") ? $html .='checked' : ''; $html .='>Select&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="typetopping" value="checkbox" onclick="radiocheck()"'; 
+            ($toppingType->typetopping == "checkbox") ? $html .='checked' : ''; $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            
+            <div style="margin-bottom: 10px;"><input type="radio" name="enable[]" value="1"'; 
+            ($toppingType->enable == 1) ? $html .='checked' : ''; $html .='>Enable&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="enable[]" value="0"'; 
+            ($toppingType->enable == 0) ? $html .='checked' : ''; $html .='>Disable&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="form-floating">
+            <label for="rename" class="form-label">Rename to</label>
+            <input type="text" name="renamegroup" class="form-control">
+            </div>
+            <div id="text"></div>
+            
+            ';
+        } else {
+            $html .= 'No Topping';
+        }
+        $html .= '</th>';
+        $html .= '<td class="text-right" style="vertical-align: middle;"><button type="button"  data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+
+        $html .= '</tr>';
+        return response()->json($html);
     }
 
 
@@ -151,6 +221,16 @@ class ProductController extends Controller
     function getproductbycategory(Request $request)
     {
         $category_id = $request->category_id;
+
+        // $products = Product::with(['hasOneProductDescription','hasOneProduct_to_category'=> function($q){
+        //     return $q->with(['hasOneCategory']);
+        // }])->whereHas('hasOneProduct_to_category', function($q) use($category_id) {
+        //     $q->where('category_id', $category_id); 
+        // })->limit(10)->get();
+
+        // return json_encode($products);
+        // exit;
+
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->get();
         $headers = ToppingSize::where('id_category', $category_id)->get();
         $head_count = count($headers) + 1;
@@ -202,9 +282,9 @@ class ProductController extends Controller
                     $html .= '<td>Disabled</td>';
                 }
                 $html .= '<td>' . $category->sort_order . '</td>';
-                $edit_url = route('editproduct',$category->product_id);
+                $edit_url = route('editproduct', $category->product_id);
 
-                $html .= '<td><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
+                $html .= '<td><a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
                 $html .= '</tr>';
             }
             return response()->json($html);
@@ -222,7 +302,7 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $edit_url = route('editproduct', $row->product_id);
-                    $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+                    $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
                     return $btn;
                 })
@@ -391,8 +471,7 @@ class ProductController extends Controller
         // $productstore->update();
         $type_topping = isset($request->typetopping) ? $request->typetopping : '';
 
-       if(!empty($type_topping) || $type_topping != '')
-       {
+        if (!empty($type_topping) || $type_topping != '') {
             $toppingtype = ProductToppingType::find($product_id);
             $toppingtype->typetopping =  $type_topping;
             $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
@@ -402,30 +481,25 @@ class ProductController extends Controller
             $toppingtype->renamegroup = $request->renamegroup;
             $toppingtype->topping_sort_order = $request->topping_sort_order;
             $toppingtype->update();
-       }
+        }
 
         // $mainprice = isset($request->mainprices) ? $request->mainprices : "";
-        $mainprice =$request->mainprices;
-        $collectionprice =$request->collectionprices;
-        $deliveryprice =$request->deliveryprices;
+        $mainprice = $request->mainprices;
+        $collectionprice = $request->collectionprices;
+        $deliveryprice = $request->deliveryprices;
         $price_size_id = $request->id_product_price_size;
         $id_size = $request->id_size;
-        if(!empty($price_size_id))
-        {
-            foreach($mainprice as $key => $mainprices)
-            {
+        if (!empty($price_size_id)) {
+            foreach ($mainprice as $key => $mainprices) {
                 $where = $price_size_id[$key];
                 $toppingProductPriceSize = ToppingProductPriceSize::find($where);
                 $toppingProductPriceSize->price = $mainprices;
                 $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
                 $toppingProductPriceSize->collection_price = $collectionprice[$key];
                 $toppingProductPriceSize->update();
-             }
-        }
-        else
-        {
-            foreach($mainprice as $key => $mainprices)
-            {
+            }
+        } else {
+            foreach ($mainprice as $key => $mainprices) {
                 $toppingProductPriceSize = new ToppingProductPriceSize;
                 $toppingProductPriceSize->price = $mainprices;
                 $toppingProductPriceSize->id_size = $id_size[$key];
@@ -433,7 +507,7 @@ class ProductController extends Controller
                 $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
                 $toppingProductPriceSize->collection_price = $collectionprice[$key];
                 $toppingProductPriceSize->save();
-             }
+            }
         }
 
 

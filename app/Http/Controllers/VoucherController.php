@@ -7,7 +7,7 @@ use App\Models\VoucherHistory;
 use App\Models\VoucherThemeDescription;
 use App\Models\Voucherthemes;
 use App\Models\VoucherThemenames;
-
+use Faker\Provider\ar_EG\Person;
 use Illuminate\Http\Request;
 
 class VoucherController extends Controller
@@ -42,7 +42,7 @@ class VoucherController extends Controller
     public function voucherupdate(Request $request)
     {
         $request->validate([
-            'code' => 'required',
+            'code' => 'required|max:10',
             'apply' => 'required',
             'formname' => 'required',
             'email' => 'required',
@@ -87,7 +87,7 @@ class VoucherController extends Controller
     public function voucherinsert(Request $request)
     {
         $request->validate([
-            'code' => 'required',
+            'code' => 'required|max:10',
             'apply' => 'required',
             'formname' => 'required',
             'email' => 'required',
@@ -142,9 +142,10 @@ class VoucherController extends Controller
             $Voucherthemename = new VoucherThemenames;
             $Voucherthemename->voucher_theme_id =$vouchertheme->voucher_theme_id;
             $Voucherthemename->name = $request->name;
+            $Voucherthemename->language_id = '1';
             $Voucherthemename->save();
 
-            return redirect()->route('voucherthemelist');
+            return redirect()->route('voucherthemelist')->with("Success, Voucher thene insert success");
             // return view('admin.vouchers.voucherthemelist');
 
            
@@ -153,8 +154,7 @@ class VoucherController extends Controller
     }
     public function voucherthemeshow()
     {
-        $data = VoucherThemenames::all();
-        // echo "<pre>"; print_r($data);exit;
+        $data = VoucherThemenames::get();
         return view('admin.vouchers.voucherthemelist',['data'=>$data]);
         
     }
@@ -177,11 +177,30 @@ class VoucherController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
        
-        $imageName = $request->image->getClientOriginalName(); 
-        $request->image->move(public_path('images'), $imageName);
+        // $imageName = $request->image->getClientOriginalName(); 
+        // $request->image->move(public_path('images'), $imageName);
         $vouchertheme = Voucherthemes::find($id);
+    
        
-        $vouchertheme->image = $imageName;
+        if ($request->hasFile('image'))
+        {
+            $image = isset($vouchertheme['image']) ? $vouchertheme['image'] : '';
+            // echo '<pre>';
+            // print_r($image);
+            // exit();
+            if(!empty($image) || $image != '')
+            {
+                if(file_exists(public_path('admin/offers/').$image))
+                {
+                    unlink(public_path('admin/offers/').$image);
+                }
+            }
+
+            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/offers/'), $imgname);
+        }
+        $vouchertheme->image = $imgname;
+
         $vouchertheme->update();
 
         $Voucherthemename = VoucherThemenames::find($id);

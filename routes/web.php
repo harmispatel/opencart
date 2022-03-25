@@ -133,6 +133,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Products
     Route::get('products', [ProductController::class, 'index'])->name('products');
     Route::get('bulkproducts', [ProductController::class, 'bulkproducts'])->name('bulkproducts');
+    Route::post('getcategoryproduct', [ProductController::class, 'getcategoryproduct'])->name('getcategoryproduct');
     Route::get('importproducts', [ProductController::class, 'importproducts'])->name('importproducts');
     Route::get('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');
     Route::post('getproductbycategory', [ProductController::class, 'getproductbycategory'])->name('getproductbycategory');
@@ -281,6 +282,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('searchproduct', [CouponController::class, 'products'])->name('searchproduct');
     Route::get('searchcategory', [CouponController::class, 'searchcategory'])->name('searchcategory');
     Route::POST('getallcouponhistory', [CouponController::class, 'getallcouponhistory'])->name('getallcouponhistory');
+    Route::POST('updonoff', [CouponController::class, 'updonoff'])->name('updonoff');
+    // Route::post('updonoff', [CouponController::class, 'updonoff'])->name('updonoff');
 
     // Vouchers
     Route::get('giftvoucher', [VoucherController::class, 'giftvoucher'])->name('giftvoucher');
@@ -309,6 +312,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('freeitemdelete', [VoucherController::class, 'freeitemdelete'])->name('freeitemdelete');
     Route::post('freeitemupdate/{id}', [FreeItemController::class, 'freeitemupdate'])->name('freeitemupdate');
     Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
+    Route::get('addfreerule', [FreeItemController::class, 'addfreerule'])->name('addfreerule');
+    // Route::post('cartruleinsert', [FreeItemController::class, 'cartruleinsert'])->name('cartruleinsert');
 
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
