@@ -107,8 +107,8 @@
                                                 </td>
                                                 <td>{{ $voucher->name }}</td>
                                                 <td>{{ ($voucher->status == 1) ? "Enable" : "Desable" }}</td>
-                                                <td>{{ strtotime($voucher->date_added) }}</td>
-                                                <td>[<a href="#">send</a>][<a href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}">Edit</a>]</td>
+                                                <td>{{ date('d-m-Y',strtotime($voucher->date_added)) }}</td>
+                                                <td><a class="btn btn-sm btn-primary" href="#"><i class="fa fa-envelope"></i></a><a class="ml-2 btn btn-sm btn-primary" href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}"><i class="fa fa-edit"></i></a></td>
                                                 
                                             </tr>
                                             @endforeach

@@ -76,8 +76,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="image">* Image:</label>
-                                <input class="form-control" name="image" id="image" value="{{$vouchertheme->image }}" type="file">
-                                <img src="{{asset('public/images/'.$vouchertheme->image)}}" alt="" width="50px" height="50px">                                 @if ($errors->has('image'))
+                                <input class="form-control" name="image" id="image" type="file">
+                                <img src="{{asset('public/admin/offers/'.$vouchertheme->image)}}" alt="" width="50px" height="50px">                                 @if ($errors->has('image'))
                                 <div style="color: red">{{ $errors->first('image') }}</div>
                                 @endif
                             </div>

@@ -44,6 +44,19 @@ class CouponController extends Controller
         return response()->json($pro);
     }
 
+    public function updonoff(Request $request)
+    {
+        echo $request->onoff;
+        $couponid = $request->dataid;
+        $onoff = Coupon::find( $couponid);
+        $onoff->on_off = $request->onoff;
+        $onoff->update();
+
+        return response()->json([
+            "success"=>"update status"
+        ]);
+    }
+
     public function insertcoupon(Request $request)
     {
 
@@ -123,9 +136,6 @@ class CouponController extends Controller
         $coupon->on_off = isset($request->on_off) ? $request->on_off : "0";
         date_default_timezone_set('Asia/Kolkata');
         $coupon->date_added = date("Y-m-d h:i:s");
-        // echo '<pre>';
-        // print_r($coupon->toArray());
-        // exit();
         $coupon->update();
 
 

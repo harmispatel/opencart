@@ -3,15 +3,16 @@
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 <style>
     /* Custom Radio Button */
-    .radio
-    {
+    .radio {
         display: none;
     }
-    .radio:checked + label {
-      background: dimgrey!important;
-      color: #fff;
+
+    .radio:checked+label {
+        background: dimgrey !important;
+        color: #fff;
     }
-    </style>
+
+</style>
 
 {{-- Section of List Coupons --}}
 <section>
@@ -71,6 +72,7 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="myTable">
+                                    {{-- <form > --}}
                                     @if (Session::has('success'))
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert"
                                             role="alert">
@@ -99,41 +101,58 @@
 
                                     {{-- Table Body --}}
                                     <tbody class="cat-list">
-                                        @foreach ($coupons as $coupon)
-                                            <tr>
-                                                <td><input type="checkbox" name="del_all" class="del_all"
-                                                        value="{{ $coupon->coupon_id }}"></td>
-                                                <td>{{ $coupon->name }}</td>
-                                                <td><div class="d-flex justify-content-between">
-                                                    {{ $coupon->code }}
-                                                        {{-- <div class="btn-group ml-2">
-                                                            <input type="radio" class="radio" id="enable" name="on_off" value="1" {{ $coupon->on_off == 1 ? "checked" : "" }}/>
-                                                            <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enable">ON</label>
-                                                            <input type="radio" class="radio" id="disable" name="on_off" value="0"  {{ $coupon->on_off == 0 ? "checked" : "" }}/>
-                                                            <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disable">OFF</label>
-                                                        </div> --}}
-                                                    </div>
-                                                </td>
-                                                <td>{{ $coupon->discount }}</td>
-                                                <td>
-                                                    @if ($coupon->apply_shipping == 1)
-                                                        Delivery
-                                                    @elseif ($coupon->apply_shipping == 2)
-                                                        Collection
-                                                    @else
-                                                        Both
-                                                    @endif
-                                                </td>
-                                                <td>{{ $coupon->date_start }}</td>
-                                                <td>{{ $coupon->date_end }}</td>
-                                                <td>{{ $coupon->status == 1 ? 'Enable' : 'Desable' }}</td>
-                                                <td>[ <a
-                                                        href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}">Edit</a>
-                                                    ]</td>
-                                            </tr>
-                                        @endforeach
+                                        @php $i=1; @endphp
+                                        <form>
+                                            @foreach ($coupons as $coupon)
+                                                <tr>
+                                                    <td><input type="checkbox" name="del_all" class="del_all"
+                                                            value="{{ $coupon->coupon_id }}"></td>
+                                                    <td>{{ $coupon->name }}</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-between">
+                                                            {{ $coupon->code }}
+                                                            <form>
+                                                                <div class="btn-group ml-2">
+                                                                    <input type="radio" class="radio"
+                                                                        data-id="{{ $coupon->coupon_id }}"
+                                                                        id="enable_{{ $i }}" name="on_off"
+                                                                        value="1"
+                                                                        {{ $coupon->on_off == 1 ? 'checked' : '' }} />
+                                                                    <label class="btn btn-sm"
+                                                                        style=" background: rgb(117,185,54);color:white;"
+                                                                        for="enable_{{ $i }}">ON</label>
+                                                                    <input type="radio" class="radio"
+                                                                        data-id="{{ $coupon->coupon_id }}"
+                                                                        id="disable_{{ $i }}" name="on_off"
+                                                                        value="0"
+                                                                        {{ $coupon->on_off == 0 ? 'checked' : '' }} />
+                                                                    <label class="btn btn-sm"
+                                                                        style=" background: rgb(178,178,178);color: white;"
+                                                                        for="disable_{{ $i }}">OFF</label>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $coupon->discount }}</td>
+                                                    <td>
+                                                        @if ($coupon->apply_shipping == 1)
+                                                            Delivery
+                                                        @elseif ($coupon->apply_shipping == 2)
+                                                            Collection
+                                                        @else
+                                                            Both
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $coupon->date_start }}</td>
+                                                    <td>{{ $coupon->date_end }}</td>
+                                                    <td>{{ $coupon->status == 1 ? 'Enable' : 'Desable' }}</td>
+                                                    <td> <a class="btn btn-sm btn-primary" href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}"><i class="fa fa-edit"></i></a></td>
+                                                </tr>
+                                                @php $i++ @endphp
+                                            @endforeach
                                     </tbody>
                                     {{-- End Table Body --}}
+                                    </form>
                                 </table>
                                 {{-- End Table --}}
                             </div>
@@ -222,4 +241,30 @@
         }
     });
     // End Delete User
+
+    $(".radio").on('click', function() {
+    //    let data = $('input[name="on_off"]:checked').val();
+    //    console.log(data);image
+        var onoff = $(this).val();
+        // alert($(this).attr("data-id"));
+        var dataid = $(this).attr("data-id");
+        console.log(dataid + "  " + onoff);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "{{ route('updonoff') }}",
+            data: {
+                onoff: onoff,
+                dataid: dataid,
+            },
+            dataType: "json",
+            success: function(response) {
+
+            }
+        });
+    });
 </script>
