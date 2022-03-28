@@ -14,9 +14,7 @@ use App\Models\ProductToppingType;
 use App\Models\ToppingSize;
 use App\Models\ToppingProductPriceSize;
 use App\Models\Topping;
-
-
-
+use App\Models\ToppingOption;
 use DataTables;
 
 
@@ -41,11 +39,25 @@ class ProductController extends Controller
     function getcategoryproduct(Request $request)
     {
         $category_id = $request->category_id;
+
+        // $demo  = Product_to_category::where('category_id',$category_id)->first();
+        // $demo1 = ProductStore::where('product_id',$demo->product_id)->first();
+        // $demo2 = Topping::where('store_topping',$demo1->store_id)->first();
+        // $demo3 = ToppingOption::where('id_group_topping',$demo2->id_topping)->get();
+
+        
+
+
+        // echo '<pre>';
+        // print_r($demo3);
+        // exit();
+
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->first();
         $headers = ToppingSize::where('id_category', $category_id)->get();
-        $head_count = count($headers) + 1;
+        $head_count = count($headers)+1;
+
         $html = '';
-        $html .= '<tr>';
+        $html .= '<tbody><tr>';
         $html .= '<th style="min-width:220px!important">Product Name</th>';
         $html .= '<th style="min-width:250px!important">Description:</th>';
         if (isset($head_count)) {
@@ -56,6 +68,7 @@ class ProductController extends Controller
         $html .= '<th style="min-width:240px!important">Image</th>';
         $html .= '<th style="min-width:300px!important">Options</th>';
         $html .= '<th>Action</th>';
+
         $html .= '</tr>';
         $html .= '<tr><td colspan="2"></td><th style="background:lightgray;min-width:100px;">Main Price</th>';
         if (count($headers) > 0) {
@@ -64,47 +77,62 @@ class ProductController extends Controller
             }
         }
         $html .= '<td colspan="3"></td> </tr>';
-        $html .= '<tr>';
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="product" class="form-control"></td>';
+        $html .= '<tr id="bulkproduct">';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[0][name]" class="form-control"></td>';
         $html .= '<td style="vertical-align: middle;"><textarea type="text" name="product" class="form-control"></textarea></td>';
         $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="product" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="price" class="form-control"></td>';
         foreach ($sizes as $size) {
-            $html .= '<td style="vertical-align: middle;"><input type="text" name="product" class="form-control"></td>';
+            $html .= '<td style="vertical-align: middle;"><input type="text" name="abc" class="form-control"></td>';
         }
         $html .= '<td style="vertical-align: middle;"><input type="file" name="image" class="form-control"></td>';
         $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $data->product_id)->first();
-       
+
         $html .= '<th>';
-        
+
         if ($data->product_id == isset($toppingType->id_product) ? $toppingType->id_product : "") {
             $html .= '<h6>' . $toppingType->name_topping . '</h6>
-            <div style="margin-bottom: 10px;"><input type="radio" name="typetopping" value="select" onclick="radiocheck()"'; 
-            ($toppingType->typetopping == "select") ? $html .='checked' : ''; $html .='>Select&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="typetopping" value="checkbox" onclick="radiocheck()"'; 
-            ($toppingType->typetopping == "checkbox") ? $html .='checked' : ''; $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+            <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping" value="select" onclick="radiocheck()"';
+            ($toppingType->typetopping == "select") ? $html .= 'checked' : '';
+            $html .= '>Select&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="typetopping" class="typetopping" value="checkbox" onclick="radiocheck()"';
+            ($toppingType->typetopping == "checkbox") ? $html .= 'checked' : '';
+            $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
             
-            <div style="margin-bottom: 10px;"><input type="radio" name="enable[]" value="1"'; 
-            ($toppingType->enable == 1) ? $html .='checked' : ''; $html .='>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="enable[]" value="0"'; 
-            ($toppingType->enable == 0) ? $html .='checked' : ''; $html .='>Disable&nbsp;&nbsp;&nbsp;&nbsp;
+            <div style="margin-bottom: 10px;"><input type="radio" name="enable[]" value="1"';
+            ($toppingType->enable == 1) ? $html .= 'checked' : '';
+            $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="radio" name="enable[]" value="0"';
+            ($toppingType->enable == 0) ? $html .= 'checked' : '';
+            $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
             <div class="form-floating">
             <label for="rename" class="form-label">Rename to</label>
             <input type="text" name="renamegroup" class="form-control">
             </div>
-            <div id="text"></div>
+            <div id="text1"></div>
             
             ';
         } else {
             $html .= 'No Topping';
         }
         $html .= '</th>';
-        $html .= '<td class="text-right" style="vertical-align: middle;"><button type="button"  data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+        $html .= '<td class="text-right" style="vertical-align: middle;"><button type="button"  data-toggle="tooltip" onclick="$(\'#bulkproduct' . '\').remove()" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+        $html .= '</tr></tbody>';
 
-        $html .= '</tr>';
-        return response()->json($html);
+        if (isset($head_count)) {
+            $html .='<td colspan="' . $head_count . '"><div align="right"><button type="button" style="margin-left: 20px" onclick="addbulkproduct();" class="btn btn-primary ">
+        <i class="fa fa-plus-circle"></i>
+        </button></div></td>';
+        } else {
+        $html .= '<tfoot><td colspan="6"><div align="right"><button type="button" style="margin-left: 20px" onclick="addbulkproduct();" class="btn btn-primary ">
+            <i class="fa fa-plus-circle"></i>
+            </button></div></td></tfoot>';
+        }
+
+
+        return response()->json(['html'=>$html,'sizes'=>$sizes,'toppingType'=>$toppingType,'data'=>$data]);
     }
 
 
@@ -317,22 +345,7 @@ class ProductController extends Controller
 
                     return $image;
                 })
-                // ->addColumn('name', function ($row) {
-                //     $name = $row->name . ' ' . $row->name;
-                //     return $name;
-                // })
-                // ->addColumn('price', function ($row) {
-                //     $price = $row->price . ' ' . $row->price;
-                //     return $price;
-                // })->addColumn('status', function ($row) {
-                //     $status = $row->status . ' ' . $row->status;
-                //     return $status;
-                // })
-                // ->addColumn('sort_order', function ($row) {
-                //     $sort_order = $row->sort_order . ' ' . $row->sort_order;
-                //     return $sort_order;
-                // })
-
+                
                 ->addColumn('checkbox', function ($row) {
                     $pid = $row->product_id;
                     $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $pid . '">';
