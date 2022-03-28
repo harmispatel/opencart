@@ -9,4 +9,6 @@ class FreeRule extends Model
 {
     use HasFactory;
     protected $table = 'oc_free_rule';
+    public $timestamps = false;
+    protected $primaryKey = 'id_rule';
 }

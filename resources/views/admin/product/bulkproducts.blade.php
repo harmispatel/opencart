@@ -86,7 +86,7 @@
                                         {{-- End Table Head --}}
 
                                         {{-- Table Body --}}
-                                        <tbody class="text-center cat-list">
+                                        <tbody class="text-center table1">
                                             {{-- <tr>
                                                 <td colspan="6"></td>
                                                 <td class="text-center"><button type="button" onclick="addProduct();"
@@ -122,9 +122,12 @@
 
 
 <script>
+    var toppingType = '';
+    var sizes = '';
+    var data = '';
     $(document).ready(function() {
-
         var categoryval = $('#categorys :selected').val();
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -139,7 +142,7 @@
             },
             success: function(result) {
                 $('.table').html('');
-                $('.table').html(result);
+                $('.table').html(result.html);
             }
 
         });
@@ -164,29 +167,22 @@
             },
             success: function(result) {
                 $('.table').html('');
-                $('.table').html(result);
+                $('.table').html(result.html);
+                sizes = result.sizes;
+                toppingType = result.toppingType;
+                data = result.data;
+
+
+                var checkdata = $('input[name=typetopping]:checked').val();
+                if (checkdata == 'checkbox') {
+                    radiocheck();
+                } else {
+                    radiocheck();
+                }
             }
 
         });
     });
-</script>
-<script>
-    $(document).ready(function() {
-
-        var data = $('input[name=typetopping]:checked').val();
-
-        if (data == 'checkbox') {
-            html += '<div><lable>Default selected</lable></div>';
-            html += '<div><table><tbody><tr><td><input type="checkbox"></td><td>hello</td></tbody></table></div>';
-        } else if (data == 'select') {
-            html += '<div><lable>Default selected</lable></div>';
-            html += '<select  class="form-control"><option></option></select>';
-
-        }
-        $("#text").append(html);
-    });
-
-
 
     function radiocheck() {
         var data = $('input[name=typetopping]:checked').val();
@@ -194,20 +190,105 @@
         var html = '';
         if (data == 'select') {
             $("#text").html('');
-        }else if(data == 'checkbox'){
+        } else if (data == 'checkbox') {
             $("#text").html('');
         }
 
         if (data == 'checkbox') {
             html += '<div><lable>Default selected</lable></div>';
-            html += '<div><table><tbody><tr><td><input type="checkbox"></td><td>hello</td></tbody></table></div>';
-           
+            html += '<div><table><tbody><tr><td><input type="checkbox" name></td><td>hello</td></tbody></table></div>';
+
         } else if (data == 'select') {
 
             html += '<div><lable>Default selected</lable></div>';
-            html += '<select  class="form-control"><option></option></select>';
+            html += '<select  class="form-control" name="select[0][name]"><option></option></select>';
 
         }
         $("#text").append(html);
     }
+
+
+
+
+    var product_row = 0;
+    
+    function addbulkproduct() {
+    
+        html = '';
+        html += '<tr id="bulkproduct' + product_row + '">';
+        html += '<td style="vertical-align: middle;"><input type="text" class="form-control" name="product[' + product_row + '][name]"></td>';
+        html += '<td style="vertical-align: middle;"><textarea type="text" name="product" class="form-control"></textarea></td>';
+        html += '<td style="vertical-align: middle;"><input type="text" name="price" class="form-control"></td>';
+        var count=sizes.length;
+         for(var i=0; i < count; i++){
+            html += '<td style="vertical-align: middle;"><input type="text" name="abc" class="form-control"></td>';
+         }
+        html += '<td style="vertical-align: middle;"><input type="file" name="image" class="form-control"></td>';
+        html += '<td style="vertical-align: middle;">';
+
+        if (data.product_id == toppingType.id_product){
+            html += '<h3> ' + toppingType.name_topping + '</h3>';
+            html +=
+                '<div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping[' +
+                product_row + '][name]" onclick="radiochecked();" value="select"';
+
+            if (toppingType.typetopping == "select") {
+                html += 'checked';
+            }
+            html += '> Select<input type="radio" class="typetopping" name="typetopping[' + product_row +
+                '][name]" onclick="radiochecked();" value="checkbox"';
+            if (toppingType.typetopping == "checkbox") {
+                html += 'checked';
+            }
+            html += '> Checkbox</div>';
+            html +=
+                '<div><input type="radio" name="product[' + product_row + '][enable]" value="1"';
+            if (toppingType.enable == 1) {
+                html += 'checked';
+            }
+            html += '> Enable<input type="radio"  name="product[' + product_row + '][enable]" value="0"';
+            if (toppingType.enable == 0) {
+                html += 'checked';
+            }
+            html += '>Disable</div>';
+            html +=
+                '<div class="form-floating"><label for="rename" class="form-label">Rename to</label><input type="text" name="renamegroup" class="form-control"></div>';
+            html += '<div id="text"></div>';
+        } else {
+            html += 'No Topping';
+        }
+
+        html += '</td>';
+        html +=
+            '<td class="text-right" style="vertical-align: middle;"><button type="button"  data-toggle="tooltip" onclick="$(\'#bulkproduct' +
+            product_row +
+            '\').remove()" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+        html += '</tr>';
+        $(".table").append(html);
+        product_row++;
+    }
+
+    // function radiochecked() {
+    //     var data = $('input[name=product[' +
+    //             product_row + '][typetopping]]:checked').val();
+
+    //     var html = '';
+    //     if (data == 'select') {
+    //         $("#text1").html('');
+    //     } else if (data == 'checkbox') {
+    //         $("#text1").html('');
+    //     }
+
+    //     if (data == 'checkbox') {
+    //         html += '<div><lable>Default selected</lable></div>';
+    //         html += '<div><table><tbody><tr><td><input type="checkbox"></td><td>hello</td></tbody></table></div>';
+
+    //     } else if (data == 'select') {
+
+    //         html += '<div><lable>Default selected</lable></div>';
+    //         html += '<select  class="form-control" name="select[0][name]"><option></option></select>';
+
+    //     }
+    //     $("#text1").append(html);
+    // }
 </script>

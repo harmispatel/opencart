@@ -42,7 +42,7 @@
                         {{-- Card Start --}}
                         <div class="card">
                             {{-- Card Header --}}
-                            {{-- <div class="card-header" style="background: #f6f6f6">
+                            <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
                                     Cart Rule
@@ -59,13 +59,12 @@
                                             class="btn btn-sm btn-danger ml-auto px-1 deletesellected">Delete</a>
                                     @endif
                                 </div>
-                            </div> --}}
+                            </div>
                             {{-- End Card Header --}}
 
                             {{-- Card Body --}}
                             <div class="card-body">
                                 {{-- Table --}}
-                                <table class="table table-bordered" id="table">
                                     {{-- Alert Message Div --}}
                                     <div class="alert alert-success del-alert alert-dismissible" id="alert"
                                         style="display: none" role="alert">
@@ -93,13 +92,11 @@
                                                     <td><input type="checkbox" name="del_all" value="{{ $rule->id_rule }}" class="del_all"></td>
                                                     <td>{{ $rule->name_rule }}</td>
                                                     <td>{{ $rule->min_total }}</td>
-                                                    <td><a class="btn btn-sm btn-primary" href="#"><i class="fa fa-edit"></i></a></td>
+                                                    <td><a class="btn btn-sm btn-primary" href="{{ url('editfreerule') }}/{{ $rule->id_rule }}"><i class="fa fa-edit"></i></a></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    {{-- End Table Body --}}
-                                </table>
                                 {{-- End Table --}}
                             </div>
                             {{-- End Card Body --}}
@@ -123,9 +120,9 @@
 
 <script type="text/javascript">
 
-    // $(document).ready(function() {
-    //     $('#table').DataTable();
-    // });
+    $(document).ready(function() {
+        $('#table').DataTable();
+    });
 
     // Select All Checkbox
     $('#delall').on('click', function(e) {
@@ -155,7 +152,7 @@
                     if (willDelete) {
                         $.ajax({
                             type: "POST",
-                            url: '{{ url('coupondelete') }}',
+                            url: '{{ url('cartruledelete') }}',
                             data: {
                                 "_token": "{{ csrf_token() }}",
                                 'id': checkValues

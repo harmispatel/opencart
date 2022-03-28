@@ -9,33 +9,76 @@ use Illuminate\Http\Request;
 
 class FreeItemController extends Controller
 {
-
-    public function freeitems()
-    {
-        // return view('admin.freeitems.freeitem');
-        $data = FreeItemadd::all();  
-        return view('admin.freeitems.freeitemlist',['data'=>$data]);
-    }
-
-    // public function cartruleinsert(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'total_above' => 'required',
-    //     ]);
-
-    //     $cartrule = new FreeRule;
-
-    //     return view('admin.freeitems.cartrule');
-    // }
-
     public function cartrule()
     {
         $data['cartrul'] = FreeRule::get();
-        // echo '<pre>';
-        // print_r($data['cartrul']->toArray());
-        // exit();
         return view('admin.freeitems.cartrule',$data);
+    }
+
+    public function addfreerule()
+    {
+        $data['freeitems'] = FreeItemadd::get();
+        return view('admin.freeitems.addfreerule',$data);
+    }
+
+    public function cartruleinsert(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'free_item' => 'required',
+            'total_above' => 'required',
+        ]);
+
+        $cartrule = new FreeRule;
+        $cartrule->name_rule = $request->name;
+        $cartrule->id_store = isset($request->id_store) ? $request->id_store : "1";
+        $id_item = implode(":",$request->free_item);
+        $cartrule->id_item = $id_item;
+        $cartrule->min_total = isset($request->total_above) ? $request->total_above : "";
+        $cartrule->save();
+        return redirect()->route('cartrule')->with('success', "Cartrule Insert Successfully.");
+    }
+
+    public function cartruleupdate(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'free_item' => 'required',
+            'total_above' => 'required',
+        ]);
+
+        $cartrule = FreeRule::find($request->id);
+        $cartrule->name_rule = $request->name;
+        $cartrule->id_store = isset($request->id_store) ? $request->id_store : "1";
+        $id_item = implode(":",$request->free_item);
+        $cartrule->id_item = $id_item;
+        $cartrule->min_total = isset($request->total_above) ? $request->total_above : "";
+        $cartrule->update();
+        return redirect()->route('cartrule')->with('success', "Cartrule Update Successfully.");
+    }
+
+    public function cartruledelete(Request $request)
+    {
+        $ids = $request['id'];
+        if (count($ids) > 0) {
+            FreeRule::whereIn('id_rule', $ids)->delete();
+            return response()->json([
+                'success' => 1,
+            ]);
+        }
+    }
+
+    public function editfreerule($id)
+    {
+        $data['freeitems'] = FreeItemadd::get();
+        $data['getfreeitem'] = FreeRule::find($id);
+        return view('admin.freeitems.edit',$data);
+    }
+
+    public function freeitems()
+    {
+        $data = FreeItemadd::all();  
+        return view('admin.freeitems.freeitemlist',['data'=>$data]);
     }
 
     public function addfreeitems()
@@ -61,13 +104,11 @@ class FreeItemController extends Controller
         $data = FreeItemadd::all();  
         return view('admin.freeitems.freeitemlist',['data'=>$data]);
     }
+
     public function freeitemedit($id)
     {
-        // echo "<pre>";print_r($id);exit;
         $freeitemedit = FreeItemadd::find($id);
-
         return view('admin.freeitems.freeitemedit',['freeitemedit'=>$freeitemedit]);
-
     }
 
     public function freeitemupdate(Request $request,$id)
@@ -80,7 +121,6 @@ class FreeItemController extends Controller
         $freeitemupdate->update();
 
         return redirect()->route('freeitemlist');
-
     }
     public function freeitemdelete(Request $request)
     {
@@ -90,7 +130,6 @@ class FreeItemController extends Controller
             return response()->json([
                 'success' => 1,
             ]);
-            echo "<pre>"; print_r($ids);exit;
         }
     }
     

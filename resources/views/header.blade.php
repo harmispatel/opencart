@@ -51,10 +51,14 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
+      <li>
+          <select class="form-control">
+              <option>Default select</option>
+            </select>
+      </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">
-
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown p-0">
           <a class="nav-link p-0 text-uppercase" style="color: rgb(71, 69, 69); font-weight: 700;font-family: verdana" data-toggle="dropdown" href="#">
