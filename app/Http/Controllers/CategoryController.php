@@ -53,7 +53,8 @@ class CategoryController extends Controller
     // Function of Bulk Category View
     function bulkcategory()
     {
-        return view('admin.category.bulkcategory');
+        $data['optiongroups'] = Topping::where('store_topping',1)->get();
+        return view('admin.category.bulkcategory',$data);
     }
 
     // Function of Add Category View
@@ -219,6 +220,11 @@ class CategoryController extends Controller
 
         // Get Category Top Option
         $topcatoption = ToppingCatOption::where('id_category',$id)->first();
+
+        // echo '<pre>';
+        // print_r($topcatoption->group);
+        // print_r(unserialize($topcatoption->group));
+        // exit();
 
 
         // Get Topping Size
