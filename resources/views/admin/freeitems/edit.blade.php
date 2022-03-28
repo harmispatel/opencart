@@ -46,20 +46,8 @@
                                     <i class="fa fa-list pr-2"></i>
                                     Cart rule
                                 </h3>
-
-                                {{-- <div class="container" style="text-align: right">
-                                    @if (check_user_role(71) == 1)
-                                        <a href="{{ route('cartruleinsert') }}"
-                                            class="btn btn-sm btn-primary ml-auto px-1">save</a>
-                                    @endif
-
-                                    @if (check_user_role(73) == 1)
-                                        <a href="{{ route('cartrule') }}"
-                                            class="btn btn-sm btn-danger ml-auto px-1 deletesellected">Back</a>
-                                    @endif
-                                </div> --}}
                                 <div class="form-group ml-auto" style="text-align: right">
-                                    <button type="submit" form="cartruleadd" class="btn btn-primary">Save</button>
+                                    <button type="submit" form="cartruleupdate" class="btn btn-primary">Save</button>
                                     <a href="{{ route('cartrule') }}" class="btn btn-danger">Back</a>
                                 </div>
                             </div>
@@ -78,12 +66,12 @@
                             @endif
                                 {{-- Table --}}
 
-                                <form action="{{ url('cartruleinsert') }}" id="cartruleadd" method="POST">
+                                <form action="{{ url('cartruleupdate') }}" id="cartruleupdate" method="POST">
                                     {{ csrf_field() }}
                                     <div class="form-group">
                                         <label for="name">* Name</label>
-                                        <input type="name" class="form-control" id="name" name="name"
-                                            aria-describedby="emailHelp">
+                                        <input type="name" class="form-control" value="{{ $getfreeitem->name_rule }}" id="name" name="name">
+                                        <input type="hidden" name="id" value="{{ $getfreeitem->id_rule }}">
                                         @if ($errors->has('name'))
                                             <div style="color: red">{{ $errors->first('name') }}</div>
                                         @endif
@@ -93,13 +81,20 @@
                                         <div class="row">
                                             @php
                                                 $i = 1;
+                                                $item = $getfreeitem->id_item;
+                                                $items = explode(":",$item);
                                             @endphp
                                             @foreach ($freeitems as $freeitem)
+                                            {{-- @php
+                                                echo '<pre>';
+                                                print_r($freeitem->id_free_item );
+                                                exit();
+                                            @endphp --}}
                                                 <div class="col-md-2 py-2">
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input"
                                                             name="free_item[]" value="{{ $freeitem->id_free_item }}"
-                                                            id="free_item_{{ $i }}">
+                                                            id="free_item_{{ $i }}" {{ (in_array($freeitem->id_free_item,$items)) ? "checked" :"" }}>
                                                         <label class="form-check-label"
                                                             for="free_item_{{ $i }}">{{html_entity_decode($freeitem->name_item) }}</label>
                                                     </div>
@@ -115,7 +110,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="total_above">*Total Above</label>
-                                        <input type="text" class="form-control" name="total_above" id="total_above">
+                                        <input type="text" class="form-control" name="total_above" value="{{ $getfreeitem->min_total }}" id="total_above">
                                         @if ($errors->has('total_above'))
                                             <div style="color: red">{{ $errors->first('total_above') }}</div>
                                         @endif

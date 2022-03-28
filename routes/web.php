@@ -313,7 +313,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('freeitemupdate/{id}', [FreeItemController::class, 'freeitemupdate'])->name('freeitemupdate');
     Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
     Route::get('addfreerule', [FreeItemController::class, 'addfreerule'])->name('addfreerule');
-    // Route::post('cartruleinsert', [FreeItemController::class, 'cartruleinsert'])->name('cartruleinsert');
+    Route::get('editfreerule/{id}', [FreeItemController::class, 'editfreerule'])->name('editfreerule');
+    Route::post('cartruleinsert', [FreeItemController::class, 'cartruleinsert'])->name('cartruleinsert');
+    Route::post('cartruleupdate', [FreeItemController::class, 'cartruleupdate'])->name('cartruleupdate');
+    Route::post('cartruledelete', [FreeItemController::class, 'cartruledelete'])->name('cartruledelete');
 
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');

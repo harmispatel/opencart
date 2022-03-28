@@ -72,7 +72,6 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="myTable">
-                                    {{-- <form > --}}
                                     @if (Session::has('success'))
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert"
                                             role="alert">
@@ -102,7 +101,7 @@
                                     {{-- Table Body --}}
                                     <tbody class="cat-list">
                                         @php $i=1; @endphp
-                                        <form>
+                                        {{-- <form> --}}
                                             @foreach ($coupons as $coupon)
                                                 <tr>
                                                     <td><input type="checkbox" name="del_all" class="del_all"
@@ -152,7 +151,6 @@
                                             @endforeach
                                     </tbody>
                                     {{-- End Table Body --}}
-                                    </form>
                                 </table>
                                 {{-- End Table --}}
                             </div>
