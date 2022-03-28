@@ -187,8 +187,17 @@
                                         <div class="row">
                                             <div class="col-md-12" id="groupTopping" style="display: none;">
                                                 @php
-                                                    $group = unserialize($topcatoption->group);
-                                                    unset($group["number_group"]);
+                                                    if(isset($topcatoption->group))
+                                                    {
+                                                        $group = unserialize($topcatoption->group);
+                                                    }
+                                                    else {
+                                                        $group = '';
+                                                    }
+                                                    if(!empty($group) || $group != '')
+                                                    {
+                                                        unset($group["number_group"]);
+                                                    }
                                                     // Dynamic Topping Size Count
                                                     if($group != '' || !empty($group))
                                                     {
@@ -307,7 +316,7 @@
                                                 <b>Maximum Character Allowed</b>
                                             </div>
                                             <div class="col-md-4">
-                                                <input type="text" name="numbercharacter" value="{{ $topcatoption->character }}" class="form-control">
+                                                <input type="text" name="numbercharacter" value="{{ (isset($topcatoption->character)) ? $topcatoption->character : 0 }}" class="form-control">
                                             </div>
                                         </div><hr>
 

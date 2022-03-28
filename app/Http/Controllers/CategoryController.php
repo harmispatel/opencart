@@ -50,11 +50,144 @@ class CategoryController extends Controller
         }
     }
 
+    // Function of Insert Category
+    function categoryinsert(Request $request)
+    {
+
+        // Validation Of Category Fields
+        $request->validate([
+            'category' => 'required',
+        ]);
+
+        // Insert Category Details
+        $catdetail = new CategoryDetail;
+
+        // Insert Category Image
+        if ($request->hasFile('image'))
+        {
+            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/category'), $imgname);
+        }
+
+        // Insert Banner Image
+        if ($request->hasFile('banner')) {
+            $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
+            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
+        }
+
+        $catdetail->image = isset($imgname) ? $imgname : '';
+        $catdetail->img_banner = isset($bannerimgname) ? $bannerimgname : '';
+        $availibleday = implode(",", $request->availibleday);
+
+        $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
+        $catdetail->top = isset($request->top) ? $request->top : 1;
+        $catdetail->column = isset($request->columns) ? $request->columns : 1;
+        $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
+        $catdetail->status = isset($request->status) ? $request->status : 0;
+        date_default_timezone_set('Asia/Kolkata');
+        $catdetail->date_added = date("Y-m-d h:i:s");
+        $catdetail->date_modified = date("Y-m-d h:i:s");
+        $catdetail->availibleday = $availibleday;
+        $catdetail->save();
+        $lastid = $catdetail->category_id;
+
+        // Category Path
+        $cat_path = new CategoryPath;
+        $cat_path->category_id = $lastid;
+        $cat_path->path_id = $lastid;
+        $cat_path->level = 0;
+        $cat_path->save();
+
+        // Insert Into Category to Store
+        $cat_to_store = new CategorytoStore;
+        $cat_to_store->category_id = $lastid;
+        $cat_to_store->store_id = 1;
+        $cat_to_store->save();
+
+        // Insert Category
+        $cat = new Category;
+        $cat->category_id = $lastid;
+        $cat->language_id = '1';
+        $cat->name = $request->category;
+        $cat->description = isset($request->description) ? $request->description : "";
+        // $cat->meta_title = isset($request->matatitle) ? $request->matatitle : "";
+
+        $replaceslug = str_replace(' ','-',$request->category);
+        $slug = strtolower($replaceslug);
+
+        $cat->slug = $slug;
+        $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
+        $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
+        $cat->save();
+
+        return redirect()->route('category')->with('success','Category has been Inserted Successfully');
+    }
+
     // Function of Bulk Category View
     function bulkcategory()
     {
         $data['optiongroups'] = Topping::where('store_topping',1)->get();
         return view('admin.category.bulkcategory',$data);
+    }
+
+
+    function storebulkcategory(Request $request)
+    {
+        foreach($request->category as $key => $cat)
+        {
+            $name = isset($cat['name']) ? $cat['name'] : '';
+            $description = isset($cat['description']) ? $cat['description'] : '';
+            $enable_size = $cat['enable_size'];
+            $size = isset($cat['size']) ? $cat['size'] : '';
+            $short_order = isset($cat['short_order']) ? $cat['short_order'] : '';
+            $ispizza = $cat['ispizza'];
+            $group = $cat['group'];
+            $enable_comment = $cat['enable_comment'];
+            $numbercharacter = $cat['numbercharacter'];
+            $image = isset($cat['image']) ? $cat['image'] : '';
+
+            // Insert Category
+            $catdetail = new CategoryDetail;
+
+            // Insert Category Image
+            if (!empty($image) || $image != '')
+            {
+                $imgname = time() . "." . $image->getClientOriginalExtension();
+                $image->move(public_path('admin/category'), $imgname);
+                $catdetail->image = $imgname;
+            }
+
+            $catdetail->img_banner = '';
+            $availibleday = '';
+            $catdetail->top = isset($request->top) ? $request->top : 1;
+            $catdetail->column = isset($request->columns) ? $request->columns : 1;
+            $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
+            $catdetail->status = isset($request->status) ? $request->status : 0;
+            date_default_timezone_set('Asia/Kolkata');
+            $catdetail->date_added = date("Y-m-d h:i:s");
+            $catdetail->date_modified = date("Y-m-d h:i:s");
+            $catdetail->availibleday = $availibleday;
+            $catdetail->save();
+            $lastid = $catdetail->category_id;
+
+
+            // Insert CategoryDetail
+            $cat = new Category;
+            $cat->category_id = $lastid;
+            $cat->language_id = '1';
+            $cat->name = $name;
+            $cat->description = $description;
+
+            $replaceslug = str_replace(' ','-',$name);
+            $slug = strtolower($replaceslug);
+
+            $cat->slug = $slug;
+            $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
+            $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
+            $cat->save();
+
+        }
+        return redirect()->route('category')->with('success','Category has been Inserted Successfully');
     }
 
     // Function of Add Category View
@@ -296,85 +429,6 @@ class CategoryController extends Controller
             ]);
         }
     }
-
-
-
-
-    // Function of Insert Category
-    function categoryinsert(Request $request)
-    {
-
-        // Validation Of Category Fields
-        $request->validate([
-            'category' => 'required',
-        ]);
-
-        // Insert Category Details
-        $catdetail = new CategoryDetail;
-
-        // Insert Category Image
-        if ($request->hasFile('image'))
-        {
-            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/category'), $imgname);
-        }
-
-        // Insert Banner Image
-        if ($request->hasFile('banner')) {
-            $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-        }
-
-        $catdetail->image = isset($imgname) ? $imgname : '';
-        $catdetail->img_banner = isset($bannerimgname) ? $bannerimgname : '';
-        $availibleday = implode(",", $request->availibleday);
-
-        $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
-        $catdetail->top = isset($request->top) ? $request->top : 1;
-        $catdetail->column = isset($request->columns) ? $request->columns : 1;
-        $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
-        $catdetail->status = isset($request->status) ? $request->status : 0;
-        date_default_timezone_set('Asia/Kolkata');
-        $catdetail->date_added = date("Y-m-d h:i:s");
-        $catdetail->date_modified = date("Y-m-d h:i:s");
-        $catdetail->availibleday = $availibleday;
-        $catdetail->save();
-        $lastid = $catdetail->category_id;
-
-        // Category Path
-        $cat_path = new CategoryPath;
-        $cat_path->category_id = $lastid;
-        $cat_path->path_id = $lastid;
-        $cat_path->level = 0;
-        $cat_path->save();
-
-        // Insert Into Category to Store
-        $cat_to_store = new CategorytoStore;
-        $cat_to_store->category_id = $lastid;
-        $cat_to_store->store_id = 1;
-        $cat_to_store->save();
-
-        // Insert Category
-        $cat = new Category;
-        $cat->category_id = $lastid;
-        $cat->language_id = '1';
-        $cat->name = $request->category;
-        $cat->description = isset($request->description) ? $request->description : "";
-        // $cat->meta_title = isset($request->matatitle) ? $request->matatitle : "";
-
-        $replaceslug = str_replace(' ','-',$request->category);
-        $slug = strtolower($replaceslug);
-
-        $cat->slug = $slug;
-        $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
-        $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
-        $cat->save();
-
-        return redirect()->route('category')->with('success','Category has been Inserted Successfully');
-    }
-
-
-
 
 
 }

@@ -123,6 +123,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('category', [CategoryController::class, 'index'])->name('category');
     Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
     Route::get('bulkcategory', [CategoryController::class, 'bulkcategory'])->name('bulkcategory');
+    Route::post('storebulkcategory', [CategoryController::class, 'storebulkcategory'])->name('storebulkcategory');
     Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
     Route::get('newcategory', [CategoryController::class, 'newcategory'])->name('newcategory');
     Route::get('categoryedit/{id}', [CategoryController::class, 'categoryedit'])->name('categoryedit');
