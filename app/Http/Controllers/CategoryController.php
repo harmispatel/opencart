@@ -15,24 +15,34 @@ use DataTables;
 
 class CategoryController extends Controller
 {
-
     // Function of Category View
     function index()
     {
         // Check User Permission
-        if (check_user_role(50) != 1) {
+        if (check_user_role(50) != 1) 
+        {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         return view('admin.category.CategoryList');
     }
 
+
+
+
+
     // Function of Get all Categories
     public function getcategory(Request $request)
     {
+        // Current Store ID;
+        $current_store_id = currentStoreId();
+
         if($request->ajax())
         {
-            $data =CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
+            // Get Categories By Selected Store
+            $data = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->get();
 
             return DataTables::of($data)->addIndexColumn()
             ->addColumn('action', function($row){
@@ -40,19 +50,29 @@ class CategoryController extends Controller
                 $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
                 return $btn;
             })
+            ->addColumn('cat_name', function($row){
+                $name = $row->hasOneCategory->name;
+                return $name;
+            })
             ->addColumn('checkbox', function($row){
                 $cid = $row->category_id;
                 $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
                 return $checkbox;
             })
-            ->rawColumns(['action','checkbox'])
+            ->rawColumns(['action','checkbox','cat_name'])
             ->make(true);
         }
     }
 
+
+
+
+
     // Function of Insert Category
     function categoryinsert(Request $request)
     {
+        // Current Store ID
+        $current_store_id = currentStoreId();
 
         // Validation Of Category Fields
         $request->validate([
@@ -78,7 +98,6 @@ class CategoryController extends Controller
         $catdetail->image = isset($imgname) ? $imgname : '';
         $catdetail->img_banner = isset($bannerimgname) ? $bannerimgname : '';
         $availibleday = implode(",", $request->availibleday);
-
         $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
         $catdetail->top = isset($request->top) ? $request->top : 1;
         $catdetail->column = isset($request->columns) ? $request->columns : 1;
@@ -101,7 +120,7 @@ class CategoryController extends Controller
         // Insert Into Category to Store
         $cat_to_store = new CategorytoStore;
         $cat_to_store->category_id = $lastid;
-        $cat_to_store->store_id = 1;
+        $cat_to_store->store_id = $current_store_id;
         $cat_to_store->save();
 
         // Insert Category
@@ -110,11 +129,8 @@ class CategoryController extends Controller
         $cat->language_id = '1';
         $cat->name = $request->category;
         $cat->description = isset($request->description) ? $request->description : "";
-        // $cat->meta_title = isset($request->matatitle) ? $request->matatitle : "";
-
         $replaceslug = str_replace(' ','-',$request->category);
         $slug = strtolower($replaceslug);
-
         $cat->slug = $slug;
         $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
@@ -122,6 +138,10 @@ class CategoryController extends Controller
 
         return redirect()->route('category')->with('success','Category has been Inserted Successfully');
     }
+
+
+
+
 
     // Function of Bulk Category View
     function bulkcategory()
@@ -131,8 +151,13 @@ class CategoryController extends Controller
     }
 
 
+
+
+
+    // Function of Store Multiple Category
     function storebulkcategory(Request $request)
     {
+
         foreach($request->category as $key => $cat)
         {
             $name = isset($cat['name']) ? $cat['name'] : '';
@@ -190,6 +215,10 @@ class CategoryController extends Controller
         return redirect()->route('category')->with('success','Category has been Inserted Successfully');
     }
 
+
+
+
+
     // Function of Add Category View
     function newcategory()
     {
@@ -197,14 +226,11 @@ class CategoryController extends Controller
         if (check_user_role(55) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
-
-        // Fetch Category Layout
-        $category_layout = CategoryLayout::select('layout_id', 'name')->get();
-
-        $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-
-        return view('admin.category.newcategory', ['category_layout' => $category_layout, 'fetchparent' => $fetchparent]);
+        
+        return view('admin.category.newcategory');
     }
+
+
 
 
 
@@ -215,7 +241,6 @@ class CategoryController extends Controller
         $request->validate([
             'category' => 'required',
         ]);
-
 
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
@@ -310,11 +335,13 @@ class CategoryController extends Controller
         }
 
 
+        // Get Topping Category Option
         $top_cat_option = ToppingCatOption::where('id_category',$request->id)->first();
 
         $group = isset($request->group) ? serialize($request->group) : '';
 
 
+        // Insert and Update Topping Category Option
         if($top_cat_option == '' || empty($top_cat_option))
         {
             $toppingCatOption = new ToppingCatOption;
@@ -341,6 +368,9 @@ class CategoryController extends Controller
     }
 
 
+
+
+
     // Function of edit Category
     public function categoryedit($id)
     {
@@ -350,15 +380,8 @@ class CategoryController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-
         // Get Category Top Option
         $topcatoption = ToppingCatOption::where('id_category',$id)->first();
-
-        // echo '<pre>';
-        // print_r($topcatoption->group);
-        // print_r(unserialize($topcatoption->group));
-        // exit();
-
 
         // Get Topping Size
         $toppingsizes = ToppingSize::where('id_category',$id)->get();
@@ -366,6 +389,7 @@ class CategoryController extends Controller
         // Fetch Category Layout
         $category_layout = CategoryLayout::select('layout_id', 'name')->get();
 
+        // Get Option Groups
         $optiongroups = Topping::where('store_topping',1)->get();
 
         // Get Single Category Description
@@ -375,9 +399,12 @@ class CategoryController extends Controller
     }
 
 
+
+
+
+    // Delete Option Size
     function delOptionSize(Request $request)
     {
-
         $size_id = $request->size_id;
 
         // Delete Topping Option
@@ -387,6 +414,9 @@ class CategoryController extends Controller
             'success' => 1,
         ]);
     }
+
+
+
 
 
     // Function of Delete Category

@@ -42,16 +42,15 @@ class OrdersController extends Controller
 
     public function getorders(Request $request)
     {
+        $current_store_id = currentStoreId();
         if ($request->ajax()) {
-            $data = Orders::join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id');
+            $data = Orders::join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->where('store_id',$current_store_id);
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
 
                     $edit_url = route('vieworder', $row->order_id);
                     $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
-
-
                     return $btn;
                 })
                 ->addColumn('checkbox', function ($row) {
@@ -62,6 +61,10 @@ class OrdersController extends Controller
                 ->addColumn('customer_name', function($row){
                     $cname = $row->firstname.' '.$row->lastname;
                     return $cname;
+                })
+                ->addColumn('store_name', function($row){
+                    $storename = html_entity_decode($row->store_name);
+                    return $storename;
                 })
                 ->addColumn('date_added', function($row){
                     $cust_date = date('d-m-Y',strtotime($row->date_added));

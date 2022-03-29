@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Models\Orders;
 use App\Models\Users;
 use App\Models\Product;
+use App\Models\Store;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,4 +52,24 @@ class HomeController extends Controller
         return view('dashboard',['customers'=>$customers,'orders'=>$orders,'product'=>$product,'categories'=>$categories]);
 
     }
+
+    function setStore(Request $request)
+    {
+        $storeId = $request->store_id;
+        if($request->session()->has('store_id'))
+        {
+            $request->session()->forget('store_id');
+            $request->session()->put('store_id', $storeId);
+        }
+        else
+        {
+            $request->session()->put('store_id', $storeId);
+        }
+        
+        return response()->json([
+            'success' => 1
+        ]);
+    }
+
+    
 }

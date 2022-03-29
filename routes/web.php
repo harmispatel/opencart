@@ -63,6 +63,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Dashboard
     Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
+    Route::post('setStore', [HomeController::class, 'setStore'])->name('setStore');
+    
 
     //Users
     Route::get('users', [AllUserController::class, 'index'])->name('users');
