@@ -60,12 +60,13 @@
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
+                                    <div class="table-responsive">
                                         <table class="table list table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Name</th>
-                                                    <th>Description</th>
-                                                    <th>Image</th>
+                                                    <th style="min-width: 250px;!important">Name</th>
+                                                    <th style="min-width: 250px;!important">Description</th>
+                                                    <th style="min-width: 250px;!important">Image</th>
                                                     <th style="min-width: 500px;!important">Options</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -204,6 +205,7 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                    </div>
                                 </div>
                                 {{-- End Card Body --}}
 

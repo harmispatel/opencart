@@ -77,7 +77,13 @@ class CategoryController extends Controller
 
         $catdetail->image = isset($imgname) ? $imgname : '';
         $catdetail->img_banner = isset($bannerimgname) ? $bannerimgname : '';
-        $availibleday = implode(",", $request->availibleday);
+        $days = isset($request->availibleday) ? $request->availibleday : 0;
+        if ($days != 0){
+            $availibleday = implode(",", $days);
+        }
+        else{
+            $availibleday = "";
+        }
 
         $catdetail->parent_id = isset($request->parent) ? $request->parent : 0;
         $catdetail->top = isset($request->top) ? $request->top : 1;
@@ -146,6 +152,7 @@ class CategoryController extends Controller
             $numbercharacter = $cat['numbercharacter'];
             $image = isset($cat['image']) ? $cat['image'] : '';
 
+
             // Insert Category
             $catdetail = new CategoryDetail;
 
@@ -177,14 +184,55 @@ class CategoryController extends Controller
             $cat->language_id = '1';
             $cat->name = $name;
             $cat->description = $description;
-
             $replaceslug = str_replace(' ','-',$name);
             $slug = strtolower($replaceslug);
-
             $cat->slug = $slug;
             $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
             $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
             $cat->save();
+
+            // Category Path
+            $cat_path = new CategoryPath;
+            $cat_path->category_id = $lastid;
+            $cat_path->path_id = $lastid;
+            $cat_path->level = 0;
+            $cat_path->save();
+
+            // Insert Into Category to Store
+            $cat_to_store = new CategorytoStore;
+            $cat_to_store->category_id = $lastid;
+            $cat_to_store->store_id = 1;
+            $cat_to_store->save();
+
+            // Insert Category Size
+            if(!empty($size) || $size != '')
+            {
+                foreach($size as $key=> $val)
+                {
+                    $sizename = $val;
+                    $sort_order = $short_order[$key];
+                    if(!empty($sizename) || $sizename != '')
+                    {
+                        $topp_size = new ToppingSize;
+                        $topp_size->id_category = $lastid;
+                        $topp_size->size = isset($sizename) ? $sizename : '';
+                        $topp_size->short_order = isset($sort_order) ? $sort_order : 0;
+                        $topp_size->save();
+                    }
+                }
+            }
+
+            if(!empty($group) || $group != '')
+            {
+                $toppingCatOption = new ToppingCatOption;
+                $toppingCatOption->id_category = $lastid;
+                $toppingCatOption->enable_size = $enable_size;
+                $toppingCatOption->enable_option = $ispizza;
+                $toppingCatOption->enable_boxcomment = $enable_comment;
+                $toppingCatOption->character = $numbercharacter;
+                $toppingCatOption->group = serialize($group);
+                $toppingCatOption->save();
+            }
 
         }
         return redirect()->route('category')->with('success','Category has been Inserted Successfully');
@@ -215,6 +263,10 @@ class CategoryController extends Controller
         $request->validate([
             'category' => 'required',
         ]);
+
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
 
 
         // update Category Details
@@ -254,7 +306,15 @@ class CategoryController extends Controller
             $catdetail->img_banner = $bannerimgname;
         }
 
-        $availibleday = implode(",", $request->availibleday);
+        $days = isset($request->availibleday) ? $request->availibleday : 0;
+        if ($days != 0)
+        {
+            $availibleday = implode(",", $days);
+        }
+        else
+        {
+            $availibleday = "";
+        }
 
         $catdetail->top =  isset($request->top) ? $request->top : 0;
         $catdetail->column = isset($request->columns) ? $request->columns : 1;
@@ -350,15 +410,8 @@ class CategoryController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-
         // Get Category Top Option
         $topcatoption = ToppingCatOption::where('id_category',$id)->first();
-
-        // echo '<pre>';
-        // print_r($topcatoption->group);
-        // print_r(unserialize($topcatoption->group));
-        // exit();
-
 
         // Get Topping Size
         $toppingsizes = ToppingSize::where('id_category',$id)->get();
@@ -418,11 +471,26 @@ class CategoryController extends Controller
                 }
             }
 
+            // Delete Category Size
+            foreach($ids as $id)
+            {
+                ToppingSize::where('id_category',$id)->delete();
+            }
+
              // Delete Category
              Category::whereIn('category_id', $ids)->delete();
 
              // Delete Category Description
              CategoryDetail::whereIn('category_id', $ids)->delete();
+
+            //  Delete Topping Options
+            ToppingCatOption::whereIn('id_category',$ids)->delete();
+
+            // Delete Category to Store
+            CategorytoStore::whereIn('category_id',$ids)->delete();
+
+            // Delete Category to Path
+            CategoryPath::whereIn('category_id',$ids)->delete();
 
             return response()->json([
                 'success' => 1,

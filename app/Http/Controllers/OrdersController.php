@@ -63,6 +63,32 @@ class OrdersController extends Controller
                     $cname = $row->firstname.' '.$row->lastname;
                     return $cname;
                 })
+                ->addColumn('payment_code', function($row){
+                    if ($row->payment_code == "worldpayhp") {
+                        $ptype = "Worldpay";
+                        return $ptype;
+                    }
+                    elseif ($row->payment_code == "ccod") {
+                        $ptype = "Chip & Pin";
+                        return $ptype;
+                    }
+                    elseif ($row->payment_code == "pp_express") {
+                        $ptype = "PayPal";
+                        return $ptype;
+                    }
+                    elseif ($row->payment_code == "cod") {
+                        $ptype = "Cash";
+                        return $ptype;
+                    }
+                    elseif ($row->payment_code == "myfoodbasketpayments_gateway") {
+                        $ptype = "Paid by Card";
+                        return $ptype;
+                    }
+                    else{
+                        $ptype = $row->payment_code;
+                        return $ptype;
+                    }
+                })
                 ->addColumn('date_added', function($row){
                     $cust_date = date('d-m-Y',strtotime($row->date_added));
                     return $cust_date;
@@ -83,7 +109,7 @@ class OrdersController extends Controller
     }
 
 
-    // Add new order 
+    // Add new order
     public function addneworders(Request $request)
     {
         $request->validate([
