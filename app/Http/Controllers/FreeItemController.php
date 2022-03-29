@@ -17,7 +17,8 @@ class FreeItemController extends Controller
 
     public function addfreerule()
     {
-        $data['freeitems'] = FreeItemadd::get();
+        $current_store_id = currentStoreId();
+        $data['freeitems'] = FreeItemadd::where('store_id',$current_store_id)->get();
         return view('admin.freeitems.addfreerule',$data);
     }
 
@@ -30,8 +31,9 @@ class FreeItemController extends Controller
         ]);
 
         $cartrule = new FreeRule;
+        $current_store_id = currentStoreId();
         $cartrule->name_rule = $request->name;
-        $cartrule->id_store = isset($request->id_store) ? $request->id_store : "1";
+        $cartrule->id_store = $current_store_id;
         $id_item = implode(":",$request->free_item);
         $cartrule->id_item = $id_item;
         $cartrule->min_total = isset($request->total_above) ? $request->total_above : "";
@@ -49,7 +51,7 @@ class FreeItemController extends Controller
 
         $cartrule = FreeRule::find($request->id);
         $cartrule->name_rule = $request->name;
-        $cartrule->id_store = isset($request->id_store) ? $request->id_store : "1";
+        // $cartrule->id_store = isset($request->id_store) ? $request->id_store : "1";
         $id_item = implode(":",$request->free_item);
         $cartrule->id_item = $id_item;
         $cartrule->min_total = isset($request->total_above) ? $request->total_above : "";
@@ -77,7 +79,8 @@ class FreeItemController extends Controller
 
     public function freeitems()
     {
-        $data = FreeItemadd::all();  
+        $current_store_id = currentStoreId();
+        $data = FreeItemadd::where('store_id',$current_store_id)->get();  
         return view('admin.freeitems.freeitemlist',['data'=>$data]);
     }
 
@@ -101,7 +104,8 @@ class FreeItemController extends Controller
 
     public function freeitemlist()
     {
-        $data = FreeItemadd::all();  
+        $current_store_id = currentStoreId();
+        $data = FreeItemadd::where('store_id',$current_store_id)->get();  
         return view('admin.freeitems.freeitemlist',['data'=>$data]);
     }
 

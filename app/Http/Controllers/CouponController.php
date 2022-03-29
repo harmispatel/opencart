@@ -16,8 +16,8 @@ class CouponController extends Controller
 
     public function index()
     {
-
-        $data['coupons'] = Coupon::get();
+        $current_store_id = currentStoreId();
+        $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
         return view('admin.coupons.list', $data);
     }
 
@@ -46,7 +46,7 @@ class CouponController extends Controller
 
     public function updonoff(Request $request)
     {
-        echo $request->onoff;
+        // echo $request->onoff;
         $couponid = $request->dataid;
         $onoff = Coupon::find( $couponid);
         $onoff->on_off = $request->onoff;
@@ -118,8 +118,9 @@ class CouponController extends Controller
             'code' => 'required|max:10',
             'coupon_name' => 'required',
         ]);
+        $current_store_id = currentStoreId();
         $coupon = Coupon::find($request->couponid);
-        $coupon->store_id = isset($request->storeid) ? $request->storeid : "0";
+        $coupon->store_id = $current_store_id;
         $coupon->apply_shipping = isset($request->apply) ? $request->apply : "0";
         $coupon->name = $request->coupon_name;
         $coupon->code = $request->code;

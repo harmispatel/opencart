@@ -234,7 +234,10 @@ class AllUserController extends Controller
         {
             if(!empty($old_img))
             {
-                unlink('public/admin/users/'.$old_img);
+                if(file_exists('public/admin/users/'.$old_img))
+                {
+                    unlink('public/admin/users/'.$old_img);
+                }
             }
 
             $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
