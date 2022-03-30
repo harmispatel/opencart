@@ -334,6 +334,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Messages
     Route::get('messages', [MessageController::class, 'index'])->name('messages');
     Route::get('sendmessages', [MessageController::class, 'add'])->name('sendmessages');
+    Route::get('getmessage', [MessageController::class, 'getmessage'])->name('getmessage');
+    Route::post('messageinsert', [MessageController::class, 'messageinsert'])->name('messageinsert');
 
     // Settings
     Route::get('mapandcategory', [SettingsController::class, 'mapandcategory'])->name('mapandcategory');

@@ -264,11 +264,6 @@ class CategoryController extends Controller
             'category' => 'required',
         ]);
 
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
-
-
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
 
