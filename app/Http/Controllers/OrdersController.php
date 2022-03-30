@@ -29,6 +29,153 @@ class OrdersController extends Controller
         return view('admin.order.list');
     }
 
+
+
+
+
+    // Function of Get Orders By Current Store
+    public function getorders(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $columns = array(
+            0 =>'order_id',
+            1 =>'order_id',
+            4 =>'firstname',
+            2 => 'flag_post_code',
+            7 => 'date_added',
+        );
+
+        // Get Orders
+        $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
+            $query->where('store_id',$current_store_id);
+        })->count();
+
+        $totalFiltered = $totalData;
+        $limit = $request->request->get('length');
+        $start = $request->request->get('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(!empty($request->input('search.value')))
+        {
+            $search = $request->input('search.value');
+
+            $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%")->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+
+
+            $totalFiltered = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%")->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+        }
+        else
+        {
+            $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+        }
+
+        $data = array();
+        $data1=array();
+
+        if($posts)
+        {
+            foreach ($posts as $post)
+            {
+                $order_id = $post->order_id;
+                $firstname = isset($post->firstname) ? $post->firstname : '';
+                $lastname = isset($post->lastname) ? $post->lastname : '';
+                $status = isset($post->hasOneOrderStatus->name) ? $post->hasOneOrderStatus->name : '';
+                $edit_url = route('vieworder', $post->order_id);
+
+
+                $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$order_id'>";
+                $data['order_id'] = $order_id;
+                $data['order_type'] = $post->flag_post_code;
+                $data['shop_name'] = $post->store_name;
+                $data['customer_name'] = $firstname.' '.$lastname;
+
+                if($status == "Accepted")
+                {
+                    $data['status'] = '<span class="badge badge-info">'.$status.'</div>';
+                }
+                elseif($status == "Rejected")
+                {
+                    $data['status'] = '<span class="badge badge-danger">'.$status.'</div>';
+                }
+                elseif($status == "Processing")
+                {
+                    $data['status'] = '<span class="badge badge-warning">'.$status.'</div>';
+                }
+                elseif($status == "Complete")
+                {
+                    $data['status'] = '<span class="badge badge-success">'.$status.'</div>';
+                }
+                elseif($status == "Refunded")
+                {
+                    $data['status'] = '<span class="badge badge-primary">'.$status.'</div>';
+                }
+                elseif($status == "Charge Back")
+                {
+                    $data['status'] = '<span class="badge badge-dark">'.$status.'</div>';
+                }
+                else
+                {
+                    $data['status'] = '-';
+                }
+
+                $data['total'] = $post->total;
+                $data['date_added'] = date('Y-m-d',strtotime($post->date_added));
+
+                if ($post->payment_code == "worldpayhp")
+                {
+                    $data['payment_type'] = "World Pay";
+                }
+                elseif ($post->payment_code == "ccod")
+                {
+                    $data['payment_type'] = "Chip & Pin";
+                }
+                elseif ($post->payment_code == "pp_express")
+                {
+                    $data['payment_type'] = "PayPal";
+                }
+                elseif ($post->payment_code == "cod")
+                {
+                    $data['payment_type'] = "Cash";
+                }
+                elseif ($post->payment_code == "myfoodbasketpayments_gateway")
+                {
+                    $data['payment_type'] = "Paid by Card";
+                }
+                else
+                {
+                    $data['payment_type'] = $post->payment_code;
+                }
+
+                $data['action'] = '<a href="'. $edit_url .'" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
+
+                $data1[] = $data;
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->request->get('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data1
+        );
+
+        echo json_encode($json_data);
+
+    }
+
+
+
+
+
     // View order
     public function vieworder($id)
     {
@@ -40,37 +187,17 @@ class OrdersController extends Controller
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders]);
     }
 
-    public function getorders(Request $request)
-    {
-        if ($request->ajax()) {
-            $data = Orders::join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id');
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-
-                    $edit_url = route('vieworder', $row->order_id);
-                    $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
 
 
-                    return $btn;
-                })
-                ->addColumn('checkbox', function ($row) {
-                    $cid = $row->order_id;
-                    $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $cid . '">';
-                    return $checkbox;
-                })
-                ->addColumn('customer_name', function($row){
-                    $cname = $row->firstname.' '.$row->lastname;
-                    return $cname;
-                })
-                ->addColumn('date_added', function($row){
-                    $cust_date = date('d-m-Y',strtotime($row->date_added));
-                    return $cust_date;
-                })
-                ->rawColumns(['action', 'checkbox'])
-                ->make(true);
-        }
-    }
+
+
+
+
+
+
+
+
+
 
     public function ordersinsert()
     {
@@ -83,7 +210,10 @@ class OrdersController extends Controller
     }
 
 
-    // Add new order 
+
+
+
+    // Add new order
     public function addneworders(Request $request)
     {
         $request->validate([
@@ -162,6 +292,11 @@ class OrdersController extends Controller
         print_r($neworder->toArray());
         exit();
     }
+
+
+
+
+
     // Get Order History
     public function getorderhistory($id)
     {
@@ -183,6 +318,10 @@ class OrdersController extends Controller
         ]);
     }
 
+
+
+
+
     // Order History Insert
     public function orderhistoryinsert(Request $request)
     {
@@ -203,15 +342,29 @@ class OrdersController extends Controller
         ]);
     }
 
+
+
+
+
+
     public function editorder()
     {
         return view('admin.order.edit');
     }
 
+
+
+
+
+
     public function updateorder()
     {
         return view('admin.order.update');
     }
+
+
+
+
 
 
     public function deleteorder(Request $request)
@@ -229,6 +382,11 @@ class OrdersController extends Controller
         return view('admin.order.list');
     }
 
+
+
+
+
+
     public function invoice($id)
     {
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
@@ -236,16 +394,33 @@ class OrdersController extends Controller
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
         return view('admin.order.invoice', ["orders" => $orders, 'productorders' => $productorders, 'ordertotal' => $ordertotal]);
     }
+
+
+
+
+
+
     public function shipping($id)
     {
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
         return view('admin.order.shippinglist', ["orders" => $orders]);
     }
+
+
+
+
+
+
     public function returns()
     {
         $returns = OrderReturn::join('oc_return', 'oc_return_status.return_status_id', '=', 'oc_return.return_status_id')->get();
         return view('admin.order.returns', ['returns' => $returns]);
     }
+
+
+
+
+
 
     public function addnewreturns()
     {
@@ -256,6 +431,10 @@ class OrdersController extends Controller
         $orderproduct = OrderProduct::get();
         return view('admin.order.addnewreturns', ['return' => $return, 'returnaction' => $returnaction, 'returnreason' => $returnreason, 'customers' => $customers, 'orderproduct' => $orderproduct]);
     }
+
+
+
+
 
     public function returnform(Request $request)
     {
@@ -299,6 +478,12 @@ class OrdersController extends Controller
 
         return redirect()->route('returns')->withErrors($errors);
     }
+
+
+
+
+
+
     public function getproducts($id)
     {
         $productorders = Orders::select('*')->join('oc_order_product as op', 'op.order_id', '=', 'oc_order.order_id')->where('oc_order.customer_id', '=', $id)->get();
@@ -324,6 +509,11 @@ class OrdersController extends Controller
         return response()->json($html);
     }
 
+
+
+
+
+
     public function autocomplete(Request $request)
     {
         $res = Customer::where("firstname", "LIKE", '%' . $request->term . '%')
@@ -332,6 +522,12 @@ class OrdersController extends Controller
 
         return response()->json($res);
     }
+
+
+
+
+
+
     public function autocompleteproduct(Request $request)
     {
 
@@ -340,6 +536,11 @@ class OrdersController extends Controller
 
         return response()->json($pro);
     }
+
+
+
+
+
 
     public function getaddress($id)
     {
@@ -351,6 +552,11 @@ class OrdersController extends Controller
         }
         return response()->json($html);
     }
+
+
+
+
+
 
     public function address($id)
     {

@@ -10,6 +10,14 @@
         {{-- Header Section --}}
         <section class="content-header">
             <div class="container-fluid">
+                @if (Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Categories</h1>
@@ -49,6 +57,9 @@
                                         <button type="submit" class="btn btn-sm btn-primary ml-auto">
                                             <i class="fa fa-save"></i>
                                         </button>
+                                        <button class="btn btn-sm btn-primary" type="submit" name="save_and_stay">
+                                            <i class="fa fa-save"></i> Save & Stay
+                                        </button>
                                         <a href="{{ route('category') }}" class="btn btn-sm btn-danger ml-1 deletesellected">
                                             <i class="fa fa-arrow-left"></i>
                                         </a>
@@ -63,7 +74,7 @@
                                         <input type="hidden" name="id" value="{{ $data->category_id }}">
                                         <input type="hidden" name="top_cat_option_id" value="{{ isset($topcatoption->id) ? $topcatoption->id : '' }}">
                                         <label for="category" class="form-label">Category Name</label>
-                                        <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->name }}">
+                                        <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->hasOneCategory->name }}">
                                         @if ($errors->has('category'))
                                             <div class="invalid-feedback">{{ $errors->first('category') }}</div>
                                         @endif
@@ -99,7 +110,7 @@
 
                                     <div class="form-group">
                                         <label for="summernote" class="form-label">Description</label>
-                                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="description">{{ $data->description }}</textarea>
+                                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="description">{{ html_entity_decode($data->hasOneCategory->description) }}</textarea>
                                     </div>
 
                                     <div class="form-group">
@@ -149,7 +160,7 @@
                                                             <tr class="size_{{ $loop->iteration }}">
                                                                 <td>
                                                                     <input type="hidden" name="size[{{ $loop->iteration }}][size_id]" value="{{ $toppingsize->id_size }}">
-                                                                    <input type="text" name="size[{{ $loop->iteration }}][sizename]" value="{{ $toppingsize->size }}" class="form-control">
+                                                                    <input type="text" name="size[{{ $loop->iteration }}][sizename]" value="{{ html_entity_decode($toppingsize->size) }}" class="form-control">
                                                                 </td>
                                                                 <td>
                                                                     <input type="text" name="size[{{ $loop->iteration }}][short_order]" value="{{ $toppingsize->short_order }}" class="form-control">

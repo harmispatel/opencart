@@ -6,6 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard</title>
 
+  <style>
+      .select2-container--default .select2-selection--single .select2-selection__rendered
+      {
+          line-height: 18px!important;
+      }
+      .select2-container--default .select2-selection--single
+      {
+            margin-top: 8px!important;
+      }
+      .select2-container--default .select2-selection--single .select2-selection__arrow b
+      {
+        margin-top: 7px!important;
+      }
+  </style>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -32,7 +47,9 @@
   <!-- Sweet alert -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css" integrity="sha512-g9k+CnZOpfd3BjCvr9L6M9F1u42RbYxtiurifk4KmqTNTyZRnKixRgZl6SzPESunaaCnyelHhKicHWcQUwALYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Select Box -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+  {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/> --}}
+  {{-- @import url(); --}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
 {{-- Summernote --}}
 <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
@@ -51,10 +68,29 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li>
-          <select class="form-control">
-              <option>Default select</option>
-            </select>
+      <li class="nav-item pt-1 pr-3">
+        <a class="btn btn-sm btn-success"><i class="fa fa-plus"></i> NEW</a>
+      </li>
+      <li class="nav-item">
+          @php
+              $stores = getStores();
+              if(Session::has('store_id'))
+              {
+                $storeID = Session::get('store_id');
+              }
+              else 
+              {
+                  $storeID = 0;
+              }
+          @endphp
+            <select class="form-control" id="SearchStore">
+                @foreach ($stores as $store)
+                    <option value="{{ $store->store_id }}" {{ ($storeID == $store->store_id) ? 'selected' : '' }}>{{ html_entity_decode($store->name) }}</option>                    
+                @endforeach
+              </select>
+      </li>
+      <li class="nav-item pl-3 pt-2 pr-3">
+        <a href="#">Visit Shop</a>
       </li>
     </ul>
 

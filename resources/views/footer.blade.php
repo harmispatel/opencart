@@ -39,7 +39,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 integrity="sha512-+q01aE1/3DSt/pNwhpoMKxjkWyRTpXPA7xceLKlhmJMADbLJL020BuGSTCExgwe+fD7bvX2HiVGS1suMf2056A=="
 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- Select -->
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 
 <!-- Datatable -->
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -60,9 +60,54 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </script>
 <script>
 
-//     $(document).ready(function() {
-//     $('.js-example-basic-multiple').select2();
-// });
+    $(document).ready(function() {
+        $('#SearchStore').select2();
+
+        var storeid = $('#SearchStore :selected').val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('setStore') }}",
+            data: {'store_id':storeid},
+            dataType: "json",
+            success: function (response) {
+                
+            }
+        });
+
+
+    });
+
+    $('#SearchStore').change(function() 
+    { 
+        var store_id = $(this).val();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('setStore') }}",
+            data: {'store_id':store_id},
+            dataType: "json",
+            success: function (response) {
+                if(response.success == 1)
+                {
+                    location.reload();
+                }
+            }
+        });
+    });
+
 </script>
     <script>
 

@@ -9,6 +9,7 @@ use App\Models\CustomerIP;
 use App\Models\Option;
 use App\Models\Region;
 use App\Models\Settings;
+use App\Models\Store;
 use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
 
@@ -25,6 +26,20 @@ function gettotalip($ip)
 {
     $ip = CustomerIP::where('ip',$ip)->count();
     return $ip;
+}
+
+
+function currentStoreId()
+{
+    if(session()->has('store_id'))
+    {
+        $storeID = session()->get('store_id');
+    }
+    else
+    {
+        $storeID = 0;
+    }
+    return $storeID;
 }
 
 
@@ -48,6 +63,14 @@ function checkNewModel()
     {
         return 0;
     }
+}
+
+
+
+function getStores()
+{
+    $stores = Store::get();
+    return $stores;
 }
 
 

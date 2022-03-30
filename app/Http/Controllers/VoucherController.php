@@ -7,7 +7,6 @@ use App\Models\VoucherHistory;
 use App\Models\VoucherThemeDescription;
 use App\Models\Voucherthemes;
 use App\Models\VoucherThemenames;
-use Faker\Provider\ar_EG\Person;
 use Illuminate\Http\Request;
 
 class VoucherController extends Controller
@@ -15,7 +14,8 @@ class VoucherController extends Controller
 
     public function voucherlist()
     {
-        $data['vouchers'] = Voucher::join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+        $current_store_id = currentStoreId();
+        $data['vouchers'] = Voucher::where('store_id',$current_store_id)->join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
         return view('admin.vouchers.voucherlist', $data);
     }
     public function giftvoucher()
@@ -54,7 +54,6 @@ class VoucherController extends Controller
             'status' => 'required',
         ]);
         $voucher = Voucher::find($request->voucherid);
-        $voucher->store_id = isset($request->storeid) ? $request->storeid : "0";
         $voucher->on_off = isset($request->onoff) ? $request->onoff : "0";
         $voucher->order_id = isset($request->orderid) ? $request->orderid : "0";
         $voucher->code = $request->code;;

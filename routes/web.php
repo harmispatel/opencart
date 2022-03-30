@@ -63,6 +63,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Dashboard
     Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
+    Route::post('setStore', [HomeController::class, 'setStore'])->name('setStore');
+
 
     //Users
     Route::get('users', [AllUserController::class, 'index'])->name('users');
@@ -152,7 +154,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Orders
     Route::get('orders', [OrdersController::class, 'index'])->name('orders');
     Route::get('ordersinsert', [OrdersController::class, 'ordersinsert'])->name('ordersinsert');
-    Route::get('getorders', [OrdersController::class, 'getorders'])->name('getorders');
+    Route::post('getorders', [OrdersController::class, 'getorders'])->name('getorders');
     Route::get('vieworder/{id}', [OrdersController::class, 'vieworder'])->name('vieworder');
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');
@@ -332,6 +334,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Messages
     Route::get('messages', [MessageController::class, 'index'])->name('messages');
     Route::get('sendmessages', [MessageController::class, 'add'])->name('sendmessages');
+    Route::get('getmessage', [MessageController::class, 'getmessage'])->name('getmessage');
+    Route::post('messageinsert', [MessageController::class, 'messageinsert'])->name('messageinsert');
 
     // Settings
     Route::get('mapandcategory', [SettingsController::class, 'mapandcategory'])->name('mapandcategory');
