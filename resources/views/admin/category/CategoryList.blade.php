@@ -2,7 +2,7 @@
 @include('header')
 {{-- End Header --}}
 
-<link rel="stylesheet" href="sweetalert2.min.css">
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 {{-- Section of List Category --}}
 <section>
@@ -10,6 +10,14 @@
         {{-- Header Section --}}
         <section class="content-header">
             <div class="container-fluid">
+                @if(Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Categories</h1>
@@ -60,18 +68,12 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="table">
-                                    @if(Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                                            {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
                                     {{-- Table Head --}}
                                     <thead class="text-center">
                                         <tr>
-                                            <th><input type="checkbox" id="delall"></th>
+                                            <th>
+                                                <input type="checkbox" id="delall">
+                                            </th>
                                             <th>Category Name</th>
                                             <th>Sort Order</th>
                                             <th>Action</th>
@@ -94,21 +96,18 @@
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
+        {{-- End List Section --}}
     </div>
 </section>
-{{-- End Section of Add Category --}}
+{{-- End Section of List Category --}}
 
 {{-- Footer --}}
 @include('footer')
 {{-- End Footer --}}
 
 
-
 {{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
 <script type="text/javascript">
 
     $(document).ready(function()
@@ -122,14 +121,14 @@
         var table = $('#table').DataTable({
         processing: true,
         serverSide: true,
-        // "scrollX": true,
+        "scrollY": true,
         ajax: "{{ route('getcategory') }}",
         columns: [
-            {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
-            {data: 'cat_name', name:'cat_name'},
-            {data: 'sort_order', name: 'sort_order'},
-            {data: 'action', name: 'action'},
-        ]
+                    {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
+                    {data: 'cat_name', name:'cat_name'},
+                    {data: 'sort_order', name: 'sort_order'},
+                    {data: 'action', name: 'action'},
+                ]
         });
     }
     // End Get All Category
@@ -148,7 +147,7 @@
     });
     // End Select All Checkbox
 
-    // Delete Multiple User
+    // Delete Multiple Category
     $('.deletesellected').click(function()
     {
         var checkValues = $('.del_all:checked').map(function()
@@ -207,6 +206,6 @@
             swal("Please select atleast One Catgory", "", "warning");
         }
     });
-    // End Delete User
+    // End Delete Multiple Category
 
 </script>

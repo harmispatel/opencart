@@ -18,34 +18,38 @@
         <table class="store table table-bordered w-100">
             <tbody>
                 <tr>
-                    <td>{{ $orders->firstname }} {{ $orders->lastname }}<br>
-                        {{ $orders->payment_address_1 }},<br>
-                        {{ $orders->city }}<br>
-                        Telephone: {{ $orders->telephone }}<br>
-                        {{ $orders->email }}<br>
-                        {{ $orders->store_url }}</td>
-                    <td align="right" valign="top">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td><b>Date Added:</b></td>
-                                    <td>{{ $orders->date_added }}</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Invoice No.:</b></td>
-                                    <td>{{ $orders->invoice_prefix }}{{ $orders->invoice_no }}</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Order ID:</b></td>
-                                    <td>{{ $orders->order_id }}</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Payment Method:</b></td>
-                                    <td>{{ $orders->payment_method }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                    @if(isset($orders))
+                    <tr>
+                        <td>{{ $orders->firstname }} {{ $orders->lastname }}<br>
+                            {{ $orders->payment_address_1 }},<br>
+                            {{ $orders->city }}<br>
+                            Telephone: {{ $orders->telephone }}<br>
+                            {{ $orders->email }}<br>
+                            {{ $orders->store_url }}</td>
+                        <td align="right" valign="top">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><b>Date Added:</b></td>
+                                        <td>{{ $orders->date_added }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Invoice No.:</b></td>
+                                        <td>{{ $orders->invoice_prefix }}{{ $orders->invoice_no }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Order ID:</b></td>
+                                        <td>{{ $orders->order_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Payment Method:</b></td>
+                                        <td>{{ $orders->payment_method }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    @endif
                 </tr>
             </tbody>
         </table>
@@ -56,11 +60,14 @@
                     <td width="50%"><b>Ship To (if different address)</b></td>
                 </tr>
                 <tr>
+                    @if(isset($orders))
                     <td>{{ $orders->firstname }}
                         {{ $orders->lastname }}<br>{{ $orders->payment_address_1 }}<br>{{ $orders->payment_address_2 }}<br>{{ $orders->payment_city }}
                         {{ $orders->payment_postcode }}<br>
                         {{ $orders->email }}<br>
-                        {{ $orders->telephone }} </td>
+                        {{ $orders->telephone }}
+                    </td>
+                    @endif
                     <td></td>
                 </tr>
             </tbody>
@@ -80,7 +87,7 @@
                     @foreach ($productorders as $order)
                         <tr>
                             <td class="left">{{ htmlspecialchars_decode($order->name) }}
-                               
+
                                 {{-- {{ echo $orders->toppings  }} --}}
                                 @php
                                     echo $order->toppings;

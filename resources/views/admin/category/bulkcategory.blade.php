@@ -145,7 +145,7 @@
                                                                             <td>
                                                                                 <select name="category[0][group][number_group][id_group_option]" id="">
                                                                                     @foreach($optiongroups as $optiongroup)
-                                                                                        <option value="{{ $optiongroup->id_topping }}">{{ $optiongroup->name_topping }}</option>
+                                                                                        <option value="{{ $optiongroup->id_topping }}">{{ html_entity_decode($optiongroup->name_topping) }}</option>
                                                                                     @endforeach
                                                                                 </select>
                                                                             </td>

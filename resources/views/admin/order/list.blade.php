@@ -1,8 +1,10 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of List Reviews --}}
+{{-- Section of List Orders --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -18,13 +20,12 @@
                 @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>orders</h1>
+                        <h1>Orders</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a
-                                    href="{{ route('dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Orders</li>
                         </ol>
                     </div>
@@ -43,21 +44,21 @@
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
+                                <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Order List
+                                    Orders List
                                 </h3>
-
                                 <div class="container" style="text-align: right">
                                     @if(check_user_role(71) == 1)
-                                        <a href="{{ route('ordersinsert') }}"
-                                            class="btn btn-sm btn-primary ml-auto px-1">Insert<i
-                                                class="pl-1 fa fa-plus"></i></a>
+                                        <a href="{{ route('ordersinsert') }}" class="btn btn-sm btn-primary ml-auto">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
                                     @endif
 
                                     @if(check_user_role(73) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-auto px-1 deletesellected">Delete<i
-                                                class="pl-1 fa fa-trash"></i></a>
+                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected">
+                                            <i  class="fa fa-trash"></i>
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -66,34 +67,29 @@
                             {{-- Card Body --}}
                             <div class="card-body">
                                 {{-- Table --}}
-                                <table class="table table-bordered" id="table">
-                                    {{-- Alert Message Div --}}
-                                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                        style="display: none" role="alert">
-                                        <p id="success-message" class="mb-0"></p>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    {{-- End Alert Message Div --}}
-
-                                    {{-- Table Head Start --}}
+                                <table class="table table-bordered table-hover" id="table">
+                                    {{-- Table Head --}}
                                     <thead class="text-center">
-                                        <th><input type="checkbox" name="checkall" id="delall"></th>
-                                        <th>Order Id</th>
-                                        <th>Order Type</th>
-                                        <th>Shop</th>
-                                        <th>Customer</th>
-                                        <th>Status</th>
-                                        <th>Total</th>
-                                        <th>Date Added</th>
-                                        <th>Payment Type</th>
-                                        <th>Action</th>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="delall">
+                                            </th>
+                                            <th>Order ID</th>
+                                            <th>Order Type</th>
+                                            <th>Shop</th>
+                                            <th>Customer</th>
+                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th>Date Added</th>
+                                            <th>Payment Type</th>
+                                            <th>Action</th>
+                                        </tr>
                                     </thead>
                                     {{-- End Table Head --}}
 
-                                    {{-- Table Body Start --}}
-                                    <tbody class="text-center review-list">
+                                    {{-- Table Body --}}
+                                    <tbody class="text-center orders-list">
+
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -106,101 +102,79 @@
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-
+        {{-- End List Section --}}
     </div>
 </section>
-{{-- End Section of List Manufacturers --}}
+{{-- End Section of List Orders --}}
 
-{{-- Footer Start --}}
+{{-- Footer --}}
 @include('footer')
 {{-- End Footer --}}
 
+
+{{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript">
 
-<script>
-    $(document).ready(function () {
-
-        // $(".loader_div").show();
-
+    $(document).ready(function ()
+    {
         getallorders();
-
     });
 
-
-    function getallorders() {
-
+    // Get All Orders
+    function getallorders()
+    {
         var table = $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-
-            ajax: "{{ route('getorders') }}",
-            columns: [{
-                    data: 'checkbox',
-                    name: 'checkbox',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'order_id',
-                    name: 'order_id'
-                },
-                {
-                    data: 'flag_post_code',
-                    name: 'flag_post_code'
-                },
-                {
-                    data: 'store_name',
-                    name: 'store_name'
-                },
-                {
-                    data: 'customer_name',
-                    name: 'customer_name'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'total',
-                    name: 'total'
-                },
-                {
-                    data: 'date_added',
-                    name: 'date_added'
-                },
-                {
-                    data: 'payment_code',
-                    name: 'payment_code'
-                },
-                {
-                    data: 'action',
-                    name: 'action'
-                },
-            ]
+        processing: true,
+        serverSide: true,
+        // rowId: 'order_id',
+        "scrollY": true,
+        "ajax": {
+            "url" : "{{ route('getorders') }}",
+            "dataType": "json",
+            "type": "POST",
+            "data":{ _token: "{{csrf_token()}}"},
+        },
+        columns: [
+                    {"data" : "checkbox", "orderable":false, "bSortable": true},
+                    {"data" : "order_id"},
+                    {"data" : "order_type"},
+                    {"data" : "shop_name", "orderable":false, "bSortable": true},
+                    {"data" : "customer_name"},
+                    {"data" : "status", "orderable":false, "bSortable": true},
+                    {"data" : "total", "orderable":false, "bSortable": true,},
+                    {"data" : "date_added"},
+                    {"data" : "payment_type", "orderable":false, "bSortable": true,},
+                    {"data" : "action", "orderable":false, "bSortable": true},
+                ]
         });
-
     }
-    // End Order Datatable
+    // End Get All Orders
 
     // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        if ($(this).is(':checked', true)) {
+    $('#delall').on('click', function(e)
+    {
+        if ($(this).is(':checked', true))
+        {
             $(".del_all").prop('checked', true);
-        } else {
+        }
+        else
+        {
             $(".del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
 
     // Delete Orders
-    $('.deletesellected').click(function() {
-
-        var checkValues = $('.del_all:checked').map(function() {
+    $('.deletesellected').click(function()
+    {
+        var checkValues = $('.del_all:checked').map(function()
+        {
             return $(this).val();
         }).get();
 
-        if (checkValues != '') {
+        if (checkValues != '')
+        {
             swal({
                     title: "Are you sure You want to Delete It ?",
                     text: "Once deleted, you will not be able to recover this Record",
@@ -208,105 +182,52 @@
                     buttons: true,
                     dangerMode: true,
                 })
-                .then((willDelete) => {
-                    if (willDelete) {
+                .then((willDelete) =>
+                {
+                    if (willDelete)
+                    {
 
                         $.ajax({
-                            type: "POST",
-                            url: '{{ url('deleteorder') }}',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id': checkValues
-                            },
-                            dataType: 'JSON',
-                            success: function(data) {
-                                if (data.success == 1) {
-                                    swal("Your Record has been deleted!", {
-                                        icon: "success",
-                                    });
+                                type: "POST",
+                                url: '{{ url('deleteorder') }}',
+                                data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        'id': checkValues
+                                      },
+                                dataType: 'JSON',
+                                success: function(data)
+                                {
+                                    if (data.success == 1)
+                                    {
+                                        swal("Your Record has been deleted!",
+                                        {
+                                            icon: "success",
+                                        });
 
-                                    setTimeout(function() {
-                                        location.reload();
-                                    }, 1500);
+                                        setTimeout(function()
+                                        {
+                                            location.reload();
+                                        }, 1500);
+                                    }
                                 }
-                            }
                         });
 
-                    } else {
+                    }
+                    else
+                    {
                         swal("Cancelled", "", "error");
-                        setTimeout(function() {
+                        setTimeout(function()
+                        {
                             location.reload();
                         }, 1000);
                     }
                 });
-        } else {
+        }
+        else
+        {
             swal("Please select atleast One User", "", "warning");
         }
     });
-    // End Delete Order
-
-    // $('#table').DataTable();
-    // Select All Checkbox
-    $('#delall').on('click', function (e) {
-        if ($(this).is(':checked', true)) {
-            $(".del_all").prop('checked', true);
-        } else {
-            $(".del_all").prop('checked', false);
-        }
-    });
-    // End Select All Checkbox
-
-    // Delete Orders
-    $('.deletesellected').click(function () {
-
-        var checkValues = $('.del_all:checked').map(function () {
-            return $(this).val();
-        }).get();
-
-        if (checkValues != '') {
-            swal({
-                    title: "Are you sure You want to Delete It ?",
-                    text: "Once deleted, you will not be able to recover this Record",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-
-                        $.ajax({
-                            type: "POST",
-                            url: '{{ url("deleteorder") }}',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id': checkValues
-                            },
-                            dataType: 'JSON',
-                            success: function (data) {
-                                if (data.success == 1) {
-                                    swal("Your Record has been deleted!", {
-                                        icon: "success",
-                                    });
-
-                                    setTimeout(function () {
-                                        location.reload();
-                                    }, 1500);
-                                }
-                            }
-                        });
-
-                    } else {
-                        swal("Cancelled", "", "error");
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    }
-                });
-        } else {
-            swal("Please select atleast One User", "", "warning");
-        }
-    });
-
-    // End Delete Order
+    // End Delete Orders
 
 </script>
