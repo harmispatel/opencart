@@ -9,11 +9,13 @@ use App\Models\Category;
 use App\Models\ProductIcons;
 use App\Models\Reward;
 use App\Models\Product_to_category;
+use App\Models\ProductOptionMapping;
 use App\Models\ProductStore;
 use App\Models\ProductToppingType;
 use App\Models\ToppingSize;
 use App\Models\ToppingProductPriceSize;
 use App\Models\Topping;
+use App\Models\ToppingCatOption;
 use App\Models\ToppingOption;
 use DataTables;
 
@@ -38,101 +40,108 @@ class ProductController extends Controller
 
     function getcategoryproduct(Request $request)
     {
+
+
         $category_id = $request->category_id;
-
-        // $demo  = Product_to_category::where('category_id',$category_id)->first();
-        // $demo1 = ProductStore::where('product_id',$demo->product_id)->first();
-        // $demo2 = Topping::where('store_topping',$demo1->store_id)->first();
-        // $demo3 = ToppingOption::where('id_group_topping',$demo2->id_topping)->get();
-
-        
-
-
-        // echo '<pre>';
-        // print_r($demo3);
-        // exit();
+        $lastid = $request->lastid;
+        $count = $request->count;
 
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->first();
-        $headers = ToppingSize::where('id_category', $category_id)->get();
-        $head_count = count($headers)+1;
 
         $html = '';
-        $html .= '<tbody><tr>';
-        $html .= '<th style="min-width:220px!important">Product Name</th>';
-        $html .= '<th style="min-width:250px!important">Description:</th>';
-        if (isset($head_count)) {
-            $html .= '<th colspan="' . $head_count . '" class="text-center" style="min-width:100px!important">Price</th>';
-        } else {
-            $html .= '<th class="text-center" style="min-width:300px!important">Price</th>';
-        }
-        $html .= '<th style="min-width:240px!important">Image</th>';
-        $html .= '<th style="min-width:300px!important">Options</th>';
-        $html .= '<th>Action</th>';
+        $thead = '';
+        $header = ToppingSize::where('id_category', $category_id)->count();
+        $headers = ToppingSize::where('id_category', $category_id)->get();
 
-        $html .= '</tr>';
-        $html .= '<tr><td colspan="2"></td><th style="background:lightgray;min-width:100px;">Main Price</th>';
-        if (count($headers) > 0) {
-            foreach ($headers as $header) {
-                $html .= '<th style="background:lightgray;min-width:100px;">' . $header->size . '</th>';
+        if ($header > 0) {
+            $head_count = $header + 1;
+        } else {
+            $head_count = $header;
+        }
+        $thead .= '<tr>';
+        $thead .= '<th style="min-width:220px!important">Product Name</th>';
+        $thead .= '<th style="min-width:220px!important">Description</th>';
+        if ($head_count > 0) {
+            $thead .= '<th colspan="' . $head_count . '" class="text-center" style="min-width:100px!important">Price</th>';
+        } else {
+            $thead .= '<th class="text-center" style="min-width:300px!important">Price</th>';
+        }
+        $thead .= '<th style="min-width:240px!important">Image</th>';
+        $thead .= '<th style="min-width:300px!important">Options</th>';
+        $thead .= '<th>Action</th>';
+        $thead .= '</tr>';
+        $thead .= '<tr><td colspan="2"></td><th style="background:lightgray;min-width:100px;">Main Price</th>';
+
+
+        if ($header > 0) {
+            foreach ($headers as $head) {
+                $thead .= '<th style="background:lightgray;min-width:100px;">' . $head->size . '</th>';
             }
         }
-        $html .= '<td colspan="3"></td> </tr>';
-        $html .= '<tr id="bulkproduct">';
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[0][name]" class="form-control"></td>';
-        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="product" class="form-control"></textarea></td>';
-        $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="price" class="form-control"></td>';
-        foreach ($sizes as $size) {
-            $html .= '<td style="vertical-align: middle;"><input type="text" name="abc" class="form-control"></td>';
+
+        $thead .= '<td colspan="3"></td> </tr>';
+        $thead .= '</tr>';
+
+        $html .= '<tr class="productone" id="productone' . $lastid . '">';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[0][productone' . $lastid . ']" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="description[0][productone' . $lastid . ']" class="form-control"></textarea></td>';
+        if (isset($data->product_id)) {
+            $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
         }
-        $html .= '<td style="vertical-align: middle;"><input type="file" name="image" class="form-control"></td>';
-        $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $data->product_id)->first();
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="price[0][productone' . $lastid . ']" class="form-control"></td>';
 
+        if (isset($data->product_id)) {
+            foreach ($sizes as $size) {
+                $html .= '<td style="vertical-align: middle;"><input type="text" name="price[0][productone' . $lastid . ']" class="form-control"></td>';
+            }
+        }
+
+        $html .= '<td style="vertical-align: middle;"><input type="file" name="image[0][productone' . $lastid . ']" class="form-control"></td>';
+
+        if (isset($data->product_id)) {
+            $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
+            $group = unserialize($toppingType->group);
+            unset($group['number_group']);
+        }
         $html .= '<th>';
+        if (isset($data->product_id)) {
+            foreach ($group as $key=>$value) {
+                $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
 
-        if ($data->product_id == isset($toppingType->id_product) ? $toppingType->id_product : "") {
-            $html .= '<h6>' . $toppingType->name_topping . '</h6>
-            <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping" value="select" onclick="radiocheck()"';
-            ($toppingType->typetopping == "select") ? $html .= 'checked' : '';
-            $html .= '>Select&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="typetopping" class="typetopping" value="checkbox" onclick="radiocheck()"';
-            ($toppingType->typetopping == "checkbox") ? $html .= 'checked' : '';
-            $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-            
-            <div style="margin-bottom: 10px;"><input type="radio" name="enable[]" value="1"';
-            ($toppingType->enable == 1) ? $html .= 'checked' : '';
-            $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" name="enable[]" value="0"';
-            ($toppingType->enable == 0) ? $html .= 'checked' : '';
-            $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
-            <div class="form-floating">
-            <label for="rename" class="form-label">Rename to</label>
-            <input type="text" name="renamegroup" class="form-control">
-            </div>
-            <div id="text1"></div>
-            
-            ';
+                $html .= '<h3>' . $top->name_topping . '</h3>
+                <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping['.$lastid.']" value="select" onclick=""';
+                ($top->typetopping == "select") ? $html .= ' checked' : '';
+                $html .= '>Select&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="typetopping['.$lastid.']" class="typetopping" value="checkbox" onclick=""';
+                ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
+                $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+
+                <div style="margin-bottom: 10px;"><input type="radio" name="enable['.$lastid.']" value="1"';
+                ($top->enable == 1) ? $html .= ' checked' : '';
+                $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="enable['.$lastid.']" value="0"';
+                ($top->enable == 0) ? $html .= 'checked' : '';
+                $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="form-floating">
+                    <label for="rename" class="form-label">Rename to</label>
+                    <input type="text" name="renamegroup['.$lastid.']" class="form-control">
+                </div>
+                <div id="text"></div>';
+            }
         } else {
             $html .= 'No Topping';
         }
         $html .= '</th>';
-        $html .= '<td class="text-right" style="vertical-align: middle;"><button type="button"  data-toggle="tooltip" onclick="$(\'#bulkproduct' . '\').remove()" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
-        $html .= '</tr></tbody>';
-
-        if (isset($head_count)) {
-            $html .='<td colspan="' . $head_count . '"><div align="right"><button type="button" style="margin-left: 20px" onclick="addbulkproduct();" class="btn btn-primary ">
-        <i class="fa fa-plus-circle"></i>
-        </button></div></td>';
+        $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+        $html .= '</tr>';
+        
+        if (isset($data->product_id)) {
+            return response()->json(['html' => $html, 'lastid' => $lastid, 'thead' => $thead]);
         } else {
-        $html .= '<tfoot><td colspan="6"><div align="right"><button type="button" style="margin-left: 20px" onclick="addbulkproduct();" class="btn btn-primary ">
-            <i class="fa fa-plus-circle"></i>
-            </button></div></td></tfoot>';
+            return response()->json(['html' => $html, 'lastid' => $lastid, 'thead' => $thead]);
         }
-
-
-        return response()->json(['html'=>$html,'sizes'=>$sizes,'toppingType'=>$toppingType,'data'=>$data]);
     }
 
 
@@ -345,7 +354,7 @@ class ProductController extends Controller
 
                     return $image;
                 })
-                
+
                 ->addColumn('checkbox', function ($row) {
                     $pid = $row->product_id;
                     $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $pid . '">';

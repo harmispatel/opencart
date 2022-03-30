@@ -21,8 +21,9 @@
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/cropper.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/dropzone.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
+<link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
 <style>
-    {!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/css/lfm.css')) !!} .img-de {
+.img-de {
         padding: 10px;
         background-color: #3ca2b8;
         color: #fff !important;
@@ -71,7 +72,7 @@
                 @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1><i class="fa fa-image"></i> Photo Gallery</h1>
+                        <h1>Photo Gallery</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
@@ -89,20 +90,30 @@
         {{-- End Header Section --}}
 
         <div class="content">
-            <form id="form" method="post" enctype="multipart-form/data" action="">
-                <div class="image" style="position: relative;display:inline-block;">
-                    <a onclick="$(this).parent().remove();" class="removeImg"><i class="fa fa-times"></i></a>
-                    <div id="div1" style="width: 100px"></div>
-                    <div class="imageOverlay"><img src="http://localhost/myfood/image/cache/no_image-228x228.jpg"
-                            alt="" id="thumb" /><span></span></div>
-                    <input type="hidden" name="image[]" value="" id="image" />
-                    <a class="browse_image img-de" data-toggle="modal" data-target="#myModal">Browse</a>
-                    <textarea name="description" placeholder="Image Description" class="w-100"></textarea>
+            <div class="conatiner-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="form" method="post" enctype="multipart-form/data" action="">
+                            <div class="image" style="position: relative;display:inline-block;border: 2px solid black;">
+                                <a onclick="$(this).parent().remove();" class="removeImg m-1"><i class="fa fa-times"></i></a>
+                                <div id="div1" style="width: 100px"></div>
+                                <div class="imageOverlay">
+                                    <img class="w-100" src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt="" id="thumb" />
+                                    <span></span>
+                                </div>
+                                <input type="hidden" name="image[]" value="" id="image" />
+                                <a class="browse_image img-de" data-toggle="modal" data-target="#myModal">Browse</a>
+                                <textarea name="description" placeholder="Image Description" class=" form-control"></textarea>
+                            </div>
+                        </form>
+                        <div class="addImage" align="center">
+                            <button type="button" onclick="addGallary();" data-toggle="tooltip" title="Add Product" class="btn btn-primary">
+                                <i class="fa fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </form>
-            <div class="addImage" align="center"><button type="button" onclick="addGallary();"
-                    data-toggle="tooltip" title="Add Product" class="btn btn-primary"><i
-                        class="fa fa-plus-circle"></i></button></div>
+            </div>
         </div>
     </div>
 </section>
@@ -171,7 +182,7 @@
                             class="fas fa-folder-open"></i>{{ trans('laravel-filemanager::lfm.btn-open') }}</a>
                     <a data-action="preview" data-multiple="true"><i
                             class="fas fa-images"></i>{{ trans('laravel-filemanager::lfm.menu-view') }}</a>
-                    <a data-action="use" data-multiple="true"><i class="fas fa-check"></i>Confirm</a>
+                    <a data-action="use" onclick="closePopupAndSetPath()" data-multiple="true"><i class="fas fa-check"></i>Confirm</a>
                 </nav>
 
                 <div class="d-flex flex-row">
@@ -381,12 +392,22 @@
         }
     ];
 </script>
+<script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script>
 <script>
-    {!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/js/script.js')) !!}
+
 </script>
 {{-- Use the line below instead of the above if you need to cache the script. --}}
 {{-- <script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script> --}}
 <script>
+    var modalToSelectedFilePath = "";
+    function getImageUrl(url){
+        modalToSelectedFilePath = url;
+    }
+    function closePopupAndSetPath(){
+        jQuery("#myModal").hide();
+        $(".modal-backdrop").attr("style", "display:none;");
+        jQuery("#thumb").attr("src", modalToSelectedFilePath); 
+    }
     Dropzone.options.uploadForm = {
         paramName: "upload[]", // The name that will be used to transfer the file
         uploadMultiple: false,
