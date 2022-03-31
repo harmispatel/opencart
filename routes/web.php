@@ -167,7 +167,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
-    Route::get('address/{id}', [OrdersController::class, 'address'])->name('address');
+    Route::get('payment_and_shipping_address/{id}', [OrdersController::class, 'payment_and_shipping_address'])->name('payment_and_shipping_address');
 
     // Order returns
     Route::get('returns', [OrdersController::class, 'returns'])->name('returns');
