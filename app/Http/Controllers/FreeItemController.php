@@ -11,7 +11,8 @@ class FreeItemController extends Controller
 {
     public function cartrule()
     {
-        $data['cartrul'] = FreeRule::get();
+        $current_store_id = currentStoreId();
+        $data['cartrul'] = FreeRule::where('id_store',$current_store_id)->get();
         return view('admin.freeitems.cartrule',$data);
     }
 
@@ -51,7 +52,7 @@ class FreeItemController extends Controller
 
         $cartrule = FreeRule::find($request->id);
         $cartrule->name_rule = $request->name;
-        // $cartrule->id_store = isset($request->id_store) ? $request->id_store : "1";
+        // $cartrule->id_store = currentStoreId();
         $id_item = implode(":",$request->free_item);
         $cartrule->id_item = $id_item;
         $cartrule->min_total = isset($request->total_above) ? $request->total_above : "";
@@ -72,8 +73,13 @@ class FreeItemController extends Controller
 
     public function editfreerule($id)
     {
-        $data['freeitems'] = FreeItemadd::get();
+        $current_store_id = currentStoreId();
+        $data['freeitems'] = FreeItemadd::where('store_id',$current_store_id)->get();
         $data['getfreeitem'] = FreeRule::find($id);
+        if(empty($data['getfreeitem']))
+        {
+            return redirect()->route('cartrule');
+        }
         return view('admin.freeitems.edit',$data);
     }
 
@@ -96,7 +102,8 @@ class FreeItemController extends Controller
         ]);
         
         $freeitem = new FreeItemadd;
-        $freeitem->name_item = $request['name_item'];
+        $freeitem->name_item = $request->name_item;
+        $freeitem->store_id = currentStoreId();
         $freeitem->save();
 
         return redirect()->route('freeitemlist');
@@ -112,6 +119,10 @@ class FreeItemController extends Controller
     public function freeitemedit($id)
     {
         $freeitemedit = FreeItemadd::find($id);
+        if(empty($freeitemedit))
+        {
+            return redirect()->route('freeitems');
+        }
         return view('admin.freeitems.freeitemedit',['freeitemedit'=>$freeitemedit]);
     }
 
@@ -120,7 +131,8 @@ class FreeItemController extends Controller
         $request->validate([
             'name_item' => 'required',
         ]);
-        $freeitemupdate = FreeItemadd::find($id);
+        $current_store_id = currentStoreId();
+        $freeitemupdate = FreeItemadd::where('id_store',$current_store_id)->find($id);
         $freeitemupdate->name_item = $request->name_item;
         $freeitemupdate->update();
 

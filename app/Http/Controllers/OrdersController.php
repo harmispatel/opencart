@@ -325,6 +325,9 @@ class OrdersController extends Controller
     // Order History Insert
     public function orderhistoryinsert(Request $request)
     {
+        echo '<pre>';
+        print_r($request->all());
+        exit();
         $orderhisins = new OrderHistory;
         // $orderstuid = new Orders;
         $orderhisins->order_status_id = $request->order_status_id;

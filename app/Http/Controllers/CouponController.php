@@ -172,6 +172,10 @@ class CouponController extends Controller
     public function editcoupon($id)
     {
         $data['coupon'] = Coupon::find($id);
+        if(empty($data['coupon']))
+        {
+            return redirect()->route('coupons');
+        }
         $data['category'] = CouponCategory::join('oc_category_description', 'oc_coupon_category.category_id', '=', 'oc_category_description.category_id')->where('coupon_id', "=", $id)->get();
         $data['products'] = CouponProduct::join('oc_product_description', 'oc_coupon_product.product_id', '=', 'oc_product_description.product_id')->where('coupon_id', "=", $id)->get();
         // $data['history'] = CouponHistory::where('coupon_id', '=', $id)->get();
