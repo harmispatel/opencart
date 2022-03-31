@@ -68,7 +68,7 @@
                             aria-labelledby="nav-customer-tab">
                             <div class="form-group">
                                 <label for="code">*Code</label>
-                                <input type="text" class="form-control" name="code" id="code" value="{{ old('code') }}" aria-describedby="codehelp" placeholder="Code">
+                                <input type="text" class="form-control" maxlength="10" name="code" id="code" value="{{ old('code') }}" aria-describedby="codehelp" placeholder="Code">
                                 <small id="codehelp" class="form-text text-muted">The code the customer enters to activate the voucher.</small>
                                 @if ($errors->has('code'))
                                 <div style="color: red">{{ $errors->first('code') }}</div>

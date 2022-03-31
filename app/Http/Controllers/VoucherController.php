@@ -33,8 +33,13 @@ class VoucherController extends Controller
     public function voucheredit($id)
     {
         $data['vouchers']= Voucher::where('voucher_id',"=",$id)->first();
+        if(empty($data['vouchers']))
+        {
+            return redirect()->route('voucherlist');
+        }
         $data['themes'] = VoucherThemeDescription::get();
-        $data['history'] = VoucherHistory::where('voucher_id','=',$id);
+        $data['history'] = VoucherHistory::where('voucher_id','=',$id)->get();
+        // $data['history'] = VoucherHistory::get();
 
         return view('admin.vouchers.voucheredit',$data);
     }
@@ -56,7 +61,7 @@ class VoucherController extends Controller
         $voucher = Voucher::find($request->voucherid);
         $voucher->on_off = isset($request->onoff) ? $request->onoff : "0";
         $voucher->order_id = isset($request->orderid) ? $request->orderid : "0";
-        $voucher->code = $request->code;;
+        $voucher->code = $request->code;
         $voucher->apply_shipping = $request->apply;
         $voucher->from_name = $request->formname;
         $voucher->from_email = $request->email;
@@ -99,7 +104,8 @@ class VoucherController extends Controller
         ]);
 
         $voucher = new Voucher;
-        $voucher->store_id = isset($request->storeid) ? $request->storeid : "0";
+        $current_store_id = currentStoreId();
+        $voucher->store_id = $current_store_id;
         $voucher->on_off = isset($request->onoff) ? $request->onoff : "0";
         $voucher->order_id = isset($request->orderid) ? $request->orderid : "0";
         $voucher->code = $request->code;;
@@ -145,26 +151,22 @@ class VoucherController extends Controller
             $Voucherthemename->save();
 
             return redirect()->route('voucherthemelist')->with("Success, Voucher thene insert success");
-            // return view('admin.vouchers.voucherthemelist');
-
-           
-
-        
     }
+    
     public function voucherthemeshow()
     {
         $data = VoucherThemenames::get();
         return view('admin.vouchers.voucherthemelist',['data'=>$data]);
-        
     }
     
-    public function voucherthemeedit(Request $request,$id)
+    public function voucherthemeedit($id)
     {
         $voucherthemenameedit = VoucherThemenames::find($id);
+        if(empty($voucherthemenameedit))
+        {
+            return redirect()->route('vouchertheme');
+        }
         $vouchertheme = Voucherthemes::find($id);
-
-        
-
         return view('admin.vouchers.voucherthemeedit',['voucherthemenameedit'=>$voucherthemenameedit,'vouchertheme'=>$vouchertheme]);
 
     }
@@ -175,18 +177,13 @@ class VoucherController extends Controller
             'name' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-       
-        // $imageName = $request->image->getClientOriginalName(); 
-        // $request->image->move(public_path('images'), $imageName);
+
         $vouchertheme = Voucherthemes::find($id);
     
        
         if ($request->hasFile('image'))
         {
             $image = isset($vouchertheme['image']) ? $vouchertheme['image'] : '';
-            // echo '<pre>';
-            // print_r($image);
-            // exit();
             if(!empty($image) || $image != '')
             {
                 if(file_exists(public_path('admin/offers/').$image))

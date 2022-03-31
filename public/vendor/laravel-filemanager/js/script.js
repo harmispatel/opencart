@@ -48,7 +48,6 @@ $(document).ready(function () {
   });
 
   actions.reverse().forEach(function (action) {
-  
     $('#nav-buttons > ul').prepend(
       $('<li>').addClass('nav-item').append(
         $('<a>').addClass('nav-link d-none')
@@ -436,7 +435,6 @@ function loadItems(page) {
       if (hasItems) {
         $('#content').addClass(response.display);
         $('#pagination').addClass('preserve_actions_space');
-
         items.forEach(function (item, index) {
           var template = $('#item-template').clone()
             .removeAttr('id class')
@@ -451,10 +449,10 @@ function loadItems(page) {
             });
 
           if (item.thumb_url) {
-            var image = $('<div>').css('background-image', 'url("' + item.thumb_url + '?timestamp=' + item.time + '")');
+            var image = $('<div onclick="getImageUrl(\''+item.thumb_url+'\')">').css('background-image', 'url("' + item.thumb_url + '?timestamp=' + item.time + '")');
           } else {
             var icon = $('<div>').addClass('ico');
-            var image = $('<div>').addClass('mime-icon ico-' + item.icon).append(icon);
+            var image = $('<div onclick=getImageUrl("'+item.thumb_url+'")>').addClass('mime-icon ico-' + item.icon).append(icon);
           }
 
           template.find('.square').append(image);
@@ -503,7 +501,6 @@ function loadItems(page) {
           li.click(function () {
             // go to corresponding path
             goTo('/' + validSegments.slice(0, 1 + index).join('/'));
-            // alert("hello");
           });
         }
 
@@ -746,7 +743,6 @@ function use(items) {
       window.close();
     }
   } else {
-    
     console.log('window.opener not found');
     // No editor found, open/download file using browser's default method
     window.open(url);

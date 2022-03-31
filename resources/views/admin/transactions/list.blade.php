@@ -66,13 +66,28 @@
                                             <th class="text-green">ACCEPTED ORDERS TOTAL</th>
                                             <th>COMMISION TOTAL</th>
                                             <th class="text-green">ACCEPTED RESTAURANT NET</th>
-                                        <tbody class="text-center cat-list">
-                                            <tr class="bg-secondary">
-                                                <td colspan="7">
-                                                    Comming Soon
-                                                </td>
+                                        <tbody class="">
+                                            <tr>
+                                                <td>0</td>
+                                                <td>0</td>
+                                                <td>£0.00</td>
+                                                <td>0</td>
+                                                <td>£0.00</td>
+                                                <td>£0.00</td>
+                                                <td>£0.00</td>
                                             </tr>
                                         </tbody>
+                                        <tfoot class="text-center cat-list">
+                                            <tr class="bg-secondary">
+                                                <td>TOTALS</td>
+                                                <td>0</td>
+                                                <td>£0.00</td>
+                                                <td>0</td>
+                                                <td>£0.00</td>
+                                                <td>£0.00</td>
+                                                <td>£0.00</td>
+                                            </tr>
+                                          </tfoot>
                                     </table>
                                 </div>
                                 {{-- End Card Body --}}

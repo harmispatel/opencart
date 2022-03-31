@@ -76,7 +76,7 @@
                                         aria-labelledby="nav-General-tab">
                                         <div class="form-group">
                                             <label for="code">*Code</label>
-                                            <input type="text" class="form-control" name="code" id="code"
+                                            <input type="text" class="form-control" maxlength="10" name="code" id="code"
                                                 value="{{ $vouchers->code }}" aria-describedby="codehelp" placeholder="Code">
                                             <input type="hidden" name="voucherid" value="{{ $vouchers->voucher_id }}">
                                             <small id="codehelp" class="form-text text-muted">The code the customer enters to

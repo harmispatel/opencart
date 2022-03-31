@@ -89,7 +89,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group">
-                                        <label for="total_above">*Total Above</label>
+                                        <label for="total_above">*Free Item</label>
                                         <div class="row">
                                             @php
                                                 $i = 1;
