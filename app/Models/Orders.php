@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\OrderStatus;
 use App\Models\Store;
+use App\Models\CustomerGroupDescription;
 
 class Orders extends Model
 {
@@ -21,6 +22,11 @@ class Orders extends Model
     public function hasOneStore()
     {
         return $this->hasOne(Store::class,'store_id','store_id');
+    }
+
+    public function hasOneCustomerGroupDescription()
+    {
+        return $this->hasOne(CustomerGroupDescription::class,'customer_group_id','customer_group_id');
     }
 
 }

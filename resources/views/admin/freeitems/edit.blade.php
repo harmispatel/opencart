@@ -77,7 +77,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group">
-                                        <label for="total_above">*Total Above</label>
+                                        <label for="total_above">*Free Item</label>
                                         <div class="row">
                                             @php
                                                 $i = 1;
@@ -85,11 +85,6 @@
                                                 $items = explode(":",$item);
                                             @endphp
                                             @foreach ($freeitems as $freeitem)
-                                            {{-- @php
-                                                echo '<pre>';
-                                                print_r($freeitem->id_free_item );
-                                                exit();
-                                            @endphp --}}
                                                 <div class="col-md-2 py-2">
                                                     <div class="form-check">
                                                         <input type="checkbox" class="form-check-input"

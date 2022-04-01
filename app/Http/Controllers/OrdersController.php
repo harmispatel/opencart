@@ -62,12 +62,16 @@ class OrdersController extends Controller
         {
             $search = $request->input('search.value');
 
-            $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%")->whereHas('hasOneStore', function ($query) use ($current_store_id){
+            $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+            })->whereHas('hasOneStore', function ($query) use ($current_store_id){
                 $query->where('store_id',$current_store_id);
             })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
 
-            $totalFiltered = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%")->whereHas('hasOneStore', function ($query) use ($current_store_id){
+            $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+            })->whereHas('hasOneStore', function ($query) use ($current_store_id){
                 $query->where('store_id',$current_store_id);
             })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
         }
@@ -164,7 +168,7 @@ class OrdersController extends Controller
         $json_data = array(
             "draw"            => intval($request->request->get('draw')),
             "recordsTotal"    => intval($totalData),
-            "recordsFiltered" => intval($totalFiltered),
+            "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
             "data"            => $data1
         );
 
@@ -179,9 +183,16 @@ class OrdersController extends Controller
     // View order
     public function vieworder($id)
     {
-        $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_status', 'oc_order.order_status_id', '=', 'oc_order_status.order_status_id')->first();
+        // Get Order Details By Order ID
+        $orders = Orders::with(['hasOneOrderStatus','hasOneCustomerGroupDescription'])->where('order_id', '=', $id)->first();
+
+        // Get All Status
         $orderstatus = OrderStatus::all();
+
+        // Get Totals By Order ID
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+
+        // Get Total Products By Order ID
         $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
 
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders]);
@@ -201,11 +212,21 @@ class OrdersController extends Controller
 
     public function ordersinsert()
     {
+        // Get All Stores
         $data['stores'] = Store::get();
+
+        // Get All Customers
         $data['Customers'] = CustomerGroupDescription::get();
+
+        // Get All Countries
         $data['countries'] = Country::get();
-        $data['voucherdesc'] = VoucherThemeDescription::get();
+
+        // Get Voucher Theme Description
+        $data['voucherthemes'] = VoucherThemeDescription::get();
+
+        //Get Order Status
         $data['orderstatus'] = OrderStatus::get();
+
         return view('admin.order.addneworder', $data);
     }
 
@@ -217,28 +238,22 @@ class OrdersController extends Controller
     public function addneworders(Request $request)
     {
         $request->validate([
-            // 'firstname' => 'required',
-            // 'lastname' => 'required',
-            // 'email' => 'required',
-            // 'phone' => 'required',
-            // 'pfirstname' => 'required',
-            // 'plastname' => 'required',
-            // 'pcompany' => 'required',
-            // 'pcompanyid' => 'required',
-            // 'paddress1' => 'required',
-            // 'pcity' => 'required',
-            // 'ppostcode' => 'required',
-            // 'pcountry' => 'required',
-            // 'pregion' => 'required',
-            // 'sfirstname' => 'required',
-            // 'slastname' => 'required',
-            // 'scompany' => 'required',
-            // 'scompanyid' => 'required',
-            // 'saddress1' => 'required',
-            // 'scity' => 'required',
-            // 'spostcode' => 'required',
-            // 'scountry' => 'required',
-            // 'sregion' => 'required',
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'phone' => 'required',
+            'email' => 'required|email',
+            'payment_firstname' => 'required',
+            'payment_lastname' => 'required',
+            'payment_region_id' => 'required',
+            'payment_country_id' => 'required',
+            'payment_city' => 'required',
+            'payment_address_1' => 'required',
+            'shipping_firstname' => 'required',
+            'shipping_lastname' => 'required',
+            'shipping_region_id' => 'required',
+            'shipping_country_id' => 'required',
+            'shipping_city' => 'required',
+            'shipping_address_1' => 'required',
         ]);
 
         $neworder = new Orders;
@@ -325,6 +340,9 @@ class OrdersController extends Controller
     // Order History Insert
     public function orderhistoryinsert(Request $request)
     {
+        echo '<pre>';
+        print_r($request->all());
+        exit();
         $orderhisins = new OrderHistory;
         // $orderstuid = new Orders;
         $orderhisins->order_status_id = $request->order_status_id;
@@ -513,13 +531,10 @@ class OrdersController extends Controller
 
 
 
-
+    // Get Customer By Search
     public function autocomplete(Request $request)
     {
-        $res = Customer::where("firstname", "LIKE", '%' . $request->term . '%')
-            ->orWhere("lastname", "LIKE", '%' . $request->term . '%')
-            ->get();
-
+        $res = Customer::where('firstname', 'LIKE', "%{$request->term}%")->orWhere('lastname','LIKE', "%{$request->term}%")->get();
         return response()->json($res);
     }
 
@@ -542,13 +557,16 @@ class OrdersController extends Controller
 
 
 
+    // Function of Get Address By Selected Customer
     public function getaddress($id)
     {
-        $addr = CustomerAddress::where('customer_id', '=', $id)->get();
+        $addresses = CustomerAddress::where('customer_id', '=', $id)->get();
+
         $html = "";
-        $html .= "<option>--None--</option>";
-        foreach ($addr as $address) {
-            $html .= '<option value="' . $address->address_id . '">' . $address->firstname . ' ' . $address->lastname . ',' . $address->address_1 . ', ' . $address->city . '</option>';
+        $html .= "<option value=''>--None--</option>";
+        foreach ($addresses as $address)
+        {
+            $html .= '<option value="'.$address->address_id.'">'.$address->firstname.' '.$address->lastname. ', '.$address->address_1.', '.$address->city.'</option>';
         }
         return response()->json($html);
     }
@@ -558,7 +576,8 @@ class OrdersController extends Controller
 
 
 
-    public function address($id)
+    // Get Payment & Shipping Address By Customer Address ID
+    public function payment_and_shipping_address($id)
     {
         $address = CustomerAddress::where('address_id', '=', $id)->first();
         return response()->json($address);

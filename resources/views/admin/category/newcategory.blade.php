@@ -2,9 +2,9 @@
 @include('header')
 {{-- End Header --}}
 
-<link rel="stylesheet" href="sweetalert2.min.css">
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of List Category --}}
+{{-- Section of Add Category --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}

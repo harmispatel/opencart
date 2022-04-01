@@ -1,8 +1,10 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of List Reviews --}}
+{{-- Section of Order View --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -18,7 +20,7 @@
                 @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>orders view</h1>
+                        <h1>Orders View</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
@@ -34,26 +36,29 @@
         </section>
         {{-- End Header Section --}}
 
-        {{-- List Section Start --}}
+        {{-- view Section Start --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        {{-- Card --}}
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
+                                <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Order View
+                                    Details
                                 </h3>
-
                                 <div class="container" style="text-align: right">
-                                    <a href="{{ route('invoice', $orders->order_id) }}" target="_blank"
-                                        data-toggle="tooltip" title="" class="btn btn-info"
-                                        data-original-title="Print Invoice"><i class="fa fa-print"></i></a>
-                                    <a href="{{ route('orders') }}" class="btn btn-danger"><i
-                                            class="fa fa-arrow-left"></i></a>
+                                    @if(check_user_role(71) == 1)
+                                        <a href="{{ route('invoice',$orders->order_id) }}" target="_blank" class="btn btn-sm btn-info ml-auto">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    @endif
+
+                                    <a href="{{ route('orders') }}" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}
@@ -61,103 +66,127 @@
                             {{-- Card Body --}}
                             <div class="card-body">
 
-                                <nav>
-                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-order-tab" data-toggle="tab"
-                                            href="#nav-order" role="tab" aria-controls="nav-order"
-                                            aria-selected="true">Order Details</a>
-                                        <a class="nav-item nav-link" id="nav-payment-tab" data-toggle="tab"
-                                            href="#nav-payment" role="tab" aria-controls="nav-payment"
-                                            aria-selected="false">Payment Details</a>
-                                        <a class="nav-item nav-link" id="nav-product-tab" data-toggle="tab"
-                                            href="#nav-product" role="tab" aria-controls="nav-product"
-                                            aria-selected="false">Products</a>
-                                        <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab"
-                                            href="#nav-history" role="tab" aria-controls="nav-history"
-                                            aria-selected="false">History</a>
-                                    </div>
-                                </nav>
+                                {{-- Tabs Link --}}
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" id="nav-order-tab" data-toggle="tab"
+                                        href="#nav-order" role="tab" aria-controls="nav-order"
+                                        aria-selected="true">Order Details</a>
+                                    <a class="nav-item nav-link" id="nav-payment-tab" data-toggle="tab"
+                                        href="#nav-payment" role="tab" aria-controls="nav-payment"
+                                        aria-selected="false">Payment Details</a>
+                                    <a class="nav-item nav-link" id="nav-product-tab" data-toggle="tab"
+                                        href="#nav-product" role="tab" aria-controls="nav-product"
+                                        aria-selected="false">Products</a>
+                                    <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab"
+                                        href="#nav-history" role="tab" aria-controls="nav-history"
+                                        aria-selected="false">History</a>
+                                </div>
+                                {{-- End Tabs Link --}}
+
+                                {{-- Tabs Content --}}
                                 <div class="tab-content" id="nav-tabContent">
+
+                                    {{-- Order Details Tab --}}
                                     <div class="tab-pane fade show active" id="nav-order" role="tabpanel"
-                                        aria-labelledby="nav-order-tab">
-                                        <table class="table table-bordered">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Order Id:</td>
-                                                    <td>#{{ $orders->order_id }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Invoice No.:</td>
-                                                    <td>{{ $orders->invoice_prefix }}{{ $orders->invoice_no }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Store Name:</td>
-                                                    <td>{{ $orders->store_name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Store Url:</td>
-                                                    <td>{{ $orders->store_url }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Customer:</td>
-                                                    <td>{{ $orders->firstname }} {{ $orders->lastname }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Customer Group:</td>
-                                                    <td>{{ $orders->customer_group_id == 1 ? 'default' : '' }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>E-Mail: </td>
-                                                    <td>{{ $orders->email }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Telephone:</td>
-                                                    <td>{{ $orders->telephone }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Total:</td>
-                                                    <td>{{ $orders->total }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Order Status</td>
-                                                    <td>{{ $orders->name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>IP Address:</td>
-                                                    <td>{{ $orders->ip }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>User Agent:</td>
-                                                    <td>{{ $orders->user_agent }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Accept Language:</td>
-                                                    <td>{{ $orders->accept_language }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Date Added:</td>
-                                                    <td>{{ $orders->date_added }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Date Modified:</td>
-                                                    <td>{{ $orders->date_modified }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Shipping Method:</td>
-                                                    <td>{{ $orders->flag_post_code }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Free Item:</td>
-                                                    <td>{{ htmlspecialchars_decode($orders->free_item) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Time delivery:</td>
-                                                    <td>{{ $orders->timedelivery }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    aria-labelledby="nav-order-tab">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h3 class="text-center mt-3 mb-3">Order Details</h3>
+                                                    {{-- Table --}}
+                                                    <table class="table table-bordered table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Order ID</th>
+                                                                <td>
+                                                                    #{{ $orders->order_id }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Invoice No.</th>
+                                                                <td>
+                                                                    {{ $orders->invoice_prefix }}{{ $orders->invoice_no }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Store Name</th>
+                                                                <td>
+                                                                    {{ $orders->store_name }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Store Url</th>
+                                                                <td>{{ $orders->store_url }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Customer</th>
+                                                                <td>
+                                                                    {{ $orders->firstname }} {{ $orders->lastname }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th width="200">Customer Group</th>
+                                                                <td>
+                                                                    {{ $orders->hasOneCustomerGroupDescription->name }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>E-Mail </hd>
+                                                                <td>{{ $orders->email }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Telephone</th>
+                                                                <td>{{ $orders->telephone }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Total</th>
+                                                                <td>{{ $orders->total }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Order Status</th>
+                                                                <td>{{ $orders->name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>IP Address</th>
+                                                                <td>{{ $orders->ip }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>User Agent</th>
+                                                                <td>{{ $orders->user_agent }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Accept Language</th>
+                                                                <td>{{ $orders->accept_language }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Date Added</th>
+                                                                <td>{{ $orders->date_added }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Date Modified</th>
+                                                                <td>{{ $orders->date_modified }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Shipping Method</th>
+                                                                <td>{{ $orders->flag_post_code }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Free Item</th>
+                                                                <td>{{ htmlspecialchars_decode($orders->free_item) }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Time delivery</th>
+                                                                <td>{{ $orders->timedelivery }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    {{-- End Table --}}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                    {{-- End Order Detail Tab --}}
+
                                     <div class="tab-pane fade" id="nav-payment" role="tabpanel"
                                         aria-labelledby="nav-payment-tab">
 
@@ -239,7 +268,7 @@
                                                 </tr>
                                             </tbody>
                                             @endforeach
-                                        
+
                                         </table>
                                     </div>
                                     <div class="alert alert-success alert-dismissible" role="alert" id="alert"
@@ -307,34 +336,29 @@
                                         </fieldset>
                                     </div>
                                 </div>
+                                {{-- End Tabs Content --}}
                             </div>
-
+                            {{-- End Card Body --}}
                         </div>
+                        {{-- End Card --}}
                     </div>
                 </div>
-                {{-- End Table --}}
             </div>
-            {{-- End Card Body --}}
-    </div>
-    {{-- End Card --}}
-    </div>
-    </div>
+        </section>
+        {{-- End view Section --}}
     </div>
 </section>
-{{-- End Form Section --}}
-
-</div>
-</section>
-{{-- End Section of List Manufacturers --}}
+{{-- End Section of Order View --}}
 
 {{-- Footer Start --}}
 @include('footer')
 {{-- End Footer --}}
 
+
+{{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
         $('#ordertable').dataTable({
             // "searching": false,
@@ -395,3 +419,4 @@
         });
     });
 </script>
+{{-- END SCRIPT --}}

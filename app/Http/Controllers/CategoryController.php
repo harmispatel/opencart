@@ -302,7 +302,10 @@ class CategoryController extends Controller
 
         // Get Category Top Option
         $topcatoption = ToppingCatOption::where('id_category',$id)->first();
-
+        if(empty($topcatoption))
+        {
+            return redirect()->route('category');
+        }
         // Get Topping Size
         $toppingsizes = ToppingSize::where('id_category',$id)->get();
 
