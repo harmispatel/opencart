@@ -173,6 +173,7 @@
         getcategoryval(categoryval,"append");
         count++;
         x++;
+        
     }
 
     $("body").on("click",".delete_option" ,function(){
