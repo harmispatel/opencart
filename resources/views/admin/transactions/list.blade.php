@@ -39,58 +39,61 @@
                                     <i class="fa fa-list"></i>
                                     Transactions List
                                 </h3>
-
-                                <div class="container" style="text-align: right">
-                                    <input type="text" name="daterange" value=""/>
-                                </div>
+                                <form action="daterange" method="post">
+                                    <div class="container" style="text-align: right">
+                                        <input type="text" name="daterange" id="daterange" value="" />
+                                    </div>
+                                </form>
 
                             </div>
                             {{-- End Card Header --}}
 
-                                {{-- Card Body --}}
-                                <div class="card-body">
-                                    <table class="table table-bordered" id="transaction">
-                                        @if(Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                                                {{ Session::get('success') }}
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                       @endif
-                                        <thead class="text-center">
-                                            <th>STORE NAME</th>
-                                            <th class="text-danger">NO OF REJECTED ORDERS</th>
-                                            <th class="text-danger">REJECTED ORDERS TOTAL</th>
-                                            <th class="text-green">NO OF ACCEPTED ORDERS</th>
-                                            <th class="text-green">ACCEPTED ORDERS TOTAL</th>
-                                            <th>COMMISION TOTAL</th>
-                                            <th class="text-green">ACCEPTED RESTAURANT NET</th>
-                                        <tbody class="">
-                                            <tr>
-                                                <td>0</td>
-                                                <td>0</td>
-                                                <td>£0.00</td>
-                                                <td>0</td>
-                                                <td>£0.00</td>
-                                                <td>£0.00</td>
-                                                <td>£0.00</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot class="text-center cat-list">
-                                            <tr class="bg-secondary">
-                                                <td>TOTALS</td>
-                                                <td>0</td>
-                                                <td>£0.00</td>
-                                                <td>0</td>
-                                                <td>£0.00</td>
-                                                <td>£0.00</td>
-                                                <td>£0.00</td>
-                                            </tr>
-                                          </tfoot>
-                                    </table>
-                                </div>
-                                {{-- End Card Body --}}
+                            {{-- Card Body --}}
+                            <div class="card-body">
+                                <table class="table table-bordered" id="transaction">
+                                    @if (Session::has('success'))
+                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                                            role="alert">
+                                            {{ Session::get('success') }}
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                    @endif
+                                    <thead class="text-center">
+                                        <th>STORE NAME</th>
+                                        <th class="text-danger">NO OF REJECTED ORDERS</th>
+                                        <th class="text-danger">REJECTED ORDERS TOTAL</th>
+                                        <th class="text-green">NO OF ACCEPTED ORDERS</th>
+                                        <th class="text-green">ACCEPTED ORDERS TOTAL</th>
+                                        <th>COMMISION TOTAL</th>
+                                        <th class="text-green">ACCEPTED RESTAURANT NET</th>
+                                    <tbody id="customerorder">
+                                        {{-- <tr>
+                                            <td></td>
+                                            <td>0</td>
+                                            <td>£0.00</td>
+                                            <td>0</td>
+                                            <td>£0.00</td>
+                                            <td>£0.00</td>
+                                            <td>£0.00</td>
+                                        </tr> --}}
+                                    </tbody>
+                                    <tfoot class="text-center cat-list">
+                                        <tr class="bg-secondary">
+                                            <td>TOTALS</td>
+                                            <td>0</td>
+                                            <td>£0.00</td>
+                                            <td>0</td>
+                                            <td>£0.00</td>
+                                            <td>£0.00</td>
+                                            <td>£0.00</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            {{-- End Card Body --}}
                         </div>
                         {{-- End Card --}}
                     </div>
@@ -111,14 +114,24 @@
 
 <script type="text/javascript">
 
-// $(document).ready(function() {
-//     $('#transaction').DataTable();
-// } );
-
-// Date Range Picker
-$(function() {
-    $('input[name="daterange"]').daterangepicker();
-});
-
+    $(function() {
+        $('input[id="daterange"]').daterangepicker({
+            opens: 'left'
+        }, function(start, end, label) {
+            var startdate = start.format('YYYY-MM-DD');
+            var enddate = end.format('YYYY-MM-DD');
+            $.ajax({
+                type: "post",
+                url: "{{ route('daterange') }}",
+                data: {
+                    'start': startdate,		
+                    'end': enddate,
+                },
+                success: function(response) {
+                    $('#customerorder').html(response.customerorder);
+                }
+            });	
+        });
+    });
 
 </script>

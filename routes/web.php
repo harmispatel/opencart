@@ -267,6 +267,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Transactions
     Route::get('transactions', [TransactionsController::class, 'index'])->name('transactions');
+    Route::post('daterange', [TransactionsController::class, 'getdaterange'])->name('daterange');
 
 
     // New Order
