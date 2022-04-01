@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gallary extends Model
 {
     use HasFactory;
+    protected $table ='oc_photo_gallery';
+    public $timestamps=false;
+    protected $primaryKey ='image_id';
 }

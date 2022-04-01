@@ -16,6 +16,7 @@ use App\Models\ProductDescription;
 use App\Models\ReturnAction;
 use App\Models\ReturnProduct;
 use App\Models\ReturnReason;
+use App\Models\Settings;
 use App\Models\Store;
 use App\Models\VoucherThemeDescription;
 use Illuminate\Http\Request;
@@ -184,7 +185,7 @@ class OrdersController extends Controller
     public function vieworder($id)
     {
         // Get Order Details By Order ID
-        $orders = Orders::with(['hasOneOrderStatus','hasOneCustomerGroupDescription'])->where('order_id', '=', $id)->first();
+        $orders = Orders::with(['hasOneOrderStatus','hasOneCustomerGroupDescription','hasOneCountry','hasOneRegion'])->where('order_id', '=', $id)->first();
 
         // Get All Status
         $orderstatus = OrderStatus::all();
@@ -195,7 +196,10 @@ class OrdersController extends Controller
         // Get Total Products By Order ID
         $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
 
-        return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders]);
+        // Get Total Order History By Order ID
+        $ordershistory = OrderHistory::with(['oneOrderHistoryStatus'])->where('order_id', $id)->get();
+
+        return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders, 'ordershistory' => $ordershistory]);
     }
 
 
@@ -232,6 +236,35 @@ class OrdersController extends Controller
 
 
 
+    function generateinvoice(Request $request)
+    {
+        $orderID = $request->order_id;
+        $order = Orders::where('order_id',$orderID)->first();
+        $html = '';
+
+        if(!empty($order) || $order!= '')
+        {
+            if($order->invoice_no == 0 || $order->invoice_no == '')
+            {
+                $query = Orders::max('invoice_no');
+                if(!empty($query) || $query != '')
+                {
+                    $invoice_no = $query + 1;
+                    $html .= $order->invoice_prefix.''.$invoice_no;
+                }
+                else
+                {
+                    $invoice_no = 1;
+                    $html .= $order->invoice_prefix.''.$invoice_no;
+                }
+                $order_update = Orders::find($orderID);
+                $order->invoice_no = $invoice_no;
+                $order->update();
+                return response()->json($html);
+            }
+        }
+
+    }
 
 
     // Add new order
@@ -309,54 +342,37 @@ class OrdersController extends Controller
     }
 
 
-
-
-
-    // Get Order History
-    public function getorderhistory($id)
-    {
-
-        $orderhistory = OrderHistory::where('order_id', $id)->join('oc_order_status', 'oc_order_history.order_status_id', '=', 'oc_order_status.order_status_id')->get();
-
-        $html = '';
-        foreach ($orderhistory as $order) {
-            $html .= '<tr>';
-            $html .= '<td>' . date('d-m-Y', strtotime($order->date_added)) . '</td>';
-            $html .= '<td>' . $order->comment . '</td>';
-            $html .= '<td>' . $order->name . '</td>';
-            $html .= '<td>' . ($order->notify == 1 ? 'Yes' : 'No') . '</td>';
-            $html .= '</tr>';
-        }
-        return response()->json([
-            'status' => 200,
-            'orderhistory' => $html,
-        ]);
-    }
-
-
-
-
-
     // Order History Insert
     public function orderhistoryinsert(Request $request)
     {
-        echo '<pre>';
-        print_r($request->all());
-        exit();
         $orderhisins = new OrderHistory;
-        // $orderstuid = new Orders;
         $orderhisins->order_status_id = $request->order_status_id;
         $orderhisins->order_id = $request->order_id;
-        // $orderhisins->override                       = isset($request->override) ? $request->override : "0";
-        $orderhisins->notify                        = isset($request->notify) ? $request->notify : "0";
-        $orderhisins->comment                       = isset($request->comment) ? $request->comment : "";
+        $orderhisins->notify  = isset($request->notify) ? $request->notify : "0";
+        $orderhisins->comment = isset($request->comment) ? $request->comment : "";
         date_default_timezone_set('Asia/Kolkata');
         $orderhisins->date_added = date("Y-m-d h:i:s");
         $orderhisins->save();
 
+        $html = '';
+
+         // Get Total Order History By Order ID
+         $ordershistory = OrderHistory::with(['oneOrderHistoryStatus'])->where('order_id', $request->order_id)->get();
+
+        foreach ($ordershistory as $key => $value)
+        {
+            $html .= '<tr>';
+            $html .= '<td>'.$value->date_added.'</td>';
+            $html .= '<td>'.$value->comment.'</td>';
+            $html .= '<td>'.$value->oneOrderHistoryStatus->name.'</td>';
+            $html .= '<td>'.$value->notify.'</td>';
+            $html .= '</tr>';
+        }
+
         return response()->json([
-            'success'  => 200,
-            'message'   => "Success: You have modified orders!",
+            'success' => 200,
+            'message' => "Success: You have modified orders!",
+            'html' => $html,
         ]);
     }
 
@@ -404,12 +420,16 @@ class OrdersController extends Controller
 
 
 
-
+    // Print Orders Invoice
     public function invoice($id)
     {
+
         $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
+
         $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
+
         $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+
         return view('admin.order.invoice', ["orders" => $orders, 'productorders' => $productorders, 'ordertotal' => $ordertotal]);
     }
 

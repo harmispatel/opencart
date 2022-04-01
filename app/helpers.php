@@ -29,6 +29,13 @@ function gettotalip($ip)
 }
 
 
+// Function to Get Store Details
+function getStoreDetails($storeid,$key)
+{
+    $gedetails = Settings::where('key',$key)->where('store_id',$storeid)->first();
+    return $gedetails->value;
+}
+
 function currentStoreId()
 {
     if(session()->has('store_id'))

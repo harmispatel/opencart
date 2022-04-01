@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Gallary;
 use Illuminate\Http\Request;
 
+
 class GallaryController extends Controller
 {
 
@@ -12,11 +13,24 @@ class GallaryController extends Controller
     {
         return view('admin.gallary.gallarysettings');
     }
-
+   
+    public function gallarysettingsstore(Request $request){
+        $data =$request->all();
+        return $data;
+    }
 
     public function uploadgallary()
     {
-        return view('admin.gallary.upload_gallary');
+        return view('vendor.laravel-filemanager.index');
     }
+
+    public function store(Request $request){
+    
+        $data =$request->all();
+        return $data;
+          
+    }
+
+
 
 }

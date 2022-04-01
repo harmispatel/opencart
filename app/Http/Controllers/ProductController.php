@@ -104,35 +104,38 @@ class ProductController extends Controller
             unset($group['number_group']);
         }
         $html .= '<th>';
-        if (isset($data->product_id)) {
+        // if (isset($data->product_id)) {
             foreach ($group as $key=>$value) {
+                
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
 
                 $html .= '<h3>' . $top->name_topping . '</h3>
-                <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping['.$lastid.']" value="select" onclick=""';
+                <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping['.($key).'][productone' . ($lastid-1) . ']" value="select" onclick=""';
                 ($top->typetopping == "select") ? $html .= ' checked' : '';
                 $html .= '>Select&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="typetopping['.$lastid.']" class="typetopping" value="checkbox" onclick=""';
+                    <input type="radio" name="typetopping['.($key).'][productone' . ($lastid-1) . ']" class="typetopping" value="checkbox" onclick=""';
                 ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
                 $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
 
-                <div style="margin-bottom: 10px;"><input type="radio" name="enable['.$lastid.']" value="1"';
+                <div style="margin-bottom: 10px;"><input type="radio" name="enable['.($key).'][productone' . ($lastid -1) . ']" value="1"';
                 ($top->enable == 1) ? $html .= ' checked' : '';
                 $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="enable['.$lastid.']" value="0"';
+                    <input type="radio" name="enable['.($key).'][productone' . ($lastid -1) . ']" value="0"';
                 ($top->enable == 0) ? $html .= 'checked' : '';
                 $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="form-floating">
                     <label for="rename" class="form-label">Rename to</label>
-                    <input type="text" name="renamegroup['.$lastid.']" class="form-control">
+                    <input type="text" name="renamegroup['.($key).'][productone' . ($lastid -1) . ']" class="form-control">
                 </div>
                 <div id="text"></div>';
+                $lastid ++;
             }
-        } else {
-            $html .= 'No Topping';
-        }
+            
+        // } else {
+        //     $html .= 'No Topping';
+        // }
         $html .= '</th>';
         $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         $html .= '</tr>';

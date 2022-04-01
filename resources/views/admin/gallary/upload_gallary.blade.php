@@ -19,6 +19,7 @@
                             <li class="breadcrumb-item active">Photo Gallary </li>
                         </ol>
                     </div>
+
                     {{-- End Breadcumb --}}
                 </div>
             </div>
