@@ -12,6 +12,7 @@ use App\Models\Region;
 
 class Orders extends Model
 {
+    protected $connection = 'mysql';
     protected $table = "oc_order";
     protected $primaryKey = 'order_id';
     public $timestamps = false;
