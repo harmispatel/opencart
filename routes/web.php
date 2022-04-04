@@ -136,6 +136,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //Products
     Route::get('products', [ProductController::class, 'index'])->name('products');
     Route::get('bulkproducts', [ProductController::class, 'bulkproducts'])->name('bulkproducts');
+    Route::post('storebulkproduct',[ProductController::class, 'storebulkproduct'])->name('storebulkproduct');
     Route::post('getcategoryproduct', [ProductController::class, 'getcategoryproduct'])->name('getcategoryproduct');
     Route::get('importproducts', [ProductController::class, 'importproducts'])->name('importproducts');
     Route::get('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');

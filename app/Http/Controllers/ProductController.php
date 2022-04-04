@@ -43,8 +43,7 @@ class ProductController extends Controller
 
 
         $category_id = $request->category_id;
-        $lastid = $request->lastid;
-        $count = $request->count;
+        $lastid = $request->lastid +1;
 
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->first();
 
@@ -83,20 +82,20 @@ class ProductController extends Controller
         $thead .= '</tr>';
 
         $html .= '<tr class="productone" id="productone' . $lastid . '">';
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[0][productone' . $lastid . ']" class="form-control"></td>';
-        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="description[0][productone' . $lastid . ']" class="form-control"></textarea></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product['.$lastid.'][name]" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="product['.$lastid.'][description]" class="form-control"></textarea></td>';
         if (isset($data->product_id)) {
             $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
         }
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="price[0][productone' . $lastid . ']" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product['.$lastid.'][price]" class="form-control"></td>';
 
         if (isset($data->product_id)) {
             foreach ($sizes as $size) {
-                $html .= '<td style="vertical-align: middle;"><input type="text" name="price[0][productone' . $lastid . ']" class="form-control"></td>';
+                $html .= '<td style="vertical-align: middle;"><input type="text" name="product['.$lastid.'][price]" class="form-control"></td>';
             }
         }
 
-        $html .= '<td style="vertical-align: middle;"><input type="file" name="image[0][productone' . $lastid . ']" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="file" name="product['.$lastid.'][image]" class="form-control"></td>';
 
         if (isset($data->product_id)) {
             $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
@@ -104,38 +103,60 @@ class ProductController extends Controller
             unset($group['number_group']);
         }
         $html .= '<th>';
-        // if (isset($data->product_id)) {
+       
+        if (isset($data->product_id)) {
+
             foreach ($group as $key=>$value) {
                 
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
-
+                $dropdown =ToppingOption::where('id_group_topping',$top->id_topping)->get();
                 $html .= '<h3>' . $top->name_topping . '</h3>
-                <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping['.($key).'][productone' . ($lastid-1) . ']" value="select" onclick=""';
+                <div style="margin-bottom: 10px;">
+                <input type="radio" class="typetopping_'.$lastid.'_'.$key.'" name="product[' .$lastid .']typetopping['.($key).']" value="select" onclick="radiocheck('.$lastid.','.$key.');"';
                 ($top->typetopping == "select") ? $html .= ' checked' : '';
-                $html .= '>Select&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="typetopping['.($key).'][productone' . ($lastid-1) . ']" class="typetopping" value="checkbox" onclick=""';
+                $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="product[' .$lastid .']typetopping['.($key).']" class="typetopping_'.$lastid.'_'.$key.'" value="checkbox" onclick="radiocheck('.$lastid.','.$key.');"';
                 ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
-                $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+                $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
 
-                <div style="margin-bottom: 10px;"><input type="radio" name="enable['.($key).'][productone' . ($lastid -1) . ']" value="1"';
+                <div style="margin-bottom: 10px;"><input type="radio" name="product[' .$lastid .']enable['.($key).']" value="1"';
                 ($top->enable == 1) ? $html .= ' checked' : '';
                 $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="enable['.($key).'][productone' . ($lastid -1) . ']" value="0"';
+                    <input type="radio" name="product[' .$lastid .']enable['.($key).']" value="0"';
                 ($top->enable == 0) ? $html .= 'checked' : '';
                 $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="form-floating">
                     <label for="rename" class="form-label">Rename to</label>
-                    <input type="text" name="renamegroup['.($key).'][productone' . ($lastid -1) . ']" class="form-control">
-                </div>
-                <div id="text"></div>';
-                $lastid ++;
+                    <input type="text" name="product[0][rename]" class="form-control">
+                </div>';
+                    $html .='<div id="checkbox_'.$lastid.'_'.$key.'" style="display:none">';
+                    $html .='<lable>Default selected</lable>';
+                    $html .='<table>';
+                    $html .='<tbody>';
+                    $html .='<tr>';
+                    foreach($dropdown as $dropdowns){
+                    $html .='<td><input type="checkbox" value="'.$dropdowns->name.'" name="product[0][selected]" ></td>';
+                    $html .='<td>'.$dropdowns->name.'</td>';
+                    $html .='</tr>';
+                    }
+                    $html .='</tbody>';
+                    $html .='</table>';
+                    $html .='</div>';
+                    $html .='<div id="select_'.$lastid.'_'.$key.'" style="display:none">';
+                    $html .='<lable>Default selected</lable>';
+                    $html .='<select  class="form-control" name="product[0][dropdown]">';
+                    foreach($dropdown as $dropdowns){
+                        $html .='<option>'.$dropdowns->name.'</option>';
+                    }
+                    $html .='</select>';
+                    $html .='</div>';
             }
             
-        // } else {
-        //     $html .= 'No Topping';
-        // }
+        } else {
+            $html .= 'No Topping';
+        }
         $html .= '</th>';
         $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         $html .= '</tr>';
@@ -146,6 +167,39 @@ class ProductController extends Controller
             return response()->json(['html' => $html, 'lastid' => $lastid, 'thead' => $thead]);
         }
     }
+
+
+    function storebulkproduct(Request $request){
+
+        $data=$request->all();
+        echo '<pre>';
+        print_r($data);
+        exit();
+        
+        $data =$request->product;
+        echo '<pre>';
+        print_r($data);
+       
+        $data1 =$request->description;
+        echo '<pre>';
+        print_r($data1);
+
+        $data2 =$request->price;
+        
+        echo '<pre>';
+        print_r($data2);
+        
+        $data3 =$request->image;
+        echo '<pre>';
+        print_r($data3);
+        exit();
+        // return $data;
+        
+
+    }
+ 
+
+
 
 
     function importproducts()
