@@ -70,25 +70,19 @@
                                         <th>COMMISION TOTAL</th>
                                         <th class="text-green">ACCEPTED RESTAURANT NET</th>
                                     <tbody id="customerorder">
-                                        {{-- <tr>
-                                            <td></td>
-                                            <td>0</td>
-                                            <td>£0.00</td>
-                                            <td>0</td>
-                                            <td>£0.00</td>
-                                            <td>£0.00</td>
-                                            <td>£0.00</td>
-                                        </tr> --}}
+                                        <tr id="status">
+                                            <td colspan="7" class="text-center">Transaction Not Avavilable</td>
+                                        </tr>
                                     </tbody>
                                     <tfoot class="text-center cat-list">
                                         <tr class="bg-secondary">
                                             <td>TOTALS</td>
-                                            <td>0</td>
-                                            <td>£0.00</td>
-                                            <td>0</td>
-                                            <td>£0.00</td>
-                                            <td>£0.00</td>
-                                            <td>£0.00</td>
+                                            <td id="rejected">0</td>
+                                            <td id="rejected_amt">£0.00</td>
+                                            <td id="accept">0</td>
+                                            <td id="accept_tot">£0.00</td>
+                                            <td id="commission">£0.00</td>
+                                            <td id="totle">£0.00</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -113,7 +107,8 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-
+$(document).ready(function () {
+    
     $(function() {
         $('input[id="daterange"]').daterangepicker({
             opens: 'left'
@@ -129,9 +124,25 @@
                 },
                 success: function(response) {
                     $('#customerorder').html(response.customerorder);
+                    $('#rejected').text('');
+                    $('#rejected').append(response.reject);
+                    $('#rejected_amt').text('');
+                    $('#rejected_amt').append(response.reject_amt);
+                    $('#accept').text('');
+                    $('#accept').append(response.accept);
+                    $('#accept_tot').text('');
+                    $('#accept_tot').append(response.accept_tot);
+                    $('#commission').text('');
+                    $('#commission').append(response.commission);
+                    $('#totle').text('');
+                    $('#totle').append(response.totle);
+                    $('#status').hide();
                 }
             });	
         });
     });
+
+});
+
 
 </script>
