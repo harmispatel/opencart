@@ -122,12 +122,17 @@
         processing: true,
         serverSide: true,
         "scrollY": true,
-        ajax: "{{ route('getcategory') }}",
+        "ajax" : {
+                "url" : "{{ route('getcategory') }}",
+                "dataType": "json",
+                "type": "POST",
+                "data":{ _token: "{{csrf_token()}}"},
+        },
         columns: [
-                    {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
-                    {data: 'cat_name', name:'cat_name'},
-                    {data: 'sort_order', name: 'sort_order'},
-                    {data: 'action', name: 'action'},
+                    {"data": "checkbox" ,"orderable": false, "searchable": false},
+                    {"data": "name"},
+                    {"data": "sort_order"},
+                    {"data": "action" ,"orderable": false, "searchable": false},
                 ]
         });
     }

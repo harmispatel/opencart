@@ -108,9 +108,12 @@
                                         </div>
                                     </div>
 
+                                    @php
+                                        $descr = html_entity_decode($data->hasOneCategory->description);
+                                    @endphp
                                     <div class="form-group">
                                         <label for="summernote" class="form-label">Description</label>
-                                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="description">{{ html_entity_decode($data->hasOneCategory->description) }}</textarea>
+                                        <textarea class="form-control" placeholder="Leave a comment here" name="description" id="description">{{ strip_tags($descr) }}</textarea>
                                     </div>
 
                                     <div class="form-group">

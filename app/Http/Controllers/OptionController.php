@@ -4,46 +4,61 @@ namespace App\Http\Controllers;
 
 use App\Models\CategorytoStore;
 use Illuminate\Http\Request;
-use App\Models\Option;
-use App\Models\OptionDescription;
 use App\Models\ProductOptionMapping;
 use App\Models\ProductStore;
 use App\Models\Settings;
 use App\Models\Topping;
 use App\Models\ToppingOption;
-use App\Models\ToppingSize;
-use DataTables;
 
 class OptionController extends Controller
 {
-   function index()
-   {
-       return view('admin.menuoptions.list');
-   }
-
-   function add()
-   {
-       $data['suboptions'] = Topping::where('store_topping',1)->get();
-       return view('admin.menuoptions.add',$data);
-   }
+    // Function for Menuoptions View
+    function index()
+    {
+        return view('admin.menuoptions.list');
+    }
 
 
-   function insert(Request $request)
-   {
-        $option_toppings = $request->optiontopping;
 
+
+
+    // Function for Add Menu Options View
+    function add()
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        // Get Suboptions By Current Store ID
+        $data['suboptions'] = Topping::where('store_topping',$current_store_id)->get();
+
+        return view('admin.menuoptions.add',$data);
+    }
+
+
+
+
+
+    // Function for Insert New Menu Options
+    function insert(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        // Validation
         $request->validate([
             'groupName'=> 'required',
         ]);
 
+        $option_toppings = $request->optiontopping;
         $groupname = $request->groupName;
         $grouptitle = $request->show_group_title;
         $grouptitlecolor = $request->group_title_color;
         $headermessage = $request->topping_header_message;
         $footermessage = $request->topping_footer_message;
 
+        // Insert New Menu Options
         $topping = new Topping;
-        $topping->store_topping = 1;
+        $topping->store_topping = $current_store_id;
         $topping->name_topping = $groupname;
         $topping->show_group_title = $grouptitle;
         $topping->group_title_color = $grouptitlecolor;
@@ -51,15 +66,15 @@ class OptionController extends Controller
         $topping->topping_footer_message = isset($footermessage) ? $footermessage : '';
         $topping->save();
 
-
+        // Insert Menu Options Toppings Options
         foreach($option_toppings as $optopping)
         {
-
             $name = $optopping['name'];
             $main_price = $optopping['price_main'];
             $order = $optopping['order'];
             $sub_option = isset($optopping['sub_option']) ? $optopping['sub_option'] : '';
 
+            // New Topping Options
             $option_topp = new ToppingOption;
             $option_topp->name = isset($name) ? $name : '';
             $option_topp->price_main = isset($main_price) ? $main_price : 0;
@@ -73,17 +88,23 @@ class OptionController extends Controller
 
         return redirect()->route('option')->with('success','Topping has been Added Successfully..');
 
-   }
+    }
 
 
-   function newmodel(Request $request)
-   {
-       $val = $request->val;
-       $key = 'new_module_status';
 
-       if($val == 1)
-       {
 
+
+    // Function for Change New Module
+    function newmodel(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $val = $request->val;
+        $key = 'new_module_status';
+
+        if($val == 1)
+        {
             $getnewmodel = Settings::where('key',$key)->first();
 
             if(!empty($getnewmodel) || $getnewmodel != '')
@@ -100,7 +121,7 @@ class OptionController extends Controller
             else
             {
                 $setting = new Settings;
-                $setting->store_id = 0;
+                $setting->store_id = $current_store_id;
                 $setting->group = 'config';
                 $setting->key = $key;
                 $setting->value = $val;
@@ -116,9 +137,9 @@ class OptionController extends Controller
                     'html' => $html
                 ]);
             }
-       }
-       else
-       {
+        }
+        else
+        {
             Settings::where('key',$key)->delete();
             $html = '';
             $html .= '<button class="btn btn-xs btn-secondary" onclick="newModel(1)">Enabled</button>';
@@ -128,42 +149,81 @@ class OptionController extends Controller
                 'success' => 1,
                 'html' => $html
             ]);
-       }
+        }
 
-   }
-
-
-
-
-   function gettoppings(Request $request)
-   {
-    if ($request->ajax()) {
-        $data = Topping::select('*');
-        return DataTables::of($data)
-        ->addIndexColumn()
-        ->addColumn('action', function($row){
-
-            $edit_url = route('edittopping',$row->id_topping);
-            $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
-
-            return $btn;
-        })
-        ->addColumn('checkbox', function($row){
-            $tid = $row->id_topping;
-            $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$tid.'">';
-            return $checkbox;
-        })
-        ->rawColumns(['action','checkbox'])
-        ->make(true);
     }
 
-    return view('admin.customers.list');
+
+
+
+
+    // Function of Get Topping List by Current Store ID
+    function gettoppings(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $columns = array(
+            0 =>'id_topping',
+            1 =>'name_topping',
+        );
+
+        // Get Total Toppings Count
+        $totalData = Topping::where('store_topping',$current_store_id)->count();
+
+        $totalFiltered = $totalData;
+        $limit = $request->request->get('length');
+        $start = $request->request->get('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        // Search & Sort
+        if(!empty($request->input('search.value')))
+        {
+            $search = $request->input('search.value');
+
+            $posts = Topping::where('store_topping',$current_store_id)->where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+
+            $totalFiltered = Topping::where('store_topping',$current_store_id)->where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+        }
+        else
+        {
+            $posts = Topping::where('store_topping','=',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+        }
+
+        $data = array();
+        $data1=array();
+
+        if($posts)
+        {
+            foreach ($posts as $post)
+            {
+                $id_topping = $post->id_topping;
+                $edit_url = route('edittopping', $id_topping);
+
+                $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$id_topping'>";
+                $data['name_topping'] = $post->name_topping;
+                $data['action'] = '<a href="'. $edit_url .'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+                $data1[] = $data;
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->request->get('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
+            "data"            => $data1
+        );
+
+        echo json_encode($json_data);
    }
 
 
 
-   function delete(Request $request)
-   {
+
+    // Function For Delete MenuOptions
+    function delete(Request $request)
+    {
         $ids = $request['id'];
 
         if(count($ids) > 0)
@@ -187,34 +247,56 @@ class OptionController extends Controller
                 'success' => 1,
             ]);
         }
-   }
+    }
 
 
-   function edit(Request $request,$id)
-   {
-        $data['suboptions'] = Topping::where('store_topping',1)->where('id_topping','!=',$id)->get();
 
+
+    // Function for Edit Menuoption
+    function edit($id)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        // Get Sub Options
+        $data['suboptions'] = Topping::where('store_topping',$current_store_id)->where('id_topping','!=',$id)->get();
+
+        // Get Edit Details of Menu Option
         $data['topping'] = Topping::where('id_topping',$id)->first();
 
+        // Get Toppings Options of Menu Options
         $data['toppingoptions'] = ToppingOption::where('id_group_topping',$id)->get();
 
-        $data['optionsmappings'] = ProductOptionMapping::select('oc_product_options_mapping.*','cd.name as cname','pd.name as pname','ts.size as sizename')->leftJoin('oc_category_description as cd','cd.category_id','=','oc_product_options_mapping.category_id')->leftJoin('oc_product_description as pd','pd.product_id','=','oc_product_options_mapping.product_id')->leftJoin('oc_topping_size as ts','ts.id_size','=','oc_product_options_mapping.size')->where('topping_id',$id)->get();
+        // Get Options Mapping
+        $data['optionsmappings'] = ProductOptionMapping::with(['hasOneCategoryDescription','hasOneProductDescription','hasOneToppingSize'])->where('topping_id',$id)->get();
 
-        $data['categoriesbystore'] = CategorytoStore::select('oc_category_to_store.*','cd.name as cname')->join('oc_category_description as cd','cd.category_id','=','oc_category_to_store.category_id')->where('oc_category_to_store.store_id','=',1)->get();
+        // Get Categories By Current Store
+        $data['categoriesbystore'] = CategorytoStore::with(['hasOneCategoryDescription'])->where('store_id','=',$current_store_id)->get();
 
-        $data['productsbystore'] = ProductStore::select('oc_product_to_store.*','pd.name as pname')->join('oc_product_description as pd','pd.product_id','=','oc_product_to_store.product_id')->where('oc_product_to_store.store_id','=',1)->get();
+        // Get Products By Current Store
+        $data['productsbystore'] = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$current_store_id)->get();
 
-        $data['toppingsizebystore'] = CategorytoStore::select('oc_category_to_store.*','ts.size as tsize','ts.id_size as size_id')->join('oc_topping_size as ts','ts.id_category','=','oc_category_to_store.category_id')->where('oc_category_to_store.store_id','=',1)->get();
+        // Get Topping Size By Current Store
 
-       return view('admin.menuoptions.edit',$data);
-   }
+        $data['toppingsizebystore'] = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->whereHas('hasManyToppingSize',function ($q)
+        {
+            $q->where('id_size','!=','');
+        })->get();
+
+        return view('admin.menuoptions.edit',$data);
+    }
 
 
-   function update(Request $request)
-   {
-       $id_topping = $request->id_topping;
-       $option_toppings = $request->optiontopping;
 
+
+
+    // Function for Update Menu Option
+    function update(Request $request)
+    {
+        $id_topping = $request->id_topping;
+        $option_toppings = $request->optiontopping;
+
+        // Validation
         $request->validate([
             'groupName'=> 'required',
         ]);
@@ -225,6 +307,7 @@ class OptionController extends Controller
         $headermessage = $request->topping_header_message;
         $footermessage = $request->topping_footer_message;
 
+        // Update Menu Option
         $topping = Topping::find($id_topping);
         $topping->name_topping = $groupname;
         $topping->show_group_title = $grouptitle;
@@ -233,6 +316,7 @@ class OptionController extends Controller
         $topping->topping_footer_message = isset($footermessage) ? $footermessage : '';
         $topping->update();
 
+        // Update Topping Options
         foreach($option_toppings as $optopping)
         {
             $name = $optopping['name'];
@@ -269,40 +353,52 @@ class OptionController extends Controller
    }
 
 
-   function delToppingOption(Request $request)
-   {
-       $topping_option_id = $request->top_opt_Id;
-
-       // Delete Topping Option
-       ToppingOption::where('id_topping_option',$topping_option_id)->delete();
-
-       return response()->json([
-           'success' => 1,
-       ]);
-   }
 
 
-   function storemapping(Request $request)
-   {
-       $topping_id = $request->top_id;
-       $order_type = $request->order_type;
-       $category_id = $request->category;
-       $product_id = $request->product;
-       $topping_rename = $request->topping_rename;
-       $size_id = $request->size;
-       $min_item = $request->min_item;
-       $max_item = $request->max_item;
-       $days = isset($request->days) ? implode(",",$request->days) : '';
-       $start = $request->start_time;
-       $end = $request->end_time;
-       $numFree = $request->num_free;
-       $price = $request->price;
-       $sub_option = isset($request->sub_option) ? implode(',',$request->sub_option) : '';
-       $style = $request->style;
-       $sort_order = $request->sort_order;
 
+    // Function for Delete Topping Options
+    function delToppingOption(Request $request)
+    {
+        $topping_option_id = $request->top_opt_Id;
+
+        // Delete Topping Option
+        ToppingOption::where('id_topping_option',$topping_option_id)->delete();
+
+        return response()->json([
+            'success' => 1,
+        ]);
+    }
+
+
+
+
+
+    // Function of Store Mapping
+    function storemapping(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $topping_id = $request->top_id;
+        $order_type = $request->order_type;
+        $category_id = $request->category;
+        $product_id = $request->product;
+        $topping_rename = $request->topping_rename;
+        $size_id = $request->size;
+        $min_item = $request->min_item;
+        $max_item = $request->max_item;
+        $days = isset($request->days) ? implode(",",$request->days) : '';
+        $start = $request->start_time;
+        $end = $request->end_time;
+        $numFree = $request->num_free;
+        $price = $request->price;
+        $sub_option = isset($request->sub_option) ? implode(',',$request->sub_option) : '';
+        $style = $request->style;
+        $sort_order = $request->sort_order;
+
+        // Store New Mapping
         $mapping = new ProductOptionMapping;
-        $mapping->store_id = 1;
+        $mapping->store_id = $current_store_id;
         $mapping->topping_id = isset($topping_id) ? $topping_id : '';
         $mapping->topping_rename = isset($topping_rename) ? $topping_rename : '';
         $mapping->order_type = isset($order_type) ? $order_type : '';
@@ -321,13 +417,17 @@ class OptionController extends Controller
         $mapping->size = isset($size_id) ? $size_id : '';
         $mapping->save();
 
-       return response()->json('success');
+        return response()->json('success');
 
-   }
+    }
 
 
-   function updatemapping(Request $request)
-   {
+
+
+
+    // Update Mappings
+    function updatemapping(Request $request)
+    {
         $map_id = $request->map_id;
         $order_type = $request->order_type;
         $category_id = $request->category;
@@ -345,6 +445,7 @@ class OptionController extends Controller
         $style = $request->style;
         $sort_order = $request->sort_order;
 
+        // Update Mapping
         $mapping = ProductOptionMapping::find($map_id);
         $mapping->topping_rename = isset($topping_rename) ? $topping_rename : '';
         $mapping->order_type = isset($order_type) ? $order_type : '';
@@ -363,13 +464,17 @@ class OptionController extends Controller
         $mapping->size = isset($size_id) ? $size_id : '';
         $mapping->update();
 
-       return response()->json('success');
+        return response()->json('success');
 
-   }
+    }
 
 
-   function deletemapping(Request $request)
-   {
+
+
+
+    // Delete Mapping
+    function deletemapping(Request $request)
+    {
         $ids = $request['id'];
 
         if(count($ids) > 0)
@@ -381,97 +486,111 @@ class OptionController extends Controller
                 'success' => 1,
             ]);
         }
-   }
+    }
 
-   function editmapping(Request $request)
-   {
-       $map_id = $request->id;
 
-       $map_details = ProductOptionMapping::where('id',$map_id)->first();
 
-       $categoriesbystore = CategorytoStore::select('oc_category_to_store.*','cd.name as cname')->join('oc_category_description as cd','cd.category_id','=','oc_category_to_store.category_id')->where('oc_category_to_store.store_id','=',1)->get();
 
-       $productsbystore = ProductStore::select('oc_product_to_store.*','pd.name as pname')->join('oc_product_description as pd','pd.product_id','=','oc_product_to_store.product_id')->where('oc_product_to_store.store_id','=',1)->get();
 
-       $toppingsizebystore = CategorytoStore::select('oc_category_to_store.*','ts.size as tsize','ts.id_size as size_id')->join('oc_topping_size as ts','ts.id_category','=','oc_category_to_store.category_id')->where('oc_category_to_store.store_id','=',1)->get();
+    // Edit Mappings
+    function editmapping(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
 
-       $suboptions = Topping::where('store_topping',1)->where('id_topping','!=',$map_details->topping_id)->get();
+        // Mapping ID
+        $map_id = $request->id;
 
-        $html = '';
+        //    Mapping Details
+        $map_details = ProductOptionMapping::where('id',$map_id)->first();
 
-        $html .= '<tr class="trow'.$map_id.'">';
+        //    Categories By Current Store
+        $categoriesbystore = CategorytoStore::select('oc_category_to_store.*','cd.name as cname')->join('oc_category_description as cd','cd.category_id','=','oc_category_to_store.category_id')->where('oc_category_to_store.store_id','=',$current_store_id)->get();
 
-        $html .= '<td></td>';
+        //    Products By Current Store
+        $productsbystore = ProductStore::select('oc_product_to_store.*','pd.name as pname')->join('oc_product_description as pd','pd.product_id','=','oc_product_to_store.product_id')->where('oc_product_to_store.store_id','=',$current_store_id)->get();
 
-        $html .= '<td class="align-middle"><select name="order_type" id="order_type_'.$map_id.'"><option value="*"'; ($map_details->order_type == '*') ? $html .= 'selected' : ''; $html .='>*</option><option value="delivery"'; ($map_details->order_type == 'delivery') ? $html .= 'selected' : ''; $html .='>Delivery</option><option value="collection"'; ($map_details->order_type == 'collection') ? $html .= 'selected' : ''; $html .='>Collection</option></select><input type="hidden" name="map_id" id="map_id_'.$map_id.'" value="'.$map_details->id.'">';
+        //    Topping Size By Current Store
+        $toppingsizebystore = CategorytoStore::select('oc_category_to_store.*','ts.size as tsize','ts.id_size as size_id')->join('oc_topping_size as ts','ts.id_category','=','oc_category_to_store.category_id')->where('oc_category_to_store.store_id','=',$current_store_id)->get();
 
-        $html .= '<td class="align-middle"><select name="category" id="category_'.$map_id.'"><option value=""> -- Select Category -- </option>';
-        foreach($categoriesbystore as $category)
-        {
-            $html .= '<option value="'.$category->category_id.'"';
-            ($category->category_id == $map_details->category_id) ? $html .= 'selected' : '';
-            $html .='>'.$category->cname.'</option>';
-        }
-        $html .= '</select></td>';
+        //    Get Sub Options
+        $suboptions = Topping::where('store_topping',$current_store_id)->where('id_topping','!=',$map_details->topping_id)->get();
 
-        $html .= '<td class="align-middle"><select name="product" id="product_'.$map_id.'"><option value=""> -- Select Product -- </option>';
-        foreach($productsbystore as $product)
-        {
-            $html .= '<option value="'.$product->product_id.'"';
-            ($product->product_id == $map_details->product_id) ? $html .= 'selected' : '';
-            $html .='>'.$product->pname.'</option>';
-        }
-        $html .= '</select></td>';
+            $html = '';
 
-        $html .= '<td class="align-middle"><input type="text" value="'.$map_details->topping_rename.'" name="topping_rename" id="topping_rename_'.$map_id.'"></td>';
+            $html .= '<tr class="trow'.$map_id.'">';
 
-        $html .= '<td class="align-middle"><select name="size" id="size_'.$map_id.'"><option value=""> -- Select Size -- </option>';
-        foreach($toppingsizebystore as $size)
-        {
-            $html .= '<option value="'.$size->size_id.'"';
-            ($size->size_id == $map_details->size) ? $html .= 'selected' : '';
-            $html .='>'.$size->tsize.'</option>';
-        }
-        $html .= '</select></td>';
+            $html .= '<td></td>';
 
-        $html .= '<td class="align-middle"><input type="number" name="min_item" id="min_item_'.$map_id.'" value="'.$map_details->min_item.'"></td>';
+            $html .= '<td class="align-middle"><select name="order_type" id="order_type_'.$map_id.'"><option value="*"'; ($map_details->order_type == '*') ? $html .= 'selected' : ''; $html .='>*</option><option value="delivery"'; ($map_details->order_type == 'delivery') ? $html .= 'selected' : ''; $html .='>Delivery</option><option value="collection"'; ($map_details->order_type == 'collection') ? $html .= 'selected' : ''; $html .='>Collection</option></select><input type="hidden" name="map_id" id="map_id_'.$map_id.'" value="'.$map_details->id.'">';
 
-        $html .= '<td class="align-middle"><input type="number" name="max_item" id="max_item_'.$map_id.'" value="'.$map_details->max_item.'"></td>';
+            $html .= '<td class="align-middle"><select name="category" id="category_'.$map_id.'"><option value=""> -- Select Category -- </option>';
+            foreach($categoriesbystore as $category)
+            {
+                $html .= '<option value="'.$category->category_id.'"';
+                ($category->category_id == $map_details->category_id) ? $html .= 'selected' : '';
+                $html .='>'.$category->cname.'</option>';
+            }
+            $html .= '</select></td>';
 
-        $arr = explode(',',$map_details->days);
+            $html .= '<td class="align-middle"><select name="product" id="product_'.$map_id.'"><option value=""> -- Select Product -- </option>';
+            foreach($productsbystore as $product)
+            {
+                $html .= '<option value="'.$product->product_id.'"';
+                ($product->product_id == $map_details->product_id) ? $html .= 'selected' : '';
+                $html .='>'.$product->pname.'</option>';
+            }
+            $html .= '</select></td>';
 
-        $html .= '<td class="align-middle"><select name="days[]" id="days_'.$map_id.'" multiple><option value="Sun"'; (in_array("Sun",$arr)) ? $html .= 'selected' : '';  $html .= '>Sunday</option><option value="Mon"'; (in_array("Mon",$arr)) ? $html .= 'selected' : '';  $html .= '>Monday</option><option value="Tue"'; (in_array("Tue",$arr)) ? $html .= 'selected' : '';  $html .= '>Tuesday</option><option value="Wed"'; (in_array("Wed",$arr)) ? $html .= 'selected' : '';  $html .= '>Wedensday</option><option value="Thu"'; (in_array("Thu",$arr)) ? $html .= 'selected' : '';  $html .= '>Thursday</option><option value="Fri"'; (in_array("Fri",$arr)) ? $html .= 'selected' : '';  $html .= '>Friday</option><option value="Sat"'; (in_array("Sat",$arr)) ? $html .= 'selected' : '';  $html .= '>Saturday</option></select></td>';
+            $html .= '<td class="align-middle"><input type="text" value="'.$map_details->topping_rename.'" name="topping_rename" id="topping_rename_'.$map_id.'"></td>';
 
-        $html .= '<td class="align-middle"><input type="time" name="start_time" id="start_time_'.$map_id.'" value="'.$map_details->start_time.'"></td>';
+            $html .= '<td class="align-middle"><select name="size" id="size_'.$map_id.'"><option value=""> -- Select Size -- </option>';
+            foreach($toppingsizebystore as $size)
+            {
+                $html .= '<option value="'.$size->size_id.'"';
+                ($size->size_id == $map_details->size) ? $html .= 'selected' : '';
+                $html .='>'.$size->tsize.'</option>';
+            }
+            $html .= '</select></td>';
 
-        $html .= '<td class="align-middle"><input type="time" name="end_time" id="end_time_'.$map_id.'" value="'.$map_details->end_time.'"></td>';
+            $html .= '<td class="align-middle"><input type="number" name="min_item" id="min_item_'.$map_id.'" value="'.$map_details->min_item.'"></td>';
 
-        $html .= '<td class="align-middle"><input type="number" name="num_free" id="num_free_'.$map_id.'" value="'.$map_details->no_free.'"></td>';
+            $html .= '<td class="align-middle"><input type="number" name="max_item" id="max_item_'.$map_id.'" value="'.$map_details->max_item.'"></td>';
 
-        $html .= '<td class="align-middle"><input type="number" name="price" id="price_'.$map_id.'" value="'.$map_details->price.'"></td>';
+            $arr = explode(',',$map_details->days);
 
-        $arr2 = explode(',',$map_details->sub_option);
+            $html .= '<td class="align-middle"><select name="days[]" id="days_'.$map_id.'" multiple><option value="Sun"'; (in_array("Sun",$arr)) ? $html .= 'selected' : '';  $html .= '>Sunday</option><option value="Mon"'; (in_array("Mon",$arr)) ? $html .= 'selected' : '';  $html .= '>Monday</option><option value="Tue"'; (in_array("Tue",$arr)) ? $html .= 'selected' : '';  $html .= '>Tuesday</option><option value="Wed"'; (in_array("Wed",$arr)) ? $html .= 'selected' : '';  $html .= '>Wedensday</option><option value="Thu"'; (in_array("Thu",$arr)) ? $html .= 'selected' : '';  $html .= '>Thursday</option><option value="Fri"'; (in_array("Fri",$arr)) ? $html .= 'selected' : '';  $html .= '>Friday</option><option value="Sat"'; (in_array("Sat",$arr)) ? $html .= 'selected' : '';  $html .= '>Saturday</option></select></td>';
 
-        $html .= '<td class="align-middle"><select name="sub_option[]" id="sub_option_'.$map_id.'" multiple>';
-        foreach($suboptions as $suboption)
-        {
-            $html .= '<option value="'.$suboption->id_topping.'"';
-            ($suboption->id_topping == in_array($suboption->id_topping,$arr2)) ? $html .= 'selected' : '';
-            $html .='>'.$suboption->name_topping.'</option>';
-        }
-        $html .= '</select></td>';
+            $html .= '<td class="align-middle"><input type="time" name="start_time" id="start_time_'.$map_id.'" value="'.$map_details->start_time.'"></td>';
 
-        $html .= '<td class="align-middle"><select name="style" id="style_'.$map_id.'"><option value="tick_boxes"'; ($map_details->style == 'tick_boxes') ? $html .= 'selected' : ''; $html .='>Tick Boxes</option><option value="button_box"'; ($map_details->style == 'button_box') ? $html .= 'selected' : ''; $html .='>Button Box</option></select>';
+            $html .= '<td class="align-middle"><input type="time" name="end_time" id="end_time_'.$map_id.'" value="'.$map_details->end_time.'"></td>';
 
-        $html .= '<td class="align-middle"><input type="number" name="sort_order" id="sort_order_'.$map_id.'" value="'.$map_details->sort_order.'"></td>';
+            $html .= '<td class="align-middle"><input type="number" name="num_free" id="num_free_'.$map_id.'" value="'.$map_details->no_free.'"></td>';
 
-        $html .= '<td class="align-middle"><a class="btn btn-sm btn-success" onclick="updateMapping('.$map_id.')"><i class="fa fa-save"></i></a></td>';
+            $html .= '<td class="align-middle"><input type="number" name="price" id="price_'.$map_id.'" value="'.$map_details->price.'"></td>';
 
-        $html .= '</tr>';
+            $arr2 = explode(',',$map_details->sub_option);
 
-        return response()->json($html);
+            $html .= '<td class="align-middle"><select name="sub_option[]" id="sub_option_'.$map_id.'" multiple>';
+            foreach($suboptions as $suboption)
+            {
+                $html .= '<option value="'.$suboption->id_topping.'"';
+                ($suboption->id_topping == in_array($suboption->id_topping,$arr2)) ? $html .= 'selected' : '';
+                $html .='>'.$suboption->name_topping.'</option>';
+            }
+            $html .= '</select></td>';
 
-   }
+            $html .= '<td class="align-middle"><select name="style" id="style_'.$map_id.'"><option value="tick_boxes"'; ($map_details->style == 'tick_boxes') ? $html .= 'selected' : ''; $html .='>Tick Boxes</option><option value="button_box"'; ($map_details->style == 'button_box') ? $html .= 'selected' : ''; $html .='>Button Box</option></select>';
+
+            $html .= '<td class="align-middle"><input type="number" name="sort_order" id="sort_order_'.$map_id.'" value="'.$map_details->sort_order.'"></td>';
+
+            $html .= '<td class="align-middle"><a class="btn btn-sm btn-success" onclick="updateMapping('.$map_id.')"><i class="fa fa-save"></i></a></td>';
+
+            $html .= '</tr>';
+
+            return response()->json($html);
+
+    }
 
 
 }

@@ -56,7 +56,7 @@
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
 
-                                <input type="hidden" id="product_id" value="{{ $product->product_id }}"
+                                <input type="hidden" id="product_id" value="{{ isset($product->product_id) ? $product->product_id : '' }}"
                                     name="product_id">
                                 <div class="card-body">
                                     {{-- Tab Links --}}
@@ -84,24 +84,27 @@
                                                 <label for="category" class="form-label">Category</label>
                                                 <select name="category" id="category" class="form-control">
                                                     <option disabled selected>select</option>
-                                                    @foreach ($result['category'] as $category)
-                                                        <option value="{{ $category->category_id }}"
-                                                            {{ $product->category_id == $category->category_id ? 'selected' : '' }}>
+                                                    @if (isset($result['category']))
+                                                        @foreach ($result['category'] as $category)
+                                                            <option value="{{ $category->category_id }}"
+                                                            {{ isset($product->category_id) ? $product->category_id : '' == $category->category_id ? 'selected' : '' }}>
                                                             {{ $category->name }}</option>
-                                                    @endforeach
+                                                        @endforeach
+                                                    @endif
                                                 </select>
                                             </div>
                                             <hr>
                                             <div class="mb-3">
                                                 <label for="product" class="form-label"><span class="text-danger">*</span>Product Name</label>
                                                 <input type="text" class="form-control" name="product" id="product"
-                                                    placeholder="Product Name" value="{{ $product->name }}" required>
+                                                    placeholder="Product Name" value="{{ isset($product->name) ? $product->name : '' }}" required>
                                             </div>
                                             <hr>
                                             <div class="mb-3">
                                                 <label for="category" class="form-label"><span class="text-danger">*</span>Product Icon</label>
                                                     @php
-                                                        $array = explode(',',$product->product_icons);
+                                                        $pro_icon = isset($product->product_icons) ? $product->product_icons : '';
+                                                        $array = explode(',',$pro_icon);
                                                         // echo '<pre>';
                                                         // print_r($arr);
                                                         // exit();
@@ -120,7 +123,8 @@
                                                     availiable</label>
                                                 <div>
                                                     @php
-                                                        $arr = explode(',', $product->availibleday);
+                                                        $days = isset($product->availibleday) ? $product->availibleday : '';
+                                                        $arr = explode(',', $days);
                                                     @endphp
                                                     <input type="checkbox" name="day[]" value="2"
                                                         {{ in_array(2, $arr) ? 'checked' : '' }}> Mon
@@ -151,14 +155,14 @@
                                                 <div>
 
                                                     <input type="radio" name="order_type" value="both"
-                                                        {{ $product->order_type == 'both' ? 'checked' : '' }}> Both
+                                                        {{ isset($product->order_type) ? $product->order_type : '' == 'both' ? 'checked' : '' }}> Both
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                     <input type="radio" name="order_type" value="delivery"
-                                                        {{ $product->order_type == 'delivery' ? 'checked' : '' }}>
+                                                        {{ isset($product->order_type) ? $product->order_type : '' == 'delivery' ? 'checked' : '' }}>
                                                     Delivery
                                                     Only &nbsp;&nbsp;&nbsp;&nbsp;
                                                     <input type="radio" name="order_type" value="collection"
-                                                        {{ $product->order_type == 'collection' ? 'checked' : '' }}>
+                                                        {{ isset($product->order_type) ? $product->order_type : '' == 'collection' ? 'checked' : '' }}>
                                                     Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>
@@ -167,20 +171,20 @@
                                             <div class="form-floating">
                                                 <label for="summernote" class="form-label">Description</label>
                                                 <textarea class="form-control" placeholder="Leave a comment here" name="description" id="summernote"
-                                                    style="height: 200px">{{ $product->description }}</textarea>
+                                                    style="height: 200px">{{ isset($product->description) ? $product->description : '' }}</textarea>
                                             </div>
                                             <hr>
                                             <div class="class=mb-3">
                                                 <label for="price" class="form-label">Price</label>
                                                 <div>
                                                     Main Price <input type="text" name="mainprice"
-                                                        class="form-control" value="{{ $product->price }}">
+                                                        class="form-control" value="{{ isset($product->price) ? $product->price : '' }}">
                                                     Delivery Price <input type="text" name="deliveryprice"
                                                         class="form-control"
-                                                        value="{{ $product->delivery_price }}">
+                                                        value="{{ isset($product->delivery_price) ? $product->delivery_price : '' }}">
                                                     Collection Price <input type="text" name="collectionprice"
                                                         class="form-control"
-                                                        value="{{ $product->collection_price }}">
+                                                        value="{{ isset($product->collection_price) ? $product->collection_price : '' }}">
                                                 </div>
                                             </div>
                                             <hr>
@@ -240,7 +244,10 @@
                                             <div class="form-group">
                                                 <label for="image" class="form-label">Image</label>
                                                 <input type="file" name="image" id="image" class="form-control">
-                                                <img src="{{ asset('public/admin/product/' . $product->image) }}"
+                                                @php
+                                                    $p_image = isset($product->image) ? $product->image : '';
+                                                @endphp
+                                                <img src="{{ asset('public/admin/product/'.$p_image) }}"
                                                     width="100px" />
                                             </div>
                                         </div>
@@ -248,20 +255,24 @@
                                         {{-- start Option --}}
                                         <div class="tab-pane fade" id="option" role="tabpanel"
                                             aria-labelledby="option-tab">
+                                            @php
+                                                $t_type_prod_id = isset($result['toppingType']->id_product) ? $result['toppingType']->id_product : '';
+                                                $t_type_name_topping = isset($result['toppingType']->name_topping) ? $result['toppingType']->name_topping : '';
+                                            @endphp
 
-                                            @if ($product->product_id == isset($result['toppingType']->id_product) ? $result['toppingType']->id_product : '')
+                                            @if (isset($product->product_id) ? $product->product_id : '' == $t_type_prod_id)
 
-                                                <h2>{{ $result['toppingType']->name_topping }}</h2>
+                                                <h2>{{ $t_type_name_topping }}</h2>
                                                 <div style="margin-bottom: 10px;">
                                                     <input type="radio" name="typetopping" class="avtive"
                                                         value="select"
-                                                        {{ $result['toppingType']->typetopping == 'select' ? 'checked' : '' }}
+                                                        {{ isset($result['toppingType']->typetopping) ? $result['toppingType']->typetopping : '' == 'select' ? 'checked' : '' }}
                                                         onclick="radiocheck()">
                                                     Dropdown
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
 
                                                     <input type="radio" name="typetopping" value="checkbox"
-                                                        {{ $result['toppingType']->typetopping == 'checkbox' ? 'checked' : '' }}
+                                                        {{ isset($result['toppingType']->typetopping) ? $result['toppingType']->typetopping : '' == 'checkbox' ? 'checked' : '' }}
                                                         onclick="radiocheck()">
                                                     Checkbox
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -272,11 +283,11 @@
 
                                                 <div style="margin-bottom: 10px;">
                                                     <input type="radio" name="enable[]" value="1"
-                                                        {{ $result['toppingType']->enable == 1 ? 'checked' : '' }}>
+                                                        {{ isset($result['toppingType']->enable) ? $result['toppingType']->enable : '' == 1 ? 'checked' : '' }}>
                                                     Enable
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                     <input type="radio" name="enable[]" value="0"
-                                                        {{ $result['toppingType']->enable == 0 ? 'checked' : '' }}>
+                                                        {{ isset($result['toppingType']->enable) ? $result['toppingType']->enable : '' == 0 ? 'checked' : '' }}>
                                                     Disable
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
@@ -300,8 +311,8 @@
                                             <div class="form-floating">
                                                 <label for="status" class="form-label">Status</label>
                                                 <select name="status" id="status" class="form-control">
-                                                    <option value="{{ $product->status }}" style="display: none">
-                                                        {{ $product->status }}</option>
+                                                    <option value="{{ isset($product->status) ? $product->status :'' }}" style="display: none">
+                                                        {{ isset($product->status) ? $product->status :'' }}</option>
                                                     <option value="1">Enabled</option>
                                                     <option value="0">Deabled</option>
                                                 </select>
@@ -309,7 +320,7 @@
                                             <div class="form-floating">
                                                 <label for="sort_order" class="form-label">Sort Order</label>
                                                 <input type="text" name="sort_order"
-                                                    value="{{ $product->sort_order }}" class="form-control">
+                                                    value="{{ isset($product->sort_order) ? $product->sort_order : '' }}" class="form-control">
                                             </div>
                                         </div>
                                         {{-- end Option --}}

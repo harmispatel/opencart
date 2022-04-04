@@ -38,31 +38,142 @@ class CategoryController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        // Categories By Current Store
-        if($request->ajax())
-        {
-            $data = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->get();
+        $columns = array(
+            0 =>'category_id',
+            1 =>'name',
+            2 =>'sort_order',
+        );
 
-            return DataTables::of($data)->addIndexColumn()
-            ->addColumn('action', function($row){
-                $edit_url = route('categoryedit',$row->category_id);
-                $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
-                return $btn;
+        // Get Total Categories
+        $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+            $query->where('store_id',$current_store_id);
+        })->count();
+
+        $totalFiltered = $totalData;
+        $limit = $request->request->get('length');
+        $start = $request->request->get('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+        if(!empty($request->input('search.value')))
+        {
+            $search = $request->input('search.value');
+
+            $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
+                $query->where('sort_order','LIKE',"%{$search}%")
+                ->orwhereHas('hasOneCategory', function ($query) use ($search){
+                    $query->where('name','LIKE',"%{$search}%");
+                });
             })
-            ->addColumn('checkbox', function($row){
-                $cid = $row->category_id;
-                $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
-                return $checkbox;
+            ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            });
+
+            if($order == 'name')
+            {
+                if($dir == 'asc')
+                {
+                    $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                }
+                else
+                {
+                    $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                }
+            }
+            else
+            {
+                $posts= $posts->orderBy($order, $dir);
+            }
+            $posts = $posts->offset($start)->limit($limit)->get();
+
+            $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
+                $query->where('sort_order','LIKE',"%{$search}%");
             })
-            ->addColumn('cat_name', function($row){
-                $cat_name = $row->hasOneCategory->name;
-                return $cat_name;
-            })
-            ->rawColumns(['action','checkbox','cat_name'])
-            ->make(true);
+
+            ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->limit($limit)->count();
+
         }
+        else
+        {
+            $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])
+            ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->limit($limit);
+
+            if($order == 'name')
+            {
+                if($dir == 'asc')
+                {
+                    $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                }
+                else
+                {
+                    $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                }
+            }
+            else
+            {
+                $posts= $posts->orderBy($order, $dir);
+            }
+            $posts = $posts->offset($start)->limit($limit)->get();
+        }
+
+        $data = array();
+        $data1=array();
+
+        if($posts)
+        {
+            foreach ($posts as $post)
+            {
+                $category_id = $post->category_id;
+                $edit_url = route('categoryedit', $category_id);
+
+                $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$category_id'>";
+                $data['name'] = $post->hasOneCategory->name;
+                $data['sort_order'] = $post->sort_order;
+                $data['action'] = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+
+                $data1[] = $data;
+
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->request->get('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
+            "data"            => $data1
+        );
+
+        echo json_encode($json_data);
+
+        // Categories By Current Store
+        // if($request->ajax())
+        // {
+        //     $data = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+        //         $query->where('store_id',$current_store_id);
+        //     })->get();
+
+        //     return DataTables::of($data)->addIndexColumn()
+        //     ->addColumn('action', function($row){
+        //         $edit_url = route('categoryedit',$row->category_id);
+        //         $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+        //         return $btn;
+        //     })
+        //     ->addColumn('checkbox', function($row){
+        //         $cid = $row->category_id;
+        //         $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
+        //         return $checkbox;
+        //     })
+        //     ->addColumn('cat_name', function($row){
+        //         $cat_name = $row->hasOneCategory->name;
+        //         return $cat_name;
+        //     })
+        //     ->rawColumns(['action','checkbox','cat_name'])
+        //     ->make(true);
+        // }
     }
 
 

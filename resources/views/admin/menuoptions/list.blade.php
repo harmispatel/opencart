@@ -136,11 +136,16 @@
         processing: true,
         serverSide: true,
         "scrollY": true,
-        ajax: "{{ route('gettoppings') }}",
+        "ajax": {
+            "url" : "{{ route('gettoppings') }}",
+            "dataType": "json",
+            "type": "POST",
+            "data":{ _token: "{{csrf_token()}}"},
+        },
         columns: [
-                    {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
-                    {data: 'name_topping', name: 'name_topping'},
-                    {data: 'action', name: 'action'},
+                    {"data": "checkbox", orderable: false, searchable: false},
+                    {"data": "name_topping"},
+                    {"data": "action", orderable: false, searchable: false},
                 ]
         });
     }
