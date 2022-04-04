@@ -105,7 +105,17 @@
                                                             <tr>
                                                                 <th>Invoice No.</th>
                                                                 <td>
-                                                                    {{ $orders->invoice_prefix }}{{ $orders->invoice_no }}
+                                                                    @if($orders->invoice_no != 0)
+
+                                                                        {{ $orders->invoice_prefix }}{{ $orders->invoice_no }}
+                                                                    @else
+                                                                        <div id="Invoice" style="display: flex;">
+                                                                            <b>[ <a class="text-primary" onclick="generateinvoice({{ $orders->order_id }})" style="cursor: pointer">Generate</a> ]</b>
+                                                                            <div class="gif-div ml-2" style="display: none;">
+                                                                                <img src="{{ asset('public/admin/gif/gif3.gif') }}" width="30" class="text-danger">
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -116,7 +126,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>Store Url</th>
-                                                                <td>{{ $orders->store_url }}</td>
+                                                                <td><a href="{{ asset($orders->store_url) }}" target="_blank">{{ $orders->store_url }}</a></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Customer</th>
@@ -131,7 +141,7 @@
                                                                 </td>
                                                             </tr>
                                                             <tr>
-                                                                <th>E-Mail </hd>
+                                                                <th>E-Mail</th>
                                                                 <td>{{ $orders->email }}</td>
                                                             </tr>
                                                             <tr>
@@ -144,7 +154,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>Order Status</th>
-                                                                <td>{{ $orders->name }}</td>
+                                                                <td>{{ $orders->hasOneOrderStatus->name }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>IP Address</th>
@@ -187,154 +197,200 @@
                                     </div>
                                     {{-- End Order Detail Tab --}}
 
+                                    {{-- Payment Details --}}
                                     <div class="tab-pane fade" id="nav-payment" role="tabpanel"
-                                        aria-labelledby="nav-payment-tab">
-
-                                        <table class="table table-bordered">
-                                            <tbody>
-                                                <tr>
-                                                    <td>First Name:</td>
-                                                    <td>{{ $orders->payment_firstname }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Last Name::</td>
-                                                    <td>{{ $orders->payment_lastname }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Address 1::</td>
-                                                    <td>{{ $orders->payment_address_1 }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Address 2:</td>
-                                                    <td>{{ $orders->payment_address_2 }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>City:</td>
-                                                    <td>{{ $orders->payment_city }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Postcode:</td>
-                                                    <td>{{ $orders->payment_postcode }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Region / State:</td>
-                                                    <td>{{ '' }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Country:</td>
-                                                    <td>{{ $orders->payment_country }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Payment Method:</td>
-                                                    <td>{{ $orders->payment_method }}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane fade" id="nav-product" role="tabpanel"
-                                        aria-labelledby="nav-product-tab">
-
-                                        <table class="list table">
-                                            <thead>
-                                                <tr>
-                                                    <td class="left">Product</td>
-                                                    <td class="left">Model</td>
-                                                    <td class="right">Quantity</td>
-                                                    <td class="right">Unit Price</td>
-                                                    <td class="right">Total</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($productorders as $order)
-                                                    <tr>
-                                                        <td class="left"><a href="#">{{ htmlspecialchars_decode($order->name) }}</a>
-                                                            <br>
-                                                            @php
-                                                                echo $order->toppings;
-                                                            @endphp
-                                                        </td>
-                                                        <td class="left">{{ $order->model  }}</td>
-                                                        <td class="right">{{ $order->quantity  }}</td>
-                                                        <td class="right">{{ $order->price  }}</td>
-                                                        <td class="right">{{ $order->total  }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                            @foreach ($ordertotal as $total)
-                                            <tbody id="totals">
-                                                <tr>
-                                                    <td colspan="4" class="right">{{ $total->code }}</td>
-                                                    <td class="right">{{ $total->text }}</td>
-                                                </tr>
-                                            </tbody>
-                                            @endforeach
-
-                                        </table>
-                                    </div>
-                                    <div class="alert alert-success alert-dismissible" role="alert" id="alert"
-                                        style="display: none">
-                                        <div id="alertmessage"></div>
-                                        <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="tab-pane fade show" id="nav-history" role="tabpanel"
-                                        aria-labelledby="nav-history-tab">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered w-100" id="ordertable">
-                                                <thead>
-                                                    <tr>
-                                                        <td class="text-left">Date Added</td>
-                                                        <td class="text-left">Comment</td>
-                                                        <td class="text-left">Status</td>
-                                                        <td class="text-left">Customer Notified</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="orderdetail">
-
-                                                </tbody>
-                                            </table>
+                                    aria-labelledby="nav-payment-tab">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h3 class="text-center mt-3 mb-3">Payment Details</h3>
+                                                    {{-- Table --}}
+                                                    <table class="table table-bordered table-striped">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>First Name</th>
+                                                                <td>{{ $orders->payment_firstname }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Last Name</th>
+                                                                <td>{{ $orders->payment_lastname }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Address 1</th>
+                                                                <td>{{ $orders->payment_address_1 }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Address 2</th>
+                                                                <td>{{ $orders->payment_address_2 }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>City</th>
+                                                                <td>{{ $orders->payment_city }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Postcode</th>
+                                                                <td>{{ $orders->payment_postcode }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Country</th>
+                                                                <td>{{ $orders->hasOneCountry->name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Region / State</th>
+                                                                <td>{{ $orders->hasOneRegion->name }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th width="200">Payment Method</th>
+                                                                <td>{{ $orders->payment_method }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <fieldset>
-                                            <legend>Add Order History</legend>
-                                            <form class="form-horizontal" id="orderhistoryform">
-                                                {{ csrf_field() }}
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label" for="input-order-status">Order
-                                                        Status</label>
-                                                    <div class="col-sm-12">
-                                                        <select name="order_status_id" id="input-order-status"
-                                                            class="form-control">
-                                                            @foreach ($orderstatus as $status)
-                                                                <option value="{{ $status->order_status_id }}">
-                                                                    {{ $status->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="days" class="form-label">Notify Customer:</label>
-                                                    <input type="checkbox" class="ml-2" name="notify"
-                                                        value="1" id="input-notify">
-                                                    <input type="hidden" name="order_id"
-                                                        value="{{ $orders->order_id }}">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-sm-2 control-label"
-                                                        for="input-comment">Comment</label>
-                                                    <div class="col-sm-12">
-                                                        <textarea name="comment" rows="8" id="input-comment"
-                                                            class="form-control"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="text-right">
-                                                    <button id="button-history" data-loading-text="Loading..."
-                                                        class="btn btn-primary"><i class="fa fa-plus-circle"></i>
-                                                        Add History</button>
-                                                </div>
-                                            </form>
-                                        </fieldset>
                                     </div>
+                                    {{-- End Payment Details --}}
+
+
+                                    {{-- Products Tab --}}
+                                    <div class="tab-pane fade" id="nav-product" role="tabpanel"
+                                    aria-labelledby="nav-product-tab">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h3 class="text-center mt-3 mb-3">Products</h3>
+                                                    {{-- Table --}}
+                                                    <table class="table table-bordered table-striped">
+                                                        <thead class="bg-dark">
+                                                            <tr>
+                                                                <td class="left">Product</td>
+                                                                <td class="left">Model</td>
+                                                                <td class="right">Quantity</td>
+                                                                <td class="right">Unit Price</td>
+                                                                <td class="right">Total</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($productorders as $order)
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="{{ route('editproduct',$order->product_id) }}">
+                                                                            {{ htmlspecialchars_decode($order->name) }}
+                                                                        </a>
+                                                                        @php
+                                                                        $strip = strip_tags($order->toppings);
+                                                                        $replace = str_replace('+','</br> + ',$strip);
+                                                                        echo $replace
+                                                                        @endphp
+
+                                                                    </td>
+                                                                    <td>{{ $order->model  }}</td>
+                                                                    <td>{{ $order->quantity  }}</td>
+                                                                    <td>{{ $order->price  }}</td>
+                                                                    <td>{{ $order->total  }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                        @foreach ($ordertotal as $total)
+                                                        <tfoot style="background: rgba(80, 80, 80, 0.788); color: white;">
+                                                            <tr>
+                                                                <td colspan="4" class="right"><b>{{ strtoupper($total->code) }}</b></td>
+                                                                <td class="right">{{ $total->text }}</td>
+                                                            </tr>
+                                                        </tfoot>
+                                                        @endforeach
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- End Products Tab --}}
+
+                                    {{-- History Tab --}}
+                                    <div class="tab-pane fade show" id="nav-history" role="tabpanel"
+                                    aria-labelledby="nav-history-tab">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="alert alert-success pt-1 pb-1 alert-dismissible mt-2" role="alert" id="alert" style="display: none;">
+                                                        <div id="alertmessage"></div>
+                                                        <button type="button" class="close pt-1" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <h3 class="text-center mt-3 mb-3">Orders History</h3>
+                                                    {{-- Table --}}
+                                                    <table class="table table-bordered table-striped" id="orderHistory">
+                                                        <thead class="bg-dark">
+                                                            <tr>
+                                                                <th>Date Added</th>
+                                                                <th>Comment</th>
+                                                                <th>Status</th>
+                                                                <th>Customer Notified</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="ohistory">
+                                                            @foreach ($ordershistory as $ohistory)
+                                                                <tr>
+                                                                    <td>{{ $ohistory->date_added }}</td>
+                                                                    <td>{{ $ohistory->comment }}</td>
+                                                                    <td>{{ $ohistory->oneOrderHistoryStatus->name }}</td>
+                                                                    <td>{{ $ohistory->notify }}</td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <hr style="background: black">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h3>Add Order History</h3>
+                                                    <form class="form-horizontal" id="orderhistoryform">
+                                                        {{ csrf_field() }}
+                                                       <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="input-order-status">
+                                                                    Order Status
+                                                                </label>
+                                                                <select name="order_status_id" id="input-order-status" class="form-control">
+                                                                        @foreach ($orderstatus as $status)
+                                                                            <option value="{{ $status->order_status_id }}">
+                                                                                {{ $status->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="days">
+                                                                    Notify Customer
+                                                                </label><br>
+                                                                <input type="checkbox" class="ml-2" name="notify" value="1" id="input-notify">
+                                                                <input type="hidden" name="order_id"
+                                                                value="{{ $orders->order_id }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="input-comment">
+                                                                    Comment
+                                                                </label>
+                                                                <textarea name="comment" id="input-comment" class="form-control"></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <a id="button-history" class="btn btn-primary">ADD HISTORY</a>
+                                                            </div>
+                                                        </div>
+                                                       </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- End History Tab --}}
                                 </div>
                                 {{-- End Tabs Content --}}
                             </div>
@@ -359,64 +415,76 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function() {
-        $('#ordertable').dataTable({
-            // "searching": false,
-            // "bLengthChange": false,
-            // "ordering": false
-        });
+        $('#orderHistory').dataTable();
     });
-    $(document).ready(function() {
 
-        getorderdetail();
+    // Insert Order History
+    $('#button-history').on("click", function()
+    {
+        var form_data = new FormData(document.getElementById("orderhistoryform"));
 
-        function getorderdetail() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "GET",
-                url: "{{ url('orderdata', $orders->order_id) }}",
-                dataType: "JSON",
-                success: function(response) {
-                    if (response.status == 200) {
-                        // console.log(response.orderhistory);
-                        $('#orderdetail').html(response.orderhistory);
-                    }
-                }
-            });
-        }
-
-        // Insert Order History
-        $('#button-history').on("click", function(e) {
-            e.preventDefault();
-
-            var form_data = new FormData(document.getElementById("orderhistoryform"));
-            $.ajax({
+        $.ajax({
                 url: "{{ url('orderhistory') }}",
                 type: "POST",
                 data: form_data,
                 contentType: false,
                 cache: false,
                 processData: false,
-                success: function(response) {
-                    // if (response.success == 200) {
-                    $('#alert').show();
-                    $('#alertmessage').text("Success: You have modified orders!");
-                    $('#orderdetail').html('')
-                    setTimeout(() => {
-                        $('#alert').hide();
-                    }, 5000);
-                    getorderdetail();
-                    $('#orderhistoryform').trigger('reset');
+                success: function(response)
+                {
+                    if (response.success == 200)
+                    {
+                        $('#alert').show();
+                        $('#alertmessage').text("Success: You have modified orders!");
+
+                        setTimeout(() =>
+                        {
+                            $('#alert').hide();
+                        }, 2500);
+
+                        $('#orderhistoryform').trigger('reset');
+
+                        $('#ohistory').html('');
+                        $('#ohistory').append(response.html);
+
+                    }
+
                 },
-                error: function(response) {
+                error: function(response)
+                {
                     $('#alertmessage').text("Error: Facing some error!");
                 }
-            });
         });
     });
+    // End Insert Order History
+
+    // Generate Invoice
+    function generateinvoice(orderID)
+    {
+        $('.gif-div').show();
+        var order_id = orderID;
+
+        $.ajaxSetup({
+                    headers:
+                    {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+        });
+
+        $.ajax({
+                url: "{{ url('generateinvoice') }}",
+                type: "POST",
+                data: { 'order_id' : order_id },
+                success: function(response)
+                {
+                    $('#Invoice').html('');
+                    $('#Invoice').append(response);
+                },
+        });
+    }
+    // End Genrate Invoice
+
 </script>
 {{-- END SCRIPT --}}

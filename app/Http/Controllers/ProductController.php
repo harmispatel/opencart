@@ -107,7 +107,6 @@ class ProductController extends Controller
         if (isset($data->product_id)) {
 
             foreach ($group as $key=>$value) {
-                
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
                 $dropdown =ToppingOption::where('id_group_topping',$top->id_topping)->get();
                 $html .= '<h3>' . $top->name_topping . '</h3>
@@ -153,14 +152,21 @@ class ProductController extends Controller
                     $html .='</select>';
                     $html .='</div>';
             }
+<<<<<<< HEAD
             
         } else {
             $html .= 'No Topping';
         }
+=======
+
+        // } else {
+        //     $html .= 'No Topping';
+        // }
+>>>>>>> 88db36f5a5f19b206adcf2ee6ca71e782b6a1fc6
         $html .= '</th>';
         $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         $html .= '</tr>';
-        
+
         if (isset($data->product_id)) {
             return response()->json(['html' => $html, 'lastid' => $lastid, 'thead' => $thead]);
         } else {
@@ -319,7 +325,7 @@ class ProductController extends Controller
         // $products = Product::with(['hasOneProductDescription','hasOneProduct_to_category'=> function($q){
         //     return $q->with(['hasOneCategory']);
         // }])->whereHas('hasOneProduct_to_category', function($q) use($category_id) {
-        //     $q->where('category_id', $category_id); 
+        //     $q->where('category_id', $category_id);
         // })->limit(10)->get();
 
         // return json_encode($products);
@@ -470,11 +476,15 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id', $id)->first();
-        $header = ToppingSize::where('id_category', $product->category_id)->get();
+
+        $prod_id = isset($product->category_id) ? $product->category_id : '';
+
+        $header = ToppingSize::where('id_category',$prod_id)->get();
+
         $price = ToppingProductPriceSize::where('id_product', $id)->get();
         $category = Category::select('*')->get();
         $product_icon = ProductIcons::select('*')->get();
-        $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $product->product_id)->first();
+        $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $prod_id)->first();
 
         $result['category'] = $category;
         $result['product_icon'] = $product_icon;

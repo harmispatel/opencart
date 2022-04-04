@@ -12,11 +12,11 @@ class Product extends Model
     protected $table = 'oc_product';
     protected $primaryKey = 'product_id';
     public $timestamps=false;
-    public function hasOneProductDescription(){
-        return $this->hasOne(ProductDescription::class,'product_id','product_id');
-    }
-    public function hasOneProduct_to_category(){
-        return $this->hasOne(Product_to_category::class,'product_id','product_id');
-    }
-    
+    // public function hasOneProductDescription(){
+    //     return $this->hasOne(ProductDescription::class,'product_id','product_id');
+    // }
+    // public function hasOneProduct_to_category(){
+    //     return $this->hasOne(Product_to_category::class,'product_id','product_id');
+    // }
+
 }

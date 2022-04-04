@@ -275,17 +275,17 @@
                                                                                     {{ $omapping->order_type }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->cname
+                                                                                    {{ $omapping->hasOneCategoryDescription->cname
                                                                                     }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->pname }}
+                                                                                    {{ $omapping->hasOneProductDescription->pname }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->topping_rename }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->sizename }}
+                                                                                    {{ isset($omapping->hasOneToppingSize->sizename) ? $omapping->hasOneToppingSize->sizename : '' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->min_item }}
@@ -444,13 +444,15 @@
 
         html += '<td class="align-middle"><select name="order_type"><option value="*">*</option><option value="delivery">Delivery</option><option value="collection">Collection</option></select><input type="hidden" name="top_id" value="{{ $topping->id_topping }}"></td>';
 
-        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ $category->category_id }}">{{ $category->cname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ $category->hasOneCategoryDescription->category_id }}">{{ $category->hasOneCategoryDescription->cname }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->product_id }}">{{ $product->pname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="text" name="topping_rename"></td>';
 
-        html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size)<option value="{{ $size->size_id }}">{{ $size->tsize }}</option>@endforeach</select></td>';
+        // html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size)<option value="{{ $size->size_id }}">{{ $size->tsize }}</option>@endforeach</select></td>';
+
+        html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size) @foreach($size->hasManyToppingSize as $tsize)<option value="{{ $tsize["id_size"] }}">{{ $tsize["size"] }}</option>@endforeach @endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="number" name="min_item" value="1"></td>';
 

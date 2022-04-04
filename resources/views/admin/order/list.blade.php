@@ -127,7 +127,6 @@
         var table = $('#table').DataTable({
         processing: true,
         serverSide: true,
-        // rowId: 'order_id',
         "scrollY": true,
         "ajax": {
             "url" : "{{ route('getorders') }}",

@@ -123,7 +123,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Category
     Route::get('category', [CategoryController::class, 'index'])->name('category');
-    Route::get('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
+    Route::post('getcategory', [CategoryController::class, 'getcategory'])->name('getcategory');
     Route::get('bulkcategory', [CategoryController::class, 'bulkcategory'])->name('bulkcategory');
     Route::post('storebulkcategory', [CategoryController::class, 'storebulkcategory'])->name('storebulkcategory');
     Route::post('categoryinsert', [CategoryController::class, 'categoryinsert'])->name('categoryinsert');
@@ -165,7 +165,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
-    Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
+    Route::post('addneworders', [OrdersController::class, 'addneworde   rs'])->name('addneworders');
+    Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
     Route::get('payment_and_shipping_address/{id}', [OrdersController::class, 'payment_and_shipping_address'])->name('payment_and_shipping_address');
@@ -196,7 +197,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
     Route::get('addmenuoptions', [OptionController::class, 'add'])->name('addmenuoptions');
     Route::post('newmodel', [OptionController::class, 'newmodel'])->name('newmodel');
-    Route::get('gettoppings', [OptionController::class, 'gettoppings'])->name('gettoppings');
+    Route::post('gettoppings', [OptionController::class, 'gettoppings'])->name('gettoppings');
     Route::post('inserttopping', [OptionController::class, 'insert'])->name('inserttopping');
     Route::post('deletetopping', [OptionController::class, 'delete'])->name('deletetopping');
     Route::get('edittopping/{id}', [OptionController::class, 'edit'])->name('edittopping');
@@ -268,6 +269,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Transactions
     Route::get('transactions', [TransactionsController::class, 'index'])->name('transactions');
+    Route::post('daterange', [TransactionsController::class, 'getdaterange'])->name('daterange');
 
 
     // New Order
@@ -325,10 +327,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
     Route::get('uploadgallary',[GallaryController::class, 'uploadgallary'])->name('uploadgallary');
-    Route::post('storeGallary',[GallaryController::class, 'store'])->name('storeGallary');
-    Route::post('gallarysettingsstore',[GallaryController::class, 'gallarysettingsstore'])->name('gallarysettingsstore');
-
-
 
 
     // Layouts
