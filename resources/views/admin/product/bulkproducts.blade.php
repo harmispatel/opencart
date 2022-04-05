@@ -64,6 +64,8 @@
                             <div class="card-body">
                                 <form action="{{ route('storebulkproduct') }}" method="POST" enctype="multipart/form-data" id="bulkP">
                                     @csrf
+
+                                     <input type="hidden"  name="category" id="demo" value="">
                                     {{-- Table Start --}}
                                     <div class="table-responsive">
                                         <table border="2">
@@ -112,12 +114,15 @@
 <script>
     $(document).ready(function() {
         var categoryval = $('#categorys :selected').val();
+        $("#demo").val(categoryval);
         getcategoryval(categoryval, "new");
         // radiocheck(1,1);
     });
 
     $('#categorys').change(function() {
         var categoryval = this.value;
+        // alert(categoryval);
+        $("#demo").val(categoryval);
         $('#productAdd').html('');
         getcategoryval(categoryval, "new");
     });
@@ -218,3 +223,4 @@
         }
     }
 </script>
+

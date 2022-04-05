@@ -94,8 +94,8 @@ class ProductController extends Controller
         $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][price]" class="form-control"></td>';
 
         if (isset($data->product_id)) {
-            foreach ($sizes as $size) {
-                $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][price]" class="form-control"></td>';
+            foreach ($sizes as $key => $size) {
+                $html .= '<td style="vertical-align: middle;"><input type="text" name="product['.$lastid.'][price_size]['. $size->id_size.']" class="form-control"></td>';
             }
         }
 
@@ -110,52 +110,54 @@ class ProductController extends Controller
 
         if (isset($data->product_id)) {
 
-            foreach ($group as $key => $value) {
+            foreach ($group as $key=>$value) {
+               
+                $productvalue=$value['id_group_option'];
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
                 $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
                 $html .= '<h3>' . $top->name_topping . '</h3>
                 <div style="margin-bottom: 10px;">
-                <input type="radio" class="typetopping_' . $lastid . '_' . $key . '" name="product[' . $lastid . ']typetopping[' . ($key) . ']" value="select" onclick="radiocheck(' . $lastid . ',' . $key . ');"';
+                <input type="radio" class="typetopping_'.$lastid.'_'.$key.'" name="product[' .$lastid .'][typetopping]['.$productvalue.']" value="select" onclick="radiocheck('.$lastid.','.$key.');"';
                 ($top->typetopping == "select") ? $html .= ' checked' : '';
                 $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="product[' . $lastid . ']typetopping[' . ($key) . ']" class="typetopping_' . $lastid . '_' . $key . '" value="checkbox" onclick="radiocheck(' . $lastid . ',' . $key . ');"';
+                <input type="radio" name="product[' .$lastid .'][typetopping]['.$productvalue.']" class="typetopping_'.$lastid.'_'.$key.'" value="checkbox" onclick="radiocheck('.$lastid.','.$key.');"';
                 ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
                 $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
-
-                <div style="margin-bottom: 10px;"><input type="radio" name="product[' . $lastid . ']enable[' . ($key) . ']" value="1"';
+                <div style="margin-bottom: 10px;"><input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="1"';
                 ($top->enable == 1) ? $html .= ' checked' : '';
                 $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="product[' . $lastid . ']enable[' . ($key) . ']" value="0"';
+                    <input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="0"';
                 ($top->enable == 0) ? $html .= 'checked' : '';
                 $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="form-floating">
                     <label for="rename" class="form-label">Rename to</label>
-                    <input type="text" name="product[0][rename]" class="form-control">
+                    <input type="text" name="product['.$lastid.'][renamegroup]['.$productvalue.']" class="form-control">
                 </div>';
-                $html .= '<div id="checkbox_' . $lastid . '_' . $key . '" style="display:none">';
-                $html .= '<lable>Default selected</lable>';
-                $html .= '<table>';
-                $html .= '<tbody>';
-                $html .= '<tr>';
-                foreach ($dropdown as $dropdowns) {
-                    $html .= '<td><input type="checkbox" value="' . $dropdowns->name . '" name="product[0][selected]" ></td>';
-                    $html .= '<td>' . $dropdowns->name . '</td>';
-                    $html .= '</tr>';
-                }
-                $html .= '</tbody>';
-                $html .= '</table>';
-                $html .= '</div>';
-                $html .= '<div id="select_' . $lastid . '_' . $key . '" style="display:none">';
-                $html .= '<lable>Default selected</lable>';
-                $html .= '<select  class="form-control" name="product[0][dropdown]">';
-                foreach ($dropdown as $dropdowns) {
-                    $html .= '<option>' . $dropdowns->name . '</option>';
-                }
-                $html .= '</select>';
-                $html .= '</div>';
+                    $html .='<div id="checkbox_'.$lastid.'_'.$key.'" style="display:none">';
+                    $html .='<lable>Default selected</lable>';
+                    $html .='<table>';
+                    $html .='<tbody>';
+                    $html .='<tr>';
+                    foreach($dropdown as $dropdowns){
+                    $html .='<td><input type="checkbox" value="'.$dropdowns->name.'" name="product['.$lastid.'][product_topping_checkbox]['.$productvalue.']" ></td>';
+                    $html .='<td>'.$dropdowns->name.'</td>';
+                    $html .='</tr>';
+                    }
+                    $html .='</tbody>';
+                    $html .='</table>';
+                    $html .='</div>';
+                    $html .='<div id="select_'.$lastid.'_'.$key.'" style="display:none">';
+                    $html .='<lable>Default selected</lable>';
+                    $html .='<select  class="form-control" name="product['.$lastid.'][product_topping_select]['.$productvalue.']">';
+                    foreach($dropdown as $dropdowns){
+                        $html .='<option>'.$dropdowns->name.'</option>';
+                    }
+                    $html .='</select>';
+                    $html .='</div>';
             }
+            
         } else {
             $html .= 'No Topping';
         }
@@ -174,30 +176,112 @@ class ProductController extends Controller
     function storebulkproduct(Request $request)
     {
 
-        $data = $request->all();
-        echo '<pre>';
-        print_r($data);
-        exit();
+        $current_store_id = currentStoreId();
+        
+        foreach($request->product as $key => $prod){
+            
+            $name = isset($prod['name']) ? $prod['name'] : '';
+            $description = isset($prod['description']) ? $prod['description'] : '';
+            $price = isset($prod['price']) ? $prod['price'] : ''; 
+            $image = isset($prod['image']) ? $prod['image'] : ''; 
+            $price_size = isset($prod['price_size']) ? $prod['price_size'] : ''; 
+            $toppingtype= isset($prod['typetopping']) ? $prod['typetopping'] : ''; 
+            $enable= isset($prod['enable']) ? $prod['enable'] : ''; 
+            $renamegroup= isset($prod['renamegroup']) ? $prod['renamegroup'] : ''; 
+         
+            
+            $product = new Product();
+            $product->model = isset($request->model) ? $request->model : 0;
+            $product->sku = isset($request->sku) ? $request->sku : 0;
+            $product->upc = isset($request->upc) ? $request->upc : 0;
+            $product->ean = isset($request->ean) ? $request->ean : 0;
+            $product->jan = isset($request->jan) ? $request->jan : 0;
+            $product->isbn = isset($request->isbn) ? $request->isbn : 0;
+            $product->mpn = isset($request->mpn) ? $request->mpn : 0;
+            $product->location = isset($request->location) ? $request->location : 0;
+            $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
+            $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
+            $product->date_available = isset($request->date_available) ? $request->date_available : 0;
+            $product->date_added = isset($request->date_added) ? $request->date_added : 0;
+            $product->date_modified = isset($request->date_modified) ? $request->date_modified : 0;
+            $product->tax_class_id = isset($request->tax_class_id) ? $request->tax_class_id : 0;
+            $product->price = $price;
+            $product->delivery_price = isset($request->deliveryprice) ? $request->deliveryprice : 0;
+            $product->collection_price = isset($request->collectionprice) ? $request->collectionprice : 0;
+            $product->status = isset($request->status) ? $request->status : 0;
+            $product->sort_order = isset($request->sort_order) ? $request->sort_order : 0;
+            // $icon = $request['product_icons'];
+            // $product_icons = implode(',', $icon);
+            $product->product_icons = isset($request->product_icons) ? $request->product_icons : 0;
+            // $data = $request['order_type'];
+            // $order_type = implode('', $data);
+            $product->order_type = isset($request->order_type) ? $request->order_type : 0;
+            // $day = $request['day'];
+            // $days = implode(',', $day);
+            $product->availibleday = isset($request->days) ? $request->days : 0;
+            if (!empty($image) || $image != '')
+            {
+                $imgname = time() . "." . $image->getClientOriginalExtension();
+                $image->move(public_path('admin/product'), $imgname);
+                $product->image = $imgname;
+            }
+            $product->save();
+            
+            $product_description = new ProductDescription();
+            $product_description->product_id = $product->product_id;
+            $product_description->language_id = 1;
+            $product_description->name = $name;
+            $product_description->description = $description;
+            $product_description->meta_description = isset($request->meta_description) ? $request->meta_description : '';
+            $product_description->meta_keyword = isset($request->meta_keyword) ? $request->meta_keyword : '';
+            $product_description->tag = isset($request->tag) ? $request->tag : '';
+            $product_description->save();
+         
+            $productstore = new ProductStore();
+            $productstore->product_id = $product->product_id;
+            $productstore->store_id =$current_store_id;
+            $productstore->save(); 
 
-        $data = $request->product;
-        echo '<pre>';
-        print_r($data);
+            $product_category = new Product_to_category();
+            $product_category->product_id = $product->product_id;
+            $product_category->category_id = isset($request->category) ? $request->category : 0;
+            $product_category->save();
 
-        $data1 = $request->description;
-        echo '<pre>';
-        print_r($data1);
+              if(!empty($toppingtype) || $toppingtype != ''){
+                foreach($toppingtype as $key=>$value){
+                 
+                    $producttoppingtype = new ProductToppingType();
+                    $producttoppingtype->id_product=$product->product_id; 
+                    $producttoppingtype->id_group_topping=isset($request->id_group_topping) ? $request->id_group_topping : "";
+                    $producttoppingtype->typetopping=$toppingtype[$key];
+                    $producttoppingtype->min_check=isset($request->min_check) ? $request->min_check : 0;
+                    $producttoppingtype->max_check=isset($request->max_check) ? $request->max_check : 0;
+                    $producttoppingtype->choose=isset($request->choose) ? $request->choose : 0;
+                    $producttoppingtype->enable=$enable[$key];
+                    $producttoppingtype->renamegroup=$renamegroup[$key];
+                    $producttoppingtype->topping_sort_order=isset($request->topping_sort_order) ? $request->topping_sort_order : 0;
+                    $producttoppingtype->save();
+              }
+              }
 
-        $data2 = $request->price;
-
-        echo '<pre>';
-        print_r($data2);
-
-        $data3 = $request->image;
-        echo '<pre>';
-        print_r($data3);
-        exit();
-        // return $data;
-
+              if(!empty($price_size) || $price_size != ''){
+                foreach($price_size as $key=>$price_sizes){
+                    $query = ToppingProductPriceSize::max('id_product_price_size');
+                    $lastidsize=$query+1;
+                    $toppingProductPriceSize = new ToppingProductPriceSize;
+                    $toppingProductPriceSize->id_product_price_size= $lastidsize;
+                    $toppingProductPriceSize->price =$price_sizes;
+                    $toppingProductPriceSize->id_size =$key;
+                    $toppingProductPriceSize->id_product =$product->product_id;
+                    $toppingProductPriceSize->delivery_price ='';
+                    $toppingProductPriceSize->collection_price ='';
+                    $toppingProductPriceSize->save();
+                }
+            }
+            
+            
+        }
+        return redirect()->route('products');
 
     }
 
@@ -520,7 +604,7 @@ class ProductController extends Controller
             Reward::whereIn('product_id', $ids)->delete();
             Product_to_category::whereIn('product_id', $ids)->delete();
             ProductStore::whereIn('product_id', $ids)->delete();
-
+            ToppingProductPriceSize::whereIn('id_product', $ids)->delete();
             return response()->json([
                 'success' => 1,
             ]);
