@@ -298,15 +298,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('voucheredit/{id}', [VoucherController::class, 'voucheredit'])->name('voucheredit');
     Route::post('voucherdelete', [VoucherController::class, 'voucherdelete'])->name('voucherdelete');
     Route::post('voucherupdate', [VoucherController::class, 'voucherupdate'])->name('voucherupdate');
-
-    // Route::get('vouchertheme', [VoucherController::class, 'vouchertheme'])->name('vouchertheme');
     Route::get('voucherthemeinsert', [VoucherController::class, 'voucherthemeinsert'])->name('voucherthemeinsert');
     Route::post('voucherthemeinsert', [VoucherController::class, 'voucherthemestore'])->name('voucherthemeinsert');
     Route::get('voucherthemelist', [VoucherController::class, 'voucherthemeshow'])->name('voucherthemelist');
     Route::get('voucherthemeedit/{id}', [VoucherController::class, 'voucherthemeedit'])->name('voucherthemeedit');
-    Route::get('voucherthemeupdate/{id}', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
+    Route::post('voucherthemeupdate', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
     Route::post('voucherthemedelete', [VoucherController::class, 'voucherthemedelete'])->name('voucherthemedelete');
-    Route::post('voucherthemeupdate/{id}', [VoucherController::class, 'voucherthemeupdate'])->name('voucherthemeupdate');
 
     // Free Item
     Route::get('freeitems', [FreeItemController::class, 'freeitems'])->name('freeitems');

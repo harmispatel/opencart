@@ -1,11 +1,9 @@
+{{-- Header --}}
 @include('header')
-
-<link rel="stylesheet" href="sweetalert2.min.css">
-<link rel="stylesheet" type="text/css"
-    href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" />
+{{-- End Header --}}
 
 
-{{-- Section of List Category --}}
+{{-- Section of Add Gift Vouchers --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -13,154 +11,205 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Gift Voucher</h1>
+                        <h1>Gift Vouchers</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('voucherlist') }}">Voucher List</a></li>
-                            <li class="breadcrumb-item active">Gift Voucher</li>
+                            <li class="breadcrumb-item"><a href="{{ route('voucherlist') }}">Gift Vouchers</a></li>
+                            <li class="breadcrumb-item active">Insert</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
-
-                </div>
-                <div class="card-header d-flex p-2" style="background: #f6f6f6">
-                    <h3 class="card-title pt-2 m-0" style="color: black">
-                        <i class="fas fa-pencil-alt"></i>
-                        Gift Voucher
-                    </h3>
-                    <div class="form-group ml-auto">
-                        <button type="submit" form="voucherform" class="btn btn-primary">Save</button>
-                        <a href="{{ route('voucherlist') }}" class="btn btn-danger">Back</a>
-                    </div>
                 </div>
             </div>
         </section>
         {{-- End Header Section --}}
 
-        {{-- List Section Start --}}
+        {{-- Insert Data Section --}}
         <section class="content">
-            @if (count($errors) > 0)
-            @if ($errors->any())
-            <div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                {{ "Warning: Please check the form carefully for errors!" }}
-            </div>
-            @endif
-            @endif
-            <form action="{{ route('voucherinsert') }}" id="voucherform" method="POST">
-                {{ @csrf_field() }}
-                <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{-- Card --}}
+                        <div class="card">
+                            {{-- Form --}}
+                            <form action="{{ route('voucherinsert') }}" id="voucherform" method="POST">
+                            {{ @csrf_field() }}
 
-                    <nav>
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-customer-tab" data-toggle="tab"
-                                href="#nav-customer" role="tab" aria-controls="nav-customer"
-                                aria-selected="true">General</a>
-             
+                                {{-- Card Header --}}
+                                <div class="card-header">
+                                    <h3 class="card-title pt-2 m-0" style="color: black">
+                                        <i class="fa fa-pencil-alt pr-2"></i>
+                                        INSERT
+                                    </h3>
+                                    <div class="container" style="text-align: right">
+                                        <button type="submit" class="btn btn-sm btn-primary ml-auto">
+                                            <i class="fa fa-save"></i>
+                                        </button>
+                                        <a href="{{ route('voucherlist') }}" class="btn btn-sm btn-danger ml-1">
+                                            <i class="fa fa-arrow-left"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                {{-- End Card Header --}}
+
+                                {{-- Card Body --}}
+                                <div class="card-body">
+                                    {{-- Tabs Link --}}
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <a class="nav-item nav-link active" id="nav-customer-tab" data-toggle="tab" href="#nav-customer" role="tab" aria-controls="nav-customer" aria-selected="true">General</a>
+                                    </div>
+                                    {{-- End Tabs Link --}}
+
+                                    {{-- Tabs Content --}}
+                                    <div class="tab-content" id="nav-tabContent">
+                                        {{-- General Tab --}}
+                                        <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
+
+                                            <div class="form-group">
+                                                <label for="code">
+                                                    <span class="text-danger">*</span>
+                                                    Code
+                                                </label>
+                                                <input type="text" class="form-control {{ ($errors->has('code')) ? 'is-invalid' :'' }}" maxlength="10" name="code" id="code" value="{{ old('code') }}" placeholder="Code">
+                                                @if ($errors->has('code'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('code') }}
+                                                    </div>
+                                                @endif
+                                                <small id="codehelp" class="text-muted">
+                                                    The code the customer enters to activate the voucher.
+                                                </small>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="apply">
+                                                    <span class="text-danger">*</span>
+                                                    Appy for
+                                                </label>
+                                                <div class="form-control">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" checked>
+                                                        <label class="form-check-label" for="delivery">Delivery</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="apply" id="collection" value="2">
+                                                        <label class="form-check-label" for="collection">Collection</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="apply" id="both" value="3">
+                                                        <label class="form-check-label" for="both">Both</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="formname">
+                                                    <span class="text-danger">*</span>
+                                                    From Name
+                                                </label>
+                                                <input class="form-control {{ ($errors->has('formname')) ? 'is-invalid' : '' }}" name="formname" id="formname" type="text" value="{{ old('formname') }}" placeholder="Form name">
+                                                @if ($errors->has('formname'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('formname') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="email">
+                                                    <span class="text-danger">*</span>
+                                                    From E-Mail
+                                                </label>
+                                                <input class="form-control {{ ($errors->has('email')) ? 'is-invalid' : '' }}" name="email" id="email" value="{{ old('email') }}" type="email" placeholder="Email">
+                                                @if ($errors->has('email'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('email') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="name">
+                                                    <span class="text-danger">*</span>
+                                                    To Name
+                                                </label>
+                                                <input class="form-control {{ ($errors->has('name')) ? 'is-invalid' : '' }}" name="name" id="name" value="{{ old('name') }}" type="text" placeholder="To Name">
+                                                @if($errors->has('name'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('name') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="toemail">
+                                                    <span class="text-danger">*</span>
+                                                    To E-Mail
+                                                </label>
+                                                <input class="form-control {{ ($errors->has('toemail')) ? 'is-invalid' : '' }}" name="toemail" id="toemail" value="{{ old('toemail') }}" type="text" placeholder="Email">
+                                                @if($errors->has('toemail'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('toemail') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="theme">Themes</label>
+                                                <select class="form-control" id="theme" name="theme">
+                                                    @foreach ($themes as $theme)
+                                                        <option value="{{ $theme->voucher_theme_id }}">{{ $theme->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="message">Message</label>
+                                                <textarea class="form-control" name="message" id="message">{{ old('message') }}</textarea>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="amount">
+                                                    <span class="text-danger">*</span>
+                                                    Amount
+                                                </label>
+                                                <input class="form-control {{  ($errors->has('amount')) ? 'is-invalid' : '' }}" name="amount" value="{{ old('amount') }}" type="text" placeholder="Ammout">
+                                                @if ($errors->has('amount'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('amount') }}
+                                                    </div>
+                                                @endif
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="status">Status:</label>
+                                                <select class="form-control" id="status" name="status">
+                                                    <option value="1">Enable</option>
+                                                    <option value="0">Disable</option>
+                                                  </select>
+                                            </div>
+                                        </div>
+                                        {{-- End General Tab --}}
+                                    </div>
+                                    {{-- End Tabs Content --}}
+                                </div>
+                                {{-- End Card Body --}}
+                            </form>
+                            {{-- End Form --}}
                         </div>
-                    </nav>
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel"
-                            aria-labelledby="nav-customer-tab">
-                            <div class="form-group">
-                                <label for="code">*Code</label>
-                                <input type="text" class="form-control" maxlength="10" name="code" id="code" value="{{ old('code') }}" aria-describedby="codehelp" placeholder="Code">
-                                <small id="codehelp" class="form-text text-muted">The code the customer enters to activate the voucher.</small>
-                                @if ($errors->has('code'))
-                                <div style="color: red">{{ $errors->first('code') }}</div>
-                                @endif
-                              </div>
-                            
-                            <div class="form-group" id="#search">
-                                <label for="cname" style="min-width: 100px">* Appy for</label>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" checked>
-                                    <label class="form-check-label" for="delivery">Delivery</label>
-                                  </div>
-                                  <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="apply" id="collection" value="2">
-                                    <label class="form-check-label" for="collection">Collection</label>
-                                  </div>
-                                  <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="apply" id="both" value="3">
-                                    <label class="form-check-label" for="both">Both</label>
-                                  </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="formname">* From Name:</label>
-                                <input class="form-control" name="formname" id="formname" type="text" value="{{ old('formname') }}"
-                                    placeholder="Form name">
-                                @if ($errors->has('formname'))
-                                <div style="color: red">{{ $errors->first('formname') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="email">* From E-Mail:</label>
-                                <input class="form-control" name="email" id="email" value="{{ old('email') }}" type="email"
-                                    placeholder="Email">
-                                @if ($errors->has('email'))
-                                <div style="color: red">{{ $errors->first('email') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="name">* To Name:</label>
-                                <input class="form-control" name="name" id="name" value="{{ old('name') }}" type="text"
-                                    placeholder="Telehone">
-                                @if ($errors->has('name'))
-                                <div style="color: red">{{ $errors->first('name') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="toemail">* To E-Mail:</label>
-                                <input class="form-control" name="toemail" id="toemail" value="{{ old('toemail') }}" type="text" placeholder="Email">
-                                @if ($errors->has('toemail'))
-                                <div style="color: red">{{ $errors->first('toemail') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="theme">Theme:</label>
-                                <select class="form-control" id="theme" name="theme"> 
-                                    @foreach ($themes as $theme)
-                                        <option value="{{ $theme->voucher_theme_id }}">{{ $theme->name }}</option>                                        
-                                    @endforeach
-                                  </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="message">* Message:</label>
-                                    <textarea class="form-control" name="message" id="message" rows="3">{{ old('message') }}</textarea>
-                                @if ($errors->has('message'))
-                                <div style="color: red">{{ $errors->first('message') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="amount">Amount:</label>
-                                <input class="form-control" name="amount" id="" value="{{ old('amount') }}" type="text"
-                                    placeholder="Ammout">
-                                @if ($errors->has('amount'))
-                                <div style="color: red">{{ $errors->first('amount') }}</div>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Status:</label>
-                                <select class="form-control" id="status" name="status">
-                                    <option value="1">Enable</option>
-                                    <option value="2">disable</option>
-                                  </select>
-                            </div>
-                        </div>
+                        {{-- End Card --}}
                     </div>
                 </div>
-
-            </form>
-
+            </div>
         </section>
-        {{-- End Form Section --}}
-
+        {{-- End Insert Data Section --}}
     </div>
 </section>
-{{-- End Section of Add Category --}}
+{{-- End Section of Add Gift Vouchers --}}
+
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}

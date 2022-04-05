@@ -149,31 +149,6 @@ class CategoryController extends Controller
 
         echo json_encode($json_data);
 
-        // Categories By Current Store
-        // if($request->ajax())
-        // {
-        //     $data = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-        //         $query->where('store_id',$current_store_id);
-        //     })->get();
-
-        //     return DataTables::of($data)->addIndexColumn()
-        //     ->addColumn('action', function($row){
-        //         $edit_url = route('categoryedit',$row->category_id);
-        //         $btn = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
-        //         return $btn;
-        //     })
-        //     ->addColumn('checkbox', function($row){
-        //         $cid = $row->category_id;
-        //         $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
-        //         return $checkbox;
-        //     })
-        //     ->addColumn('cat_name', function($row){
-        //         $cat_name = $row->hasOneCategory->name;
-        //         return $cat_name;
-        //     })
-        //     ->rawColumns(['action','checkbox','cat_name'])
-        //     ->make(true);
-        // }
     }
 
 

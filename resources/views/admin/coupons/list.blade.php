@@ -1,20 +1,26 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+
+{{-- Custom CSS for Radio Buttons --}}
 <style>
-    /* Custom Radio Button */
     .radio {
         display: none;
     }
 
     .radio:checked+label {
-        background: dimgrey !important;
+        background: rgb(41, 41, 41) !important;
         color: #fff;
     }
-
 </style>
+{{-- End Custom CSS for Radio Buttons --}}
 
-{{-- Section of List Coupons --}}
+
+{{-- Section of List All Coupons --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -40,17 +46,25 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if (Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                        role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        {{-- Card --}}
                         <div class="card card-primary">
-
-
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Gift Voucher List
+                                    Coupons List
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(55) == 1)
@@ -72,16 +86,6 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="myTable">
-                                    @if (Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                            role="alert">
-                                            {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
                                     {{-- Table Head --}}
                                     <thead>
                                         <tr>
@@ -118,7 +122,7 @@
                                                                         value="1"
                                                                         {{ $coupon->on_off == 1 ? 'checked' : '' }} />
                                                                     <label class="btn btn-sm"
-                                                                        style=" background: rgb(117,185,54);color:white;"
+                                                                        style=" background: green;color:white;"
                                                                         for="enable_{{ $i }}">ON</label>
                                                                     <input type="radio" class="radio"
                                                                         data-id="{{ $coupon->coupon_id }}"
@@ -126,7 +130,7 @@
                                                                         value="0"
                                                                         {{ $coupon->on_off == 0 ? 'checked' : '' }} />
                                                                     <label class="btn btn-sm"
-                                                                        style=" background: rgb(178,178,178);color: white;"
+                                                                        style=" background: rgb(248, 9, 9);color: white;"
                                                                         for="disable_{{ $i }}">OFF</label>
                                                                 </div>
                                                             </form>
@@ -155,48 +159,61 @@
                                 {{-- End Table --}}
                             </div>
                             {{-- End Card Body --}}
-
-
                         </div>
                         {{-- End Card --}}
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
+        {{-- End List Section --}}
 
     </div>
 </section>
-{{-- End Section of List Coupons --}}
+{{-- End Section of List All Coupons --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+
+{{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{{-- END SCRIPT --}}
+
 
 <script type="text/javascript">
-    $(document).ready(function() {
+
+    $(document).ready(function()
+    {
         $('#myTable').DataTable();
     });
 
+
     // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        if ($(this).is(':checked', true)) {
+    $('#delall').on('click', function(e)
+    {
+        if ($(this).is(':checked', true))
+        {
             $(".del_all").prop('checked', true);
-        } else {
+        }
+        else
+        {
             $(".del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
 
     // Delete Multiple User
-    $('.deletesellected').click(function() {
-        var checkValues = $('.del_all:checked').map(function() {
+    $('.deletesellected').click(function()
+    {
+        var checkValues = $('.del_all:checked').map(function()
+        {
             return $(this).val();
         }).get();
 
-        if (checkValues != '') {
+        if (checkValues != '')
+        {
             swal({
                     title: "Are you sure You want to Delete It ?",
                     text: "Once deleted, you will not be able to recover this Record",
@@ -204,8 +221,10 @@
                     buttons: true,
                     dangerMode: true,
                 })
-                .then((willDelete) => {
-                    if (willDelete) {
+                .then((willDelete) =>
+                {
+                    if (willDelete)
+                    {
                         $.ajax({
                             type: "POST",
                             url: '{{ url('coupondelete') }}',
@@ -214,55 +233,70 @@
                                 'id': checkValues
                             },
                             dataType: 'JSON',
-                            success: function(data) {
-                                if (data.success == 1) {
+                            success: function(data)
+                            {
+                                if (data.success == 1)
+                                {
                                     swal("Your Record has been deleted!", {
                                         icon: "success",
                                     });
 
-                                    setTimeout(function() {
+                                    setTimeout(function()
+                                    {
                                         location.reload();
                                     }, 1500);
                                 }
                             }
                         });
 
-                    } else {
+                    }
+                    else
+                    {
                         swal("Cancelled", "", "error");
-                        setTimeout(function() {
+
+                        setTimeout(function()
+                        {
                             location.reload();
                         }, 1000);
                     }
                 });
-        } else {
+        }
+        else
+        {
             swal("Please select atleast One Record", "", "warning");
         }
     });
     // End Delete User
 
-    $(".radio").on('click', function() {
-    //    let data = $('input[name="on_off"]:checked').val();
-    //    console.log(data);image
+
+    // Change Coupon Status
+    $(".radio").on('click', function()
+    {
         var onoff = $(this).val();
-        // alert($(this).attr("data-id"));
         var dataid = $(this).attr("data-id");
-        console.log(dataid + "  " + onoff);
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        $.ajax({
-            type: "post",
-            url: "{{ route('updonoff') }}",
-            data: {
-                onoff: onoff,
-                dataid: dataid,
-            },
-            dataType: "json",
-            success: function(response) {
 
-            }
+        $.ajax({
+                type: "post",
+                url: "{{ route('updonoff') }}",
+                data: {
+                    onoff: onoff,
+                    dataid: dataid,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+
+                }
         });
     });
+    // End Change Coupon Status
+
+
 </script>
+{{-- END SCRIPT --}}

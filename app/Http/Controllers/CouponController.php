@@ -14,60 +14,85 @@ use DataTables;
 class CouponController extends Controller
 {
 
+    //Function of Get Coupons By Current Store
     public function index()
     {
+        // Current Store ID
         $current_store_id = currentStoreId();
+
         $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
         return view('admin.coupons.list', $data);
     }
 
+
+
+
+
+    //Function of Add New Coupon View
     public function addcoupon()
     {
         return view('admin.coupons.add');
     }
 
+
+
+
+
+    // Function of Search Products
     public function products(Request $request)
     {
-
-        $cat = ProductDescription::select('product_id', 'name')->where("name", "LIKE", '%' . $request->product . '%')
-            ->get();
-
+        $cat = ProductDescription::select('product_id', 'name')->where("name", "LIKE", '%'.$request->product.'%')->get();
         return response()->json($cat);
     }
 
+
+
+
+
+    // Function of Search Category
     public function searchcategory(Request $request)
     {
-
-        $pro = Category::select('category_id', 'name')->where("name", "LIKE", '%' . $request->category . '%')
-            ->get();
-
+        $pro = Category::select('category_id', 'name')->where("name", "LIKE", '%'.$request->category.'%')->get();
         return response()->json($pro);
     }
 
+
+
+
+
+    // Function of Update Coupon Code Status
     public function updonoff(Request $request)
     {
-        // echo $request->onoff;
         $couponid = $request->dataid;
         $onoff = Coupon::find( $couponid);
         $onoff->on_off = $request->onoff;
         $onoff->update();
-
         return response()->json([
             "success"=>"update status"
         ]);
     }
 
+
+
+
+
+    // Function of Store New Coupon
     public function insertcoupon(Request $request)
     {
+        // Current Store ID
+        $current_store_id = currentStoreId();
 
+        // Validation
         $request->validate([
             'code' => 'required|max:10',
             'coupon_name' => 'required',
         ]);
 
         date_default_timezone_set('Asia/Kolkata');
+
+        // Insert New Coupon
         $coupon = new Coupon;
-        $coupon->store_id = isset($request->storeid) ? $request->storeid : "0";
+        $coupon->store_id = $current_store_id;
         $coupon->apply_shipping = isset($request->apply) ? $request->apply : "0";
         $coupon->name = $request->coupon_name;
         $coupon->code = $request->code;
@@ -86,10 +111,12 @@ class CouponController extends Controller
         $coupon->save();
         $couponid = $coupon->coupon_id;
 
-        // Coupon Category
+        // Store Coupon Category
         $category = $request->catid;
-        if (!empty($category)) {
-            foreach ($category as $value) {
+        if (!empty($category))
+        {
+            foreach ($category as $value)
+            {
                 $couponcat = new CouponCategory;
                 $couponcat->coupon_id = $couponid;
                 $couponcat->category_id = $value;
@@ -97,11 +124,12 @@ class CouponController extends Controller
             }
         }
 
-        // Coupon Product
-
+        // Store Coupon Product
         $product = $request->proid;
-        if (!empty($product)) {
-            foreach ($product as $value) {
+        if (!empty($product))
+        {
+            foreach ($product as $value)
+            {
                 $couponpro = new CouponProduct;
                 $couponpro->coupon_id = $couponid;
                 $couponpro->product_id = $value;
@@ -112,15 +140,20 @@ class CouponController extends Controller
     }
 
 
+
+
+
+    // Function of Update Coupon
     public function couponupdate(Request $request)
     {
-            $request->validate([
+        // Validation
+        $request->validate([
             'code' => 'required|max:10',
             'coupon_name' => 'required',
         ]);
-        $current_store_id = currentStoreId();
+
+        // Update Coupon
         $coupon = Coupon::find($request->couponid);
-        $coupon->store_id = $current_store_id;
         $coupon->apply_shipping = isset($request->apply) ? $request->apply : "0";
         $coupon->name = $request->coupon_name;
         $coupon->code = $request->code;
@@ -139,14 +172,18 @@ class CouponController extends Controller
         $coupon->date_added = date("Y-m-d h:i:s");
         $coupon->update();
 
-
-
-        // Coupon add Category
+        // Update & Delete Coupon Category
         $categoryadd = $request->catid;
         $couponid = $request->couponid;
+
+        // Delete Old Coupon Category
         CouponCategory::where('coupon_id', $couponid)->delete();
-        if (!empty($categoryadd)) {
-            foreach ($categoryadd as $value) {
+
+        // New Coupon Category
+        if (!empty($categoryadd))
+        {
+            foreach ($categoryadd as $value)
+            {
                 $couponcat = new CouponCategory;
                 $couponcat->coupon_id = $request->couponid;
                 $couponcat->category_id = $value;
@@ -154,12 +191,16 @@ class CouponController extends Controller
             }
         }
 
-
-        // Coupon add Product
         $productadd = $request->proid;
+
+        // Delete Old Coupon Product
         CouponProduct::where('coupon_id', $couponid)->delete();
-        if (!empty($productadd)) {
-            foreach ($productadd as $value) {
+
+        // New Coupon Product
+        if (!empty($productadd))
+        {
+            foreach ($productadd as $value)
+            {
                 $couponpro = new CouponProduct;
                 $couponpro->coupon_id = $request->couponid;
                 $couponpro->product_id = $value;
@@ -169,29 +210,48 @@ class CouponController extends Controller
         return redirect()->route('coupons')->with('success', "Coupon Update Successfully.");
     }
 
+
+
+
+
+    // Function of Edit Coupon
     public function editcoupon($id)
     {
         $data['coupon'] = Coupon::find($id);
+
         if(empty($data['coupon']))
         {
             return redirect()->route('coupons');
         }
+
         $data['category'] = CouponCategory::join('oc_category_description', 'oc_coupon_category.category_id', '=', 'oc_category_description.category_id')->where('coupon_id', "=", $id)->get();
         $data['products'] = CouponProduct::join('oc_product_description', 'oc_coupon_product.product_id', '=', 'oc_product_description.product_id')->where('coupon_id', "=", $id)->get();
-        // $data['history'] = CouponHistory::where('coupon_id', '=', $id)->get();
 
         return view('admin.coupons.edit', $data);
     }
 
 
 
+
+
+    // Delete Coupon
     public function coupondelete(Request $request)
     {
         $ids = $request['id'];
-        if (count($ids) > 0) {
-            Coupon::where('coupon_id', $ids)->delete();
-            CouponCategory::where('coupon_id', $ids)->delete();;
-            CouponProduct::where('coupon_id', $ids)->delete();
+        if (count($ids) > 0)
+        {
+            // Delete Coupon
+            Coupon::whereIn('coupon_id', $ids)->delete();
+
+            // Delete Coupon Category
+            CouponCategory::whereIn('coupon_id', $ids)->delete();
+
+            // Delete Coupon Product
+            CouponProduct::whereIn('coupon_id', $ids)->delete();
+
+            // Delete Coupon History
+            CouponHistory::whereIn('coupon_id',$ids)->delete();
+
             return response()->json([
                 'success' => 1,
             ]);
@@ -199,33 +259,29 @@ class CouponController extends Controller
     }
 
 
+
+
+
+    // Get All Coupons History
     public function getallcouponhistory(Request $request)
     {
-    
-
-
-
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $couponid = $request->couponid;
             $data = CouponHistory::select('oc_coupon_history.*','oc_order.firstname','oc_order.lastname')->join('oc_order','oc_coupon_history.order_id','=','oc_order.order_id')->where('coupon_id', $couponid)->get();
-            // $data = CouponHistory::where('coupon_id', $couponid)->get();
-            // echo '<pre>';
-            // print_r($data);
-            // exit();
-            return Datatables::of($data)->addIndexColumn()
-                ->addColumn('date_added', function ($row) {
-                    $date_added = date('d-m-Y', strtotime($row->date_added));
-                    return $date_added;
-                })
-                ->addColumn('customer_name', function($row){
-                    $cname = $row->firstname.' '.$row->lastname;
-                    
-                    return $cname;
-                })
-                ->rawColumns(['date_added'])
-                ->make(true);
-        }
 
-        // return view('users');
+            return Datatables::of($data)->addIndexColumn()
+            ->addColumn('date_added', function ($row) {
+                $date_added = date('d-m-Y', strtotime($row->date_added));
+                return $date_added;
+            })
+            ->addColumn('customer_name', function($row){
+                $cname = $row->firstname.' '.$row->lastname;
+
+                return $cname;
+            })
+            ->rawColumns(['date_added'])
+            ->make(true);
+        }
     }
 }

@@ -29,8 +29,9 @@ class CustomerController extends Controller
 
     function getcustomers(Request $request)
     {
+        $current_store_id = currentStoreId();
         if ($request->ajax()) {
-            $data = Customer::select('*','cgd.name as customer_group','oc_store.name as shop')->leftJoin('oc_customer_group as cg','cg.customer_group_id','=','oc_customer.customer_group_id')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','cg.customer_group_id')->leftJoin('oc_store','oc_store.store_id','=','oc_customer.store_id');
+            $data = Customer::select('*','cgd.name as customer_group','oc_store.name as shop')->leftJoin('oc_customer_group as cg','cg.customer_group_id','=','oc_customer.customer_group_id')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','cg.customer_group_id')->leftJoin('oc_store','oc_store.store_id','=','oc_customer.store_id')->where('oc_store.store_id',$current_store_id);
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function($row){

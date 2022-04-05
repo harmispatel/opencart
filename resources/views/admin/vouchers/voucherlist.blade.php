@@ -2,9 +2,11 @@
 @include('header')
 {{-- End Header --}}
 
-<link rel="stylesheet" href="sweetalert2.min.css">
 
-{{-- Section of List Category --}}
+<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+
+{{-- Section of List Gift Vouchers --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -12,13 +14,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Gift Voucher</h1>
+                        <h1>Gift Vouchers</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Gift Voucher</li>
+                            <li class="breadcrumb-item active">Gift Vouchers</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -30,15 +32,25 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if (Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                        role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        {{-- Card --}}
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Gift Voucher List
+                                    Gift Vouchers List
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(55) == 1)
@@ -60,16 +72,6 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="table">
-                                    @if (Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                            role="alert">
-                                            {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
                                     {{-- Table Head --}}
                                     <thead class="text-center">
                                         <tr>
@@ -90,26 +92,38 @@
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
                                         @foreach ($vouchers as $voucher)
-                                        <tr>
-                                                <td><input type="checkbox" name="del_all" class="del_all" value="{{ $voucher->voucher_id }}"></td>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="del_all" class="del_all" value="{{ $voucher->voucher_id }}">
+                                                </td>
                                                 <td>{{ $voucher->code }}</td>
                                                 <td>{{ $voucher->from_name }}</td>
                                                 <td>{{ $voucher->to_name }}</td>
                                                 <td>{{ $voucher->amount }}</td>
                                                 <td>
-                                                    @if ($voucher->apply_shipping == 1)
+                                                    @if($voucher->apply_shipping == 1)
                                                         Delivery
-                                                    @elseif ($voucher->apply_shipping == 2)
+                                                    @elseif($voucher->apply_shipping == 2)
                                                         Collection
                                                     @else
                                                         Both
-                                                    @endif                                                    
+                                                    @endif
                                                 </td>
                                                 <td>{{ $voucher->name }}</td>
-                                                <td>{{ ($voucher->status == 1) ? "Enable" : "Desable" }}</td>
-                                                <td>{{ date('d-m-Y',strtotime($voucher->date_added)) }}</td>
-                                                <td><a class="btn btn-sm btn-primary" href="#"><i class="fa fa-envelope"></i></a><a class="ml-2 btn btn-sm btn-primary" href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}"><i class="fa fa-edit"></i></a></td>
-                                                
+                                                <td>
+                                                    {{ ($voucher->status == 1) ? "Enable" : "Desable" }}
+                                                </td>
+                                                <td>
+                                                    {{ date('d-m-Y',strtotime($voucher->date_added)) }}
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-primary" href="#">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
+                                                    <a class="ml-2 btn btn-sm btn-primary" href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                             @endforeach
                                     </tbody>
@@ -127,48 +141,49 @@
         {{-- End Form Section --}}
     </div>
 </section>
-{{-- End Section of Add Category --}}
+{{-- End Section of List Gift Vouchers --}}
+
 
 {{-- Footer --}}
 @include('footer')
 {{-- End Footer --}}
 
 
-
 {{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-
 <script type="text/javascript">
 
+    $(document).ready( function ()
+    {
+        $('#table').DataTable();
+    } );
 
-$(document).ready( function () {
-    $('#table').DataTable();
-} );
-    $(document).ready(function() {
-        getallcategory();
-    });
-
-
-    // End Get All Category
 
     // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        if ($(this).is(':checked', true)) {
+    $('#delall').on('click', function(e)
+    {
+        if ($(this).is(':checked', true))
+        {
             $(".del_all").prop('checked', true);
-        } else {
+        }
+        else
+        {
             $(".del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
 
-    // Delete Multiple User
-    $('.deletesellected').click(function() {
-        var checkValues = $('.del_all:checked').map(function() {
+    // Delete Multiple Gift Vouchers
+    $('.deletesellected').click(function()
+    {
+        var checkValues = $('.del_all:checked').map(function()
+        {
             return $(this).val();
         }).get();
 
-        if (checkValues != '') {
+        if (checkValues != '')
+        {
             swal({
                     title: "Are you sure You want to Delete It ?",
                     text: "Once deleted, you will not be able to recover this Record",
@@ -176,39 +191,52 @@ $(document).ready( function () {
                     buttons: true,
                     dangerMode: true,
                 })
-                .then((willDelete) => {
-                    if (willDelete) {
+                .then((willDelete) =>
+                {
+                    if (willDelete)
+                    {
                         $.ajax({
-                            type: "POST",
-                            url: '{{ url('voucherdelete') }}',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                'id': checkValues
-                            },
-                            dataType: 'JSON',
-                            success: function(data) {
-                                if (data.success == 1) {
-                                    swal("Your Record has been deleted!", {
-                                        icon: "success",
-                                    });
+                                type: "POST",
+                                url: '{{ url('voucherdelete') }}',
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    'id': checkValues
+                                },
+                                dataType: 'JSON',
+                                success: function(data)
+                                {
+                                    if (data.success == 1)
+                                    {
+                                        swal("Your Record has been deleted!",
+                                        {
+                                            icon: "success",
+                                        });
 
-                                    setTimeout(function() {
-                                        location.reload();
-                                    }, 1500);
+                                        setTimeout(function()
+                                        {
+                                            location.reload();
+                                        }, 1500);
+                                    }
                                 }
-                            }
                         });
 
-                    } else {
+                    }
+                    else
+                    {
                         swal("Cancelled", "", "error");
-                        setTimeout(function() {
+                        setTimeout(function()
+                        {
                             location.reload();
                         }, 1000);
                     }
                 });
-        } else {
-            swal("Please select atleast One Record", "", "warning");
+        }
+        else
+        {
+            swal("Please select atleast One Gift Voucher", "", "warning");
         }
     });
-    // End Delete User
+    // End Delete Gift Vouchers
+
 </script>
+{{-- END SCRIPT --}}

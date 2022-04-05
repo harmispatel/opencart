@@ -1,4 +1,6 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -17,7 +19,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Voucher Themes </li>
+                            <li class="breadcrumb-item active">Voucher Themes</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -27,18 +29,27 @@
         {{-- End Header Section --}}
 
         {{-- List Section Start --}}
-        
         <section class="content">
             <div class="container-fluid">
+                @if (Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
+                        role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        {{-- Card --}}
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Gift Voucher Themes List
+                                    Voucher Themes List
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(55) == 1)
@@ -60,39 +71,28 @@
                             <div class="card-body">
                                 {{-- Table --}}
                                 <table class="table table-bordered table-hover" id="table">
-                                    @if (Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                            role="alert">
-                                            {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
                                     {{-- Table Head --}}
-                                    <thead class="text-center">
+                                    <thead class="">
                                         <tr>
                                             <th><input type="checkbox" name="del_all" id="delall"></th>
                                             <th>Name</th>
-                                       
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- End Table Head --}} 
+                                    {{-- End Table Head --}}
 
                                     {{-- Table Body --}}
-                                    <tbody class="text-center cat-list">
+                                    <tbody class="cat-list">
                                         @foreach ($data as $voucher)
-                                        <tr>
+                                            <tr>
                                                 <td><input type="checkbox" name="del_all" class="del_all" value="{{ $voucher->voucher_theme_id }}"></td>
-                                              
+
                                                 <td>{{ $voucher->name }}</td>
-                                               
+
                                                 <td><a class="btn btn-sm btn-primary" href=" {{ url('voucherthemeedit/'.$voucher->voucher_theme_id) }}"><i class="fa fa-edit"></i></a></td>
-                                                
+
                                             </tr>
-                                            @endforeach
+                                        @endforeach
                                     </tbody>
                                     {{-- End Table Body --}}
                                 </table>
@@ -105,52 +105,51 @@
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-                        
-
+        {{-- End List Section --}}
     </div>
 </section>
 {{-- End Section of List Voucher Themes --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
 
 {{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-
 <script type="text/javascript">
 
-
-$(document).ready( function () {
-    $('#table').DataTable();
-} );
-    $(document).ready(function() {
-        getallcategory();
+    $(document).ready( function ()
+    {
+        $('#table').DataTable();
     });
 
-
-    // End Get All Category
-
     // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        if ($(this).is(':checked', true)) {
+    $('#delall').on('click', function(e)
+    {
+        if ($(this).is(':checked', true))
+        {
             $(".del_all").prop('checked', true);
-        } else {
+        }
+        else
+        {
             $(".del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
 
-    // Delete Multiple User
-    $('.deletesellected').click(function() {
-        var checkValues = $('.del_all:checked').map(function() {
+    // Delete Multiple Voucher Theme
+    $('.deletesellected').click(function()
+    {
+        var checkValues = $('.del_all:checked').map(function()
+        {
             return $(this).val();
         }).get();
 
-        if (checkValues != '') {
+        if (checkValues != '')
+        {
             swal({
                     title: "Are you sure You want to Delete It ?",
                     text: "Once deleted, you will not be able to recover this Record",
@@ -158,8 +157,10 @@ $(document).ready( function () {
                     buttons: true,
                     dangerMode: true,
                 })
-                .then((willDelete) => {
-                    if (willDelete) {
+                .then((willDelete) =>
+                {
+                    if (willDelete)
+                    {
                         $.ajax({
                             type: "POST",
                             url: '{{ url('voucherthemedelete') }}',
@@ -169,28 +170,38 @@ $(document).ready( function () {
                             },
                             dataType: 'JSON',
                             success: function(data) {
-                                if (data.success == 1) {
-                                    swal("Your Record has been deleted!", {
+                                if (data.success == 1)
+                                {
+                                    swal("Your Record has been deleted!",
+                                    {
                                         icon: "success",
                                     });
 
-                                    setTimeout(function() {
+                                    setTimeout(function()
+                                    {
                                         location.reload();
                                     }, 1500);
                                 }
                             }
                         });
 
-                    } else {
+                    }
+                    else
+                    {
                         swal("Cancelled", "", "error");
-                        setTimeout(function() {
+                        setTimeout(function()
+                        {
                             location.reload();
                         }, 1000);
                     }
                 });
-        } else {
+        }
+        else
+        {
             swal("Please select atleast One Record", "", "warning");
         }
     });
-    // End Delete User
+    // End Delete Multiple Voucher Theme
+
 </script>
+{{-- END SCRIPT --}}
