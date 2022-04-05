@@ -80,12 +80,12 @@ class TransactionsController extends Controller
                 'totle' => number_format($totle,2),
             ]);
         } else {
-            $html .= '<tr>';
-            $html .= '<td colspan="7" class="text-center">Transaction Not Avavilable</td>';
-            $html .= '</tr>';
+            // $html .= '<tr>';
+            // $html .= '<td colspan="7" class="text-center">Transaction Not Avavilable</td>';
+            // $html .= '</tr>';
 
             return response()->json([
-                'customerorder' => $html,
+                'status' => 200,
             ]);
         }
     }

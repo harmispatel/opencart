@@ -27,7 +27,11 @@ class ProductController extends Controller
 {
     function index()
     {
-        $category = Category::select('*')->get();
+        // Current Store ID
+        $current_store_id = currentStoreId();
+        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+            $query->where('store_id', $current_store_id);
+        })->get();
         return view('admin.product.list', ['category' => $category]);
     }
 
@@ -43,8 +47,7 @@ class ProductController extends Controller
 
 
         $category_id = $request->category_id;
-        $lastid = $request->lastid;
-        $count = $request->count;
+        $lastid = $request->lastid + 1;
 
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->first();
 
@@ -83,20 +86,20 @@ class ProductController extends Controller
         $thead .= '</tr>';
 
         $html .= '<tr class="productone" id="productone' . $lastid . '">';
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[0][productone' . $lastid . ']" class="form-control"></td>';
-        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="description[0][productone' . $lastid . ']" class="form-control"></textarea></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][name]" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><textarea type="text" name="product[' . $lastid . '][description]" class="form-control"></textarea></td>';
         if (isset($data->product_id)) {
             $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
         }
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="price[0][productone' . $lastid . ']" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][price]" class="form-control"></td>';
 
         if (isset($data->product_id)) {
-            foreach ($sizes as $size) {
-                $html .= '<td style="vertical-align: middle;"><input type="text" name="price[0][productone' . $lastid . ']" class="form-control"></td>';
+            foreach ($sizes as $key => $size) {
+                $html .= '<td style="vertical-align: middle;"><input type="text" name="product['.$lastid.'][price_size]['. $size->id_size.']" class="form-control"></td>';
             }
         }
 
-        $html .= '<td style="vertical-align: middle;"><input type="file" name="image[0][productone' . $lastid . ']" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="file" name="product[' . $lastid . '][image]" class="form-control"></td>';
 
         if (isset($data->product_id)) {
             $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
@@ -104,38 +107,60 @@ class ProductController extends Controller
             unset($group['number_group']);
         }
         $html .= '<th>';
-        // if (isset($data->product_id)) {
+
+        if (isset($data->product_id)) {
+
             foreach ($group as $key=>$value) {
-
+               
+                $productvalue=$value['id_group_option'];
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
-
+                $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
                 $html .= '<h3>' . $top->name_topping . '</h3>
-                <div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="typetopping['.($key).'][productone' . ($lastid-1) . ']" value="select" onclick=""';
+                <div style="margin-bottom: 10px;">
+                <input type="radio" class="typetopping_'.$lastid.'_'.$key.'" name="product[' .$lastid .'][typetopping]['.$productvalue.']" value="select" onclick="radiocheck('.$lastid.','.$key.');"';
                 ($top->typetopping == "select") ? $html .= ' checked' : '';
-                $html .= '>Select&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="typetopping['.($key).'][productone' . ($lastid-1) . ']" class="typetopping" value="checkbox" onclick=""';
+                $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="product[' .$lastid .'][typetopping]['.$productvalue.']" class="typetopping_'.$lastid.'_'.$key.'" value="checkbox" onclick="radiocheck('.$lastid.','.$key.');"';
                 ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
-                $html .= '>Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+                $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
-
-                <div style="margin-bottom: 10px;"><input type="radio" name="enable['.($key).'][productone' . ($lastid -1) . ']" value="1"';
+                <div style="margin-bottom: 10px;"><input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="1"';
                 ($top->enable == 1) ? $html .= ' checked' : '';
                 $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="enable['.($key).'][productone' . ($lastid -1) . ']" value="0"';
+                    <input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="0"';
                 ($top->enable == 0) ? $html .= 'checked' : '';
                 $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="form-floating">
                     <label for="rename" class="form-label">Rename to</label>
-                    <input type="text" name="renamegroup['.($key).'][productone' . ($lastid -1) . ']" class="form-control">
-                </div>
-                <div id="text"></div>';
-                $lastid ++;
+                    <input type="text" name="product['.$lastid.'][renamegroup]['.$productvalue.']" class="form-control">
+                </div>';
+                    $html .='<div id="checkbox_'.$lastid.'_'.$key.'" style="display:none">';
+                    $html .='<lable>Default selected</lable>';
+                    $html .='<table>';
+                    $html .='<tbody>';
+                    $html .='<tr>';
+                    foreach($dropdown as $dropdowns){
+                    $html .='<td><input type="checkbox" value="'.$dropdowns->name.'" name="product['.$lastid.'][product_topping_checkbox]['.$productvalue.']" ></td>';
+                    $html .='<td>'.$dropdowns->name.'</td>';
+                    $html .='</tr>';
+                    }
+                    $html .='</tbody>';
+                    $html .='</table>';
+                    $html .='</div>';
+                    $html .='<div id="select_'.$lastid.'_'.$key.'" style="display:none">';
+                    $html .='<lable>Default selected</lable>';
+                    $html .='<select  class="form-control" name="product['.$lastid.'][product_topping_select]['.$productvalue.']">';
+                    foreach($dropdown as $dropdowns){
+                        $html .='<option>'.$dropdowns->name.'</option>';
+                    }
+                    $html .='</select>';
+                    $html .='</div>';
             }
-
-        // } else {
-        //     $html .= 'No Topping';
-        // }
+            
+        } else {
+            $html .= 'No Topping';
+        }
         $html .= '</th>';
         $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
         $html .= '</tr>';
@@ -146,6 +171,122 @@ class ProductController extends Controller
             return response()->json(['html' => $html, 'lastid' => $lastid, 'thead' => $thead]);
         }
     }
+
+
+    function storebulkproduct(Request $request)
+    {
+
+        $current_store_id = currentStoreId();
+        
+        foreach($request->product as $key => $prod){
+            
+            $name = isset($prod['name']) ? $prod['name'] : '';
+            $description = isset($prod['description']) ? $prod['description'] : '';
+            $price = isset($prod['price']) ? $prod['price'] : ''; 
+            $image = isset($prod['image']) ? $prod['image'] : ''; 
+            $price_size = isset($prod['price_size']) ? $prod['price_size'] : ''; 
+            $toppingtype= isset($prod['typetopping']) ? $prod['typetopping'] : ''; 
+            $enable= isset($prod['enable']) ? $prod['enable'] : ''; 
+            $renamegroup= isset($prod['renamegroup']) ? $prod['renamegroup'] : ''; 
+         
+            
+            $product = new Product();
+            $product->model = isset($request->model) ? $request->model : 0;
+            $product->sku = isset($request->sku) ? $request->sku : 0;
+            $product->upc = isset($request->upc) ? $request->upc : 0;
+            $product->ean = isset($request->ean) ? $request->ean : 0;
+            $product->jan = isset($request->jan) ? $request->jan : 0;
+            $product->isbn = isset($request->isbn) ? $request->isbn : 0;
+            $product->mpn = isset($request->mpn) ? $request->mpn : 0;
+            $product->location = isset($request->location) ? $request->location : 0;
+            $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
+            $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
+            $product->date_available = isset($request->date_available) ? $request->date_available : 0;
+            $product->date_added = isset($request->date_added) ? $request->date_added : 0;
+            $product->date_modified = isset($request->date_modified) ? $request->date_modified : 0;
+            $product->tax_class_id = isset($request->tax_class_id) ? $request->tax_class_id : 0;
+            $product->price = $price;
+            $product->delivery_price = isset($request->deliveryprice) ? $request->deliveryprice : 0;
+            $product->collection_price = isset($request->collectionprice) ? $request->collectionprice : 0;
+            $product->status = isset($request->status) ? $request->status : 0;
+            $product->sort_order = isset($request->sort_order) ? $request->sort_order : 0;
+            // $icon = $request['product_icons'];
+            // $product_icons = implode(',', $icon);
+            $product->product_icons = isset($request->product_icons) ? $request->product_icons : 0;
+            // $data = $request['order_type'];
+            // $order_type = implode('', $data);
+            $product->order_type = isset($request->order_type) ? $request->order_type : 0;
+            // $day = $request['day'];
+            // $days = implode(',', $day);
+            $product->availibleday = isset($request->days) ? $request->days : 0;
+            if (!empty($image) || $image != '')
+            {
+                $imgname = time() . "." . $image->getClientOriginalExtension();
+                $image->move(public_path('admin/product'), $imgname);
+                $product->image = $imgname;
+            }
+            $product->save();
+            
+            $product_description = new ProductDescription();
+            $product_description->product_id = $product->product_id;
+            $product_description->language_id = 1;
+            $product_description->name = $name;
+            $product_description->description = $description;
+            $product_description->meta_description = isset($request->meta_description) ? $request->meta_description : '';
+            $product_description->meta_keyword = isset($request->meta_keyword) ? $request->meta_keyword : '';
+            $product_description->tag = isset($request->tag) ? $request->tag : '';
+            $product_description->save();
+         
+            $productstore = new ProductStore();
+            $productstore->product_id = $product->product_id;
+            $productstore->store_id =$current_store_id;
+            $productstore->save(); 
+
+            $product_category = new Product_to_category();
+            $product_category->product_id = $product->product_id;
+            $product_category->category_id = isset($request->category) ? $request->category : 0;
+            $product_category->save();
+
+              if(!empty($toppingtype) || $toppingtype != ''){
+                foreach($toppingtype as $key=>$value){
+                 
+                    $producttoppingtype = new ProductToppingType();
+                    $producttoppingtype->id_product=$product->product_id; 
+                    $producttoppingtype->id_group_topping=isset($request->id_group_topping) ? $request->id_group_topping : "";
+                    $producttoppingtype->typetopping=$toppingtype[$key];
+                    $producttoppingtype->min_check=isset($request->min_check) ? $request->min_check : 0;
+                    $producttoppingtype->max_check=isset($request->max_check) ? $request->max_check : 0;
+                    $producttoppingtype->choose=isset($request->choose) ? $request->choose : 0;
+                    $producttoppingtype->enable=$enable[$key];
+                    $producttoppingtype->renamegroup=$renamegroup[$key];
+                    $producttoppingtype->topping_sort_order=isset($request->topping_sort_order) ? $request->topping_sort_order : 0;
+                    $producttoppingtype->save();
+              }
+              }
+
+              if(!empty($price_size) || $price_size != ''){
+                foreach($price_size as $key=>$price_sizes){
+                    $query = ToppingProductPriceSize::max('id_product_price_size');
+                    $lastidsize=$query+1;
+                    $toppingProductPriceSize = new ToppingProductPriceSize;
+                    $toppingProductPriceSize->id_product_price_size= $lastidsize;
+                    $toppingProductPriceSize->price =$price_sizes;
+                    $toppingProductPriceSize->id_size =$key;
+                    $toppingProductPriceSize->id_product =$product->product_id;
+                    $toppingProductPriceSize->delivery_price ='';
+                    $toppingProductPriceSize->collection_price ='';
+                    $toppingProductPriceSize->save();
+                }
+            }
+            
+            
+        }
+        return redirect()->route('products');
+
+    }
+
+
+
 
 
     function importproducts()
@@ -336,36 +477,95 @@ class ProductController extends Controller
 
     public function getproduct(Request $request)
     {
-        if ($request->ajax()) {
-            $data = ProductDescription::select('*')->join('oc_product', 'oc_product_description.product_id', '=', 'oc_product.product_id')->get();
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $edit_url = route('editproduct', $row->product_id);
-                    $btn = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+        $current_store_id = currentStoreId();
 
-                    return $btn;
-                })
-                ->addColumn('image', function ($row) {
-                    if (!empty($row->image)) {
-                        $image_path = asset('public/admin/product/' . $row->image);
-                        $image = '<img src="' . $image_path . '" alt="Not Found" width="40">';
-                    } else {
-                        $image_path = asset('public/admin/product/no_image.jpg');
-                        $image = '<img src="' . $image_path . '" alt="Not Found" width="40">';
-                    }
+        $columns = array(
+            0 =>'product_id',
+            3 =>'name',
+        );
 
-                    return $image;
-                })
+        // Get data
+        $totledata = ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($query) use ($current_store_id) {
+            $query->where('store_id', $current_store_id);
+        })->count();
 
-                ->addColumn('checkbox', function ($row) {
-                    $pid = $row->product_id;
-                    $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="' . $pid . '">';
-                    return $checkbox;
+        $totalFiltered = $totledata;
+        $limit = $request->request->get('length');
+        $start = $request->request->get('start');
+        $order = $columns[$request->input('order.0.column')];
+        $dir = $request->input('order.0.dir');
+
+
+        if (!empty($request->input('search.value'))) {
+            $search = $request->input('search.value');
+
+            $posts =  ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
                 })
-                ->rawColumns(['action', 'checkbox', 'image'])
-                ->make(true);
+                ->whereHas('hasOneProductToStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->orderBy($order, $dir)->limit($limit)->get();
+
+
+            $totalFiltered = ProductDescription::with(['hasOneStore','hasOneProductToStore'])->where(function ($query) use ($search){
+                $query->where('name','LIKE',"%{$search}%");
+            })->whereHas('hasOneProductToStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+        } else {
+            $posts = ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($query) use ($current_store_id) {
+                $query->where('store_id', $current_store_id);
+            })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
         }
+
+        $data = array();
+        $data1 = array();
+
+        if ($posts) {
+            foreach ($posts as $post) {
+                $product_id = $post->product_id;
+                // $name = isset($post->name) ? $post->name : '';
+                $status = isset($post->status) ? $post->status : '';
+                $edit_url = route('editproduct', $post->product_id);
+                // $price = isset($post->price) ? $post->price : '';
+
+
+                $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
+                $data['product_id'] = $product_id;
+                $data['image'] = $post->image;
+                if (!empty($data['image'])) {
+                    $image_path = asset('public/admin/product/' . $data['image']);
+                    $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
+                } else {
+                    $image_path = asset('public/admin/product/no_image.jpg');
+                    $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
+                }
+                $data['name'] = $post->name;
+                $data['price'] = $post->hasOneProduct->price;
+                $data['status'] = $post->hasOneProduct->status;
+
+                if ($status == 0) {
+                    $data['status'] ='<td>Enabled</td>';
+                } else {
+                    $data['status'] = '<td>Disabled</td>';
+                }
+
+                $data['sort_order'] = $post->hasOneProduct->sort_order;
+                $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+
+                $data1[] = $data;
+            }
+        }
+
+        $json_data = array(
+            "draw"            => intval($request->request->get('draw')),
+            "recordsTotal"    => intval($totledata),
+            "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
+            "data"            => $data1
+        );
+
+        echo json_encode($json_data);
+
     }
 
 
@@ -404,7 +604,7 @@ class ProductController extends Controller
             Reward::whereIn('product_id', $ids)->delete();
             Product_to_category::whereIn('product_id', $ids)->delete();
             ProductStore::whereIn('product_id', $ids)->delete();
-
+            ToppingProductPriceSize::whereIn('id_product', $ids)->delete();
             return response()->json([
                 'success' => 1,
             ]);
@@ -419,7 +619,7 @@ class ProductController extends Controller
 
         $prod_id = isset($product->category_id) ? $product->category_id : '';
 
-        $header = ToppingSize::where('id_category',$prod_id)->get();
+        $header = ToppingSize::where('id_category', $prod_id)->get();
 
         $price = ToppingProductPriceSize::where('id_product', $id)->get();
         $category = Category::select('*')->get();
@@ -438,17 +638,17 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $product_id = $request->product_id;
-
         $product = Product::find($product_id);
-
-        $product->model = isset($request->model) ? $request->model : 0;
-        $product->sku = isset($request->sku) ? $request->sku : 0;
-        $product->upc = isset($request->upc) ? $request->upc : 0;
-        $product->ean = isset($request->ean) ? $request->ean : 0;
-        $product->jan = isset($request->jan) ? $request->jan : 0;
-        $product->isbn = isset($request->isbn) ? $request->isbn : 0;
-        $product->mpn = isset($request->mpn) ? $request->mpn : 0;
-        $product->location = isset($request->location) ? $request->location : 0;
+     
+        $product->model = isset($request->model) ? $request->model : "";
+        $product->model = $request->model;
+        $product->sku = isset($request->sku) ? $request->sku : "";
+        $product->upc = isset($request->upc) ? $request->upc : "";
+        $product->ean = isset($request->ean) ? $request->ean : "";
+        $product->jan = isset($request->jan) ? $request->jan : "";
+        $product->isbn = isset($request->isbn) ? $request->isbn : "";
+        $product->mpn = isset($request->mpn) ? $request->mpn : "";
+        $product->location = isset($request->location) ? $request->location : "";
         $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
         $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
         $product->date_available = isset($request->date_available) ? $request->date_available : 0;

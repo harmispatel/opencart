@@ -70,7 +70,10 @@
                                         <th>COMMISION TOTAL</th>
                                         <th class="text-green">ACCEPTED RESTAURANT NET</th>
                                     <tbody id="customerorder">
-                                        <tr id="status">
+                                        <tr id="status" style="display: none;">
+                                            <td colspan="7" class="text-center"><img src="{{ asset('public/admin/gif/gif3.gif') }}" alt=""></td>
+                                        </tr>
+                                        <tr id="message" style="display: none">
                                             <td colspan="7" class="text-center">Transaction Not Avavilable</td>
                                         </tr>
                                     </tbody>
@@ -110,9 +113,12 @@
 $(document).ready(function () {
     
     $(function() {
+        
         $('input[id="daterange"]').daterangepicker({
             opens: 'left'
         }, function(start, end, label) {
+            $('#message').hide();
+            $('#status').show();
             var startdate = start.format('YYYY-MM-DD');
             var enddate = end.format('YYYY-MM-DD');
             $.ajax({
@@ -137,6 +143,9 @@ $(document).ready(function () {
                     $('#totle').text('');
                     $('#totle').append(response.totle);
                     $('#status').hide();
+                    if (response.status == 200) {
+                        $('#message').show();
+                    }
                 }
             });	
         });

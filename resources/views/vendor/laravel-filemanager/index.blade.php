@@ -198,7 +198,7 @@
                             class="fas fa-folder-open"></i>{{ trans('laravel-filemanager::lfm.btn-open') }}</a>
                     <a data-action="preview" data-multiple="true"><i
                             class="fas fa-images"></i>{{ trans('laravel-filemanager::lfm.menu-view') }}</a>
-                    <a data-action="use" onclick="closePopupAndSetPath()" data-image="0" id="test" data-multiple="true"><i
+                    <a data-action="use" onclick="closePopupAndSetPath()" data-imageId="0" id="test" data-multiple="true"><i
                             class="fas fa-check"></i>Confirm</a>
                 </nav>
 
@@ -417,7 +417,7 @@
 {{-- <script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script> --}}
 <script>
     var modalToSelectedFilePath = "";
-
+     var gallary1 ='';
     function getImageUrl(url) {
         modalToSelectedFilePath = url;
         
@@ -425,7 +425,9 @@
     function closePopupAndSetPath() {
         jQuery("#myModal").hide();
         $(".modal-backdrop").attr("style", "display:none;");
+        // $('#test').attr(gallary1);
         jQuery("#thumb0").attr("src", modalToSelectedFilePath);
+        // jQuery("#thumb"+gallary1).attr("src", modalToSelectedFilePath);
     }
     
     function showmodal(gallary){
@@ -433,7 +435,6 @@
        var gallary1=gallary;
        
         // $('#test').attr(gallary1);
-        jQuery("#thumb"+gallary1).attr("src", modalToSelectedFilePath);
     }
    
     Dropzone.options.uploadForm = {

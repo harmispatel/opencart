@@ -49,42 +49,47 @@
                                 {{-- <h3>category</h3> --}}
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(59) == 1)
-                                        <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i
-                                                class="fa fa-plus"></i></a>
+                                            <button type="submit" form="bulkP" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></button>
                                     @endif
 
                                     @if (check_user_role(61) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
+                                        <a href="{{ route('products') }}" class="btn btn-sm btn-danger ml-1 deletesellected"><i
                                                 class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
                             </div>
                             {{-- End Card Header --}}
-
+                            
                             {{-- Card Body --}}
                             <div class="card-body">
-                                {{-- Table Start --}}
-                                <div class="table-responsive">
-                                    <table border="2">
-                                        <thead id="thead">
-                                           
-                                        </thead>
-                                        <tbody id="productAdd">
-                                            
+                                <form action="{{ route('storebulkproduct') }}" method="POST" enctype="multipart/form-data" id="bulkP">
+                                    @csrf
+
+                                     <input type="hidden"  name="category" id="demo" value="">
+                                    {{-- Table Start --}}
+                                    <div class="table-responsive">
+                                        <table border="2">
+                                            <thead id="thead">
+                                            </thead>
+                                            <tbody id="productAdd">
                                             <tfoot>
                                                 <tr class="">
                                                     <td colspan="6">
-                                                        <div align="right"><button type="button" style="margin-left: 20px" onclick="addMoreProduct();" class="btn btn-primary ">
+                                                        <div align="right">
+                                                            <button type="button"
+                                                                style="margin-left: 20px" onclick="addMoreProduct();"
+                                                                class="btn btn-primary ">
                                                                 <i class="fa fa-plus-circle"></i>
-                                                            </button></div>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tfoot>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                {{-- End Table --}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {{-- End Table --}}
+                                </form>
                             </div>
                             {{-- End Card Body --}}
                         </div>
@@ -107,37 +112,41 @@
 
 
 <script>
-   
-   $(document).ready(function() {
+    $(document).ready(function() {
         var categoryval = $('#categorys :selected').val();
-        getcategoryval(categoryval,"new");
+        $("#demo").val(categoryval);
+        getcategoryval(categoryval, "new");
+        // radiocheck(1,1);
     });
 
     $('#categorys').change(function() {
         var categoryval = this.value;
-        getcategoryval(categoryval,"new");
+        // alert(categoryval);
+        $("#demo").val(categoryval);
+        $('#productAdd').html('');
+        getcategoryval(categoryval, "new");
     });
 
-    function getcategoryval(categoryval,ctype=""){
+    function getcategoryval(categoryval, ctype = "") {
         var total = $('.productone').length;
-        var lastid = total ;
-       
+        var lastid = total;
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        
+
         $.ajax({
             type: "post",
             url: "{{ route('getcategoryproduct') }}",
             dataType: "json",
             data: {
                 category_id: categoryval,
-                lastid:lastid
+                lastid: lastid
             },
             success: function(result) {
-                if(ctype != "append"){
+                if (ctype != "append") {
                     $('#productAdd').html('');
                 }
                 $('#productAdd').append(result.html);
@@ -145,157 +154,73 @@
                 // if(ctype != "append"){
                 //     $('#thead').html('');
                 // }
-                if(ctype == "new"){
+                if (ctype == "new") {
                     $('#thead').html('');
-                    $('#thead').append(result.thead);  
+                    $('#thead').append(result.thead);
                 }
                 reset_values();
 
-            
+
             }
 
         });
     }
 
-    var x=1;
+    var x = 1;
     var count = 0;
-    
-    function addMoreProduct(){
-        
+
+    function addMoreProduct() {
+
         var total = $('.productone').length;
-        if(total != 0){
+        if (total != 0) {
             x = total + 1;
-        }else{
+        } else {
             x = 1;
         }
         var categoryval = $("#categorys").val();
-       
-        getcategoryval(categoryval,"append");
+
+        getcategoryval(categoryval, "append");
         count++;
         x++;
-        
+
     }
 
-    $("body").on("click",".delete_option" ,function(){
-        $(this).closest('.productone').remove(); 
+    $("body").on("click", ".delete_option", function() {
+        $(this).closest('.productone').remove();
         count--;
         reset_values();
     });
 
     function reset_values() {
         var count = 1;
-            $(".productone").each(function() {
+        $(".productone").each(function() {
             var id = $(this).attr("id", "productone" + count);
             count++;
         });
     }
 
-    
 
-   
-    // var product_row = 0;
+    function radiocheck(lid, key) {
 
-    // function addbulkproduct() {
-    //     product_row++;
-    //     html = '';
-    //     html += '<tr id="bulkproduct' + product_row + '">';
-    //     html += '<td style="vertical-align: middle;"><input type="text" class="form-control" name="product[' +
-    //         product_row + '][name]"></td>';
-    //     html += '<td style="vertical-align: middle;"><textarea type="text" name="product[' + product_row +
-    //         '][discription]" class="form-control"></textarea></td>';
-    //     html += '<td style="vertical-align: middle;"><input type="text" name="product[' + product_row +
-    //         '][price]" class="form-control"></td>';
+        var cls = '.typetopping_' + lid + '_' + key;
+        var data = $("input[type='radio']" + cls + ":checked").val();
 
+        var html = '';
+        //    if (data == 'select') {
+        //        $('#text_'+lid+'_'+key).html('');
+        //    } else if (data == 'checkbox') {
+        //        $('#text_'+lid+'_'+key).html('');
+        //    }
 
-    //      $.each(sizes, function (key, value) { 
-              
-    //          html += '<td style="vertical-align: middle;"><input type="text" name="product[' + product_row +
-    //              '][price]" class="form-control"></td>';
-    //      });    
-       
+        if (data == 'checkbox') {
 
-    //     html += '<td style="vertical-align: middle;"><input type="file" name="product[' + product_row +
-    //         '][image]" class="form-control"></td>';
-    //     html += '<td style="vertical-align: middle;">';
+            $('#checkbox_' + lid + '_' + key).show();
+            $('#select_' + lid + '_' + key).hide();
+        } else if (data == 'select') {
 
-    //     if (data == '') {
-    //         html += '<b>No Topping</b>';
-    //     } else {
-
-    //         if (group == null || group == '') {
-    //             html += '<b>No Topping</b>';
-    //         } else {
-    //             $.each(group, function(key, value) {
-                    
-    //                 if (data.product_id == value.id_product) {
-    //                     html += '<h3> ' + value.name_topping + '</h3>';
-    //                     html +=
-    //                         '<div style="margin-bottom: 10px;"><input type="radio" class="typetopping" name="product[' + product_row + '][typetopping]"  value="select"';
-
-    //                     if (value.typetopping == "select") {
-    //                         html += 'checked';
-    //                     }
-
-    //                     html += '> Select&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" class="typetopping" name="product[' + product_row + '][typetopping]"  value="checkbox"';
-
-    //                     if (value.typetopping == "checkbox") {
-    //                         html += 'checked';
-    //                     }
-
-    //                     html += '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;</div>';
-    //                     html += '<div><input type="radio" name="product[' + product_row +
-    //                     '][enable]" value="1"';
-
-    //                     if (value.enable == 1) {
-    //                         html += 'checked';
-    //                     }
-
-    //                     html += '> Enable&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio"  name="product[' +
-    //                         product_row + '][enable]" value="0"';
-
-    //                     if (value.enable == 0) {
-    //                         html += 'checked';
-    //                     }
-
-    //                     html += '>Disable</div>';
-    //                     html +=
-    //                         '<div class="form-floating"><label for="rename" class="form-label">Rename to</label><input type="text" name="product[' +
-    //                         product_row + '][renamegroup]" class="form-control"></div>';
-    //                     html += '<div id="text"></div>';
-    //                 } else {
-    //                     html += '<b>No Topping</b>';
-    //                 }
-    //             });
-
-    //         }
-
-    //     }
-
-
-    //     $(".table").append(html);
-
-    // }
-
-    // function radiocheck() {
-    //     var data = $('input[name=typetopping]:checked').val();
-
-    //     var html = '';
-    //     if (data == 'select') {
-    //         $("#text").html('');
-    //     } else if (data == 'checkbox') {
-    //         $("#text").html('');
-    //     }
-
-    //     if (data == 'checkbox') {
-    //         html += '<div><lable>Default selected</lable></div>';
-    //         html += '<div><table><tbody><tr><td><input type="checkbox"></td><td>hello</td></tbody></table></div>';
-
-    //     } else if (data == 'select') {
-
-    //         html += '<div><lable>Default selected</lable></div>';
-    //         html += '<select  class="form-control" name="select[0][name]"><option></option></select>';
-
-    //     }
-    //     $("#text").append(html);
-    // }
+            $('#select_' + lid + '_' + key).show();
+            $('#checkbox_' + lid + '_' + key).hide();
+        }
+    }
 </script>
+
