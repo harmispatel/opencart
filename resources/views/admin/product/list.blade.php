@@ -115,9 +115,16 @@
 @include('footer')
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script>
+        alert("Hi")
+
+
+    $(document).ready(function() {
+      
     // Select All Checkbox
     $('#delall').on('click', function(e) {
+        alert("Hi")
         if ($(this).is(':checked', true)) {
             $(".del_all").prop('checked', true);
         } else {
@@ -149,7 +156,7 @@
                             type: "POST",
                             url: '{{ url('deleteproduct') }}',
                             data: {
-                                "_token": "{{ csrf_token() }}",
+                                "_token " :{{ csrf_token() }} ",
                                 'id': checkValues
                             },
                             dataType: 'JSON',
@@ -176,20 +183,18 @@
             swal("Please select atleast One Product", "", "warning");
         }
     });
-</script>
 
-<script>
-    $(document).ready(function() {
+
 
         $('#categorys').change(function() {
             var categoryval = this.value;
             // var categoryval = $('#categorys :selected').val();
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
 
 
             $.ajax({
@@ -197,7 +202,8 @@
                 url: "{{ route('getproductbycategory') }}",
                 dataType: "json",
                 data: {
-                    category_id: categoryval
+                    _token: "{{csrf_token()}}",
+                    category_id: categoryval,
                 },
                 success: function(result) {
                     $('.table').html('');
@@ -211,60 +217,38 @@
 </script>
 
 <script>
+    $(document).ready(function() {
 
-$(document).ready(function(){
+        // $(".loader_div").show();
 
-// $(".loader_div").show();
+        getallproduct();
 
-getallproduct();
+    });
 
-});
+    function getallproduct() {
 
-function getallproduct() {
+        var table = $('.table').DataTable({
+            processing: true,
+            serverSide: true,
+            "scrollY": true,
+            "ajax": {
+                "url": "{{ route('getproduct') }}",
+                "dataType": "json",
+                "type": "POST",
+                "data": {
+                    _token: "{{ csrf_token() }}"
+                },
+            },
+            columns: [
+                {"data" : "checkbox", "orderable":false, "bSortable": true},
+                {"data" : "image", "orderable":false, "bSortable": true},
+                {"data" : "name", "orderable":false, "bSortable": true},
+                {"data" : "price", "orderable":false, "bSortable": true},
+                {"data" : "status", "orderable":false, "bSortable": true},
+                {"data" : "sort_order", "orderable":false, "bSortable": true},
+                {"data" : "action", "orderable":false, "bSortable": true},
+            ]
+        });
 
-var table = $('.table').DataTable({
-    processing: true,
-    serverSide: true,
-
-    ajax: "{{ route('getproduct') }}",
-    columns: [{
-            data: 'checkbox',
-            name: 'checkbox',
-            orderable: false,
-            searchable: true
-        },
-        {
-            data: 'image',
-            name: 'image'
-        },
-        {
-            data: 'name',
-            name: 'name'
-        },
-        {
-            data: 'price',
-            name: 'price'
-        },
-        {
-            data: 'status',
-            name: 'status'
-        },
-        {
-            data: 'sort_order',
-            name: 'sort_order'
-        },
-        {
-            data: 'action',
-            name: 'action'
-        },
-    ]
-});
-
-}
-
-
-
-
-
-
+    }
 </script>

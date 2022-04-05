@@ -139,7 +139,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storebulkproduct',[ProductController::class, 'storebulkproduct'])->name('storebulkproduct');
     Route::post('getcategoryproduct', [ProductController::class, 'getcategoryproduct'])->name('getcategoryproduct');
     Route::get('importproducts', [ProductController::class, 'importproducts'])->name('importproducts');
-    Route::get('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');
+    Route::post('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');
     Route::post('getproductbycategory', [ProductController::class, 'getproductbycategory'])->name('getproductbycategory');
     Route::get('addproduct', [ProductController::class, 'add'])->name('addproduct');
     Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
@@ -327,6 +327,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Gallary
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
     Route::get('uploadgallary',[GallaryController::class, 'uploadgallary'])->name('uploadgallary');
+    Route::get('storeGallary',[GallaryController::class, 'uploadgallary'])->name('storeGallary');
+    Route::get('gallarysettingsstore',[GallaryController::class, 'gallarysettingsstore'])->name('gallarysettingsstore');
 
 
     // Layouts

@@ -137,7 +137,7 @@
                                                             <tr>
                                                                 <th width="200">Customer Group</th>
                                                                 <td>
-                                                                    {{ $orders->hasOneCustomerGroupDescription->name }}
+                                                                    {{ isset($orders->hasOneCustomerGroupDescription->name) ?  $orders->hasOneCustomerGroupDescription->name : ""}}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -233,11 +233,11 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>Country</th>
-                                                                <td>{{ $orders->hasOneCountry->name }}</td>
+                                                                <td>{{ isset($orders->hasOneCountry->name) ? $orders->hasOneCountry->name : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Region / State</th>
-                                                                <td>{{ $orders->hasOneRegion->name }}</td>
+                                                                <td>{{ isset($orders->hasOneRegion->name) ? $orders->hasOneRegion->name : ""  }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th width="200">Payment Method</th>

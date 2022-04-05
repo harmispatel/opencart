@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class ProductDescription extends Model
 {
@@ -12,4 +13,13 @@ class ProductDescription extends Model
     public $timestamps=false;
     protected $primaryKey='product_id';
 
+    public function hasOneProduct()
+    {
+        return $this->hasOne(Product::class, 'product_id','product_id');
+    }
+
+    public function hasOneProductToStore()
+    {
+        return $this->hasOne(ProductStore::class, 'product_id','product_id');
+    }
 }
