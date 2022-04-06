@@ -33,7 +33,8 @@ function gettotalip($ip)
 function getStoreDetails($storeid,$key)
 {
     $gedetails = Settings::where('key',$key)->where('store_id',$storeid)->first();
-    return $gedetails->value;
+    $new = isset($gedetails->value) ? $gedetails->value : '';
+    return $new;
 }
 
 function currentStoreId()

@@ -165,7 +165,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
-    Route::post('addneworders', [OrdersController::class, 'addneworde   rs'])->name('addneworders');
+    Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
     Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
@@ -355,14 +355,14 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'index'])->name('option');
 
 
+    Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+        \UniSharp\LaravelFilemanager\Lfm::routes();
+        // echo '<pre>';
+        // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
+        // exit();
+    });
 });
 
-Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
-    \UniSharp\LaravelFilemanager\Lfm::routes();
-    // echo '<pre>';
-    // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
-    // exit();
-});
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND

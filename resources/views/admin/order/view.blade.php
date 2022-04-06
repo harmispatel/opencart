@@ -99,7 +99,7 @@
                                                             <tr>
                                                                 <th>Order ID</th>
                                                                 <td>
-                                                                    #{{ $orders->order_id }}
+                                                                    #{{ isset($orders->order_id) ? $orders->order_id : "" }}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -107,10 +107,10 @@
                                                                 <td>
                                                                     @if($orders->invoice_no != 0)
 
-                                                                        {{ $orders->invoice_prefix }}{{ $orders->invoice_no }}
+                                                                        {{ isset($orders->invoice_prefix) ? $orders->invoice_prefix : "" }}{{ isset($orders->invoice_no) ? $orders->invoice_no : "" }}
                                                                     @else
                                                                         <div id="Invoice" style="display: flex;">
-                                                                            <b>[ <a class="text-primary" onclick="generateinvoice({{ $orders->order_id }})" style="cursor: pointer">Generate</a> ]</b>
+                                                                            <b>[ <a class="text-primary" onclick="generateinvoice({{ isset($orders->order_id) ? $orders->order_id : "" }})" style="cursor: pointer">Generate</a> ]</b>
                                                                             <div class="gif-div ml-2" style="display: none;">
                                                                                 <img src="{{ asset('public/admin/gif/gif3.gif') }}" width="30" class="text-danger">
                                                                             </div>
@@ -121,17 +121,17 @@
                                                             <tr>
                                                                 <th>Store Name</th>
                                                                 <td>
-                                                                    {{ $orders->store_name }}
+                                                                    {{ isset($orders->store_name) ? $orders->store_name : ""}}
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Store Url</th>
-                                                                <td><a href="{{ asset($orders->store_url) }}" target="_blank">{{ $orders->store_url }}</a></td>
+                                                                <td><a href="{{ asset($orders->store_url) }}" target="_blank">{{ isset($orders->store_url) ? $orders->store_url : "" }}</a></td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Customer</th>
                                                                 <td>
-                                                                    {{ $orders->firstname }} {{ $orders->lastname }}
+                                                                    {{ isset($orders->firstname) ? $orders->firstname : "" }} {{ isset($orders->lastname) ? $orders->lastname : "" }}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -142,43 +142,43 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>E-Mail</th>
-                                                                <td>{{ $orders->email }}</td>
+                                                                <td>{{ isset($orders->email) ? $orders->email : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Telephone</th>
-                                                                <td>{{ $orders->telephone }}</td>
+                                                                <td>{{ isset($orders->telephone) ? $orders->telephone : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Total</th>
-                                                                <td>{{ $orders->total }}</td>
+                                                                <td>{{ isset($orders->total) ? $orders->total : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Order Status</th>
-                                                                <td>{{ $orders->hasOneOrderStatus->name }}</td>
+                                                                <td>{{ isset($orders->hasOneOrderStatus->name) ? $orders->hasOneOrderStatus->name : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>IP Address</th>
-                                                                <td>{{ $orders->ip }}</td>
+                                                                <td>{{ isset($orders->ip) ? $orders->ip : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>User Agent</th>
-                                                                <td>{{ $orders->user_agent }}</td>
+                                                                <td>{{ isset($orders->user_agent) ? $orders->user_agent : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Accept Language</th>
-                                                                <td>{{ $orders->accept_language }}</td>
+                                                                <td>{{ isset($orders->accept_language) ? $orders->accept_language : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Date Added</th>
-                                                                <td>{{ $orders->date_added }}</td>
+                                                                <td>{{ isset($orders->date_added) ? $orders->date_added : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Date Modified</th>
-                                                                <td>{{ $orders->date_modified }}</td>
+                                                                <td>{{ isset($orders->date_modified) ? $orders->date_modified : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Shipping Method</th>
-                                                                <td>{{ $orders->flag_post_code }}</td>
+                                                                <td>{{ isset($orders->flag_post_code) ? $orders->flag_post_code : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Free Item</th>
@@ -186,7 +186,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th>Time delivery</th>
-                                                                <td>{{ $orders->timedelivery }}</td>
+                                                                <td>{{ isset($orders->timedelivery) ? $orders->timedelivery : "" }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -209,27 +209,27 @@
                                                         <tbody>
                                                             <tr>
                                                                 <th>First Name</th>
-                                                                <td>{{ $orders->payment_firstname }}</td>
+                                                                <td>{{ isset($orders->payment_firstname) ? $orders->payment_firstname : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Last Name</th>
-                                                                <td>{{ $orders->payment_lastname }}</td>
+                                                                <td>{{ isset($orders->payment_lastname) ? $orders->payment_lastname : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Address 1</th>
-                                                                <td>{{ $orders->payment_address_1 }}</td>
+                                                                <td>{{ isset($orders->payment_address_1) ? $orders->payment_address_1 : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Address 2</th>
-                                                                <td>{{ $orders->payment_address_2 }}</td>
+                                                                <td>{{ isset($orders->payment_address_2) ? $orders->payment_address_2 : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>City</th>
-                                                                <td>{{ $orders->payment_city }}</td>
+                                                                <td>{{ isset($orders->payment_city) ? $orders->payment_city : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Postcode</th>
-                                                                <td>{{ $orders->payment_postcode }}</td>
+                                                                <td>{{ isset($orders->payment_postcode) ? $orders->payment_postcode : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Country</th>
@@ -241,7 +241,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <th width="200">Payment Method</th>
-                                                                <td>{{ $orders->payment_method }}</td>
+                                                                <td>{{ isset($orders->payment_method) ? $orders->payment_method : "" }}</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -286,8 +286,8 @@
                                                                     </td>
                                                                     <td>{{ $order->model  }}</td>
                                                                     <td>{{ $order->quantity  }}</td>
-                                                                    <td>{{ $order->price  }}</td>
-                                                                    <td>{{ $order->total  }}</td>
+                                                                    <td>{{ number_format($order->price,2)  }}</td>
+                                                                    <td>{{ number_format($order->total,2)  }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>
@@ -370,7 +370,7 @@
                                                                 </label><br>
                                                                 <input type="checkbox" class="ml-2" name="notify" value="1" id="input-notify">
                                                                 <input type="hidden" name="order_id"
-                                                                value="{{ $orders->order_id }}">
+                                                                value="{{ isset($orders->order_id) ? $orders->order_id : "" }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12">

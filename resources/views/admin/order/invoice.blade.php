@@ -45,24 +45,24 @@
                                 <tr>
                                     <td><b>Date Added</b></td>
                                     <td>:</td>
-                                    <td>{{ $orders->date_added }}</td>
+                                    <td>{{ isset($orders->date_added) ? $orders->date_added : "" }}</td>
                                 </tr>
                                 @if($orders->invoice_no != 0 || $orders->invoice_no != '')
                                     <tr>
                                         <td><b>Invoice No.</b></td>
                                         <td>:</td>
-                                        <td>{{ $orders->invoice_prefix }}{{ $orders->invoice_no }}</td>
+                                        <td>{{ isset($orders->invoice_prefix) ? $orders->invoice_prefix : "" }}{{ isset($orders->invoice_no) ? $orders->invoice_no : "" }}</td>
                                     </tr>
                                 @endif
                                 <tr>
                                     <td><b>Order ID</b></td>
                                     <td>:</td>
-                                    <td>{{ $orders->order_id }}</td>
+                                    <td>{{ isset($orders->order_id) ? $orders->order_id : "" }}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Payment Method</b></td>
                                     <td>:</td>
-                                    <td>{{ $orders->payment_method }}</td>
+                                    <td>{{ isset($orders->payment_method) ? $orders->payment_method : "" }}</td>
                                 </tr>
                             </table>
                         </div>
@@ -80,11 +80,11 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            {{ $orders->firstname }} {{ $orders->lastname }} <br>
-                                            {{ $orders->payment_address_1 }} <br>
-                                            {{ $orders->payment_city }} {{ $orders->payment_postcode }}<br>
-                                            {{ $orders->email }}<br>
-                                            {{ $orders->telephone }}
+                                            {{ isset($orders->firstname) ? $orders->firstname : "" }} {{ isset($orders->lastname) ? $orders->lastname : "" }} <br>
+                                            {{ isset($orders->payment_address_1) ? $orders->payment_address_1 : "" }} <br>
+                                            {{ isset($orders->payment_city) ? $orders->payment_city : "" }} {{ isset($orders->payment_postcode) ? $orders->payment_postcode : "" }}<br>
+                                            {{ isset($orders->email) ? $orders->email : "" }}<br>
+                                            {{ isset($orders->telephone) ? $orders->telephone : "" }}
                                         </td>
                                         <td></td>
                                     </tr>
@@ -118,16 +118,16 @@
                                                     @endphp
                                                 </td>
                                                 <td>
-                                                    {{ $order->model }}
+                                                    {{ isset($order->model) ? $order->model : "" }}
                                                 </td>
                                                 <td>
-                                                    {{ $order->quantity }}
+                                                    {{ isset($order->quantity) ? $order->quantity : "" }}
                                                 </td>
                                                 <td>
-                                                    {{ round($order->price,2) }}
+                                                    {{ number_format($order->price,2) }}
                                                 </td>
                                                 <td>
-                                                    {{ round($order->total,2) }}
+                                                    {{ number_format($order->total,2) }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -141,7 +141,7 @@
                                                     <b>{{ strtoupper($total->title) }}</b>
                                                 </td>
                                                 <td align="right">
-                                                    <b>{{ $total->text }}</b>
+                                                    <b>{{ isset($total->text) ? $total->text : "" }}</b>
                                                 </td>
                                             </tr>
                                         @endforeach
