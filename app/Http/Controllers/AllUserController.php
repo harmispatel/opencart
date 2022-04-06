@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 class AllUserController extends Controller
 {
 
+    // Function of Get all User By Current Store
     public function index()
     {
+        // Current Store ID
+        $current_store_id = currentStoreId();
 
         // Check User Permission
         if(check_user_role(82) != 1)
@@ -19,10 +22,15 @@ class AllUserController extends Controller
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
-        $data['users'] = Users::get();
+        $data['users'] = Users::where('user_shop',$current_store_id)->get();
         return view('admin.users.list',$data);
     }
 
+
+
+
+
+    // Function of Add New User View
     public function add()
     {
         // Check User Permission
@@ -31,12 +39,21 @@ class AllUserController extends Controller
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
+        // Get Users Group
         $data['usersgroup'] = UserGroup::get();
         return view('admin.users.add',$data);
     }
 
+
+
+
+
+    // Function of Store New User
     function store(Request $request)
     {
+        $current_store_id = currentStoreId();
+
+        // Validation
         $request->validate([
             'username' => 'required',
             'usersgroup' => 'required',
@@ -55,11 +72,11 @@ class AllUserController extends Controller
         $data->firstname = $request['firstname'];
         $data->lastname = $request['lastname'];
         $data->email = $request['email'];
+        $data->user_shop = $current_store_id;
         $data->status = $request['status'];
         $data->salt = genratetoken(9);
         $data->code = '';
         $data->ip = $_SERVER['REMOTE_ADDR'];
-        $data->user_shop = isset($request->user_shop) ? $request->user_shop : 0;
         $data->accessdirectory = isset($request->accessdirectory) ? $request->accessdirectory : '';
         $data->date_added = date('Y-m-d');
 
@@ -76,9 +93,12 @@ class AllUserController extends Controller
     }
 
 
+
+
+
+    // Function of Delete User
     function deletemultiuser(Request $request)
     {
-
         // Check User Permission
         if(check_user_role(85) != 1)
         {
@@ -110,9 +130,13 @@ class AllUserController extends Controller
         }
     }
 
+
+
+
+
+    // Function of Edit User View
     function edit($id)
     {
-
         // Check User Permission
         if(check_user_role(84) != 1)
         {
@@ -132,8 +156,13 @@ class AllUserController extends Controller
     }
 
 
+
+
+
+    // Function of Update User
     function update(Request $request)
     {
+        // Validation
         $request->validate([
             'username' => 'required',
             'usersgroup' => 'required',
@@ -180,9 +209,12 @@ class AllUserController extends Controller
     }
 
 
+
+
+
+    // Function of Edit User Profile
     function userprofile($id)
     {
-
         // Check User Permission
         if(check_user_role(91) != 1)
         {
@@ -200,6 +232,10 @@ class AllUserController extends Controller
     }
 
 
+
+
+
+    // Function of Update User Profile
     function updateprofile(Request $request)
     {
         $request->validate([

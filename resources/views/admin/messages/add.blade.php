@@ -40,8 +40,12 @@
                                     Send Messages
                                 </h3>
                                 <div class="form-group ml-auto float-right">
-                                    <button type="submit" form="addmessage" class="btn btn-primary">Save</button>
-                                    <a href="{{ route('messages') }}" class="btn btn-danger">Back</a>
+                                    <button type="submit" form="addmessage" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                    <a href="{{ route('messages') }}" class="btn btn-sm btn-danger">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}

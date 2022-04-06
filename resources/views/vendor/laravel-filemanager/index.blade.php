@@ -116,7 +116,7 @@
                                             data-target="#myModal">Browse</a>
                                         <textarea name="description" placeholder="Image Description" class=" form-control"></textarea>
 
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -420,7 +420,7 @@
      var gallary1 ='';
     function getImageUrl(url) {
         modalToSelectedFilePath = url;
-        
+
     }
     function closePopupAndSetPath() {
         jQuery("#myModal").hide();
@@ -429,14 +429,14 @@
         jQuery("#thumb0").attr("src", modalToSelectedFilePath);
         // jQuery("#thumb"+gallary1).attr("src", modalToSelectedFilePath);
     }
-    
+
     function showmodal(gallary){
         $("#myModal").modal('show');
        var gallary1=gallary;
-       
+
         // $('#test').attr(gallary1);
     }
-   
+
     Dropzone.options.uploadForm = {
         paramName: "upload[]", // The name that will be used to transfer the file
         uploadMultiple: false,
