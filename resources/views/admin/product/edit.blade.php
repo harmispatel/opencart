@@ -246,9 +246,8 @@
                                                 <input type="file" name="image" id="image" class="form-control">
                                                 @php
                                                     $p_image = isset($product->image) ? $product->image : '';
-                                                @endphp
-                                                <img src="{{ asset('public/admin/product/'.$p_image) }}"
-                                                    width="100px" />
+                                                    @endphp
+                                                    <img src="{{ asset('public/admin/product/'.$p_image) }}" width="100px" />
                                             </div>
                                         </div>
                                         {{-- end Genral --}}
@@ -347,7 +346,7 @@
     $(document).ready(function() {
 
         var data = $('input[name=typetopping]:checked').val();
-
+        var html = '';
         if (data == 'checkbox') {
             html = '<div><lable>Minimum</lable></div>';
             html += '<div><input type="text" name="minimum" value="0" class="form-control"></div>';

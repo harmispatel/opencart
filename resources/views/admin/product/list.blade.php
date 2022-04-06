@@ -39,6 +39,7 @@
                                     <i class="fa fa-cog fw"></i>&nbsp;&nbsp;
                                     category &nbsp;&nbsp;&nbsp;&nbsp;
                                     <select name="category" id="categorys" style="width: 70%">
+
                                         @foreach ($category as $categorys)
                                             <option value="{{ $categorys->category_id }}">{{ $categorys->name }}
                                             </option>
@@ -63,6 +64,7 @@
 
                             {{-- Card Body --}}
                             <div class="card-body">
+                                <input type="hidden" name="catid" id="changecatid">
                                 {{-- Table Start --}}
                                 <table class="table table-bordered">
                                     {{-- Alert Message div --}}
@@ -80,19 +82,19 @@
 
                                     {{-- Table Head --}}
                                     <thead class="text-center">
-                                        <th>
-                                            <input type="checkbox" name="checkall" id="delall">
+                                        {{-- <th>
+                                            <input type="checkbox" name="checkall" id="del_all">
                                         </th>
                                         <th id="image">Image</th>
                                         <th id="name">Product Name</th>
                                         <th id="price">Price</th>
                                         <th id="status">Status</th>
                                         <th id="sort_order">Sort Order</th>
-                                        <th id="action">Action</th>
+                                        <th id="action">Action</th> --}}
                                     </thead>
-                                    {{-- End Table Head --}}
+                                        {{-- End Table Head --}}
 
-                                    {{-- Table Body --}}
+                                        {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
 
                                     </tbody>
@@ -115,20 +117,13 @@
 @include('footer')
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 <script>
-        alert("Hi")
-
-
-    $(document).ready(function() {
-      
     // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        alert("Hi")
+    $('#del_all').on('click', function(e) {
         if ($(this).is(':checked', true)) {
-            $(".del_all").prop('checked', true);
+            $("#del_all").prop('checked', true);
         } else {
-            $(".del_all").prop('checked', false);
+            $("#del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
@@ -137,7 +132,7 @@
     // Delete User
     $('.deletesellected').click(function() {
 
-        var checkValues = $('.del_all:checked').map(function() {
+        var checkValues = $('#del_all:checked').map(function() {
             return $(this).val();
         }).get();
 
@@ -156,7 +151,7 @@
                             type: "POST",
                             url: '{{ url('deleteproduct') }}',
                             data: {
-                                "_token " :{{ csrf_token() }} ",
+                                "_token": "{{ csrf_token() }}",
                                 'id': checkValues
                             },
                             dataType: 'JSON',
@@ -183,27 +178,22 @@
             swal("Please select atleast One Product", "", "warning");
         }
     });
+</script>
 
-
-
-        $('#categorys').change(function() {
-            var categoryval = this.value;
-            // var categoryval = $('#categorys :selected').val();
-
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-
-
+<script>
+    $(document).ready(function() {
+            var catval = $('#categorys :selected').val();
+             $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 type: "post",
                 url: "{{ route('getproductbycategory') }}",
                 dataType: "json",
                 data: {
-                    _token: "{{csrf_token()}}",
-                    category_id: categoryval,
+                    category_id: catval
                 },
                 success: function(result) {
                     $('.table').html('');
@@ -211,44 +201,83 @@
                 }
 
             });
-        });
 
+            $('#categorys').change(function() {
+                var categoryval = this.value;
+
+                // var categoryval = $('#categorys :selected').val();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('getproductbycategory') }}",
+                    dataType: "json",
+                    data: {
+                        category_id: categoryval
+                    },
+                    success: function(result) {
+                        $('.table').html('');
+                        $('.table').html(result);
+                    }
+
+                });
+            });
     });
 </script>
 
 <script>
-    $(document).ready(function() {
 
-        // $(".loader_div").show();
+//     $('#categorys').change(function () { 
+        
+//         var categoryval = this.value;
+//         $('#changecatid').val(categoryval);
 
-        getallproduct();
+//         var table = $('.table').DataTable();
+//         table.destroy();
 
-    });
+//         getallproduct();
+//     });
 
-    function getallproduct() {
+// $(document).ready(function()
+// {
+//     getallproduct();
 
-        var table = $('.table').DataTable({
-            processing: true,
-            serverSide: true,
-            "scrollY": true,
-            "ajax": {
-                "url": "{{ route('getproduct') }}",
-                "dataType": "json",
-                "type": "POST",
-                "data": {
-                    _token: "{{ csrf_token() }}"
-                },
-            },
-            columns: [
-                {"data" : "checkbox", "orderable":false, "bSortable": true},
-                {"data" : "image", "orderable":false, "bSortable": true},
-                {"data" : "name", "orderable":false, "bSortable": true},
-                {"data" : "price", "orderable":false, "bSortable": true},
-                {"data" : "status", "orderable":false, "bSortable": true},
-                {"data" : "sort_order", "orderable":false, "bSortable": true},
-                {"data" : "action", "orderable":false, "bSortable": true},
-            ]
-        });
+// });
+// function getallproduct() {
+//     var catval = $('#categorys :selected').val();
+//     // alert(catval)
 
-    }
+//     var table = $('.table').DataTable({
+//         processing: true,
+//         serverSide: true,
+//         "scrollY": true,
+//         "ajax": {
+//             "url": "{{ route('getproduct') }}",
+//             "dataType": "json",
+//             "type": "POST",
+//             "data": {
+//                 _token: "{{ csrf_token() }}",
+//                 cat_id :catval,
+//                 // category_id:categoryval,
+//             },
+//         },
+//         columns: [
+//             {"data" : "checkbox", "orderable":false, "bSortable": true},
+//             {"data" : "image", "orderable":false, "bSortable": true},
+//             {"data" : "name", "orderable":false, "bSortable": true},
+//             {"data" : "price", "orderable":false, "bSortable": true},
+//             {"data" : "status", "orderable":false, "bSortable": true},
+//             {"data" : "sort_order", "orderable":false, "bSortable": true},
+//             {"data" : "action", "orderable":false, "bSortable": true},
+//         ]
+//     });
+
+// }
+
 </script>
