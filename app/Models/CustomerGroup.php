@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer;
+use App\Models\CustomerGroupDescription;
 
 class CustomerGroup extends Model
 {
@@ -12,9 +13,9 @@ class CustomerGroup extends Model
     protected $primaryKey = 'customer_group_id';
     public $timestamps = false;
 
-    // function customer()
-    // {
-    //     return $this->belongsToMany(Customer::class);
-    // }
+    public function hasOneCustomerGroupDescription()
+    {
+        return $this->hasOne(CustomerGroupDescription::class,'customer_group_id','customer_group_id');
+    }
 
 }

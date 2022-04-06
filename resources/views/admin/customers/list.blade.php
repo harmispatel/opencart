@@ -153,14 +153,14 @@
         columns: [
             {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
             {data: 'customer_name', name: 'customer_name'},
-            {data: 'shop', name: 'shop'},
+            {data: 'shop', name: 'shop', orderable: false, searchable: false},
             {data: 'email', name: 'email'},
-            {data: 'customer_group', name: 'customer_group'},
+            {data: 'customer_group', name: 'customer_group', orderable: false, searchable: false},
             {data: 'status', name: 'status'},
-            {data: 'approved', name: 'approved'},
+            {data: 'approved', name: 'approved', orderable: false, searchable: false},
             {data: 'ip', name: 'ip'},
             {data: 'date_added', name: 'date_added'},
-            {data: 'action', name: 'action'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
 

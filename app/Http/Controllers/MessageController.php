@@ -9,19 +9,24 @@ use DataTables;
 
 class MessageController extends Controller
 {
-
+    // Function of Message List View
     public function index()
     {
-
         return view('admin.messages.list');
     }
 
+
+
+
+
+    // Function of Get All Messages by Current Store ID
     public function getmessage(Request $request)
     {
+         // Current Store ID;
+         $current_store_id = currentStoreId();
+
         if($request->ajax())
         {
-            // Current Store ID;
-            $current_store_id = currentStoreId();
             // $data =Message::where('sore_id', $current_store_id)->get();
             $data = Message::with('hasOneStore')->whereHas('hasOneStore', function ($query) use ($current_store_id){
                 $query->where('store_id',$current_store_id);
@@ -45,6 +50,11 @@ class MessageController extends Controller
         }
     }
 
+
+
+
+
+    // Function of Store Messages
     public function messageinsert(Request $request)
     {
         $current_store_id = currentStoreId();
@@ -58,10 +68,13 @@ class MessageController extends Controller
     }
 
 
+
+
+
+    // Function of Add Message View
     public function add()
     {
         return view('admin.messages.add');
     }
-
 
 }

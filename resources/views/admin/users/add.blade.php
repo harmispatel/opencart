@@ -1,4 +1,6 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -17,7 +19,7 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('users') }}">Users</a></li>
-                            <li class="breadcrumb-item active">Add</li>
+                            <li class="breadcrumb-item active">Insert</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -33,19 +35,23 @@
                     <div class="col-md-12">
                         {{-- Card Start --}}
                         <div class="card card-primary">
-                            {{-- Card Header --}}
-                            <div class="card-header d-flex justify-content-between
-                            p-2" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    Add User
-                                </h3>
-                            </div>
-                            {{-- End Card Header --}}
-
                             {{-- Form Strat --}}
                             <form action="{{ route('storeuser') }}" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
+
+                                {{-- Card Header --}}
+                                <div class="card-header" style="background: #f6f6f6">
+                                    <h3 class="card-title pt-2" style="color: black">
+                                        <i class="fas fa-pencil-alt mr-2"></i>
+                                        INSERT
+                                    </h3>
+                                    <div class="container" style="text-align: right">
+                                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i></button>
+                                        <a href="{{ route('users') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
+                                    </div>
+                                </div>
+                                {{-- End Card Header --}}
+
                                 {{-- Card Body --}}
                                 <div class="card-body">
 
@@ -145,18 +151,8 @@
 
                                 </div>
                                 {{-- End Card Body --}}
-
-                                {{-- Start Card Footer --}}
-                                <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"> Save</i></button>
-                                        <a href="{{ route('users') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
-                                </div>
-                                {{-- End Card Footer --}}
-
                             </form>
                             {{-- Form End --}}
-
-
                         </div>
                         {{-- End Card --}}
                     </div>
@@ -164,17 +160,12 @@
             </div>
         </section>
         {{-- End Form Section --}}
-
     </div>
 </section>
 {{-- End Section of Add Users--}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-<script type="text/javascript">
-
-</script>

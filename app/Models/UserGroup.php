@@ -9,5 +9,5 @@ class UserGroup extends Model
 {
     public $table = "oc_user_group";
     protected $primaryKey = 'user_group_id';
-
+    public $timestamps=false;
 }

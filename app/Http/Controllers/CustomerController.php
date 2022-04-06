@@ -18,26 +18,34 @@ use DataTables;
 class CustomerController extends Controller
 {
 
+    // Function of Get All Customer View
     public function index()
     {
-        // Get all Customers
-        // $data['customers'] = Customer::select('oc_customer.*','cgd.name as groupname')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer.customer_group_id')->get();
-
         return view('admin.customers.list');
     }
 
 
+
+
+
+    //Get All Customers by Current Store
     function getcustomers(Request $request)
     {
+        // Current Store ID
         $current_store_id = currentStoreId();
+
         if ($request->ajax()) {
-            $data = Customer::select('*','cgd.name as customer_group','oc_store.name as shop')->leftJoin('oc_customer_group as cg','cg.customer_group_id','=','oc_customer.customer_group_id')->leftJoin('oc_customer_group_description as cgd','cgd.customer_group_id','=','cg.customer_group_id')->leftJoin('oc_store','oc_store.store_id','=','oc_customer.store_id')->where('oc_store.store_id',$current_store_id);
+
+            $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                $query->where('store_id',$current_store_id);
+            })->get();
+
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function($row){
 
                 $edit_url = route('editcustomer',$row->customer_id);
-                $btn = '<div class="btn-group"><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a><button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="dropdown-header">Login into Store</li><li class="text-center"><a href="" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li></ul></div>';
+                $btn = '<div class="btn-group"><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a><button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="dropdown-header">Login into Store</li><li class="text-center"><a href="'.$row->hasOneStore->ssl.'/account/login" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li></ul></div>';
 
                 return $btn;
             })
@@ -71,15 +79,19 @@ class CustomerController extends Controller
             })
             ->addColumn('shop', function($row){
                 $approved = '';
-                if(!empty($row->shop))
+                if(!empty($row->hasOneStore->name))
                 {
-                    $shop = $row->shop;
+                    $shop = $row->hasOneStore->name;
                 }
                 else
                 {
                     $shop = '---';
                 }
                 return $shop;
+            })
+            ->addColumn('customer_group', function($row){
+                $c_group = $row->hasOneCustomerGroupDescription->name;
+                return $c_group;
             })
             ->addColumn('customer_name', function($row){
                 $cname = $row->firstname.' '.$row->lastname;
@@ -90,16 +102,17 @@ class CustomerController extends Controller
                 $checkbox = '<input type="checkbox" name="del_all" class="del_all" value="'.$cid.'">';
                 return $checkbox;
             })
-            ->rawColumns(['action','date_added','status','approved','shop','customer_name','checkbox'])
+            ->rawColumns(['action','date_added','status','approved','shop','customer_group','customer_name','checkbox'])
             ->make(true);
         }
-
-        return view('admin.customers.list');
-
 
     }
 
 
+
+
+
+    // Function of Get Customer History
     function getcustomerhistory(Request $request)
     {
         $customer_id = $request->cust_id;
@@ -130,6 +143,10 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Add Customer Ban IP
     function addcustomerbanip(Request $request)
     {
         $ip = $request->ip;
@@ -146,6 +163,11 @@ class CustomerController extends Controller
 
     }
 
+
+
+
+
+    // Function of Remove Customer Ban IP
     function removecustomerbanip(Request $request)
     {
         $ip = $request->ip;
@@ -161,6 +183,10 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Get Customer Transactions
     function getcustomertransactions(Request $request)
     {
         $customer_id = $request->cust_id;
@@ -206,6 +232,11 @@ class CustomerController extends Controller
         }
     }
 
+
+
+
+
+    // Function of Get Customer Reward Points
     function getcustomerrewardpoints(Request $request)
     {
         $customer_id = $request->cust_id;
@@ -250,9 +281,14 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Add New Customer View
     public function add()
     {
-        $data['customergroups'] = CustomerGroup::select('oc_customer_group.customer_group_id','cgd.name as gname')->join('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer_group.customer_group_id')->get();
+
+        $data['customergroups'] = CustomerGroup::with(['hasOneCustomerGroupDescription'])->get();
 
         // Country
         $data['countries'] = Country::get();
@@ -261,8 +297,13 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Store Customer History
     function storecustomerhistory(Request $request)
     {
+        // Validation
         $request->validate([
             'comment' => 'required',
         ]);
@@ -277,8 +318,14 @@ class CustomerController extends Controller
 
     }
 
+
+
+
+
+    // Function of Store Customer Transaction
     function storecustomertransaction(Request $request)
     {
+        // Validation
         $request->validate([
             'trdescription' => 'required',
             'tramount' => 'required',
@@ -296,8 +343,14 @@ class CustomerController extends Controller
 
     }
 
+
+
+
+
+    // Function of Store Customer Reward Points
     function storecustomerrewardpoint(Request $request)
     {
+        // Validation
         $request->validate([
             'rdescription' => 'required',
             'rpoints' => 'required',
@@ -315,8 +368,17 @@ class CustomerController extends Controller
 
     }
 
+
+
+
+
+    // Function of Store New Customer
     public function store(Request $request)
     {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        // Validation
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
@@ -326,8 +388,9 @@ class CustomerController extends Controller
             'confirm' => 'min:6|required_with:password|same:password',
         ]);
 
+        // Store New Customer
         $customer = new Customer;
-        $customer->store_id = isset($request->store_id) ? $request->store_id : 0;
+        $customer->store_id = $current_store_id;
         $customer->firstname = isset($request->firstname) ? $request->firstname : '';
         $customer->lastname = isset($request->lastname) ? $request->lastname : '';
         $customer->email = isset($request->email) ? $request->email : '';
@@ -346,19 +409,18 @@ class CustomerController extends Controller
         $customer->token = isset($request->token) ? $request->token : '';
         $customer->date_added = date('Y-m-d');
         $customer->gender_id = isset($request->gender_id) ? $request->gender_id : 1;
-
         $customer->save();
 
 
 
-        // Customer IP
+        // Store Customer IP
         $customer_ip = new CustomerIP;
         $customer_ip->customer_id = $customer->customer_id;
         $customer_ip->ip = $_SERVER['REMOTE_ADDR'];
         $customer_ip->date_added = date('Y-m-d');
         $customer_ip->save();
 
-
+        // Store Customer Addresses
         $address = $request->address;
 
         if(!empty($address))
@@ -417,9 +479,13 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Edit Customer View
     public function edit($id)
     {
-        $data['customergroups'] = CustomerGroup::select('oc_customer_group.*','cgd.name as gname')->join('oc_customer_group_description as cgd','cgd.customer_group_id','=','oc_customer_group.customer_group_id')->get();
+        $data['customergroups'] = CustomerGroup::with(['hasOneCustomerGroupDescription'])->get();
         $data['countries'] = Country::get();
         $data['regions'] = Region::get();
         $data['customer'] = Customer::find($id);
@@ -429,10 +495,15 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Update Customer
     public function update(Request $request)
     {
         $customer_id = $request->customer_id;
 
+        // Validation
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
@@ -461,7 +532,6 @@ class CustomerController extends Controller
 
 
         $customer = Customer::find($customer_id);
-        // $customer->store_id = isset($request->store_id) ? $request->store_id : 0;
         $customer->firstname = isset($request->firstname) ? $request->firstname : '';
         $customer->lastname = isset($request->lastname) ? $request->lastname : '';
         $customer->email = isset($request->email) ? $request->email : '';
@@ -587,6 +657,10 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Delete Customer
     public function delete(Request $request)
     {
         $ids = $request['id'];
@@ -615,9 +689,12 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Delete Customer Addresses
     function delCustomerAddress(Request $request)
     {
-
         $address_id = $request->add_id;
 
         // Delete Customer Address
@@ -630,6 +707,10 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function of Get Region By Country ID
     function getRegionbyCountry(Request $request)
     {
         $country_id = $request->country_id;
@@ -664,8 +745,6 @@ class CustomerController extends Controller
             return response()->json($html);
 
        }
-
-
 
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Layout;
+use App\Models\Themes;
 use Illuminate\Http\Request;
 
 class LayoutController extends Controller
@@ -10,7 +11,8 @@ class LayoutController extends Controller
 
     public function templatesettings()
     {
-        return view('admin.settinglayouts.template_settings');
+        $data['themes'] = Themes::get();
+        return view('admin.settinglayouts.template_settings',$data);
     }
 
     public function slidersettings()
