@@ -17,7 +17,7 @@
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('customers') }}">Customers</a></li>
-                            <li class="breadcrumb-item active">Add</li>
+                            <li class="breadcrumb-item active">Insert</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -37,11 +37,11 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fas fa-pencil-alt mr-2"></i>
-                                    Add Customers
+                                    INSERT
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    <button onclick="savecustomer()" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                                    <a href="{{ route('customers') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i> Back</a>
+                                    <button onclick="savecustomer()" class="btn btn-sm btn-primary"><i class="fa fa-save"></i></button>
+                                    <a href="{{ route('customers') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}
@@ -155,7 +155,7 @@
                                                                 <label for="customergroup">Customer Group</label>
                                                                 <select name="customer_group_id" id="customergroup" class="form-control">
                                                                     @foreach ($customergroups as $group)
-                                                                        <option value="{{ $group->customer_group_id }}">{{ $group->gname }}</option>
+                                                                        <option value="{{ $group->hasOneCustomerGroupDescription->customer_group_id }}">{{ $group->hasOneCustomerGroupDescription->name }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>

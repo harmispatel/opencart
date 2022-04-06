@@ -31,11 +31,29 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
-                        <div class="card card-primary text-center">
-                            <h1>Comming Soon</h1>
+                        <div class="container">
+                            <h4>Themes</h4>
+                            <hr>
+                            <div class="row">
+                                @if (isset($themes))
+                                    @foreach ($themes as $theme)
+                                        <div class="col-md-4 mt-1 mb-3">
+                                            <div class="card h-100" style="border: 1px solid black;">
+                                                <div class="card-header bg-dark text-center pt-1 pb-0">
+                                                    <h3>{{ $theme->theme_name }}</h3>
+                                                </div>
+                                                <div class="card-body">
+                                                    <img src="{{ asset('public/admin/theme_view/'.$theme->theme_image) }}" class="w-100">
+                                                </div>
+                                                <div class="card-footer bg-dark">
+                                                    <a href="#" class="btn btn-success w-100">ACTIVE</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
-                        {{-- End Card --}}
                     </div>
                 </div>
             </div>

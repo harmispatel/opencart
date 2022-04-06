@@ -346,10 +346,17 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
     Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
+
     Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
+    Route::post('updatesociallinks', [SettingsController::class, 'updatesociallinks'])->name('updatesociallinks');
 
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
+    Route::get('addproducticon', [ProductIconsController::class, 'add'])->name('addproducticon');
+    Route::post('storeproducticons', [ProductIconsController::class, 'store'])->name('storeproducticons');
+    Route::post('deleteproducticons', [ProductIconsController::class, 'delete'])->name('deleteproducticons');
+    Route::get('editproducticons/{id}', [ProductIconsController::class, 'edit'])->name('editproducticons');
+    Route::post('updateproducticons', [ProductIconsController::class, 'update'])->name('updateproducticons');
 
     //option
     Route::get('option', [OptionController::class, 'index'])->name('option');

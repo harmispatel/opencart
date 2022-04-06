@@ -48,4 +48,31 @@ class SettingsController extends Controller
     {
         return view('admin.settings.social_links_settings');
     }
+
+    public function updatesociallinks(Request $request)
+    {
+        $current_store_id = currentStoreId();
+
+        $data['polianna_facebook_id'] = $request->polianna_facebook_id;
+        $data['polianna_twitter_username'] = $request->polianna_twitter_username;
+        $data['polianna_gplus_id'] = $request->polianna_gplus_id;
+        $data['polianna_linkedin_id'] = $request->polianna_linkedin_id;
+        $data['polianna_youtube_id'] = $request->polianna_youtube_id;
+
+        foreach($data as $key => $new)
+        {
+            $query = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+
+            if(!empty($setting_id) || $setting_id != '')
+            {
+                $social_update = Settings::find($setting_id);
+                $social_update->value = $new;
+                $social_update->update();
+            }
+        }
+
+        return redirect()->route('sociallinks')->with('success','Settings Updated..');
+
+    }
 }

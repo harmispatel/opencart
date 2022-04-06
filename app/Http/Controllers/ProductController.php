@@ -38,7 +38,10 @@ class ProductController extends Controller
 
     function bulkproducts()
     {
-        $category = Category::select('*')->get();
+        $current_store_id = currentStoreId();
+        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+            $query->where('store_id', $current_store_id);
+        })->get();
         return view('admin.product.bulkproducts', ['category' => $category]);
     }
 
@@ -311,7 +314,10 @@ class ProductController extends Controller
         $tex_class = DB::table('oc_tax_class')->select('*')->get();
         $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
         $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
-        $category = Category::select('*')->get();
+        $current_store_id = currentStoreId();
+        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+            $query->where('store_id', $current_store_id);
+        })->get();
         $product_icon = ProductIcons::select('*')->get();
         $result['manufacturer'] = $manufacturer;
         $result['category'] = $category;
@@ -412,16 +418,9 @@ class ProductController extends Controller
     {
         $category_id = $request->category_id;
 
-        // $products = Product::with(['hasOneProductDescription','hasOneProduct_to_category'=> function($q){
-        //     return $q->with(['hasOneCategory']);
-        // }])->whereHas('hasOneProduct_to_category', function($q) use($category_id) {
-        //     $q->where('category_id', $category_id);
-        // })->limit(10)->get();
-
-        // return json_encode($products);
-        // exit;
 
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->get();
+        
         $headers = ToppingSize::where('id_category', $category_id)->get();
         $head_count = count($headers) + 1;
         $html = '';
@@ -452,7 +451,7 @@ class ProductController extends Controller
             foreach ($data as $category) {
 
                 $html .= '<tr>';
-                $html .= '<td><input type="checkbox" name="del_all" class="del_all" value="' . $category->product_id . '"></td>';
+                $html .= '<td><input type="checkbox" name="del_all" id="del_all" value="' . $category->product_id . '"></td>';
                 if (!empty($category->image)) {
                     $image_path = asset('public/admin/product/' . $category->image);
                     $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
@@ -486,94 +485,105 @@ class ProductController extends Controller
 
     public function getproduct(Request $request)
     {
-        $current_store_id = currentStoreId();
+        // $category_id=$request->cat_id;
+        // $current_store_id = currentStoreId();
+        // $columns = array(
+        //     0 =>'product_id',
+        //     3 =>'name',
+        // );
 
-        $columns = array(
-            0 =>'product_id',
-            3 =>'name',
-        );
+        // // Get data
+        // $totledata = ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($query) use ($current_store_id) {
+        //     $query->where('store_id', $current_store_id);
+        // })->count();
 
-        // Get data
-        $totledata = ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($query) use ($current_store_id) {
-            $query->where('store_id', $current_store_id);
-        })->count();
-
-        $totalFiltered = $totledata;
-        $limit = $request->request->get('length');
-        $start = $request->request->get('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir = $request->input('order.0.dir');
-
-
-        if (!empty($request->input('search.value'))) {
-            $search = $request->input('search.value');
-
-            $posts =  ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->where(function ($query) use ($search) {
-                $query->where('name', 'LIKE', "%{$search}%");
-                })
-                ->whereHas('hasOneProductToStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->offset($start)->orderBy($order, $dir)->limit($limit)->get();
+        // $totalFiltered = $totledata;
+        // $limit = $request->request->get('length');
+        // $start = $request->request->get('start');
+        // $order = $columns[$request->input('order.0.column')];
+        // $dir = $request->input('order.0.dir');
 
 
-            $totalFiltered = ProductDescription::with(['hasOneStore','hasOneProductToStore'])->where(function ($query) use ($search){
-                $query->where('name','LIKE',"%{$search}%");
-            })->whereHas('hasOneProductToStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
-        } else {
-            $posts = ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($query) use ($current_store_id) {
-                $query->where('store_id', $current_store_id);
-            })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
-        }
+        // if (!empty($request->input('search.value'))) {
+        //     $search = $request->input('search.value');
 
-        $data = array();
-        $data1 = array();
-
-        if ($posts) {
-            foreach ($posts as $post) {
-                $product_id = $post->product_id;
-                // $name = isset($post->name) ? $post->name : '';
-                $status = isset($post->status) ? $post->status : '';
-                $edit_url = route('editproduct', $post->product_id);
-                // $price = isset($post->price) ? $post->price : '';
+        //     $posts =  ProductDescription::with(['hasOneProduct','hasOneProductToStore'])->where(function ($query) use ($search) {
+        //         $query->where('name', 'LIKE', "%{$search}%");
+        //         })
+        //         ->whereHas('hasOneProductToStore', function ($query) use ($current_store_id){
+        //         $query->where('store_id',$current_store_id);
+        //     })->offset($start)->orderBy($order, $dir)->limit($limit)->get();
 
 
-                $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
-                $data['product_id'] = $product_id;
-                $data['image'] = $post->image;
-                if (!empty($data['image'])) {
-                    $image_path = asset('public/admin/product/' . $data['image']);
-                    $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
-                } else {
-                    $image_path = asset('public/admin/product/no_image.jpg');
-                    $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
-                }
-                $data['name'] = $post->name;
-                $data['price'] = $post->hasOneProduct->price;
-                $data['status'] = $post->hasOneProduct->status;
+        //     $totalFiltered = ProductDescription::with(['hasOneStore','hasOneProductToStore'])->where(function ($query) use ($search){
+        //         $query->where('name','LIKE',"%{$search}%");
+        //     })->whereHas('hasOneProductToStore', function ($query) use ($current_store_id){
+        //         $query->where('store_id',$current_store_id);
+        //     })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+        // } else {
 
-                if ($status == 0) {
-                    $data['status'] ='<td>Enabled</td>';
-                } else {
-                    $data['status'] = '<td>Disabled</td>';
-                }
+        //     $posts = ProductDescription::with(['hasOneProduct','hasOneProductToStore','hasOnecategorytostore'])->whereHas('hasOneProductToStore', function ($query) use ($current_store_id) {
+        //         $query->where('store_id', $current_store_id);
+        //     })
+        //     ->orwhereHas('hasOnecategorytostore', function ($query) use ($category_id) {
+        //         $query->where('category_id', $category_id);
+        //     })
+        //     ->offset($start)->limit($limit)->orderBy($order,$dir)->get();
 
-                $data['sort_order'] = $post->hasOneProduct->sort_order;
-                $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+        //     // echo '<pre>';
+        //     // print_r($posts);
+        //     // exit();
 
-                $data1[] = $data;
-            }
-        }
+           
+        // }
 
-        $json_data = array(
-            "draw"            => intval($request->request->get('draw')),
-            "recordsTotal"    => intval($totledata),
-            "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
-            "data"            => $data1
-        );
+        // $data = array();
+        // $data1 = array();
 
-        echo json_encode($json_data);
+        // if ($posts) {
+        //     foreach ($posts as $post) {
+        //         $product_id = $post->product_id;
+        //         // $name = isset($post->name) ? $post->name : '';
+        //         $status = isset($post->status) ? $post->status : '';
+        //         $edit_url = route('editproduct', $post->product_id);
+        //         // $price = isset($post->price) ? $post->price : '';
+
+
+        //         $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
+        //         $data['product_id'] = $product_id;
+        //         $data['image'] = $post->image;
+        //         if (!empty($data['image'])) {
+        //             $image_path = asset('public/admin/product/' . $data['image']);
+        //             $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
+        //         } else {
+        //             $image_path = asset('public/admin/product/no_image.jpg');
+        //             $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
+        //         }
+        //         $data['name'] = $post->name;
+        //         $data['price'] = $post->hasOneProduct->price;
+        //         $data['status'] = $post->hasOneProduct->status;
+
+        //         if ($status == 0) {
+        //             $data['status'] ='<td>Enabled</td>';
+        //         } else {
+        //             $data['status'] = '<td>Disabled</td>';
+        //         }
+
+        //         $data['sort_order'] = $post->hasOneProduct->sort_order;
+        //         $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
+
+        //         $data1[] = $data;
+        //     }
+        // }
+
+        // $json_data = array(
+        //     "draw"            => intval($request->request->get('draw')),
+        //     "recordsTotal"    => intval($totledata),
+        //     "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
+        //     "data"            => $data1
+        // );
+         
+        // echo json_encode($json_data);
 
     }
 
@@ -631,7 +641,10 @@ class ProductController extends Controller
         $header = ToppingSize::where('id_category', $prod_id)->get();
 
         $price = ToppingProductPriceSize::where('id_product', $id)->get();
-        $category = Category::select('*')->get();
+        $current_store_id = currentStoreId();
+        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+            $query->where('store_id', $current_store_id);
+        })->get();
         $product_icon = ProductIcons::select('*')->get();
         $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $prod_id)->first();
 
@@ -707,11 +720,9 @@ class ProductController extends Controller
         // $productstore =ProductStore::find($product_id);
         // $productstore->store_id =isset($request->store_id) ? $request->store_id : 0;
         // $productstore->update();
-        $type_topping = $request->typetopping;
-        // echo '<pre>';
-        // print_r($type_topping);
-        // exit();
-        if (!empty($type_topping) || $type_topping != '') {
+        $type_topping = isset($request->typetopping) ? $request->typetopping : '';
+
+        // if (!empty($type_topping) || $type_topping != '') {
             $toppingtype = ProductToppingType::find($product_id);
             $toppingtype->typetopping =  $type_topping;
             $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
@@ -721,7 +732,7 @@ class ProductController extends Controller
             $toppingtype->renamegroup = $request->renamegroup;
             $toppingtype->topping_sort_order = $request->topping_sort_order;
             $toppingtype->update();
-        }
+        // }
 
         // $mainprice = isset($request->mainprices) ? $request->mainprices : "";
         $mainprice = $request->mainprices;
@@ -739,18 +750,19 @@ class ProductController extends Controller
                 $toppingProductPriceSize->update();
             }
         } else {
-            foreach ($mainprice as $key => $mainprices) {
-                $toppingProductPriceSize = new ToppingProductPriceSize;
-                $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->id_size = $id_size[$key];
-                $toppingProductPriceSize->id_product = $product_id;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                $toppingProductPriceSize->save();
-            }
+            // foreach ($mainprice as $key => $mainprices) {
+            //     $toppingProductPriceSize = new ToppingProductPriceSize;
+            //     $toppingProductPriceSize->price = $mainprices;
+            //     $toppingProductPriceSize->id_size = $id_size[$key];
+            //     $toppingProductPriceSize->id_product = $product_id;
+            //     $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+            //     $toppingProductPriceSize->collection_price = $collectionprice[$key];
+            //     $toppingProductPriceSize->save();
+            // }
         }
 
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");
     }
 }
+
