@@ -1,0 +1,45 @@
+$white: #fff;
+$red: #F4494E;
+$red-hover: #ec262d;
+$green: #4CD790;
+$green-hover: #23cb70;
+$brown: #BC8B5F;
+$text-color: #000000;
+$footer-text-color: #898989;
+$black: #000;
+
+$bg-color-1: rgba(76,215,144,.10);
+$bg-color-2: rgba(177,130,99,.10);
+$header-bg-color: #121013;
+$footer-bg-color: #1C1C1C;
+$footer-copyright-color: rgba(148,148,148, .12);
+
+%raleway-regular{
+  font-weight: 400;
+  font-family: 'Raleway', sans-serif;
+}
+
+%raleway-bold {
+  font-weight: 700;
+  font-family: 'Raleway', sans-serif;
+}
+
+%bitter-regular{
+  font-weight: 400;
+  font-family: 'Bitter', serif;
+}
+
+%bitter-bold {
+  font-weight: 700;
+  font-family: 'Bitter', serif;
+}
+
+%oswald-regular{
+  font-weight: 400;
+  font-family: 'Oswald', sans-serif;
+}
+
+%oswald-medium {
+  font-weight: 500;
+  font-family: 'Oswald', sans-serif;
+}

@@ -1,0 +1,167 @@
+@import "variable";
+
+@media (max-width: 1780px) {
+  .restaurant-status {
+    right: 15px;
+  }
+}
+
+@media (max-width: 1600px) {
+  .restaurant-status {
+    display: none;
+  }
+}
+
+@media (max-width: 1400px) {}
+
+@media (max-width: 1200px) {
+
+  .header {
+
+    .header-bottom {
+
+      .menu {
+        display: none;
+      }
+
+      .menu-shopping-cart {
+
+        .price-box {
+          display: none;
+        }
+      }
+
+      .open-mobile-menu {
+        display: flex;
+      }
+    }
+  }
+}
+
+@media (max-width:1024px) {}
+
+@media (max-width: 991px) {}
+
+@media (max-width: 767px) {
+
+  .header {
+    top: 20px;
+
+    .header-top {
+      display: none;
+    }
+  }
+
+  body {
+
+    &.fixed-menu {
+
+      .header {
+        top: 20px;
+      }
+    }
+  }
+
+  .home-slide {
+
+    .swiper-slide {
+      padding-top: 200px;
+
+      .title {
+        font-size: 26px;
+      }
+
+      .sub-title {
+        font-size: 36px;
+      }
+    }
+
+    .order-online {
+      top: 365px;
+      max-width: calc(100vw - 30px);
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 60px;
+      height: 60px;
+      display: none;
+
+      i{
+        height: 30px;
+        width: 30px;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .popular-foods {
+
+    .popular-foods-swiper {
+
+      .swiper-wrapper {
+        height: 320px;
+      }
+    }
+  }
+
+  .opening-hours {
+    padding-bottom: 110px;
+  }
+
+  .footer {
+
+    .info-group {
+      top: 0;
+
+      .input-group-item {
+        height: 170px;
+      }
+    }
+
+    .f-logo {
+      margin-top: 3rem;
+    }
+  }
+
+  .categories {
+
+    >.container {
+
+      p.text {
+        margin-bottom: 4rem;
+      }
+    }
+  }
+
+  .welcome {
+
+    .img-box {
+      margin-top: 3rem;
+    }
+  }
+
+  .swiper-pagination-bullet {
+    margin-bottom: 5px!important;
+  }
+}
+
+@media (max-width: 450px) {
+  .home-slide {
+
+    .order-online {
+
+      .btn__group {
+        flex-direction: column;
+
+        .btn {
+
+          &:nth-child(1) {
+            margin-right: 0;
+            margin-bottom: 1.5rem;
+          }
+        }
+      }
+    }
+  }
+}

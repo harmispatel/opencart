@@ -1,0 +1,48 @@
+$white: #fff;
+$red: #F4494E;
+$red-hover: #ec262d;
+$green: #4CD790;
+$green-hover: #23cb70;
+$yellow: #FDB932;
+$yellow-hover: #fcae15;
+$orange: #FE753E;
+$orange-hover: #f8591a;
+$brown: #BC8B5F;
+$text-color: #0F194C;
+$footer-text-color: #898989;
+$black: #000;
+$blue: #13164B;
+
+$bg-color-1: #13164B;
+$bg-color-2: #ECFAF2;
+$bg-color-3: #FFF8EA;
+$bg-color-4: #F7F9FF;
+$footer-bg-color: #13164B;
+
+$facebook-color: #1877F2;
+$twitter-color: #1DA1F2;
+$linkedin-color: #0A66C2;
+$pinterest-color: #BD081C;
+$youtube-color: #CD201F;
+$whatsapp-color: #25D366;
+$instagram-color: #E4405F;
+
+%lato-regular{
+  font-weight: 400;
+  font-family: 'Lato', sans-serif;
+}
+
+%lato-bold {
+  font-weight: 700;
+  font-family: 'Lato', sans-serif;
+}
+
+%playfair-display-regular {
+  font-weight: 400;
+  font-family: 'Playfair Display', serif;
+}
+
+%playfair-display-bold {
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}

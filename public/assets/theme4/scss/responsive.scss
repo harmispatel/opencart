@@ -1,0 +1,199 @@
+@import "variable";
+
+@media (max-width: 1600px) {
+  .photo-gallery-v4 {
+
+    .list-item {
+      left: 0;
+    }
+  }
+}
+
+@media (max-width: 1400px) {}
+
+@media (max-width: 1199px) {
+  .header-v4 {
+
+    .header-bottom {
+
+      .menu {
+        display: none;
+      }
+
+      .open-mobile-menu {
+        display: flex;
+      }
+    }
+  }
+}
+
+@media (max-width:1024px) {
+  .home-slide-v4 {
+    position: relative;
+
+    .container {
+      width: 100%;
+      padding: 0;
+      max-width: 100%;
+
+      >.row {
+        height: auto;
+        margin: 0;
+      }
+    }
+
+    .col-md-12 {
+      width: 100%;
+      padding: 0;
+    }
+
+    .__circle {
+      display: none;
+    }
+
+    .swiper {
+      height: 615px;
+      width: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .swiper-slide {
+      position: relative;
+
+      img {
+        height: 100%;
+        width: 100%;
+        border-radius: 0;
+      }
+    }
+
+    .order-online-v4 {
+      max-width: calc(100% - 90px);
+      width: 100%;
+      position: absolute;
+      z-index: 10;
+      padding: 45px;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba($white, .80);
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .who-are-we-v4 {
+    padding-bottom: 0;
+
+    .row {
+      height: auto;
+    }
+
+    .default-title-v4, p {
+      text-align: center;
+    }
+
+    .img {
+      text-align: center;
+
+      img {
+        position: relative;
+        left: initial;
+        right: initial;
+        top: initial;
+        transform: initial;
+        max-height: 500px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .header-v4 {
+
+    .header-bottom {
+
+      .__btn-group {
+        display: none;
+      }
+    }
+  }
+
+  .home-slide-v4 {
+
+    .order-online-v4 {
+      padding: 20px;
+      max-width: 100%;
+
+      .__title {
+        font-size: 46px;
+
+        span {
+          font-size: 36px;
+        }
+      }
+
+      .btn__group {
+        flex-direction: column;
+
+        .btn {
+          margin-left: 0!important;
+          margin-right: 0!important;
+
+          &:nth-child(1) {
+            margin-bottom: 2rem;
+          }
+        }
+      }
+    }
+
+    .swiper {
+      height: 700px;
+    }
+  }
+
+  .reservation-v4 {
+
+    .container {
+      max-width: 100%;
+    }
+  }
+
+  .opening-hours-v4 {
+    min-height: initial;
+    padding-top: 75px;
+    padding-bottom: 75px;
+
+    .default-title-v4 {
+      margin-left: initial;
+      top: initial;
+      text-align: center;
+    }
+
+    .__time {
+      width: initial;
+      height: initial;
+      position: relative;
+    }
+  }
+
+  .footer-v4 {
+
+    .footer-top {
+
+      .container {
+        flex-direction: column;
+        height: auto;
+        padding-top: 10px;
+        padding-bottom: 50px;
+
+        .__menu {
+          margin-bottom: 2rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 450px) {}

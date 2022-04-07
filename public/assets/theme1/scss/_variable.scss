@@ -1,0 +1,26 @@
+$white: #fff;
+$red: #F4494E;
+$red-hover: #ec262d;
+$green: #4ED58C;
+$green-hover: #23cb70;
+$orange: #FBBC42;
+$text-color:#474747;
+$black:#000;
+
+$bg-color-1: #F7F2EF;
+$bg-color-2: #EDFBF3;
+$bg-color-3: #1B1B1B;
+$footer-bg-color: #222222;
+$footer-text-color: #9b9b9b;
+
+%font-weight-regular {
+  font-weight: 400;
+}
+
+%font-weight-bold{
+  font-weight: 700;
+}
+
+%font-weight-extra-bold{
+  font-weight: 800;
+}

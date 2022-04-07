@@ -33,6 +33,9 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Auth;
 
+//frontend
+use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -165,7 +168,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
-    Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
+    Route::post('addneworders', [OrdersController::class, 'addneworde   rs'])->name('addneworders');
     Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
@@ -312,8 +315,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('freeiteminsert',[FreeItemController::class, 'freeiteminsert'])->name('freeiteminsert');
     Route::get('freeitemlist', [FreeItemController::class, 'freeitemlist'])->name('freeitemlist');
     Route::get('freeitemedit/{id}', [FreeItemController::class, 'freeitemedit'])->name('freeitemedit');
-    Route::post('freeitemdelete', [VoucherController::class, 'freeitemdelete'])->name('freeitemdelete');
+    Route::post('freeitemdelete', [FreeItemController::class, 'freeitemdelete'])->name('freeitemdelete');
     Route::post('freeitemupdate/{id}', [FreeItemController::class, 'freeitemupdate'])->name('freeitemupdate');
+
+    // Cart Rule
     Route::get('cartrule', [FreeItemController::class, 'cartrule'])->name('cartrule');
     Route::get('addfreerule', [FreeItemController::class, 'addfreerule'])->name('addfreerule');
     Route::get('editfreerule/{id}', [FreeItemController::class, 'editfreerule'])->name('editfreerule');
@@ -332,6 +337,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
     Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
     Route::get('bannerandblocks', [LayoutController::class, 'bannerandblocks'])->name('bannerandblocks');
+    Route::get('activetheme/{id}', [LayoutController::class, 'activetheme'])->name('activetheme');
 
     // Messages
     Route::get('messages', [MessageController::class, 'index'])->name('messages');
@@ -341,10 +347,17 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Settings
     Route::get('mapandcategory', [SettingsController::class, 'mapandcategory'])->name('mapandcategory');
+    Route::post('geteditregionbycountry', [SettingsController::class, 'geteditregionbycountry'])->name('geteditregionbycountry');
+    Route::post('getregionbycountry', [SettingsController::class, 'getregionbycountry'])->name('getregionbycountry');
+    Route::post('updatemapandcategory', [SettingsController::class, 'updatemapandcategory'])->name('updatemapandcategory');
+
     Route::get('shopsettings', [SettingsController::class, 'shopsettings'])->name('shopsettings');
     Route::get('appsettings', [SettingsController::class, 'appsettings'])->name('appsettings');
     Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
+
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
+
+
     Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
 
     Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
@@ -362,18 +375,16 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'index'])->name('option');
 
 
-    Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
-        \UniSharp\LaravelFilemanager\Lfm::routes();
-        // echo '<pre>';
-        // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
-        // exit();
-    });
 });
 
+Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+    // echo '<pre>';
+    // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
+    // exit();
+});
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
-Route::get('/', function () {
-    return view('frontend.pages.home');
-});
+Route::get('/', [HomeControllerFront::class, 'index']);
 

@@ -46,7 +46,15 @@
                                                     <img src="{{ asset('public/admin/theme_view/'.$theme->theme_image) }}" class="w-100">
                                                 </div>
                                                 <div class="card-footer bg-dark">
-                                                    <a href="#" class="btn btn-success w-100">ACTIVE</a>
+                                                    @php
+                                                        $theme_active = themeActive();
+                                                    @endphp
+
+                                                    @if($theme->theme_id == $theme_active)
+                                                        <button type="button" class="btn btn-secondary w-100" disabled>ACTIVATED &nbsp;<i class="fa fa-check-circle"></i></button>
+                                                    @else
+                                                        <a href="{{ route('activetheme',$theme->theme_id) }}" class="btn btn-success w-100">ACTIVE</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

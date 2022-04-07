@@ -1,0 +1,32 @@
+$white: #fff;
+$red: #F4494E;
+$red-hover: #ec262d;
+$green: #4CD790;
+$green-hover: #23cb70;
+$orange: #FDB932;
+$orange-hover: #faaa0b;
+$brown: #BC8B5F;
+$text-color: #000000;
+$footer-text-color: #898989;
+$black: #000;
+
+$bg-color-1: #F7F2EF;
+$bg-color-2: #ECFAF2;
+$bg-color-3: #F0EDF6;
+$bg-color-4: #F7F2EF;
+$footer-bg-color: #000;
+
+%open-sans-regular{
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+}
+
+%open-sans-bold {
+  font-weight: 700;
+  font-family: 'Open Sans', sans-serif;
+}
+
+%playfair-display-bold {
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}
