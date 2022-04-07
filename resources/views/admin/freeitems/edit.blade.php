@@ -2,29 +2,22 @@
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of List Reviews --}}
+{{-- Section Edit Cart Rule --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
         <section class="content-header">
             <div class="container-fluid">
-                @if (Session::has('success'))
-                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                        {{ Session::get('success') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Cart rule</h1>
+                        <h1>Cart Rules</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Cart rule</li>
+                            <li class="breadcrumb-item"><a href="{{ route('cartrule') }}">Cart Rules</a></li>
+                            <li class="breadcrumb-item active">Edit</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -33,99 +26,95 @@
         </section>
         {{-- End Header Section --}}
 
-        {{-- List Section Start --}}
+        {{-- Edit Section Start --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
                         <div class="card">
+                            {{-- Form --}}
+                            <form action="{{ url('cartruleupdate') }}" id="cartruleupdate" method="POST">
+                            {{ csrf_field() }}
+
                             {{-- Card Header --}}
-                            <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
-                                    <i class="fa fa-list pr-2"></i>
-                                    Cart rule
+                            <div class="card-header">
+                                <h3 class="card-title pt-2 m-0" style="color: black">
+                                    <i class="fa fa-pencil-alt pr-2"></i>
+                                    EDIT
                                 </h3>
-                                <div class="form-group ml-auto" style="text-align: right">
-                                    <button type="submit" form="cartruleupdate" class="btn btn-primary">Save</button>
-                                    <a href="{{ route('cartrule') }}" class="btn btn-danger">Back</a>
+                                <div class="container" style="text-align: right">
+                                    <button type="submit" class="btn btn-sm btn-primary ml-auto">
+                                        <i class="fa fa-save"></i>
+                                    </button>
+                                    <a href="{{ route('cartrule') }}" class="btn btn-sm btn-danger ml-1">
+                                        <i class="fa fa-arrow-left"></i>
+                                    </a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}
 
                             {{-- Card Body --}}
                             <div class="card-body">
-                                @if (count($errors) > 0)
-                                @if ($errors->any())
-                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        {{ 'Warning: Please check the form carefully for errors!' }}
-                                    </div>
-                                @endif
-                            @endif
-                                {{-- Table --}}
-
-                                <form action="{{ url('cartruleupdate') }}" id="cartruleupdate" method="POST">
-                                    {{ csrf_field() }}
-                                    <div class="form-group">
-                                        <label for="name">* Name</label>
-                                        <input type="name" class="form-control" value="{{ $getfreeitem->name_rule }}" id="name" name="name">
-                                        <input type="hidden" name="id" value="{{ $getfreeitem->id_rule }}">
-                                        @if ($errors->has('name'))
-                                            <div style="color: red">{{ $errors->first('name') }}</div>
-                                        @endif
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="total_above">*Free Item</label>
-                                        <div class="row">
-                                            @php
-                                                $i = 1;
-                                                $item = $getfreeitem->id_item;
-                                                $items = explode(":",$item);
-                                            @endphp
-                                            @foreach ($freeitems as $freeitem)
-                                                <div class="col-md-2 py-2">
-                                                    <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input"
-                                                            name="free_item[]" value="{{ $freeitem->id_free_item }}"
-                                                            id="free_item_{{ $i }}" {{ (in_array($freeitem->id_free_item,$items)) ? "checked" :"" }}>
-                                                        <label class="form-check-label"
-                                                            for="free_item_{{ $i }}">{{html_entity_decode($freeitem->name_item) }}</label>
-                                                    </div>
-                                                </div>
-                                                @php
-                                                    $i++
-                                                @endphp
-                                            @endforeach
+                                <div class="form-group">
+                                    <input type="hidden" name="id" value="{{ $getfreeitem->id_rule }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name"><span class="text-danger">*</span> Name</label>
+                                    <input type="name" class="form-control {{ ($errors->has('name')) ? 'is-invalid' : '' }}" id="name" name="name"  value="{{ $getfreeitem->name_rule }}">
+                                    @if ($errors->has('name'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('name') }}
                                         </div>
-                                        @if ($errors->has('free_item'))
-                                            <div style="color: red">{{ $errors->first('free_item') }}</div>
-                                        @endif
+                                    @endif
+                                </div>
+                                <div class="form-group">
+                                    <label for="total_above"><span class="text-danger">*</span> Free Item</label>
+                                    <div class="row rounded {{ ($errors->has('free_item')) ? 'is-invalid' : '' }}" style="background: rgb(236, 229, 229)">
+                                        @php
+                                            $i = 1;
+                                            $item = $getfreeitem->id_item;
+                                            $items = explode(":",$item);
+                                        @endphp
+                                        @foreach ($freeitems as $freeitem)
+                                            <div class="col-md-2 p-2">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input"
+                                                    name="free_item[]" value="{{ $freeitem->id_free_item }}" id="free_item_{{ $loop->iteration }}" {{ (in_array($freeitem->id_free_item,$items)) ? "checked" :"" }}>
+                                                    <label class="form-check-label" for="free_item_{{ $loop->iteration }}">{{html_entity_decode($freeitem->name_item) }}</label>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                    <div class="form-group">
-                                        <label for="total_above">*Total Above</label>
-                                        <input type="text" class="form-control" name="total_above" value="{{ $getfreeitem->min_total }}" id="total_above">
-                                        @if ($errors->has('total_above'))
-                                            <div style="color: red">{{ $errors->first('total_above') }}</div>
-                                        @endif
-                                    </div>
-                                </form>
-
-                                {{-- End Table --}}
+                                    @if($errors->has('free_item'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('free_item') }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="form-group">
+                                    <label for="total_above"><span class="text-danger">*</span> Total Above</label>
+                                    <input type="text" class="form-control {{ ($errors->has('total_above')) ? 'is-invalid' : '' }}" name="total_above" id="total_above" value="{{ $getfreeitem->min_total }}">
+                                    @if($errors->has('total_above'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('total_above') }}
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                             {{-- End Card Body --}}
+                            </form>
+                            {{-- End Form --}}
                         </div>
                         {{-- End Card --}}
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-
+        {{-- End Edit Section Start --}}
     </div>
 </section>
-{{-- End Section of List Manufacturers --}}
+{{-- End Section Edit Cart Rule --}}
 
 {{-- Footer Start --}}
 @include('footer')

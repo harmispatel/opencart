@@ -194,6 +194,7 @@ class ProductController extends Controller
          
             
             $product = new Product();
+            date_default_timezone_set('Asia/Kolkata');
             $product->model = isset($request->model) ? $request->model : 0;
             $product->sku = isset($request->sku) ? $request->sku : 0;
             $product->upc = isset($request->upc) ? $request->upc : 0;
@@ -205,8 +206,8 @@ class ProductController extends Controller
             $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
             $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
             $product->date_available = isset($request->date_available) ? $request->date_available : 0;
-            $product->date_added = isset($request->date_added) ? $request->date_added : 0;
-            $product->date_modified = isset($request->date_modified) ? $request->date_modified : 0;
+            $product->date_added = isset($request->date_added) ? $request->date_added : date("Y-m-d h:i:s");
+            $product->date_modified = isset($request->date_modified) ? $request->date_modified : date("Y-m-d h:i:s");
             $product->tax_class_id = isset($request->tax_class_id) ? $request->tax_class_id : 0;
             $product->price = $price;
             $product->delivery_price = isset($request->deliveryprice) ? $request->deliveryprice : 0;
@@ -339,36 +340,43 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+        $request->validate([
+            'product' => 'required',
+            'product_icons' => 'required',
+        ]);
 
         $product = new Product();
+        date_default_timezone_set('Asia/Kolkata');
         $product->model = isset($request->model) ? $request->model : 0;
-        $product->sku = isset($request->sku) ? $request->sku : 0;
-        $product->upc = isset($request->upc) ? $request->upc : 0;
-        $product->ean = isset($request->ean) ? $request->ean : 0;
-        $product->jan = isset($request->jan) ? $request->jan : 0;
-        $product->isbn = isset($request->isbn) ? $request->isbn : 0;
-        $product->mpn = isset($request->mpn) ? $request->mpn : 0;
-        $product->location = isset($request->location) ? $request->location : 0;
+        $product->sku = isset($request->sku) ? $request->sku : "";
+        $product->upc = isset($request->upc) ? $request->upc : "";
+        $product->ean = isset($request->ean) ? $request->ean : "";
+        $product->jan = isset($request->jan) ? $request->jan : "";
+        $product->isbn = isset($request->isbn) ? $request->isbn : "";
+        $product->mpn = isset($request->mpn) ? $request->mpn : "";
+        $product->location = isset($request->location) ? $request->location : "";
         $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
         $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
         $product->date_available = isset($request->date_available) ? $request->date_available : 0;
-        $product->date_added = isset($request->date_added) ? $request->date_added : 0;
-        $product->date_modified = isset($request->date_modified) ? $request->date_modified : 0;
+        $product->date_added = isset($request->date_added) ? $request->date_added : date("Y-m-d h:i:s");
+        $product->date_modified = isset($request->date_modified) ? $request->date_modified : date("Y-m-d h:i:s");
         $product->tax_class_id = isset($request->tax_class_id) ? $request->tax_class_id : 0;
         $product->price = isset($request->mainprice) ? $request->mainprice : 0;
         $product->delivery_price = isset($request->deliveryprice) ? $request->deliveryprice : 0;
         $product->collection_price = isset($request->collectionprice) ? $request->collectionprice : 0;
         $product->status = isset($request->status) ? $request->status : 0;
         $product->sort_order = isset($request->sort_order) ? $request->sort_order : 0;
-        $icon = $request['product_icons'];
-        $product_icons = implode(',', $icon);
-        $product->product_icons = isset($product_icons) ? $product_icons : 0;
-        $data = $request['order_type'];
+        if (!empty($icon = $request['product_icons'])) {
+            $product_icons = implode(',', $icon);
+            $product->product_icons = isset($product_icons) ? $product_icons : 0;
+        }
+        $data = $request->order_type;
         $order_type = implode('', $data);
         $product->order_type = isset($order_type) ? $order_type : 0;
-        $day = $request['day'];
-        $days = implode(',', $day);
-        $product->availibleday = isset($days) ? $days : 0;
+        if (!empty($day = $request['day'])) {
+            $days = implode(',', $day);
+            $product->availibleday = isset($days) ? $days : 0;
+        }
         if ($request->hasFile('image')) {
             $Image = $request->file('image');
             $filename = time() . '.' . $Image->getClientOriginalExtension();
@@ -400,7 +408,8 @@ class ProductController extends Controller
 
         $productstore = new ProductStore();
         $productstore->product_id = $product->product_id;
-        $productstore->store_id = isset($request->store_id) ? $request->store_id : 1;
+        $current_store_id = currentStoreId();
+        $productstore->store_id = $current_store_id;
         $productstore->save();
         return redirect()->route('products')->with('success', "Product Inserted Successfully..");
     }
@@ -626,7 +635,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id', $id)->first();
-
+       
         $prod_id = isset($product->category_id) ? $product->category_id : '';
 
         $header = ToppingSize::where('id_category', $prod_id)->get();
@@ -652,7 +661,7 @@ class ProductController extends Controller
     {
         $product_id = $request->product_id;
         $product = Product::find($product_id);
-     
+        date_default_timezone_set('Asia/Kolkata');
         $product->model = isset($request->model) ? $request->model : "";
         $product->model = $request->model;
         $product->sku = isset($request->sku) ? $request->sku : "";
@@ -665,8 +674,8 @@ class ProductController extends Controller
         $product->stock_status_id = isset($request->stock_status_id) ? $request->stock_status_id : 0;
         $product->manufacturer_id = isset($request->manufacturer_id) ? $request->manufacturer_id : 0;
         $product->date_available = isset($request->date_available) ? $request->date_available : 0;
-        $product->date_added = isset($request->date_added) ? $request->date_added : 0;
-        $product->date_modified = isset($request->date_modified) ? $request->date_modified : 0;
+        // $product->date_added = isset($request->date_added) ? $request->date_added : 0;
+        $product->date_modified = date("Y-m-d h:i:s");
         $product->tax_class_id = isset($request->tax_class_id) ? $request->tax_class_id : 0;
         $product->price = isset($request->mainprice) ? $request->mainprice : 0;
         $product->delivery_price = isset($request->deliveryprice) ? $request->deliveryprice : 0;

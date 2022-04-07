@@ -55,7 +55,6 @@
                                 enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
-
                                 <input type="hidden" id="product_id" value="{{ isset($product->product_id) ? $product->product_id : '' }}"
                                     name="product_id">
                                 <div class="card-body">

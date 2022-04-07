@@ -1,0 +1,14 @@
+{
+  "name": "ui",
+  "homepage": "https://github.com/fancyapps/ui",
+  "version": "4.0.11",
+  "_release": "4.0.11",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.0.11",
+    "commit": "455d664c3a09d1ae5f4302e4e2bf72a988286ef2"
+  },
+  "_source": "https://github.com/fancyapps/ui.git",
+  "_target": "^4.0.10",
+  "_originalSource": "https://github.com/fancyapps/ui.git"
+}

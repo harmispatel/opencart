@@ -17,9 +17,6 @@ class TransactionsController extends Controller
     public function getdaterange(Request $request)
     {
 
-        // SELECT count(order_id) AS order_count , SUM(order_amount) AS order_total,SUM(refunded_amount) AS refund_total FROM `customer_order` WHERE order_status = '11'  AND store_id = '12'  AND DATE(date_added) >= DATE('2020-09-16 00:00:00') AND DATE(date_added) < DATE('2020-09-18 00:00:00')
-
-
         $startdate = $request->start;
         $enddate = $request->end;
         $current_store_id = currentStoreId();

@@ -1,0 +1,84 @@
+@media (max-width: 1199px) {
+  .photo-gallery-v6 .row {
+    justify-content: center;
+  }
+  .photo-gallery-v6 .col {
+    width: 25%;
+  }
+}
+@media (max-width: 991px) {
+  .reservation-v6 .row .col {
+    width: 50%;
+    flex: initial;
+    margin-bottom: 2rem;
+  }
+  .reservation-v6 .row .col:nth-last-of-type(1) {
+    margin-bottom: 0;
+  }
+
+  .photo-gallery-v6 .col {
+    width: 33.3333333%;
+  }
+}
+@media (max-width: 767px) {
+  .header-v6 .header-center {
+    display: none;
+  }
+  .header-v6 .header-bottom .working-time {
+    display: none;
+  }
+  .header-v6 .header-bottom .open-mobile-menu {
+    display: flex;
+  }
+
+  .photo-gallery-v6 .col {
+    width: 50%;
+  }
+  .photo-gallery-v6 .item {
+    height: auto;
+  }
+  .photo-gallery-v6 .item img {
+    position: initial;
+    height: auto;
+    width: auto;
+    max-width: 100%;
+  }
+
+  .home-slide-v6 .order-online-v6 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .home-slide-v6 .order-online-v6 .btn__group {
+    flex-direction: column;
+  }
+  .home-slide-v6 .order-online-v6 .btn__group .btn:nth-child(1) {
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+  }
+  .home-slide-v6 .home-slide-v6-swiper .swiper-slide {
+    padding-top: 1rem;
+  }
+  .home-slide-v6 .home-slide-v6-swiper .swiper-slide .slide-logo {
+    display: none;
+  }
+  .home-slide-v6 .home-slide-v6-swiper .swiper-slide .__title {
+    font-size: 26px;
+  }
+}
+@media (max-width: 450px) {
+  .header-v6 .header-top .container {
+    justify-content: center;
+  }
+  .header-v6 .header-top .authentication-links {
+    display: none;
+  }
+  .header-v6 .header-bottom .restaurant-status {
+    display: none;
+  }
+
+  .reservation-v6 .row .col {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=responsive.css.map */

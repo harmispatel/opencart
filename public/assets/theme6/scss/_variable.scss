@@ -1,0 +1,24 @@
+$white: #fff;
+$white-hover: #d5d2d2;
+$red: #D91D1D;
+$red-hover: #d50a0a;
+$text-color: #443F3F;
+$p-color: #767676;
+$black: #000;
+
+$bg-color-1: #EDEDED;
+
+%raleway-light{
+  font-weight: 300;
+  font-family: 'Raleway', sans-serif;
+}
+
+%raleway-regular{
+  font-weight: 400;
+  font-family: 'Raleway', sans-serif;
+}
+
+%raleway-bold {
+  font-weight: 700;
+  font-family: 'Raleway', sans-serif;
+}

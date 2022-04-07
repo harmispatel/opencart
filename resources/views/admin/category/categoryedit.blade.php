@@ -275,7 +275,7 @@
                                                                     <tbody>
                                                                         @foreach($toppingsizes as $toppingsize)
                                                                             <tr class="size_{{ $key }}">
-                                                                                <td>{{ $toppingsize->size }}</td>
+                                                                                <td>{{ html_entity_decode($toppingsize->size) }}</td>
                                                                                 <td>
                                                                                     <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
                                                                                 </td>
@@ -294,7 +294,7 @@
                                                                     <tbody>
                                                                         @foreach($toppingsizes as $toppingsize)
                                                                             <tr class="size_{{ $key }}">
-                                                                                <td>{{ $toppingsize->size }}</td>
+                                                                                <td>{{ html_entity_decode($toppingsize->size) }}</td>
                                                                                 <td>
                                                                                     <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
                                                                                 </td>
@@ -456,7 +456,7 @@ function addgroup()
     html += '<tr><th>Size</th><th>Top Price</th></tr>';
     html += '</thead>';
     html += '<tbody>';
-    html += '@foreach($toppingsizes as $toppingsize)<tr class="size_{{ $loop->iteration }}"><td>{{ $toppingsize->size }}</td><td><input type="text" class="form-control" name="group['+group_row+'][size_val][{{ $toppingsize->id_size }}]"></td></tr>@endforeach';
+    html += '@foreach($toppingsizes as $toppingsize)<tr class="size_{{ $loop->iteration }}"><td>{{ ($toppingsize->size) }}</td><td><input type="text" class="form-control" name="group['+group_row+'][size_val][{{ $toppingsize->id_size }}]"></td></tr>@endforeach';
     html += '</tbody>';
     html += '</table>';
 

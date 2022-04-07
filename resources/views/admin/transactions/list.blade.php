@@ -111,7 +111,7 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-    
+  
     $(function() {
         
         $('input[id="daterange"]').daterangepicker({
@@ -146,6 +146,9 @@ $(document).ready(function () {
                     if (response.status == 200) {
                         $('#message').show();
                     }
+                },
+                error: function(response){
+                    $('#message').show();
                 }
             });	
         });

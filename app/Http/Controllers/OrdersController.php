@@ -132,7 +132,7 @@ class OrdersController extends Controller
                     $data['status'] = '-';
                 }
 
-                $data['total'] = $post->total;
+                $data['total'] = number_format($post->total,2);
                 $data['date_added'] = date('Y-m-d',strtotime($post->date_added));
 
                 if ($post->payment_code == "worldpayhp")
@@ -201,18 +201,6 @@ class OrdersController extends Controller
 
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders, 'ordershistory' => $ordershistory]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function ordersinsert()
     {
@@ -291,54 +279,61 @@ class OrdersController extends Controller
 
         $neworder = new Orders;
         $neworder->store_id                = isset($request->storename) ? $request->storename : "0";
-        $neworder->firstname               = isset($request->firstname) ? $request->firstname : "";
-        $neworder->lastname                = isset($request->lastname) ? $request->lastname : "";
-        $neworder->email                   = isset($request->email) ? $request->email : "";
-        $neworder->telephone               = isset($request->phone) ? $request->phone : "";
+        $neworder->invoice_prefix          = "INV-2013-00";
+        $neworder->store_name              = isset($request->store_name) ? $request->store_name : "";
+        $neworder->firstname               = $request->firstname;
+        $neworder->lastname                = $request->lastname;
+        $neworder->email                   = $request->email;
+        $neworder->telephone               = $request->phone;
         $neworder->fax                     = isset($request->fax) ? $request->fax : "";
-        $neworder->payment_firstname       = isset($request->pfirstname) ? $request->pfirstname : "";
-        $neworder->payment_lastname        = isset($request->plastname) ? $request->plastname : "";
-        $neworder->payment_company         = isset($request->pcompany) ? $request->pcompany : "";
-        $neworder->payment_company_id      = isset($request->pcompanyid) ? $request->pcompanyid : "";
+        $neworder->payment_firstname       = $request->payment_firstname;
+        $neworder->payment_lastname        = $request->payment_lastname;
+        $neworder->payment_company         = isset($request->payment_company) ? $request->payment_company : "";
+        $neworder->payment_company_id      = isset($request->payment_company_id) ? $request->payment_company_id : "";
         // $neworder->payment_tax_id          = isset($request->firstname) ? $request->firstname : "";
-        $neworder->payment_address_1       = isset($request->paddress1) ? $request->paddress1 : "";
-        $neworder->payment_address_2       = isset($request->paddress2) ? $request->paddress2 : "";
-        $neworder->payment_city            = isset($request->pcity) ? $request->pcity : "";
-        $neworder->payment_postcode        = isset($request->ppostcode) ? $request->ppostcode : "";
-        $neworder->payment_country         = isset($request->pcountry) ? $request->pcountry : "";
-        // $neworder->payment_country_id      = isset($request->pcountryid) ? $request->pcountry : "";
-        // $neworder->payment_zone            = isset($request->firstname) ? $request->firstname : "";
-        // $neworder->payment_zone_id         = isset($request->firstname) ? $request->firstname : "";
+        $neworder->payment_address_1       = $request->payment_address_1;
+        $neworder->payment_address_2       = isset($request->payment_address_2) ? $request->payment_address_2 : "";
+        $neworder->payment_city            = isset($request->payment_city) ? $request->payment_city : "";
+        $neworder->payment_postcode        = isset($request->payment_postcode) ? $request->payment_postcode : "";
+        $neworder->payment_country         = $request->payment_country_id;
+        // $neworder->payment_country      = isset($request->payment_region_id) ? $request->pcountry : "";
+        // $neworder->payment_zone            = $request->payment_region_id;
+        $neworder->payment_zone_id         = $request->payment_region_id;
         // $neworder->payment_address_format  = isset($request->firstname) ? $request->firstname : "";
         // $neworder->payment_method          = isset($request->firstname) ? $request->firstname : "";
-        $neworder->shipping_firstname      = isset($request->sfirstname) ? $request->sfirstname : "";
-        $neworder->shipping_lastname       = isset($request->slastname) ? $request->slastname : "";
-        $neworder->shipping_company        = isset($request->scompany) ? $request->scompany : "";
-        $neworder->shipping_address_1      = isset($request->saddress1) ? $request->saddress1 : "";
-        $neworder->shipping_address_2      = isset($request->saddress2) ? $request->saddress2 : "";
-        $neworder->shipping_city           = isset($request->scity) ? $request->scity : "";
-        $neworder->shipping_postcode       = isset($request->spostcode) ? $request->spostcode : "";
-        $neworder->shipping_country        = isset($request->scountry) ? $request->scountry : "";
-        $neworder->shipping_country_id     = isset($request->scountryid) ? $request->scountryid : "";
+        $neworder->shipping_firstname      = $request->shipping_firstname;
+        $neworder->shipping_lastname       = $request->shipping_lastname;
+        $neworder->shipping_company        = isset($request->shipping_company) ? $request->shipping_company : "";
+        $neworder->shipping_address_1      = $request->shipping_address_1;
+        $neworder->shipping_address_2      = isset($request->shipping_address_2) ? $request->shipping_address_2 : "";
+        $neworder->shipping_city           = $request->shipping_city;
+        $neworder->shipping_postcode       = isset($request->shipping_postcode) ? $request->shipping_postcode : "";
+        $neworder->shipping_country        = $request->shipping_country_id;
+        $neworder->shipping_country_id     = isset($request->shipping_country_id) ? $request->shipping_country_id : "";
         // $neworder->shipping_zone           = isset($request->firstname) ? $request->firstname : "";
-        // $neworder->shipping_zone_id        = isset($request->firstname) ? $request->firstname : "";
+        $neworder->shipping_zone_id        = $request->shipping_region_id;
         // $neworder->shipping_address_format = isset($request->firstname) ? $request->firstname : "";
         // $neworder->shipping_method         = isset($request->firstname) ? $request->firstname : "";
         // $neworder->shipping_code           = isset($request->firstname) ? $request->firstname : "";
-        $neworder->comment                 = isset($request->comment) ? $request->comment : "";
+        // $neworder->comment                 = isset($request->comment) ? $request->comment : "";
         // $neworder->total                   = isset($request->firstname) ? $request->firstname : "";
         // $neworder->order_status_id         = isset($request->firstname) ? $request->firstname : "";
         // $neworder->message                 = isset($request->firstname) ? $request->firstname : "";
-        $neworder->affiliate_id            = isset($request->affiliate) ? $request->affiliate : "";
+        // $neworder->affiliate_id            = isset($request->affiliate) ? $request->affiliate : "";
         // $neworder->commission           = isset($request->firstname) ? $request->firstname : "";
         // $neworder->language_id          = isset($request->firstname) ? $request->firstname : "";
         // $neworder->currency_id          = isset($request->firstname) ? $request->firstname : "";
         // $neworder->currency_code        = isset($request->firstname) ? $request->firstname : "";
         // $neworder->currency_value       = isset($request->firstname) ? $request->firstname : "";
-
+        date_default_timezone_set('Asia/Kolkata');
+        $neworder->date_added = date("Y-m-d h:i:s");
+        $neworder->date_modified = date("Y-m-d h:i:s");
+        $neworder->save();
+        // return redirect()->route('orders');
         echo '<pre>';
         print_r($neworder->toArray());
         exit();
+        
     }
 
 
@@ -375,31 +370,6 @@ class OrdersController extends Controller
             'html' => $html,
         ]);
     }
-
-
-
-
-
-
-    public function editorder()
-    {
-        return view('admin.order.edit');
-    }
-
-
-
-
-
-
-    public function updateorder()
-    {
-        return view('admin.order.update');
-    }
-
-
-
-
-
 
     public function deleteorder(Request $request)
     {
@@ -532,7 +502,7 @@ class OrdersController extends Controller
             $html .= '<td class="left">' . $order->model . '</td>';
             $html .= '<td class="right">' . $order->quantity  . '</td>';
             $html .= '<td class="right">' . $order->price  . '</td>';
-            $html .= '<td class="right">' . $order->total  . '</td>';
+            $html .= '<td class="right">' . number_format($order->total,2)  . '</td>';
             $html .= '</tr>';
         }
         // @foreach ($ordertotal as $total)

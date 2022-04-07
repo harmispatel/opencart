@@ -29,6 +29,23 @@ function gettotalip($ip)
 }
 
 
+//
+function themeActive()
+{
+    // Current Store ID
+    $current_store_id = currentStoreId();
+
+    $key = 'theme_id';
+
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    $theme_id = isset($setting->value) ? $setting->value : '';
+
+    return $theme_id;
+
+}
+
+
 // Function to Get Store Details
 function getStoreDetails($storeid,$key)
 {

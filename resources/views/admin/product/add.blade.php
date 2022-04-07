@@ -43,7 +43,7 @@
                                 <div class="container" style="text-align: right;">
                                     <button type="submit" form="catform" class="btn btn-sm btn-primary"><i
                                             class="fa fa-save"></i> Save</button>
-                                    <a href="{{ route('category') }}" class="btn btn-sm btn-danger"><i
+                                    <a href="{{ route('products') }}" class="btn btn-sm btn-danger"><i
                                             class="fa fa-arrow-left">
                                             Back</i></a>
                                 </div>
@@ -99,46 +99,56 @@
 
                                             <div class="mb-3">
                                                 <label for="product" class="form-label"><span class="text-danger">*</span>Product Name</label>
-                                                <input type="text" class="form-control" name="product" id="product"
-                                                    placeholder="Product Name" required>
+                                                <input type="text" class="form-control {{ ($errors->has('product')) ? 'is-invalid' : '' }}" value="{{ old('product') }}" name="product" id="product"
+                                                    placeholder="Product Name">
+                                                    @if($errors->has('product'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('product') }}
+                                                    </div>
+                                                @endif
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="category" class="form-label"><span class="text-danger">*</span>Product Icon</label>
-                                                <select name="product_icons[]" id="product_icon" class="form-control"
-                                                    multiple required>
+                                                <select name="product_icons[]"  id="product_icon" class="form-control {{ ($errors->has('product_icons')) ? 'is-invalid' : '' }}"
+                                                    multiple>
                                                     @foreach ($result['product_icon'] as $productIcon)
                                                         <option value="{{ $productIcon->id }}">
                                                             {{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>
+                                                @if($errors->has('product_icons'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('product_icons') }}
+                                                </div>
+                                            @endif
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="day" class="form-label">select the days
+                                                <label class="form-label">select the days
                                                     availiable</label>
                                                 <div>
-                                                    <input type="checkbox" name="day[]" value="2"> Mon
+                                                    <input type="checkbox" name="day[]" value="2" checked> Mon
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="3"> Tue
+                                                    <input type="checkbox" name="day[]" value="3" checked> Tue
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="4"> Wed
+                                                    <input type="checkbox" name="day[]" value="4" checked> Wed
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="5"> Thu
+                                                    <input type="checkbox" name="day[]" value="5" checked> Thu
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="6"> Fir
+                                                    <input type="checkbox" name="day[]" value="6" checked> Fir
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="7"> Sat
+                                                    <input type="checkbox" name="day[]" value="7" checked> Sat
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="8"> Sun
+                                                    <input type="checkbox" name="day[]" value="8" checked> Sun
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="order" class="form-label">Order Type</label>
+                                                <label class="form-label">Order Type</label>
                                                 <div>
-                                                    <input type="radio" name="order_type[]" value="both"> Both
+                                                    <input type="radio" name="order_type[]" value="both"  checked> Both
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                     <input type="radio" name="order_type[]" value="delivery"> Delivery
                                                     Only &nbsp;&nbsp;&nbsp;&nbsp;
@@ -151,18 +161,18 @@
                                             <div class="form-floating">
                                                 <label for="summernote" class="form-label">Description</label>
                                                 <textarea class="form-control" placeholder="Leave a comment here"
-                                                    name="description" id="summernote" style="height: 200px"></textarea>
+                                                    name="description" id="summernote" style="height: 200px">{{ old('description') }}</textarea>
                                             </div>
 
                                             <div class="class=mb-3">
                                                 <label for="price" class="form-label">Price</label>
                                                 <div>
                                                     Main Price <input type="text" name="mainprice"
-                                                        class="form-control">
+                                                        class="form-control" value="{{ old('mainprice') }}">
                                                     Delivery Price <input type="text" name="deliveryprice"
-                                                        class="form-control">
+                                                        class="form-control" value="{{ old('deliveryprice') }}">
                                                     Collection Price <input type="text" name="collectionprice"
-                                                        class="form-control">
+                                                        class="form-control" value="{{ old('collectionprice') }}">
                                                 </div>
                                             </div>
 

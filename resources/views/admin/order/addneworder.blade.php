@@ -103,10 +103,10 @@
                                                                     <option value="{{ $store->store_id }}" {{ (old('storename') == $store->store_id) ? 'selected' : '' }}>
                                                                         {{ htmlspecialchars_decode($store->name) }}
                                                                     </option>
-                                                                @endforeach
-                                                            </select>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group" id="#search">
                                                             <label for="cname">Customer</label>
