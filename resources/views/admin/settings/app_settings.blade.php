@@ -31,6 +31,15 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="card-header" style="background: #f9f3f3">
+                            <h3 class="card-title pt-2" style="color: black">
+                                <i class="fas fa-cog mr-2"></i>
+                                SETTINGS
+                            </h3>
+                            <div class="container" style="text-align: right">
+                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i></button>
+                            </div>
+                        </div>
                         {{-- Card Start --}}
                         <div class="card card-primary">
                             <div class="accordion" id="accordionExample">
@@ -118,16 +127,16 @@
 @include('footer')
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js"></script> --}}
 <script>
-    $(function () {
-      // Basic instantiation:
-      $('#demo-input').colorpicker();
+    // $(function () {
+    //   // Basic instantiation:
+    //   $('#demo-input').colorpicker();
       
-      // Example using an event, to change the color of the #demo div background:
-      $('#demo-input').on('colorpickerChange', function(event) {
-        $('#demo').css('background-color', event.color.toString());
-      });
-    });
+    //   // Example using an event, to change the color of the #demo div background:
+    //   $('#demo-input').on('colorpickerChange', function(event) {
+    //     $('#demo').css('background-color', event.color.toString());
+    //   });
+    // });
   </script>
 {{-- </script> --}}
