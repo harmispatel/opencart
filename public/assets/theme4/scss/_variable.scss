@@ -1,0 +1,41 @@
+$white: #fff;
+$red: #F4494E;
+$red-hover: #ec262d;
+$green: #4CD790;
+$green-hover: #23cb70;
+$orange: #FDB932;
+$orange-hover: #faaa0b;
+$brown: #BC8B5F;
+$purple: #6D009D;
+$purple-hover: #4b006c;
+$text-color: #0B1C4D;
+$footer-text-color: #fff;
+$black: #000;
+
+$header-top-color: #252228;
+$header-bottom-color: #121013;
+$bg-color-1: #F7F9FF;
+$bg-color-2: #F0EDF6;
+$bg-color-3: rgba(#FDB932, .10);
+$bg-color-4: #ECFAF2;
+$footer-bg-color: #121013;
+
+%open-sans-regular{
+  font-weight: 400;
+  font-family: 'Open Sans', sans-serif;
+}
+
+%open-sans-bold {
+  font-weight: 700;
+  font-family: 'Open Sans', sans-serif;
+}
+
+%playfair-display-regular {
+  font-weight: 400;
+  font-family: 'Playfair Display', serif;
+}
+
+%playfair-display-bold {
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}

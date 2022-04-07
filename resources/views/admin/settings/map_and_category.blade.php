@@ -1,18 +1,77 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+{{-- CUSTOM CSS --}}
 <style>
     /* Custom Radio Button */
-    .radio {
+    .enable_booking_module
+    {
         display: none;
     }
-
-    .radio:checked+label {
+    .enable_booking_module:checked+label
+    {
         background: dimgrey !important;
         color: #fff;
     }
 
+
+    .sms_notification_status
+    {
+        display: none;
+    }
+    .sms_notification_status:checked+label
+    {
+        background: dimgrey !important;
+        color: #fff;
+    }
+
+
+    .enable_ajax_checkout
+    {
+        display: none;
+    }
+    .enable_ajax_checkout:checked+label
+    {
+        background: dimgrey !important;
+        color: #fff;
+    }
+
+
+    .enable_notify_email
+    {
+        display: none;
+    }
+    .enable_notify_email:checked+label
+    {
+        background: dimgrey !important;
+        color: #fff;
+    }
+
+    .enable_res_api
+    {
+        display: none;
+    }
+    .enable_res_api:checked+label
+    {
+        background: dimgrey !important;
+        color: #fff;
+    }
+
+
+    .enable_msg_api
+    {
+        display: none;
+    }
+    .enable_msg_api:checked+label
+    {
+        background: dimgrey !important;
+        color: #fff;
+    }
 </style>
+{{-- END CUSTOM CSS --}}
 
 {{-- Section of List Map and Category Settings --}}
 <section>
@@ -44,330 +103,411 @@
                     <div class="col-md-12">
                         {{-- Card Start --}}
                         <div class="card">
-                            {{-- Card Header --}}
-                            {{-- <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2" style="color: black">
-                                    <i class="fa fa-list pr-2"></i>
-                                    Cart Rule
-                                </h3>
+                            {{-- Form --}}
+                            <form action="{{ route('updatemapandcategory') }}" method="POST" enctype="multipart/form-data">
+                                {{ csrf_field() }}
 
-                                <div class="container" style="text-align: right">
-                                    @if (check_user_role(71) == 1)
-                                        <a href="{{ route('addfreerule') }}"
-                                            class="btn btn-sm btn-primary ml-auto px-1">Insert</a>
-                                    @endif
+                                    {{-- Card Header --}}
+                                    <div class="card-header" style="background: #f6f6f6">
+                                        <h3 class="card-title pt-2" style="color: black">
+                                            <i class="fa fa-cog pr-2"></i>
+                                            SETTINGS
+                                        </h3>
 
-                                    @if (check_user_role(73) == 1)
-                                        <a href="#"
-                                            class="btn btn-sm btn-danger ml-auto px-1 deletesellected">Delete</a>
-                                    @endif
-                                </div>
-                            </div> --}}
-                            {{-- End Card Header --}}
-
-                            {{-- Card Body --}}
-                            <div class="card-body">
-                                {{-- Table --}}
-                                    {{-- Alert Message Div --}}
-                                    <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                        style="display: none" role="alert">
-                                        <p id="success-message" class="mb-0"></p>
-                                        <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <div class="container" style="text-align: right">
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-save"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    {{-- End Alert Message Div --}}
+                                {{-- End Card Header --}}
 
-                                    <form>
-                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                            <li class="nav-item">
-                                              <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
-                                            </li>
-                                            <li class="nav-item">
-                                              <a class="nav-link" id="notification-tab" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="false">Notification</a>
-                                            </li>
-                                            <li class="nav-item">
-                                              <a class="nav-link" id="suspend-maintenance-tab" data-toggle="tab" href="#suspend-maintenance" role="tab" aria-controls="suspend-maintenance" aria-selected="false">Suspend / Maintenance Mode</a>
-                                            </li>
-                                          </ul>
-                                          <div class="tab-content" id="myTabContent">
-                                            <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
-                                                <div class="form-group pt-2">
-                                                    <label for="webaddress">* Website Address:</label>
-                                                    <input type="text" class="form-control" id="webaddress" name="webaddress" value="" aria-describedby="emailHelp">
-                                                    <small class="form-text text-muted">Include the full URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/ <br><br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.</small>
-                                                  </div>
-                                            <div class="form-group">
-                                                <label for="webaddress" style="width: 100px">Use SSL:</label>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="ssl" id="sslyes" value="1">
-                                                    <label class="form-check-label" for="sslyes">Yes</label>
-                                                  </div>
-                                                  <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="ssl" id="sslno" value="2">
-                                                    <label class="form-check-label" for="sslno">No</label>
-                                                  </div>
-                                                  <small class="form-text text-muted">To use SSL check with your host if a SSL certificate is installed.</small>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="sslurl">SSL URL:</label>
-                                                <input type="text" class="form-control" id="sslurl" name="sslurl" value="" aria-describedby="emailHelp">
-                                                <small class="form-text text-muted">SSL URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/ <br><br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.</small>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="shop_name">* Shop Name:</label>
-                                                <input type="text" class="form-control" id="shop_name" name="shop_name" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="owner_name">* Shop Owner Name:</label>
-                                                <input type="text" class="form-control" id="owner_name" name="owner_name" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="address">* Address:</label>
-                                                <textarea class="form-control" id="address" name="address" rows="3"></textarea>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="region">Region:</label>
-                                                <select class="form-control" id="region" name="region">
-                                                    <option>Default select</option>
-                                                  </select>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="post_code">Post code:</label>
-                                                <input type="text" class="form-control" id="post_code" name="post_code" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="country">Country:</label>
-                                                <select class="form-control" id="country" name="country">
-                                                    <option>Default select</option>
-                                                  </select>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="gmap">Google Maps:</label>
-                                                <input type="text" class="form-control" id="gmap" name="gmap" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="gsiteurl">Google Sitemap URL:</label>
-                                                <input type="text" class="form-control" id="gsiteurl" name="gsiteurl" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="telephone_1">* Telephone 1:</label>
-                                                <input type="text" class="form-control" id="telephone_1" name="telephone_1" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="telephone_1">* Telephone 2:</label>
-                                                <input type="text" class="form-control" id="telephone_2" name="telephone_2" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="language">Language:</label>
-                                                <select class="form-control" id="language" name="language">
-                                                    <option>Default select</option>
-                                                  </select>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="currency">Currency:</label>
-                                                <select class="form-control" id="currency" name="currency">
-                                                    <option>Default select</option>
-                                                  </select>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="title">* Title:</label>
-                                                <input type="text" class="form-control" id="title" name="title" value="">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="meta_description">Meta Tag Description:</label>
-                                                <textarea class="form-control" id="meta_description" name="meta_description" rows="3"></textarea>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="logo">Logo:</label>
-                                                <input type="file" class="form-control-file" name="logo" id="logo">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="icon">Logo:</label>
-                                                <input type="file" class="form-control-file" name="icon" id="icon">
-                                                <small class="form-text text-muted">The icon should be a PNG that is 16px x 16px.</small>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="google_captcha">Google ReCaptcha:</label>
-                                                <select class="form-control" id="google_captcha" name="google_captcha">
-                                                    <option>Default select</option>
-                                                  </select>
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="file_url">File Directory URL:</label>
-                                                <input type="text" class="form-control" id="file_url" name="file_url" value="/">
-                                              </div>
-                                              <div class="form-group">
-                                                <label for="service_charge" style="width: 150px">Service Charges:</label>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="service" id="s_chargey" value="1">
-                                                    <label class="form-check-label" for="s_chargey">Yes</label>
-                                                  </div>
-                                                  <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="service" id="s_chargen" value="2">
-                                                    <label class="form-check-label" for="s_chargen">No</label>
-                                                  </div>
-                                                <input type="text" class="form-control" id="service_charge" name="service_charge" value="">
-                                              </div>                                           
+                                {{-- Card Body --}}
+                                <div class="card-body">
+                                    {{-- Tabs Link --}}
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                        <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab" aria-controls="general" aria-selected="true">General</a>
+                                        </li>
+                                        <li class="nav-item">
+                                        <a class="nav-link" id="notification-tab" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="false">Notification</a>
+                                        </li>
+                                        <li class="nav-item">
+                                        <a class="nav-link" id="suspend-maintenance-tab" data-toggle="tab" href="#suspend-maintenance" role="tab" aria-controls="suspend-maintenance" aria-selected="false">Suspend / Maintenance Mode</a>
+                                        </li>
+                                    </ul>
+                                    {{-- End Tabs Link --}}
 
-                                              </div>
-                                            <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
-                                                <div class="form-group">
-                                                    <label for="email">* E-Mail:</label>
-                                                    <input type="text" class="form-control" id="email" name="email" value="">
-                                                  </div>
-                                                  <h4 class="text-success" style="border-bottom: dotted black 1px">SMS NOTTIFICATION</h4>
-                                                  <div class="form-group">
-                                                    <label for="sms_url">SMS API URL</label>
-                                                    <input type="text" class="form-control" id="sms_url" name="sms_url" value="">
-                                                    <small>[PhoneNumber] = Notification Number [SenderId] : Order Id [Store Message] = Message Content</small>
-                                                  </div>
-                                                  <div class="btn-group">
-                                                    <label for="sms_url" style="width: 198px">SMS Notification</label>
-                                                    <input type="radio" class="radio" id="enable" name="on_off" value="1"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enable">Enable</label>
-                                                    <input type="radio" class="radio" id="disable" name="on_off" value="0"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disable">Disable</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sms_time">SMS Notification Time [Min]</label>
-                                                    <input class="form-control" type="number" id="sms_time" name="sms_time"/>
-                                                    <small>0 for instant SMS Order Notification</small>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sms_number">Notification Number</label>
-                                                    <input class="form-control" type="number" id="sms_number" name="sms_number"/>
-                                                </div>
-                                                <h4 class="text-success" style="border-bottom: dotted black 1px">PRINTER CONFIG</h4>
-                                                <div class="form-group">
-                                                    <label style="width: 198px">Notification Number</label>0
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="account">Account</label>
-                                                    <input class="form-control" type="text" id="account" name="account" rows="3"/>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="password">password</label>
-                                                    <input class="form-control" type="password" id="password" name="password" rows="3"/>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                    <label style="width: 100%; max-width: 198px">Feed url</label><span>http://www.highworthkebab.co.uk/index.php?route=module/printer/request&a=0&u=highworthkebab&p=wTcSFE@42Wq</span>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                    <label style="width: 100%; max-width: 198px">Callback url</label><span>http://www.highworthkebab.co.uk/index.php?route=module/printer/callback&a=0&o=?&ak=?&m=?&dt=?&u=highworthkebab&p=wTcSFE@42Wq</span>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                    <label style="width: 100%; max-width: 198px">API Feed url</label><span>http://www.highworthkebab.co.uk/index.php?route=module/notification/feedapi&id=0&u=highworthkebab&p=wTcSFE@42Wq</span>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                    <label style="width: 100%; max-width: 198px">Order API Callback url</label><span>http://www.highworthkebab.co.uk/index.php?route=module/notification/callback&id=0&oid=?&ost=?&m=?&ot=?&u=highworthkebab&p=wTcSFE@42Wq</span>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                    <label style="width: 100%; max-width: 198px">Reservation API Callback url</label><span>http://www.highworthkebab.co.uk/index.php?route=module/notification/callback&id=0&rid=?&rst=?&m=?&u=highworthkebab&p=wTcSFE@42Wq</span>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                    <label style="width: 100%; max-width: 198px">Message API Callback url</label><span>http://www.highworthkebab.co.uk/index.php?route=module/notification/callback&id=0&mid=?&mst=?&m=?&u=highworthkebab&p=wTcSFE@42Wq</span>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                <div class="btn-group">
-                                                    <label style="width: 198px">Enable Ajax Checkout</label>
-                                                    <input type="radio" class="radio" id="enableajax" name="ajax_checkout" value="1"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enableajax">Enable</label>
-                                                    <input type="radio" class="radio" id="disableajax" name="ajax_checkout" value="0"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disableajax">Disable</label>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                <div class="btn-group">
-                                                    <label style="width: 198px">Enable Notification Email</label>
-                                                    <input type="radio" class="radio" id="enableemail" name="notification_email" value="1"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enableemail">Enable</label>
-                                                    <input type="radio" class="radio" id="disableemail" name="notification_email" value="0"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disableemail">Disable</label>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                <div class="btn-group">
-                                                    <label style="width: 198px">Enable Reservation API</label>
-                                                    <input type="radio" class="radio" id="enableReservation" name="reservation_api" value="1"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enableReservation">Enable</label>
-                                                    <input type="radio" class="radio" id="disableReservation" name="reservation_api" value="0"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disableReservation">Disable</label>
-                                                </div>
-                                                </div>
-                                                <div class="form-group">
-                                                <div class="btn-group">
-                                                    <label style="width: 198px">Enable Message API</label>
-                                                    <input type="radio" class="radio" id="enableMessage" name="message_api" value="1"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(117,185,54);color:white;" for="enableMessage">Enable</label>
-                                                    <input type="radio" class="radio" id="disableMessage" name="message_api" value="0"/>
-                                                    <label class="btn btn-sm" style=" background: rgb(178,178,178);color: white;" for="disableMessage">Disable</label>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane fade" id="suspend-maintenance" role="tabpanel" aria-labelledby="suspend-maintenance-tab">
-                                                <div class="form-group">
-                                                    <div class="btn-group">
-                                                        <label style="width: 198px">Suspend Permanently</label>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="1">
-                                                        </div>  
+                                    {{-- Tabs Content --}}
+                                    <div class="tab-content" id="myTabContent">
+
+                                        {{-- General Tab --}}
+                                        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> Website Address:</label>
+                                                        <input type="text" class="form-control" id="config_url" name="config_url" value="{{ $map_category['config_url'] }}">
+                                                        <code class="text-muted">
+                                                            Include the full URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/. <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
+                                                        </code>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Use SSL</label>
+                                                        <div class="form-control">
+                                                            <input type="radio" name="config_secure" value="1" {{ ($map_category['config_secure'] == 1) ? 'checked' : '' }}>
+                                                            <label class="form-check-label">Yes</label>
+                                                            <input type="radio" name="config_secure" value="0" {{ ($map_category['config_secure'] == 0) ? 'checked' : '' }}>
+                                                            <label class="form-check-label">No</label>
+                                                        </div>
+                                                        <code class="text-muted">
+                                                            To use SSL check with your host if a SSL certificate is installed.
+                                                        </code>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>SSL URL</label>
+                                                        <input type="text" class="form-control" id="config_ssl" name="config_ssl" value="{{ $map_category['config_ssl'] }}">
+                                                        <code class="text-muted">
+                                                            SSL URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/ <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
+                                                        </code>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> Shop Name</label>
+                                                        <input type="text" class="form-control" id="config_name" name="config_name" value="{{ $map_category['config_name'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> Shop Owner Name</label>
+                                                        <input type="text" class="form-control" id="config_owner" name="config_owner" value="{{ $map_category['config_owner'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> Address</label>
+                                                        <textarea class="form-control" id="config_address" name="config_address" rows="3">{{ $map_category['config_address'] }}</textarea>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="zone_id" id="zone_id" value="{{ $map_category['config_zone_id'] }}">
+                                                        <label>Region</label>
+                                                        <select class="form-control" id="config_zone_id" name="config_zone_id">
+
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Post code</label>
+                                                        <input type="text" class="form-control" id="map_post_code" name="map_post_code" value="{{ $map_category['map_post_code'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Country</label>
+                                                        <select class="form-control" id="config_country_id" name="config_country_id" onchange="region()">
+                                                            @foreach ($countries as $country)
+                                                                <option value="{{ $country->country_id }}" {{ ($map_category['config_country_id'] == $country->country_id) ? 'selected' : '' }}>{{ $country->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Google Maps</label>
+                                                        <input type="text" class="form-control" id="map_ifram" name="map_ifram" value="{{ $map_category['map_ifram'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Google Sitemap URL</label>
+                                                        <input type="text" class="form-control" id="sitemap_url" name="sitemap_url" value="{{ $map_category['sitemap_url'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> Telephone 1</label>
+                                                        <input type="text" class="form-control" id="config_telephone" name="config_telephone" value="{{ $map_category['config_telephone'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Telephone 2</label>
+                                                        <input type="text" class="form-control" id="config_fax" name="config_fax" value="{{ $map_category['config_fax'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Language</label>
+                                                        <select class="form-control" id="config_language" name="config_language">
+                                                            @foreach ($language as $lang)
+                                                                <option value="{{ $lang->code }}" {{ ($map_category['config_language'] == $lang->code) ? 'selected' : '' }}>{{ $lang->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Currency</label>
+                                                        <select class="form-control" id="config_currency" name="config_currency">
+                                                            @foreach ($currency as $curr)
+                                                                <option value="{{ $curr->code }}" {{ ($map_category['config_currency'] == $curr->code) ? 'selected' : '' }}>{{ $curr->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> Title</label>
+                                                        <input type="text" class="form-control" id="config_title" name="config_title" value="{{ $map_category['config_title'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Meta Tag Description</label>
+                                                        <textarea class="form-control" id="config_meta_description" name="config_meta_description" rows="3">{{ $map_category['config_meta_description'] }}</textarea>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Logo</label>
+                                                        <input type="file" class="form-control p-1" name="config_logo" id="config_logo">
+                                                        @if(!empty($map_category['config_logo']) || $map_category['config_logo'] != '')
+                                                            <img src="{{ $map_category['config_logo'] }}" width="60">
+                                                        @else
+                                                            Not Found
+                                                        @endif
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Icon</label>
+                                                        <input type="file" class="form-control p-1" name="config_icon" id="config_icon">
+                                                        <code class="text-muted">
+                                                            The icon should be a PNG that is 16px x 16px.
+                                                        </code><br>
+                                                        @if(!empty($map_category['config_icon']) || $map_category['config_icon'] != '')
+                                                            <img src="{{ $map_category['config_icon'] }}" width="60">
+                                                        @else
+                                                            Not Found
+                                                        @endif
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Google ReCaptcha</label>
+                                                        <select class="form-control" id="grecaptcha" name="grecaptcha">
+                                                            <option value="1" {{ ($map_category['grecaptcha'] == 1) ? 'selected' : '' }}>Enable</option>
+                                                            <option value="0" {{ ($map_category['grecaptcha'] == 0) ? 'selected' : '' }}>Disable</option>
+                                                        </select>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Booking Module</label><br>
+                                                        <div class="btn-group">
+                                                            <input type="radio" class="enable_booking_module" id="enable_booking_module1" name="enable_booking_module" value="1" {{ ($map_category['enable_booking_module'] == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: green;color:white;" for="enable_booking_module1">Enable</label>
+
+                                                            <input type="radio" class="enable_booking_module" id="enable_booking_module2" name="enable_booking_module" value="0" {{ ($map_category['enable_booking_module'] == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: red;color: white;" for="enable_booking_module2">Disable</label>
+                                                         </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>File Directory URL</label>
+                                                        <input type="text" class="form-control" id="file_directory_url" name="file_directory_url" value="{{ $map_category['file_directory_url'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label class="mr-3">Service Charges</label>
+                                                        <input type="radio" name="service_charge_type" value="1" {{ ($map_category['service_charge_type'] == 1) ? 'checked' : '' }}>
+                                                        <label>Yes</label>
+                                                        <input type="radio" name="service_charge_type" value="2" {{ ($map_category['service_charge_type'] == 2) ? 'checked' : '' }}>
+                                                        <label>No</label>
+                                                        <input type="text" class="form-control" id="service_charge" name="service_charge" value="{{ $map_category['service_charge'] }}">
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="btn-group">
-                                                        <label style="width: 198px">Suspend</label>
-                                                        <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="suspend" id="Suspend1" value="1">
-                                                            <label class="form-check-label" for="Suspend1">Web</label>
-                                                          </div>
-                                                          <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="suspend" id="Suspend2" value="2">
-                                                            <label class="form-check-label" for="Suspend2">App</label>
-                                                          </div>
-                                                          <div class="form-check form-check-inline">
-                                                            <input class="form-check-input" type="radio" name="suspend" id="Suspend3" value="3">
-                                                            <label class="form-check-label" for="Suspend3">Both</label>
-                                                          </div>
+                                            </div>
+                                        </div>
+                                        {{-- End General Tab --}}
+
+                                        {{-- Notification Tab --}}
+                                        <div class="tab-pane fade" id="notification" role="tabpanel" aria-labelledby="notification-tab">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label><span class="text-danger">*</span> E-Mail</label>
+                                                        <input type="text" class="form-control" id="config_email" name="config_email" value="{{ $map_category['config_email'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <h4 class="text-warning" style="border-bottom: dotted black 1px">SMS NOTTIFICATION</h4>
+                                                    <div class="form-group">
+                                                        <label>SMS API URL</label>
+                                                        <input type="text" class="form-control" id="sms_api_url" name="sms_api_url" value="{{ $map_category['sms_api_url'] }}">
+                                                        <code class="text-muted">[PhoneNumber] = Notification Number [SenderId] : Order Id [Store Message] = Message Content</code>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>SMS NOTIFICATION</label><br>
+                                                        <div class="btn-group">
+                                                            <input type="radio" class="sms_notification_status" id="sms_notification_status1" name="sms_notification_status" value="1" {{ ($map_category['sms_notification_status'] == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: green;color:white;" for="sms_notification_status1">Enable</label>
+
+                                                            <input type="radio" class="sms_notification_status" id="sms_notification_status2" name="sms_notification_status" value="0" {{ ($map_category['sms_notification_status'] == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: red;color: white;" for="sms_notification_status2">Disable</label>
+                                                         </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>SMS Notification Time [MIN]</label>
+                                                        <input class="form-control" type="number" id="sms_notification_time" name="sms_notification_time" value="{{ $map_category['sms_notification_time'] }}"/>
+                                                        <code class="text-muted">0 for instant SMS Order Notification</code>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Notification Number</label>
+                                                        <input class="form-control" type="number" id="sms_notification_number" name="sms_notification_number" value="{{ $map_category['sms_notification_number'] }}"/>
+                                                    </div>
+                                                    <hr><br>
+                                                    <h4 class="text-warning" style="border-bottom: dotted black 1px">PRINTER CONFIG</h4>
+                                                    <div class="form-group">
+                                                        <label class="mr-4">Restaurant ID</label>
+                                                        @php
+                                                            echo $current_store_id = currentStoreId();
+                                                        @endphp
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Account</label>
+                                                        <input class="form-control" type="text" id="config_account_printer" name="config_account_printer" value="{{ $map_category['config_account_printer'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Password</label>
+                                                        <input class="form-control" type="text" id="config_password_printer" name="config_password_printer" value="{{ $map_category['config_password_printer'] }}">
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Feed url</label><br>
+                                                        <span>''</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Callback url</label><br>
+                                                        <span>''</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>API Feed url</label><br>
+                                                        <span>''</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Order API Callback url</label><br>
+                                                        <span>''</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Reservation API Callback url</label><br>
+                                                        <span>''</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Message API Callback url</label><br>
+                                                        <span>''</span>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>ENABLE AJAX CHECKOUT</label><br>
+                                                        <div class="btn-group">
+                                                            <input type="radio" class="enable_ajax_checkout" id="enable_ajax_checkout1" name="enable_ajax_checkout" value="1" {{ ($map_category['enable_ajax_checkout'] == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: green;color:white;" for="enable_ajax_checkout1">Enable</label>
+
+                                                            <input type="radio" class="enable_ajax_checkout" id="enable_ajax_checkout2" name="enable_ajax_checkout" value="0" {{ ($map_category['enable_ajax_checkout'] == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: red;color: white;" for="enable_ajax_checkout2">Disable</label>
+                                                         </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>ENABLE NOTIFICATION E-MAIL</label><br>
+                                                        <div class="btn-group">
+                                                            <input type="radio" class="enable_notify_email" id="enable_notify_email1" name="enable_notify_email" value="1" {{ ($map_category['enable_notify_email'] == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: green;color:white;" for="enable_notify_email1">Enable</label>
+
+                                                            <input type="radio" class="enable_notify_email" id="enable_notify_email2" name="enable_notify_email" value="0" {{ ($map_category['enable_notify_email'] == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: red;color: white;" for="enable_notify_email2">Disable</label>
+                                                         </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>ENABLE RESERVATION API</label><br>
+                                                        <div class="btn-group">
+                                                            <input type="radio" class="enable_res_api" id="enable_res_api1" name="enable_res_api" value="1" {{ ($map_category['enable_res_api'] == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: green;color:white;" for="enable_res_api1">Enable</label>
+
+                                                            <input type="radio" class="enable_res_api" id="enable_res_api2" name="enable_res_api" value="0" {{ ($map_category['enable_res_api'] == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: red;color: white;" for="enable_res_api2">Disable</label>
+                                                         </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>ENABLE MESSAGE API</label><br>
+                                                        <div class="btn-group">
+                                                            <input type="radio" class="enable_msg_api" id="enable_msg_api1" name="enable_msg_api" value="1" {{ ($map_category['enable_msg_api'] == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: green;color:white;" for="enable_msg_api1">Enable</label>
+
+                                                            <input type="radio" class="enable_msg_api" id="enable_msg_api2" name="enable_msg_api" value="0" {{ ($map_category['enable_msg_api'] == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: red;color: white;" for="enable_msg_api2">Disable</label>
+                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="suspend_time">Suspend_Time</label>
-                                                    <input class="form-control" type="date" id="suspend_time" name="suspend_time"/>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="sicon">Icon</label>
-                                                    <input type="file" class="form-control-file" id="sicon" name="sicon">
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label for="title">Title</label>
-                                                    <input class="form-control" type="text" id="title" name="title" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="description">Description</label>
-                                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                        {{-- End Notification Tab --}}
+
+                                        {{-- Suspend Tab --}}
+                                        <div class="tab-pane fade" id="suspend-maintenance" role="tabpanel" aria-labelledby="suspend-maintenance-tab">
+                                            <div class="row mt-4">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Suspend Permanently</label><br>
+                                                        <input type="checkbox" name="suspend_permanently" id="suspend_permanently" value="yes" {{ ($map_category['suspend_permanently'] == 'yes') ? 'checked' : '' }}>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Suspend</label><br>
+                                                        <div class="form-control">
+                                                            <input type="radio" name="suspend_for" value="web" {{ ($map_category['suspend_for'] == 'web') ? 'checked' : '' }}>
+                                                            <label>Web</label>
+                                                            <input type="radio" name="suspend_for" value="app" {{ ($map_category['suspend_for'] == 'app') ? 'checked' : '' }}>
+                                                            <label>App</label>
+                                                            <input type="radio" name="suspend_for" value="both" {{ ($map_category['suspend_for'] == 'both') ? 'checked' : '' }}>
+                                                            <label>Both</label>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Suspend for Time</label>
+                                                        <input class="form-control" type="date" id="suspend_time" name="suspend_time" value="{{ date('Y-m-d',strtotime($map_category['suspend_time'])) }}"/>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Icon</label>
+                                                        <input type="file" class="form-control p-1" id="suspend_logo" name="suspend_logo">
+                                                        @if(!empty($map_category['suspend_logo']) || $map_category['suspend_logo'] != '')
+                                                            <img src="{{ $map_category['suspend_logo'] }}" width="60">
+                                                        @else
+                                                            Not Found
+                                                        @endif
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Title</label>
+                                                        <input class="form-control" type="text" id="suspend_title" name="suspend_title" value="{{ $map_category['suspend_title'] }}"/>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Description</label>
+                                                        <textarea class="form-control" id="suspend_description" name="suspend_description" rows="3">{{ $map_category['suspend_description'] }}</textarea>
+                                                    </div>
                                                 </div>
                                             </div>
-                                          </div>
-                                          </div>
-                                    </form>
-                                    
-                                {{-- End Table --}}
-                            </div>
-                            {{-- End Card Body --}}
+                                        </div>
+                                        {{-- End Suspend Tab --}}
+                                    </div>
+                                    {{-- End Tabs Content --}}
+                                </div>
+                                {{-- End Card Body --}}
+                            </form>
+                            {{-- End Form --}}
                         </div>
                         {{-- End Card --}}
                     </div>
@@ -387,6 +527,45 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
+
+    $(document).ready(function()
+    {
+        // Get Edited Region By Country ID
+        var country_id = $('#config_country_id').val();
+        var edit_zone_id = $('#zone_id').val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('geteditregionbycountry') }}",
+            data: {'country_id':country_id,"_token": "{{ csrf_token() }}",'edit_zone_id':edit_zone_id},
+            dataType: "json",
+            success: function (response) {
+                $('#config_zone_id').text('');
+                $('#config_zone_id').append(response);
+            }
+        });
+        // End Get Edited Region By Country ID
+
+    });
+
+
+    // Get Region By Country ID
+    function region(row_id)
+    {
+        var country_id = $('#config_country_id :selected').val();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('getregionbycountry') }}",
+            data: {'country_id':country_id,"_token": "{{ csrf_token() }}",},
+            dataType: "json",
+            success: function (response) {
+                $('#config_zone_id').text('');
+                $('#config_zone_id').append(response);
+            }
+        });
+
+    }
+    // End Get Region By Country ID
 
 
 </script>

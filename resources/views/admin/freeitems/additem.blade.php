@@ -1,11 +1,9 @@
+{{-- Header --}}
 @include('header')
-
-<link rel="stylesheet" href="sweetalert2.min.css">
-<link rel="stylesheet" type="text/css"
-    href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" />
+{{-- Footer --}}
 
 
-{{-- Section of List Category --}}
+{{-- Section of Add Free Item --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -13,73 +11,77 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Add Free item</h1>
+                        <h1>Free Items</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('voucherlist') }}">Voucher List</a></li>
-                            <li class="breadcrumb-item active">Gift Voucher</li>
+                            <li class="breadcrumb-item"><a href="{{ route('freeitemlist') }}">Free Items</a></li>
+                            <li class="breadcrumb-item active">Insert</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
-
-                </div>
-                <div class="card-header d-flex p-2" style="background: #f6f6f6">
-                    <h3 class="card-title pt-2 m-0" style="color: black">
-                        <i class="fas fa-pencil-alt"></i>
-                        Add Item
-                    </h3>
-                    <div class="form-group ml-auto">
-                        <button type="submit" form="voucherform" class="btn btn-primary">Save</button>
-                        <a href="{{ route('freeitemlist') }}" class="btn btn-danger">Back</a>
-                    </div>
                 </div>
             </div>
         </section>
         {{-- End Header Section --}}
 
-        {{-- List Section Start --}}
+        {{-- Add Section Start --}}
         <section class="content">
-            @if (count($errors) > 0)
-            @if ($errors->any())
-            <div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                {{ "Warning: Please check the form carefully for errors!" }}
-            </div>
-            @endif
-            @endif
-            <form action="{{ route('freeiteminsert') }}" id="voucherform" method="POST" >
-                {{ @csrf_field() }}
-                <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        {{-- Card --}}
+                        <div class="card">
+                            {{-- Form --}}
+                            <form action="{{ route('freeiteminsert') }}" id="voucherform" method="POST" >
+                            {{ @csrf_field() }}
 
-                   
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel"
-                            aria-labelledby="nav-customer-tab">                                         
-                         
-                            <div class="form-group">
-                                <label for="name"> * Name Item:</label>
-                                <input class="form-control" name="name_item" id="name" value="" type="text"
-                                    placeholder="Item name">
-                                @if ($errors->has('name_item'))
-                                <div style="color: red">{{ $errors->first('name_item') }}</div>
-                                @endif
-                            </div>
-                        
-                          <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+                                {{-- Card Header --}}
+                                <div class="card-header">
+                                    <h3 class="card-title pt-2 m-0" style="color: black">
+                                        <i class="fa fa-pencil-alt pr-2"></i>
+                                        INSERT
+                                    </h3>
+                                    <div class="container" style="text-align: right">
+                                        <button type="submit" class="btn btn-sm btn-primary ml-auto">
+                                            <i class="fa fa-save"></i>
+                                        </button>
+                                        <a href="{{ route('freeitemlist') }}" class="btn btn-sm btn-danger ml-1">
+                                            <i class="fa fa-arrow-left"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                {{-- End Card Header --}}
+
+                                {{-- Card Body --}}
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="name"><span class="text-danger">*</span> Item Name</label>
+                                        <input class="form-control {{ ($errors->has('name_item')) ? 'is-invalid' : '' }}" name="name_item" id="name" value="" type="text" placeholder="Item name">
+                                        @if($errors->has('name_item'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('name_item') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{-- End Card Body --}}
+                            </form>
+                            {{-- End Form --}}
                         </div>
+                        {{-- End Card --}}
                     </div>
                 </div>
-
-            </form>
-
+            </div>
         </section>
-        {{-- End Form Section --}}
-
+        {{-- End Add Section Start --}}
     </div>
 </section>
-{{-- End Section of Add Category --}}
+{{-- End Section of Add Free Item --}}
+
+
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}

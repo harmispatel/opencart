@@ -1,0 +1,100 @@
+@media (max-width: 1780px) {
+  .restaurant-status {
+    right: 15px;
+  }
+}
+@media (max-width: 1600px) {
+  .restaurant-status {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  .header .header-bottom .menu {
+    display: none;
+  }
+  .header .header-bottom .menu-shopping-cart .price-box {
+    display: none;
+  }
+  .header .header-bottom .open-mobile-menu {
+    display: flex;
+  }
+}
+@media (max-width: 767px) {
+  .header {
+    top: 20px;
+  }
+  .header .header-top {
+    display: none;
+  }
+
+  body.fixed-menu .header {
+    top: 20px;
+  }
+
+  .home-slide .swiper-slide {
+    padding-top: 200px;
+  }
+  .home-slide .swiper-slide .title {
+    font-size: 26px;
+  }
+  .home-slide .swiper-slide .sub-title {
+    font-size: 36px;
+  }
+  .home-slide .order-online {
+    top: 365px;
+    max-width: calc(100vw - 30px);
+  }
+  .home-slide .swiper-button-next,
+.home-slide .swiper-button-prev {
+    width: 60px;
+    height: 60px;
+    display: none;
+  }
+  .home-slide .swiper-button-next i,
+.home-slide .swiper-button-prev i {
+    height: 30px;
+    width: 30px;
+    font-size: 18px;
+  }
+
+  .popular-foods .popular-foods-swiper .swiper-wrapper {
+    height: 320px;
+  }
+
+  .opening-hours {
+    padding-bottom: 110px;
+  }
+
+  .footer .info-group {
+    top: 0;
+  }
+  .footer .info-group .input-group-item {
+    height: 170px;
+  }
+  .footer .f-logo {
+    margin-top: 3rem;
+  }
+
+  .categories > .container p.text {
+    margin-bottom: 4rem;
+  }
+
+  .welcome .img-box {
+    margin-top: 3rem;
+  }
+
+  .swiper-pagination-bullet {
+    margin-bottom: 5px !important;
+  }
+}
+@media (max-width: 450px) {
+  .home-slide .order-online .btn__group {
+    flex-direction: column;
+  }
+  .home-slide .order-online .btn__group .btn:nth-child(1) {
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/*# sourceMappingURL=responsive.css.map */

@@ -11,13 +11,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Free Item</h1>
+                        <h1>Free Items</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Free Item </li>
+                            <li class="breadcrumb-item active">Free Items</li>
                         </ol>
                     </div>
                     {{-- End Breadcumb --}}
@@ -38,7 +38,7 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
-                                    Free Item List
+                                    Free Items List
                                 </h3>
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(55) == 1)
@@ -75,23 +75,26 @@
                                         <tr>
                                             <th><input type="checkbox" name="del_all" id="delall"></th>
                                             <th>Name</th>
-                                       
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- End Table Head --}} 
+                                    {{-- End Table Head --}}
 
                                     {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
                                         @foreach ($data as $voucher)
                                         <tr>
                                                 <td><input type="checkbox" name="del_all" class="del_all" value="{{ $voucher->id_free_item  }}"></td>
-                                              
+
                                                 <td>{{ html_entity_decode($voucher->name_item) }}</td>
-                                               
-                                                <td>[<a href=" {{ url('freeitemedit/'.$voucher->id_free_item ) }}">Edit</a>]</td>
+
+                                                <td>
+                                                    <a href=" {{ url('freeitemedit/'.$voucher->id_free_item ) }}" class="btn btn-sm btn-primary">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </td>
                                                 {{-- <td>[<a href="voucherthemeedit/{{$voucher->voucher_theme_id }}">Edit</a>]</td> --}}
-                                                
+
                                             </tr>
                                             @endforeach
                                     </tbody>
@@ -107,7 +110,7 @@
             </div>
         </section>
         {{-- End Form Section --}}
-             
+
 
     </div>
 </section>

@@ -73,7 +73,7 @@
                                             <div class="form-group">
                                                 <label>Enable Delivery/Collection</label>
                                                 <div class="form-control">
-                                                    <input type="radio" name="enable_delivery" value="delivery">
+                                                    <input type="radio" name="enable_delivery" value="delivery" onclick="">
                                                     <label class="mr-4">Delivery</label>
                                                     <input type="radio" name="enable_delivery" value="collection">
                                                     <label class="mr-4">Collection</label>

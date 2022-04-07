@@ -1,0 +1,226 @@
+@media (max-width: 1400px) {
+  .home-slide-v5 .container-fluid {
+    margin-bottom: 5rem;
+    padding-top: 90px;
+    width: 100%;
+  }
+
+  .home-slide-category .swiper-slide-item .img {
+    width: 150px;
+    height: 150px;
+  }
+  .home-slide-category .swiper-slide-item .__text-content {
+    padding-left: 100px;
+    padding-right: 30px;
+    width: calc(100% - 75px);
+  }
+}
+@media (max-width: 1199px) {
+  .home-slide-category {
+    width: 100%;
+  }
+  .home-slide-category .swiper-button-next {
+    right: 15px;
+  }
+  .home-slide-category .swiper-button-prev {
+    left: 15px;
+  }
+  .home-slide-category .swiper {
+    width: calc(100% - 200px);
+  }
+}
+@media (max-width: 1024px) {
+  .home-slide-v5 .container-fluid > .row {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column-reverse;
+  }
+  .home-slide-v5 .container-fluid > .row .col-md-6 {
+    width: 100%;
+  }
+  .home-slide-v5 .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .home-slide-v5 .order-online-v5 {
+    max-width: 100%;
+  }
+}
+@media (max-width: 991px) {
+  .header-v5 .header-bottom .menu {
+    display: none;
+  }
+  .header-v5 .header-bottom .open-mobile-menu {
+    display: flex;
+  }
+
+  .photo-gallery-v5 {
+    text-align: center;
+  }
+  .photo-gallery-v5 p {
+    margin-bottom: 2rem !important;
+  }
+  .photo-gallery-v5 .user-comments-v5-swiper-info {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0;
+    margin-bottom: 4rem;
+  }
+}
+@media (max-width: 767px) {
+  .header-v5 .header-top .working-time {
+    display: none;
+  }
+
+  .home-slide-category .swiper {
+    width: calc(100% - 30px);
+  }
+  .home-slide-category div[class^=swiper-button] {
+    top: initial;
+    margin-top: initial;
+    width: 40px;
+    height: 40px;
+    bottom: -60px;
+  }
+  .home-slide-category div[class^=swiper-button] i {
+    font-size: 20px;
+  }
+  .home-slide-category .swiper-button-prev {
+    left: 50%;
+    margin-left: -60px;
+  }
+  .home-slide-category .swiper-button-next {
+    right: 50%;
+    margin-right: -60px;
+  }
+
+  .best-categories-v5 .best-categories-v5-swiper-control {
+    flex-direction: column;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide {
+    margin-bottom: 25px;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .__empty {
+    display: none;
+  }
+
+  .popular-foods-v5 .popular-foods-v5-swiper-control {
+    flex-direction: column;
+  }
+  .popular-foods-v5 .popular-foods-v5-swiper-control .number-of-slide {
+    margin-bottom: 25px;
+  }
+  .popular-foods-v5 .popular-foods-v5-swiper-control .__empty {
+    display: none;
+  }
+
+  .user-comments-v5 .user-comments-v5-swiper-control {
+    flex-direction: column;
+  }
+  .user-comments-v5 .user-comments-v5-swiper-control .number-of-slide {
+    margin-bottom: 25px;
+  }
+
+  .opening-hours-v5 .__info .__container {
+    max-width: 100%;
+  }
+  .opening-hours-v5 .__info .__time-title {
+    display: block;
+    font-size: 46px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) {
+    flex-direction: column;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) strong {
+    margin-right: 0;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box {
+    display: flex;
+    align-items: center;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__time-divier {
+    width: 30px;
+    height: 10px;
+    background-color: #fff;
+    margin-left: 20px;
+    margin-right: 10px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__left-time span, .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__right-time span {
+    font-size: 100px;
+    letter-spacing: -10px;
+    line-height: 100px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__left-time span:nth-child(2), .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__right-time span:nth-child(2) {
+    font-size: 48px;
+    line-height: 48px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(2) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(2) span {
+    font-size: 22px;
+    color: #fff;
+  }
+
+  .footer-v5 {
+    text-align: center;
+  }
+  .footer-v5 .__social-links {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .who-are-we-v5 .col-sm-12 {
+    text-align: center;
+  }
+  .who-are-we-v5 img {
+    margin-bottom: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media (max-width: 450px) {
+  .header-v5 .header-top .container {
+    justify-content: center;
+  }
+  .header-v5 .header-top .authentication-links {
+    display: none;
+  }
+  .header-v5 .header-bottom .restaurant-status {
+    display: none;
+  }
+
+  .home-slide-v5 .order-online-v5 .btn__group {
+    flex-direction: column;
+  }
+  .home-slide-v5 .order-online-v5 .btn__group .btn:nth-child(1) {
+    margin-right: 0;
+    margin-bottom: 25px;
+  }
+  .home-slide-v5 .happy-customers {
+    width: 100%;
+    position: relative;
+    top: 0;
+    margin-bottom: 45px;
+  }
+
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide .__text {
+    width: 77px;
+  }
+
+  .popular-foods-v5 .popular-foods-v5-swiper-control .number-of-slide .__text {
+    width: 77px;
+  }
+
+  .user-comments-v5 .user-comments-v5-swiper-control .number-of-slide .__text {
+    width: 77px;
+  }
+}
+
+/*# sourceMappingURL=responsive.css.map */
