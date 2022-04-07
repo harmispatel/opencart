@@ -277,7 +277,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Loyalty
     Route::get('loyalty', [LoyaltyController::class, 'index'])->name('loyalty');
-
+    Route::post('storeloyalty', [LoyaltyController::class, 'store'])->name('storeloyalty');
+    
     // Coupons
     Route::get('coupons', [CouponController::class, 'index'])->name('coupons');
     Route::get('addcoupon', [CouponController::class, 'addcoupon'])->name('addcoupon');
