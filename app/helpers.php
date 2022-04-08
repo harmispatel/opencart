@@ -54,14 +54,12 @@ function getStoreDetails($storeid,$key)
     return $new;
 }
 
-// function getLoyaltyDetails($storeid,$key){
-//     $gedetails = Settings::where('key',$key)->where('store_id',$storeid)->first();
-//      echo '<pre>';
-//      print_r($gedetails);
-//      exit();
-//     $value = isset($gedetails->value) ? $gedetails->value : '';
-//     return $value;
-// }
+function getLoyaltyDetails($storeid,$key){
+     
+    $gedetails = Settings::where('store_id',$storeid)->where('key',$key)->first();
+    $value = isset($gedetails->value) ? $gedetails->value : '';
+    return $value;
+}
 
 function currentStoreId()
 {
