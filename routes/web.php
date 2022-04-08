@@ -355,6 +355,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('shopsettings', [SettingsController::class, 'shopsettings'])->name('shopsettings');
     Route::get('appsettings', [SettingsController::class, 'appsettings'])->name('appsettings');
     Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
+    Route::post('openclosetimeset', [SettingsController::class, 'openclosetimeset'])->name('openclosetimeset');
 
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
 

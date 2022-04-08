@@ -302,4 +302,19 @@ class SettingsController extends Controller
 
         return redirect()->route('sociallinks')->with('success', 'Settings Updated..');
     }
+
+    // openclosetimeset
+    public function openclosetimeset(Request $request)
+    {
+        $business = $request['bussines'];
+        $bissinessdays = serialize($request['bussines']);
+        $closingdate = serialize($request->closingdate);
+        $delivery = serialize($request['delivery']);
+        $collection = serialize($request['collection']);
+        echo '<pre>';
+        // print_r($bissinessdays);
+        // print_r($closingdate);
+        print_r($collection);
+        exit();
+    }
 }
