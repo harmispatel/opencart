@@ -281,7 +281,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Loyalty
     Route::get('loyalty', [LoyaltyController::class, 'index'])->name('loyalty');
     Route::post('storeloyalty', [LoyaltyController::class, 'store'])->name('storeloyalty');
-    
+
     // Coupons
     Route::get('coupons', [CouponController::class, 'index'])->name('coupons');
     Route::get('addcoupon', [CouponController::class, 'addcoupon'])->name('addcoupon');
@@ -351,17 +351,14 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('geteditregionbycountry', [SettingsController::class, 'geteditregionbycountry'])->name('geteditregionbycountry');
     Route::post('getregionbycountry', [SettingsController::class, 'getregionbycountry'])->name('getregionbycountry');
     Route::post('updatemapandcategory', [SettingsController::class, 'updatemapandcategory'])->name('updatemapandcategory');
-
     Route::get('shopsettings', [SettingsController::class, 'shopsettings'])->name('shopsettings');
     Route::get('appsettings', [SettingsController::class, 'appsettings'])->name('appsettings');
+    Route::post('updateappsettings', [SettingsController::class, 'updateappsettings'])->name('updateappsettings');
     Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
     Route::post('openclosetimeset', [SettingsController::class, 'openclosetimeset'])->name('openclosetimeset');
 
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
-
-
     Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
-
     Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
     Route::post('updatesociallinks', [SettingsController::class, 'updatesociallinks'])->name('updatesociallinks');
 
@@ -381,9 +378,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
     \UniSharp\LaravelFilemanager\Lfm::routes();
-    // echo '<pre>';
-    // print_r(\UniSharp\LaravelFilemanager\Lfm::routes());
-    // exit();
 });
 
 // ---------------------------------------------------------------------------------------------

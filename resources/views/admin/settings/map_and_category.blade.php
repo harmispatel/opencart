@@ -79,6 +79,14 @@
         {{-- Header Section --}}
         <section class="content-header">
             <div class="container-fluid">
+                @if(Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Map and Category Settings</h1>
@@ -145,6 +153,9 @@
                                         <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="setting" value="map">
+                                                    </div>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Website Address:</label>
                                                         <input type="text" class="form-control" id="config_url" name="config_url" value="{{ $map_category['config_url'] }}">
@@ -309,9 +320,9 @@
                                                     <div class="form-group">
                                                         <label class="mr-3">Service Charges</label>
                                                         <input type="radio" name="service_charge_type" value="1" {{ ($map_category['service_charge_type'] == 1) ? 'checked' : '' }}>
-                                                        <label>Yes</label>
+                                                        <label>Fixed</label>
                                                         <input type="radio" name="service_charge_type" value="2" {{ ($map_category['service_charge_type'] == 2) ? 'checked' : '' }}>
-                                                        <label>No</label>
+                                                        <label>Percentage</label>
                                                         <input type="text" class="form-control" id="service_charge" name="service_charge" value="{{ $map_category['service_charge'] }}">
                                                     </div>
                                                 </div>
@@ -521,9 +532,12 @@
 {{-- End Section of List Map and Category Settings --}}
 
 
-
+{{-- Footer--}}
 @include('footer')
+{{-- End Footer --}}
 
+
+{{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -569,3 +583,4 @@
 
 
 </script>
+{{-- END SCRIPT --}}

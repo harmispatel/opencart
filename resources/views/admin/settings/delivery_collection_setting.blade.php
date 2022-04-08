@@ -73,11 +73,13 @@
                                             <div class="form-group">
                                                 <label>Enable Delivery/Collection</label>
                                                 <div class="form-control">
-                                                    <input type="radio" name="enable_delivery" value="delivery" onclick="">
+                                                    <input type="radio" name="enable_delivery" value="delivery" onclick="$('.delivery-sec').hide(); $('.food_form_settt, .delivery-options').show(); $('.'+$('input[name=delivery_type]').val()).show();">
                                                     <label class="mr-4">Delivery</label>
-                                                    <input type="radio" name="enable_delivery" value="collection">
+
+                                                    <input type="radio" name="enable_delivery" value="collection" onclick="$('#deliveryenable, .food_form_settt, .delivery-options, .delivery-sec, .distance-calculation, .mileage-sec').hide();">
                                                     <label class="mr-4">Collection</label>
-                                                    <input type="radio" name="enable_delivery" value="both">
+
+                                                    <input type="radio" name="enable_delivery" value="both" onclick="$('.delivery-sec').hide(); $('.food_form_settt, .delivery-options').show(); $('.'+$('input[name=delivery_type]').val()).show();">
                                                     <label>Both</label>
                                                 </div>
                                             </div>
