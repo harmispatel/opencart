@@ -46,6 +46,28 @@ function themeActive()
 }
 
 
+function themeID($url)
+{
+    $storeDetails = Store::where('url',$url)->orWhere('ssl',$url)->first();
+    $store_id = isset($storeDetails->store_id) ? $storeDetails->store_id : '';
+
+    $key = 'theme_id';
+    $setting = Settings::select('value')->where('store_id',$store_id)->where('key',$key)->first();
+    $theme_id = isset($setting->value) ? $setting->value : '';
+
+    if(session()->has('theme_id'))
+    {
+        session()->forget('theme_id');
+        session()->put('theme_id', $theme_id);
+    }
+    else
+    {
+        session()->put('theme_id', $theme_id);
+    }
+
+}
+
+
 // Function to Get Store Details
 function getStoreDetails($storeid,$key)
 {
