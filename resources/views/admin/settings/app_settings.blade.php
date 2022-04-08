@@ -1,9 +1,25 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
+{{-- Custom CSS --}}
+<style>
+    [data-toggle="collapse"] .fa:before
+    {
+        content: "\f13a";
+    }
 
-{{-- Section of List App Settings --}}
+    [data-toggle="collapse"].collapsed .fa:before
+    {
+        content: "\f139";
+    }
+</style>
+{{-- End Custom CSS --}}
+
+{{-- Section of App Settings --}}
 <section>
     <div class="content-wrapper">
         {{-- Header Section --}}
@@ -29,114 +45,114 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if(Session::has('success'))
+                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                        {{ Session::get('success') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card-header" style="background: #f9f3f3">
-                            <h3 class="card-title pt-2" style="color: black">
-                                <i class="fas fa-cog mr-2"></i>
-                                SETTINGS
-                            </h3>
-                            <div class="container" style="text-align: right">
-                                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i></button>
-                            </div>
-                        </div>
-                        {{-- Card Start --}}
-                        <div class="card card-primary">
-                            <div class="accordion" id="accordionExample">
-                                <div class="card" style="margin-bottom: 0 !important;">
-                                    <div class="card-header" id="headingOne" style="background-color: #1BBC9B">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link btn-block text-bold text-white text-left"
-                                                type="button" data-toggle="collapse" data-target="#collapseOne"
-                                                aria-expanded="true" aria-controls="collapseOne"><i
-                                                    class="pr-2 nav-icon fa fa-th"></i>
-                                                APP SETTINGS
-                                            </button>
-                                        </h2>
+                        {{-- Card --}}
+                        <div class="card">
+                            {{-- Form --}}
+                            <form action="{{ route('updateappsettings') }}" method="POST" enctype="multipart/form-data">
+                                {{ @csrf_field() }}
+                                {{-- Card Header --}}
+                                <div class="card-header" style="background: #1bbc9b ">
+                                    <h3 class="card-title pt-2 text-white">
+                                        <i class="fas fa-cog mr-2"></i>
+                                        SETTINGS
+                                    </h3>
+                                    <div class="container" style="text-align: right">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll" aria-expanded="true" aria-controls="coll" onclick="changeAngle()">
+                                            <i class="fa" aria-hidden="true"></i>
+                                        </button>
                                     </div>
+                                </div>
+                                {{-- End Card Header --}}
 
-                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                        data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <form>
+                                <div class="collapse show" id="coll">
+                                    {{-- Card Body --}}
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label for="manubackground">Menu Background Image</label>
-                                                    <input type="file" class="form-control" id="manubackground">
+                                                    <label for="android_app_id">Android App ID</label>
+                                                    <input type="text" name="android_app_id" id="android_app_id" class="form-control" value="{{ $map_category['android_app_id'] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="androidappid">Android App Id</label>
-                                                    <input type="text" class="form-control" id="androidappid"
-                                                        placeholder="Android App Id">
+                                                    <label for="apple_app_id">Apple App ID</label>
+                                                    <input type="text" name="apple_app_id" id="apple_app_id" class="form-control" value="{{ $map_category['apple_app_id'] }}">
                                                 </div>
-                                                <div class="btn-group my-2">
-                                                    <label style="width: 150px">App Available</label>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="inlineCheckbox1" value="1">
+                                                <div class="form-group">
+                                                    <label for="app_available">App Available</label>
+                                                    <div class="form-control">
+                                                        <input type="checkbox" name="app_available" id="app_available" value="0" {{ ($map_category['app_available'] == 0) ? 'checked' : '' }}>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="appleappid">Apple App Id</label>
-                                                    <input type="text" class="form-control" id="appleappid"
-                                                        placeholder="Apple App Id">
+                                                    <label for="home_bg_color">Home Background Color</label>
+                                                    <input type="color" name="home_bg_color" id="home_bg_color" class="form-control" value="{{ $map_category['home_bg_color'] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="homebgcolor">Home Background Color</label>
-                                                    <input type="color" class="form-control" id="homebgcolor">
+                                                    <label for="menu_background_image">Menu Background Image</label>
+                                                    <input type="file" name="menu_background_image" id="menu_background_image" class="form-control p-1 mb-1">
+                                                    @if(!empty($map_category['menu_background_image']) || $map_category['menu_background_image'] != '')
+                                                        <img src="{{ $map_category['menu_background_image'] }}" width="70">
+                                                    @else
+                                                        Image Not Selected
+                                                    @endif
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="logobgcolor">Logo Background Color</label>
-                                                    <input type="color" class="form-control" id="logobgcolor">
+                                                    <label for="polianna_logo_bg_color">Logo Background Color</label>
+                                                    <input type="color" name="polianna_logo_bg_color" id="polianna_logo_bg_color" class="form-control" value="{{ $map_category['polianna_logo_bg_color'] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="menucolor">Menu Cross Color</label>
-                                                    <input type="color" class="form-control" id="menucolor">
+                                                    <label for="polianna_menu_cross_color">Menu Cross Color</label>
+                                                    <input type="color" name="polianna_menu_cross_color" id="polianna_menu_cross_color" class="form-control" value="{{ $map_category['polianna_menu_cross_color'] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="notificationcolor">Notification Background Color</label>
-                                                    <input type="color" class="form-control" id="notificationcolor">
+                                                    <label for="polianna_notification_bg_color">Notification Background Color</label>
+                                                    <input type="color" name="polianna_notification_bg_color" id="polianna_notification_bg_color" class="form-control" value="{{ $map_category['polianna_notification_bg_color'] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="notificationforncolor">Notification Font Color</label>
-                                                    <input type="color" class="form-control" id="notificationforncolor"">
+                                                    <label for="polianna_notification_font_color">Notification Font Color</label>
+                                                    <input type="color" name="polianna_notification_font_color" id="polianna_notification_font_color" class="form-control" value="{{ $map_category['polianna_notification_font_color'] }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="titleurl">Title Image Url</label>
-                                                    <input type="file" class="form-control" id="titleurl">
+                                                    <label for="title_image_url">Title Image URL</label>
+                                                    <input type="text" name="title_image_url" id="title_image_url" class="form-control p-1 mb-2" value="{{ $map_category['title_image_url'] }}">
+                                                    @if(!empty($map_category['title_image_url']) || $map_category['title_image_url'] != '')
+                                                        <img src="{{ $map_category['title_image_url'] }}" width="70">
+                                                    @else
+                                                        Url Not Available
+                                                    @endif
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
+                                    {{-- End Card Body --}}
                                 </div>
-                            </div>
+                            </form>
+                            {{-- End Form --}}
                         </div>
+                        {{-- End Card --}}
                     </div>
-                    {{-- End Card --}}
                 </div>
             </div>
+        </section>
+        {{-- End Form Section --}}
     </div>
 </section>
-{{-- End Form Section --}}
-
-</div>
-</section>
-{{-- End Section of List App Settings --}}
+{{-- End Section of App Settings --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
-
-
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js"></script> --}}
-<script>
-    // $(function () {
-    //   // Basic instantiation:
-    //   $('#demo-input').colorpicker();
-      
-    //   // Example using an event, to change the color of the #demo div background:
-    //   $('#demo-input').on('colorpickerChange', function(event) {
-    //     $('#demo').css('background-color', event.color.toString());
-    //   });
-    // });
-  </script>
-{{-- </script> --}}
+{{-- End Footer --}}

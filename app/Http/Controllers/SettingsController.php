@@ -189,6 +189,11 @@ class SettingsController extends Controller
 
     public function updatemapandcategory(Request $request)
     {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $setting_page = $request->setting;
+
         $data['config_url'] = isset($request->config_url) ? $request->config_url : '';
         $data['config_secure'] = isset($request->config_secure) ? $request->config_secure : 0;
         $data['config_ssl'] = isset($request->config_ssl) ? $request->config_ssl : '';
@@ -206,8 +211,47 @@ class SettingsController extends Controller
         $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
         $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
         $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-        $data['config_logo'] = isset($request->config_logo) ? $request->config_logo : '';
-        $data['config_icon'] = isset($request->config_icon) ? $request->config_icon : '';
+
+        if($request->hasFile('config_logo'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','config_logo')->first();
+
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $logo_name = time().'.'.$request->file('config_logo')->getClientOriginalExtension();
+            $request->file('config_logo')->move(public_path('admin/store_images/logo'),$logo_name);
+            $data['config_logo'] = 'public/admin/store_images/logo/'.$logo_name;
+        }
+
+
+        if($request->hasFile('config_icon'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','config_icon')->first();
+
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $icon_name = time().'.'.$request->file('config_icon')->getClientOriginalExtension();
+            $request->file('config_icon')->move(public_path('admin/store_images/icon'),$icon_name);
+            $data['config_icon'] = 'public/admin/store_images/icon/'.$logo_name;
+        }
+
+
         $data['grecaptcha'] = isset($request->grecaptcha) ? $request->grecaptcha : '';
         $data['enable_booking_module'] = isset($request->enable_booking_module) ? $request->enable_booking_module : '';
         $data['file_directory_url'] = isset($request->file_directory_url) ? $request->file_directory_url : '';
@@ -227,22 +271,217 @@ class SettingsController extends Controller
         $data['suspend_permanently'] = isset($request->suspend_permanently) ? $request->suspend_permanently : 'no';
         $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
         $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
-        $data['suspend_logo'] = isset($request->suspend_logo) ? $request->suspend_logo : '';
+
+        if($request->hasFile('suspend_logo'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','suspend_logo')->first();
+
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $suspend_logo_name = time().'.'.$request->file('suspend_logo')->getClientOriginalExtension();
+            $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'),$suspend_logo_name);
+            $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/'.$suspend_logo_name;
+        }
+
         $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
         $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
+
+       foreach($data as $key => $new)
+       {
+            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+            if (!empty($setting_id) || $setting_id != '')
+            {
+                $map_update = Settings::find($setting_id);
+                $map_update->value = $new;
+                $map_update->update();
+            }
+            else
+            {
+                $map_add = new Settings();
+                $map_add->store_id = $current_store_id;
+                $map_add->group = 'config';
+                $map_add->key = $key;
+                $map_add->value = $new;
+                $map_add->serialized = 0;
+                $map_add->save();
+            }
+        }
+
+        if($setting_page == 'map')
+        {
+            return redirect()->route('mapandcategory')->with('success', 'Settings Updated..');
+        }
+        else
+        {
+            return redirect()->route('shopsettings')->with('success', 'Settings Updated..');
+        }
 
     }
 
 
     public function shopsettings()
     {
-        return view('admin.settings.shop_settings');
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $language = Language::get();
+        $currency = Currency::get();
+        $countries = Country::get();
+
+        $key = ([
+            'config_url',
+            'config_secure',
+            'config_ssl',
+            'config_name',
+            'config_owner',
+            'config_address',
+            'config_zone_id',
+            'map_post_code',
+            'config_country_id',
+            'map_ifram',
+            'sitemap_url',
+            'config_telephone',
+            'config_fax',
+            'config_language',
+            'config_currency',
+            'config_title',
+            'config_meta_description',
+            'config_logo',
+            'config_icon',
+            'grecaptcha',
+            'enable_booking_module',
+            'file_directory_url',
+            'service_charge_type',
+            'service_charge',
+            'config_email',
+            'sms_api_url',
+            'sms_notification_status',
+            'sms_notification_time',
+            'sms_notification_number',
+            'config_account_printer',
+            'config_password_printer',
+            'enable_ajax_checkout',
+            'enable_notify_email',
+            'enable_res_api',
+            'enable_msg_api',
+            'suspend_permanently',
+            'suspend_for',
+            'suspend_logo',
+            'suspend_time',
+            'suspend_title',
+            'suspend_description',
+        ]);
+
+        $map_category = [];
+
+        foreach($key as $row)
+        {
+            $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
+
+            $map_category[$row] = isset($query->value) ? $query->value : '';
+        }
+
+        return view('admin.settings.shop_settings',compact(['map_category','language','currency','countries']));
+
     }
 
 
     public function appsettings()
     {
-        return view('admin.settings.app_settings');
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $key = ([
+            'android_app_id',
+            'apple_app_id',
+            'app_available',
+            'home_bg_color',
+            'menu_background_image',
+            'polianna_logo_bg_color',
+            'polianna_menu_cross_color',
+            'polianna_notification_bg_color',
+            'polianna_notification_font_color',
+            'title_image_url',
+        ]);
+
+        $map_category = [];
+
+        foreach($key as $row)
+        {
+            $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
+
+            $map_category[$row] = isset($query->value) ? $query->value : '';
+        }
+        return view('admin.settings.app_settings',compact(['map_category']));
+    }
+
+    public function updateappsettings(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $data['android_app_id'] = isset($request->android_app_id) ? $request->android_app_id : '';
+        $data['apple_app_id'] = isset($request->apple_app_id) ? $request->apple_app_id : '';
+        $data['app_available'] = isset($request->app_available) ? $request->app_available : '';
+        $data['home_bg_color'] = isset($request->home_bg_color) ? $request->home_bg_color : '';
+
+        if($request->hasFile('menu_background_image'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','menu_background_image')->first();
+
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $menu_background_image = time().'.'.$request->file('menu_background_image')->getClientOriginalExtension();
+            $request->file('menu_background_image')->move(public_path('admin/app_backgrounds'),$menu_background_image);
+            $data['menu_background_image'] = 'public/admin/app_backgrounds/'.$menu_background_image;
+        }
+
+        $data['polianna_logo_bg_color'] = isset($request->polianna_logo_bg_color) ? $request->polianna_logo_bg_color : '';
+        $data['polianna_menu_cross_color'] = isset($request->polianna_menu_cross_color) ? $request->polianna_menu_cross_color : '';
+        $data['polianna_notification_bg_color'] = isset($request->polianna_notification_bg_color) ? $request->polianna_notification_bg_color : '';
+        $data['polianna_notification_font_color'] = isset($request->polianna_notification_font_color) ? $request->polianna_notification_font_color : '';
+        $data['title_image_url'] = isset($request->title_image_url) ? $request->title_image_url : '';
+
+        foreach($data as $key => $new)
+        {
+            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+
+            if (!empty($setting_id) || $setting_id != '')
+            {
+                $app_setting = Settings::find($setting_id);
+                $app_setting->value = $new;
+                $app_setting->update();
+            }
+            else
+            {
+                $app_setting = new Settings();
+                $app_setting->store_id = $current_store_id;
+                $app_setting->group = 'config';
+                $app_setting->key = $key;
+                $app_setting->value = $new;
+                $app_setting->serialized = 0;
+                $app_setting->save();
+            }
+        }
+        return redirect()->route('appsettings')->with('success', 'Settings Updated..');
     }
 
     //open close time start
@@ -301,5 +540,20 @@ class SettingsController extends Controller
         }
 
         return redirect()->route('sociallinks')->with('success', 'Settings Updated..');
+    }
+
+    // openclosetimeset
+    public function openclosetimeset(Request $request)
+    {
+        $business = $request['bussines'];
+        $bissinessdays = serialize($request['bussines']);
+        $closingdate = serialize($request->closingdate);
+        $delivery = serialize($request['delivery']);
+        $collection = serialize($request['collection']);
+        echo '<pre>';
+        // print_r($bissinessdays);
+        // print_r($closingdate);
+        print_r($collection);
+        exit();
     }
 }
