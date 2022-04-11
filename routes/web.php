@@ -361,6 +361,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
     Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
     Route::post('updatesociallinks', [SettingsController::class, 'updatesociallinks'])->name('updatesociallinks');
+    Route::post('calculateDistance', [SettingsController::class, 'calculateDistance'])->name('calculateDistance');
 
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
@@ -374,11 +375,12 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'index'])->name('option');
 
 
+    // Upload Gallary
+    Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+        \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
 });
 
-Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
-    \UniSharp\LaravelFilemanager\Lfm::routes();
-});
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
