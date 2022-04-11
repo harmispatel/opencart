@@ -76,9 +76,23 @@ function getStoreDetails($storeid,$key)
     return $new;
 }
 
-function getLoyaltyDetails($storeid,$key){
+function getLoyaltyDetails($storeid,$key,$rtype){
      
     $gedetails = Settings::where('store_id',$storeid)->where('key',$key)->first();
+     
+    if($rtype == 'point')
+    {
+        $point = Settings::select('value')->where('store_id',$storeid)->where('key',$rtype)->first();
+        $unserializepoint =unserialize(isset($point['value']) ? $point['value'] :'');
+        return $unserializepoint;
+    } 
+
+    if($rtype == 'money')
+    {
+        $money = Settings::select('value')->where('store_id',$storeid)->where('key',$rtype)->first();
+        $unserializemoney =unserialize(isset($money['value']) ? $money['value'] :'');
+        return $unserializemoney;
+    } 
     $value = isset($gedetails->value) ? $gedetails->value : '';
     return $value;
 }
