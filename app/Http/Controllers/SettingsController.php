@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\DeliverySettings;
 use App\Models\Language;
 use App\Models\Region;
 use App\Models\Settings;
@@ -503,7 +504,32 @@ class SettingsController extends Controller
 
     public function deliverycollectionsetting()
     {
-        return view('admin.settings.delivery_collection_setting');
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $data['enable_delivery'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','enable_delivery')->first();
+
+        $data['delivery_option'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','delivery_option')->first();
+
+        $data['is_distance_option'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','is_distance_option')->first();
+
+        $data['road_mileage_percentage'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','road_mileage_percentage')->first();
+
+        $data['google_distance_api_key'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','google_distance_api_key')->first();
+
+        $data['deliverysettings'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store',$current_store_id)->where('delivery_type','post_codes')->get();
+
+        $data['deliverydistance'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store',$current_store_id)->where('delivery_type','distance')->get();
+
+        $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store',$current_store_id)->where('delivery_type','area')->get();
+
+        return view('admin.settings.delivery_collection_setting',$data);
+    }
+
+
+    public function calculateDistance(Request $request)
+    {
+
     }
 
 
