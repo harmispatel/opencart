@@ -356,6 +356,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updateappsettings', [SettingsController::class, 'updateappsettings'])->name('updateappsettings');
     Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
     Route::post('openclosetimeset', [SettingsController::class, 'openclosetimeset'])->name('openclosetimeset');
+    Route::get('daytime/id', [SettingsController::class, 'daytime'])->name('daytime');
 
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
     Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
