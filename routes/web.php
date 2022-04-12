@@ -336,6 +336,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
+    Route::post('updateTemplateSetting', [LayoutController::class, 'updateTemplateSetting'])->name('updateTemplateSetting');
+
     Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
     Route::get('bannerandblocks', [LayoutController::class, 'bannerandblocks'])->name('bannerandblocks');
     Route::get('activetheme/{id}', [LayoutController::class, 'activetheme'])->name('activetheme');
@@ -356,6 +358,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updateappsettings', [SettingsController::class, 'updateappsettings'])->name('updateappsettings');
     Route::get('openclosetime', [SettingsController::class, 'openclosetime'])->name('openclosetime');
     Route::post('openclosetimeset', [SettingsController::class, 'openclosetimeset'])->name('openclosetimeset');
+    Route::get('daytime/id', [SettingsController::class, 'daytime'])->name('daytime');
 
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
     Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
