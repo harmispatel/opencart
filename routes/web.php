@@ -336,6 +336,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
+    Route::post('updateTemplateSetting', [LayoutController::class, 'updateTemplateSetting'])->name('updateTemplateSetting');
+
     Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
     Route::get('bannerandblocks', [LayoutController::class, 'bannerandblocks'])->name('bannerandblocks');
     Route::get('activetheme/{id}', [LayoutController::class, 'activetheme'])->name('activetheme');
