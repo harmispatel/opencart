@@ -78,19 +78,22 @@
               {
                 $storeID = Session::get('store_id');
               }
-              else 
+              else
               {
                   $storeID = 0;
               }
           @endphp
             <select class="form-control" id="SearchStore">
                 @foreach ($stores as $store)
-                    <option value="{{ $store->store_id }}" {{ ($storeID == $store->store_id) ? 'selected' : '' }}>{{ html_entity_decode($store->name) }}</option>                    
+                    <option value="{{ $store->store_id }}" {{ ($storeID == $store->store_id) ? 'selected' : '' }}>{{ html_entity_decode($store->name) }}</option>
                 @endforeach
               </select>
       </li>
       <li class="nav-item pl-3 pt-2 pr-3">
-        <a href="#">Visit Shop</a>
+        @php
+            $current_store_id = currentStoreId();
+        @endphp
+        <a href="{{ getCurrentStoreURL($current_store_id) }}" target="_blanck" id="visitShop">Visit Shop</a>
       </li>
     </ul>
 
@@ -422,7 +425,7 @@
 
            @endif
 
-       
+
 
         </ul>
       </nav>

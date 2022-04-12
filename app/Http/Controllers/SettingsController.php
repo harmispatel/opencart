@@ -8,6 +8,7 @@ use App\Models\DeliverySettings;
 use App\Models\Language;
 use App\Models\Region;
 use App\Models\Settings;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use DateTime;
 
@@ -212,7 +213,6 @@ class SettingsController extends Controller
         $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
         $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
         $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-
         if($request->hasFile('config_logo'))
         {
             $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','config_logo')->first();
@@ -316,6 +316,13 @@ class SettingsController extends Controller
                 $map_add->save();
             }
         }
+
+        // Update in Store
+        $store = Store::find($current_store_id);
+        $store->name = $data['config_name'];
+        $store->url =  $data['config_url'];
+        $store->ssl =  $data['config_ssl'];
+        $store->update();
 
         if($setting_page == 'map')
         {

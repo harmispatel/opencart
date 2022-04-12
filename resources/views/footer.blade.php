@@ -77,15 +77,15 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
             data: {'store_id':storeid},
             dataType: "json",
             success: function (response) {
-                
+
             }
         });
 
 
     });
 
-    $('#SearchStore').change(function() 
-    { 
+    $('#SearchStore').change(function()
+    {
         var store_id = $(this).val();
 
         $.ajaxSetup({
