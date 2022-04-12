@@ -104,9 +104,7 @@
                                                     @php
                                                         $pro_icon = isset($product->product_icons) ? $product->product_icons : '';
                                                         $array = explode(',',$pro_icon);
-                                                        // echo '<pre>';
-                                                        // print_r($arr);
-                                                        // exit();
+                                                        
                                                     @endphp
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
                                                     multiple required>

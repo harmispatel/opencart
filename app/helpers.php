@@ -76,25 +76,25 @@ function getStoreDetails($storeid,$key)
     return $new;
 }
 
-function getLoyaltyDetails($storeid,$key,$rtype){
+function getLoyaltyDetails($storeid,$key){
      
     $gedetails = Settings::where('store_id',$storeid)->where('key',$key)->first();
-     
-    if($rtype == 'point')
-    {
-        $point = Settings::select('value')->where('store_id',$storeid)->where('key',$rtype)->first();
+    
+        $point = Settings::select('value')->where('store_id',$storeid)->where('key','point')->first();
         $unserializepoint =unserialize(isset($point['value']) ? $point['value'] :'');
-        return $unserializepoint;
-    } 
-
-    if($rtype == 'money')
-    {
-        $money = Settings::select('value')->where('store_id',$storeid)->where('key',$rtype)->first();
+       
+        $money = Settings::select('value')->where('store_id',$storeid)->where('key','money')->first();
         $unserializemoney =unserialize(isset($money['value']) ? $money['value'] :'');
-        return $unserializemoney;
-    } 
+       
+   
+    
     $value = isset($gedetails->value) ? $gedetails->value : '';
-    return $value;
+    $data['value'] = $value;
+    $data['unserializepoint'] =$unserializepoint;
+    $data['unserializemoney'] =$unserializemoney;
+
+
+    return $data;
 }
 
 function currentStoreId()
