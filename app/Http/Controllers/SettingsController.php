@@ -43,6 +43,17 @@ class SettingsController extends Controller
         '23:59' => 'End day'
     );
 
+    private $days = array(
+        '0' => "Every day",
+        '1' => 'Monday',
+        '2' => 'Tuesday',
+        '3' => 'Wednesday',
+        '4' => 'Thursday',
+        '5' => 'Friday',
+        '6' => 'Saturday',
+        '7' => 'Sunday',
+    );
+
     public function openclosetime(Request $request)
     {
         $minitunes = array('00', '10', '20', '30', '40', '50');
@@ -55,18 +66,6 @@ class SettingsController extends Controller
         }
         $timearray['23:59'] = '23:59';
         $times = $this->times = $timearray;
-
-
-        $days = array(
-            '0' => "Every day",
-            '2' => 'Monday',
-            '3' => 'Tuesday',
-            '4' => 'Wednesday',
-            '5' => 'Thursday',
-            '6' => 'Friday',
-            '7' => 'Saturday',
-            '8' => 'Sunday',
-        );
 
         // 
         $current_store_id = currentStoreId();
@@ -92,20 +91,27 @@ class SettingsController extends Controller
         {
             $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
 
-            $open_close[$row] = isset($query->value) ? $query->value : '';
+            $open = $open_close[$row] = isset($query->value) ? $query->value : '';
         }
 
-        $new = unserialize($open_close['bussines']);
-       
-            // foreach ($new as $key => $value) {
-            //     foreach ($value as $item) {
-            //         echo '<pre>';
-            //         print_r($value);
-            //         exit();
-            //     }
-            // }
+        // echo '<pre>';
+        // print_r($open);
+        // exit();
+        
+        $timesetting = unserialize($open);
+        // echo '<pre>';
+        // print_r($timesetting);
+        // exit();
 
-        return view('admin.settings.open_close_time_settings', compact(['days','open_close','times','new']) );
+        $alldays = unserialize($open_close['bussines']);
+        $close_date = unserialize($open_close['closing_dates']);
+        // echo '<pre>';
+        // print_r($close_date);
+        // exit();
+
+        $days = $this->days;
+       
+        return view('admin.settings.open_close_time_settings', compact(['days','open_close','times','alldays']) );
     }
 
     public function mapandcategory()
@@ -647,42 +653,71 @@ class SettingsController extends Controller
         
     }
 
-    // public function daytime()
-    // {
-    //     $html = "";
-    //  $html.='<div class="form-row justify-content-between js-example-basic-multiple add">';
-    //  $html.='<div class="col-md-4">';
-    //  $html.='<div class="form-group">';
-    //  $html.='<select class="form-control multipalselect" multiple="multiple"  name="bussines[days][]">';
-    //  $html.='@foreach ($days as $key => $day)';
-    //  $html.='<option value="">2</option>';
-    //  $html.='@endforeach';
-    //  $html.='</select>';
-    //  $html.='</div>';
-    //  $html.='</div>';
-    //  $html.='<div class="col-md-4">';
-    //  $html.='<div class="row">';
-    //  $html.='<div class="form-group col-md-5">';
-    //  $html.='<select class="form-control js-example-basic-multiple text-dark" id="starttime" name="bussines[from][]">';
-    //  $html.='@foreach ($times as $key => $time)';
-    //  $html.='<option value="">1</option>';
-    //  $html.='@endforeach';
-    //  $html.='</select>';
-    //  $html.='</div>';
-    //  $html.='<div class="form-group col-md-5">';
-    //  $html.='<select class="form-control js-example-basic-multiple text-dark" id="endtime" name="bussines[to][]">';
-    //  $html.='@foreach ($times as $key => $time)';
-    //  $html.='<option value="" selected="</option>';
-    //  $html.='@endforeach';
-    //  $html.='</select>';
-    //  $html.='</div>';
-    //  $html.='<div class="form-group col-md-2 pt" style="padding-top: 6px;">';
-    //  $html.='<button class="btn btn-sm btn-danger remove" onclick="$(\'.add\').remove()" type="button">X</button>';
-    //  $html.='</div>';
-    //  $html.='</div>';
-    //  $html.='</div>';
-    //  $html.='</div>';
+    public function daytime(Request $request)
+    {
+        $number = $request->number;
+        $type = $request->type;
 
-    //  return response()->json(['html' => $html,]);
-    // }
+        $days = $this->days;
+
+        $minitunes = array('00', '10', '20', '30', '40', '50');
+        $timearray = array();
+        $timearray['00:00'] = '00:00';
+        for ($i = 0; $i <= 23; $i++) {
+            foreach ($minitunes as $phut) {
+                $timearray[$i . ':' . $phut] = $i . ':' . $phut;
+            }
+        }
+        $timearray['23:59'] = '23:59';
+        $times1 = $this->times = $timearray;
+
+        $html = '';
+        $html .= '<div class="col-sm-12" id="'.$type.'_'.$number.'">';
+        $html .= '<div class="d-flex justify-content-between">';
+            $html .= '<div class="form-group col-sm-6">';
+            $html .= '<select class="selectday form-control" name="'.$type.'[day]['.$number.'][]" class="form-control" multiple="multiple">';
+            foreach($days as $key => $day)
+            {
+                $html .= '<option value="'.$key.'">'.$day.'</option>';
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+            $html .= '<div class="d-flex">';
+            $html .= '<div class="form-group">';
+            $html .= '<select class="selectday form-control" name="'.$type.'[from]['.$number.']" class="form-control" style="width: 100% !importent;">';
+            foreach($times1 as $key => $time)
+            {
+                // $html .= '<option '.($key == "0:00") ? "selected" : "".' value="'.$key.'">'.$time.'</option>';
+                $html .= '<option >'.$time.'</option>';
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+            $html .= '<div class="form-group px-3">';
+            $html .= '<select class="selectday form-control" name="'.$type.'[to]['.$number .']" class="form-control" style="width: 100% !importent;">';
+            foreach($times1 as $key => $time)
+            {
+                $html .= '<option ';
+                if ($key == "23:50") {
+                    $html .= "selected";
+                }
+                else{
+                    $html .= "";
+                }
+                $html .= '>'.$time.'</option>';
+                // $html .= '<option  '.($key == "23:50") ? "selected" : "".' value="'.$key.'">'.$time.'</option>';
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+            $html .= '<div class="form-group">';
+            $html .= '<span class="btn btn-default" onclick="$(\'#'.$type.'_'.$number.' \').remove();">X</span>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '</div>';
+            $html .= '<script type="text/javascript">';
+            // $html .= '$("#'.$type.'_'.$number.' .selectday").chosen({width: "100%"});';
+            $html .= '$(".selectday").select2();';
+            $html .= '</script>';
+
+     return response()->json(['html' => $html,]);
+    }
 }

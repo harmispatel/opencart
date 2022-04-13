@@ -45,137 +45,180 @@
                                     <h1 class="text-center">Opening Closing Times</h1>
                                     <h4 class="text-success" style="border-bottom: 1px dotted black">BUSSINESS HOURS
                                     </h4>
-                                    <div class="addnewtime">
-                                        <div class="form-row justify-content-between add">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    @foreach ( $new as $keyabc =>$value )
-                                                                 @php
-                                                                 $data = $value;
-
-
-                                                                //  echo '<pre>';
-                                                                //  print_r($data);
-                                                                //  exit();
-                                                                 @endphp
-                                                    <select class="form-control js-example-basic-multiple text-dark"
-                                                    multiple="multiple" id="days" name="bussinessdays[]">
-                                                    @foreach ($days as $key => $day)
-                                                        <option value="{{ $key }}"  {{ in_array($key ,$data) == $key ? 'selected' : '' }}>{{ $day }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                    @endforeach
-                                                  
-
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="row">
-                                                    <div class="form-group col-md-5">
-                                                       @php
-                                                               
-                                                             
-
-                                                       $demo1 =$new['from'];
-                                                       $demo2 =$new['to'];
-                                                       @endphp
-                                                        <select class="form-control js-example-basic-multiple text-dark"
-                                                            id="starttime" name="bussinessstarttime[]">
-                                                            @foreach ($times as $time)
-                                                                <option value="{{ $time }}" {{ in_array($time,$demo1) == $time ? 'selected' : '' }}>{{ $time }}
-                                                                </option>
+                                    <div class="col-sm-12" id="bussinestime">
+                                        <h2>Bussiness Hours</h2>
+                                        @php $key_bussines = 0; @endphp
+                                            @if(isset($timesetting['bussines']['day']) && count($timesetting['bussines']['day']))
+                                                @foreach($timesetting['bussines']['day'] as $keyday => $daytime)
+                                                <div id="bussines_{{ $key_bussines; }}" class="bussines col-sm-12">
+                                                    <div class="form-group col-sm-6">
+                                                        <select class="selectday" name="bussines[day][{{ $key_bussines }}][]" class="form-control" multiple="multiple">
+                                                            @foreach($days as $key => $day)
+                                                                <option @if(in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="form-group col-md-5">
-                                                        <select class="form-control js-example-basic-multiple text-dark"
-                                                            id="endtime" name="bussinessendtime[]">
-                                                            @foreach ($times as $key => $time)
-                                                                <option value="{{ $time }}"
-                                                                {{ in_array($time,$demo2) == $time ? 'selected' : '' }}>
-                                                                    {{ $time }}</option>
+                                                    <div class="form-group col-sm-2">
+                                                        <select class="selectday" name="bussines[from][{{ $key_bussines; }}]" class="form-control">
+                                                            @foreach($times as $key => $time)
+                                                                <option @if (isset($timesetting['bussines']['from'][$keyday]) && $timesetting['bussines']['from'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key; }}">{{ $time; }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    <div class="form-group col-md-2 pt" style="padding-top: 6px;">
-                                                        <button class="btn btn-sm btn-danger"
-                                                            onclick="$('.add').remove()" type="button">X</button>
+                                                    <div class="form-group col-sm-2">
+                                                        <select class="selectday" name="bussines[to][{{ $key_bussines; }}]" class="form-control">
+                                                            @foreach($times as $key => $time)
+                                                            <option @if (isset($timesetting['bussines']['to'][$keyday]) && $timesetting['bussines']['to'][$keyday] == $key) {{'selected' }}  @endif value="{{ $key; }}">{{ $time; }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <span class="btn btn-default" onclick="$('#bussines_<?= $key_bussines; ?>').remove();">X</span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                {{$key_bussines++;}}
+                                                @endforeach
+                                            @endif
+                                        <div class="col-sm-12">
+                                            <span class="btn btn-primary addtime" rel="bussines">+Add another set of hours</span>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <span class="btn btn-primary addtime" id="bussines" rel="bussines">+Add another set of hours</span>
-                                    </div>
-                                    <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">CLOSING DATES
-                                    </h4>
-                                    <div class="row adddate">
-                                        <div class="col-md-4 py-2">
-                                            <input type="date" name="closingdate[]" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <span class="btn btn-primary addnewdate">+Add another closing date</span>
-                                    </div>
+                                        </div> 
+                                        <!-- end bussinestime -->
+      
 
-                                    <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">DELIVERY HOURS</h4>
+                                        <!--Closing Dates--->
+                                        <div class="col-sm-12" id="closingdates">
+                                            <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">CLOSING DATES</h4>                                            
+                                                @if(isset($close_date['closing_dates']) && !empty(array_filter($close_date['closing_dates'])))
+                                                    @foreach (array_filter($close_date['closing_dates']) as $key => $value )
+                                                        @php
+                                                            echo '<pre>';
+                                                            print_r($value);
+                                                        @endphp
+                                                        <input type="date" name="closing_dates[{{$key}}]" class="multi-dates form-control col-md-3 d-inline" value="{{$value}}">
+                                                    @endforeach
+                                                @else
+                                                    <input type="date" name="closing_dates[0]" class="multi-dates form-control col-md-3 d-inline" value="">
+                                                @endif 
 
-                                    <div class="form-group row col-sm">
-                                        <label class=" col-form-label">Same as bussiness hours</label>
-                                        <div class="d-flex pl-5">
-                                            <div class="form-check form-check-inline ">
-                                                <input class="form-check-input" type="radio" name="deliveryhours"
-                                                    id="samebisinessyes" value="1" {{ $open_close['order_outof_bussiness_time'] ? $open_close['order_outof_bussiness_time'] : "checked" }}>
-                                                <label class="form-check-label" for="samebisinessyes">Yes</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="deliveryhours"
-                                                    id="samebisinessno" value="0" {{ $open_close['order_outof_bussiness_time'] ? $open_close['order_outof_bussiness_time'] : "checked" }}>
-                                                <label class="form-check-label" for="samebisinessno">No</label>
+                                            
+                                            <div class="col-sm-12 py-3"> 
+                                                <span class="btn btn-primary adddates" rel="closingdates">+Add another closing date</span>
                                             </div>
                                         </div>
-                                        <div class="form-group row float-right">
-                                            <label for="deliverygap" class="col-sm-3 col-form-label">GAP</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="deliverygap" id="deliverygap" value="{{ $open_close['delivery_gaptime'] ? $open_close['delivery_gaptime'] : ""  }}">
+
+                                        
+                                        <div class="col-sm-12" id="deliverytime">
+                                        <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">DELIVERY HOURS</h4>
+                                        <div class="col-sm-12 d-flex">
+                                            <div class="col-sm-8 d-flex">
+                                                <label class="control-label col-sm-4">Same as bussiness hours</label>
+                                                <p>
+                                                  <input class="switch-size" {{ (isset($open_close['delivery_same_bussiness']) && $open_close['delivery_same_bussiness'] == 1) ? 'checked="checked"' : ''; }} name="delivery_same_bussiness" type="radio" value="1" onclick="$('#delivery_same_bussiness').hide();" />Yes
+                                                  <input class="switch-size" {{ (!(isset($open_close['delivery_same_bussiness']) && $open_close['delivery_same_bussiness'] == 1)) ? 'checked="checked"' : ''; }} name="delivery_same_bussiness" type="radio" value="0" onclick="$('#delivery_same_bussiness').show();" />No
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <span>GAP</span>
+                                                {{-- value="{{ $open_close['delivery_gaptime'] ? $open_close['delivery_gaptime'] : ""  }}" --}}
+                                                <input type="text" value="{{ (isset($open_close['delivery_gaptime'])) ? $open_close['delivery_gaptime'] : ''; }}" name="delivery_gaptime" />
+                                                <span>Min</span>
+                                            </div>
+                                        </div>
+                                        @php $key_delivery = 0; @endphp
+                                        <div id="delivery_same_bussiness" style="display: {{ (isset($open_close['delivery_same_bussiness']) && $open_close['delivery_same_bussiness'] == 1) ? 'none' : 'block'; }}" >
+                                        @if(isset($timesetting['delivery']['day']) && count($timesetting['delivery']['day']))
+                                                @foreach($timesetting['delivery']['day'] as $keyday => $daytime)
+                                                <div id="delivery_{{ $key_delivery }}" class="delivery col-sm-12">
+                                                    <div class="form-group col-sm-6">
+                                                        <select class="selectday" name="delivery[day][{{ $key_delivery}}][]" class="form-control" multiple="multiple">
+                                                            @foreach($days as $key => $day)
+                                                            <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key}}">< {{$day}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <select class="selectday" name="delivery[from][ {{$key_delivery}}]" class="form-control">
+                                                            @foreach($times as $key => $time)
+                                                                <option @if (isset($timesetting['delivery']['from'][$keyday]) && $timesetting['delivery']['from'][$keyday] == $key)  {{'selected'}} @endif value="{{$key}}"> {{$time}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <select class="selectday" name="delivery[to][<?= $key_delivery; ?>]" class="form-control">
+                                                            @foreach($times as $key => $time)
+                                                                <option @if (isset($timesetting['delivery']['to'][$keyday]) && $timesetting['delivery']['to'][$keyday] == $key)  {{'selected'}} @endif value=" {{$key}}>">{{$time}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <span class="btn btn-default" onclick="$('#delivery_{{$key_delivery}};').remove();">X</span>
+                                                    </div>
+                                                </div>
+                                                @php $key_delivery++ @endphp
+                                            @endforeach
+                                        @endif
+                                            <div class="col-sm-12">
+                                                <span class="btn btn-primary addtime" rel="delivery">+Add another set of hours</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="addsamebisinesshours"></div>
-                                    <div class="col-sm-12 samebisiness" style="display: none">
-                                        <span class="btn btn-primary addsamebisiness" id="bussines" rel="bussines">+Add another set of hours</span>
-                                    </div>
+                                    <!-- end delivery time -->
 
+                                    <!-- start collection time -->
+                                    <div class="col-sm-12" id="collection">
                                     <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">COLLECTION HOURS</h4>
-                                    <div class="form-group row col-sm">
-                                        <label class=" col-form-label">Same as bussiness hours</label>
-                                        <div class="d-flex pl-5">
-                                            <div class="form-check form-check-inline ">
-                                                <input class="form-check-input" type="radio" name="collectionhours"
-                                                    id="deliveryyes" value="1" checked>
-                                                <label class="form-check-label" for="deliveryyes">Yes</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="collectionhours"
-                                                    id="collection" value="0">
-                                                <label class="form-check-label" for="collection">No</label>
-                                            </div>
+                                    <div class="col-sm-12 d-flex">
+                                        <div class="col-sm-8 d-flex">
+                                            <label class="control-label col-sm-4">Same as bussiness hours</label>
+                                            <p>
+                                            <input class="switch-size" {{ (isset($open_close['collection_same_bussiness']) && $open_close['collection_same_bussiness'] == 1) ? 'checked="checked"' : ''; }} name="collection_same_bussiness" type="radio" value="1" onclick="$('#collection_same_bussiness').hide();" />Yes
+                                            <input class="switch-size" {{ (!(isset($open_close['collection_same_bussiness']) && $open_close['collection_same_bussiness'] == 1)) ? 'checked="checked"' : ''; }} name="collection_same_bussiness" type="radio" value="0" onclick="$('#collection_same_bussiness').show();" />No
+                                            </p>
                                         </div>
-                                        <div class="form-group row float-right">
-                                            <label for="collectiongap" class="col-sm-3 col-form-label">GAP</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" id="collectiongap" name="collectiongap" value="{{ $open_close['collection_gaptime'] ? $open_close['collection_gaptime'] : ""  }}">
-                                            </div>
+                                        <div class="col-sm-4 pull-right">
+                                            <span>GAP</span>
+                                            <input type="text" value="{{ (isset($open_close['collection_gaptime'])) ? $open_close['collection_gaptime'] : ''; }}" name="collection_gaptime" />
+                                            <span>Min</span>
                                         </div>
                                     </div>
-                                    <div class="adddeliverycolection"></div>
-                                    <div class="col-sm-12 collection" style="display: none">
-                                        <span class="btn btn-primary deliverycolection" id="collection" rel="collection">+Add another set of hours</span>
-                                    </div>
+                                    @php $key_collection = 0; @endphp
+                                    <div id="collection_same_bussiness" style="display: {{ (isset($open_close['collection_same_bussiness']) && $open_close['collection_same_bussiness'] == 1) ? 'none' : 'block'; }}" >
+                                    @if(isset($timesetting['collection']['day']) && count($timesetting['collection']['day']))
+                                            @foreach($timesetting['collection']['day'] as $keyday => $daytime)
+                                            <div id="collection_{{ $key_collection; }}" class="collection col-sm-12">
+                                                <div class="form-group col-sm-6">
+                                                    <select class="selectday" name="collection[day][{{ $key_collection; }}][]" class="form-control" multiple="multiple">
+                                                        @foreach($days as $key => $day)
+                                                        <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key; }}">{{ $day }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <select class="selectday" name="collection[from][{{ $key_collection; }}]" class="form-control">
+                                                        @foreach($times as $key => $time)
+                                                        <option @if (isset($timesetting['collection']['from'][$keyday]) && $timesetting['collection']['from'][$keyday] == $key) {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <select class="selectday" name="collection[to][{{ $key_collection; }}]" class="form-control">
+                                                        @foreach($times as $key => $time){ }}
+                                                        <option @if (isset($timesetting['collection']['to'][$keyday]) && $timesetting['collection']['to'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-2">
+                                                    <span class="btn btn-default" onclick="$('#collection_{{ $key_collection; }}').remove();">X</span>
+                                                </div>
+                                            </div>
+                                            @php $key_collection++; @endphp
+                                        @endforeach
+                                    @endif
+                                        <div class="col-sm-12">
+                                            <span class="btn btn-primary addtime" rel="collection">+Add another set of hours</span>
+                                        </div>
+                                </div>
                                     <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">SETTING ORDER</h4>
                                     <div class="form-group row align-items-center">
                                         <label for="inputPassword" class="col-sm-8 col-form-label">Accept orders out of bussiness hours?</label>
@@ -209,172 +252,54 @@
 
 
 <script type="text/javascript">
-   $('.multipalselect').siblings().addClass('js-example-basic-multiple');
-    $(document).ready(function() {
-
-        var delivery = $('input[name="deliveryhours"]:checked').val();
-        if (delivery == 0) {
-            $('.samebisiness').show();
-        }
+    // $('.multipalselect').siblings().addClass('js-example-basic-multiple');
+    $('.selectday').select2();
+    $(document).ready(function(){
+       var number_bussines = {{ $key_bussines; }};
+       var number_delivery = {{ $key_delivery; }};
+       var number_collection = {{ $key_collection }};
        
-
-        $('.js-example-basic-multiple').select2();
-                            
-       
-
-        var id = 0;
-        // Add bussiness hours
-        $('.addtime').click(function () {            
-            $('.addnewtime').append('<div class="form-row justify-content-between add'+ id +'">'+
-                                        '<div class="col-md-4">'+
-                                            '<div class="form-group">'+
-                                                '<select class="form-control multipalselect" multiple="multiple"  name="bussines[days]['+id+'][]">'+
-                                                    '@foreach ($days as $key => $day)'+
-                                                        '<option value="{{ $key }}">{{ $day }}</option>'+
-                                                    '@endforeach'+
-                                                '</select>'+
-                                            '</div>'+
-                                        '</div>'+
-                                        '<div class="col-md-4">'+
-                                            '<div class="row">'+
-                                                '<div class="form-group col-md-5">'+
-                                                    '<select class="form-control js-example-basic-multiple text-dark" id="starttime" name="bussines[from]['+id+']">'+
-                                                        '@foreach ($times as $key => $time)'+
-                                                            '<option value="{{ $time }}">{{ $time }}</option>'+
-                                                        '@endforeach'+
-                                                    '</select>'+
-                                                '</div>'+
-                                                '<div class="form-group col-md-5">'+
-                                                    '<select class="form-control js-example-basic-multiple text-dark" id="endtime" name="bussines[to]['+id+']">'+
-                                                        '@foreach ($times as $key => $time)'+
-                                                            '<option value="{{ $time }}" selected="{{ $time == '23:50' ? $time : 'selected' }}">{{ $time }}</option>'+
-                                                        '@endforeach'+
-                                                    '</select>'+
-                                                '</div>'+
-                                                '<div class="form-group col-md-2 pt" style="padding-top: 6px;">'+
-                                                    '<button class="btn btn-sm btn-danger remove" onclick="$(\'.add' + id + '\').remove()" type="button">X</button>'+
-                                                '</div>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>');
-                                    id ++;
-                                    
-             });
-
-
-        // Add bussiness hours
-        var closedate = 0
-        $('.addnewdate').click(function () {            
-            $('.adddate').append('<div class="col-md-4 py-2">'+
-                                    '<input type="date" name="closingdate['+closedate+']" class="form-control">'+
-                                '</div>');
-                                closedate++
-        });
-
-
-        // Same as bussiness hours
-        $('#samebisinessno').click(function() {
-            $('.samebisiness').show();
-
-            var id = 0;
-        // Add bussiness hours
-        $('.addsamebisiness').click(function () {   
-            console.log("click");         
-            $('.addsamebisinesshours').append('<div class="form-row justify-content-between addsamebisiness'+ id +'">'+
-                                        '<div class="col-md-4">'+
-                                            '<div class="form-group">'+
-                                                '<select class="form-control multipalselect" multiple="multiple"  name="delivery[days]['+id+'][]">'+
-                                                    '@foreach ($days as $key => $day)'+
-                                                        '<option value="{{ $key }}">{{ $day }}</option>'+
-                                                    '@endforeach'+
-                                                '</select>'+
-                                            '</div>'+
-                                        '</div>'+
-                                        '<div class="col-md-4">'+
-                                            '<div class="row">'+
-                                                '<div class="form-group col-md-5">'+
-                                                    '<select class="form-control js-example-basic-multiple text-dark" id="starttime" name="delivery[form][]">'+
-                                                        '@foreach ($times as $key => $time)'+
-                                                            '<option value="{{ $time }}">{{ $time }}</option>'+
-                                                        '@endforeach'+
-                                                    '</select>'+
-                                                '</div>'+
-                                                '<div class="form-group col-md-5">'+
-                                                    '<select class="form-control js-example-basic-multiple text-dark" id="endtime" name="delivery[to][]">'+
-                                                        '@foreach ($times as $key => $time)'+
-                                                            '<option value="{{ $time }}" selected="{{ $time == '23:50' ? $time : 'selected' }}">{{ $time }}</option>'+
-                                                        '@endforeach'+
-                                                    '</select>'+
-                                                '</div>'+
-                                                '<div class="form-group col-md-2 pt" style="padding-top: 6px;">'+
-                                                    '<button class="btn btn-sm btn-danger remove" onclick="$(\'.addsamebisiness' + id + '\').remove()" type="button">X</button>'+
-                                                '</div>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>');
-                                    id ++;
-             });
-        });
-
-        $('#samebisinessyes').on('click', function() {
-            console.log("yes");
-            $('.samebisiness').hide();
-        });
-
-
-        // COLLECTION HOURS
-        $('#collection').on('click', function() {
-            $('.collection').show();
-
-            var id = 0;
-        // Add bussiness hours
-        $('.deliverycolection').click(function () {            
-            $('.adddeliverycolection').append('<div class="form-row justify-content-between addsamebisiness'+ id +'">'+
-                                        '<div class="col-md-4">'+
-                                            '<div class="form-group">'+
-                                                '<select class="form-control multipalselect" multiple="multiple"  name="collection[days]['+id+'][]">'+
-                                                    '@foreach ($days as $key => $day)'+
-                                                        '<option value="{{ $key }}">{{ $day }}</option>'+
-                                                    '@endforeach'+
-                                                '</select>'+
-                                            '</div>'+
-                                        '</div>'+
-                                        '<div class="col-md-4">'+
-                                            '<div class="row">'+
-                                                '<div class="form-group col-md-5">'+
-                                                    '<select class="form-control js-example-basic-multiple text-dark" id="starttime" name="collection[form][]">'+
-                                                        '@foreach ($times as $key => $time)'+
-                                                            '<option value="{{ $time }}">{{ $time }}</option>'+
-                                                        '@endforeach'+
-                                                    '</select>'+
-                                                '</div>'+
-                                                '<div class="form-group col-md-5">'+
-                                                    '<select class="form-control js-example-basic-multiple text-dark" id="endtime" name="collection[to][]">'+
-                                                        '@foreach ($times as $key => $time)'+
-                                                            '<option value="{{ $time }}" selected="{{ $time == '23:50' ? $time : 'selected' }}">{{ $time }}</option>'+
-                                                        '@endforeach'+
-                                                    '</select>'+
-                                                '</div>'+
-                                                '<div class="form-group col-md-2 pt" style="padding-top: 6px;">'+
-                                                    '<button class="btn btn-sm btn-danger remove" onclick="$(\'.addsamebisiness' + id + '\').remove()" type="button">X</button>'+
-                                                '</div>'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>');
-                                    id ++;
+       var number = 0;
+       $('.addtime').click(function(){
+            var addtime = $(this);
+            switch(addtime.attr('rel'))
+            {
+                case 'bussines': number = number_bussines;break;
+                case 'delivery': number = number_delivery;break;
+                case 'collection': number = number_collection;break;
+            }
+            $.ajax({
+                // url: '{{ route("daytime") }}/&number=' + number + '&type=' + addtime.attr('rel'),
+                url: '{{ route("daytime") }}',
+        		type: "get",		
+        		dataType: 'json',
+                data: {
+                    'number': number,
+                    'type': addtime.attr('rel'),
+                    '_token': '{{ csrf_token() }}'
+                },		
+        		success: function(response) {
+                    // console.log(response.html);
+                    switch(addtime.attr('rel'))
+                    {
+                        case 'bussines': number_bussines++;break;
+                        case 'delivery': number_delivery++;break;
+                        case 'collection': number_collection++;break;
+                    }
+                    addtime.parent().before(response.html);
+        		},
             });
-        });
+       });
 
-        $('#samebisinessyes').on('click', function() {
-            console.log("NO");
-            $('.collection').hide();
-        });
-      
-
-
-
-                                     
-                                                
-
+        $('.adddates').click(function(){
+       		var numItems = $('.multi-dates').length;
+            
+            numItems = ++numItems;
+       		$(this).parent().before("<input type='date' class='multi-dates form-control col-md-3 py-3 d-inline' name='closing_dates["+numItems+"]' />");
+        })
     });
+
+
+
+
 </script>
