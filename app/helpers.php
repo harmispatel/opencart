@@ -12,6 +12,8 @@ use App\Models\Settings;
 use App\Models\Store;
 use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
+use App\Models\Product_to_category;
+
 
 // Function of User Details
 function user_details()
@@ -66,6 +68,16 @@ function themeID($url)
     $setting = Settings::select('value')->where('store_id',$store_id)->where('key',$key)->first();
     $theme_id = isset($setting->value) ? $setting->value : '';
 
+	if(session()->has('front_store_id'))
+    {
+        session()->forget('front_store_id');
+        session()->put('front_store_id',$store_id);
+    }
+    else
+    {
+        session()->put('front_store_id', $store_id);
+    }
+
     if(session()->has('theme_id'))
     {
         session()->forget('theme_id');
@@ -76,6 +88,13 @@ function themeID($url)
         session()->put('theme_id', $theme_id);
     }
 
+}
+
+function getproduct($demo){
+	$productcount=Product_to_category::where('category_id',$demo)->count();
+	return $productcount;
+	
+	
 }
 
 

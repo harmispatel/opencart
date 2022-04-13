@@ -115,7 +115,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll">
+                                                <div class="collapse" id="coll">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -178,7 +178,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll2">
+                                                <div class="collapse" id="coll2">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -189,7 +189,7 @@
                                                                             <label>Background</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="file" name="polianna_custom_pattern" class="form-control p-1">
+                                                                            <input type="file" name="polianna_contentimage_pattern" class="form-control p-1">
                                                                             @if (!empty($template_settings['polianna_custom_pattern']))
                                                                                 <img src="{{ $template_settings['polianna_custom_pattern'] }}" width="80" class="mt-2" style="border: 1px solid black;">
                                                                             @else
@@ -273,6 +273,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="polianna_bg_footer" class="form-control p-1">
+                                                                            @if (!empty($template_settings['polianna_bg_footer']))
+                                                                                <img src="{{ $template_settings['polianna_bg_footer'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -281,10 +286,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="footer_bg_status" id="footer_bg_status1" name="footer_bg_status" value="1"/>
+                                                                                <input type="radio" class="footer_bg_status" id="footer_bg_status1" name="footer_bg_status" value="1" {{ ($template_settings['footer_bg_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="footer_bg_status1">ON</label>
 
-                                                                                <input type="radio" class="footer_bg_status" id="footer_bg_status2" name="footer_bg_status" value="0"/>
+                                                                                <input type="radio" class="footer_bg_status" id="footer_bg_status2" name="footer_bg_status" value="0" {{ ($template_settings['footer_bg_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="footer_bg_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -295,10 +300,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <select name="footer_bg_repeat" id="footer_bg_repeat" class="form-control">
-                                                                                <option value="no-repeat">no-repeat</option>
-                                                                                <option value="repeat">repeat</option>
-                                                                                <option value="repeat-x">repeat-x</option>
-                                                                                <option value="repeat-y">repeat-y</option>
+                                                                                <option value="no-repeat" {{ ($template_settings['footer_bg_repeat'] == 'no-repeat') ? 'selected' : '' }}>no-repeat</option>
+                                                                                <option value="repeat" {{ ($template_settings['footer_bg_repeat'] == 'repeat') ? 'selected' : '' }}>repeat</option>
+                                                                                <option value="repeat-x" {{ ($template_settings['footer_bg_repeat'] == 'repeat-x') ? 'selected' : '' }}>repeat-x</option>
+                                                                                <option value="repeat-y" {{ ($template_settings['footer_bg_repeat'] == 'repeat-y') ? 'selected' : '' }}>repeat-y</option>
                                                                             </select>
                                                                         </td>
                                                                     </tr>
@@ -308,10 +313,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="footer_bg_mobile_status" id="footer_bg_mobile_status1" name="footer_bg_mobile_status" value="1"/>
+                                                                                <input type="radio" class="footer_bg_mobile_status" id="footer_bg_mobile_status1" name="footer_bg_mobile_status" value="1" {{ ($template_settings['footer_bg_mobile_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="footer_bg_mobile_status1">ON</label>
 
-                                                                                <input type="radio" class="footer_bg_mobile_status" id="footer_bg_mobile_status2" name="footer_bg_mobile_status" value="0"/>
+                                                                                <input type="radio" class="footer_bg_mobile_status" id="footer_bg_mobile_status2" name="footer_bg_mobile_status" value="0" {{ ($template_settings['footer_bg_mobile_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="footer_bg_mobile_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -322,10 +327,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="footer_bg_tablet_status" id="footer_bg_tablet_status1" name="footer_bg_tablet_status" value="1"/>
+                                                                                <input type="radio" class="footer_bg_tablet_status" id="footer_bg_tablet_status1" name="footer_bg_tablet_status" value="1" {{ ($template_settings['footer_bg_tablet_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="footer_bg_tablet_status1">ON</label>
 
-                                                                                <input type="radio" class="footer_bg_tablet_status" id="footer_bg_tablet_status2" name="footer_bg_tablet_status" value="0"/>
+                                                                                <input type="radio" class="footer_bg_tablet_status" id="footer_bg_tablet_status2" name="footer_bg_tablet_status" value="0" {{ ($template_settings['footer_bg_tablet_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="footer_bg_tablet_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -336,9 +341,9 @@
                                                                         </th>
                                                                         <td>
                                                                             <span><b>X</b></span>
-                                                                            <input type="text" name="ybc_bgfooter_positions_x" class="form-control">
+                                                                            <input type="text" name="ybc_bgfooter_positions_x" class="form-control" value="{{ $template_settings['ybc_bgfooter_positions_x'] }}">
                                                                             <span><b>Y</b></span>
-                                                                            <input type="text" name="ybc_bgfooter_positions_y" class="form-control">
+                                                                            <input type="text" name="ybc_bgfooter_positions_y" class="form-control" value="{{ $template_settings['ybc_bgfooter_positions_y'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -356,6 +361,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="ybc_module_bg" class="form-control p-1">
+                                                                            @if (!empty($template_settings['ybc_module_bg']))
+                                                                                <img src="{{ $template_settings['ybc_module_bg'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -364,10 +374,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_module_bg_status" id="ybc_module_bg_status1" name="ybc_module_bg_status" value="1"/>
+                                                                                <input type="radio" class="ybc_module_bg_status" id="ybc_module_bg_status1" name="ybc_module_bg_status" value="1" {{ ($template_settings['ybc_module_bg_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_module_bg_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_module_bg_status" id="ybc_module_bg_status2" name="ybc_module_bg_status" value="0"/>
+                                                                                <input type="radio" class="ybc_module_bg_status" id="ybc_module_bg_status2" name="ybc_module_bg_status" value="0" {{ ($template_settings['ybc_module_bg_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_module_bg_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -378,10 +388,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <select name="ybc_module_bg_repeat" id="ybc_module_bg_repeat" class="form-control">
-                                                                                <option value="no-repeat">no-repeat</option>
-                                                                                <option value="repeat">repeat</option>
-                                                                                <option value="repeat-x">repeat-x</option>
-                                                                                <option value="repeat-y">repeat-y</option>
+                                                                                <option value="no-repeat" {{ ($template_settings['ybc_module_bg_repeat'] == 'no-repeat') ? 'selected' : '' }}>no-repeat</option>
+                                                                                <option value="repeat" {{ ($template_settings['ybc_module_bg_repeat'] == 'repeat') ? 'selected' : '' }}>repeat</option>
+                                                                                <option value="repeat-x" {{ ($template_settings['ybc_module_bg_repeat'] == 'repeat-x') ? 'selected' : '' }}>repeat-x</option>
+                                                                                <option value="repeat-y" {{ ($template_settings['ybc_module_bg_repeat'] == 'repeat-y') ? 'selected' : '' }}>repeat-y</option>
                                                                             </select>
                                                                         </td>
                                                                     </tr>
@@ -391,10 +401,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_module_bg_mobile_status" id="ybc_module_bg_mobile_status1" name="ybc_module_bg_mobile_status" value="1"/>
+                                                                                <input type="radio" class="ybc_module_bg_mobile_status" id="ybc_module_bg_mobile_status1" name="ybc_module_bg_mobile_status" value="1" {{ ($template_settings['ybc_module_bg_mobile_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_module_bg_mobile_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_module_bg_mobile_status" id="ybc_module_bg_mobile_status2" name="ybc_module_bg_mobile_status" value="0"/>
+                                                                                <input type="radio" class="ybc_module_bg_mobile_status" id="ybc_module_bg_mobile_status2" name="ybc_module_bg_mobile_status" value="0" {{ ($template_settings['ybc_module_bg_mobile_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_module_bg_mobile_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -405,10 +415,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_module_bg_tablet_status" id="ybc_module_bg_tablet_status1" name="ybc_module_bg_tablet_status" value="1"/>
+                                                                                <input type="radio" class="ybc_module_bg_tablet_status" id="ybc_module_bg_tablet_status1" name="ybc_module_bg_tablet_status" value="1" {{ ($template_settings['ybc_module_bg_tablet_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_module_bg_tablet_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_module_bg_tablet_status" id="ybc_module_bg_tablet_status2" name="ybc_module_bg_tablet_status" value="0"/>
+                                                                                <input type="radio" class="ybc_module_bg_tablet_status" id="ybc_module_bg_tablet_status2" name="ybc_module_bg_tablet_status" value="0" {{ ($template_settings['ybc_module_bg_tablet_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_module_bg_tablet_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -423,6 +433,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="polianna_top_main_bg" class="form-control p-1">
+                                                                            @if (!empty($template_settings['polianna_top_main_bg']))
+                                                                                <img src="{{ $template_settings['polianna_top_main_bg'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -431,10 +446,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="top_main_bg_status" id="top_main_bg_status1" name="top_main_bg_status" value="1"/>
+                                                                                <input type="radio" class="top_main_bg_status" id="top_main_bg_status1" name="top_main_bg_status" value="1" {{ ($template_settings['top_main_bg_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="top_main_bg_status1">ON</label>
 
-                                                                                <input type="radio" class="top_main_bg_status" id="top_main_bg_status2" name="top_main_bg_status" value="0"/>
+                                                                                <input type="radio" class="top_main_bg_status" id="top_main_bg_status2" name="top_main_bg_status" value="0" {{ ($template_settings['top_main_bg_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="top_main_bg_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -445,10 +460,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <select name="top_main_bg_repeat" id="top_main_bg_repeat" class="form-control">
-                                                                                <option value="no-repeat">no-repeat</option>
-                                                                                <option value="repeat">repeat</option>
-                                                                                <option value="repeat-x">repeat-x</option>
-                                                                                <option value="repeat-y">repeat-y</option>
+                                                                                <option value="no-repeat" {{ ($template_settings['top_main_bg_repeat'] == 'no-repeat') ? 'selected' : '' }}>no-repeat</option>
+                                                                                <option value="repeat" {{ ($template_settings['top_main_bg_repeat'] == 'repeat') ? 'selected' : '' }}>repeat</option>
+                                                                                <option value="repeat-x" {{ ($template_settings['top_main_bg_repeat'] == 'repeat-x') ? 'selected' : '' }}>repeat-x</option>
+                                                                                <option value="repeat-y" {{ ($template_settings['top_main_bg_repeat'] == 'repeat-y') ? 'selected' : '' }}>repeat-y</option>
                                                                             </select>
                                                                         </td>
                                                                     </tr>
@@ -458,10 +473,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="top_main_bg_mobile_status" id="top_main_bg_mobile_status1" name="top_main_bg_mobile_status" value="1"/>
+                                                                                <input type="radio" class="top_main_bg_mobile_status" id="top_main_bg_mobile_status1" name="top_main_bg_mobile_status" value="1" {{ ($template_settings['top_main_bg_mobile_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="top_main_bg_mobile_status1">ON</label>
 
-                                                                                <input type="radio" class="top_main_bg_mobile_status" id="top_main_bg_mobile_status2" name="top_main_bg_mobile_status" value="0"/>
+                                                                                <input type="radio" class="top_main_bg_mobile_status" id="top_main_bg_mobile_status2" name="top_main_bg_mobile_status" value="0"  {{ ($template_settings['top_main_bg_mobile_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="top_main_bg_mobile_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -472,10 +487,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="top_main_bg_tablet_status" id="top_main_bg_tablet_status1" name="top_main_bg_tablet_status" value="1"/>
+                                                                                <input type="radio" class="top_main_bg_tablet_status" id="top_main_bg_tablet_status1" name="top_main_bg_tablet_status" value="1"  {{ ($template_settings['top_main_bg_tablet_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="top_main_bg_tablet_status1">ON</label>
 
-                                                                                <input type="radio" class="top_main_bg_tablet_status" id="top_main_bg_tablet_status2" name="top_main_bg_tablet_status" value="0"/>
+                                                                                <input type="radio" class="top_main_bg_tablet_status" id="top_main_bg_tablet_status2" name="top_main_bg_tablet_status" value="0" {{ ($template_settings['top_main_bg_tablet_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="top_main_bg_tablet_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -486,9 +501,9 @@
                                                                         </th>
                                                                         <td>
                                                                             <span><b>X</b></span>
-                                                                            <input type="text" name="ybc_bg_top_main_positions_x" class="form-control">
+                                                                            <input type="text" name="ybc_bg_top_main_positions_x" class="form-control" value="{{ $template_settings['ybc_bg_top_main_positions_x'] }}">
                                                                             <span><b>Y</b></span>
-                                                                            <input type="text" name="ybc_bg_top_main_positions_y" class="form-control">
+                                                                            <input type="text" name="ybc_bg_top_main_positions_y" class="form-control" value="{{ $template_settings['ybc_bg_top_main_positions_y'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -505,7 +520,7 @@
                                                                             <label>Main Background Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_backgr_color" class="form-control">
+                                                                            <input type="color" name="polianna_backgr_color" class="form-control" value="{{ $template_settings['polianna_backgr_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -522,7 +537,7 @@
                                 </div>
                                 {{-- END MAIN --}}
 
-
+                                {{-- CONTENT SETTING --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -554,10 +569,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="polianna_blog_enable" id="polianna_blog_enable1" name="polianna_blog_enable" value="1"/>
+                                                                                <input type="radio" class="polianna_blog_enable" id="polianna_blog_enable1" name="polianna_blog_enable" value="1" {{ ($template_settings['polianna_blog_enable'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="polianna_blog_enable1">ON</label>
 
-                                                                                <input type="radio" class="polianna_blog_enable" id="polianna_blog_enable2" name="polianna_blog_enable" value="0"/>
+                                                                                <input type="radio" class="polianna_blog_enable" id="polianna_blog_enable2" name="polianna_blog_enable" value="0" {{ ($template_settings['polianna_blog_enable'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="polianna_blog_enable2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -568,6 +583,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="polianna_custom_icon1" class="form-control p-1">
+                                                                            @if (!empty($template_settings['polianna_custom_icon1']))
+                                                                                <img src="{{ $template_settings['polianna_custom_icon1'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                 Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -576,6 +596,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="banner_open_img" class="form-control p-1">
+                                                                            @if (!empty($template_settings['banner_open_img']))
+                                                                                <img src="{{ $template_settings['banner_open_img'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -584,6 +609,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="banner_close_img" class="form-control p-1">
+                                                                            @if (!empty($template_settings['banner_close_img']))
+                                                                                <img src="{{ $template_settings['banner_close_img'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -592,10 +622,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="polianna_img1_menu" id="polianna_img1_menu1" name="polianna_img1_menu" value="1"/>
+                                                                                <input type="radio" class="polianna_img1_menu" id="polianna_img1_menu1" name="polianna_img1_menu" value="1" {{ ($template_settings['polianna_img1_menu'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="polianna_img1_menu1">ON</label>
 
-                                                                                <input type="radio" class="polianna_img1_menu" id="polianna_img1_menu2" name="polianna_img1_menu" value="0"/>
+                                                                                <input type="radio" class="polianna_img1_menu" id="polianna_img1_menu2" name="polianna_img1_menu" value="0" {{ ($template_settings['polianna_img1_menu'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="polianna_img1_menu2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -606,10 +636,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <select name="ybc_baner_bg_repeat" id="ybc_baner_bg_repeat" class="form-control">
-                                                                                <option value="no-repeat">no-repeat</option>
-                                                                                <option value="repeat">repeat</option>
-                                                                                <option value="repeat-x">repeat-x</option>
-                                                                                <option value="repeat-y">repeat-y</option>
+                                                                                <option value="no-repeat" {{ ($template_settings['ybc_baner_bg_repeat'] == 'no-repeat') ? 'selected' : '' }}>no-repeat</option>
+                                                                                <option value="repeat" {{ ($template_settings['ybc_baner_bg_repeat'] == 'repeat') ? 'selected' : '' }}>repeat</option>
+                                                                                <option value="repeat-x" {{ ($template_settings['ybc_baner_bg_repeat'] == 'repeat-x') ? 'selected' : '' }}>repeat-x</option>
+                                                                                <option value="repeat-y" {{ ($template_settings['ybc_baner_bg_repeat'] == 'repeat-y') ? 'selected' : '' }}>repeat-y</option>
                                                                             </select>
                                                                         </td>
                                                                     </tr>
@@ -619,10 +649,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_baner_bg_mobile_status" id="ybc_baner_bg_mobile_status1" name="ybc_baner_bg_mobile_status" value="1"/>
+                                                                                <input type="radio" class="ybc_baner_bg_mobile_status" id="ybc_baner_bg_mobile_status1" name="ybc_baner_bg_mobile_status" value="1" {{ ($template_settings['ybc_baner_bg_mobile_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_baner_bg_mobile_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_baner_bg_mobile_status" id="ybc_baner_bg_mobile_status2" name="ybc_baner_bg_mobile_status" value="0"/>
+                                                                                <input type="radio" class="ybc_baner_bg_mobile_status" id="ybc_baner_bg_mobile_status2" name="ybc_baner_bg_mobile_status" value="0" {{ ($template_settings['ybc_baner_bg_mobile_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_baner_bg_mobile_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -633,10 +663,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_baner_bg_tablet_status" id="ybc_baner_bg_tablet_status1" name="ybc_baner_bg_tablet_status" value="1"/>
+                                                                                <input type="radio" class="ybc_baner_bg_tablet_status" id="ybc_baner_bg_tablet_status1" name="ybc_baner_bg_tablet_status" value="1" {{ ($template_settings['ybc_baner_bg_tablet_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_baner_bg_tablet_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_baner_bg_tablet_status" id="ybc_baner_bg_tablet_status2" name="ybc_baner_bg_tablet_status" value="0"/>
+                                                                                <input type="radio" class="ybc_baner_bg_tablet_status" id="ybc_baner_bg_tablet_status2" name="ybc_baner_bg_tablet_status" value="0" {{ ($template_settings['ybc_baner_bg_tablet_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_baner_bg_tablet_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -651,10 +681,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="logo_tablet_enable" id="logo_tablet_enable1" name="logo_tablet_enable" value="1"/>
+                                                                                <input type="radio" class="logo_tablet_enable" id="logo_tablet_enable1" name="logo_tablet_enable" value="1" {{ ($template_settings['logo_tablet_enable'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="logo_tablet_enable1">ON</label>
 
-                                                                                <input type="radio" class="logo_tablet_enable" id="logo_tablet_enable2" name="logo_tablet_enable" value="0"/>
+                                                                                <input type="radio" class="logo_tablet_enable" id="logo_tablet_enable2" name="logo_tablet_enable" value="0" {{ ($template_settings['logo_tablet_enable'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="logo_tablet_enable2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -664,7 +694,7 @@
                                                                             <label>Banner Background Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="bg_banner" class="form-control">
+                                                                            <input type="color" name="bg_banner" class="form-control" value="{{ $template_settings['bg_banner'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -673,10 +703,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="bg_banner_tranparent" id="bg_banner_tranparent1" name="bg_banner_tranparent" value="1"/>
+                                                                                <input type="radio" class="bg_banner_tranparent" id="bg_banner_tranparent1" name="bg_banner_tranparent" value="1" {{ ($template_settings['bg_banner_tranparent'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="bg_banner_tranparent1">ON</label>
 
-                                                                                <input type="radio" class="bg_banner_tranparent" id="bg_banner_tranparent2" name="bg_banner_tranparent" value="0"/>
+                                                                                <input type="radio" class="bg_banner_tranparent" id="bg_banner_tranparent2" name="bg_banner_tranparent" value="0" {{ ($template_settings['bg_banner_tranparent'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="bg_banner_tranparent2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -686,7 +716,7 @@
                                                                             <label>Banner Height</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="number" name="polianna_custom_topinfo1" class="form-control">
+                                                                            <input type="number" name="polianna_custom_topinfo1" class="form-control" value="{{ $template_settings['polianna_custom_topinfo1'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -695,10 +725,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_wide_banner_fullwidth" id="ybc_wide_banner_fullwidth1" name="ybc_wide_banner_fullwidth" value="1"/>
+                                                                                <input type="radio" class="ybc_wide_banner_fullwidth" id="ybc_wide_banner_fullwidth1" name="ybc_wide_banner_fullwidth" value="1"  {{ ($template_settings['ybc_wide_banner_fullwidth'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_wide_banner_fullwidth1">ON</label>
 
-                                                                                <input type="radio" class="ybc_wide_banner_fullwidth" id="ybc_wide_banner_fullwidth2" name="ybc_wide_banner_fullwidth" value="0"/>
+                                                                                <input type="radio" class="ybc_wide_banner_fullwidth" id="ybc_wide_banner_fullwidth2" name="ybc_wide_banner_fullwidth" value="0" {{ ($template_settings['ybc_wide_banner_fullwidth'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_wide_banner_fullwidth2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -708,7 +738,7 @@
                                                                             <label>Box Shadow</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="text" name="ybc_banner_box_shadow" class="form-control">
+                                                                            <input type="text" name="ybc_banner_box_shadow" class="form-control" value="{{ $template_settings['ybc_banner_box_shadow'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -717,9 +747,9 @@
                                                                         </th>
                                                                         <td>
                                                                             <span><b>X</b></span>
-                                                                            <input type="text" name="ybc_banner_positions_x" class="form-control">
+                                                                            <input type="text" name="ybc_banner_positions_x" class="form-control" value="{{ $template_settings['ybc_banner_positions_x'] }}">
                                                                             <span><b>Y</b></span>
-                                                                            <input type="text" name="ybc_banner_positions_y" class="form-control">
+                                                                            <input type="text" name="ybc_banner_positions_y" class="form-control" value="{{ $template_settings['ybc_banner_positions_y'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -733,7 +763,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END CONTENT SETTING --}}
 
+                                {{-- MENU SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -765,10 +797,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="polianna_widthmenu" id="polianna_widthmenu1" name="polianna_widthmenu" value="1"/>
+                                                                                <input type="radio" class="polianna_widthmenu" id="polianna_widthmenu1" name="polianna_widthmenu" value="1" {{ ($template_settings['polianna_widthmenu'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="polianna_widthmenu1">ON</label>
 
-                                                                                <input type="radio" class="polianna_widthmenu" id="polianna_widthmenu2" name="polianna_widthmenu" value="0"/>
+                                                                                <input type="radio" class="polianna_widthmenu" id="polianna_widthmenu2" name="polianna_widthmenu" value="0" {{ ($template_settings['polianna_widthmenu'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="polianna_widthmenu2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -778,7 +810,7 @@
                                                                             <label>Menu Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_bar_color" class="form-control">
+                                                                            <input type="color" name="polianna_bar_color" class="form-control" value="{{ $template_settings['polianna_bar_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -786,7 +818,7 @@
                                                                             <label>Button Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_line1_color" class="form-control">
+                                                                            <input type="color" name="polianna_line1_color" class="form-control" value="{{ $template_settings['polianna_line1_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -794,7 +826,7 @@
                                                                             <label>Button Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_hover_color" class="form-control">
+                                                                            <input type="color" name="polianna_hover_color" class="form-control" value="{{ $template_settings['polianna_hover_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -807,7 +839,7 @@
                                                                             @endphp
                                                                             <select name="polianna_subbar_color" id="polianna_subbar_color" class="form-control">
                                                                                 @foreach ($fonts as $key => $font)
-                                                                                    <option value="{{ $key }}">{{ $font }}</option>
+                                                                                    <option value="{{ $key }}" {{ ($template_settings['polianna_subbar_color'] == $key) ? 'selected' : '' }}>{{ $font }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                         </td>
@@ -821,7 +853,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_toplinksize'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -832,7 +869,7 @@
                                                                             <label>Menu Font Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_wide_menu_font_color1" class="form-control">
+                                                                            <input type="color" name="polianna_wide_menu_font_color1" class="form-control" value="{{ $template_settings['polianna_wide_menu_font_color1'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -840,7 +877,7 @@
                                                                             <label>Menu Font Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_hover2_color" class="form-control">
+                                                                            <input type="color" name="polianna_hover2_color" class="form-control" value="{{ $template_settings['polianna_hover2_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -848,7 +885,7 @@
                                                                             <label>Basket Background Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_menulink2_color" class="form-control">
+                                                                            <input type="color" name="polianna_menulink2_color" class="form-control" value="{{ $template_settings['polianna_menulink2_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -856,7 +893,7 @@
                                                                             <label>Basket Mouse Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_fonlink2_color" class="form-control">
+                                                                            <input type="color" name="polianna_fonlink2_color" class="form-control" value="{{ $template_settings['polianna_fonlink2_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -864,7 +901,7 @@
                                                                             <label>Basket Font Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_toplinksize2" class="form-control">
+                                                                            <input type="color" name="polianna_toplinksize2" class="form-control" value="{{ $template_settings['polianna_toplinksize2'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -872,7 +909,7 @@
                                                                             <label>Basket Font Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_categorysize" class="form-control">
+                                                                            <input type="color" name="polianna_categorysize" class="form-control" value="{{ $template_settings['polianna_categorysize'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -886,7 +923,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END MENU SETTINGS --}}
 
+                                {{-- MAIN CONTENT SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -918,10 +957,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="main_content_fullwidth" id="main_content_fullwidth1" name="main_content_fullwidth" value="1"/>
+                                                                                <input type="radio" class="main_content_fullwidth" id="main_content_fullwidth1" name="main_content_fullwidth" value="1" {{ ($template_settings['main_content_fullwidth'] == 1) ? 'checked' : '' }}/>
+
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="main_content_fullwidth1">ON</label>
 
-                                                                                <input type="radio" class="main_content_fullwidth" id="main_content_fullwidth2" name="main_content_fullwidth" value="0"/>
+                                                                                <input type="radio" class="main_content_fullwidth" id="main_content_fullwidth2" name="main_content_fullwidth" value="0" {{ ($template_settings['main_content_fullwidth'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="main_content_fullwidth2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -931,7 +971,7 @@
                                                                             <label>Content Width (PX)</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="number" name="polianna_contentwidth" id="polianna_contentwidth" class="form-control">
+                                                                            <input type="number" name="polianna_contentwidth" id="polianna_contentwidth" class="form-control" value="{{ $template_settings['polianna_contentwidth'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -940,6 +980,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="polianna_contentimage_pattern" class="form-control p-1">
+                                                                            @if (!empty($template_settings['polianna_contentimage_pattern']))
+                                                                                <img src="{{ $template_settings['polianna_contentimage_pattern'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                 Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -948,10 +993,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="polianna_img1_main_content" id="polianna_img1_main_content1" name="polianna_img1_main_content" value="1"/>
+                                                                                <input type="radio" class="polianna_img1_main_content" id="polianna_img1_main_content1" name="polianna_img1_main_content" value="1" {{ ($template_settings['polianna_img1_main_content'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="polianna_img1_main_content1">ON</label>
 
-                                                                                <input type="radio" class="polianna_img1_main_content" id="polianna_img1_main_content2" name="polianna_img1_main_content" value="0"/>
+                                                                                <input type="radio" class="polianna_img1_main_content" id="polianna_img1_main_content2" name="polianna_img1_main_content" value="0" {{ ($template_settings['polianna_img1_main_content'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="polianna_img1_main_content2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -962,10 +1007,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <select name="polianna_contentbackgr_repeat" id="polianna_contentbackgr_repeat" class="form-control">
-                                                                                <option value="no-repeat">no-repeat</option>
-                                                                                <option value="repeat">repeat</option>
-                                                                                <option value="repeat-x">repeat-x</option>
-                                                                                <option value="repeat-y">repeat-y</option>
+                                                                                <option value="no-repeat" {{ ($template_settings['polianna_contentbackgr_repeat'] == 'no-repeat') ? 'selected' : '' }}>no-repeat</option>
+                                                                                <option value="repeat" {{ ($template_settings['polianna_contentbackgr_repeat'] == 'repeat') ? 'selected' : '' }}>repeat</option>
+                                                                                <option value="repeat-x" {{ ($template_settings['polianna_contentbackgr_repeat'] == 'repeat-x') ? 'selected' : '' }}>repeat-x</option>
+                                                                                <option value="repeat-y" {{ ($template_settings['polianna_contentbackgr_repeat'] == 'repeat-y') ? 'selected' : '' }}>repeat-y</option>
                                                                             </select>
                                                                         </td>
                                                                     </tr>
@@ -975,10 +1020,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_main_content_bg_mobile_status" id="ybc_main_content_bg_mobile_status1" name="ybc_main_content_bg_mobile_status" value="1"/>
+                                                                                <input type="radio" class="ybc_main_content_bg_mobile_status" id="ybc_main_content_bg_mobile_status1" name="ybc_main_content_bg_mobile_status" value="1" {{ ($template_settings['ybc_main_content_bg_mobile_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_main_content_bg_mobile_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_main_content_bg_mobile_status" id="ybc_main_content_bg_mobile_status2" name="ybc_main_content_bg_mobile_status" value="0"/>
+                                                                                <input type="radio" class="ybc_main_content_bg_mobile_status" id="ybc_main_content_bg_mobile_status2" name="ybc_main_content_bg_mobile_status" value="0" {{ ($template_settings['ybc_main_content_bg_mobile_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_main_content_bg_mobile_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -989,10 +1034,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="ybc_main_content_bg_tablet_status" id="ybc_main_content_bg_tablet_status1" name="ybc_main_content_bg_tablet_status" value="1"/>
+                                                                                <input type="radio" class="ybc_main_content_bg_tablet_status" id="ybc_main_content_bg_tablet_status1" name="ybc_main_content_bg_tablet_status" value="1" {{ ($template_settings['ybc_main_content_bg_tablet_status'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="ybc_main_content_bg_tablet_status1">ON</label>
 
-                                                                                <input type="radio" class="ybc_main_content_bg_tablet_status" id="ybc_main_content_bg_tablet_status2" name="ybc_main_content_bg_tablet_status" value="0"/>
+                                                                                <input type="radio" class="ybc_main_content_bg_tablet_status" id="ybc_main_content_bg_tablet_status2" name="ybc_main_content_bg_tablet_status" value="0"  {{ ($template_settings['ybc_main_content_bg_tablet_status'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="ybc_main_content_bg_tablet_status2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -1002,7 +1047,7 @@
                                                                             <label>Box Shadow Value</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="number" name="polianna_shadowcontent" id="polianna_shadowcontent" class="form-control">
+                                                                            <input type="number" name="polianna_shadowcontent" id="polianna_shadowcontent" class="form-control" value="{{ $template_settings['polianna_shadowcontent'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1010,13 +1055,13 @@
                                                                             <label>Background Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_contentbackgr_color" id="polianna_contentbackgr_color" class="form-control">
+                                                                            <input type="color" name="polianna_contentbackgr_color" id="polianna_contentbackgr_color" class="form-control" value="{{ $template_settings['polianna_contentbackgr_color'] }}">
                                                                             <br>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="polianna_contentbackgr_transparent" id="polianna_contentbackgr_transparent1" name="polianna_contentbackgr_transparent" value="1"/>
+                                                                                <input type="radio" class="polianna_contentbackgr_transparent" id="polianna_contentbackgr_transparent1" name="polianna_contentbackgr_transparent" value="1" {{ ($template_settings['polianna_contentbackgr_transparent'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="polianna_contentbackgr_transparent1">ON</label>
 
-                                                                                <input type="radio" class="polianna_contentbackgr_transparent" id="polianna_contentbackgr_transparent2" name="polianna_contentbackgr_transparent" value="0"/>
+                                                                                <input type="radio" class="polianna_contentbackgr_transparent" id="polianna_contentbackgr_transparent2" name="polianna_contentbackgr_transparent" value="0" {{ ($template_settings['polianna_contentbackgr_transparent'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="polianna_contentbackgr_transparent2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -1031,6 +1076,11 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="file" name="footer_background_image" class="form-control p-1">
+                                                                            @if (!empty($template_settings['footer_background_image']))
+                                                                            <img src="{{ $template_settings['footer_background_image'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                        @else
+                                                                             Not Avavilable
+                                                                        @endif
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1039,10 +1089,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="footer_bg_enable" id="footer_bg_enable1" name="footer_bg_enable" value="1"/>
+                                                                                <input type="radio" class="footer_bg_enable" id="footer_bg_enable1" name="footer_bg_enable" value="1" {{ ($template_settings['footer_bg_enable'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="footer_bg_enable1">ON</label>
 
-                                                                                <input type="radio" class="footer_bg_enable" id="footer_bg_enable2" name="footer_bg_enable" value="0"/>
+                                                                                <input type="radio" class="footer_bg_enable" id="footer_bg_enable2" name="footer_bg_enable" value="0" {{ ($template_settings['footer_bg_enable'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="footer_bg_enable2">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -1053,10 +1103,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <select name="footer_background_repeat" id="footer_background_repeat" class="form-control">
-                                                                                <option value="no-repeat">no-repeat</option>
-                                                                                <option value="repeat">repeat</option>
-                                                                                <option value="repeat-x">repeat-x</option>
-                                                                                <option value="repeat-y">repeat-y</option>
+                                                                                <option value="no-repeat" {{ ($template_settings['footer_background_repeat'] == 'no-repeat') ? 'selected' : '' }}>no-repeat</option>
+                                                                                <option value="repeat" {{ ($template_settings['footer_background_repeat'] == 'repeat') ? 'selected' : '' }}>repeat</option>
+                                                                                <option value="repeat-x" {{ ($template_settings['footer_background_repeat'] == 'repeat-x') ? 'selected' : '' }}>repeat-x</option>
+                                                                                <option value="repeat-y" {{ ($template_settings['footer_background_repeat'] == 'repeat-y') ? 'selected' : '' }}>repeat-y</option>
                                                                             </select>
                                                                         </td>
                                                                     </tr>
@@ -1066,10 +1116,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="footer_bg_mobile_status2" id="footer_bg_mobile_status21" name="footer_bg_mobile_status2" value="1"/>
+                                                                                <input type="radio" class="footer_bg_mobile_status2" id="footer_bg_mobile_status21" name="footer_bg_mobile_status2" value="1" {{ ($template_settings['footer_bg_mobile_status2'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="footer_bg_mobile_status21">ON</label>
 
-                                                                                <input type="radio" class="footer_bg_mobile_status2" id="footer_bg_mobile_status22" name="footer_bg_mobile_status2" value="0"/>
+                                                                                <input type="radio" class="footer_bg_mobile_status2" id="footer_bg_mobile_status22" name="footer_bg_mobile_status2" value="0"  {{ ($template_settings['footer_bg_mobile_status2'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="footer_bg_mobile_status22">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -1080,10 +1130,10 @@
                                                                         </th>
                                                                         <td>
                                                                             <div class="btn-group">
-                                                                                <input type="radio" class="footer_bg_tablet_status2" id="footer_bg_tablet_status21" name="footer_bg_tablet_status2" value="1"/>
+                                                                                <input type="radio" class="footer_bg_tablet_status2" id="footer_bg_tablet_status21" name="footer_bg_tablet_status2" value="1" {{ ($template_settings['footer_bg_tablet_status2'] == 1) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: green;color:white;opacity: 0.5;" for="footer_bg_tablet_status21">ON</label>
 
-                                                                                <input type="radio" class="footer_bg_tablet_status2" id="footer_bg_tablet_status22" name="footer_bg_tablet_status2" value="0"/>
+                                                                                <input type="radio" class="footer_bg_tablet_status2" id="footer_bg_tablet_status22" name="footer_bg_tablet_status2" value="0" {{ ($template_settings['footer_bg_tablet_status2'] == 0) ? 'checked' : '' }}/>
                                                                                 <label class="btn btn-sm" style=" background: red;color: white;opacity: 0.5;" for="footer_bg_tablet_status22">OFF</label>
                                                                              </div>
                                                                         </td>
@@ -1099,7 +1149,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END MAIN CONTENT SETTINGS --}}
 
+                                {{-- GLOBAL SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1134,13 +1186,13 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Button Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_button_color" class="form-control">
+                                                                                <input type="color" name="polianna_button_color" class="form-control" value="{{ $template_settings['polianna_button_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Button Hover Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_buttonhov_color" class="form-control">
+                                                                                <input type="color" name="polianna_buttonhov_color" class="form-control" value="{{ $template_settings['polianna_buttonhov_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1157,37 +1209,37 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Border Hover Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_mousehover_color" class="form-control">
+                                                                                <input type="color" name="ybc_mousehover_color" class="form-control" value="{{ $template_settings['ybc_mousehover_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Active Border Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_click_color" class="form-control">
+                                                                                <input type="color" name="ybc_click_color" class="form-control" value="{{ $template_settings['ybc_click_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Errors Border Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_error_color" class="form-control">
+                                                                                <input type="color" name="ybc_error_color" class="form-control" value="{{ $template_settings['ybc_error_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">General Border Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_general_color" class="form-control">
+                                                                                <input type="color" name="ybc_general_color" class="form-control" value="{{ $template_settings['ybc_general_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Unactive Text Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_unactive_color" class="form-control">
+                                                                                <input type="color" name="ybc_unactive_color" class="form-control" value="{{ $template_settings['ybc_unactive_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Active Text Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_active_color" class="form-control">
+                                                                                <input type="color" name="ybc_active_color" class="form-control" value="{{ $template_settings['ybc_active_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1204,13 +1256,13 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Category links (In Left/Right Columns)</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_categ_color" class="form-control">
+                                                                                <input type="color" name="polianna_categ_color" class="form-control" value="{{ $template_settings['polianna_categ_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Category Links Hover</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_hovercateg_color" class="form-control">
+                                                                                <input type="color" name="polianna_hovercateg_color" class="form-control" value="{{ $template_settings['polianna_hovercateg_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1227,19 +1279,19 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Product Name Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_titleitem_color" class="form-control">
+                                                                                <input type="color" name="polianna_titleitem_color" class="form-control" value=" {{ $template_settings['polianna_titleitem_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Price Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_allprice_color" class="form-control">
+                                                                                <input type="color" name="polianna_allprice_color" class="form-control" value="{{ $template_settings['polianna_allprice_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Product Description Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_oprice_color" class="form-control">
+                                                                                <input type="color" name="polianna_oprice_color" class="form-control" value="{{ $template_settings['polianna_oprice_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1254,7 +1306,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END GLOBAL SETTINGS --}}
 
+                                {{-- FOOTER SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1285,7 +1339,7 @@
                                                                             <label>Footer Link</label>
                                                                         </th>
                                                                         <td>
-                                                                            <textarea name="polianna_custom_submenu_1" id="polianna_custom_submenu_1" rows="3" class="form-control"></textarea>
+                                                                            <textarea name="polianna_custom_submenu_1" id="polianna_custom_submenu_1" rows="3" class="form-control">{{ $template_settings['polianna_custom_submenu_1'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1293,7 +1347,7 @@
                                                                             <label>Font Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footertitle_color" class="form-control">
+                                                                            <input type="color" name="polianna_footertitle_color" class="form-control" value="{{ $template_settings['polianna_footertitle_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1301,7 +1355,7 @@
                                                                             <label>Link Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footer_color" class="form-control">
+                                                                            <input type="color" name="polianna_footer_color" class="form-control" value="{{ $template_settings['polianna_footer_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1309,7 +1363,7 @@
                                                                             <label>Link Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footerhover_color" class="form-control">
+                                                                            <input type="color" name="polianna_footerhover_color" class="form-control"  value="{{ $template_settings['polianna_footerhover_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -1321,7 +1375,7 @@
                                                                             <label>Text Footer</label>
                                                                         </th>
                                                                         <td>
-                                                                            <textarea name="polianna_custom_submenu_2" id="polianna_custom_submenu_2" rows="3" class="form-control"></textarea>
+                                                                            <textarea name="polianna_custom_submenu_2" id="polianna_custom_submenu_2" rows="3" class="form-control">{{ $template_settings['polianna_custom_submenu_2'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1329,7 +1383,7 @@
                                                                             <label>Font Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footerfon_color" class="form-control">
+                                                                            <input type="color" name="polianna_footerfon_color" class="form-control" value="{{ $template_settings['polianna_footerfon_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1337,7 +1391,7 @@
                                                                             <label>Link Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footertext_color" class="form-control">
+                                                                            <input type="color" name="polianna_footertext_color" class="form-control" value="{{ $template_settings['polianna_footertext_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1345,7 +1399,7 @@
                                                                             <label>Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footertext_hover_color" class="form-control">
+                                                                            <input type="color" name="polianna_footertext_hover_color" class="form-control" value="{{ $template_settings['polianna_footertext_hover_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -1359,7 +1413,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END FOOTER SETTINGS --}}
 
+                                {{-- FONT SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1392,7 +1448,7 @@
                                                                         <td>
                                                                             <select name="polianna_title_font" id="polianna_title_font" class="form-control">
                                                                                 @foreach ($fonts as $key => $font)
-                                                                                    <option value="{{ $key }}">{{ $font }}</option>
+                                                                                    <option value="{{ $key }}" {{ ($template_settings['polianna_title_font'] == $key) ? 'selected' : '' }}>{{ $font }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                             <code class="text-muted">
@@ -1407,7 +1463,7 @@
                                                                         <td>
                                                                             <select name="polianna_body_font" id="polianna_body_font" class="form-control">
                                                                                 @foreach ($fonts as $key => $font)
-                                                                                    <option value="{{ $key }}">{{ $font }}</option>
+                                                                                    <option value="{{ $key }}"  {{ ($template_settings['polianna_body_font'] == $key) ? 'selected' : '' }}>{{ $font }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                             <code class="text-muted">
@@ -1424,7 +1480,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_bodysize'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1439,7 +1500,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['ybc_polianna_title_h1'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1454,7 +1520,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_h2'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1469,7 +1540,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_h3'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '. $selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1484,7 +1560,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_h4'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1499,7 +1580,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_box'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1514,7 +1600,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_column'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1529,7 +1620,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_product'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1544,7 +1640,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_pricesize'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1561,6 +1662,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END FONT SETTINGS --}}
 
                             </form>
                             {{-- End Form --}}

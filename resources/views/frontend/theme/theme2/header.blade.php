@@ -9,11 +9,11 @@
     <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
       <div class="container">
         <ul class="menu">
-          <li class="active"><a class="text-uppercase" href="#">home</a></li>
-          <li><a class="text-uppercase" href="#">member</a></li>
-          <li><a class="text-uppercase" href="#">menu</a></li>
-          <li><a class="text-uppercase" href="#">check out</a></li>
-          <li><a class="text-uppercase" href="#">contact us</a></li>
+          <li class="{{ (request()->is('/')) ? 'active' : '' }}"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
+          <li><a class="text-uppercase" href="{{ route('menu') }}">member</a></li>
+          <li class="{{ (request()->is('menu')) ? 'active' : '' }}"><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
+          <li><a class="text-uppercase" href="{{ route('menu') }}">check out</a></li>
+          <li><a class="text-uppercase" href="{{ route('menu') }}">contact us</a></li>
         </ul>
         <div class="__right">
           <ul class="authentication-links">

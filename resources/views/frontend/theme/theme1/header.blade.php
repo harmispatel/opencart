@@ -17,7 +17,7 @@
           <ul class="menu">
             <li class="active"><a class="text-uppercase" href="#">home</a></li>
             <li><a class="text-uppercase" href="#">member</a></li>
-            <li><a class="text-uppercase" href="#">menu</a></li>
+            <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
             <li><a class="text-uppercase" href="#">check out</a></li>
             <li><a class="text-uppercase" href="#">contact us</a></li>
           </ul><a class="menu-shopping-cart" href="">

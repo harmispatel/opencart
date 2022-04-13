@@ -13,13 +13,16 @@ class ReviewsController extends Controller
     // Function of All Reviews List
     public function index()
     {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
         // Check User Permission
         if(check_user_role(78) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
-        $data['reviews'] = Reviews::select('oc_review.*','pd.name as pname')->leftJoin('oc_product_description as pd','pd.product_id','=','oc_review.product_id')->get();
+        $data['reviews'] = Reviews::where('store_id',$current_store_id)->get();
 
          return view('admin.reviews.list',$data);
     }

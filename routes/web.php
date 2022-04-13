@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Auth;
 
 //frontend
 use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
+use App\Http\Controllers\Frontend\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -255,10 +256,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Reviews
     Route::get('review', [ReviewsController::class, 'index'])->name('review');
-    Route::get('addreview',[ReviewsController::class,'add'])->name('addreview');
+    // Route::get('addreview',[ReviewsController::class,'add'])->name('addreview');
     Route::post('storereview',[ReviewsController::class,'store'])->name('storereview');
-    Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
-    Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
+    // Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
+    // Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
 
     // Countries
@@ -387,5 +388,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
-Route::get('/', [HomeControllerFront::class, 'index']);
+Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
+Route::get('menu', [MenuController::class, 'index'])->name('menu');
+
+
 

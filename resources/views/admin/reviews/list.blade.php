@@ -46,16 +46,6 @@
                                     <i class="fa fa-list pr-2"></i>
                                     Reviews List
                                 </h3>
-
-                                <div class="container" style="text-align: right">
-                                    @if(check_user_role(79) == 1)
-                                        <a href="{{ route('addreview') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
-                                    @endif
-
-                                    @if(check_user_role(81) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
-                                    @endif
-                                </div>
                             </div>
                             {{-- End Card Header --}}
 
@@ -74,15 +64,13 @@
 
                                     {{-- Table Head Start --}}
                                     <thead class="text-center">
-                                        <th>
-                                            <input type="checkbox" name="checkall" id="delall">
-                                        </th>
-                                        <th>Product</th>
-                                        <th>Auther</th>
-                                        <th>Rating</th>
-                                        <th>Status</th>
-                                        <th>Date Added</th>
-                                        <th>Action</th>
+                                        <th>Order ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Order Date</th>
+                                        <th>Review Date</th>
+                                        <th>Review Stars</th>
+                                        <th>Review Comment</th>
+                                        <th>Actions</th>
                                     </thead>
                                     {{-- End Table Head --}}
 
@@ -90,42 +78,13 @@
                                     <tbody class="text-center review-list">
                                         @foreach ($reviews as $review )
                                             <tr>
-                                                <td>
-                                                    <input type="checkbox" name="del_all" class="del_all" value="{{ $review->review_id }}">
-                                                </td>
-                                                <td>{{ $review->pname }}</td>
+                                                <td>{{ $review->order_id }}</td>
                                                 <td>{{ $review->author }}</td>
-                                                <td>
-                                                    @php
-                                                        for($i=1; $i<=5; $i++)
-                                                        {
-                                                            if($review->rating >= $i)
-                                                            {
-                                                                echo "<label style='color: goldenrod;font-size: 25px;'>&#10038;</label>";
-                                                            }
-                                                            else
-                                                            {
-                                                                echo "<label style='color: lightgray;font-size: 25px;'>&#10038;</label>";
-                                                            }
-                                                        }
-
-                                                    @endphp
-                                                </td>
-                                                <td>
-                                                    @if ($review->status == 1)
-                                                        Enabled
-                                                    @else
-                                                        Disabled
-                                                    @endif
-                                                </td>
+                                                <td></td>
                                                 <td>{{ date('d-m-Y',strtotime($review->date_added)) }}</td>
-                                                <td>
-                                                    @if(check_user_role(80) == 1)
-                                                        <a href="{{ route('editreview',$review->review_id) }}" class="btn btn-sm btn-primary rounded"><i class="fa fa-edit"></i></a>
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
+                                                <td>-</td>
+                                                <td>{{ $review->message }}</td>
+                                                <td></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -161,82 +120,6 @@
         $('.table').DataTable();
 
     });
-
-
-
-    // Select All Checkbox
-    $('#delall').on('click', function(e) {
-        if($(this).is(':checked',true))
-        {
-            $(".del_all").prop('checked', true);
-        }
-        else
-        {
-            $(".del_all").prop('checked',false);
-        }
-    });
-    // End Select All Checkbox
-
-
-    // Delete User
-    $('.deletesellected').click(function()
-    {
-
-        var checkValues = $('.del_all:checked').map(function()
-        {
-            return $(this).val();
-        }).get();
-
-        if(checkValues !='')
-        {
-            swal({
-                title: "Are you sure You want to Delete It ?",
-                text: "Once deleted, you will not be able to recover this Record",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete)
-                {
-
-                    $.ajax({
-                            type: "POST",
-                            url: '{{ url("deletereview") }}',
-                            data: {"_token": "{{ csrf_token() }}",'id':checkValues},
-                            dataType : 'JSON',
-                            success: function (data)
-                            {
-                                if(data.success == 1)
-                                {
-                                    swal("Your Record has been deleted!", {
-                                        icon: "success",
-                                    });
-
-                                    setTimeout(function(){
-                                        location.reload();
-                                    }, 1500);
-                                }
-                            }
-                    });
-
-                }
-                else
-                {
-                    swal("Cancelled", "", "error");
-                    setTimeout(function(){
-                        location.reload();
-                    }, 1000);
-                }
-            });
-        }
-        else
-        {
-            swal("Please select atleast One Review", "", "warning");
-        }
-    });
-
-// End Delete User
 
 </script>
 
