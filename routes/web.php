@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Auth;
 
 //frontend
 use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
+use App\Http\Controllers\Frontend\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -386,5 +387,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 // ---------------------------------------------------------------------------------------------
 // FRONTEND
-Route::get('/', [HomeControllerFront::class, 'index']);
+Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
+Route::get('menu', [MenuController::class, 'index'])->name('menu');
 
