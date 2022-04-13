@@ -391,3 +391,5 @@ Route::group(['middleware' => 'AuthUser'], function () {
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 
+
+

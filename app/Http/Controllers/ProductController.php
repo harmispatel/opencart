@@ -461,10 +461,24 @@ class ProductController extends Controller
                 }
                 $html .= '<td>' . $category->pname . '</td>';
                 $sizes = ToppingProductPriceSize::where('id_product', $category->product_id)->get();
+                
                 $html .= '<td>' . $category->price . '</td>';
-                foreach ($sizes as $size) {
-                    $html .= '<td>' . $size->price . '</td>';
+                
+                if(count($sizes) > 0)
+                {
+                    foreach ($sizes as $size) 
+                    {
+                        $html .= '<td>' . $size->price . '</td>';
+                    }
                 }
+                else
+                {
+                    foreach ($headers as $header)
+                    {
+                        $html .= '<td>-</td>';
+                    }
+                }
+
                 if ($category->status == 1) {
                     $html .= '<td>Enabled</td>';
                 } else {

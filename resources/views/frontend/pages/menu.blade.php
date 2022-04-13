@@ -62,18 +62,14 @@
                   </div>
                   <div >
                     <ul class="box-category">
-                      <li><a href="#" class="active">PIZZA DEALS (5)</a></li>
-                      <li><a href="#">PIZZAS (27)</a></li>
-                      <li><a href="#">CALZONE (1)</a></li>
-                      <li><a href="#">GARLIC PIZZAS (2)</a></li>
-                      <li><a href="#">MEAL DEALS (3)</a></li>
-                      <li><a href="#">PASTA (5)</a></li>
-                      <li><a href="#">WRAPS (9)</a></li>
-                      <li><a href="#">KIDS MEALS (2)</a></li>
-                      <li><a href="#">EXTRAS (21)</a></li>
-                      <li><a href="#">SAUCES (8)</a></li>
-                      <li><a href="#">DESSERTS (4)</a></li>
-                      <li><a href="#">DRINKS (11)</a></li>
+                       @foreach ($data['category'] as $category)
+                        @php
+                          $demo =$category->category_id;
+                          $productcount =getproduct($demo);
+                        @endphp
+                       <li><a href="#" class="active">{{ $category->name  }}   ({{ ($productcount) }})</a></li>
+                       @endforeach
+                     
                     </ul>
                   </div>
                 </div>
@@ -102,7 +98,10 @@
                       <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <span>PIZZA DEALS</span>
+                            @foreach ($data['category'] as $value )
+                            <span>{{ $value->name }}</span>
+                              
+                            @endforeach
                             <i class="fa fa-angle-down"></i>
                           </button>
                         </h2>
