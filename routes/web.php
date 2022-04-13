@@ -256,10 +256,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Reviews
     Route::get('review', [ReviewsController::class, 'index'])->name('review');
-    Route::get('addreview',[ReviewsController::class,'add'])->name('addreview');
+    // Route::get('addreview',[ReviewsController::class,'add'])->name('addreview');
     Route::post('storereview',[ReviewsController::class,'store'])->name('storereview');
-    Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
-    Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
+    // Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
+    // Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
 
     // Countries

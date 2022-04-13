@@ -103,6 +103,41 @@ class LayoutController extends Controller
             'footer_bg_mobile_status2',
             'footer_bg_tablet_status2',
 
+            'polianna_button_color',
+            'polianna_buttonhov_color',
+            'ybc_mousehover_color',
+            'ybc_click_color',
+            'ybc_error_color',
+            'ybc_general_color',
+            'ybc_active_color',
+            'ybc_unactive_color',
+            'polianna_categ_color',
+            'polianna_hovercateg_color',
+            'polianna_titleitem_color',
+            'polianna_allprice_color',
+            'polianna_oprice_color',
+
+            'polianna_custom_submenu_1',
+            'polianna_footertitle_color',
+            'polianna_footer_color',
+            'polianna_footerhover_color',
+            'polianna_custom_submenu_2',
+            'polianna_footerfon_color',
+            'polianna_footertext_color',
+            'polianna_footertext_hover_color',
+
+            'polianna_title_font',
+            'polianna_body_font',
+            'polianna_bodysize',
+            'ybc_polianna_title_h1',
+            'polianna_title_h2',
+            'polianna_title_h3',
+            'polianna_title_h4',
+            'polianna_title_box',
+            'polianna_title_column',
+            'polianna_title_product',
+            'polianna_pricesize',
+
         ]);
 
         $template_settings = [];
@@ -344,6 +379,68 @@ class LayoutController extends Controller
         $data['polianna_shadowcontent'] = isset($request->polianna_shadowcontent) ? $request->polianna_shadowcontent : '';
         $data['polianna_contentbackgr_color'] = isset($request->polianna_contentbackgr_color) ? $request->polianna_contentbackgr_color : '';
         $data['polianna_contentbackgr_transparent'] = isset($request->polianna_contentbackgr_transparent) ? $request->polianna_contentbackgr_transparent : '';
+
+
+        if($request->hasFile('footer_background_image'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','footer_background_image')->first();
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $footer_background_image = time().'.'.$request->file('footer_background_image')->getClientOriginalName();
+            $request->file('footer_background_image')->move(public_path('frontend/backgrounds'),$footer_background_image);
+            $data['footer_background_image'] = 'public/frontend/backgrounds/'.$footer_background_image;
+        }
+
+        $data['footer_bg_enable'] = isset($request->footer_bg_enable) ? $request->footer_bg_enable : '';
+        $data['footer_background_repeat'] = isset($request->footer_background_repeat) ? $request->footer_background_repeat : '';
+        $data['footer_bg_mobile_status2'] = isset($request->footer_bg_mobile_status2) ? $request->footer_bg_mobile_status2 : '';
+        $data['footer_bg_tablet_status2'] = isset($request->footer_bg_tablet_status2) ? $request->footer_bg_tablet_status2 : '';
+
+
+        $data['polianna_button_color'] = isset($request->polianna_button_color) ? $request->polianna_button_color : '';
+        $data['polianna_buttonhov_color'] = isset($request->polianna_buttonhov_color) ? $request->polianna_buttonhov_color : '';
+        $data['ybc_mousehover_color'] = isset($request->ybc_mousehover_color) ? $request->ybc_mousehover_color : '';
+        $data['ybc_click_color'] = isset($request->ybc_click_color) ? $request->ybc_click_color : '';
+        $data['ybc_error_color'] = isset($request->ybc_error_color) ? $request->ybc_error_color : '';
+        $data['ybc_general_color'] = isset($request->ybc_general_color) ? $request->ybc_general_color : '';
+        $data['ybc_active_color'] = isset($request->ybc_active_color) ? $request->ybc_active_color : '';
+        $data['ybc_unactive_color'] = isset($request->ybc_unactive_color) ? $request->ybc_unactive_color : '';
+        $data['polianna_categ_color'] = isset($request->polianna_categ_color) ? $request->polianna_categ_color : '';
+        $data['polianna_hovercateg_color'] = isset($request->polianna_hovercateg_color) ? $request->polianna_hovercateg_color : '';
+        $data['polianna_titleitem_color'] = isset($request->polianna_titleitem_color) ? $request->polianna_titleitem_color : '';
+        $data['polianna_allprice_color'] = isset($request->polianna_allprice_color) ? $request->polianna_allprice_color : '';
+        $data['polianna_oprice_color'] = isset($request->polianna_oprice_color) ? $request->polianna_oprice_color : '';
+
+
+        $data['polianna_custom_submenu_1'] = isset($request->polianna_custom_submenu_1) ? $request->polianna_custom_submenu_1 : '';
+        $data['polianna_footertitle_color'] = isset($request->polianna_footertitle_color) ? $request->polianna_footertitle_color : '';
+        $data['polianna_footer_color'] = isset($request->polianna_footer_color) ? $request->polianna_footer_color : '';
+        $data['polianna_footerhover_color'] = isset($request->polianna_footerhover_color) ? $request->polianna_footerhover_color : '';
+        $data['polianna_custom_submenu_2'] = isset($request->polianna_custom_submenu_2) ? $request->polianna_custom_submenu_2 : '';
+        $data['polianna_footerfon_color'] = isset($request->polianna_footerfon_color) ? $request->polianna_footerfon_color : '';
+        $data['polianna_footertext_color'] = isset($request->polianna_footertext_color) ? $request->polianna_footertext_color : '';
+        $data['polianna_footertext_hover_color'] = isset($request->polianna_footertext_hover_color) ? $request->polianna_footertext_hover_color : '';
+
+
+        $data['polianna_title_font'] = isset($request->polianna_title_font) ? $request->polianna_title_font : '';
+        $data['polianna_body_font'] = isset($request->polianna_body_font) ? $request->polianna_body_font : '';
+        $data['polianna_bodysize'] = isset($request->polianna_bodysize) ? $request->polianna_bodysize : '';
+        $data['ybc_polianna_title_h1'] = isset($request->ybc_polianna_title_h1) ? $request->ybc_polianna_title_h1 : '';
+        $data['polianna_title_h2'] = isset($request->polianna_title_h2) ? $request->polianna_title_h2 : '';
+        $data['polianna_title_h3'] = isset($request->polianna_title_h3) ? $request->polianna_title_h3 : '';
+        $data['polianna_title_h4'] = isset($request->polianna_title_h4) ? $request->polianna_title_h4 : '';
+        $data['polianna_title_box'] = isset($request->polianna_title_box) ? $request->polianna_title_box : '';
+        $data['polianna_title_column'] = isset($request->polianna_title_column) ? $request->polianna_title_column : '';
+        $data['polianna_title_product'] = isset($request->polianna_title_product) ? $request->polianna_title_product : '';
+        $data['polianna_pricesize'] = isset($request->polianna_pricesize) ? $request->polianna_pricesize : '';
 
 
         foreach($data as $key => $new)
