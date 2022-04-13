@@ -115,7 +115,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll">
+                                                <div class="collapse" id="coll">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -178,7 +178,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll2">
+                                                <div class="collapse" id="coll2">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -557,7 +557,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll3">
+                                                <div class="collapse" id="coll3">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -785,7 +785,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll4">
+                                                <div class="collapse" id="coll4">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -925,7 +925,7 @@
                                 </div>
                                 {{-- END MENU SETTINGS --}}
 
-                                {{-- MAIN CONTENT --}}
+                                {{-- MAIN CONTENT SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -945,7 +945,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse show" id="coll5">
+                                                <div class="collapse" id="coll5">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -1149,8 +1149,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- END MAIN CONTENT --}}
+                                {{-- END MAIN CONTENT SETTINGS --}}
 
+                                {{-- GLOBAL SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1185,13 +1186,13 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Button Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_button_color" class="form-control">
+                                                                                <input type="color" name="polianna_button_color" class="form-control" value="{{ $template_settings['polianna_button_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Button Hover Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_buttonhov_color" class="form-control">
+                                                                                <input type="color" name="polianna_buttonhov_color" class="form-control" value="{{ $template_settings['polianna_buttonhov_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1208,37 +1209,37 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Border Hover Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_mousehover_color" class="form-control">
+                                                                                <input type="color" name="ybc_mousehover_color" class="form-control" value="{{ $template_settings['ybc_mousehover_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Active Border Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_click_color" class="form-control">
+                                                                                <input type="color" name="ybc_click_color" class="form-control" value="{{ $template_settings['ybc_click_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Errors Border Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_error_color" class="form-control">
+                                                                                <input type="color" name="ybc_error_color" class="form-control" value="{{ $template_settings['ybc_error_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">General Border Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_general_color" class="form-control">
+                                                                                <input type="color" name="ybc_general_color" class="form-control" value="{{ $template_settings['ybc_general_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Unactive Text Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_unactive_color" class="form-control">
+                                                                                <input type="color" name="ybc_unactive_color" class="form-control" value="{{ $template_settings['ybc_unactive_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Active Text Color</th>
                                                                             <td>
-                                                                                <input type="color" name="ybc_active_color" class="form-control">
+                                                                                <input type="color" name="ybc_active_color" class="form-control" value="{{ $template_settings['ybc_active_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1255,13 +1256,13 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Category links (In Left/Right Columns)</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_categ_color" class="form-control">
+                                                                                <input type="color" name="polianna_categ_color" class="form-control" value="{{ $template_settings['polianna_categ_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Category Links Hover</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_hovercateg_color" class="form-control">
+                                                                                <input type="color" name="polianna_hovercateg_color" class="form-control" value="{{ $template_settings['polianna_hovercateg_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1278,19 +1279,19 @@
                                                                         <tr>
                                                                             <th width="250" class="align-middle">Product Name Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_titleitem_color" class="form-control">
+                                                                                <input type="color" name="polianna_titleitem_color" class="form-control" value=" {{ $template_settings['polianna_titleitem_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Price Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_allprice_color" class="form-control">
+                                                                                <input type="color" name="polianna_allprice_color" class="form-control" value="{{ $template_settings['polianna_allprice_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th class="align-middle">Product Description Color</th>
                                                                             <td>
-                                                                                <input type="color" name="polianna_oprice_color" class="form-control">
+                                                                                <input type="color" name="polianna_oprice_color" class="form-control" value="{{ $template_settings['polianna_oprice_color'] }}">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -1305,7 +1306,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END GLOBAL SETTINGS --}}
 
+                                {{-- FOOTER SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1336,7 +1339,7 @@
                                                                             <label>Footer Link</label>
                                                                         </th>
                                                                         <td>
-                                                                            <textarea name="polianna_custom_submenu_1" id="polianna_custom_submenu_1" rows="3" class="form-control"></textarea>
+                                                                            <textarea name="polianna_custom_submenu_1" id="polianna_custom_submenu_1" rows="3" class="form-control">{{ $template_settings['polianna_custom_submenu_1'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1344,7 +1347,7 @@
                                                                             <label>Font Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footertitle_color" class="form-control">
+                                                                            <input type="color" name="polianna_footertitle_color" class="form-control" value="{{ $template_settings['polianna_footertitle_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1352,7 +1355,7 @@
                                                                             <label>Link Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footer_color" class="form-control">
+                                                                            <input type="color" name="polianna_footer_color" class="form-control" value="{{ $template_settings['polianna_footer_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1360,7 +1363,7 @@
                                                                             <label>Link Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footerhover_color" class="form-control">
+                                                                            <input type="color" name="polianna_footerhover_color" class="form-control"  value="{{ $template_settings['polianna_footerhover_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -1372,7 +1375,7 @@
                                                                             <label>Text Footer</label>
                                                                         </th>
                                                                         <td>
-                                                                            <textarea name="polianna_custom_submenu_2" id="polianna_custom_submenu_2" rows="3" class="form-control"></textarea>
+                                                                            <textarea name="polianna_custom_submenu_2" id="polianna_custom_submenu_2" rows="3" class="form-control">{{ $template_settings['polianna_custom_submenu_2'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1380,7 +1383,7 @@
                                                                             <label>Font Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footerfon_color" class="form-control">
+                                                                            <input type="color" name="polianna_footerfon_color" class="form-control" value="{{ $template_settings['polianna_footerfon_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1388,7 +1391,7 @@
                                                                             <label>Link Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footertext_color" class="form-control">
+                                                                            <input type="color" name="polianna_footertext_color" class="form-control" value="{{ $template_settings['polianna_footertext_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -1396,7 +1399,7 @@
                                                                             <label>Hover Color</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="color" name="polianna_footertext_hover_color" class="form-control">
+                                                                            <input type="color" name="polianna_footertext_hover_color" class="form-control" value="{{ $template_settings['polianna_footertext_hover_color'] }}">
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -1410,7 +1413,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END FOOTER SETTINGS --}}
 
+                                {{-- FONT SETTINGS --}}
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1443,7 +1448,7 @@
                                                                         <td>
                                                                             <select name="polianna_title_font" id="polianna_title_font" class="form-control">
                                                                                 @foreach ($fonts as $key => $font)
-                                                                                    <option value="{{ $key }}">{{ $font }}</option>
+                                                                                    <option value="{{ $key }}" {{ ($template_settings['polianna_title_font'] == $key) ? 'selected' : '' }}>{{ $font }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                             <code class="text-muted">
@@ -1458,7 +1463,7 @@
                                                                         <td>
                                                                             <select name="polianna_body_font" id="polianna_body_font" class="form-control">
                                                                                 @foreach ($fonts as $key => $font)
-                                                                                    <option value="{{ $key }}">{{ $font }}</option>
+                                                                                    <option value="{{ $key }}"  {{ ($template_settings['polianna_body_font'] == $key) ? 'selected' : '' }}>{{ $font }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                             <code class="text-muted">
@@ -1475,7 +1480,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_bodysize'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1490,7 +1500,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['ybc_polianna_title_h1'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1505,7 +1520,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_h2'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1520,7 +1540,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_h3'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '. $selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1535,7 +1560,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_h4'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1550,7 +1580,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_box'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1565,7 +1600,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_column'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1580,7 +1620,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_title_product'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1595,7 +1640,12 @@
                                                                                 @php
                                                                                     for($i=9;$i<=36;$i++)
                                                                                     {
-                                                                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                                                                        $selected = '';
+                                                                                        if($template_settings['polianna_pricesize'] == $i)
+                                                                                        {
+                                                                                            $selected = 'selected';
+                                                                                        }
+                                                                                        echo '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
                                                                                     }
                                                                                 @endphp
                                                                             </select>
@@ -1612,6 +1662,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{-- END FONT SETTINGS --}}
 
                             </form>
                             {{-- End Form --}}

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Reviews extends Model
 {
     use HasFactory;
-    protected $table='oc_review';
-    protected $primaryKey = 'review_id';
+    protected $table='oc_store_review';
+    protected $primaryKey = 'store_review_id';
     public $timestamps = false;
 }
