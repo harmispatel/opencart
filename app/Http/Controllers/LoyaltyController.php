@@ -36,41 +36,42 @@ class LoyaltyController extends Controller
     public function store(Request $request)
     {
 
-        // return $request->all();
+        // return $request->rewardtype;
         $current_store_id = currentStoreId();
+        $rewardtype=isset($request->rewardtype) ? $request->rewardtype : '';
+         if(!empty($rewardtype) || $rewardtype != ''){
 
-        $setting = new Settings();
-        $setting->store_id = $current_store_id;
-        $setting->group = 'loyality';
-        $setting->key = 'rewardtype';
-        $setting->value = $request->rewardtype;
-        $setting->serialized = 0;
-        $setting->save();
-        // $data['rewardtype']=$request->rewardtype;
+             $setting = new Settings();
+             $setting->store_id = $current_store_id;
+             $setting->group = 'loyality';
+             $setting->key = 'rewardtype';
+             $setting->value = $request->rewardtype;
+             $setting->serialized = 0;
+             $setting->save();
+         } else{
+             echo "hello";
+         }
+          
+        
 
-        if ($request->rewardtype == 'money') {
-
-            $data['minimum'] = $request->money['minimum'];
-            $data['collectionaward'] = $request->money['collectionaward'];
-            $data['deliveryaward'] = $request->money['deliveryaward'];
-            $data['pointexpiry'] = $request->money['pointexpiry'];
-            $data['expiryday'] = $request->money['expiryday'];
-            $data['maximumaward'] = $request->money['maximumaward'];
-            $data['maximumorder'] = $request->money['maximumorder'];
-            $data['category'] = $request->money['category'];
-            $data['product'] = $request->money['product'];
-            $data['availibleday'] = $request->money['availibleday'];
-            $data['excludeminimumspend'] = $request->money['excludeminimumspend'];
-            $data['excludecoupons'] = $request->money['excludecoupons'];
-
-
-
+        if($rewardtype == 'money'){
+            $query = Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : ''; 
+            $data['minimum'] =isset($request->money['minimum']) ? $request->money['minimum'] : '';
+            $data['collectionaward'] = isset($request->money['collectionaward']) ? $request->money['collectionaward'] : '';
+            $data['deliveryaward'] =isset($request->money['deliveryaward']) ? $request->money['deliveryaward'] : '';
+            $data['pointexpiry'] = isset($request->money['pointexpiry']) ? $request->money['pointexpiry'] : '';
+            $data['expiryday'] = isset($request->money['expiryday']) ? $request->money['expiryday'] : '';
+            $data['maximumaward'] = isset($request->money['maximumaward']) ? $request->money['maximumaward'] : '';
+            $data['maximumorder'] = isset($request->money['maximumorder']) ? $request->money['maximumorder'] : '';
+            $data['category'] = isset($request->money['category']) ? $request->money['category'] : '';
+            $data['product'] = isset($request->money['product']) ? $request->money['product'] : '';
+            $data['availibleday'] = isset($request->money['availibleday']) ? $request->money['availibleday'] : '';
+            $data['excludeminimumspend'] = isset($request->money['excludeminimumspend']) ? $request->money['excludeminimumspend'] : '';
+            $data['excludecoupons'] =isset($request->money['excludecoupons']) ? $request->money['excludecoupons'] : '';
 
             $moneyserialize = serialize($data);
-
-            $query = Settings::where('store_id', $current_store_id)->where('key', isset($request->rewardtype) ? $request->rewardtype : '')->first();
-
-            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+            
             if ($setting_id) {
                 $social_update = Settings::find($setting_id);
                 $social_update->value = $moneyserialize;
@@ -88,28 +89,29 @@ class LoyaltyController extends Controller
                 }
                 $settingmoney->save();
             }
-        } else if ($request->rewardtype == 'point') {
-            $point['minimum'] = $request->point['minimum'];
-            $point['rewardsevery'] = $request->point['rewardsevery'];
-            $point['totalspend'] = $request->point['totalspend'];
-            $point['award'] = $request->point['award'];
-            $point['everypoint'] = $request->point['everypoint'];
-            $point['pointexpiry'] = $request->point['pointexpiry'];
-            $point['expiryday'] = $request->point['expiryday'];
-            $point['category'] = $request->point['category'];
-            $point['product'] = $request->point['product'];
-            $point['availibleday'] = $request->point['availibleday'];
-            $point['excludeminimumspend'] = $request->point['excludeminimumspend'];
-            $point['excludecoupons'] = $request->point['excludecoupons'];
+           }
+           else if($rewardtype == 'point')
+           {
+            $query1= Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
+            $setting_id1 = isset($query1->setting_id) ? $query1->setting_id : '';
+            $point['minimum'] =isset($request->point['minimum']) ? $request->point['minimum'] : '';
+            $point['rewardsevery'] = isset($request->point['rewardsevery']) ? $request->point['rewardsevery'] : '';
+            $point['totalspend'] =isset($request->point['totalspend']) ? $request->point['totalspend'] : '';
+            $point['award'] = isset($request->point['award']) ? $request->point['award'] : '';
+            $point['everypoint'] =isset($request->point['everypoint']) ? $request->point['everypoint'] : '';
+            $point['pointexpiry'] = isset($request->point['pointexpiry']) ? $request->point['pointexpiry'] : '';
+            $point['expiryday'] =isset($request->point['expiryday']) ? $request->point['expiryday'] : '';
+            $point['category'] =isset($request->point['category']) ? $request->point['category'] : '';
+            $point['product'] = isset($request->point['product']) ? $request->point['product'] : '';
+            $point['availibleday'] =isset($request->point['availibleday']) ? $request->point['availibleday'] : '';
+            $point['excludeminimumspend'] =isset($request->point['excludeminimumspend']) ? $request->point['excludeminimumspend'] : '';
+            $point['excludecoupons'] =isset($request->point['excludecoupons']) ? $request->point['excludecoupons'] : '';
 
 
             $pointserialize = serialize($point);
 
-            $query = Settings::where('store_id', $current_store_id)->where('key', isset($request->rewardtype) ? $request->rewardtype : '')->first();
-            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
-
-            if (!empty($setting_id) || $setting_id != '') {
-                $social_update = Settings::find($setting_id);
+            if (!empty($setting_id) || $setting_id1 != '') {
+                $social_update = Settings::find($setting_id1);
                 $social_update->value = $pointserialize;
                 $social_update->update();
             } else {
@@ -125,7 +127,14 @@ class LoyaltyController extends Controller
                 }
                 $settingpoint->save();
             }
-        }
+           }
+          
+
+            
+        
+
+            
+        
 
         return redirect('loyalty');
     }
