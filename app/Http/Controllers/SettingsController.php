@@ -91,27 +91,17 @@ class SettingsController extends Controller
         {
             $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
 
-            $open = $open_close[$row] = isset($query->value) ? $query->value : '';
+            $open_close[$row] = isset($query->value) ? $query->value : '';
         }
 
-        // echo '<pre>';
-        // print_r($open);
-        // exit();
-        
-        $timesetting = unserialize($open);
-        // echo '<pre>';
-        // print_r($timesetting);
-        // exit();
-
-        $alldays = unserialize($open_close['bussines']);
-        $close_date = unserialize($open_close['closing_dates']);
-        // echo '<pre>';
-        // print_r($close_date);
-        // exit();
-
+        $closedate = unserialize($open_close['closing_dates']);
+        $delivery = unserialize($open_close['delivery']);
+        $collection = unserialize($open_close['collection']);
+        $timesetting = $open_close;
+        $bussines = unserialize($open_close['bussines']);
         $days = $this->days;
        
-        return view('admin.settings.open_close_time_settings', compact(['days','open_close','times','alldays']) );
+        return view('admin.settings.open_close_time_settings', compact(['days','timesetting','times','bussines','closedate','delivery','collection']) );
     }
 
     public function mapandcategory()
@@ -536,23 +526,6 @@ class SettingsController extends Controller
         return redirect()->route('appsettings')->with('success', 'Settings Updated..');
     }
 
-    //open close time start
-    // public function openclosetime()
-    // {
-    //     $data['days'] = array(
-    //         '0' => "Every day",
-    //         '2' => 'Monday',
-    //         '3' => 'Tuesday',
-    //         '4' => 'Wednesday',
-    //         '5' => 'Thursday',
-    //         '6' => 'Friday',
-    //         '7' => 'Saturday',
-    //         '8' => 'Sunday',
-    //     );
-    // }
-
-    //open close time end
-
     public function deliverycollectionsetting()
     {
         // Current Store ID
@@ -622,35 +595,47 @@ class SettingsController extends Controller
     // openclosetimeset
     public function openclosetimeset(Request $request)
     {
-        // $business = $request['bussines'];
         $current_store_id = currentStoreId();
 
-        $key = ([
-            'opening_time_collection',
-            'opening_time_delivery',
-            'opening_time_bussness',
-            'business_closing_dates',
-            'order_outof_bussiness_time',
-            'collection',
-            'collection_gaptime',
-            'collection_same_bussiness',
-            'delivery',
-            'delivery_gaptime',
-            'delivery_same_bussiness',
-            'closing_dates',
-            'bussines',
-        ]);
         $bissinessdays = serialize($request['bussines']);
-        $closingdate = serialize($request->closingdate);
+        $closingdate = serialize($request['closing_dates']);
         $delivery = serialize($request['delivery']);
         $collection = serialize($request['collection']);
-        $openclose = new Settings();
-        $openclose->store_id = $current_store_id;
-  
 
 
-        exit();
-        
+        $data['bussines'] = isset($bissinessdays) ? $bissinessdays : '';
+        $data['closing_dates'] = isset($closingdate) ? $closingdate : '';
+        $data['delivery'] = isset($delivery) ? $delivery : '';
+        $data['collection'] = isset($collection) ? $collection : '';
+        $data['delivery_same_bussiness'] = isset($request->delivery_same_bussiness) ? $request->delivery_same_bussiness : '';
+        $data['delivery_gaptime'] = isset($request->delivery_gaptime) ? $request->delivery_gaptime : '';
+        $data['collection_same_bussiness'] = isset($request->collection_same_bussiness) ? $request->collection_same_bussiness : '';
+        $data['collection_gaptime'] = isset($request->collection_gaptime) ? $request->collection_gaptime : '';
+        $data['order_outof_bussiness_time'] = $request->order_outof_bussiness_time;
+
+        foreach($data as $key => $new)
+        {
+            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+
+            if (!empty($setting_id) || $setting_id != '')
+            {
+                $timesetting = Settings::find($setting_id);
+                $timesetting->value = $new;
+                $timesetting->update();
+            }
+            else
+            {
+                $timesetting = new Settings();
+                $timesetting->store_id = $current_store_id;
+                $timesetting->group = 'timesetting';
+                $timesetting->key = $key;
+                $timesetting->value = $new;
+                $timesetting->serialized = 1;
+                $timesetting->save();
+            }
+        }
+        return redirect()->route('openclosetime')->with('success', 'Open/Close time Updated..');
     }
 
     public function daytime(Request $request)
