@@ -65,8 +65,11 @@
                        @foreach ($data['category'] as $category)
                         @php
                           $demo =$category->category_id;
-                          $productcount =getproduct($demo);
+                          $productcount =getproductcount($demo);
+                           
+                        
                         @endphp
+                            
                        <li><a href="#" class="active">{{ $category->name  }}   ({{ ($productcount) }})</a></li>
                        @endforeach
                      
@@ -77,311 +80,67 @@
                   <select class="form-control">
                     <option>Show All Categories</option>
                     <option>PIZZA DEALS (5)</option>
-                    <option>PIZZAS (27)</option>
-                    <option>CALZONE (1)</option>
-                    <option>GARLIC PIZZAS (2)</option>
-                    <option>MEAL DEALS (3)</option>
-                    <option>PASTA (5)</option>
-                    <option>WRAPS (9)</option>
-                    <option>KIDS MEALS (2)</option>
-                    <option>EXTRAS (21)</option>
-                    <option>SAUCES (8)</option>
-                    <option>DESSERTS (4)</option>
-                    <option>DRINKS (11)</option>
                   </select>
                 </div>
               </div>
               <div class="col-lg-8">
                 <div class="product-list wow animate__fadeInUp" data-wow-duration="1s">
                   <div class="product-list-innr" >
+                    
+                    @foreach ($data['category'] as $value )
+                     
+                    @php
+                          $cat_id=$value->category_id;
+                          $front_store_id= session('front_store_id'); 
+                          $result=getproduct($front_store_id,$cat_id);
+
+                          // echo '<pre>';
+                          // print_r($product);
+                          
+                    @endphp
+                     
+                   
+                       
+                        
+                       
+                    
+ 
                     <div class="accordion" id="accordionExample">
                       <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            @foreach ($data['category'] as $value )
                             <span>{{ $value->name }}</span>
-                              
-                            @endforeach
                             <i class="fa fa-angle-down"></i>
                           </button>
                         </h2>
+                        
+                            
+                        @foreach($result['product'] as $values)
+                           
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                           <div class="accordion-body">
                             <div class="acc-body-inr">
                               <div class="acc-body-inr-title">
-                                <h4>MARGHERITA</h4>
-                                <p>Cheese and Tomato</p>
-                                <img src="./assets/demo-data/photo-gallery/placehold 8.jpg">
+                                <h4>{{ $values->hasOneDescription['name'] }}</h4>
+                                <p>{{ $values->hasOneDescription['description'] }}</p>
+                                <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}"
+                                width="80px">
                               </div>
                               <div class="options-bt-main">
+                                @foreach ($result['size'] as $size)
                                 <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
+                                  <span>{{ $size->size }}</span>
+                                  <a href="" class="btn options-btn">£15.00<i class="fa fa-shopping-basket"></i></a>
                                 </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>LONDON PIZZA</h4>
-                                <p>Chips and Cheese</p>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>AL FUNGHI</h4>
-                                <p>Mushrooms and Cheese</p>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>MARGHERITA</h4>
-                                <p>Cheese and Tomato</p>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
+                                @endforeach
                               </div>
                             </div>
                           </div>
                         </div>
+                        @endforeach
                       </div>
                     </div>
-                    <div class="accordion" id="accordionExample">
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">
-                           <span> PIZZAS</span>
-                            <i class="fa fa-angle-down"></i>
-                          </button>
-                          <p>9" (Regular), 12" (Large), 16" (Family Size)</p>
-                        </h2>
-                        <div id="collapsethree" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>MARGHERITA</h4>
-                                <span>Cheese and Tomato</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>LONDON PIZZA</h4>
-                                <span>Chips and Cheese</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>AL FUNGHI</h4>
-                                <span>Mushrooms and Cheese</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>MARGHERITA</h4>
-                                <span>Cheese and Tomato</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="accordion" id="accordionExample">
-                      <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
-                            <span>CALZONE</span>
-                            <i class="fa fa-angle-down"></i>
-                          </button>
-                          <p>TRY OUR NEW ITALIAN STYLE CALZONES</p>
-                        </h2>
-                        <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                          <div class="accordion-body">
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>MARGHERITA</h4>
-                                <span>Cheese and Tomato</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>LONDON PIZZA</h4>
-                                <span>Chips and Cheese</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>AL FUNGHI</h4>
-                                <span>Mushrooms and Cheese</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="acc-body-inr">
-                              <div class="acc-body-inr-title">
-                                <h4>MARGHERITA</h4>
-                                <span>Cheese and Tomato</span>
-                              </div>
-                              <div class="options-bt-main">
-                                <div class="options-bt">
-                                  <span>9"</span>
-                                  <a href="" class="btn options-btn">£05.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>12"</span>
-                                  <a href="" class="btn options-btn">£06.49 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                                <div class="options-bt">
-                                  <span>16"</span>
-                                  <a href="" class="btn options-btn">£10.00 <i class="fa fa-shopping-basket"></i></a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    @endforeach
                   </div>
                 </div>
               </div>
