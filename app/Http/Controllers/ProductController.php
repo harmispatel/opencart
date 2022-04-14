@@ -114,7 +114,7 @@ class ProductController extends Controller
         if (isset($data->product_id)) {
 
             foreach ($group as $key=>$value) {
-               
+
                 $productvalue=$value['id_group_option'];
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
                 $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
@@ -160,7 +160,7 @@ class ProductController extends Controller
                     $html .='</select>';
                     $html .='</div>';
             }
-            
+
         } else {
             $html .= 'No Topping';
         }
@@ -180,19 +180,19 @@ class ProductController extends Controller
     {
 
         $current_store_id = currentStoreId();
-        
+
         foreach($request->product as $key => $prod){
-            
+
             $name = isset($prod['name']) ? $prod['name'] : '';
             $description = isset($prod['description']) ? $prod['description'] : '';
-            $price = isset($prod['price']) ? $prod['price'] : ''; 
-            $image = isset($prod['image']) ? $prod['image'] : ''; 
-            $price_size = isset($prod['price_size']) ? $prod['price_size'] : ''; 
-            $toppingtype= isset($prod['typetopping']) ? $prod['typetopping'] : ''; 
-            $enable= isset($prod['enable']) ? $prod['enable'] : ''; 
-            $renamegroup= isset($prod['renamegroup']) ? $prod['renamegroup'] : ''; 
-         
-            
+            $price = isset($prod['price']) ? $prod['price'] : '';
+            $image = isset($prod['image']) ? $prod['image'] : '';
+            $price_size = isset($prod['price_size']) ? $prod['price_size'] : '';
+            $toppingtype= isset($prod['typetopping']) ? $prod['typetopping'] : '';
+            $enable= isset($prod['enable']) ? $prod['enable'] : '';
+            $renamegroup= isset($prod['renamegroup']) ? $prod['renamegroup'] : '';
+
+
             $product = new Product();
             date_default_timezone_set('Asia/Kolkata');
             $product->model = isset($request->model) ? $request->model : 0;
@@ -230,7 +230,7 @@ class ProductController extends Controller
                 $product->image = $imgname;
             }
             $product->save();
-            
+
             $product_description = new ProductDescription();
             $product_description->product_id = $product->product_id;
             $product_description->language_id = 1;
@@ -240,11 +240,11 @@ class ProductController extends Controller
             $product_description->meta_keyword = isset($request->meta_keyword) ? $request->meta_keyword : '';
             $product_description->tag = isset($request->tag) ? $request->tag : '';
             $product_description->save();
-         
+
             $productstore = new ProductStore();
             $productstore->product_id = $product->product_id;
             $productstore->store_id =$current_store_id;
-            $productstore->save(); 
+            $productstore->save();
 
             $product_category = new Product_to_category();
             $product_category->product_id = $product->product_id;
@@ -253,9 +253,9 @@ class ProductController extends Controller
 
               if(!empty($toppingtype) || $toppingtype != ''){
                 foreach($toppingtype as $key=>$value){
-                 
+
                     $producttoppingtype = new ProductToppingType();
-                    $producttoppingtype->id_product=$product->product_id; 
+                    $producttoppingtype->id_product=$product->product_id;
                     $producttoppingtype->id_group_topping=isset($request->id_group_topping) ? $request->id_group_topping : "";
                     $producttoppingtype->typetopping=$toppingtype[$key];
                     $producttoppingtype->min_check=isset($request->min_check) ? $request->min_check : 0;
@@ -282,8 +282,8 @@ class ProductController extends Controller
                     $toppingProductPriceSize->save();
                 }
             }
-            
-            
+
+
         }
         return redirect()->route('products');
 
@@ -420,7 +420,7 @@ class ProductController extends Controller
 
 
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->get();
-        
+
         $headers = ToppingSize::where('id_category', $category_id)->get();
         $head_count = count($headers) + 1;
         $html = '';
@@ -461,12 +461,12 @@ class ProductController extends Controller
                 }
                 $html .= '<td>' . $category->pname . '</td>';
                 $sizes = ToppingProductPriceSize::where('id_product', $category->product_id)->get();
-                
+
                 $html .= '<td>' . $category->price . '</td>';
-                
+
                 if(count($sizes) > 0)
                 {
-                    foreach ($sizes as $size) 
+                    foreach ($sizes as $size)
                     {
                         $html .= '<td>' . $size->price . '</td>';
                     }
@@ -548,7 +548,7 @@ class ProductController extends Controller
         //     // print_r($posts);
         //     // exit();
 
-           
+
         // }
 
         // $data = array();
@@ -596,7 +596,7 @@ class ProductController extends Controller
         //     "recordsFiltered" => intval(isset($totalFiltered) ? $totalFiltered : ''),
         //     "data"            => $data1
         // );
-         
+
         // echo json_encode($json_data);
 
     }
@@ -649,7 +649,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id', $id)->first();
-       
+
         $prod_id = isset($product->category_id) ? $product->category_id : '';
 
         $header = ToppingSize::where('id_category', $prod_id)->get();

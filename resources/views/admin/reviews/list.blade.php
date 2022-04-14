@@ -78,13 +78,61 @@
                                     <tbody class="text-center review-list">
                                         @foreach ($reviews as $review )
                                             <tr>
+                                                @php
+                                                    $cust_name = '-';
+                                                    $order_date = '-';
+                                                    if(isset($review->hasOneCustomer))
+                                                    {
+                                                        $cust_name = $review->hasOneCustomer['firstname'].' '.$review->hasOneCustomer['lastname'];
+                                                    }
+
+                                                    if(isset($review->hasOneOrder))
+                                                    {
+                                                        $order_date = $review->hasOneOrder['date_added'];
+                                                    }
+                                                @endphp
                                                 <td>{{ $review->order_id }}</td>
-                                                <td>{{ $review->author }}</td>
-                                                <td></td>
+                                                <td>{{ $cust_name }}</td>
+                                                <td>{{ date('d-m-Y',strtotime($order_date)) }}</td>
                                                 <td>{{ date('d-m-Y',strtotime($review->date_added)) }}</td>
-                                                <td>-</td>
+                                                <td>
+                                                    @php
+                                                        $cnt = $review->quality + $review->service + $review->timing;
+                                                    @endphp
+                                                    @if ($cnt == 15)
+                                                        5
+                                                    @elseif ($cnt > 13 && $cnt <= 14)
+                                                        4.5
+                                                    @elseif ($cnt >= 12 && $cnt <= 13 )
+                                                        4
+                                                    @elseif ($cnt > 10 && $cnt < 12 )
+                                                        3.5
+                                                    @elseif ($cnt > 8 && $cnt <= 10 )
+                                                        3
+                                                    @elseif ($cnt > 6 && $cnt <= 8 )
+                                                        2.5
+                                                    @elseif ($cnt > 4 && $cnt <= 6 )
+                                                        2
+                                                    @elseif ($cnt > 2 && $cnt <= 4 )
+                                                        1.5
+                                                    @elseif ($cnt >= 1 && $cnt <= 2 )
+                                                        1
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </td>
                                                 <td>{{ $review->message }}</td>
-                                                <td></td>
+                                                <td>
+                                                    <div class="btn-group" role="group" style="height: 30px;" id="reviewStatus">
+                                                        @if ($review->status == 1)
+                                                            <button class="btn btn-xs btn-success" onclick="reviewStatus(1,{{ $review->store_review_id }})">Enabled</button>
+                                                            <button class="btn btn-xs btn-secondary" onclick="reviewStatus(0,{{ $review->store_review_id }})">Disabled</button>
+                                                        @else
+                                                            <button class="btn btn-xs btn-secondary" onclick="reviewStatus(1,{{ $review->store_review_id }})">Enabled</button>
+                                                            <button class="btn btn-xs btn-danger" onclick="reviewStatus(0,{{ $review->store_review_id }})">Disabled</button>
+                                                        @endif
+                                                    </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -120,6 +168,25 @@
         $('.table').DataTable();
 
     });
+
+    // Review Status Enabled Disabled
+    function reviewStatus(val,rid)
+    {
+        $.ajax({
+            type: "POST",
+            url: "{{ url('reviewStatus') }}",
+            data: {'val':val,"_token": "{{ csrf_token() }}",'rid':rid},
+            dataType: "json",
+            success: function (response) {
+
+               if(response.success == 1)
+               {
+                   location.reload();
+               }
+            }
+        });
+    }
+    // End Review Status Enabled Disabled
 
 </script>
 

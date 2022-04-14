@@ -13,6 +13,14 @@
     {
         $theme_id = 1;
     }
+
+    if(session()->has('front_store_id'))
+    {
+        $front_store_id = session()->get('front_store_id');
+    }
+
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+
 @endphp
 
 

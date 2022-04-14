@@ -48,6 +48,47 @@ function themeActive()
 }
 
 
+function storeThemeSettings($theme_id,$store_id)
+{
+    $key = ([
+        'polianna_navbar_background',
+        'polianna_navbar_link',
+        'polianna_main_logo',
+        'polianna_main_logo_width',
+        'polianna_main_logo_height',
+
+        'polianna_slider_permission',
+        'polianna_slider_1',
+        'polianna_slider_2',
+        'polianna_slider_3',
+        'polianna_slider_1_title',
+        'polianna_slider_2_title',
+        'polianna_slider_3_title',
+
+        'polianna_online_order_permission',
+    ]);
+
+    $template_settings = [];
+
+    foreach($key as $row)
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where('theme_id',$theme_id)->where('key',$row)->first();
+        $template_settings[$row] = isset($query->value) ? $query->value : '';
+    }
+
+    if(session()->has('template_settings'))
+    {
+        session()->forget('template_settings');
+        session()->put('template_settings',$template_settings);
+    }
+    else
+    {
+        session()->put('template_settings', $template_settings);
+    }
+
+}
+
+
 function themeID($url)
 {
     $slash = substr($url, -1);
@@ -93,8 +134,8 @@ function themeID($url)
 function getproduct($demo){
 	$productcount=Product_to_category::where('category_id',$demo)->count();
 	return $productcount;
-	
-	
+
+
 }
 
 
@@ -517,17 +558,17 @@ function getStoreDetails($storeid,$key)
 }
 
 function getLoyaltyDetails($storeid,$key){
-     
+
     $gedetails = Settings::where('store_id',$storeid)->where('key',$key)->first();
-    
+
         $point = Settings::select('value')->where('store_id',$storeid)->where('key','point')->first();
         $unserializepoint =unserialize(isset($point['value']) ? $point['value'] :'');
-       
+
         $money = Settings::select('value')->where('store_id',$storeid)->where('key','money')->first();
         $unserializemoney =unserialize(isset($money['value']) ? $money['value'] :'');
-       
-   
-    
+
+
+
     $value = isset($gedetails->value) ? $gedetails->value : '';
     $data['value'] = $value;
     $data['unserializepoint'] =$unserializepoint;

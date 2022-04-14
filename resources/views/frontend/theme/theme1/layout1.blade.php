@@ -1,40 +1,69 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
 
+@php
+    $template_setting = session('template_settings');
+    $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+    $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+@endphp
+
 <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
     <img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/open.svg') }}"/>
     <img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/closed.svg') }}"/>
 </div>
 
 <section class="home-slide">
-    <div class="swiper">
-        <div class="swiper-wrapper">
+    {{-- Slider --}}
+    @if($slider_permission == 1)
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <strong class="title text-uppercase">welcome to</strong>
+                    <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_1_title'] }}</strong>
+                    <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')"/>
+                </div>
+                <div class="swiper-slide">
+                    <strong class="title text-uppercase">welcome to</strong>
+                    <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_2_title'] }}</strong>
+                    <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')"/>
+                </div>
+                <div class="swiper-slide">
+                    <strong class="title text-uppercase">welcome to</strong>
+                    <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_3_title'] }}</strong>
+                    <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')"/>
+                </div>
+            </div>
+            <div class="swiper-button-next">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="swiper-button-prev">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+        </div>
+    @else
+        <div class="swiper">
             <div class="swiper-slide">
                 <strong class="title text-uppercase">welcome to</strong>
                 <strong class="sub-title text-capitalize">kebab & pizza</strong>
-                <img class="img-fluid" style="background-image: url('{{ asset('public/assets/theme1/demo-data/home-slider.jpg') }}')"/>
-            </div>
-            <div class="swiper-slide">
-                <strong class="title text-uppercase">welcome to</strong>
-                <strong class="sub-title text-capitalize">star kebab & pizza</strong>
-                <img class="img-fluid" style="background-image: url('{{ asset('public/assets/theme1/demo-data/home-slider.jpg') }}')"/>
+                <img class="img-fluid" style="background-image: url('{{ asset('public/frontend/sliders/demo.jpg') }}'); background-size: cover;"/>
             </div>
         </div>
-        <div class="swiper-button-next">
-            <i class="fas fa-arrow-right"></i>
+    @endif
+    {{-- End Slider --}}
+
+    {{-- Online Order --}}
+    @if ($online_order_permission == 1)
+        <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
+            <strong class="title text-uppercase">order online</strong>
+            <input class="form-control" placeholder="Eg. AA11AA"/>
+            <p>Please enter your postcode to view our<br> menu and place an order</p>
+            <div class="btn__group">
+                <a class="btn btn-green text-uppercase">collection</a>
+                <a class="btn btn-red text-uppercase">delivery</a>
+            </div>
         </div>
-        <div class="swiper-button-prev">
-            <i class="fas fa-arrow-left"></i>
-        </div>
-    </div>
-    <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
-        <strong class="title text-uppercase">order online</strong>
-        <input class="form-control" placeholder="Eg. AA11AA"/>
-        <p>Please enter your postcode to view our<br> menu and place an order</p>
-        <div class="btn__group">
-            <a class="btn btn-green text-uppercase">collection</a>
-            <a class="btn btn-red text-uppercase">delivery</a>
-        </div>
-    </div>
+    @endif
+    {{-- End Online Order --}}
+
 </section>
 
 <section class="welcome pt-110 pb-110">

@@ -256,6 +256,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     //Reviews
     Route::get('review', [ReviewsController::class, 'index'])->name('review');
+    Route::post('reviewStatus', [ReviewsController::class, 'reviewStatus'])->name('reviewStatus');
     // Route::get('addreview',[ReviewsController::class,'add'])->name('addreview');
     Route::post('storereview',[ReviewsController::class,'store'])->name('storereview');
     // Route::post('deletereview',[ReviewsController::class,'deletemultireview'])->name('deletereview');
