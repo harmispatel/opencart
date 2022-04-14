@@ -13,6 +13,8 @@ use App\Models\Store;
 use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
+use App\Models\ToppingSize;
+
 
 
 // Function of User Details
@@ -131,11 +133,24 @@ function themeID($url)
 
 }
 
-function getproduct($demo){
+function getproductcount($demo){
 	$productcount=Product_to_category::where('category_id',$demo)->count();
+	
 	return $productcount;
 
 
+}
+
+function getproduct($front_store_id,$cat_id){
+
+	$product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
+		$query->where('category_id', $cat_id);
+	})->get();
+   
+	$size =ToppingSize::where('id_category',$cat_id)->get();
+	$result['product']=$product;
+	$result['size']=$size;
+	return $result;
 }
 
 

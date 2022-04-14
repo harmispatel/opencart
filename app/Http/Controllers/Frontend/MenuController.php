@@ -21,9 +21,6 @@ class MenuController extends Controller
             $query->where('store_id', $front_store_id);
         })->get();
         $data['category'] =$category;
-       
-        
-       
         return view('frontend.pages.menu',['data'=>$data]);
     }
 
