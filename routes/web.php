@@ -22,7 +22,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FreeItemController;
-use App\Http\Controllers\Frontend\ContactUs;
+use App\Http\Controllers\Frontend\ContactUsController;
 use App\Http\Controllers\GallaryController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\LoyaltyController;
@@ -391,7 +391,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
-Route::get('contactus', [ContactUs::class, 'index'])->name('contact');
+Route::get('contactus', [ContactUsController::class, 'index'])->name('contact');
 
 
 
