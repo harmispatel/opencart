@@ -6,7 +6,6 @@
     @endphp
 
     <div class="mobile-menu-shadow"></div>
-<<<<<<< HEAD
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/></a>
       <div class="top">
         <ul class="menu">
@@ -40,32 +39,6 @@
             <h3 class="text-capitalize">star kebab & pizza 0</h3><img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
             <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in  nulla pariatur anim id est laborum sunt in dolor in reprehenderit in.</p><a class="text-uppercase" href="#">read more<span></span></a>
           </div>
-=======
-
-    <sidebar class="mobile-menu">
-        <a class="close far fa-times-circle" href="#"></a>
-        <a class="logo" href="#slide">
-            <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
-        </a>
-        <div class="top">
-            <ul class="menu">
-                <li class="active">
-                    <a class="text-uppercase" href="#">home</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">member</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">menu</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">check out</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">contact us</a>
-                </li>
-            </ul>
->>>>>>> 3a51ba947a47ace679bad9b5f06f293e608d5ff1
         </div>
         <div class="center">
             <ul class="authentication-links">
