@@ -22,12 +22,26 @@ class ReviewsController extends Controller
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
-        $data['reviews'] = Reviews::where('store_id',$current_store_id)->get();
+        $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->where('store_id',$current_store_id)->get();
 
-         return view('admin.reviews.list',$data);
+        return view('admin.reviews.list',$data);
     }
 
 
+    function reviewStatus(Request $request)
+    {
+        $status = $request->val;
+        $review_id = $request->rid;
+
+        $review = Reviews::find($review_id);
+        $review->status = $status;
+        $review->update();
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
 
 
     // Function of add Review View
