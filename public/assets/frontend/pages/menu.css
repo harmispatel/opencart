@@ -346,6 +346,105 @@ ul.box-category {
     margin-top: 10px;
 }
 
+/* pop up modal */
+.csmodal{
+    top: 20%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.csmodal .modal-dialog{
+    max-width: 500px;
+    width: 100%;
+}
+.csmodal .modal-content{
+    background-color: #eeeeee;
+}
+.csmodal .modal-header{
+    justify-content: end;
+    border: none;
+    padding-bottom:0 !important;
+}
+.csmodal button.btn-close {
+    background: aliceblue;
+    background: #fffee4 none repeat scroll 0 0;
+    border-bottom: 1px solid #c38c89;
+    border-left: 1px solid #c38c89;
+    color: #353535;
+    display: inline-block;
+    height: 20px;
+    margin: 0;
+    width: 20px;
+    font-weight: 900;
+    opacity: 1;
+}
+.csmodal-btn-close{
+    background: transparent;
+    border: none;
+    color: #000;
+    text-decoration: underline;
+    font-size: 20px;
+}
+.csmodal button.btn-close i{
+    font-size: 25px;
+    color: #353535 !important;
+}
+.csmodal .modal-body{
+    text-align: center;
+    padding-bottom: 50px !important;
+}
+.csmodal .modal-title {
+    color: red;
+    font-size: 25px;
+    font-weight: 700;
+}
+.csmodal .modal-body p{
+    color: #151515;
+    font-size: 18px;
+    font-weight: 300;
+}
+.csmodal .modal-body .csmodal-btn{
+    border-radius: 4px;
+    line-height: 30px;
+    width: 100%;
+    max-width: 340px;
+    background: #00a600;
+    border: 1px solid #00a600;
+    font-family: 'Lato';
+    font-size: 20px;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.show_min{
+    color: #151515;
+    font-size: 18px;
+    font-weight: 300;
+    margin:10px 0 20px;
+}
+
+.csmodal .controls input{
+    width: 100%;
+    max-width: 340px;
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 0 #cecece inset;
+    font-weight: 700;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+
 @media only screen and (max-width:991px){
     .cate-list-part{
         display: none;

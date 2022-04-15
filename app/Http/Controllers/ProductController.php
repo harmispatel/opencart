@@ -736,7 +736,7 @@ class ProductController extends Controller
         // $productstore->update();
         $type_topping = isset($request->typetopping) ? $request->typetopping : '';
 
-        // if (!empty($type_topping) || $type_topping != '') {
+        if (!empty($type_topping) || $type_topping != '') {
             $toppingtype = ProductToppingType::find($product_id);
             $toppingtype->typetopping =  $type_topping;
             $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
@@ -746,9 +746,9 @@ class ProductController extends Controller
             $toppingtype->renamegroup = $request->renamegroup;
             $toppingtype->topping_sort_order = $request->topping_sort_order;
             $toppingtype->update();
-        // }
+        }
 
-        // $mainprice = isset($request->mainprices) ? $request->mainprices : "";
+        $mainprice = isset($request->mainprices) ? $request->mainprices : "";
         $mainprice = $request->mainprices;
         $collectionprice = $request->collectionprices;
         $deliveryprice = $request->deliveryprices;
@@ -764,15 +764,15 @@ class ProductController extends Controller
                 $toppingProductPriceSize->update();
             }
         } else {
-            // foreach ($mainprice as $key => $mainprices) {
-            //     $toppingProductPriceSize = new ToppingProductPriceSize;
-            //     $toppingProductPriceSize->price = $mainprices;
-            //     $toppingProductPriceSize->id_size = $id_size[$key];
-            //     $toppingProductPriceSize->id_product = $product_id;
-            //     $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-            //     $toppingProductPriceSize->collection_price = $collectionprice[$key];
-            //     $toppingProductPriceSize->save();
-            // }
+            foreach ($mainprice as $key => $mainprices) {
+                $toppingProductPriceSize = new ToppingProductPriceSize;
+                $toppingProductPriceSize->price = $mainprices;
+                $toppingProductPriceSize->id_size = $id_size[$key];
+                $toppingProductPriceSize->id_product = $product_id;
+                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+                $toppingProductPriceSize->collection_price = $collectionprice[$key];
+                $toppingProductPriceSize->save();
+            }
         }
 
 
