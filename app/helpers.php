@@ -218,11 +218,16 @@ function getproduct($front_store_id,$cat_id){
 	$product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
 		$query->where('category_id', $cat_id);
 	})->get();
-
 	$size =ToppingSize::where('id_category',$cat_id)->get();
+
 	$result['product']=$product;
 	$result['size']=$size;
 	return $result;
+}
+function getprice($sizeprice,$productsize){
+
+	$setsizeprice=ToppingProductPriceSize::where('id_size',$sizeprice)->where('id_product',$productsize)->get();
+	return $setsizeprice;
 }
 
 

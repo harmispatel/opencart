@@ -6,30 +6,39 @@
     @endphp
 
     <div class="mobile-menu-shadow"></div>
-
-    <sidebar class="mobile-menu">
-        <a class="close far fa-times-circle" href="#"></a>
-        <a class="logo" href="#slide">
-            <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
-        </a>
-        <div class="top">
-            <ul class="menu">
-                <li class="active">
-                    <a class="text-uppercase" href="#">home</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">member</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">menu</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">check out</a>
-                </li>
-                <li>
-                    <a class="text-uppercase" href="#">contact us</a>
-                </li>
-            </ul>
+    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/></a>
+      <div class="top">
+        <ul class="menu">
+          <li class="active"><a class="text-uppercase" href="#">home</a></li>
+          <li><a class="text-uppercase" href="#">member</a></li>
+          <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
+          <li><a class="text-uppercase" href="#">check out</a></li>
+          <li><a class="text-uppercase" href="#">contact us</a></li>
+        </ul>
+      </div>
+      <div class="center">
+        <ul class="authentication-links">
+          <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
+          <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+        </ul>
+      </div>
+      <div class="bottom">
+        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span></div>
+        <ul class="social-links">
+          <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
+          <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
+          <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
+          <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+        </ul>
+      </div>
+    </sidebar>
+    <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme2/demo-data/home-slide.jpg') }})">
+          <div class="container">
+            <h3 class="text-capitalize">star kebab & pizza 0</h3><img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in  nulla pariatur anim id est laborum sunt in dolor in reprehenderit in.</p><a class="text-uppercase" href="#">read more<span></span></a>
+          </div>
         </div>
         <div class="center">
             <ul class="authentication-links">

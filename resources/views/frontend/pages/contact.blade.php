@@ -1,4 +1,5 @@
-@extends('layouts.default')
+@extends('frontend.layout.layout')
 @section('content')
-   i am the contact page
-@stop
+
+
+<h1>Contect</h1>

@@ -83,10 +83,15 @@
                                                 <label for="category" class="form-label">Category</label>
                                                 <select name="category" id="category" class="form-control">
                                                     <option disabled selected>select</option>
+                                                        @php
+                                                            $test1 = isset($product->category_id) ? $product->category_id :'';
+                                                             $test =explode(' ',$test1);
+                                                        @endphp
+                                                       
                                                     @if (isset($result['category']))
                                                         @foreach ($result['category'] as $category)
                                                             <option value="{{ $category->category_id }}"
-                                                            {{ isset($product->category_id) ? $product->category_id : '' == $category->category_id ? 'selected' : '' }}>
+                                                                {{ in_array($category->category_id, $test) == $category->category_id ? 'selected' : '' }}>
                                                             {{ $category->name }}</option>
                                                         @endforeach
                                                     @endif
