@@ -69,7 +69,7 @@
     <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
         @if($slider_permission == 1)
             <div class="swiper-wrapper">
-                <div class="swiper-slide" style="background-image: url({{$template_setting['polianna_slider_1'] }})">
+                <div class="swiper-slide" style="background-image: url({{$template_setting['polianna_slider_1']}})">
                     <div class="container">
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_1_title'] }}</h3>
                         <img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
@@ -77,7 +77,7 @@
                         <a class="text-uppercase" href="#">read more<span></span></a>
                     </div>
                 </div>
-                <div class="swiper-slide" style="background-image: url({{$template_setting['polianna_slider_2'] }})">
+                <div class="swiper-slide" style="background-image: url({{$template_setting['polianna_slider_2']}})">
                     <div class="container">
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_2_title'] }}</h3>
                         <img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>

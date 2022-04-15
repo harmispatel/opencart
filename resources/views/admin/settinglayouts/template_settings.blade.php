@@ -115,7 +115,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse" id="coll">
+                                                <div class="collapse show" id="coll">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">
@@ -135,6 +135,14 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="color" name="polianna_navbar_link" class="form-control"  value="{{ $template_settings['polianna_navbar_link'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="align-middle">
+                                                                            <label>Navbar Link Hover</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="color" name="polianna_navbar_link_hover" class="form-control"  value="{{ $template_settings['polianna_navbar_link_hover'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -315,6 +323,52 @@
                                                                             </div>
                                                                         </td>
                                                                     </tr>
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Open/Close Store</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <div class="form-control">
+                                                                                <label for="polianna_open_close_store_permission1">Open</label>
+                                                                                <input type="radio" name="polianna_open_close_store_permission" id="polianna_open_close_store_permission1" value="1" {{ ($template_settings['polianna_open_close_store_permission'] == 1) ? 'checked' : '' }}>
+                                                                                <label for="polianna_open_close_store_permission2" class="ml-2">Closed</label>
+                                                                                <input type="radio" name="polianna_open_close_store_permission" id="polianna_open_close_store_permission2" value="0" {{ ($template_settings['polianna_open_close_store_permission'] == 0) ? 'checked' : '' }}>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="form-group">
+                                                                                <label>Open Banner</label>
+                                                                                <input type="file" name="polianna_open_banner" class="form-control p-1">
+                                                                                @if (!empty($template_settings['polianna_open_banner']))
+                                                                                    <img src="{{ $template_settings['polianna_open_banner'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                                @else
+                                                                                    Not Avavilable
+                                                                                @endif
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="form-group">
+                                                                                <label>Close Banner</label>
+                                                                                <input type="file" name="polianna_close_banner" class="form-control p-1">
+                                                                                @if (!empty($template_settings['polianna_close_banner']))
+                                                                                    <img src="{{ $template_settings['polianna_close_banner'] }}" width="80" class="mt-2" style="border: 1px solid black;">
+                                                                                @else
+                                                                                    Not Avavilable
+                                                                                @endif
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="form-group">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-6">
+                                                                                        <label>Banner Width (PX)</label>
+                                                                                        <input type="number" name="polianna_open_close_banner_width" class="form-control" value="{{ $template_settings['polianna_open_close_banner_width'] }}">
+                                                                                    </div>
+                                                                                    <div class="col-md-6">
+                                                                                        <label>Banner Height (PX)</label>
+                                                                                        <input type="number" name="polianna_open_close_banner_height" class="form-control" value="{{ $template_settings['polianna_open_close_banner_height'] }}">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -327,6 +381,60 @@
                                     </div>
                                 </div>
                                 {{-- END PERMISSION SETTINGS --}}
+
+                                 {{-- EXTRA SETTINGS  --}}
+                                 <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            {{-- Card --}}
+                                            <div class="card">
+                                                {{-- Card Header --}}
+                                                <div class="card-header" style="background: #1bbc9b ">
+                                                    <h3 class="card-title pt-2 text-white">
+                                                        <i class="fas fa-cog mr-2"></i>
+                                                        EXTRAS
+                                                    </h3>
+                                                    <div class="container" style="text-align: right">
+                                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll3" aria-expanded="true" aria-controls="coll3">
+                                                            <i class="fa" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                {{-- End Card Header --}}
+
+                                                <div class="collapse show" id="coll3">
+                                                    {{-- Card Body --}}
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table class="table table-bordered table-striped">
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Store Fonts</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            @php
+                                                                                $fonts = getFonts();
+                                                                            @endphp
+                                                                            <select name="polianna_store_fonts" id="polianna_store_fonts" class="form-control">
+                                                                                @foreach ($fonts as $key => $font)
+                                                                                    <option value="{{ $key }}" {{ ($template_settings['polianna_store_fonts'] == $key) ? 'selected' : '' }}>{{ $font }}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {{-- End Card Body --}}
+                                                </div>
+                                            </div>
+                                            {{-- End Card --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- END EXTRA SETTINGS --}}
 
                             </form>
                             {{-- End Form --}}

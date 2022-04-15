@@ -67,7 +67,7 @@ class SettingsController extends Controller
         $timearray['23:59'] = '23:59';
         $times = $this->times = $timearray;
 
-        // 
+        //
         $current_store_id = currentStoreId();
         $key = ([
             'opening_time_collection',
@@ -100,7 +100,7 @@ class SettingsController extends Controller
         $timesetting = $open_close;
         $bussines = unserialize($open_close['bussines']);
         $days = $this->days;
-       
+
         return view('admin.settings.open_close_time_settings', compact(['days','timesetting','times','bussines','closedate','delivery','collection']) );
     }
 
@@ -586,6 +586,16 @@ class SettingsController extends Controller
                 $social_update = Settings::find($setting_id);
                 $social_update->value = $new;
                 $social_update->update();
+            }
+            else
+            {
+                $social_add = new Settings;
+                $social_add->store_id = $current_store_id;
+                $social_add->group = 'polianna';
+                $social_add->key = $key;
+                $social_add->value = isset($new) ? $new : '';
+                $social_add->serialized = 0;
+                $social_add->save();
             }
         }
 

@@ -323,7 +323,7 @@ ul.box-category {
     align-items: center;
 }
 
-.product-list-innr .accordion-button span, i{
+.product-list-innr .accordion-button span, .accordion-button i{
     color: #ff0000 !important;
     font-weight: 600;
     font-size: 16px;

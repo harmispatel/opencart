@@ -1,20 +1,23 @@
+@php
+
+    $template_setting = session('template_settings');
+
+    if(session()->has('theme_id'))
+    {
+        $theme_id = session()->get('theme_id');
+    }
+    else
+    {
+        $theme_id = 1;
+    }
+@endphp
+
 <!doctype html>
 <html>
 <head>
    @include('frontend.include.head')
 </head>
-<body>
-
-    @php
-        if(session()->has('theme_id'))
-        {
-            $theme_id = session()->get('theme_id');
-        }
-        else
-        {
-            $theme_id = 1;
-        }
-    @endphp
+<body style="font-family: {{ $template_setting['polianna_store_fonts'] }}">
 
     {{-- Header --}}
     @include('frontend.theme.theme'.$theme_id.'.header')
