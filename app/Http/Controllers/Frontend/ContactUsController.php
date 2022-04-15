@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ContactUs extends Controller
+class ContactUsController extends Controller
 {
     public function index()
     {
