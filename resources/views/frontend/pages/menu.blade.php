@@ -31,7 +31,7 @@
           <li><a class="text-uppercase" href="#">member</a></li>
           <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
           <li><a class="text-uppercase" href="#">check out</a></li>
-          <li><a class="text-uppercase" href="#">contact us</a></li>
+          <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
         </ul>
       </div>
       <div class="center">
