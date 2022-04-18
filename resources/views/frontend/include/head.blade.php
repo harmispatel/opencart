@@ -24,12 +24,24 @@
 @endphp
 
 
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/css/bootstrap.min.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/fontawesome/css/all.min.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/swiper-js/swiper-bundle.min.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/ui/dist/fancybox.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/animate.css/animate.min.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/select2/dist/css/select2.min.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/css/app.css')  }}">
-<link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/css/responsive.css')  }}">
+@if (!empty($theme_id) || $theme_id != '')
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/css/bootstrap.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/fontawesome/css/all.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/swiper-js/swiper-bundle.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/ui/dist/fancybox.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/animate.css/animate.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/select2/dist/css/select2.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/css/app.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/css/responsive.css')  }}">
+@else
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/plugins/bootstrap/dist/css/bootstrap.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/plugins/fontawesome/css/all.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/plugins/swiper-js/swiper-bundle.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/plugins/ui/dist/fancybox.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/plugins/animate.css/animate.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/select2/dist/css/select2.min.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/css/app.css')  }}">
+    <link rel="stylesheet" href="{{  asset('public/assets/theme1/css/responsive.css')  }}">
+@endif
