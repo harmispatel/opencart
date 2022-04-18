@@ -391,7 +391,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
-Route::get('contactus', [ContactUsController::class, 'index'])->name('contact');
+Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 
 
 

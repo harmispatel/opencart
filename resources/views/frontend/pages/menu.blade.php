@@ -29,9 +29,15 @@
         }
     @endphp
 
-    {{-- Header --}}
-    @include('frontend.theme.theme' . $theme_id . '.header')
-    {{-- End Header --}}
+    @if (!empty($theme_id) || $theme_id != '')
+        {{-- Header --}}
+        @include('frontend.theme.theme' . $theme_id . '.header')
+        {{-- End Header --}}
+    @else
+        {{-- Header --}}
+        @include('frontend.theme.theme1.header')
+        {{-- End Header --}}
+    @endif
 
     <div class="mobile-menu-shadow">
         <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
@@ -155,6 +161,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <hr>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -284,9 +291,17 @@
     </div>
 
 
-    {{-- Footer --}}
-    @include('frontend.theme.theme' . $theme_id . '.footer')
-    {{-- End Footer --}}
+
+
+    @if (!empty($theme_id) || $theme_id != '')
+        {{-- Footer --}}
+        @include('frontend.theme.theme' . $theme_id . '.footer')
+        {{-- End Footer --}}
+    @else
+        {{-- Footer --}}
+        @include('frontend.theme.theme1.footer')
+        {{-- End Footer --}}
+    @endif
 
     {{-- JS --}}
     @include('frontend.include.script')
