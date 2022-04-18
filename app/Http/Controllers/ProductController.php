@@ -748,10 +748,13 @@ class ProductController extends Controller
             $toppingtype->update();
         }
 
-        $mainprice = isset($request->mainprices) ? $request->mainprices : "";
-        $mainprice = $request->mainprices;
-        $collectionprice = $request->collectionprices;
-        $deliveryprice = $request->deliveryprices;
+        $mainprice = isset($request->mainprices) ? $request->mainprices : "0";
+        // echo '<pre>';
+        // print_r($mainprice);
+        // exit();
+        // $mainprice = $request->mainprices;
+        $collectionprice =isset($request->collectionprices) ? $request->collectionprices :0;
+        $deliveryprice = isset($request->deliveryprices) ? $request->deliveryprices : 0;
         $price_size_id = $request->id_product_price_size;
         $id_size = $request->id_size;
         if (!empty($price_size_id)) {
@@ -766,9 +769,9 @@ class ProductController extends Controller
         } else {
             foreach ($mainprice as $key => $mainprices) {
                 $toppingProductPriceSize = new ToppingProductPriceSize;
-                $toppingProductPriceSize->price = $mainprices;
                 $toppingProductPriceSize->id_size = $id_size[$key];
                 $toppingProductPriceSize->id_product = $product_id;
+                $toppingProductPriceSize->price = $mainprices;
                 $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
                 $toppingProductPriceSize->collection_price = $collectionprice[$key];
                 $toppingProductPriceSize->save();
