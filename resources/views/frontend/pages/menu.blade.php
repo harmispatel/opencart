@@ -1,3 +1,11 @@
+@php
+    $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
+@endphp
+
 <!doctype html>
 <html>
 <style>
@@ -26,35 +34,36 @@
     {{-- End Header --}}
 
     <div class="mobile-menu-shadow">
-    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
-            href="#slide"><img class="img-fluid" src="./assets/img/logo/black-logo.svg" /></a>
-        <div class="top">
-            <ul class="menu">
-                <li class="active"><a class="text-uppercase" href="#">home</a></li>
-                <li><a class="text-uppercase" href="#">member</a></li>
-                <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-                <li><a class="text-uppercase" href="#">check out</a></li>
-                <li><a class="text-uppercase" href="#">contact us</a></li>
-            </ul>
-        </div>
-        <div class="center">
-            <ul class="authentication-links">
-                <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-                <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
-            </ul>
-        </div>
-        <div class="bottom">
-            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+        <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
+                href="#slide"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/></a>
+            <div class="top">
+                <ul class="menu">
+                    <li class="active"><a class="text-uppercase" href="#">home</a></li>
+                    <li><a class="text-uppercase" href="#">member</a></li>
+                    <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
+                    <li><a class="text-uppercase" href="#">check out</a></li>
+                    <li><a class="text-uppercase" href="#">contact us</a></li>
+                </ul>
             </div>
-            <ul class="social-links">
-                <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
-            </ul>
-        </div>
-    </sidebar>
-  </div>
+            <div class="center">
+                <ul class="authentication-links">
+                    <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
+                    <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+                </ul>
+            </div>
+            <div class="bottom">
+                <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 -
+                        23:00</span>
+                </div>
+                <ul class="social-links">
+                    <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
+                    <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
+                    <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
+                    <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+                </ul>
+            </div>
+        </sidebar>
+    </div>
     <section class="main-innr">
         <div class="container">
             <div class="row">
@@ -72,9 +81,11 @@
                                                 $demo = $category->category_id;
                                                 $productcount = getproductcount($demo);
                                             @endphp
-                                            <li><a href="#" class="active">{{ $category->name }}
+                                            <li>
+                                                <a href="#" class="active">{{ $category->name }}
                                                     ({{ $productcount }})
-                                                </a></li>
+                                                </a>
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -83,7 +94,7 @@
                                 <select class="form-control">
                                     <option>Show All Categories</option>
                                     @foreach ($data['category'] as $category)
-                                    <option>{{ $category->name }}</option>
+                                        <option>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -131,13 +142,13 @@
                                                                             $productsize = $values->hasOneProduct['product_id'];
                                                                             $setsizeprice = getprice($sizeprice, $productsize);
                                                                         @endphp
-
                                                                         <div class="options-bt">
                                                                             <span>{{ $size->size }}</span>
                                                                             @foreach ($setsizeprice as $setsizeprices)
                                                                                 <a href="" class="btn options-btn"
                                                                                     onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i
-                                                                                        class="fa fa-shopping-basket"></i></a>
+                                                                                        class="fa fa-shopping-basket"></i>
+                                                                                </a>
                                                                             @endforeach
                                                                         </div>
                                                                     @endforeach
@@ -287,9 +298,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#exampleModal').modal('show');
-    });
+    // $(document).ready(function() {
+    //     $('#exampleModal').modal('show');
+    // });
 </script>
 <script>
     function showmodal() {
@@ -297,7 +308,8 @@
         $('#Modal').modal('show');
         $('#exampleModal').modal('hide');
     }
+
     function showmodalproduct() {
-            $('#Modal').modal('show');
-        }
+        $('#Modal').modal('show');
+    }
 </script>

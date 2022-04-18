@@ -2,6 +2,9 @@
 
     @php
         $template_setting = session('template_settings');
+        $social_site = session('social_site');
+        $store_setting = session('store_settings');
+        $template_setting = session('template_settings');
         $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
     @endphp
 
@@ -9,24 +12,24 @@
     <sidebar class="mobile-menu">
         <a class="close far fa-times-circle" href="#"></a>
         <a class="logo" href="#slide">
-            <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
-        </a>
+          <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
+      </a>
         <div class="top">
             <ul class="menu">
                 <li class="active">
-                    <a class="text-uppercase" href="#">home</a>
+                    <a class="text-uppercase" href="{{ route('home') }}">home</a>
                 </li>
                 <li>
-                    uppercase" href="#">member</a>
+                  <a class="text-uppercase" href="#">member</a>
                 </li>
                 <li>
-                    uppercase" href="{{ route('menu') }}">menu</a>
+                  <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                 </li>
                 <li>
-                    uppercase" href="#">check out</a>
+                  <a class="text-uppercase" href="#">check out</a>
                 </li>
                 <li>
-                    uppercase" href="#">contact us</a>
+                  <a class="text-uppercase" href="#">contact us</a>
                 </li>
             </ul>
         </div>
@@ -47,12 +50,23 @@
       </div>
     <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
       <div class="swiper-wrapper">
-        <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme2/demo-data/home-slide.jpg') }})">
-          <div class="container">
+        {{-- <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme2/demo-data/home-slide.jpg') }})">
+           --}}
+           {{-- <div class="swiper-slide">
+            <strong class="title text-uppercase">welcome to</strong>
+            <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_1_title'] }}</strong>
+            <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')"/>
+        </div> --}}
+        {{-- <div class="swiper-slide">
+            <strong class="title text-uppercase">welcome to</strong>
+            <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_2_title'] }}</strong>
+            <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')"/>
+        </div> --}}
+          {{-- <div class="container">
             <h3 class="text-capitalize">star kebab & pizza 0</h3><img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
             <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in  nulla pariatur anim id est laborum sunt in dolor in reprehenderit in.</p><a class="text-uppercase" href="#">read more<span></span></a>
           </div>
-        </div>
+        </div> --}}
         <div class="center">
             <ul class="authentication-links">
                 <li>
@@ -105,7 +119,7 @@
                     <div class="container">
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_2_title'] }}</h3>
                         <img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptates adipisci omnis excepturi inventore ducimus corrupti beatae quibusdam hic molestias sit modi iste commodi atque rem magni perspiciatis provident magnam quidem eligendi, tenetur ut laboriosam, voluptate sequi! Veritatis modi aspernatur, mollitia culpa vero quis optio aut quasi laudantium, porro possimus.</p>
+                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in  nulla pariatur anim id est laborum sunt in dolor in reprehenderit in.</p>
                         <a class="text-uppercase" href="#">read more<span></span></a>
                     </div>
                 </div>
@@ -113,7 +127,7 @@
                     <div class="container">
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_3_title'] }}</h3>
                         <img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptates adipisci omnis excepturi inventore ducimus corrupti beatae quibusdam hic molestias sit modi iste commodi atque rem magni perspiciatis provident magnam quidem eligendi, tenetur ut laboriosam, voluptate sequi! Veritatis modi aspernatur, mollitia culpa vero quis optio aut quasi laudantium, porro possimus.</p>
+                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
                         <a class="text-uppercase" href="#">read more<span></span></a>
                     </div>
                 </div>
@@ -395,7 +409,7 @@
           </div>
           <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
             <div class="icon"><i class="fas fa-chevron-down"></i>
-              <select class="form-control select2">
+              <select class="form-control">
                 <option value="" selected="selected">Person</option>
                 <option value="1">1</option>
                 <option value="2">2</option>

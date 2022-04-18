@@ -221,17 +221,17 @@
 
                                                                         <input type="text" name="mainprices[]"
                                                                             id="mainprice"
-                                                                            value="{{ isset($product_size->price) ? $product_size->price : '' }}">
+                                                                            value="{{ isset($product_size->price) ? $product_size->price : 0 }}">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" name="deliveryprices[]"
                                                                             id="deliveryprice"
-                                                                            value="{{ isset($product_size->delivery_price) ? $product_size->delivery_price : '' }}">
+                                                                            value="{{ isset($product_size->delivery_price) ? $product_size->delivery_price : 0 }}">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" name="collectionprices[]"
                                                                             id="collectionprice"
-                                                                            value="{{ isset($product_size->collection_price) ? $product_size->collection_price : '' }}">
+                                                                            value="{{ isset($product_size->collection_price) ? $product_size->collection_price : 0 }}">
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
