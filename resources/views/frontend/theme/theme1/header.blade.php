@@ -1,7 +1,20 @@
 
 @php
     $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+
 @endphp
+
+<style>
+    .menu li:hover a{
+        color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
+    }
+
+
+</style>
 
 {{-- Header Start --}}
 <header class="header">
@@ -10,18 +23,32 @@
             <div class="working-time">
                 <strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
             </div>
+
+            @if ($store_open_close == 1)
+                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                    <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                </div>
+            @else
+                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                    <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                </div>
+            @endif
+
             <ul class="social-links">
                 <li>
-                    <a class="fab fa-facebook" href="#" target="_blank"></a>
+                    <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
                 </li>
                 <li>
-                    <a class="fab fa-twitter" href="#" target="_blank"></a>
+                    <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
                 </li>
                 <li>
-                    <a class="fab fa-pinterest-p" href="#" target="_blank"></a>
+                    <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
                 </li>
                 <li>
-                    <a class="fab fa-instagram" href="#" target="_blank"></a>
+                    <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
                 </li>
             </ul>
             <ul class="authentication-links">

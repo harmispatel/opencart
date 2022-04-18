@@ -2,14 +2,69 @@
 
 @php
     $template_setting = session('template_settings');
+    $store_setting = session('store_settings');
     $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
     $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
 @endphp
 
-<div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
-    <img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/open.svg') }}"/>
-    <img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/closed.svg') }}"/>
-</div>
+<sidebar class="mobile-menu">
+    <a class="close far fa-times-circle" href="#"></a>
+    <a class="logo" href="#slide">
+        <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
+    </a>
+    <div class="top">
+        <ul class="menu">
+            <li class="active">
+                <a class="text-uppercase" href="#">home</a>
+            </li>
+            <li>
+                <a class="text-uppercase" href="#">member</a>
+            </li>
+            <li>
+                <a class="text-uppercase" href="#">menu</a>
+            </li>
+            <li>
+                <a class="text-uppercase" href="#">check out</a>
+            </li>
+            <li>
+                <a class="text-uppercase" href="#">contact us</a>
+            </li>
+        </ul>
+    </div>
+    <div class="center">
+        <ul class="authentication-links">
+            <li>
+                <a href="#">
+                    <i class="far fa-user"></i><span>Login</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="bottom">
+        <div class="working-time">
+            <strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+        </div>
+        <ul class="social-links">
+            <li>
+                <a class="fab fa-facebook" href="#" target="_blank"></a>
+            </li>
+            <li>
+                <a class="fab fa-twitter" href="#" target="_blank"></a>
+            </li>
+            <li>
+                <a class="fab fa-pinterest-p" href="#" target="_blank"></a>
+            </li>
+            <li>
+                <a class="fab fa-instagram" href="#" target="_blank"></a>
+            </li>
+        </ul>
+    </div>
+</sidebar>
 
 <section class="home-slide">
     {{-- Slider --}}
@@ -29,7 +84,7 @@
                 <div class="swiper-slide">
                     <strong class="title text-uppercase">welcome to</strong>
                     <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_3_title'] }}</strong>
-                    <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')"/>
+                    <img class="img-fluid" style="background-image: url('{{$template_setting['polianna_slider_3']}}')"/>
                 </div>
             </div>
             <div class="swiper-button-next">
@@ -70,9 +125,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-6 wow animate__fadeInLeft" data-wow-duration="1s">
-                <h3 class="section-title color-green">Welcome to <br> Star Kebab & Pizza</h3>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>dolore eu fugiat nulla pariatur.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br>commodo consequat. <br>Duis aute irure dolor in reprehenderit in voluptate velit esse dolore eu fugiat nulla pariatur.</p><a class="btn btn-green text-uppercase" href="">read more</a>
+                <h3 class="section-title color-green">Welcome to <br> {{ $store_setting['config_name'] }}</h3>
+                <p>
+                    {{ $store_setting['config_meta_description'] }}
+                </p>
+                <a class="btn btn-green text-uppercase" href="">read more</a>
             </div>
             <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="img-box">
@@ -338,8 +395,8 @@
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <select class="form-control select2">
-                    <option value="" selected="selected">Person</option>
+                  <select class="form-control">
+                    <option value="">Person</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
