@@ -87,7 +87,7 @@
                                                             $test1 = isset($product->category_id) ? $product->category_id :'';
                                                              $test =explode(' ',$test1);
                                                         @endphp
-                                                       
+
                                                     @if (isset($result['category']))
                                                         @foreach ($result['category'] as $category)
                                                             <option value="{{ $category->category_id }}"
@@ -109,7 +109,7 @@
                                                     @php
                                                         $pro_icon = isset($product->product_icons) ? $product->product_icons : '';
                                                         $array = explode(',',$pro_icon);
-                                                        
+
                                                     @endphp
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
                                                     multiple required>
@@ -221,17 +221,17 @@
 
                                                                         <input type="text" name="mainprices[]"
                                                                             id="mainprice"
-                                                                            value="{{ isset($product_size->price) ? $product_size->price : '' }}">
+                                                                            value="{{ isset($product_size->price) ? $product_size->price : 0 }}">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" name="deliveryprices[]"
                                                                             id="deliveryprice"
-                                                                            value="{{ isset($product_size->delivery_price) ? $product_size->delivery_price : '' }}">
+                                                                            value="{{ isset($product_size->delivery_price) ? $product_size->delivery_price : 0 }}">
                                                                     </td>
                                                                     <td>
                                                                         <input type="text" name="collectionprices[]"
                                                                             id="collectionprice"
-                                                                            value="{{ isset($product_size->collection_price) ? $product_size->collection_price : '' }}">
+                                                                            value="{{ isset($product_size->collection_price) ? $product_size->collection_price : 0 }}">
                                                                     </td>
                                                                 </tr>
                                                             @endforeach

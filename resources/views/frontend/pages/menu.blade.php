@@ -21,9 +21,15 @@
         }
     @endphp
 
-    {{-- Header --}}
-    @include('frontend.theme.theme' . $theme_id . '.header')
-    {{-- End Header --}}
+    @if (!empty($theme_id) || $theme_id != '')
+        {{-- Header --}}
+        @include('frontend.theme.theme' . $theme_id . '.header')
+        {{-- End Header --}}
+    @else
+        {{-- Header --}}
+        @include('frontend.theme.theme1.header')
+        {{-- End Header --}}
+    @endif
 
     <div class="mobile-menu-shadow">
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
@@ -112,38 +118,48 @@
 
 
                                                 @foreach ($result['product'] as $values)
-                                                    <div id="collapse{{ $key }}"
-                                                        class="accordion-collapse collapse show"
-                                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                        <div class="accordion-body">
-                                                            <div class="acc-body-inr">
-                                                                <div class="acc-body-inr-title">
-                                                                    <h4>{{ $values->hasOneDescription['name'] }}</h4>
-                                                                    <p>{{ strip_tags($values->hasOneDescription['description']) }}
-                                                                    </p>
-                                                                    <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}"
-                                                                        width="80px">
-                                                                </div>
-                                                                <div class="options-bt-main">
-                                                                    @foreach ($result['size'] as $size)
-                                                                        @php
-                                                                            $sizeprice = $size->id_size;
-                                                                            $productsize = $values->hasOneProduct['product_id'];
-                                                                            $setsizeprice = getprice($sizeprice, $productsize);
-                                                                        @endphp
+                                                    <div id="collapse{{ $key }}" class="accordion-collapse collapse show"
+                                                    aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div class="row">
+                                                            <div class="col-md-8" style="overflow-wrap: break-word;">
+                                                                <h6 style="font-size: 17px;">{{ $values->hasOneDescription['name'] }}</h6>
+                                                                <p style="font-size: 15px; text-align: justify">
+                                                                    {{ strip_tags($values->hasOneDescription['description']) }}
+                                                                </p>
+                                                                @php
+                                                                    $prod_img = isset($values->hasOneProduct['image']) ? $values->hasOneProduct['image'] : '';
+                                                                @endphp
 
-                                                                        <div class="options-bt">
-                                                                            <span>{{ $size->size }}</span>
-                                                                            @foreach ($setsizeprice as $setsizeprices)
-                                                                                <a href="" class="btn options-btn"
-                                                                                    onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i
-                                                                                        class="fa fa-shopping-basket"></i></a>
-                                                                            @endforeach
-                                                                        </div>
-                                                                    @endforeach
-                                                                </div>
+                                                                @if(!empty($prod_img) || $prod_img != '')
+                                                                    <img src="{{ asset('public/admin/product/'.$prod_img) }}" width="80" height="80" style="border: 1px solid black;">
+                                                                @else
+                                                                    <div style="border:1px solid black;width: 80px;" class="text-center">
+                                                                        <h5 class="mt-2">
+                                                                            <i class="fa fa-ban"></i>
+                                                                        </h5>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class="col-md-4 pt-4">
+                                                                @foreach ($result['size'] as $size)
+                                                                    @php
+                                                                        $sizeprice = $size->id_size;
+                                                                        $productsize = $values->hasOneProduct['product_id'];
+                                                                        $setsizeprice = getprice($sizeprice, $productsize);
+                                                                    @endphp
+
+                                                                    <div class="row mt-1">
+                                                                        <label style="font-weight: 600">{{ $size->size }}</label>
+                                                                        @foreach ($setsizeprice as $setsizeprices)
+                                                                            <a href="" class="btn options-btn" onclick="showmodalproduct();">£{{ $setsizeprices->price }}
+                                                                                <i class="fa fa-shopping-basket"></i>
+                                                                            </a>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endforeach
                                                             </div>
                                                         </div>
+                                                        <hr>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -273,9 +289,17 @@
     </div>
 
 
-    {{-- Footer --}}
-    @include('frontend.theme.theme' . $theme_id . '.footer')
-    {{-- End Footer --}}
+
+
+    @if (!empty($theme_id) || $theme_id != '')
+        {{-- Footer --}}
+        @include('frontend.theme.theme' . $theme_id . '.footer')
+        {{-- End Footer --}}
+    @else
+        {{-- Footer --}}
+        @include('frontend.theme.theme1.footer')
+        {{-- End Footer --}}
+    @endif
 
     {{-- JS --}}
     @include('frontend.include.script')
