@@ -6,16 +6,30 @@
     @endphp
 
     <div class="mobile-menu-shadow"></div>
-    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/></a>
-      <div class="top">
-        <ul class="menu">
-          <li class="active"><a class="text-uppercase" href="#">home</a></li>
-          <li><a class="text-uppercase" href="#">member</a></li>
-          <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-          <li><a class="text-uppercase" href="#">check out</a></li>
-          <li><a class="text-uppercase" href="#">contact us</a></li>
-        </ul>
-      </div>
+    <sidebar class="mobile-menu">
+        <a class="close far fa-times-circle" href="#"></a>
+        <a class="logo" href="#slide">
+            <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
+        </a>
+        <div class="top">
+            <ul class="menu">
+                <li class="active">
+                    <a class="text-uppercase" href="#">home</a>
+                </li>
+                <li>
+                    uppercase" href="#">member</a>
+                </li>
+                <li>
+                    uppercase" href="{{ route('menu') }}">menu</a>
+                </li>
+                <li>
+                    uppercase" href="#">check out</a>
+                </li>
+                <li>
+                    uppercase" href="#">contact us</a>
+                </li>
+            </ul>
+        </div>
       <div class="center">
         <ul class="authentication-links">
           <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
@@ -31,7 +45,6 @@
           <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
         </ul>
       </div>
-    </sidebar>
     <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
       <div class="swiper-wrapper">
         <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme2/demo-data/home-slide.jpg') }})">
@@ -73,6 +86,8 @@
                 </li>
             </ul>
         </div>
+      </div>
+    </div>
     </sidebar>
 
     <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
