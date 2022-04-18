@@ -31,7 +31,6 @@
           <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
         </ul>
       </div>
-    </sidebar>
     <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
       <div class="swiper-wrapper">
         <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme2/demo-data/home-slide.jpg') }})">
@@ -73,6 +72,8 @@
                 </li>
             </ul>
         </div>
+      </div>
+    </div>
     </sidebar>
 
     <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
