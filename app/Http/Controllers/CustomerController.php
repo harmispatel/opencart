@@ -388,6 +388,11 @@ class CustomerController extends Controller
             'confirm' => 'min:6|required_with:password|same:password',
         ]);
 
+
+        echo '<pre>';
+        print_r($request->all);
+        exit();
+
         // Store New Customer
         $customer = new Customer;
         $customer->store_id = $current_store_id;

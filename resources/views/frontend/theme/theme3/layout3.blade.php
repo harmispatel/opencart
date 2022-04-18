@@ -1,5 +1,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
 
+@php
+    $template_setting = session('template_settings');
+    $store_setting = session('store_settings');
+    $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+    $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+@endphp
+
     <div class="mobile-menu-shadow"></div>
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme3/img/logo/logo.svg') }}"/></a>
       <div class="top">
@@ -55,6 +62,36 @@
                 <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 3" data-text="Lorem Ipsum Dolar 3"></div>
               </div>
             </div>
+                {{-- Slider --}}
+                {{-- @if($slider_permission == 1)
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')")" data-title="Lorem Ipsum 1" data-text="{{ $template_setting['polianna_slider_1_title'] }}"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="Lorem Ipsum 2" data-text="{{ $template_setting['polianna_slider_2_title'] }}"></div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="swiper-slide" style="background-image: url('{{$template_setting['polianna_slider_3']}}')" data-title="Lorem Ipsum 3" data-text="{{ $template_setting['polianna_slider_3_title'] }}"></div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="swiper-button-prev">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+            @else
+                <div class="swiper">
+                    <div class="swiper-slide">
+                        <strong class="title text-uppercase">welcome to</strong>
+                        <strong class="sub-title text-capitalize">kebab & pizza</strong>
+                        <img class="img-fluid" style="background-image: url('{{ asset('public/frontend/sliders/demo.jpg') }}'); background-size: cover;"/>
+                    </div>
+                </div>
+            @endif --}}
           </div>
         </div>
       </div>

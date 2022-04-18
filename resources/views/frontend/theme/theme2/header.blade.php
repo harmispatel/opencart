@@ -1,17 +1,35 @@
 @php
     $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
 @endphp
+
+<style>
+    .menu li:hover a{
+        color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
+    }
+
+
+</style>
 
 {{-- Header --}}
 <header class="header-v2">
     <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
         <div class="container">
             <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
-            <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
-                <img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/open.svg') }}"/>
-                <img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/closed.svg') }}"/>
-            </div>
-            <a class="logo" href="#slide">
+            @if ($store_open_close == 1)
+                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                    <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                </div>
+            @else
+                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                    <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                </div>
+            @endif
+
+            <a class="logo" href="{{ route('home') }}">
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
             </a>
             <div class="working-time">

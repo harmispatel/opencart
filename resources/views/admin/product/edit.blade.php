@@ -216,7 +216,7 @@
                                                                         @if(!empty($product_size) || $product_size != '')
                                                                             <input type="hidden"
                                                                             name="id_product_price_size[]"
-                                                                            value="{{ isset($product_size->id_product_price_size) ? $product_size->id_product_price_size : '' }}">
+                                                                            value="{{ isset($product_size->id_product_price_size) ? $product_size->id_product_price_size : '0' }}">
                                                                         @endif
 
                                                                         <input type="text" name="mainprices[]"
