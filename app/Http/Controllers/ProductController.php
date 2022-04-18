@@ -748,13 +748,10 @@ class ProductController extends Controller
             $toppingtype->update();
         }
 
-        $mainprice = isset($request->mainprices) ? $request->mainprices : "0";
-        // echo '<pre>';
-        // print_r($mainprice);
-        // exit();
-        // $mainprice = $request->mainprices;
-        $collectionprice =isset($request->collectionprices) ? $request->collectionprices :0;
-        $deliveryprice = isset($request->deliveryprices) ? $request->deliveryprices : 0;
+        $mainprice = isset($request->mainprices) ? $request->mainprices : "";
+        $mainprice = $request->mainprices;
+        $collectionprice =isset($request->collectionprices) ? $request->collectionprices : "";
+        $deliveryprice = isset($request->deliveryprices) ? $request->deliveryprices : "";
         $price_size_id = $request->id_product_price_size;
         $id_size = $request->id_size;
         if (!empty($price_size_id)) {
