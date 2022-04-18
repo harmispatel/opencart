@@ -1,8 +1,13 @@
 
 @php
-    $template_setting = session('template_settings');
-    $social_site = session('social_site');
-    $store_setting = session('store_settings');
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
+
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
 
     $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
 
@@ -65,7 +70,7 @@
             </ul>
         </div>
         <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="background: {{ $template_setting['polianna_navbar_background'] }};">
-            <a class="logo" href="#slide">
+            <a class="logo" href="{{ route('home') }}">
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
             </a>
             <ul class="menu">
@@ -81,8 +86,8 @@
                 <li>
                     <a class="text-uppercase" href="#" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
                 </li>
-                <li>
-                    <a class="text-uppercase" href="#" style="color: {{  (request()->is('contactUs')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
+                <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
+                    <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contact')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                 </li>
             </ul>
             <a class="menu-shopping-cart" href="">

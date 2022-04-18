@@ -1,6 +1,7 @@
 @php
 
-    $template_setting = session('template_settings');
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
 
     if(session()->has('theme_id'))
     {
@@ -17,7 +18,7 @@
 <head>
    @include('frontend.include.head')
 </head>
-<body style="font-family: {{ $template_setting['polianna_store_fonts'] }}">
+<body style="font-family: {{ isset($template_setting['polianna_store_fonts']) ? $template_setting['polianna_store_fonts'] : '' }}">
 
     @if(!empty($theme_id) || $theme_id != '')
         {{-- Header --}}

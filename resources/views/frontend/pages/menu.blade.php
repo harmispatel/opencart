@@ -1,8 +1,5 @@
 <!doctype html>
 <html>
-<style>
-
-</style>
 
 <head>
     {{-- CSS --}}
@@ -19,6 +16,10 @@
         } else {
             $theme_id = 1;
         }
+
+        $social = session('social_site');
+        $social_site = isset($social) ? $social : '#';
+
     @endphp
 
     @if (!empty($theme_id) || $theme_id != '')
@@ -31,36 +32,69 @@
         {{-- End Header --}}
     @endif
 
-    <div class="mobile-menu-shadow">
-    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
-            href="#slide"><img class="img-fluid" src="./assets/img/logo/black-logo.svg" /></a>
+
+    <sidebar class="mobile-menu">
+        <a class="close far fa-times-circle" href="#"></a>
+        <a class="logo" href="#slide">
+            <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
+        </a>
         <div class="top">
             <ul class="menu">
-                <li class="active"><a class="text-uppercase" href="#">home</a></li>
-                <li><a class="text-uppercase" href="#">member</a></li>
-                <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-                <li><a class="text-uppercase" href="#">check out</a></li>
-                <li><a class="text-uppercase" href="#">contact us</a></li>
+                <li class="active">
+                    <a class="text-uppercase" href="{{ route('home') }}">home</a>
+                </li>
+                <li>
+                    <a class="text-uppercase" href="{{ route('home') }}">member</a>
+                </li>
+                <li>
+                    <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
+                </li>
+                <li>
+                    <a class="text-uppercase" href="{{ route('menu') }}">check out</a>
+                </li>
+                <li>
+                    <a class="text-uppercase" href="{{ route('menu') }}">contact us</a>
+                </li>
             </ul>
         </div>
         <div class="center">
             <ul class="authentication-links">
-                <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-                <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+                <li>
+                    <a href="#">
+                        <i class="far fa-user"></i><span>Login</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="bottom">
-            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+            <div class="working-time">
+                <strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
             </div>
             <ul class="social-links">
-                <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+                <li>
+                    <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                </li>
             </ul>
         </div>
     </sidebar>
-  </div>
+
     <section class="main-innr">
         <div class="container">
             <div class="row">
@@ -115,8 +149,6 @@
                                                         <i class="fa fa-angle-down"></i>
                                                     </button>
                                                 </h2>
-
-
                                                 @foreach ($result['product'] as $values)
                                                     <div id="collapse{{ $key }}" class="accordion-collapse collapse show"
                                                     aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -147,13 +179,22 @@
                                                                         $productsize = $values->hasOneProduct['product_id'];
                                                                         $setsizeprice = getprice($sizeprice, $productsize);
                                                                     @endphp
-
                                                                     <div class="row mt-1">
-                                                                        <label style="font-weight: 600">{{ $size->size }}</label>
+                                                                         @if(!empty($result['size']) || $result['size'] != '')
+                                                                            <label style="font-weight: 600">{{ $size->size }}</label>
+                                                                         @else
+                                                                            <label>Main Price</label>
+                                                                         @endif
                                                                         @foreach ($setsizeprice as $setsizeprices)
-                                                                            <a href="" class="btn options-btn" onclick="showmodalproduct();">£{{ $setsizeprices->price }}
-                                                                                <i class="fa fa-shopping-basket"></i>
-                                                                            </a>
+                                                                            @if (!empty($setsizeprices) || $setsizeprices != '')
+                                                                                <a href="" class="btn options-btn" onclick="showmodalproduct();">£{{ $setsizeprices->price }}
+                                                                                    <i class="fa fa-shopping-basket"></i>
+                                                                                </a>
+                                                                            @else
+                                                                                <a href="" class="btn options-btn" onclick="showmodalproduct();">£{{$values->hasOneProduct['price']}}
+                                                                                    <i class="fa fa-shopping-basket"></i>
+                                                                                </a>
+                                                                            @endif
                                                                         @endforeach
                                                                     </div>
                                                                 @endforeach
