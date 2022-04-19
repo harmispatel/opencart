@@ -82,6 +82,7 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_footer_background',
         'polianna_footer_text_color',
         'polianna_footer_title_color',
+        'polianna_footer_logo',
     ]);
 
     $template_settings = [];
@@ -102,7 +103,6 @@ function storeThemeSettings($theme_id,$store_id)
         session()->put('template_settings', $template_settings);
     }
     // End Template Settings
-
 
     // Social Site
     $social_key = ([
@@ -166,6 +166,10 @@ function storeThemeSettings($theme_id,$store_id)
 
 }
 
+function public_url()
+{
+    return asset('');
+}
 
 function themeID($url)
 {

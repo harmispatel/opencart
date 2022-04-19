@@ -52,10 +52,10 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     @endif
                 </div>
             </div>
-            <div class="col-md-12 col-lg-6 wow animate__fadeInRight position-relative" data-wow-duration="1s">
+            {{-- <div class="col-md-12 col-lg-6 wow animate__fadeInRight position-relative" data-wow-duration="1s">
                 <div class="swiper-text-content">
                     <div class="text-content"><strong class="__title">Lorem Ipsum </strong>
-                    {{-- <div class="text-content"><strong class="__title">{{ $template_setting['polianna_slider_1_title'] }}</strong> --}}
+                    <!-- <div class="text-content"><strong class="__title">{{ $template_setting['polianna_slider_1_title'] }}</strong> -->
                         <p>Lorem Ipsum Dolar</p>
                     </div>
                     <div class="swiper-buttons">
@@ -63,7 +63,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         <div class="swiper-button-next"></div>
                     </div>
                 </div>
-                {{-- Slider --}}
+               <!-- Slider-->
                 @if ($slider_permission == 1)
                     <div class="swiper">
                         <div class="swiper-wrapper">
@@ -87,13 +87,6 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="swiper">
-                        <div class="swiper-wrapper">
-                          <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 1" data-text="Lorem Ipsum Dolar 1"></div>
-                          <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 2" data-text="Lorem Ipsum Dolar 2"></div>
-                          <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 3" data-text="Lorem Ipsum Dolar 3"></div>
-                        </div>
-                      </div> --}}
                 @else
                     <div class="swiper">
                         <div class="swiper-slide">
@@ -104,8 +97,33 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         </div>
                     </div>
                 @endif
-            </div>
+            </div> --}}
+            <div class="col-md-12 col-lg-6 wow animate__fadeInRight position-relative" data-wow-duration="1s">
+                <div class="swiper-text-content">
+                  <div class="text-content"><strong class="__title">Lorem Ipsum</strong>
+                    <p>Lorem Ipsum Dolar</p>
+                  </div>
+                  <div class="swiper-buttons">
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                  </div>
+                </div>
+                @if ($slider_permission == 1)
+                <div class="swiper">
+                  <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')" data-title="{{ $template_setting['polianna_slider_1_title'] }}" data-text="Lorem Ipsum Dolar 1"></div>
+                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="{{ $template_setting['polianna_slider_2_title'] }}" data-text="Lorem Ipsum Dolar 2"></div>
+                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')" data-title="{{ $template_setting['polianna_slider_3_title'] }}" data-text="Lorem Ipsum Dolar 3"></div>
+                  </div>
+                </div>
+                @endif
+              </div>
         </div>
+
+
+
+
+
     </div>
 </section>
 <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
