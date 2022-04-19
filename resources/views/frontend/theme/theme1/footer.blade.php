@@ -15,7 +15,7 @@
         background: <?php echo $template_setting['polianna_footer_background']; ?> !important;
     }
 
-    footer .info-group .row strong
+    footer .info-group .row .title
     {
         color: <?php echo $template_setting['polianna_footer_title_color']; ?> !important;
     }
