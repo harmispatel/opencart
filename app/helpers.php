@@ -82,6 +82,7 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_footer_background',
         'polianna_footer_text_color',
         'polianna_footer_title_color',
+        'polianna_footer_logo',
     ]);
 
     $template_settings = [];

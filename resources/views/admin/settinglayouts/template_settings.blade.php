@@ -486,6 +486,19 @@
                                                                             <input type="color" name="polianna_footer_text_color" class="form-control" value="{{ $template_settings['polianna_footer_text_color'] }}">
                                                                         </td>
                                                                     </tr>
+                                                                    <tr>
+                                                                        <th class="align-middle">
+                                                                            <label>Footer Logo</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="file" name="polianna_footer_logo" class="form-control p-1">
+                                                                            @if (!empty($template_settings['polianna_footer_logo']))
+                                                                                <img src="{{ $template_settings['polianna_footer_logo'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
                                                                 </table>
                                                             </div>
                                                         </div>

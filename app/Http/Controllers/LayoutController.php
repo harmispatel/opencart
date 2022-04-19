@@ -53,6 +53,7 @@ class LayoutController extends Controller
             'polianna_footer_background',
             'polianna_footer_text_color',
             'polianna_footer_title_color',
+            'polianna_footer_logo',
 
         ]);
 
@@ -243,6 +244,26 @@ class LayoutController extends Controller
         $data['polianna_footer_background'] = isset($request->polianna_footer_background) ? $request->polianna_footer_background : '';
         $data['polianna_footer_text_color'] = isset($request->polianna_footer_text_color) ? $request->polianna_footer_text_color : '';
         $data['polianna_footer_title_color'] = isset($request->polianna_footer_title_color) ? $request->polianna_footer_title_color : '';
+        if($request->hasFile('polianna_footer_logo'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_footer_logo')->first();
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $polianna_footer_logo_url = $currentURL.'/public/frontend/footer/';
+
+            $polianna_footer_logo = time().'.'.$request->file('polianna_footer_logo')->getClientOriginalName();
+            $request->file('polianna_footer_logo')->move(public_path('frontend/footer'),$polianna_footer_logo);
+            // $data['polianna_footer_logo'] = 'public/frontend/footer/'.$polianna_footer_logo;
+            $data['polianna_footer_logo'] = $polianna_footer_logo_url.$polianna_footer_logo;
+        }
         // END FOOTER
 
         foreach($data as $key => $new)

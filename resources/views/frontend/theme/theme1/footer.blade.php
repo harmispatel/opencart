@@ -45,7 +45,7 @@
         </div>
     </div>
     <a class="f-logo" href="">
-        <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}"/>
+        <img class="img-fluid" src="{{ $template_setting['polianna_footer_logo'] }}"/>
     </a>
     <ul class="social-links">
         <li>
