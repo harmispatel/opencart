@@ -104,7 +104,6 @@ function storeThemeSettings($theme_id,$store_id)
     }
     // End Template Settings
 
-
     // Social Site
     $social_key = ([
         'polianna_facebook_id',
@@ -167,6 +166,10 @@ function storeThemeSettings($theme_id,$store_id)
 
 }
 
+function public_url()
+{
+    return asset('');
+}
 
 function themeID($url)
 {

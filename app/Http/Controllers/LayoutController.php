@@ -79,7 +79,8 @@ class LayoutController extends Controller
         $current_store_theme = themeActive();
 
         // Current URL
-        $currentURL = URL::to("/");
+        // $currentURL = URL::to("/");
+        $currentURL = public_url();
 
 
         // NAVBAR
