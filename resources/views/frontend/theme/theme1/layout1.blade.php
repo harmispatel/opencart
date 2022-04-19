@@ -235,127 +235,55 @@
             <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
             <div class="popular-foods-swiper">
               <div class="swiper">
-                <div class="swiper-wrapper"><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/></div><strong>Breakfast Chef 0</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 0</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/2.jpg') }}"/></div><strong>Breakfast Chef 1</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 1</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/3.jpg') }}"/></div><strong>Breakfast Chef 2</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/4.jpg') }}"/></div><strong>Breakfast Chef 3</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 3</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/5.jpg') }}"/></div><strong>Breakfast Chef 4</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 4</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/6.jpg') }}"/></div><strong>Breakfast Chef 5</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 5</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/7.jpg') }}"/></div><strong>Breakfast Chef 6</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 6</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/8.jpg') }}"/></div><strong>Breakfast Chef 7</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 7</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/9.jpg') }}"/></div><strong>Breakfast Chef 8</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 8</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/10.jpg') }}"/></div><strong>Breakfast Chef 9</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 9</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/></div><strong>Breakfast Chef 10</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 10</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/2.jpg') }}"/></div><strong>Breakfast Chef 11</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 11</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/3.jpg') }}"/></div><strong>Breakfast Chef 12</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 12</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/4.jpg') }}"/></div><strong>Breakfast Chef 13</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 13</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/5.jpg') }}"/></div><strong>Breakfast Chef 14</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 14</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/6.jpg') }}"/></div><strong>Breakfast Chef 15</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 15</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/7.jpg') }}"/></div><strong>Breakfast Chef 16</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 16</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/8.jpg') }}"/></div><strong>Breakfast Chef 17</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 17</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/9.jpg') }}"/></div><strong>Breakfast Chef 18</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 18</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/10.jpg') }}"/></div><strong>Breakfast Chef 19</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 19</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/></div><strong>Breakfast Chef 20</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 20</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/2.jpg') }}"/></div><strong>Breakfast Chef 21</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 21</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/3.jpg') }}"/></div><strong>Breakfast Chef 22</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 22</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/4.jpg') }}"/></div><strong>Breakfast Chef 23</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 23</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/5.jpg') }}"/></div><strong>Breakfast Chef 24</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 24</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/6.jpg') }}"/></div><strong>Breakfast Chef 25</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 25</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/7.jpg') }}"/></div><strong>Breakfast Chef 26</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 26</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/8.jpg') }}"/></div><strong>Breakfast Chef 27</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 27</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/9.jpg') }}"/></div><strong>Breakfast Chef 28</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 28</p>
-                    </div></a><a class="swiper-slide" href="#">
-                    <div class="box">
-                      <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/10.jpg') }}"/></div><strong>Breakfast Chef 29</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur 29</p>
-                    </div></a>
+                <div class="swiper-wrapper">
+                    @if (count($popular_foods) > 0)
+                        @foreach ($popular_foods as $food)
+                            <a class="swiper-slide" href="#">
+                                <div class="box">
+                                    <div class="img">
+                                        @if (!empty($food->hasOneProduct['image']) || $food->hasOneProduct['image'] != '')
+                                            <img class="img-fluid" src="{{ asset('public/admin/product/'.$food->hasOneProduct['image']) }}">
+                                        @else
+                                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                        @endif
+                                    </div>
+                                    <strong>{{ $food->hasOneProduct->hasOneProductDescription['name'] }}</strong>
+                                    @php
+                                        $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
+                                        $description = strip_tags($desc);
+
+                                        if($description == '')
+                                        {
+                                            echo '<p>Description Not Avavilable.</p>';
+                                        }
+                                        else
+                                        {
+                                            echo '<p>'.$description.'</p>';
+                                        }
+                                    @endphp
+                                </div>
+                            </a>
+                        @endforeach
+                    @else
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 1</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 1</p>
+                            </div>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 2</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 2</p>
+                            </div>
+                        </a>
+                    @endif
                 </div>
               </div>
               <div class="swiper-pagination"></div>

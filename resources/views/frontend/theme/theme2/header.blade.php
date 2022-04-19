@@ -43,16 +43,16 @@
                 <li class="{{ (request()->is('/')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
                 </li>
-                <li>
+                <li class="{{ (request()->is('member')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
                 </li>
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                <li>
+                <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
                 </li>
-                <li>
+                <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contactUs')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                 </li>
             </ul>

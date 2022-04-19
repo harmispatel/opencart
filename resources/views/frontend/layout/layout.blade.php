@@ -19,7 +19,7 @@
    @include('frontend.include.head')
    <style>
        body{
-            font-family: <?php echo isset($template_setting['polianna_store_fonts']) ? $template_setting['polianna_store_fonts'] : '' ?> !important;
+            font-family: <?php echo isset($template_setting['polianna_store_fonts']) ? $template_setting['polianna_store_fonts'] : '' ?>!important;
        }
    </style>
 </head>
