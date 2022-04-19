@@ -8,6 +8,9 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\OrderProduct;
+use App\Models\Orders;
+use DB;
 
 class HomeController extends Controller
 {
@@ -29,8 +32,15 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('frontend.pages.home');
+        $front_store_id= session('front_store_id');
+
+        $data['popular_foods'] = OrderProduct::with(['hasOrder','hasOneProduct'])->whereHas('hasOrder',function($query) use ($front_store_id)
+        {
+            $query->where('store_id',$front_store_id);
+        })->groupBy('name')->select('product_id', DB::raw('count(*) as total_product'))->orderBy('total_product','DESC')->limit(20)->get();
+
+        return view('frontend.pages.home',$data);
     }
 
-    
+
 }

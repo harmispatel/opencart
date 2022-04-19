@@ -16,13 +16,14 @@ class MenuController extends Controller
 {
     public function index()
     {
-        // echo 'Hello';
-        // exit();
         $front_store_id= session('front_store_id');
+
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->get();
+
         $data['category'] =$category;
+
         return view('frontend.pages.menu',['data'=>$data]);
     }
 

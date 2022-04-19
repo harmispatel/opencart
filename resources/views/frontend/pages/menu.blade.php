@@ -105,181 +105,177 @@
 
     <section class="main-innr">
         <div class="container">
-            <div class="row">
-                <div class="col-md-7 col-lg-8">
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <div class="cate-part wow animate__fadeInUp cate-list-part" data-wow-duration="1s">
-                                <div class="category-title">
-                                    <h2>Categories</h2>
+            <div class="main-inner-p">
+                <div class="row">
+                    <div class="col-md-7 col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="cate-part wow animate__fadeInUp cate-list-part" data-wow-duration="1s">
+                                    <div class="category-title">
+                                        <h2>Categories</h2>
+                                    </div>
+                                    <div>
+                                        <ul class="box-category">
+                                            @foreach ($data['category'] as $category)
+                                                @php
+                                                    $demo = $category->category_id;
+                                                    $productcount = getproductcount($demo);
+                                                @endphp
+                                                <li>
+                                                    <a href="#" class="active">{{ $category->name }}
+                                                        ({{ $productcount }})
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
-                                <div>
-                                    <ul class="box-category">
+                                <div class="cate-part wow animate__fadeInUp cate-part-select-box" data-wow-duration="1s">
+                                    <select class="form-control">
+                                        <option>Show All Categories</option>
                                         @foreach ($data['category'] as $category)
-                                            @php
-                                                $demo = $category->category_id;
-                                                $productcount = getproductcount($demo);
-                                            @endphp
-                                            <li>
-                                                <a href="#" class="active">{{ $category->name }}
-                                                    ({{ $productcount }})
-                                                </a>
-                                            </li>
+                                            <option>{{ $category->name }}</option>
                                         @endforeach
-                                    </ul>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="cate-part wow animate__fadeInUp cate-part-select-box" data-wow-duration="1s">
-                                <select class="form-control">
-                                    <option>Show All Categories</option>
-                                    @foreach ($data['category'] as $category)
-                                        <option>{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-8">
-                            <div class="product-list wow animate__fadeInUp" data-wow-duration="1s">
-                                <div class="product-list-innr">
-                                    @foreach ($data['category'] as $key => $value)
-                                        @php
-                                            $cat_id = $value->category_id;
-                                            $front_store_id = session('front_store_id');
-                                            $result = getproduct($front_store_id, $cat_id);
-                                        @endphp
-                                        <div class="accordion" id="accordionExample">
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingOne">
-                                                    <button class="accordion-button" type="button"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target="#collapse{{ $key }}"
-                                                        aria-expanded="true"
-                                                        aria-controls="collapse{{ $key }}">
-                                                        <span>{{ $value->name }}</span>
-                                                        <i class="fa fa-angle-down"></i>
-                                                    </button>
-                                                </h2>
-                                                @foreach ($result['product'] as $values)
-                                                    <div id="collapse{{ $key }}" class="accordion-collapse collapse show"
-                                                    aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                        <div class="row">
-                                                            <div class="col-md-8" style="overflow-wrap: break-word;">
-                                                                <h6 style="font-size: 17px;">{{ $values->hasOneDescription['name'] }}</h6>
-                                                                <p style="font-size: 15px; text-align: justify">
-                                                                    {{ strip_tags($values->hasOneDescription['description']) }}
-                                                                </p>
-                                                                @php
-                                                                    $prod_img = isset($values->hasOneProduct['image']) ? $values->hasOneProduct['image'] : '';
-                                                                @endphp
+                            <div class="col-lg-8">
+                                <div class="product-list wow animate__fadeInUp" data-wow-duration="1s">
+                                    <div class="product-list-innr">
+                                        @foreach ($data['category'] as $key => $value)
+                                            @php
+                                                $cat_id = $value->category_id;
+                                                $front_store_id = session('front_store_id');
+                                                $result = getproduct($front_store_id, $cat_id);
+                                            @endphp
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingOne">
+                                                        <button class="accordion-button" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse{{ $key }}"
+                                                            aria-expanded="true"
+                                                            aria-controls="collapse{{ $key }}">
+                                                            <span>{{ $value->name }}</span>
+                                                            <i class="fa fa-angle-down"></i>
+                                                        </button>
+                                                    </h2>
 
-                                                                @if(!empty($prod_img) || $prod_img != '')
-                                                                    <img src="{{ asset('public/admin/product/'.$prod_img) }}" width="80" height="80" style="border: 1px solid black;">
-                                                                @else
-                                                                    <div style="border:1px solid black;width: 80px;" class="text-center">
-                                                                        <h5 class="mt-2">
-                                                                            <i class="fa fa-ban"></i>
-                                                                        </h5>
+
+                                                    @foreach ($result['product'] as $values)
+                                                        <div id="collapse{{ $key }}"
+                                                            class="accordion-collapse collapse show"
+                                                            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                            <div class="accordion-body">
+                                                                <div class="acc-body-inr">
+                                                                    <div class="row">
+                                                                        <div class="col-md-7">
+                                                                            <div class="acc-body-inr-title">
+                                                                                <h4>{{ $values->hasOneDescription['name'] }}</h4>
+                                                                                <p>{{ strip_tags($values->hasOneDescription['description']) }}
+                                                                                </p>
+                                                                                <img src="{{ asset('public/admin/product/'.$values->hasOneProduct['image']) }}" width="80" height="80" class="mt-2 mb-2">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-5">
+                                                                            <div class="options-bt-main">
+                                                                                @foreach ($result['size'] as $size)
+                                                                                    @php
+                                                                                        $sizeprice = $size->id_size;
+                                                                                        $productsize = $values->hasOneProduct['product_id'];
+                                                                                        $setsizeprice = getprice($sizeprice, $productsize);
+                                                                                    @endphp
+
+                                                                                    <div class="options-bt">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-5">
+                                                                                                <span>{{ $size->size }}</span>
+                                                                                            </div>
+                                                                                            <div class="col-md-7">
+                                                                                                @foreach ($setsizeprice as $setsizeprices)
+                                                                                                <a href="" class="btn options-btn"
+                                                                                                    onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i
+                                                                                                        class="fa fa-shopping-basket"></i></a>
+                                                                                            @endforeach
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="col-md-4 pt-4">
-                                                                @foreach ($result['size'] as $size)
-                                                                    @php
-                                                                        $sizeprice = $size->id_size;
-                                                                        $productsize = $values->hasOneProduct['product_id'];
-                                                                        $setsizeprice = getprice($sizeprice, $productsize);
-                                                                    @endphp
-                                                                    <div class="row mt-1">
-                                                                         @if(!empty($result['size']) || $result['size'] != '')
-                                                                            <label style="font-weight: 600">{{ $size->size }}</label>
-                                                                         @else
-                                                                            <label>Main Price</label>
-                                                                         @endif
-                                                                        @foreach ($setsizeprice as $setsizeprices)
-                                                                            @if (!empty($setsizeprices) || $setsizeprices != '')
-                                                                                <a href="" class="btn options-btn" onclick="showmodalproduct();">£{{ $setsizeprices->price }}
-                                                                                    <i class="fa fa-shopping-basket"></i>
-                                                                                </a>
-                                                                            @else
-                                                                                <a href="" class="btn options-btn" onclick="showmodalproduct();">£{{$values->hasOneProduct['price']}}
-                                                                                    <i class="fa fa-shopping-basket"></i>
-                                                                                </a>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </div>
-                                                                @endforeach
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                    </div>
-                                                @endforeach
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-5 col-lg-4">
-                    <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
-                        <div class="close-shop">
-                            <h2>Sorry we are closed now!</h2>
-                            <span>We will be opening back at 16:00 Today</span>
-                        </div>
-                        <div class="minicart">
-                            <div class="minibox-title">
-                                <h3>My Basket</h3>
-                                <i class="fa fa-shopping-basket"></i>
+                    <div class="col-md-5 col-lg-4">
+                        <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
+                            <div class="close-shop">
+                                <h2>Sorry we are closed now!</h2>
+                                <span>We will be opening back at 16:00 Today</span>
                             </div>
-                            <div class="minibox-content">
-                                <div class="empty-box">
-                                    <span>Your shopping cart is empty!</span>
+                            <div class="minicart">
+                                <div class="minibox-title">
+                                    <h3>My Basket</h3>
+                                    <i class="fa fa-shopping-basket"></i>
                                 </div>
-                                <div class="minicart-total">
-                                    <ul class="minicart-list">
-                                        <li class="minicart-list-item">
-                                            <div class="minicart-list-item-innr">
-                                                <label>Sub-Total</label>
-                                                <span>£0.00</span>
+                                <div class="minibox-content">
+                                    <div class="empty-box">
+                                        <span>Your shopping cart is empty!</span>
+                                    </div>
+                                    <div class="minicart-total">
+                                        <ul class="minicart-list">
+                                            <li class="minicart-list-item">
+                                                <div class="minicart-list-item-innr">
+                                                    <label>Sub-Total</label>
+                                                    <span>£0.00</span>
+                                                </div>
+                                            </li>
+                                            <li class="minicart-list-item">
+                                                <div class="minicart-list-item-innr">
+                                                    <label>Total to pay:</label>
+                                                    <span>£0.00</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="order-type">
+                                        <div class="order-type-innr">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                                    id="flexRadioDefault1" onclick="showmodalproduct();">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    <h4>Delivery</h4>
+                                                    <span>Starts at 16:50</span>
+                                                </label>
                                             </div>
-                                        </li>
-                                        <li class="minicart-list-item">
-                                            <div class="minicart-list-item-innr">
-                                                <label>Total to pay:</label>
-                                                <span>£0.00</span>
+                                        </div>
+                                        <div class="order-type-innr">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                                    id="flexRadioDefault1">
+                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                    <h4>Collection</h4>
+                                                    <span>Starts at 16:50</span>
+                                                </label>
                                             </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="order-type">
-                                    <div class="order-type-innr">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="flexRadioDefault1" onclick="showmodalproduct();">
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                <h4>Delivery</h4>
-                                                <span>Starts at 16:50</span>
-                                            </label>
                                         </div>
                                     </div>
-                                    <div class="order-type-innr">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                id="flexRadioDefault1">
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                                <h4>Collection</h4>
-                                                <span>Starts at 16:50</span>
-                                            </label>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <a href="" class="btn disabled checkbt">Checkout</a>
-                        <div class="closed-now">
-                            <span class="closing-text ">We are closed now!</span>
+                            <a href="" class="btn disabled checkbt">Checkout</a>
+                            <div class="closed-now">
+                                <span class="closing-text ">We are closed now!</span>
+                            </div>
                         </div>
                     </div>
                 </div>

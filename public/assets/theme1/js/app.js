@@ -68,11 +68,11 @@ $(function () {
         spaceBetween: 0,
         speed: 500,
         loop: false,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
+        // autoplay: {
+        //     delay: 3000,
+        //     disableOnInteraction: false,
+        //     pauseOnMouseEnter: true
+        // },
         mousewheel: false,
         keyboard: false,
         pagination: {
