@@ -50,6 +50,10 @@ class LayoutController extends Controller
 
             'polianna_store_fonts',
 
+            'polianna_footer_background',
+            'polianna_footer_text_color',
+            'polianna_footer_title_color',
+
         ]);
 
         $template_settings = [];
@@ -234,6 +238,12 @@ class LayoutController extends Controller
         $data['polianna_store_fonts'] = isset($request->polianna_store_fonts) ? $request->polianna_store_fonts : '';
         // END EXTRA
 
+
+        // FOOTER
+        $data['polianna_footer_background'] = isset($request->polianna_footer_background) ? $request->polianna_footer_background : '';
+        $data['polianna_footer_text_color'] = isset($request->polianna_footer_text_color) ? $request->polianna_footer_text_color : '';
+        $data['polianna_footer_title_color'] = isset($request->polianna_footer_title_color) ? $request->polianna_footer_title_color : '';
+        // END FOOTER
 
         foreach($data as $key => $new)
         {

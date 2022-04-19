@@ -9,6 +9,23 @@
     $store_setting = isset($store_set) ? $store_set : '';
 @endphp
 
+<style>
+    footer .info-group
+    {
+        background: <?php echo $template_setting['polianna_footer_background']; ?> !important;
+    }
+
+    footer .info-group .row strong
+    {
+        color: <?php echo $template_setting['polianna_footer_title_color']; ?> !important;
+    }
+
+    footer .info-group .row p,a
+    {
+        color: <?php echo $template_setting['polianna_footer_text_color']; ?> !important;
+    }
+</style>
+
 {{-- Footer --}}
 <footer class="footer wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container info-group wow animate__fadeInUp" data-wow-duration="1s">

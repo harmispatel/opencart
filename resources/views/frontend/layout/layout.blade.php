@@ -17,8 +17,13 @@
 <html>
 <head>
    @include('frontend.include.head')
+   <style>
+       body{
+            font-family: <?php echo isset($template_setting['polianna_store_fonts']) ? $template_setting['polianna_store_fonts'] : '' ?> !important;
+       }
+   </style>
 </head>
-<body style="font-family: {{ isset($template_setting['polianna_store_fonts']) ? $template_setting['polianna_store_fonts'] : '' }}">
+<body>
 
     @if(!empty($theme_id) || $theme_id != '')
         {{-- Header --}}

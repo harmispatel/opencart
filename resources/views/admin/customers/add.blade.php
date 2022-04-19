@@ -123,14 +123,14 @@
 
                                                             <div class="form-group">
                                                                 <label for="password"><span class="text-danger">*</span> Password</label>
-                                                                <input type="password" name="password" id="password" class="form-control">
+                                                                <input type="password" name="password" id="password" class="form-control" autocomplete="on">
                                                                 <div class="invalid-feedback" style="display: none" id="passwordError">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="password"><span class="text-danger">*</span> Confirm Password</label>
-                                                                <input type="password" name="confirm" id="confirm" class="form-control">
+                                                                <input type="password" name="confirm" id="confirm" class="form-control" autocomplete="on">
                                                                 <div class="invalid-feedback" style="display: none" id="confirmError">
                                                                 </div>
                                                             </div>
@@ -365,9 +365,6 @@ function savecustomer() {
             window.location.replace('customers');
         },
         error : function (message) {
-
-            alert('Please Check Form Carfully');
-
             var first_name = message.responseJSON.errors.firstname;
             var last_name = message.responseJSON.errors.lastname;
             var e_mail = message.responseJSON.errors.email;

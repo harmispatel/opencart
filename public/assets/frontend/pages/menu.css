@@ -268,7 +268,7 @@ ul.box-category {
     border: solid 1px #000;
     border-radius: 4px;
     display: inline-block;
-    padding: 5px 15px;
+    /* padding: 5px 15px; */
     font-size: 14px;
     font-weight: 600;
     color: #fff !important;
