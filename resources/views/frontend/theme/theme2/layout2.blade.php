@@ -16,20 +16,20 @@
       </a>
         <div class="top">
             <ul class="menu">
-                <li class="active">
+                <li class="{{ (request()->is('/')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('home') }}">home</a>
                 </li>
-                <li>
+                <li class="{{ (request()->is('member')) ? 'active' : '' }}">
                   <a class="text-uppercase" href="#">member</a>
                 </li>
-                <li>
+                <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                   <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                 </li>
-                <li>
+                <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                   <a class="text-uppercase" href="#">check out</a>
                 </li>
-                <li>
-                  <a class="text-uppercase" href="#">contact us</a>
+                <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
+                  <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                 </li>
             </ul>
         </div>

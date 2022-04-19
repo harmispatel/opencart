@@ -236,7 +236,7 @@
             <div class="popular-foods-swiper">
               <div class="swiper">
                 <div class="swiper-wrapper">
-                    @if (isset($popular_foods))
+                    @if (count($popular_foods) > 0)
                         @foreach ($popular_foods as $food)
                             <a class="swiper-slide" href="#">
                                 <div class="box">
@@ -281,33 +281,6 @@
                                 </div>
                                 <strong>DEMO CAT 2</strong>
                                 <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                            </div>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 3</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 3</p>
-                            </div>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 4</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 4</p>
-                            </div>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 5</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 5</p>
                             </div>
                         </a>
                     @endif
