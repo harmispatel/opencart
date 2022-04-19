@@ -9,6 +9,7 @@ use App\Models\Store;
 use App\Models\CustomerGroupDescription;
 use App\Models\Country;
 use App\Models\Region;
+use App\Models\OrderProduct;
 
 class Orders extends Model
 {

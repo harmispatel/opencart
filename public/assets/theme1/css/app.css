@@ -1191,3 +1191,45 @@ body.fixed-menu .header .header-bottom {
 }
 
 /*# sourceMappingURL=app.css.map */
+
+/* New Header */
+.header {
+    position: relative;
+    z-index: 11;
+    width: 100%;
+}
+.header .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80px;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 5px 5px #00000030;
+    padding: 0 30px 3px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #000;
+}
+.header .header-bottom{
+  box-shadow: 0 5px 5px #00000030;
+  border-radius: 0 0 10px 10px
+}
+
+.header .header-top .working-time strong,
+.header .header-top .working-time span,
+.header .header-top .social-links li a,
+.header .header-top .authentication-links li a i,
+.header .header-top .authentication-links li a span
+  {
+    color: #000;
+  }
+
+ /* new header  */
+
+
+
+ /* home slider */
+ .home-slide .order-online{
+     top: 640px !important;
+ }
+ /* home slider */
