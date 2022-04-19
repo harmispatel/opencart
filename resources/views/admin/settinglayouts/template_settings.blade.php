@@ -382,8 +382,8 @@
                                 </div>
                                 {{-- END PERMISSION SETTINGS --}}
 
-                                 {{-- EXTRA SETTINGS  --}}
-                                 <div class="container">
+                                {{-- EXTRA SETTINGS  --}}
+                                <div class="container">
                                     <div class="row">
                                         <div class="col-md-12">
                                             {{-- Card --}}
@@ -435,6 +435,69 @@
                                     </div>
                                 </div>
                                 {{-- END EXTRA SETTINGS --}}
+
+                                {{-- FOOTER SETTINGS --}}
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            {{-- Card --}}
+                                            <div class="card">
+                                                {{-- Card Header --}}
+                                                <div class="card-header" style="background: #1bbc9b ">
+                                                    <h3 class="card-title pt-2 text-white">
+                                                        <i class="fas fa-cog mr-2"></i>
+                                                        FOOTER
+                                                    </h3>
+                                                    <div class="container" style="text-align: right">
+                                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll4" aria-expanded="true" aria-controls="coll4">
+                                                            <i class="fa" aria-hidden="true"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                {{-- End Card Header --}}
+
+                                                <div class="collapse show" id="coll4">
+                                                    {{-- Card Body --}}
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table class="table table-bordered table-striped">
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Footer Background</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="color" name="polianna_footer_background" class="form-control" value="{{ $template_settings['polianna_footer_background'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Footer Titles Color</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="color" name="polianna_footer_title_color" class="form-control" value="{{ $template_settings['polianna_footer_title_color'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Footer Text Color</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="color" name="polianna_footer_text_color" class="form-control" value="{{ $template_settings['polianna_footer_text_color'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {{-- End Card Body --}}
+                                                </div>
+                                            </div>
+                                            {{-- End Card --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- END FOOTER SETTINGS --}}
 
                             </form>
                             {{-- End Form --}}

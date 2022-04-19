@@ -78,6 +78,10 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_open_close_banner_height',
 
         'polianna_store_fonts',
+
+        'polianna_footer_background',
+        'polianna_footer_text_color',
+        'polianna_footer_title_color',
     ]);
 
     $template_settings = [];
