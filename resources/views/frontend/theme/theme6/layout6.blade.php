@@ -18,11 +18,11 @@
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/black-logo.svg') }}"/></a>
       <div class="top">
         <ul class="menu">
-          <li class="active"><a class="text-uppercase" href="#">home</a></li>
+          <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
           <li><a class="text-uppercase" href="#">member</a></li>
-          <li><a class="text-uppercase" href="#">menu</a></li>
+          <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
           <li><a class="text-uppercase" href="#">check out</a></li>
-          <li><a class="text-uppercase" href="#">contact us</a></li>
+          <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
         </ul>
       </div>
       <div class="center">
