@@ -3,7 +3,7 @@ new WOW({
     live: true,
 }).init();
 
-$(function () {
+$(function() {
 
     let width = $(window).width();
 
@@ -91,12 +91,12 @@ $(function () {
         },
     })
 
-    $(".popular-categories-v6-swiper .__btn-list a").on("click", function(e){
+    $(".popular-categories-v6-swiper .__btn-list a").on("click", function(e) {
         var filter = $(this).data("filter");
         $(".popular-categories-v6-swiper .__btn-list a").removeClass("active");
         $(this).addClass("active");
 
-        if(filter=="all"){
+        if (filter == "all") {
             $(".best-categories-v6-swiper [data-slide-filter]").removeClass("non-swiper-slide d-none").addClass("swiper-slide").show();
             popularCategoriesV6SlideCategory.destroy();
             popularCategoriesV6SlideCategory = new Swiper(".popular-categories-v6-swiper .swiper", {
@@ -134,10 +134,9 @@ $(function () {
                     },
                 },
             })
-        }
-        else {
-            $(".popular-categories-v6-swiper .swiper-slide").not("[data-slide-filter='"+filter+"']").addClass("non-swiper-slide d-none").removeClass("swiper-slide");
-            $(".popular-categories-v6-swiper [data-slide-filter='"+filter+"']").removeClass("non-swiper-slide d-none").addClass("swiper-slide").attr("style", null);
+        } else {
+            $(".popular-categories-v6-swiper .swiper-slide").not("[data-slide-filter='" + filter + "']").addClass("non-swiper-slide d-none").removeClass("swiper-slide");
+            $(".popular-categories-v6-swiper [data-slide-filter='" + filter + "']").removeClass("non-swiper-slide d-none").addClass("swiper-slide").attr("style", null);
             popularCategoriesV6SlideCategory.destroy();
             popularCategoriesV6SlideCategory = new Swiper(".popular-categories-v6-swiper .swiper", {
                 slidesPerView: 1,
@@ -200,10 +199,10 @@ $(function () {
     })
 
     /*** select2 ***/
-    $('.select2').select2({
-        language: "tr",
-        placeholder: 'Person'
-    });
+    // $('.select2').select2({
+    //     language: "tr",
+    //     placeholder: 'Person'
+    // });
 
     /*** datetimepickerIcons ***/
     const datetimepickerIcons = {
@@ -219,18 +218,18 @@ $(function () {
     }
 
     /*** datetimepicker ***/
-    $('#date').datetimepicker({
-        sideBySide: true,
-        locale: moment.locale('tr'),
-        icons: datetimepickerIcons
-    });
+    // $('#date').datetimepicker({
+    //     sideBySide: true,
+    //     locale: moment.locale('tr'),
+    //     icons: datetimepickerIcons
+    // });
 
     /*** Fancybox ***/
     Fancybox.bind("[data-fancybox]", {});
 
     /*** Go Up Animate Scroll Js ***/
-    $('#go-up').on('click', function (e) {
-        $("html, body").animate({scrollTop: $('body').offset().top, easing: "smooth"}, 300);
+    $('#go-up').on('click', function(e) {
+        $("html, body").animate({ scrollTop: $('body').offset().top, easing: "smooth" }, 300);
         e.preventDefault();
     })
 
@@ -277,7 +276,7 @@ $(function () {
         mobileMenuShadow.removeClass('active')
     })
 
-    $(window).resize(function () {
+    $(window).resize(function() {
         width = $(window).width();
     })
 
