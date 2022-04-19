@@ -37,6 +37,15 @@
     <section class="home-slide-v3 wow animate__fadeInUp" data-wow-duration="1s">
       <div class="container">
         <div class="row">
+          {{-- <div class="col-md-12 col-lg-6 wow animate__fadeInLeft" data-wow-duration="1s">
+            <div class="order-online-v3">
+              <h1 class="__title">Welcome to <br><span>STAR KEBAB & PIZZA</span></h1><strong class="title text-uppercase">order online</strong>
+              <input class="form-control" placeholder="Eg. AA11AA"/>
+              <p>Please enter your postcode to view our<br> menu and place an order</p>
+              <div class="btn__group"><a class="btn btn-red text-uppercase">collection</a><a class="btn btn-orange text-uppercase">delivery</a></div>
+            </div>
+          </div> --}}
+          @if ($online_order_permission == 1)
           <div class="col-md-12 col-lg-6 wow animate__fadeInLeft" data-wow-duration="1s">
             <div class="order-online-v3">
               <h1 class="__title">Welcome to <br><span>STAR KEBAB & PIZZA</span></h1><strong class="title text-uppercase">order online</strong>
@@ -45,6 +54,7 @@
               <div class="btn__group"><a class="btn btn-red text-uppercase">collection</a><a class="btn btn-orange text-uppercase">delivery</a></div>
             </div>
           </div>
+      @endif
           <div class="col-md-12 col-lg-6 wow animate__fadeInRight position-relative" data-wow-duration="1s">
             <div class="swiper-text-content">
               <div class="text-content"><strong class="__title">Lorem Ipsum</strong>
@@ -55,34 +65,34 @@
                 <div class="swiper-button-next"></div>
               </div>
             </div>
-            <div class="swiper">
+            {{-- <div class="swiper">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 1" data-text="Lorem Ipsum Dolar 1"></div>
                 <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 2" data-text="Lorem Ipsum Dolar 2"></div>
                 <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme3/demo-data/slider.jpg')}})" data-title="Lorem Ipsum 3" data-text="Lorem Ipsum Dolar 3"></div>
               </div>
-            </div>
+            </div> --}}
                 {{-- Slider --}}
-                {{-- @if($slider_permission == 1)
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')")" data-title="Lorem Ipsum 1" data-text="{{ $template_setting['polianna_slider_1_title'] }}"></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="Lorem Ipsum 2" data-text="{{ $template_setting['polianna_slider_2_title'] }}"></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="swiper-slide" style="background-image: url('{{$template_setting['polianna_slider_3']}}')" data-title="Lorem Ipsum 3" data-text="{{ $template_setting['polianna_slider_3_title'] }}"></div>
-                        </div>
+            @if($slider_permission == 1)
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')")" data-title="Lorem Ipsum 1" data-text="{{ $template_setting['polianna_slider_1_title'] }}"></div>
                     </div>
-                    <div class="swiper-button-next">
-                        <i class="fas fa-arrow-right"></i>
+                    <div class="swiper-slide">
+                        <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="Lorem Ipsum 2" data-text="{{ $template_setting['polianna_slider_2_title'] }}"></div>
                     </div>
-                    <div class="swiper-button-prev">
-                        <i class="fas fa-arrow-left"></i>
+                    <div class="swiper-slide">
+                        <div class="swiper-slide" style="background-image: url('{{$template_setting['polianna_slider_3']}}')" data-title="Lorem Ipsum 3" data-text="{{ $template_setting['polianna_slider_3_title'] }}"></div>
                     </div>
                 </div>
+                {{-- <div class="swiper-button-next">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="swiper-button-prev">
+                    <i class="fas fa-arrow-left"></i>
+                </div> --}}
+            </div>
             @else
                 <div class="swiper">
                     <div class="swiper-slide">
@@ -91,7 +101,7 @@
                         <img class="img-fluid" style="background-image: url('{{ asset('public/frontend/sliders/demo.jpg') }}'); background-size: cover;"/>
                     </div>
                 </div>
-            @endif --}}
+            @endif
           </div>
         </div>
       </div>
@@ -240,13 +250,17 @@
     <section class="reservation-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
       <form class="container">
         <div class="row align-items-center">
-          <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
-            <div class="default-title-v3">
-              <h3 class="title color-green text-capitalize">make a <br>reservation</h3>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-            </div>
-            <button class="btn btn-red text-capitalize">make reservation now</button>
-          </div>
+              {{-- Online Order --}}
+            @if ($online_order_permission == 1)
+            <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
+                <div class="default-title-v3">
+                  <h3 class="title color-green text-capitalize">make a <br>reservation</h3>
+                  <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+                </div>
+                <button class="btn btn-red text-capitalize">make reservation now</button>
+              </div>
+        @endif
+{{-- End Online Order --}}
           <div class="col-md-12 col-lg-7 wow animate__fadeInRight" data-wow-duration="1s">
             <div class="row">
               <div class="col-12 col-sm-6 mb-4">
