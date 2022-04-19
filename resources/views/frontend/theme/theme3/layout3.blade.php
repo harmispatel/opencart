@@ -52,63 +52,17 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     @endif
                 </div>
             </div>
-            {{-- <div class="col-md-12 col-lg-6 wow animate__fadeInRight position-relative" data-wow-duration="1s">
-                <div class="swiper-text-content">
-                    <div class="text-content"><strong class="__title">Lorem Ipsum </strong>
-                    <!-- <div class="text-content"><strong class="__title">{{ $template_setting['polianna_slider_1_title'] }}</strong> -->
-                        <p>Lorem Ipsum Dolar</p>
-                    </div>
-                    <div class="swiper-buttons">
-                        <div class="swiper-button-prev"></div>
-                        <div class="swiper-button-next"></div>
-                    </div>
-                </div>
-               <!-- Slider-->
-                @if ($slider_permission == 1)
-                    <div class="swiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="swiper-slide"
-                                    style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')" )
-                                    data-title="{{ $template_setting['polianna_slider_1_title'] }}"
-                                    data-text="Lorem Ipsum Dolar 1"></div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="swiper-slide"
-                                    style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')"
-                                    data-title="{{ $template_setting['polianna_slider_2_title'] }}"
-                                    data-text="Lorem Ipsum Dolar 2"></div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="swiper-slide"
-                                    style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')"
-                                    data-title="{{ $template_setting['polianna_slider_3_title'] }}"
-                                    data-text="Lorem Ipsum Dolar 3"></div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="swiper">
-                        <div class="swiper-slide">
-                            <strong class="title text-uppercase">welcome to</strong>
-                            <strong class="sub-title text-capitalize">kebab & pizza</strong>
-                            <img class="img-fluid"
-                                style="background-image: url('{{ asset('public/frontend/sliders/demo.jpg') }}'); background-size: cover;" />
-                        </div>
-                    </div>
-                @endif
-            </div> --}}
             <div class="col-md-12 col-lg-6 wow animate__fadeInRight position-relative" data-wow-duration="1s">
+                @if ($slider_permission == 1)
                 <div class="swiper-text-content">
                   <div class="text-content"><strong class="__title">Lorem Ipsum</strong>
                     <p>Lorem Ipsum Dolar</p>
-                  </div>
+                </div>
                   <div class="swiper-buttons">
                     <div class="swiper-button-prev"></div>
                     <div class="swiper-button-next"></div>
                   </div>
                 </div>
-                @if ($slider_permission == 1)
                 <div class="swiper">
                   <div class="swiper-wrapper">
                     <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')" data-title="{{ $template_setting['polianna_slider_1_title'] }}" data-text="Lorem Ipsum Dolar 1"></div>
@@ -116,14 +70,15 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')" data-title="{{ $template_setting['polianna_slider_3_title'] }}" data-text="Lorem Ipsum Dolar 3"></div>
                   </div>
                 </div>
+                @else
+                <div class="swiper">
+                    <div class="swiper-slide">
+                        <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')"></div>
+                    </div>
+                </div>
                 @endif
-              </div>
+            </div>
         </div>
-
-
-
-
-
     </div>
 </section>
 <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
@@ -280,28 +235,24 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     <div class="container-fluid">
         <div class="row list-item">
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" /></div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" />
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" /></div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" />
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" /></div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" />
+                </div>
             </div>
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" /></div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" />
+                </div>
             </div>
         </div>
     </div>

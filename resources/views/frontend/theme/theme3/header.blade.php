@@ -36,13 +36,8 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
         <div class="container">
             <a class="logo" href="#slide">
                 <img class="attach img-fluid" src="{{ asset('public/assets/theme3/img/icon/logo-attach.svg') }}" />
-            {{-- <img class="img-fluid" src="{{ asset('public/assets/theme3/img/logo/logo.svg') }}" /></a> --}}
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}"
                     style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;" />
-                    {{-- <a class="logo" href="#slide">
-                        <img class="attach img-fluid" src="{{ asset('public/assets/theme3/img/icon/logo-attach.svg') }}">
-                        <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}">
-                    </a> --}}
                 <ul class="menu">
                     <li class="{{ request()->is('/') ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('home') }}" style="color:{{ request()->is('home') ? 'red' : $template_setting['polianna_navbar_link'] }};">home</a>

@@ -1,4 +1,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+@php
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
+
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '#';
+
+    $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+
+    $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+@endphp
 
     <div class="mobile-menu-shadow"></div>
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/black-logo.svg') }}"/></a>
@@ -28,30 +42,38 @@
       </div>
     </sidebar>
     <section class="home-slide-v6 wow animate__fadeInUp" data-wow-duration="1s">
+
       <div class="home-slide-v6-swiper">
         <div class="swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme6/demo-data/slider.jpg') }})">
+            @if ($slider_permission == 1)
+            <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
               <div class="container">
                 <div class="slide-logo"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}"/></div>
-                <h2 class="__title">Our restaurant offers amazing dishes from around the world!</h2>
+                <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae voluptatem. Culpa mollitia placeat rem.</p>
               </div>
             </div>
-            <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme6/demo-data/slider.jpg')}})">
+            <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
               <div class="container">
-                <h2 class="__title">Our restaurant offers amazing dishes from around the world!</h2>
+                <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae voluptatem. Culpa mollitia placeat rem.</p>
               </div>
             </div>
+            @else
+
+            @endif
           </div>
         </div>
       </div>
+
+      @if ($online_order_permission == 1)
       <div class="order-online-v6"><strong class="title text-uppercase">order online</strong>
         <input class="form-control" placeholder="Eg. AA11AA"/>
         <p>Please enter your postcode to view our<br> menu and place an order</p>
         <div class="btn__group"><a class="btn btn-white text-uppercase">collection</a><a class="btn btn-red text-uppercase">delivery</a></div>
       </div>
+      @endif
       <div class="__btn-bottom"><i class="fas fa-arrow-down"></i></div>
     </section>
     <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
@@ -59,7 +81,7 @@
         <div class="default-title-v6"><strong class="sub-title color-orange text-uppercase">about us</strong>
           <h3 class="title text-uppercase">SEE WHO WE ARE AND WHAT WE OFFER!</h3>
         </div>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquid consectetur deleniti dolorum est facilis labore maiores molestias odio officiis quam qui quisquam repellendus sapiente sequi suscipit tempora, ut.</p>
+        <p>{{ $store_setting['config_meta_description'] }}</p>
         <p>Magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>At autem consequatur consequuntur dolor dolorum eligendi error excepturi facere illum, inventore laudantium, <br>libero minima mollitia nihil nobis quis quod tenetur vitae?</p><a class="btn text-uppercase" href="">read more</a>
       </div>
     </section>

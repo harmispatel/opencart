@@ -1,5 +1,26 @@
-<header class="header-v6">
-    <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
+@php
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
+
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
+
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+
+@endphp
+<style>
+    .menu li:hover a{
+        color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
+    }
+
+
+</style>
+
+<header class="header-v6" style="background: {{ $template_setting['polianna_navbar_background'] }};">
+    <div class="header-top wow animate__fadeInDown" data-wow-duration="1s" >
       <div class="container">
         <ul class="authentication-links">
           <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
@@ -14,11 +35,21 @@
     <div class="header-center">
       <div class="container">
         <ul class="menu">
-          <li class="active"><a class="text-uppercase" href="#">home</a></li>
-          <li><a class="text-uppercase" href="#">member</a></li>
-          <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-          <li><a class="text-uppercase" href="#">check out</a></li>
-          <li><a class="text-uppercase" href="#">contact us</a></li>
+            <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">
+                <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'red' : $template_setting['polianna_navbar_link'] }};">home</a>
+            </li>
+            <li class="{{ ((request()->is('member'))) ? 'active' : '' }}">
+                <a class="text-uppercase" href="#" style="color: {{  (request()->is('member')) ? 'red' : $template_setting['polianna_navbar_link'] }};">member</a>
+            </li>
+            <li class="{{ ((request()->is('menu'))) ? 'active' : '' }}">
+                <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('menu')) ? 'red' : $template_setting['polianna_navbar_link'] }};">menu</a>
+            </li>
+            <li class="{{ ((request()->is('checkout'))) ? 'active' : '' }}">
+                <a class="text-uppercase" href="#" style="color: {{  (request()->is('checkout')) ? 'red' : $template_setting['polianna_navbar_link'] }};">check out</a>
+            </li>
+            <li class="{{ ((request()->is('contact'))) ? 'active' : '' }}">
+                <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contact')) ? 'red' : $template_setting['polianna_navbar_link'] }};">contact us</a>
+            </li>
         </ul>
       </div>
     </div>
@@ -26,8 +57,19 @@
       <div class="container">
         <div class="working-time"><i class="far fa-clock"></i>
           <div><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span></div>
-        </div><a class="logo" href="#slide"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/logo.svg') }}"/></a>
-        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/icon/open.svg') }}"/><img class="img-fluid" src="{{ asset('public/assets/theme6/img/icon/closed.svg') }}"/></div><a class="open-mobile-menu" href="javascript:void(0)"><span class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
+        </div><a class="logo" href="#slide"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/></a>
+        @if ($store_open_close == 1)
+        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
+            <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"/>
+        </div>
+        @else
+        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
+            <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}"/>
+        </div>
+        @endif
+        <a class="open-mobile-menu" href="javascript:void(0)">
+            <span class="text-uppercase">menu</span>
+            <i class="fas fa-bars"></i></a>
       </div>
     </div>
   </header>
