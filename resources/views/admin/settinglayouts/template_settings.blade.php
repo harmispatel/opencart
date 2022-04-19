@@ -202,7 +202,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
-                                                <div class="collapse" id="coll1">
+                                                <div class="collapse show" id="coll1">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
                                                         <div class="row">

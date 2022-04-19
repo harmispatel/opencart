@@ -1,7 +1,12 @@
 @php
-    $template_setting = session('template_settings');
-    $social_site = session('social_site');
-    $store_setting = session('store_settings');
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
+
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '#';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
 @endphp
 
 {{-- Footer --}}

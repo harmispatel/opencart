@@ -44,10 +44,13 @@ class HomeController extends Controller
 
     public function adminHome()
     {
-        $customers = Customer::count();
+        // current store id
+        $current_store_id = currentStoreId();
+
+        $customers = Customer::where('store_id',$current_store_id)->count();
         $product = Product::count();
         $categories = Category::count();
-        $orders = Orders::count();
+        $orders = Orders::where('store_id',$current_store_id)->count();
 
         return view('dashboard',['customers'=>$customers,'orders'=>$orders,'product'=>$product,'categories'=>$categories]);
 

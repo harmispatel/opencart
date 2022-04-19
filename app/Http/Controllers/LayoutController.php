@@ -7,6 +7,7 @@ use App\Models\Settings;
 use App\Models\Themes;
 use Illuminate\Http\Request;
 use URL;
+use Illuminate\Support\Facades\Artisan;
 
 class LayoutController extends Controller
 {
@@ -289,7 +290,7 @@ class LayoutController extends Controller
             $active_new->serialized = 0;
             $active_new->save();
         }
-
+        // Artisan::call('view:clear');
         return redirect()->route('templatesettings');
 
     }

@@ -123,10 +123,10 @@ $(function () {
     })
 
     /*** select2 ***/
-    $('.select2').select2({
-        language: "tr",
-        placeholder: 'Person'
-    });
+    // $('.select2').select2({
+    //     language: "tr",
+    //     placeholder: 'Person'
+    // });
 
     /*** datetimepickerIcons ***/
     const datetimepickerIcons = {
@@ -142,17 +142,17 @@ $(function () {
     }
 
     /*** datetimepicker ***/
-    $('#date').datetimepicker({
-        format: 'DD/MM/YYYY',
-        locale: moment.locale('tr'),
-        icons: datetimepickerIcons
-    });
+    // $('#date').datetimepicker({
+    //     format: 'DD/MM/YYYY',
+    //     locale: moment.locale('tr'),
+    //     icons: datetimepickerIcons
+    // });
 
-    $('#time').datetimepicker({
-        format: 'LT',
-        locale: moment.locale('tr'),
-        icons: datetimepickerIcons
-    });
+    // $('#time').datetimepicker({
+    //     format: 'LT',
+    //     locale: moment.locale('tr'),
+    //     icons: datetimepickerIcons
+    // });
 
     /*** Fancybox ***/
     Fancybox.bind("[data-fancybox]", {});
@@ -176,17 +176,17 @@ $(function () {
     })
 
     /*** Fixed Menu Js ***/
-    $(window).on('scroll', (e) => {
-        if (window.scrollY > 200) {
-            if (!$('body').hasClass('fixed-menu')) {
-                $('body').addClass('fixed-menu')
-            }
-        } else {
-            if ($('body').hasClass('fixed-menu')) {
-                $('body').removeClass('fixed-menu')
-            }
-        }
-    })
+    // $(window).on('scroll', (e) => {
+    //     if (window.scrollY > 200) {
+    //         if (!$('body').hasClass('fixed-menu')) {
+    //             $('body').addClass('fixed-menu')
+    //         }
+    //     } else {
+    //         if ($('body').hasClass('fixed-menu')) {
+    //             $('body').removeClass('fixed-menu')
+    //         }
+    //     }
+    // })
 
     /*** Mobile Menu Toggle ***/
     const mobileMenu = $('sidebar.mobile-menu')

@@ -1,33 +1,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
 
 @php
-    $template_setting = session('template_settings');
-    $store_setting = session('store_settings');
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
+
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '#';
+
     $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+
     $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
 @endphp
 
 <sidebar class="mobile-menu">
     <a class="close far fa-times-circle" href="#"></a>
-    <a class="logo" href="#slide">
-        <img class="img-fluid" src="{{ asset('public/assets/theme2/img/logo/logo.svg') }}"/>
+    <a class="logo" href="{{ route('home') }}">
+        <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
     </a>
     <div class="top">
         <ul class="menu">
-            <li class="active">
-                <a class="text-uppercase" href="#">home</a>
+            <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">
+                <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
             </li>
             <li>
-                <a class="text-uppercase" href="#">member</a>
+                <a class="text-uppercase" href="#" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
+            </li>
+            <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
+                <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
             </li>
             <li>
-                <a class="text-uppercase" href="#">menu</a>
+                <a class="text-uppercase" href="#" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
             </li>
-            <li>
-                <a class="text-uppercase" href="#">check out</a>
-            </li>
-            <li>
-                <a class="text-uppercase" href="#">contact us</a>
+            <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
+                <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contact')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
             </li>
         </ul>
     </div>
@@ -51,16 +59,19 @@
         </div>
         <ul class="social-links">
             <li>
-                <a class="fab fa-facebook" href="#" target="_blank"></a>
+                <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
             </li>
             <li>
-                <a class="fab fa-twitter" href="#" target="_blank"></a>
+                <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
             </li>
             <li>
-                <a class="fab fa-pinterest-p" href="#" target="_blank"></a>
+                <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
             </li>
             <li>
-                <a class="fab fa-instagram" href="#" target="_blank"></a>
+                <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+            </li>
+            <li>
+                <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
             </li>
         </ul>
     </div>
@@ -478,4 +489,6 @@
             <p>Sunday to Tuesday 09.00 – 23:00  |  Sunday 08:00 – 23:00</p>
           </div>
         </section>
+
+
 
