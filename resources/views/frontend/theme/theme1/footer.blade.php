@@ -20,7 +20,7 @@
         color: <?php echo $template_setting['polianna_footer_title_color']; ?> !important;
     }
 
-    footer .info-group .row p,a
+    footer .info-group .row .foot_content,.foot_link
     {
         color: <?php echo $template_setting['polianna_footer_text_color']; ?> !important;
     }
@@ -31,16 +31,16 @@
     <div class="container info-group wow animate__fadeInUp" data-wow-duration="1s">
         <div class="row">
             <div class="col-12 col-sm-12 col-md-4 input-group-item"><strong class="title top-divider-red">Our Address</strong>
-                <p><i class="fa fa-address-card"></i>&nbsp; {{ $store_setting['config_address'] }}</p>
+                <p class="foot_content"><i class="fa fa-address-card"></i>&nbsp; {{ $store_setting['config_address'] }}</p>
             </div>
             <div class="col-12 col-sm-12 col-md-4 input-group-item">
                 <strong class="title top-divider-green">Contact Info</strong>
-                <a href="mailto:{{ $store_setting['config_email'] }}"><i class="fa fa-envelope"></i>&nbsp; {{ $store_setting['config_email'] }}</a>
-                <a href="tel:{{  $store_setting['config_telephone'] }}"><i class="fa fa-phone-alt"></i>&nbsp; {{  $store_setting['config_telephone'] }}</a>
+                <a class="foot_link" href="mailto:{{ $store_setting['config_email'] }}"><i class="fa fa-envelope"></i>&nbsp; {{ $store_setting['config_email'] }}</a>
+                <a class="foot_link" href="tel:{{  $store_setting['config_telephone'] }}"><i class="fa fa-phone-alt"></i>&nbsp; {{  $store_setting['config_telephone'] }}</a>
             </div>
             <div class="col-12 col-sm-12 col-md-4 input-group-item">
                 <strong class="title top-divider-orange">Our Reservation</strong>
-                <p>You can make a reservation online by <br> clicking on find table link.</p>
+                <p class="foot_content">You can make a reservation online by <br> clicking on find table link.</p>
             </div>
         </div>
     </div>
