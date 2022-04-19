@@ -232,36 +232,36 @@ $(function () {
     })
 
     /*** select2 ***/
-    $('.select2').select2({
-        language: "tr",
-        placeholder: 'Person'
-    });
+    // $('.select2').select2({
+    //     language: "tr",
+    //     placeholder: 'Person'
+    // });
 
     /*** datetimepickerIcons ***/
-    const datetimepickerIcons = {
-        time: 'far fa-clock',
-        date: 'far fa-calendar',
-        up: 'fas fa-chevron-up',
-        down: 'fas fa-chevron-down',
-        previous: 'fas fa-chevron-left',
-        next: 'fas fa-chevron-right',
-        today: 'fas fa-calendar-day',
-        clear: 'far fa-trash-alt',
-        close: 'far fa-times-circle'
-    }
+    // const datetimepickerIcons = {
+    //     time: 'far fa-clock',
+    //     date: 'far fa-calendar',
+    //     up: 'fas fa-chevron-up',
+    //     down: 'fas fa-chevron-down',
+    //     previous: 'fas fa-chevron-left',
+    //     next: 'fas fa-chevron-right',
+    //     today: 'fas fa-calendar-day',
+    //     clear: 'far fa-trash-alt',
+    //     close: 'far fa-times-circle'
+    // }
 
     /*** datetimepicker ***/
-    $('#date').datetimepicker({
-        format: 'DD/MM/YYYY',
-        locale: moment.locale('tr'),
-        icons: datetimepickerIcons
-    });
+    // $('#date').datetimepicker({
+    //     format: 'DD/MM/YYYY',
+    //     locale: moment.locale('tr'),
+    //     icons: datetimepickerIcons
+    // });
 
-    $('#time').datetimepicker({
-        format: 'LT',
-        locale: moment.locale('tr'),
-        icons: datetimepickerIcons
-    });
+    // $('#time').datetimepicker({
+    //     format: 'LT',
+    //     locale: moment.locale('tr'),
+    //     icons: datetimepickerIcons
+    // });
 
     /*** Fancybox ***/
     Fancybox.bind("[data-fancybox]", {});
