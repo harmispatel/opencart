@@ -41,26 +41,22 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
 
                 <ul class="menu">
                     <li class="{{ request()->is('/') ? 'active' : '' }}">
-                        <a class="text-uppercase" href="{{ route('home') }}" style="color:{{ request()->is('menu') ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
+                        <a class="text-uppercase" href="{{ route('home') }}" style="color:{{ request()->is('home') ? 'red' : $template_setting['polianna_navbar_link'] }};">home</a>
                     </li>
-                    <li>
-                        <a class="text-uppercase" href="#" style="color:{{ request()->is('menu') ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
+                    <li class="{{ request()->is('member') ? 'active' : '' }}">
+                        <a class="text-uppercase" href="#" style="color:{{ request()->is('member') ? 'red' : $template_setting['polianna_navbar_link'] }};">member</a>
                     </li>
                     <li class="{{ request()->is('menu') ? 'active' : '' }}">
-                        <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{ request()->is('menu') ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
+                        <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{ request()->is('menu') ? 'red' : $template_setting['polianna_navbar_link'] }};">menu</a>
                     </li>
-                    <li>
-                        <a class="text-uppercase" href="#" style="color:{{ request()->is('menu') ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    <li class="{{ request()->is('checkout') ? 'active' : '' }}">
+                        <a class="text-uppercase" href="#" style="color:{{ request()->is('checkout') ? 'red' : $template_setting['polianna_navbar_link'] }};">check out</a>
                     </li>
                     <li class="{{ request()->is('contact') ? 'active' : '' }}">
-                        <a class="text-uppercase" href="{{ route('contact') }}" style="color:{{ request()->is('menu') ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
+                        <a class="text-uppercase" href="{{ route('contact') }}" style="color:{{ request()->is('contact') ? 'red' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                     </li>
                 </ul>
                 <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
-                {{-- <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
-                    <img class="img-fluid" src="{{ asset('public/assets/theme3/img/icon/open.svg') }}" />
-                    <img class="img-fluid" src="{{ asset('public/assets/theme3/img/icon/closed.svg') }}" />
-                </div> --}}
                 @if ($store_open_close == 1)
                     <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                         <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"
