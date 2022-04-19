@@ -258,12 +258,58 @@
                                         }
                                         else
                                         {
-                                            echo '<p style="overflow: hidden;">'.$description.'</p>';
+                                            echo '<p>'.$description.'</p>';
                                         }
                                     @endphp
                                 </div>
                             </a>
                         @endforeach
+                    @else
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 1</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 1</p>
+                            </div>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 2</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 2</p>
+                            </div>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 3</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 3</p>
+                            </div>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 4</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 4</p>
+                            </div>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="box">
+                                <div class="img">
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                                </div>
+                                <strong>DEMO CAT 5</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 5</p>
+                            </div>
+                        </a>
                     @endif
                 </div>
               </div>
