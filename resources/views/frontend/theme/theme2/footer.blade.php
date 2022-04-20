@@ -35,7 +35,7 @@
             <div class="social-links">
               <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
               <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
-              <a class="fab fa-instagram" href="#" target="_blank"></a>
+              <a class="fab fa-youtube" href="#" target="_blank"></a>
               <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
             </div>
           </div>

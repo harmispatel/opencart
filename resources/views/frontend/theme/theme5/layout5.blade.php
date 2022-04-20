@@ -46,9 +46,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
                 <div class="order-online-v5">
-                    <h2 class="__title"><span class="color-orange">Lorem ipsum</span><span>dolar</span><span
-                            class="color-yellow">sit amet</span><span>consectetur</span><span
-                            class="color-green">elit!</span></h2>
+                    <h2 class="__title">"{{ $store_setting['config_name'] }}"</h2>
                     @if ($online_order_permission == 1)
                         <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
                             <strong class="title text-uppercase ">order online</strong>
@@ -415,126 +413,6 @@
                     </div>
                 </div>
                 @endif
-                    {{-- <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
             <div class="popular-foods-v5-swiper-control">

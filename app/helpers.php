@@ -14,7 +14,7 @@ use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\ToppingSize;
-
+use App\Models\PhotoGallry;
 
 
 // Function of User Details
@@ -238,6 +238,11 @@ function getprice($sizeprice,$productsize){
 	$setsizeprice=ToppingProductPriceSize::where('id_size',$sizeprice)->where('id_product',$productsize)->get();
 	return $setsizeprice;
 }
+
+function getimage($current_store){
+    $image=PhotoGallry::where('store_id',$current_store)->get();
+    return $image;
+} 
 
 
 function getFonts()

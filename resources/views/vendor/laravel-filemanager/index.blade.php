@@ -1,20 +1,9 @@
 @include('header')
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
-{{-- <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-  <meta name="viewport" content="width=device-width,initial-scale=1"> --}}
 
-{{-- <!-- Chrome, Firefox OS and Opera -->
-  <meta name="theme-color" content="#333844">
-  <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#333844">
-  <!-- iOS Safari -->
-  <meta name="apple-mobile-web-app-status-bar-style" content="#333844">
-
-  <title>{{ trans('laravel-filemanager::lfm.title-page') }}</title> --}}
 <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}">
-{{-- <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/.png') }}"> --}}
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
@@ -91,34 +80,44 @@
 
 
         {{-- End Header Section --}}
-
+        @php
+            $current_store = currentStoreId();
+            $image=getimage($current_store);
+            // echo '<pre>';
+            // print_r($image->image);
+            // exit();
+        @endphp
         <div class="content">
             <div class="conatiner-fluid">
-                <div class="row">
+                <div class="row" style="margin:0">
                     <div class="col-md-12">
                         <form action="{{ route('storeGallary') }}" id="form" method="post" enctype="multipart-form/data" >
-                            <div class="row" id="gallryappend">
-                                <div class="col-md-3">
+                            <div class="row"  id="gallryappend">
+                                @foreach ($image as $images)
+                                <div class="demo{{ $loop->iteration }} col-md-3">
                                     @csrf
                                     <div class="image"
                                         style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;">
-                                        <a onclick="$(this).parent().remove();" class="removeImg m-1"><i
-                                                class="fa fa-times"></i></a>
+                                        <a onclick="$('.demo0').remove();" class="removeImg m-1"><i
+                                                class="fa fa-times" data-id="{{ $images->image_id }}"></i></a>
                                         <div id="div1" style="width: 100px"></div>
                                         <div class="imageOverlay">
-                                            <img class="w-100"
-                                                src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt=""
-                                                id="thumb0" />
+                                              @if (!empty($images->image) || $images->image != '')
+                                              <img class="w-100" src="{{asset('public/admin/product/'.$images->image)}}" alt="" 
+                                              id="thumb0"/>
+                                              @else
+                                              <img class="w-100"
+                                              src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt=""
+                                              id="thumb0" />
+                                              @endif
                                             <span></span>
                                         </div>
-                                        <input type="hidden" name="image" value="" id="image" />
-                                        <a class="browse_image img-de" data-toggle="modal"
-                                            data-target="#myModal">Browse</a>
-                                        <textarea name="description" placeholder="Image Description" class=" form-control"></textarea>
-
-
+                                        <input type="hidden" name="image" value="{{ $images->image_id }}" id="image" />
+                                        <a class="browse_image img-de" onclick="showmodal(0);">Browse</a>
+                                        <textarea name="description" placeholder="Image Description" class=" form-control" value="">{{ $images->description }}</textarea>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
                         </form>
 
@@ -422,19 +421,20 @@
         modalToSelectedFilePath = url;
 
     }
-    function closePopupAndSetPath() {
-        jQuery("#myModal").hide();
-        $(".modal-backdrop").attr("style", "display:none;");
-        // $('#test').attr(gallary1);
-        jQuery("#thumb0").attr("src", modalToSelectedFilePath);
-        // jQuery("#thumb"+gallary1).attr("src", modalToSelectedFilePath);
+    
+    function closePopupAndSetPath(imageId) {
+        var v=$('#test').attr('imageId');
+        //  alert(v);
+        jQuery("#myModal").modal('hide');
+        // $(".modal-backdrop").attr("style", "display:none;");
+        // jQuery("#thumb").attr("src", modalToSelectedFilePath);
+        jQuery('#thumb' + v).attr("src",modalToSelectedFilePath);
     }
 
     function showmodal(gallary){
         $("#myModal").modal('show');
        var gallary1=gallary;
-
-        // $('#test').attr(gallary1);
+        $('#test').attr('imageId',gallary1);
     }
 
     Dropzone.options.uploadForm = {
@@ -463,7 +463,18 @@
 
     var gallary = 1;
     function addGallary() {
-        $('#gallryappend').append('<div class="col-md-3 demo"><div class="image" style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;"><a onclick="$(this).parent().remove();" class="removeImg m-1"><i class="fa fa-times"></i></a><div id="div1" style="width: 100px"></div><div class="imageOverlay"><img class="w-100" src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt="" id="thumb_'+gallary+'" /><span></span></div><input type="hidden" name="image['+gallary+'][img]" value="" id="image_'+gallary+'" /><a class="browse_image img-de" onclick="showmodal('+gallary+');">Browse</a><textarea name="image['+gallary+'][desc]" placeholder="Image Description" class=" form-control"></textarea></div></div>');
+        $('#gallryappend').append('<div class="demo'+gallary+' col-md-3"><div class="image" style="position:relative;display:inline-block;border: 2px solid black;overflow:hidden;"><a onclick="$(\'.demo'+gallary+'\').remove();" class="removeImg m-1"><i class="fa fa-times"></i></a><div id="div1" style="width: 100px"></div><div class="imageOverlay"><img class="w-100" src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt="" id="thumb'+gallary+'" /><span></span></div><input type="hidden" name="image['+gallary+'][img]" value="" id="image_'+gallary+'" /><a class="browse_image img-de" onclick="showmodal('+gallary+');">Browse</a><textarea name="image['+gallary+'][desc]" placeholder="Image Description" class=" form-control"></textarea></div></div>');
         gallary ++;
     }
+   
+</script>
+<script>
+   
+      
+        $('#removeImg').on('click',function(){
+              alert('hello');
+        });
+        // var companyid = $(this).data("id");
+        // alert(companyid);
+  
 </script>

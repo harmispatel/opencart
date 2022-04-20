@@ -390,7 +390,7 @@
                                                 src="{{ asset('public/admin/product/no_image.jpg') }}">
                                         @endif
                                     </div>
-                                    <strong>{{ $food->hasOneProduct->hasOneProductDescription['name'] }}{{ $food->hasOneProduct['product_id'] }}</strong>
+                                    <strong>{{ $food->hasOneProduct->hasOneProductDescription['name'] }}</strong>
                                     @php
                                         $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
                                         $description = strip_tags($desc);

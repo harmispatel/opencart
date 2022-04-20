@@ -20,16 +20,18 @@ class GallaryController extends Controller
     }
 
     public function uploadgallary()
-    {
+    {  
         return view('vendor.laravel-filemanager.index');
     }
 
     public function store(Request $request){
-    
+       
+       
         $data =$request->all();
         return $data;
           
     }
+    
 
 
 
