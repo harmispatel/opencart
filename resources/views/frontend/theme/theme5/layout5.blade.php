@@ -365,7 +365,57 @@
         <div class="popular-foods-v5-swiper">
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
+                    @if (count($popular_foods) > 0)
+                    @foreach ($popular_foods as $food)
+                        <div class="swiper-slide">
+                            <div class="item">
+                                <div class="img">
+                                    @if (isset($food->hasOneProduct['image']))
+                                        <img class="img-fluid" src="{{ asset('public/admin/product/'.$food->hasOneProduct['image']) }}">
+                                    @else
+                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                    @endif
+                                </div>
+                                <strong>{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
+                                @php
+                                    $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
+                                    $description = strip_tags($desc);
+
+                                    if($description == '')
+                                    {
+                                        echo '<p>Description Not Avavilable.</p>';
+                                    }
+                                    else
+                                    {
+                                        echo '<p>'.$description.'</p>';
+                                    }
+                                @endphp
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                <div class="swiper-slide">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
+                        </div>
+                        <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
+                        </div>
+                        <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                    {{-- <div class="swiper-slide">
                         <div class="item">
                             <div class="img"><img class="img-fluid"
                                     src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
@@ -484,7 +534,7 @@
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="popular-foods-v5-swiper-control">

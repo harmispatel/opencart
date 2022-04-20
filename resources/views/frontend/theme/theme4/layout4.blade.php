@@ -1,16 +1,16 @@
 @php
-    $temp_set = session('template_settings');
-    $template_setting = isset($temp_set) ? $temp_set : '';
+$temp_set = session('template_settings');
+$template_setting = isset($temp_set) ? $temp_set : '';
 
-    $store_set = session('store_settings');
-    $store_setting = isset($store_set) ? $store_set : '';
+$store_set = session('store_settings');
+$store_setting = isset($store_set) ? $store_set : '';
 
-    $social = session('social_site');
-    $social_site = isset($social) ? $social : '#';
+$social = session('social_site');
+$social_site = isset($social) ? $social : '#';
 
-    $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+$slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
 
-    $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+$online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
 @endphp
 <link
     href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap"
@@ -22,11 +22,11 @@
             src="{{ asset('public/assets/theme4/img/logo/black-logo.svg') }}" /></a>
     <div class="top">
         <ul class="menu">
-            <li class="active"><a class="text-uppercase" href="#">home</a></li>
+            <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
             <li><a class="text-uppercase" href="#">member</a></li>
-            <li><a class="text-uppercase" href="#">menu</a></li>
+            <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
             <li><a class="text-uppercase" href="#">check out</a></li>
-            <li><a class="text-uppercase" href="#">contact us</a></li>
+            <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
         </ul>
     </div>
     <div class="center">
@@ -84,11 +84,11 @@
                             class="btn btn-green text-uppercase">delivery</a></div> --}}
                     {{-- Online Order --}}
                     <h1 class="__title">Welcome to <br>
-                      <span>STAR KEBAB & PIZZA</span>
-                  </h1>
+                        <span>STAR KEBAB & PIZZA</span>
+                    </h1>
                     @if ($online_order_permission == 1)
                         <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
-                          {{-- <h1 class="__title">Welcome to <br>
+                            {{-- <h1 class="__title">Welcome to <br>
                             <span>STAR KEBAB & PIZZA</span>
                         </h1> --}}
                             <strong class="title text-uppercase">order online</strong>
@@ -171,60 +171,74 @@
             <h3 class="title text-capitalize">popular foods</h3>
         </div>
         <div class="row list-item">
-            <div class="col-12 col-md-6">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            @if (count($popular_foods) > 0)
+                @foreach ($popular_foods as $food)
+                    <div class="col-12 col-md-6">
+                        <div class="item">
+                            <div class="img">
+                                @if (!empty($food->hasOneProduct['image']) || $food->hasOneProduct['image'] != '')
+                                    <img class="img-fluid"
+                                        src="{{ asset('public/admin/product/' . $food->hasOneProduct['image']) }}">
+                                @else
+                                    <img class="img-fluid"
+                                        src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                @endif
+                            </div>
+                            <div class="text-content">
+                                <strong
+                                    class="text-capitalize">{{ $food->hasOneProduct->hasOneProductDescription['name'] }}</strong>
+                                @php
+                                    $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
+                                    $description = strip_tags($desc);
+                                    
+                                    if ($description == '') {
+                                        echo '<p>Description Not Avavilable.</p>';
+                                    } else {
+                                        echo '<p>' . $description . '</p>';
+                                    }
+                                @endphp
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-12 col-md-6">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
+                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                <div class="col-12 col-md-6">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
+                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                <div class="col-12 col-md-6">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
+                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                <div class="col-12 col-md-6">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
+                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </section>
