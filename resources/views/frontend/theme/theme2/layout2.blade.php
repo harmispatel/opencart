@@ -1,6 +1,29 @@
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&amp;family=Oswald:wght@400;500&amp;family=Raleway:wght@400;700&amp;display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&amp;family=Oswald:wght@400;500&amp;family=Raleway:wght@400;700&amp;display=swap" rel="stylesheet" />
+
+    <style>
+        .grid-header
+        {
+            text-align: center;
+        }
+
+        .grid
+        {
+            margin: 1rem auto;
+        }
+
+        .grid-item
+        {
+            width: 250px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        img
+        {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 
     @php
         $template_setting = session('template_settings');
@@ -54,22 +77,6 @@
         </div>
         <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
             <div class="swiper-wrapper">
-                {{-- <div class="swiper-slide" style="background-image: url({{ asset('public/assets/theme2/demo-data/home-slide.jpg') }})"> --}}
-                {{-- <div class="swiper-slide">
-            <strong class="title text-uppercase">welcome to</strong>
-            <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_1_title'] }}</strong>
-            <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')"/>
-        </div> --}}
-                {{-- <div class="swiper-slide">
-            <strong class="title text-uppercase">welcome to</strong>
-            <strong class="sub-title text-capitalize">{{ $template_setting['polianna_slider_2_title'] }}</strong>
-            <img class="img-fluid" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')"/>
-        </div> --}}
-                {{-- <div class="container">
-            <h3 class="text-capitalize">star kebab & pizza 0</h3><img class="img-fluid __icon" src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}"/>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in  nulla pariatur anim id est laborum sunt in dolor in reprehenderit in.</p><a class="text-uppercase" href="#">read more<span></span></a>
-          </div>
-        </div> --}}
                 <div class="center">
                     <ul class="authentication-links">
                         <li>
@@ -382,7 +389,7 @@
                             @foreach ($popular_foods as $food)
                                 <a class="swiper-slide" href="#">
                                     <div class="img">
-                                        @if (!empty($food->hasOneProduct['image']) || $food->hasOneProduct['image'] != '')
+                                        @if (isset($food->hasOneProduct['image']))
                                             <img class="img-fluid"
                                                 src="{{ asset('public/admin/product/' . $food->hasOneProduct['image']) }}">
                                         @else
@@ -390,15 +397,15 @@
                                                 src="{{ asset('public/admin/product/no_image.jpg') }}">
                                         @endif
                                     </div>
-                                    <strong>{{ $food->hasOneProduct->hasOneProductDescription['name'] }}{{ $food->hasOneProduct['product_id'] }}</strong>
+                                    <strong>{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
                                     @php
-                                        $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
+                                        $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
                                         $description = strip_tags($desc);
 
                                         if ($description == '') {
-                                            echo '<p>Description Not Avavilable.</p>';
+                                            echo '<p>-</p>';
                                         } else {
-                                            echo '<p>' . $description . '</p>';
+                                            echo '<p>'.substr($description,0,30).'</p>';
                                         }
                                     @endphp
                                 </a>
@@ -519,6 +526,7 @@
             </form>
         </div>
     </section>
+
     <section class="photo-gallery-v2 pt-75 wow animate__fadeInUp" data-wow-duration="1s">
         <div class="container">
             <div class="default-title-v2 text-center">
@@ -528,51 +536,39 @@
             </div>
         </div>
         <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
+
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-3">
-                    <div class="box single"><a class="fas fa-search-plus"
-                            href="{{ asset('public/assets/theme2/demo-data/photo-gallery/0.png') }}"
-                            data-fancybox="photoGallery"></a><img class="img-fluid"
-                            src="{{ asset('public/assets/theme2/demo-data/photo-gallery/0.png') }}" /></div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="box couple"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme2/demo-data/photo-gallery/1.png') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/photo-gallery/1.png') }}" /></div>
+                @if(isset($photos))
+                    <div class="grid">
+                        @foreach ($photos as $photo)
+                            <div class="grid-item">
+                                @if(file_exists($photo->image))
+                                    <img src="{{ $photo->image }}">
+                                @else
+                                    <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="grid">
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/0.png') }}" alt="">
                         </div>
-                        <div class="col-12">
-                            <div class="box couple"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme2/demo-data/photo-gallery/2.png') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/photo-gallery/2.png') }}" /></div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/1.png') }}" alt="">
+                        </div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/2.png') }}" alt="">
+                        </div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/3.png') }}" alt="">
+                        </div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}" alt="">
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3">
-                    <div class="box single"><a class="fas fa-search-plus"
-                            href="{{ asset('public/assets/theme2/demo-data/photo-gallery/3.png') }}"
-                            data-fancybox="photoGallery"></a><img class="img-fluid"
-                            src="{{ asset('public/assets/theme2/demo-data/photo-gallery/3.png') }}" /></div>
-                </div>
-                <div class="col-sm-12 col-md-6 col-lg-3">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="box couple"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}" /></div>
-                        </div>
-                        <div class="col-12">
-                            <div class="box couple"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme2/demo-data/photo-gallery/5.png') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/photo-gallery/5.png') }}" /></div>
-                        </div>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </section>
@@ -587,3 +583,8 @@
                 src="{{ asset('public/assets/theme2/img/icon/opening-hours-bottom-divider.svg') }}" />
         </div>
     </section>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.js"></script>
+    <script src="{{ asset('public/assets/js/gallary.js') }}"></script>
+

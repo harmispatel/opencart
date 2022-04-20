@@ -254,11 +254,11 @@
 
                                         if($description == '')
                                         {
-                                            echo '<p>Description Not Avavilable.</p>';
+                                            echo '<p>-</p>';
                                         }
                                         else
                                         {
-                                            echo '<p>'.$description.'</p>';
+                                            echo '<p>'.substr($description,0,30).'</p>';
                                         }
                                     @endphp
                                 </div>
@@ -372,42 +372,35 @@
           </div>
           <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
             <div class="row">
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/1.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/2.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/3.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/4.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/5.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/5.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/6.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/6.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/7.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/7.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/8.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/8.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/9.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/9.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/10.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/10.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/11.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/11.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/12.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/12.jpg') }}"/></div>
-              </div>
+                @if(isset($photos))
+                   @foreach ($photos as $photo)
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="{{ $photo->image }}"/>
+                        </div>
+                    </div>
+                   @endforeach
+                @else
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
+                        </div>
+                    </div>
+                @endif
             </div>
           </div>
         </section>

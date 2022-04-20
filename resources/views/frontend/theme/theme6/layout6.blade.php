@@ -154,66 +154,52 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 1.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 1.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 3.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 3.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 4.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 4.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 6.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 6.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 7.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 7.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 8.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 8.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 9.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 9.jpg') }}" /></div>
-            </div>
-            <div class="col">
-                <div class="item"><a class="fas fa-search-plus"
-                        href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 10.jpg') }}"
-                        data-fancybox="photoGallery"></a><img class="img-fluid"
-                        src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 10.jpg') }}" /></div>
-            </div>
+            @if(isset($photos))
+                @foreach ($photos as $photo)
+                    <div class="col">
+                        <div class="item">
+                            @if (file_exists($photo->image))
+                                <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                                <img class="img-fluid" src="{{ $photo->image }}" />
+                            @else
+                                <a class="fas fa-search-plus" href="{{ asset('public/frontend/other/no-image.jpg') }}" data-fancybox="photoGallery"></a>
+                                <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 1.jpg') }}" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 1.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 3.jpg') }}" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 3.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 4.jpg') }}" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 4.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg') }}" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg') }}" />
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </section>
@@ -245,9 +231,9 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                                         $description = strip_tags($desc);
 
                                         if ($description == '') {
-                                            echo '<p>Description Not Avavilable.</p>';
+                                            echo '<p>-</p>';
                                         } else {
-                                            echo '<p>' . $description . '</p>';
+                                            echo '<p>'.substr($description,0,30).'</p>';
                                         }
                                     @endphp
                                 </div>

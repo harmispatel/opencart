@@ -383,11 +383,11 @@
 
                                     if($description == '')
                                     {
-                                        echo '<p>Description Not Avavilable.</p>';
+                                        echo '<p>-</p>';
                                     }
                                     else
                                     {
-                                        echo '<p>'.$description.'</p>';
+                                        echo '<p>'.substr($description,0,30).'</p>';
                                     }
                                 @endphp
                             </div>
@@ -689,102 +689,52 @@
             <div class="col-md-12 col-lg-8">
                 <div class="swiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" /></div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="item"><a class="fas fa-search-plus"
-                                    href="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}"
-                                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" /></div>
-                        </div>
+                        @if(isset($photos))
+                            @foreach ($photos as $photo)
+                                <div class="swiper-slide">
+                                    <div class="item">
+                                        @if (file_exists($photo->image))
+                                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                                            <img class="img-fluid" src="{{ $photo->image }}" />
+                                        @else
+                                            <a class="fas fa-search-plus" href="{{ asset('public/frontend/other/no-image.jpg') }}" data-fancybox="photoGallery"></a>
+                                            <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="swiper-slide">
+                                <div class="item">
+                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" data-fancybox="photoGallery"></a>
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" />
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="item">
+                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a>
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" />
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="item">
+                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a>
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" />
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="item">
+                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a>
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" />
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="item">
+                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a>
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/4.jpg') }}" />
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="photo-gallery-v5-swiper-control">
