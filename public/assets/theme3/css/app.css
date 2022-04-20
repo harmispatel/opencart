@@ -951,6 +951,7 @@ ul {
 .photo-gallery-v3 .list-item .item {
     position: relative;
     height: 460px;
+    margin-bottom: 30px;
 }
 
 .photo-gallery-v3 .list-item .item:hover a {

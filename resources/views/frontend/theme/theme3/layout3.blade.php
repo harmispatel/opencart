@@ -174,11 +174,11 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
 
                                         if($description == '')
                                         {
-                                            echo '<p>Description Not Avavilable.</p>';
+                                            echo '<p>-</p>';
                                         }
                                         else
                                         {
-                                            echo '<p>'.$description.'</p>';
+                                            echo '<p>'.substr($description,0,30).'</p>';
                                         }
                                     @endphp
                             </div>
@@ -253,7 +253,45 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
     <div class="container-fluid">
         <div class="row list-item">
-            <div class="col-12 col-md-6 col-lg-3">
+
+            @if(isset($photos))
+                @foreach ($photos as $photo)
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="item">
+                            @if (file_exists($photo->image))
+                                <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                                <img class="img-fluid" src="{{ $photo->image }}" />
+                            @else
+                                <a class="fas fa-search-plus" href="{{ asset('public/frontend/other/no-image.jpg') }}" data-fancybox="photoGallery"></a>
+                                <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" />
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="item">
+                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" />
+                    </div>
+                </div>
+            @endif
+
+            {{-- <div class="col-12 col-md-6 col-lg-3">
                 <div class="item">
                     <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" />
                 </div>
@@ -272,7 +310,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 <div class="item">
                     <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" />
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
