@@ -1,4 +1,6 @@
 @php
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
 
     $social = session('social_site');
     $social_site = isset($social) ? $social : '#';
