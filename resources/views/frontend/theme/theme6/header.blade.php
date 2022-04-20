@@ -57,7 +57,7 @@
       <div class="container">
         <div class="working-time"><i class="far fa-clock"></i>
           <div><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span></div>
-        </div><a class="logo" href="#slide"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/></a>
+        </div><a class="logo" href="{{ route('home') }}"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/></a>
         @if ($store_open_close == 1)
         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
             <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"/>

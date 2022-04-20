@@ -3,7 +3,7 @@ new WOW({
     live: true,
 }).init();
 
-$(function () {
+$(function() {
 
     let width = $(window).width();
 
@@ -142,24 +142,24 @@ $(function () {
     }
 
     /*** datetimepicker ***/
-    // $('#date').datetimepicker({
-    //     format: 'DD/MM/YYYY',
-    //     locale: moment.locale('tr'),
-    //     icons: datetimepickerIcons
-    // });
+    $('#date').datetimepicker({
+        format: 'DD/MM/YYYY',
+        // locale: moment.locale('tr'),
+        icons: datetimepickerIcons
+    });
 
-    // $('#time').datetimepicker({
-    //     format: 'LT',
-    //     locale: moment.locale('tr'),
-    //     icons: datetimepickerIcons
-    // });
+    $('#time').datetimepicker({
+        format: 'LT',
+        // locale: moment.locale('tr'),
+        icons: datetimepickerIcons
+    });
 
     /*** Fancybox ***/
     Fancybox.bind("[data-fancybox]", {});
 
     /*** Go Up Animate Scroll Js ***/
-    $('#go-up').on('click', function (e) {
-        $("html, body").animate({scrollTop: $('body').offset().top, easing: "smooth"}, 300);
+    $('#go-up').on('click', function(e) {
+        $("html, body").animate({ scrollTop: $('body').offset().top, easing: "smooth" }, 300);
         e.preventDefault();
     })
 
@@ -206,7 +206,7 @@ $(function () {
         mobileMenuShadow.removeClass('active')
     })
 
-    $(window).resize(function () {
+    $(window).resize(function() {
         width = $(window).width();
     })
 

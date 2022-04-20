@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Auth;
 //frontend
 use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
 use App\Http\Controllers\Frontend\MenuController;
+use App\Http\Controllers\Frontend\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -392,6 +393,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
+Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 
 
 

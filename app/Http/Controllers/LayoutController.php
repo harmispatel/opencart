@@ -105,7 +105,7 @@ class LayoutController extends Controller
 
             $polianna_main_logo_url = $currentURL.'/public/frontend/navbar/';
 
-            $polianna_main_logo = time().'.'.$request->file('polianna_main_logo')->getClientOriginalName();
+            $polianna_main_logo = genratetoken(6).$request->file('polianna_main_logo')->getClientOriginalExtension();
             $request->file('polianna_main_logo')->move(public_path('frontend/navbar'),$polianna_main_logo);
             // $data['polianna_main_logo'] = 'public/frontend/navbar/'.$polianna_main_logo;
             $data['polianna_main_logo'] = $polianna_main_logo_url.$polianna_main_logo;
@@ -133,7 +133,7 @@ class LayoutController extends Controller
 
             $polianna_slider_1_url = $currentURL.'/public/frontend/sliders/';
 
-            $polianna_slider_1 = time().'.'.$request->file('polianna_slider_1')->getClientOriginalName();
+            $polianna_slider_1 = genratetoken(6).$request->file('polianna_slider_1')->getClientOriginalExtension();
             $request->file('polianna_slider_1')->move(public_path('frontend/sliders'),$polianna_slider_1);
             // $data['polianna_slider_1'] = 'public/frontend/sliders/'.$polianna_slider_1;
             $data['polianna_slider_1'] = $polianna_slider_1_url.$polianna_slider_1;
@@ -154,7 +154,7 @@ class LayoutController extends Controller
 
             $polianna_slider_2_url = $currentURL.'/public/frontend/sliders/';
 
-            $polianna_slider_2 = time().'.'.$request->file('polianna_slider_2')->getClientOriginalName();
+            $polianna_slider_2 = genratetoken(6).$request->file('polianna_slider_2')->getClientOriginalExtension();
             $request->file('polianna_slider_2')->move(public_path('frontend/sliders'),$polianna_slider_2);
             // $data['polianna_slider_2'] = 'public/frontend/sliders/'.$polianna_slider_2;
             $data['polianna_slider_2'] = $polianna_slider_2_url.$polianna_slider_2;
@@ -175,7 +175,7 @@ class LayoutController extends Controller
 
             $polianna_slider_3_url = $currentURL.'/public/frontend/sliders/';
 
-            $polianna_slider_3 = time().'.'.$request->file('polianna_slider_3')->getClientOriginalName();
+            $polianna_slider_3 = genratetoken(6).$request->file('polianna_slider_3')->getClientOriginalExtension();
             $request->file('polianna_slider_3')->move(public_path('frontend/sliders'),$polianna_slider_3);
             // $data['polianna_slider_3'] = 'public/frontend/sliders/'.$polianna_slider_3;
             $data['polianna_slider_3'] = $polianna_slider_3_url.$polianna_slider_3;
@@ -205,7 +205,7 @@ class LayoutController extends Controller
 
             $polianna_open_banner_url = $currentURL.'/public/frontend/banners/';
 
-            $polianna_open_banner = time().'.'.$request->file('polianna_open_banner')->getClientOriginalName();
+            $polianna_open_banner = genratetoken(6).$request->file('polianna_open_banner')->getClientOriginalExtension();
             $request->file('polianna_open_banner')->move(public_path('frontend/banners'),$polianna_open_banner);
             // $data['polianna_open_banner'] = 'public/frontend/banners/'.$polianna_open_banner;
             $data['polianna_open_banner'] = $polianna_open_banner_url.$polianna_open_banner;
@@ -226,7 +226,7 @@ class LayoutController extends Controller
 
             $polianna_close_banner_url = $currentURL.'/public/frontend/banners/';
 
-            $polianna_close_banner = time().'.'.$request->file('polianna_close_banner')->getClientOriginalName();
+            $polianna_close_banner = genratetoken(6).$request->file('polianna_close_banner')->getClientOriginalExtension();
             $request->file('polianna_close_banner')->move(public_path('frontend/banners'),$polianna_close_banner);
             // $data['polianna_close_banner'] = 'public/frontend/banners/'.$polianna_close_banner;
             $data['polianna_close_banner'] = $polianna_close_banner_url.$polianna_close_banner;
@@ -262,7 +262,7 @@ class LayoutController extends Controller
 
             $polianna_footer_logo_url = $currentURL.'/public/frontend/footer/';
 
-            $polianna_footer_logo = time().'.'.$request->file('polianna_footer_logo')->getClientOriginalName();
+            $polianna_footer_logo =genratetoken(6).$request->file('polianna_footer_logo')->getClientOriginalExtension();
             $request->file('polianna_footer_logo')->move(public_path('frontend/footer'),$polianna_footer_logo);
             // $data['polianna_footer_logo'] = 'public/frontend/footer/'.$polianna_footer_logo;
             $data['polianna_footer_logo'] = $polianna_footer_logo_url.$polianna_footer_logo;

@@ -176,7 +176,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     <div class="col-12 col-md-6">
                         <div class="item">
                             <div class="img">
-                                @if (!empty($food->hasOneProduct['image']) || $food->hasOneProduct['image'] != '')
+                                @if (isset($food->hasOneProduct['image']))
                                     <img class="img-fluid"
                                         src="{{ asset('public/admin/product/' . $food->hasOneProduct['image']) }}">
                                 @else
@@ -186,15 +186,15 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                             </div>
                             <div class="text-content">
                                 <strong
-                                    class="text-capitalize">{{ $food->hasOneProduct->hasOneProductDescription['name'] }}</strong>
+                                    class="text-capitalize">{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
                                 @php
-                                    $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
+                                    $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
                                     $description = strip_tags($desc);
-                                    
+
                                     if ($description == '') {
-                                        echo '<p>Description Not Avavilable.</p>';
+                                        echo '<p>-</p>';
                                     } else {
-                                        echo '<p>' . $description . '</p>';
+                                        echo '<p>'.substr($description,0,30).'</p>';
                                     }
                                 @endphp
                             </div>
@@ -292,58 +292,61 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
     <div class="list-item-container">
         <div class="list-item">
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/0.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/0.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/1.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/1.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/2.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/2.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/3.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/3.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/4.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/4.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/5.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/5.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/6.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/6.jpg') }}" /></div>
-            <div class="item"><a class="fas fa-search-plus"
-                    href="{{ asset('public/assets/theme4/demo-data/photo-gallery/7.jpg') }}"
-                    data-fancybox="photoGallery"></a><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/demo-data/photo-gallery/7.jpg') }}" /></div>
+            @if(isset($photos))
+                @foreach ($photos as $photo)
+                    <div class="item">
+                        @if (file_exists($photo->image))
+                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="{{ $photo->image }}" />
+                        @else
+                            <a class="fas fa-search-plus" href="{{ asset('public/frontend/other/no-image.jpg') }}" data-fancybox="photoGallery"></a>
+                            <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                        @endif
+                    </div>
+                @endforeach
+            @else
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/0.jpg') }}" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/0.jpg') }}" />
+                </div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/1.jpg') }}" />
+                </div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/2.jpg') }}" />
+                </div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/3.jpg') }}" />
+                </div>
+                <div class="item">
+                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/4.jpg') }}" />
+                </div>
+            @endif
         </div>
     </div>
     <div style="clear:both;"></div>
 </div>
 <section class="reservation-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-    <form class="container">
+    <form class="container" method="POST" action="{{ route('reservation') }}">
+        {{ csrf_field() }}
         <div class="default-title-v4 text-center"><strong class="sub-title color-purple text-capitalize">book
                 now</strong>
             <h3 class="title text-capitalize">make a reservation</h3>
         </div>
         <div class="row justify-content-center">
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" placeholder="Full Name" type="text" />
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" placeholder="Phone Number" type="text" />
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <select class="form-control ">
+                    <select class="form-control" name="person">
                         <option value="" selected="selected">Person</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -359,12 +362,12 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" placeholder="Date" id="date" type="text" />
+                    <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" placeholder="Time" id="time" type="text" />
+                    <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-12 text-center">

@@ -254,11 +254,11 @@
 
                                         if($description == '')
                                         {
-                                            echo '<p>Description Not Avavilable.</p>';
+                                            echo '<p>-</p>';
                                         }
                                         else
                                         {
-                                            echo '<p>'.$description.'</p>';
+                                            echo '<p>'.substr($description,0,30).'</p>';
                                         }
                                     @endphp
                                 </div>
@@ -325,16 +325,17 @@
           <div class="container wow animate__fadeInUp" data-wow-duration="1s">
             <h3 class="section-title color-green divider-white text-capitalize">make a reservation</h3>
             <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-            <form class="row" method="" action="">
+            <form class="row" method="POST" action="{{ route('reservation') }}">
+                {{ csrf_field() }}
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" placeholder="Full Name" type="text"/>
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text"/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" placeholder="Phone Number" type="text"/>
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text"/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <select class="form-control">
+                  <select class="form-control select2" name="person">
                     <option value="">Person</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -350,12 +351,12 @@
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <input class="form-control icon" placeholder="Date" id="date" type="text"/>
+                  <input class="form-control icon" placeholder="Date" name="date" id="date" type="text"/>
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <input class="form-control icon" placeholder="Time" id="time" type="text"/>
+                  <input class="form-control icon" placeholder="Time" name="time" id="time" type="text"/>
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
@@ -371,42 +372,35 @@
           </div>
           <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
             <div class="row">
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/1.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/2.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/3.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/4.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/5.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/5.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/6.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/6.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/7.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/7.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/8.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/8.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/9.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/9.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/10.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/10.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/11.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/11.jpg') }}"/></div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                <div class="box"><a class="fas fa-search-plus" href="{{ asset('public/assets/theme1/demo-data/photo-gallery/12.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/photo-gallery/12.jpg') }}"/></div>
-              </div>
+                @if(isset($photos))
+                   @foreach ($photos as $photo)
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="{{ $photo->image }}"/>
+                        </div>
+                    </div>
+                   @endforeach
+                @else
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
+                        </div>
+                    </div>
+                @endif
             </div>
           </div>
         </section>

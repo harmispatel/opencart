@@ -1,5 +1,6 @@
 @php
-    $temp_set = session('template_settings');
+
+   $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
     if(session()->has('theme_id'))

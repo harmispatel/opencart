@@ -8,27 +8,13 @@ use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Gallary;
 use App\Models\OrderProduct;
 use App\Models\Orders;
 use DB;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    // public function __construct()
-    // {
-    //     return view('admin.login');
-    // }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
 
     public function index()
     {
@@ -38,6 +24,8 @@ class HomeController extends Controller
         $template_setting = session('template_settings');
 
         $limit =  isset($template_setting['polianna_popular_food_count']) ? $template_setting['polianna_popular_food_count'] : 1;
+
+        $data['photos'] = Gallary::where('store_id',$front_store_id)->get();
 
         $data['popular_foods'] = OrderProduct::with(['hasOrder','hasOneProduct'])->whereHas('hasOrder',function($query) use ($front_store_id)
         {

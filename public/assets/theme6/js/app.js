@@ -218,11 +218,11 @@ $(function() {
     }
 
     /*** datetimepicker ***/
-    // $('#date').datetimepicker({
-    //     sideBySide: true,
-    //     locale: moment.locale('tr'),
-    //     icons: datetimepickerIcons
-    // });
+    $('#date').datetimepicker({
+        sideBySide: true,
+        // locale: moment.locale('tr'),
+        icons: datetimepickerIcons
+    });
 
     /*** Fancybox ***/
     Fancybox.bind("[data-fancybox]", {});
