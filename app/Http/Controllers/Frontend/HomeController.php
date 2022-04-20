@@ -33,11 +33,13 @@ class HomeController extends Controller
     public function index()
     {
         $front_store_id= session('front_store_id');
-
+            
         $data['popular_foods'] = OrderProduct::with(['hasOrder','hasOneProduct'])->whereHas('hasOrder',function($query) use ($front_store_id)
         {
             $query->where('store_id',$front_store_id);
-        })->groupBy('name')->select('product_id', DB::raw('count(*) as total_product'))->orderBy('total_product','DESC')->limit(20)->get();
+        })->groupBy('name')->select('product_id',DB::raw('count(*) as total_product'))->orderBy('total_product','DESC')->limit(20)->get();
+        
+       
 
         return view('frontend.pages.home',$data);
     }
