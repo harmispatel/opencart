@@ -49,6 +49,7 @@ class LayoutController extends Controller
             'polianna_open_close_banner_height',
 
             'polianna_store_fonts',
+            'polianna_popular_food_count',
 
             'polianna_footer_background',
             'polianna_footer_text_color',
@@ -238,6 +239,7 @@ class LayoutController extends Controller
 
         // EXTRA
         $data['polianna_store_fonts'] = isset($request->polianna_store_fonts) ? $request->polianna_store_fonts : '';
+        $data['polianna_popular_food_count'] = isset($request->polianna_popular_food_count) ? $request->polianna_popular_food_count : '';
         // END EXTRA
 
 

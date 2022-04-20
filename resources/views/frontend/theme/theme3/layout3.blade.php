@@ -153,34 +153,53 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit, maiores
                 praesentium qui</p>
         </div>
+
         <div class="row list-item">
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/popular-foods/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            @if (count($popular_foods) > 0)
+                @foreach ($popular_foods as $food)
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="item">
+                            <div class="img">
+                                @if (isset($food->hasOneProduct['image']))
+                                    <img class="img-fluid" src="{{ asset('public/admin/product/'.$food->hasOneProduct['image']) }}">
+                                @else
+                                    <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                @endif
+                            </div>
+                            <div class="text-content">
+                                <strong class="text-capitalize">{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
+                                @php
+                                        $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
+                                        $description = strip_tags($desc);
+
+                                        if($description == '')
+                                        {
+                                            echo '<p>Description Not Avavilable.</p>';
+                                        }
+                                        else
+                                        {
+                                            echo '<p>'.$description.'</p>';
+                                        }
+                                    @endphp
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="item">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                        </div>
+                        <div class="text-content">
+                            <strong class="text-capitalize">
+                                Demo Food
+                            </strong>
+                            <p>This is demo food.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/popular-foods/2.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">seafood</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/popular-foods/3.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">soups</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </section>

@@ -78,6 +78,7 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_open_close_banner_height',
 
         'polianna_store_fonts',
+        'polianna_popular_food_count',
 
         'polianna_footer_background',
         'polianna_footer_text_color',

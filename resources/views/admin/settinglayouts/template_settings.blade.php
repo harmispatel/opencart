@@ -423,6 +423,14 @@
                                                                             </select>
                                                                         </td>
                                                                     </tr>
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Popular Food Count</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="number" name="polianna_popular_food_count" class="form-control" value="{{ $template_settings['polianna_popular_food_count'] }}">
+                                                                        </td>
+                                                                    </tr>
                                                                 </table>
                                                             </div>
                                                         </div>
