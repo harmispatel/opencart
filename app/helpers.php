@@ -183,8 +183,8 @@ function themeID($url)
     {
         $new_url = $url;
     }
-
     $storeDetails = Store::where('url',$new_url)->orWhere('ssl',$new_url)->first();
+
     $store_id = isset($storeDetails->store_id) ? $storeDetails->store_id : '';
 
     $key = 'theme_id';

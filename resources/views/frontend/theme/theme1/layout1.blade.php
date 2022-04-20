@@ -241,15 +241,15 @@
                             <a class="swiper-slide" href="#">
                                 <div class="box">
                                     <div class="img">
-                                        @if (!empty($food->hasOneProduct['image']) || $food->hasOneProduct['image'] != '')
+                                        @if (isset($food->hasOneProduct['image']))
                                             <img class="img-fluid" src="{{ asset('public/admin/product/'.$food->hasOneProduct['image']) }}">
                                         @else
                                             <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
                                         @endif
                                     </div>
-                                    <strong>{{ $food->hasOneProduct->hasOneProductDescription['name'] }}</strong>
+                                    <strong>{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
                                     @php
-                                        $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
+                                        $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
                                         $description = strip_tags($desc);
 
                                         if($description == '')

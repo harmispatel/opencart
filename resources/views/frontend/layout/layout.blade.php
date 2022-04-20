@@ -1,5 +1,4 @@
 @php
-
     $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
