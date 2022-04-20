@@ -394,7 +394,7 @@
                                     @php
                                         $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
                                         $description = strip_tags($desc);
-                                        
+
                                         if ($description == '') {
                                             echo '<p>Description Not Avavilable.</p>';
                                         } else {
@@ -478,16 +478,17 @@
                 <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>
                     dolore eu fugiat nulla pariatur.</p>
             </div>
-            <form class="row" method="" action="">
+            <form class="row" method="POST" action="{{ route('reservation') }}">
+                {{ csrf_field() }}
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                    <input class="form-control" placeholder="Full Name" type="text" />
+                    <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                    <input class="form-control" placeholder="Phone Number" type="text" />
+                    <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                     <div class="icon"><i class="fas fa-chevron-down"></i>
-                        <select class="form-control">
+                        <select class="form-control" name="person">
                             <option value="" selected="selected">Person</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -503,12 +504,12 @@
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                     <div class="icon"><i class="fas fa-chevron-down"></i>
-                        <input class="form-control icon" placeholder="Date" id="date" type="text" />
+                        <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                     <div class="icon"><i class="fas fa-chevron-down"></i>
-                        <input class="form-control icon" placeholder="Time" id="time" type="text" />
+                        <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">

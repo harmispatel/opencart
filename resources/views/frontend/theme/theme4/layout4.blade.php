@@ -190,7 +190,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                                 @php
                                     $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
                                     $description = strip_tags($desc);
-                                    
+
                                     if ($description == '') {
                                         echo '<p>Description Not Avavilable.</p>';
                                     } else {
@@ -329,21 +329,22 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     <div style="clear:both;"></div>
 </div>
 <section class="reservation-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-    <form class="container">
+    <form class="container" method="POST" action="{{ route('reservation') }}">
+        {{ csrf_field() }}
         <div class="default-title-v4 text-center"><strong class="sub-title color-purple text-capitalize">book
                 now</strong>
             <h3 class="title text-capitalize">make a reservation</h3>
         </div>
         <div class="row justify-content-center">
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" placeholder="Full Name" type="text" />
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" placeholder="Phone Number" type="text" />
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <select class="form-control ">
+                    <select class="form-control" name="person">
                         <option value="" selected="selected">Person</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -359,12 +360,12 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" placeholder="Date" id="date" type="text" />
+                    <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" placeholder="Time" id="time" type="text" />
+                    <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-12 text-center">

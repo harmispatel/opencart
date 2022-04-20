@@ -107,7 +107,7 @@ class VoucherController extends Controller
         $voucher->amount = $request->amount;
         $voucher->status = $request->status;
         date_default_timezone_set('Asia/Kolkata');
-        $voucher->date_added = date("Y-m-d h:i:s");;
+        $voucher->date_added = date("Y-m-d h:i:s");
         $voucher->update();
 
         return redirect()->route('voucherlist')->with('success', "Voucher Update Successfully.");

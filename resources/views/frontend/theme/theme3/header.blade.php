@@ -34,7 +34,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
     </div>
     <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="background: {{ $template_setting['polianna_navbar_background'] }};">
         <div class="container">
-            <a class="logo" href="#slide">
+            <a class="logo" href="{{route('home')}}">
                 <img class="attach img-fluid" src="{{ asset('public/assets/theme3/img/icon/logo-attach.svg') }}" />
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}"
                     style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;" />

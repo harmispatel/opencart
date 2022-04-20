@@ -37,43 +37,54 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
         </div>
         <ul class="social-links">
-            <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
         </ul>
     </div>
 </sidebar>
 <section class="home-slide-v6 wow animate__fadeInUp" data-wow-duration="1s">
 
     <div class="home-slide-v6-swiper">
+        @if ($slider_permission == 1)
         <div class="swiper">
             <div class="swiper-wrapper">
-                @if ($slider_permission == 1)
-                    <div class="swiper-slide"
-                        style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
-                        <div class="container">
-                            <div class="slide-logo"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
-                            <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
-                                eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
-                                voluptatem. Culpa mollitia placeat rem.</p>
-                        </div>
+                <div class="swiper-slide"
+                    style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
+                    <div class="container">
+                        <div class="slide-logo"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
+                        <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
+                            eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
+                            voluptatem. Culpa mollitia placeat rem.</p>
                     </div>
-                    <div class="swiper-slide"
-                        style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
-                        <div class="container">
-                            <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
-                                eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
-                                voluptatem. Culpa mollitia placeat rem.</p>
-                        </div>
+                </div>
+                <div class="swiper-slide"
+                    style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
+                    <div class="container">
+                        <h2 class="__title">{{ $template_setting['polianna_slider_2_title'] }}</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
+                            eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
+                            voluptatem. Culpa mollitia placeat rem.</p>
                     </div>
-                @else
-                @endif
+                </div>
             </div>
         </div>
+        @else
+        <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
+            <div class="container">
+                <div class="slide-logo">
+                    <img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" />
+                </div>
+                <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
+                    eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
+                    voluptatem. Culpa mollitia placeat rem.</p>
+            </div>
+        </div>
+        @endif
     </div>
 
     @if ($online_order_permission == 1)
@@ -98,28 +109,37 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
 </section>
 <section class="reservation-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
-    <form class="container">
+    <form class="container" method="POST" action="{{ route('reservation') }}">
+        {{ csrf_field() }}
         <div class="default-title-v6"><strong class="sub-title color-orange text-uppercase">reservation</strong>
             <h3 class="title text-uppercase">BOOK A TABLE NOW!</h3>
         </div>
         <div class="row">
             <div class="col">
-                <input class="form-control" placeholder="Full Name" type="text" />
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
             </div>
             <div class="col">
-                <input class="form-control" placeholder="Phone Number" type="text" />
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
             </div>
             <div class="col">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <select class="form-control select2">
+                    <select class="form-control select2" name="person">
                         <option value="" selected="selected">Person</option>
-                        <option value="10">10</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
                     </select>
                 </div>
             </div>
             <div class="col">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" placeholder="Date &amp; Time" id="date" type="text" />
+                    <input class="form-control icon" name="time" placeholder="Date &amp; Time" id="date" type="text" />
                 </div>
             </div>
             <div class="col">
@@ -223,7 +243,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                                     @php
                                         $desc = html_entity_decode($food->hasOneProduct->hasOneProductDescription['description']);
                                         $description = strip_tags($desc);
-                                        
+
                                         if ($description == '') {
                                             echo '<p>Description Not Avavilable.</p>';
                                         } else {

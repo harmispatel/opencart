@@ -325,16 +325,17 @@
           <div class="container wow animate__fadeInUp" data-wow-duration="1s">
             <h3 class="section-title color-green divider-white text-capitalize">make a reservation</h3>
             <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-            <form class="row" method="" action="">
+            <form class="row" method="POST" action="{{ route('reservation') }}">
+                {{ csrf_field() }}
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" placeholder="Full Name" type="text"/>
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text"/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" placeholder="Phone Number" type="text"/>
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text"/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <select class="form-control">
+                  <select class="form-control select2" name="person">
                     <option value="">Person</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -350,12 +351,12 @@
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <input class="form-control icon" placeholder="Date" id="date" type="text"/>
+                  <input class="form-control icon" placeholder="Date" name="date" id="date" type="text"/>
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <input class="form-control icon" placeholder="Time" id="time" type="text"/>
+                  <input class="form-control icon" placeholder="Time" name="time" id="time" type="text"/>
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">

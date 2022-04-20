@@ -56,7 +56,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 @if ($slider_permission == 1)
                 <div class="swiper-text-content">
                   <div class="text-content"><strong class="__title">Lorem Ipsum</strong>
-                    <p>Lorem Ipsum Dolar</p>
+                    {{-- <p>Lorem Ipsum Dolar</p> --}}
                 </div>
                   <div class="swiper-buttons">
                     <div class="swiper-button-prev"></div>
@@ -65,9 +65,12 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 </div>
                 <div class="swiper">
                   <div class="swiper-wrapper">
-                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')" data-title="{{ $template_setting['polianna_slider_1_title'] }}" data-text="Lorem Ipsum Dolar 1"></div>
-                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="{{ $template_setting['polianna_slider_2_title'] }}" data-text="Lorem Ipsum Dolar 2"></div>
-                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')" data-title="{{ $template_setting['polianna_slider_3_title'] }}" data-text="Lorem Ipsum Dolar 3"></div>
+                    {{-- <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')" data-title="{{ $template_setting['polianna_slider_1_title'] }}" data-text="Lorem Ipsum Dolar 1"></div> --}}
+                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')" data-title="{{ $template_setting['polianna_slider_1_title'] }}"></div>
+                    {{-- <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="{{ $template_setting['polianna_slider_2_title'] }}" data-text="Lorem Ipsum Dolar 2"></div> --}}
+                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')" data-title="{{ $template_setting['polianna_slider_2_title'] }}"></div>
+                    {{-- <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')" data-title="{{ $template_setting['polianna_slider_3_title'] }}" data-text="Lorem Ipsum Dolar 3"></div> --}}
+                    <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_3'] }}')" data-title="{{ $template_setting['polianna_slider_3_title'] }}"></div>
                   </div>
                 </div>
                 @else
@@ -277,31 +280,20 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
 </div>
 <section class="reservation-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-    <form class="container">
+    <form class="container" method="POST" action="{{ route('reservation') }}">
+        {{ csrf_field() }}
         <div class="row align-items-center">
-            {{-- Online Order --}}
-            @if ($online_order_permission == 1)
-                <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
-                    <div class="default-title-v3">
-                        <h3 class="title color-green text-capitalize">make a <br>reservation</h3>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat
-                            nulla pariatur.</p>
-                    </div>
-                    <button class="btn btn-red text-capitalize">make reservation now</button>
-                </div>
-            @endif
-            {{-- End Online Order --}}
             <div class="col-md-12 col-lg-7 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="row">
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" placeholder="Full Name" type="text" />
+                        <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" placeholder="Phone Number" type="text" />
+                        <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
                         <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <select class="form-control select2">
+                            <select class="form-control " name="person">
                                 <option value="" selected="selected">Person</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -317,12 +309,12 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
                         <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <input class="form-control icon" placeholder="Date" id="date" type="text" />
+                            <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
                         </div>
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <input class="form-control icon" placeholder="Time" id="time" type="text" />
+                            <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
                         </div>
                     </div>
                     <div class="col-12">
