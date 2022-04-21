@@ -244,6 +244,13 @@ function getimage($current_store){
     return $image;
 } 
 
+function getphoto($current_store,$key){
+    $gallery = Settings::where('key',$key)->where('store_id',$current_store)->first();
+    $new = isset($gallery->value) ? $gallery->value : '';
+    return $new;
+    
+}
+
 
 function getFonts()
 {

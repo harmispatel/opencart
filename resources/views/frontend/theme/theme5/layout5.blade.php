@@ -48,8 +48,8 @@
                 <div class="order-online-v5">
                     <h2 class="__title">"{{ $store_setting['config_name'] }}"</h2>
                     @if ($online_order_permission == 1)
-                        <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
-                            <strong class="title text-uppercase ">order online</strong>
+                        <div class="order-online wow animate__fadeInUp" data-wow-duration="1s" style="text-align: center">
+                            <strong class="title text-uppercase " >order online</strong>
                             <input class="form-control" placeholder="Eg. AA11AA" />
                             <p>Please enter your postcode to view our<br> menu and place an order</p>
                             <div class="btn__group">

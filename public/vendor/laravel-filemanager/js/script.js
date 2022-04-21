@@ -30,8 +30,9 @@ $.fn.fab = function (options) {
     );
   });
 };
-
+ 
 $(document).ready(function () {
+
   $('#fab').fab({
     buttons: [
       {
@@ -46,7 +47,7 @@ $(document).ready(function () {
       }
     ]
   });
-
+  
   actions.reverse().forEach(function (action) {
     $('#nav-buttons > ul').prepend(
       $('<li>').addClass('nav-item').append(

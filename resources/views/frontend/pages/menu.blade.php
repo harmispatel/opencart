@@ -160,8 +160,6 @@
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
-
-
                                                     @foreach ($result['product'] as $values)
                                                         <div id="collapse{{ $key }}"
                                                             class="accordion-collapse collapse show"
@@ -193,10 +191,11 @@
                                                                                             </div>
                                                                                             <div class="col-md-7">
                                                                                                 @foreach ($setsizeprice as $setsizeprices)
-                                                                                                <a href="" class="btn options-btn"
-                                                                                                    onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i
-                                                                                                        class="fa fa-shopping-basket"></i></a>
-                                                                                            @endforeach
+                                                                                                    <a href="" class="btn options-btn"
+                                                                                                       onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i
+                                                                                                        class="fa fa-shopping-basket"></i>
+                                                                                                    </a>
+                                                                                                @endforeach
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
