@@ -3,14 +3,18 @@
    $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
-    if(session()->has('theme_id'))
-    {
-        $theme_id = session()->get('theme_id');
-    }
-    else
-    {
-        $theme_id = 1;
-    }
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // if(session()->has('theme_id'))
+    // {
+    //     $theme_id = session()->get('theme_id');
+    // }
+    // else
+    // {
+    //     $theme_id = 1;
+    // }
 @endphp
 
 <!doctype html>
@@ -24,7 +28,6 @@
    </style>
 </head>
 <body>
-
     @if(!empty($theme_id) || $theme_id != '')
         {{-- Header --}}
         @include('frontend.theme.theme'.$theme_id.'.header')

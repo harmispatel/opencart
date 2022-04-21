@@ -216,6 +216,11 @@ function themeID($url)
     {
         session()->put('theme_id', $theme_id);
     }
+    $new = ([
+        'theme_id' => $theme_id,
+        'store_id' => $store_id,
+    ]);
+    return $new;
 
 }
 
@@ -253,7 +258,7 @@ function getphoto($current_store,$key){
     $gallery = Settings::where('key',$key)->where('store_id',$current_store)->first();
     $new = isset($gallery->value) ? $gallery->value : '';
     return $new;
-    
+
 }
 
 

@@ -3,21 +3,27 @@
 <title>Star Kebab & Pizza</title>
 
 @php
+
     $currentURL = URL::to("/");
     $current_theme_id = themeID($currentURL);
-    if(session()->has('theme_id'))
-    {
-        $theme_id = session()->get('theme_id');
-    }
-    else
-    {
-        $theme_id = 1;
-    }
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // echo '<pre>';
+    // print_r($current_theme_id);
+    // exit();
+    // if(session()->has('theme_id'))
+    // {
+    //     $theme_id = session()->get('theme_id');
+    // }
+    // else
+    // {
+    //     $theme_id = 1;
+    // }
 
-    if(session()->has('front_store_id'))
-    {
-        $front_store_id = session()->get('front_store_id');
-    }
+    // if(session()->has('front_store_id'))
+    // {
+    //     $front_store_id = session()->get('front_store_id');
+    // }
 
     $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
 
