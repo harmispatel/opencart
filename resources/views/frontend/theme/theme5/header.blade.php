@@ -1,4 +1,5 @@
 @php
+    $openclose = openclosetime();
     $template_setting = session('template_settings');
     $social_site = session('social_site');
     $store_setting = session('store_settings');
@@ -16,7 +17,7 @@
 <header class="header-v5">
     <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
       <div class="container">
-        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span></div>
+        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span></div>
         <a class="logo" href="{{ route('home') }}">
           <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
       </a>

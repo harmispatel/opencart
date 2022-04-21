@@ -1,4 +1,5 @@
 @php
+ $openclose = openclosetime();
 $temp_set = session('template_settings');
 $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -41,7 +42,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                     </div>
                 @endif
             </div>
-            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span>
             </div>
         </div>
     </div>
