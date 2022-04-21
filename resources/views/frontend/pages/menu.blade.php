@@ -218,65 +218,71 @@
 
                     <div class="col-md-5 col-lg-4">
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
-                            <div class="close-shop">
-                                <h2>Sorry we are closed now!</h2>
-                                <span>We will be opening back at 16:00 Today</span>
+                          <div class="close-shop">
+                            <h2>Sorry we are closed now!</h2>
+                            <span>We will be opening back at 16:00 Today</span>
+                          </div>
+                          <div class="mob-view-main">
+                            <div class="mob-view" id="mob-view">
+                              <span class="tg-icon"  id="tg-icon"><i class="fas fa-angle-double-up"></i></span>
+                              <div class="mob-basket">
+                              0 X ITEMS | TOTAL: £0.00</div>
                             </div>
-                            <div class="minicart">
-                                <div class="minibox-title">
-                                    <h3>My Basket</h3>
-                                    <i class="fa fa-shopping-basket"></i>
+                            <div class="minicart" id="minicart">
+                              <div class="minibox-title">
+                                <h3>My Basket</h3>
+                                <i class="fa fa-shopping-basket"></i>
+                              </div>
+                              <div class="minibox-content">
+                                <div class="empty-box">
+                                  <span>Your shopping cart is empty!</span>
                                 </div>
-                                <div class="minibox-content">
-                                    <div class="empty-box">
-                                        <span>Your shopping cart is empty!</span>
-                                    </div>
-                                    <div class="minicart-total">
-                                        <ul class="minicart-list">
-                                            <li class="minicart-list-item">
-                                                <div class="minicart-list-item-innr">
-                                                    <label>Sub-Total</label>
-                                                    <span>£0.00</span>
-                                                </div>
-                                            </li>
-                                            <li class="minicart-list-item">
-                                                <div class="minicart-list-item-innr">
-                                                    <label>Total to pay:</label>
-                                                    <span>£0.00</span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="order-type">
-                                        <div class="order-type-innr">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                    id="flexRadioDefault1" onclick="showmodalproduct();">
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    <h4>Delivery</h4>
-                                                    <span>Starts at 16:50</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="order-type-innr">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                    id="flexRadioDefault1">
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    <h4>Collection</h4>
-                                                    <span>Starts at 16:50</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="minicart-total">
+                                  <ul class="minicart-list">
+                                    <li class="minicart-list-item">
+                                      <div class="minicart-list-item-innr">
+                                        <label>Sub-Total</label>
+                                        <span>£0.00</span>
+                                      </div>
+                                    </li>
+                                    <li class="minicart-list-item">
+                                      <div class="minicart-list-item-innr">
+                                        <label>Total to pay:</label>
+                                        <span>£0.00</span>
+                                      </div>
+                                    </li>
+                                  </ul>
                                 </div>
+                                <div class="order-type">
+                                  <div class="order-type-innr">
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                      <label class="form-check-label" for="flexRadioDefault1">
+                                        <h4>Delivery</h4>
+                                        <span>Starts at 16:50</span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                  <div class="order-type-innr">
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                      <label class="form-check-label" for="flexRadioDefault1">
+                                        <h4>Collection</h4>
+                                        <span>Starts at 16:50</span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <a href="" class="btn disabled checkbt">Checkout</a>
-                            <div class="closed-now">
-                                <span class="closing-text ">We are closed now!</span>
-                            </div>
+                          </div>
+                          <a href="" class="btn disabled checkbt">Checkout</a>
+                          <div class="closed-now">
+                            <span class="closing-text ">We are closed now!</span>
+                          </div>
                         </div>
-                    </div>
+                      </div>
+
                 </div>
             </div>
         </div>
@@ -357,11 +363,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-    // $(document).ready(function() {
-    //     $('#exampleModal').modal('show');
-    // });
-</script>
-<script>
     function showmodal() {
 
         $('#Modal').modal('show');
@@ -372,3 +373,26 @@
         $('#Modal').modal('show');
     }
 </script>
+
+<script type="text/javascript">
+    $("#mob-view").click(function() {
+      TestsFunction();myFunction();
+    });
+        function TestsFunction() {
+        var T = document.getElementById("minicart"),
+          displayValue = "";
+         if (T.style.display == "")
+         displayValue = "block";
+
+          T.style.display = displayValue;
+          myFunction();
+      }
+      function myFunction() {
+        if($("#minicart").is(":visible")){
+          $("#tg-icon").html('<i class="fas fa-angle-double-down"></i>');
+        }else{
+          $("#tg-icon").html('<i class="fas fa-angle-double-up"></i>');
+        }
+      }
+  </script>
+

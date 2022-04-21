@@ -69,10 +69,18 @@
             <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
             </div>
             <ul class="social-links">
-                <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+                <li>
+                    <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                </li>
+                <li>
+                    <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                </li>
             </ul>
         </div>
         <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
@@ -97,16 +105,16 @@
                     </div>
                     <ul class="social-links">
                         <li>
-                            <a class="fab fa-facebook" href="#" target="_blank"></a>
+                            <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
                         </li>
                         <li>
-                            <a class="fab fa-twitter" href="#" target="_blank"></a>
+                            <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
                         </li>
                         <li>
-                            <a class="fab fa-pinterest-p" href="#" target="_blank"></a>
+                            <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
                         </li>
                         <li>
-                            <a class="fab fa-instagram" href="#" target="_blank"></a>
+                            <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
                         </li>
                     </ul>
                 </div>
@@ -123,12 +131,10 @@
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_1_title'] }}</h3>
                         <img class="img-fluid __icon"
                             src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}" />
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptates adipisci omnis
-                            excepturi inventore ducimus corrupti beatae quibusdam hic molestias sit modi iste commodi
-                            atque rem magni perspiciatis provident magnam quidem eligendi, tenetur ut laboriosam,
-                            voluptate sequi! Veritatis modi aspernatur, mollitia culpa vero quis optio aut quasi
-                            laudantium, porro possimus.</p>
-                        <a class="text-uppercase" href="#">read more<span></span></a>
+                        <p>
+                            {{ $template_setting['polianna_slider_1_description'] }}
+                        </p>
+                        {{-- <a class="text-uppercase" href="#">read more<span></span></a> --}}
                     </div>
                 </div>
                 <div class="swiper-slide"
@@ -137,10 +143,10 @@
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_2_title'] }}</h3>
                         <img class="img-fluid __icon"
                             src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}" />
-                        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                            commodo consequat. Duis aute irure dolor in reprehenderit in nulla pariatur anim id est
-                            laborum sunt in dolor in reprehenderit in.</p>
-                        <a class="text-uppercase" href="#">read more<span></span></a>
+                        <p>
+                            {{ $template_setting['polianna_slider_2_description'] }}
+                        </p>
+                        {{-- <a class="text-uppercase" href="#">read more<span></span></a> --}}
                     </div>
                 </div>
                 <div class="swiper-slide"
@@ -149,11 +155,10 @@
                         <h3 class="text-capitalize">{{ $template_setting['polianna_slider_3_title'] }}</h3>
                         <img class="img-fluid __icon"
                             src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}" />
-                        <p>It is a long established fact that a reader will be distracted by the readable content of a
-                            page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                            more-or-less normal distribution of letters, as opposed to using 'Content here, content
-                            here', making it look like readable English.</p>
-                        <a class="text-uppercase" href="#">read more<span></span></a>
+                        <p>
+                            {{ $template_setting['polianna_slider_3_description'] }}
+                        </p>
+                        {{-- <a class="text-uppercase" href="#">read more<span></span></a> --}}
                     </div>
                 </div>
             </div>
@@ -164,15 +169,17 @@
                 <div class="swiper-slide"
                     style="background-image: url('{{ asset('public/frontend/sliders/demo.jpg') }}');">
                     <div class="container">
-                        <h3 class="text-capitalize">star kebab & pizza 0</h3>
+                        <h3 class="text-capitalize">{{ $store_setting['config_name'] }}</h3>
                         <img class="img-fluid __icon"
                             src="{{ asset('public/assets/theme2/img/icon/slide-divider.svg') }}" />
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptates adipisci omnis
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptates adipisci omnis
                             excepturi inventore ducimus corrupti beatae quibusdam hic molestias sit modi iste commodi
                             atque rem magni perspiciatis provident magnam quidem eligendi, tenetur ut laboriosam,
                             voluptate sequi! Veritatis modi aspernatur, mollitia culpa vero quis optio aut quasi
-                            laudantium, porro possimus.</p>
-                        <a class="text-uppercase" href="#">read more<span></span></a>
+                            laudantium, porro possimus.
+                        </p>
+                        {{-- <a class="text-uppercase" href="#">read more<span></span></a> --}}
                     </div>
                 </div>
             </div>
@@ -182,53 +189,38 @@
     <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s">
         <div class="row">
             <div class="col-md-12 col-lg-6 img">
-                <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/about-us.jpg') }}" />
+                <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}" />
             </div>
             <div class="col-md-12 col-lg-6 content">
-                <strong class="sub-title text-capitalize">star kebab & pizza</strong>
-                <h3 class="title text-uppercase">about us</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Bibendum est ultricies integer quis. Iaculis urna id volutpat lacus laoreet.
-                    Mauris vitae ultricies leo integer malesuada. Ac odio tempor orci dapibus ultrices in. Egestas diam
-                    in arcu cursus</p>
-                <div class="about-us-swiper swiper">
+                <div>
+                    {!! $template_setting['polianna_store_description'] !!}
+                </div>
+                <div class="about-us-swiper swiper mt-3">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/2.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/3.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/2.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/3.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/1.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/2.jpg') }}" />
-                        </div>
-                        <div class="swiper-slide">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme2/demo-data/about-us-slider/3.jpg') }}" />
-                        </div>
+                        @if(isset($photos))
+                            @foreach ($photos as $photo)
+                                <div class="swiper-slide">
+                                    @if(file_exists($photo->image))
+                                        <img class="img-fluid" src="{{ $photo->image }}">
+                                    @else
+                                        <img class="img-fluid" src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                                    @endif
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="swiper-slide">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/about-us-slider/1.jpg') }}" />
+                            </div>
+                            <div class="swiper-slide">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/about-us-slider/2.jpg') }}" />
+                            </div>
+                            <div class="swiper-slide">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/about-us-slider/3.jpg') }}" />
+                            </div>
+                            <div class="swiper-slide">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/about-us-slider/1.jpg') }}" />
+                            </div>
+                        @endif
                     </div>
                     <button class="swiper-button-next"></button>
                     <button class="swiper-button-prev"></button>
@@ -510,14 +502,10 @@
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                    <div class="icon"><i class="fas fa-chevron-down"></i>
-                        <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
-                    </div>
+                    <input class="form-control"  name="date" id="date" type="date" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                    <div class="icon"><i class="fas fa-chevron-down"></i>
-                        <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
-                    </div>
+                        <input class="form-control"  name="time" id="time" type="time" />
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                     <button class="__btn text-capitalize">make reservation now<i

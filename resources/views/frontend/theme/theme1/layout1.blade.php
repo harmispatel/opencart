@@ -136,15 +136,15 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-6 wow animate__fadeInLeft" data-wow-duration="1s">
-                <h3 class="section-title color-green">Welcome to <br> {{ $store_setting['config_name'] }}</h3>
-                <p>
-                    {{ $store_setting['config_meta_description'] }}
-                </p>
-                <a class="btn btn-green text-uppercase" href="">read more</a>
+                <div style="height: 300px; overflow: hidden;" id="shopDescription">
+                    {!! $template_setting['polianna_store_description'] !!}
+                </div>
+                <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
+                <a style="display: none;" class="btn mt-2 btn-green text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
             </div>
             <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="img-box">
-                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/welcome-bg.jpg') }}"/>
+                    <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}"/>
                 </div>
             </div>
         </div>
@@ -335,7 +335,7 @@
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <select class="form-control select2" name="person">
+                  <select class="form-control bg-dark" name="person">
                     <option value="">Person</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -350,14 +350,10 @@
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <input class="form-control icon" placeholder="Date" name="date" id="date" type="text"/>
-                </div>
+                <input class="form-control text-white" style="color-scheme: dark;" name="date" id="date" type="date"/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <input class="form-control icon" placeholder="Time" name="time" id="time" type="text"/>
-                </div>
+                <input class="form-control" style="color-scheme: dark;" name="time" id="time" type="time"/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <button class="btn btn-green text-capitalize">make reservation now<i class="fas fa-arrow-right"></i></button>
@@ -411,6 +407,3 @@
             <p>Sunday to Tuesday 09.00 – 23:00  |  Sunday 08:00 – 23:00</p>
           </div>
         </section>
-
-
-

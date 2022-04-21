@@ -39,6 +39,9 @@ class LayoutController extends Controller
             'polianna_slider_1_title',
             'polianna_slider_2_title',
             'polianna_slider_3_title',
+            'polianna_slider_1_description',
+            'polianna_slider_2_description',
+            'polianna_slider_3_description',
 
             'polianna_online_order_permission',
             'polianna_open_close_store_permission',
@@ -50,6 +53,8 @@ class LayoutController extends Controller
 
             'polianna_store_fonts',
             'polianna_popular_food_count',
+            'polianna_store_description',
+            'polianna_banner_image',
 
             'polianna_footer_background',
             'polianna_footer_text_color',
@@ -118,6 +123,9 @@ class LayoutController extends Controller
         $data['polianna_slider_1_title'] = isset($request->polianna_slider_1_title) ? $request->polianna_slider_1_title : '';
         $data['polianna_slider_2_title'] = isset($request->polianna_slider_2_title) ? $request->polianna_slider_2_title : '';
         $data['polianna_slider_3_title'] = isset($request->polianna_slider_3_title) ? $request->polianna_slider_3_title : '';
+        $data['polianna_slider_1_description'] = isset($request->polianna_slider_1_description) ? $request->polianna_slider_1_description : '';
+        $data['polianna_slider_2_description'] = isset($request->polianna_slider_2_description) ? $request->polianna_slider_2_description : '';
+        $data['polianna_slider_3_description'] = isset($request->polianna_slider_3_description) ? $request->polianna_slider_3_description : '';
         if($request->hasFile('polianna_slider_1'))
         {
             $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_1')->first();
@@ -240,6 +248,27 @@ class LayoutController extends Controller
         // EXTRA
         $data['polianna_store_fonts'] = isset($request->polianna_store_fonts) ? $request->polianna_store_fonts : '';
         $data['polianna_popular_food_count'] = isset($request->polianna_popular_food_count) ? $request->polianna_popular_food_count : '';
+        $data['polianna_store_description'] = isset($request->polianna_store_description) ? $request->polianna_store_description : '';
+        if($request->hasFile('polianna_banner_image'))
+        {
+            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_banner_image')->first();
+            $old_name = isset($old->value) ? $old->value : '';
+
+            if(!empty($old_name) || $old_name != '')
+            {
+                if(file_exists($old_name))
+                {
+                    unlink($old_name);
+                }
+            }
+
+            $polianna_banner_image_url = $currentURL.'/public/frontend/banners/';
+
+            $polianna_banner_image = genratetoken(6).$request->file('polianna_banner_image')->getClientOriginalExtension();
+            $request->file('polianna_banner_image')->move(public_path('frontend/banners'),$polianna_banner_image);
+            // $data['polianna_banner_image'] = 'public/frontend/banners/'.$polianna_banner_image;
+            $data['polianna_banner_image'] = $polianna_banner_image_url.$polianna_banner_image;
+        }
         // END EXTRA
 
 

@@ -68,6 +68,9 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_slider_1_title',
         'polianna_slider_2_title',
         'polianna_slider_3_title',
+        'polianna_slider_1_description',
+        'polianna_slider_2_description',
+        'polianna_slider_3_description',
 
         'polianna_online_order_permission',
         'polianna_open_close_store_permission',
@@ -79,6 +82,8 @@ function storeThemeSettings($theme_id,$store_id)
 
         'polianna_store_fonts',
         'polianna_popular_food_count',
+        'polianna_store_description',
+        'polianna_banner_image',
 
         'polianna_footer_background',
         'polianna_footer_text_color',
@@ -242,7 +247,7 @@ function getprice($sizeprice,$productsize){
 function getimage($current_store){
     $image=PhotoGallry::where('store_id',$current_store)->get();
     return $image;
-} 
+}
 
 function getphoto($current_store,$key){
     $gallery = Settings::where('key',$key)->where('store_id',$current_store)->first();
