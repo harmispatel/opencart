@@ -236,6 +236,9 @@
                                                                             <hr>
                                                                             <label>Title</label>
                                                                             <input type="text" name="polianna_slider_1_title" class="form-control" value="{{ $template_settings['polianna_slider_1_title'] }}">
+                                                                            <hr>
+                                                                            <label>Description</label>
+                                                                            <textarea name="polianna_slider_1_description" class="form-control" rows="5">{{ $template_settings['polianna_slider_1_description'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -252,6 +255,9 @@
                                                                             <hr>
                                                                             <label>Title</label>
                                                                             <input type="text" name="polianna_slider_2_title" class="form-control"  value="{{ $template_settings['polianna_slider_2_title'] }}">
+                                                                            <hr>
+                                                                            <label>Description</label>
+                                                                            <textarea name="polianna_slider_2_description" class="form-control" rows="5">{{ $template_settings['polianna_slider_2_description'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
@@ -269,6 +275,9 @@
                                                                             <hr>
                                                                             <label>Title</label>
                                                                             <input type="text" name="polianna_slider_3_title" class="form-control"  value="{{ $template_settings['polianna_slider_3_title'] }}">
+                                                                            <hr>
+                                                                            <label>Description</label>
+                                                                            <textarea name="polianna_slider_3_description" class="form-control" rows="5">{{ $template_settings['polianna_slider_3_description'] }}</textarea>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -429,6 +438,27 @@
                                                                         </th>
                                                                         <td>
                                                                             <input type="number" name="polianna_popular_food_count" class="form-control" value="{{ $template_settings['polianna_popular_food_count'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="align-middle">
+                                                                            <label>Store Description</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <textarea class="form-control" name="polianna_store_description" id="summernote">{{ $template_settings['polianna_store_description'] }}</textarea>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="align-middle">
+                                                                            <label>Banner Image</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="file" name="polianna_banner_image" class="form-control p-1">
+                                                                            @if (!empty($template_settings['polianna_banner_image']))
+                                                                                <img src="{{ $template_settings['polianna_banner_image'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
+                                                                            @else
+                                                                                Not Avavilable
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                 </table>

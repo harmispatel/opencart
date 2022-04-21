@@ -140,8 +140,8 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 </div>
             </div>
             <div class="col">
-                <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" name="time" placeholder="Date &amp; Time" id="date" type="text" />
+                <div class="icon">
+                    <input class="form-control icon" name="time" placeholder="Date &amp; Time"  type="datetime-local" />
                 </div>
             </div>
             <div class="col">

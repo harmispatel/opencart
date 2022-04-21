@@ -26,7 +26,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                 <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}"></a>
                 <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}"></a>
                 <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}"></a>
-                <a class="fab fa-youtube" href="#"></a>
+                <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}"></a>
             </div>
             <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
             <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">

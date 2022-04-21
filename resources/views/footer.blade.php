@@ -55,7 +55,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
     $('#summernote').summernote({
-        height: 250,
+        minHeight: 500,
     });
 </script>
 <script>

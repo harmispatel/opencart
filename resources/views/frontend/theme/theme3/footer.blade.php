@@ -46,7 +46,11 @@
               <div class="col-12 col-sm-12 col-md-6">
                 <div class="__info-item"><strong>E-mail Address</strong><a href="mailto:">{{ $store_setting['config_email'] }}</a></div>
                 <div class="__info-item"><strong>Online Follow Us</strong>
-                  <div class="__social-links"><a href="{{ $social_site['polianna_facebook_id'] }}" target="_blank" class="fab fa-facebook-f"></a><a  href="{{ $social_site['polianna_twitter_username'] }}" target="_blank" class="fab fa-twitter"></a><a  href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank" class="fab fa-linkedin"></a><a href="{{ $social_site['polianna_youtube_id'] }}" target="_blank" class="fab fa-youtube"></a></div>
+                  <div class="__social-links">
+                      <a href="{{ $social_site['polianna_facebook_id'] }}" target="_blank" class="fab fa-facebook-f"></a>
+                      <a  href="{{ $social_site['polianna_twitter_username'] }}" target="_blank" class="fab fa-twitter"></a>
+                      <a  href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank" class="fab fa-linkedin"></a>
+                      <a href="{{ $social_site['polianna_youtube_id'] }}" target="_blank" class="fab fa-youtube"></a></div>
                 </div>
               </div>
             </div>

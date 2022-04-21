@@ -334,7 +334,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('gallarysettings', [GallaryController::class, 'gallarysettings'])->name('gallarysettings');
     // Route::get('uploadgallary',[GallaryController::class, 'uploadgallary'])->name('uploadgallary');
     Route::post('storeGallary',[GallaryController::class, 'uploadgallary'])->name('storeGallary');
-    Route::get('gallarysettingsstore',[GallaryController::class, 'gallarysettingsstore'])->name('gallarysettingsstore');
+    Route::post('gallarysettingsstore',[GallaryController::class, 'gallarysettingsstore'])->name('gallarysettingsstore');
 
 
     // Layouts

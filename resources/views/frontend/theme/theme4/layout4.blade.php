@@ -39,10 +39,10 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
         </div>
         <ul class="social-links">
-            <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
         </ul>
     </div>
 </sidebar>
@@ -110,13 +110,13 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     <div class="container">
         <div class="row">
             <div class="col-12 col-md-12 col-lg-6">
-                <div class="default-title-v4"><strong class="sub-title color-green">About Us</strong>
-                    <h3 class="title">Who are we?</h3>
+                <div>
+                    {!! $template_setting['polianna_store_description'] !!}
                 </div>
-                <p>{{ $store_setting['config_meta_description'] }}</p>
             </div>
-            <div class="col-12 col-md-12 col-lg-6 img"><img class="img-fluid"
-                    src="{{ asset('public/assets/theme4/img/bg/who-are-we.png') }}" /></div>
+            <div class="col-12 col-md-12 col-lg-6">
+                <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ $template_setting['polianna_banner_image'] }}" />
+            </div>
         </div>
     </div>
 </section>
@@ -361,14 +361,10 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
-                </div>
+                <input class="form-control" name="date" id="date" type="date" />
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
-                </div>
+                <input class="form-control" name="time" id="time" type="time" />
             </div>
             <div class="col-12 col-sm-6 col-md-12 text-center">
                 <button class="btn btn-purple text-capitalize">make reservation now</button>
