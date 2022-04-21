@@ -1,4 +1,5 @@
 @php
+ $openclose = openclosetime();
 $template_setting = session('template_settings');
 $social_site = session('social_site');
 $store_setting = session('store_settings');
@@ -16,7 +17,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
 <header class="header-v3">
     <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
         <div class="container">
-            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span>
             </div>
             <div class="__right-content">
                 <ul class="authentication-links">

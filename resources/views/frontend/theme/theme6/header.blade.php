@@ -1,4 +1,7 @@
 @php
+
+    $openclose = openclosetime();
+
     $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -56,7 +59,7 @@
     <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
       <div class="container">
         <div class="working-time"><i class="far fa-clock"></i>
-          <div><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span></div>
+          <div><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span></div>
         </div><a class="logo" href="{{ route('home') }}"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/></a>
         @if ($store_open_close == 1)
         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">

@@ -34,7 +34,9 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         </ul>
     </div>
     <div class="bottom">
-        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+        <div class="working-time">
+            <strong class="text-uppercase">Working Time:</strong>
+            <span>09:00 - 23:00</span>
         </div>
         <ul class="social-links">
             <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
@@ -209,7 +211,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
     <div class="container">
         <div class="row list-item">
-            @if (count($popular_foods) > 0)
+            @if (count($popular_foods) < 0)
                 @foreach ($popular_foods as $food)
                     <div class="col-12 col-sm-12 col-md-6">
                         <div class="item">

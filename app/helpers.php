@@ -15,6 +15,7 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
+use DB;
 
 
 // Function of User Details
@@ -242,27 +243,27 @@ function getprice($sizeprice,$productsize){
 function getimage($current_store){
     $image=PhotoGallry::where('store_id',$current_store)->get();
     return $image;
-} 
+}
 
 
 function getFonts()
 {
     $fonts = array(
-        ''                  => '- default -',
-        'Arial'             => 'Arial',
-        'Verdana'           => 'Verdana',
-        'Helvetica'         => 'Helvetica',
-        'Cursive'           => 'cursive',
-        'Calibri'           => 'Calibri',
-        'Noto'              => 'Noto',
-        'Lucida Sans'       => 'Lucida Sans',
-        'Gill Sans'       => 'Gill Sans',
-        'Candara'       => 'Candara',
+        ''             => '- default -',
+        'Arial'        => 'Arial',
+        'Verdana'      => 'Verdana',
+        'Helvetica'    => 'Helvetica',
+        'Cursive'      => 'cursive',
+        'Calibri'      => 'Calibri',
+        'Noto'         => 'Noto',
+        'Lucida Sans'  => 'Lucida Sans',
+        'Gill Sans'    => 'Gill Sans',
+        'Candara'      => 'Candara',
         'Futara'       => 'Futara',
         'Geneva'       => 'Geneva',
-        'Segoe UI'       => 'Segoe UI',
+        'Segoe UI'     => 'Segoe UI',
         'Optima'       => 'Optima',
-        'Avanta Garde'       => 'Avanta Garde',
+        'Avanta Garde' => 'Avanta Garde',
 	);
 
     return $fonts;
@@ -566,6 +567,134 @@ function fetch_mainmenu_submenucolumn($id)
 
     return $arr;
 
+}
+
+
+
+function openclosetime()
+{
+    $days = array(
+        '0' => "Every day",
+        '1' => 'Monday',
+        '2' => 'Tuesday',
+        '3' => 'Wednesday',
+        '4' => 'Thursday',
+        '5' => 'Friday',
+        '6' => 'Saturday',
+        '7' => 'Sunday',
+    );
+
+    $times = array(
+        '00:00' => 'Start day',
+        '01:00' => "1:00 AM",
+        '02:00' => "2:00 AM",
+        '03:00' => "3:00 AM",
+        '04:00' => "4:00 AM",
+        '05:00' => "5:00 AM",
+        '06:00' => "6:00 AM",
+        '07:00' => "7:00 AM",
+        '08:00' => "8:00 AM",
+        '09:00' => "9:00 AM",
+        '10:00' => "10:00 AM",
+        '11:00' => "11:00 AM",
+        '12:00' => "12:00 AM",
+        '13:00' => "1:00 PM",
+        '14:00' => "2:00 PM",
+        '15:00' => "3:00 PM",
+        '16:00' => "4:00 PM",
+        '17:00' => "5:00 PM",
+        '18:00' => "6:00 PM",
+        '19:00' => "7:00 PM",
+        '20:00' => "8:00 PM",
+        '21:00' => "9:00 PM",
+        '22:00' => "10:00 PM",
+        '23:00' => "11:00 PM",
+        '23:59' => 'End day'
+    );
+
+    $key = ([
+        'opening_time_collection',
+        'opening_time_delivery',
+        'opening_time_bussness',
+        'business_closing_dates',
+        'order_outof_bussiness_time',
+        'collection',
+        'collection_gaptime',
+        'collection_same_bussiness',
+        'delivery',
+        'delivery_gaptime',
+        'delivery_same_bussiness',
+        'closing_dates',
+        'bussines',
+    ]);
+
+    $minitunes = array('00', '10', '20', '30', '40', '50');
+    $timearray = array();
+    $timearray['00:00'] = '00:00';
+    for ($i = 0; $i <= 23; $i++) {
+        foreach ($minitunes as $phut) {
+            $timearray[$i . ':' . $phut] = $i . ':' . $phut;
+        }
+    }
+    $timearray['23:59'] = '23:59';
+    $times = $times = $timearray;
+
+    $open_close = [];
+    $front_store_id = session('front_store_id');
+
+    foreach ($key as $row) {
+        $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+
+        $open_close[$row] = isset($query->value) ? $query->value : '';
+    }
+
+
+    // $closedate = unserialize($open_close['closing_dates']);
+    // $delivery = unserialize($open_close['delivery']);
+    // $collection = unserialize($open_close['collection']);
+    // $timesetting = $open_close;
+    $bussines = unserialize($open_close['bussines']);
+    $days = $days;
+    $times = $times;
+    // echo '<pre>';
+    // print_r($bussines);
+
+    if (isset($bussines['day']) && count($bussines['day'])) {
+        foreach ($bussines['day'] as $keyday => $daytime) {
+            foreach ($days as $key => $day) {
+                if (in_array($key, $daytime)) {
+                    // echo ($key);
+                    // echo '.';
+                    // echo ($day);
+                    // echo ' ';
+                    $data['days'] = $day;
+                }
+            }
+            foreach ($times as $key => $time) {
+                if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key) {
+                    // echo '  from  ';
+                    // echo ($key);
+                    // echo ' ';
+                    // echo ($time);
+                    $data['fromtime'] = $time;
+                }
+            }
+            foreach ($times as $key => $time) {
+                if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {
+                    // echo '  to  ';
+                    // echo ($key);
+                    // echo ' ';
+                    // echo ($time);
+                    $data['totime'] = $time;
+                }
+            }
+            // echo '<br>';
+        }
+    }
+    // echo '<pre>';
+    // print_r($data);
+    // exit();
+    return $data;
 }
 
 

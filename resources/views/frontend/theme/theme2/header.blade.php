@@ -1,4 +1,5 @@
 @php
+    $openclose = openclosetime();
     $template_setting = session('template_settings');
     $social_site = session('social_site');
     $store_setting = session('store_settings');
@@ -33,7 +34,7 @@
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
             </a>
             <div class="working-time">
-                <strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+                <strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span>
             </div>
         </div>
     </div>
