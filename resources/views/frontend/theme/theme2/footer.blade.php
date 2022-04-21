@@ -33,10 +33,10 @@
           <div class="col-sm-12 col-md-4"><a class="f-logo" href="{{ route('home') }}"><img class="img-fluid" src="{{ $template_setting['polianna_footer_logo'] }}"/></a>
             <p class="foot_link">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus illo porro similique voluptate. Accusamus amet aut beatae consequatur doloremque eius explicabo</p>
             <div class="social-links">
-              <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
-              <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
-              <a class="fab fa-youtube" href="#" target="_blank"></a>
-              <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
             </div>
           </div>
           <div class="col-sm-12 col-md-4">
@@ -57,7 +57,7 @@
               <li class="col-6"><a class="text-uppercase foot_link" href="#">shop</a></li>
               <li class="col-6"><a class="text-uppercase foot_link" href="#">blog</a></li>
               <li class="col-6"><a class="text-uppercase foot_link" href="{{ route('menu') }}">menu</a></li>
-              <li class="col-6"><a class="text-uppercase foot_link" href="#">contact</a></li>
+              <li class="col-6"><a class="text-uppercase foot_link" href="{{ route('contact') }}">contact</a></li>
               <li class="col-6"><a class="text-uppercase foot_link" href="#">support</a></li>
               <li class="col-6"><a class="text-uppercase foot_link" href="#">reservation</a></li>
             </ul>

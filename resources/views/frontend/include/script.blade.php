@@ -36,3 +36,19 @@
         <script type="text/javascript" src="{{ asset('public/assets/theme1/js/app.js') }}"></script>
    @endif
 <!--Js Files-->
+
+<script>
+    function ShowMoreDescription()
+    {
+        $('#shopDescription').css({"height":"","overflow":"none"});
+        $('#readmore').hide();
+        $('#readless').show();
+    }
+
+    function HideMoreDescription()
+    {
+        $('#shopDescription').css({"height":"300px","overflow":"hidden"});
+        $('#readmore').show();
+        $('#readless').hide();
+    }
+</script>
