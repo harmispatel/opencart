@@ -39,7 +39,7 @@
           <a class="fab fa-facebook-f foot_link" href="{{ $social_site['polianna_facebook_id'] }}"></a>
           <a class="fab fa-twitter foot_link"    href="{{ $social_site['polianna_twitter_username'] }}"></a>
           <a class="fab fa-linkedin foot_link"   href="{{ $social_site['polianna_linkedin_id'] }}"></a>
-          <a class="fab fa-youtube foot_link"  href="#"></a></div>
+          <a class="fab fa-youtube foot_link"  href="{{ $social_site['polianna_youtube_id'] }}"></a></div>
       </div><a class="f-logo" href="{{ route('home') }}">
         <img class="img-fluid" src="{{ $template_setting['polianna_footer_logo'] }}"/></a>
     </div>

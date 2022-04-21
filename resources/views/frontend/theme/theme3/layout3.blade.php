@@ -3,10 +3,12 @@
     rel="stylesheet" />
 
 @php
-$template_setting = session('template_settings');
-$store_setting = session('store_settings');
-$slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
-$online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+    $template_setting = session('template_settings');
+    $store_setting = session('store_settings');
+    $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+    $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '#';
 @endphp
 
 <div class="mobile-menu-shadow"></div>
@@ -31,10 +33,10 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
         </div>
         <ul class="social-links">
-            <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-            <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
+            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
         </ul>
     </div>
 </sidebar>
@@ -86,14 +88,9 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
 </section>
 <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container text-center">
-        <div class="default-title-v3">
-            <h3 class="title color-green">Who are we?</h3>
+        <div>
+            {!! $template_setting['polianna_store_description'] !!}
         </div>
-        <h4 class="__title">"{{ $store_setting['config_name'] }}"</h4>
-        {{-- <h4 class="__title">"{{ $store_setting['config_name'] }} WANT TO BE LIMITED."</h4> --}}
-        <p>
-            {{ $store_setting['config_meta_description'] }}
-        </p>
     </div>
 </section>
 <section class="best-categories-icon pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
@@ -293,27 +290,6 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     </div>
                 </div>
             @endif
-
-            {{-- <div class="col-12 col-md-6 col-lg-3">
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" />
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" />
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" />
-                </div>
-            </div>
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" />
-                </div>
-            </div> --}}
         </div>
     </div>
 </div>
@@ -331,7 +307,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
                         <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <select class="form-control " name="person">
+                            <select class="form-control" name="person">
                                 <option value="" selected="selected">Person</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -346,14 +322,10 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <input class="form-control icon" name="date" placeholder="Date" id="date" type="text" />
-                        </div>
+                        <input class="form-control" name="date" id="date" type="date" />
                     </div>
                     <div class="col-12 col-sm-6">
-                        <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <input class="form-control icon" name="time" placeholder="Time" id="time" type="text" />
-                        </div>
+                        <input class="form-control" name="time" id="time" type="time" />
                     </div>
                     <div class="col-12">
                         <button class="btn btn-red text-capitalize __mobile-show">make reservation now</button>
