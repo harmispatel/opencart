@@ -17,7 +17,32 @@
 <header class="header-v5">
     <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
       <div class="container">
-        {{-- <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span></div> --}}
+        <div class="working-time">
+            <strong class="text-uppercase">Working Time:</strong>
+            {{-- <span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span> --}}
+            @php
+            $openday =$openclose['openday'];
+            $fromtime = $openclose['fromtime'];
+            $totime = $openclose['totime'];
+            @endphp
+            @foreach ($openday as $key => $item)
+                @foreach ($item as $value)
+      @php
+
+        @endphp
+                @php
+                $t = count($item)-1;
+                $firstday = $item[0];
+                $lastday = $item[$t];
+                $today = date('l');
+                @endphp
+                    @if ($today == $value)
+                    <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                    @endif
+                    @endforeach
+            @endforeach
+        </div>
+
         <a class="logo" href="{{ route('home') }}">
           <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
       </a>
