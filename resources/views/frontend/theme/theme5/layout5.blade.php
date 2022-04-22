@@ -3,6 +3,7 @@
     rel="stylesheet" />
 
     @php
+        $openclose = openclosetime();
         $template_setting = session('template_settings');
         $social_site = session('social_site');
         $store_setting = session('store_settings');
@@ -681,15 +682,49 @@
         <div class="__container"><img class="img-fluid mb-3"
                 src="{{ asset('public/assets/theme5/img/icon/time-top-flower.svg') }}" /><strong
                 class="__time-title">OPEN NOW</strong>
-            <div class="__time"><strong>MONDAY-<br>SATURDAY</strong>
+            {{-- <div class="__time"><strong>{{ $openclose['days1'] }}-<br>{{ $openclose['days2'] }}</strong>
+                <div class="__time-box">
+                    <div class="__left-time"><span>{{ $openclose['fromtime'] }}</span></div>
+                    <div class="__time-divier"></div>
+                    <div class="__right-time"><span>{{ $openclose['totime'] }}</span></div>
+                </div>
+            </div> --}}
+
+            @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+            @endphp
+            @foreach ($openday as $key => $item)
+                @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                @endphp
+                    <div class="__time">
+                        @if ($firstday == $lastday)
+                            <strong>{{ $firstday }}</strong>
+                        @else
+                            <strong>{{ $firstday }} - {{ $lastday }}</strong>
+                        @endif
+                        <div class="__time-box">
+                            <div class="__left-time"><span>{{ $fromtime[$key] }}</span></div>
+                            <div class="__time-divier"></div>
+                            <div class="__right-time"><span>{{ $totime[$key] }}</span></div>
+                        </div>
+                    </div>
+                <br>
+            @endforeach
+            {{-- <div class="__time"><strong>{{ $openclose['days1'] }}-<br>{{ $openclose['days2'] }}</strong>
                 <div class="__time-box">
                     <div class="__left-time"><span>9</span><span>A<br>M</span></div>
+                    <div class="__left-time"><span>{{ $openclose['fromtime'] }}</span></div>
                     <div class="__time-divier"></div>
                     <div class="__right-time"><span>11</span><span>P<br>M</span></div>
+                    <div class="__right-time"><span>{{ $openclose['totime'] }}</span></div>
                 </div>
-            </div>
-            <div class="__time"><span>SUNDAY 9:30 AM to 11AM</span></div><img class="img-fluid mt-3"
-                src="{{ asset('public/assets/theme5/img/icon/time-bottom-flower.svg') }}" />
+            </div> --}}
+            {{-- <div class="__time"><span>SUNDAY 9:30 AM to 11AM</span></div><img class="img-fluid mt-3" src="{{ asset('public/assets/theme5/img/icon/time-bottom-flower.svg') }}" /> --}}
         </div>
     </div>
 </section>

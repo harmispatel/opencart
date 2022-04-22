@@ -672,41 +672,44 @@ function openclosetime()
     $bussines = unserialize($open_close['bussines']);
     $days = $days;
     $times = $times;
+    // echo '<pre>';
+    // print_r($bussines);
+    // exit();
 
-    $data = [];
 
+    $openday = array();
+    $fromtime = array();
+    $totime = array();
     if (isset($bussines['day']) && count($bussines['day'])) {
         foreach ($bussines['day'] as $keyday => $daytime) {
+            $day2 = array();
             foreach ($days as $key => $day) {
                 if (in_array($key, $daytime)) {
-                    // echo ($key);
-                    // echo '.';
-                    // echo ($day);
-                    // echo ' ';
-                    $data['days'] = $day;
+                   $day2[] = $day;
                 }
             }
+            $openday[]=$day2;
+            // $totle = count($openday)-1;
+            // $data['days1'] = $openday[0];
+            // $data['days2'] = $openday[$totle];
+            // $formtime = [];
             foreach ($times as $key => $time) {
                 if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key) {
-                    // echo '  from  ';
-                    // echo ($key);
-                    // echo ' ';
-                    // echo ($time);
-                    $data['fromtime'] = $time;
+                    // $data['fromtime'] = $time;
+                    $fromtime[] = $time;
                 }
             }
             foreach ($times as $key => $time) {
                 if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {
-                    // echo '  to  ';
-                    // echo ($key);
-                    // echo ' ';
-                    // echo ($time);
-                    $data['totime'] = $time;
+                    // $data['totime'] = $time;
+                    $totime[] = $time;
                 }
             }
-            // echo '<br>';
         }
     }
+    $data['openday'] = $openday;
+    $data['fromtime'] = $fromtime;
+    $data['totime'] = $totime;
     return $data;
 }
 
