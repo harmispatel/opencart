@@ -42,7 +42,30 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                     </div>
                 @endif
             </div>
-            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ date('l') }}</span>
+            <div class="working-time">
+                <strong class="text-uppercase">Working Time:</strong>
+                {{-- <span>{{ date('l') }}</span> --}}
+                @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+                @endphp
+                @foreach ($openday as $key => $item)
+                    @foreach ($item as $value)
+          @php
+
+            @endphp
+                    @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                    $today = date('l');
+                    @endphp
+                        @if ($today == $value)
+                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @endif
+                        @endforeach
+                @endforeach
             </div>
         </div>
     </div>
