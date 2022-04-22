@@ -170,14 +170,14 @@
                         @foreach ($best_categories as $categorydet)
                             <a class="swiper-slide" href="#">
                                 <div class="img">
-                                    @if (isset($category->hasOneCategoryDetails['image'])) --}}
+                                    @if (isset($category->hasOneCategoryDetails['image']))
                                         <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
                                     @else
                                         <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
                                     @endif
                                 </div>
                                 <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
-                                {{-- <strong>{{ isset($category->hasOneCategory->hasOneCategory['name']) ? $category->hasOneCategory->hasOneCategory['name'] : '' }}</strong> --}}
+
                             </a>
                         @endforeach
                     @endif
