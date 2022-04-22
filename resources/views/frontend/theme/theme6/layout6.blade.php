@@ -42,7 +42,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
             <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
             <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
         </ul>
     </div>
 </sidebar>
@@ -58,18 +58,18 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         <div class="slide-logo"><img class="img-fluid"
                                 src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
                         <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
-                            eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
-                            voluptatem. Culpa mollitia placeat rem.</p>
+                        <p>
+                            {{ $template_setting['polianna_slider_1_description'] }}
+                        </p>
                     </div>
                 </div>
                 <div class="swiper-slide"
                     style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
                     <div class="container">
                         <h2 class="__title">{{ $template_setting['polianna_slider_2_title'] }}</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
-                            eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
-                            voluptatem. Culpa mollitia placeat rem.</p>
+                        <p>
+                            {{ $template_setting['polianna_slider_2_description'] }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -101,13 +101,11 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
 </section>
 <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container">
-        <div class="default-title-v6"><strong class="sub-title color-orange text-uppercase">about us</strong>
-            <h3 class="title text-uppercase">SEE WHO WE ARE AND WHAT WE OFFER!</h3>
+        <div style="height: 300px; overflow: hidden;" id="shopDescription">
+            {!! $template_setting['polianna_store_description'] !!}
         </div>
-        <p>{{ $store_setting['config_meta_description'] }}</p>
-        <p>Magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>At autem consequatur consequuntur dolor
-            dolorum eligendi error excepturi facere illum, inventore laudantium, <br>libero minima mollitia nihil nobis
-            quis quod tenetur vitae?</p><a class="btn text-uppercase" href="">read more</a>
+        <a class="btn mt-2 text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
+        <a style="display: none;" class="btn mt-2 text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
     </div>
 </section>
 <section class="reservation-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
@@ -211,18 +209,16 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
     <div class="container">
         <div class="row list-item">
-            @if (count($popular_foods) < 0)
+            @if (count($popular_foods) > 0)
                 @foreach ($popular_foods as $food)
                     <div class="col-12 col-sm-12 col-md-6">
                         <div class="item">
                             <div class="item">
                                 <div class="img">
                                     @if (!empty($food->hasOneProduct['image']) || $food->hasOneProduct['image'] != '')
-                                        <img class="img-fluid"
-                                            src="{{ asset('public/admin/product/' . $food->hasOneProduct['image']) }}">
+                                        <img class="img-fluid" src="{{ $food->hasOneProduct['image'] }}">
                                     @else
-                                        <img class="img-fluid"
-                                            src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
                                     @endif
                                 </div>
                                 <div class="text-content">

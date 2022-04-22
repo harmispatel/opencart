@@ -242,7 +242,7 @@
                                 <div class="box">
                                     <div class="img">
                                         @if (isset($food->hasOneProduct['image']))
-                                            <img class="img-fluid" src="{{ asset('public/admin/product/'.$food->hasOneProduct['image']) }}">
+                                            <img class="img-fluid" src="{{ $food->hasOneProduct['image'] }}">
                                         @else
                                             <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
                                         @endif

@@ -66,8 +66,8 @@ $store_setting = isset($store_set) ? $store_set : '';
                                         class="fab fa-twitter"></i><span>Twitter</span></a>
                                 <a class="bg-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}"><i
                                         class="fab fa-linkedin"></i><span>Linkedin</span></a>
-                                <a class="bg-instagram" href="#"><i
-                                        class="fab fa-instagram"></i><span>Instagram</span></a>
+                                <a class="bg-instagram" href="{{ $social_site['polianna_youtube_id'] }}"><i
+                                        class="fab fa-youtube"></i><span>Youtube</span></a>
                             </div>
                         </div>
                     </div>

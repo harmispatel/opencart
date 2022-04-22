@@ -15,7 +15,6 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
-use DB;
 
 
 // Function of User Details
@@ -673,8 +672,8 @@ function openclosetime()
     $bussines = unserialize($open_close['bussines']);
     $days = $days;
     $times = $times;
-    // echo '<pre>';
-    // print_r($bussines);
+
+    $data = [];
 
     if (isset($bussines['day']) && count($bussines['day'])) {
         foreach ($bussines['day'] as $keyday => $daytime) {
@@ -708,9 +707,6 @@ function openclosetime()
             // echo '<br>';
         }
     }
-    // echo '<pre>';
-    // print_r($data);
-    // exit();
     return $data;
 }
 

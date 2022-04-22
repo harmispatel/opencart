@@ -157,11 +157,11 @@
         <div class="row list-item">
             @if (count($popular_foods) > 0)
                 @foreach ($popular_foods as $food)
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <div class="col-12 col-md-6 col-lg-4 mb-4">
                         <div class="item">
                             <div class="img">
                                 @if (isset($food->hasOneProduct['image']))
-                                    <img class="img-fluid" src="{{ asset('public/admin/product/'.$food->hasOneProduct['image']) }}">
+                                    <img class="img-fluid" src="{{ $food->hasOneProduct['image'] }}">
                                 @else
                                     <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
                                 @endif
