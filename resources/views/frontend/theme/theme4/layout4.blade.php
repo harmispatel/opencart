@@ -179,7 +179,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                             <div class="img">
                                 @if (isset($food->hasOneProduct['image']))
                                     <img class="img-fluid"
-                                        src="{{ asset('public/admin/product/' . $food->hasOneProduct['image']) }}">
+                                        src="{{ $food->hasOneProduct['image'] }}">
                                 @else
                                     <img class="img-fluid"
                                         src="{{ asset('public/admin/product/no_image.jpg') }}">

@@ -248,8 +248,10 @@
                                                 <input type="file" name="image" id="image" class="form-control">
                                                 @php
                                                     $p_image = isset($product->image) ? $product->image : '';
-                                                    @endphp
-                                                    <img src="{{ asset('public/admin/product/'.$p_image) }}" width="100px" />
+                                                @endphp
+                                                <div class="mt-1">
+                                                    <img src="{{ $p_image }}" width="100px"/>
+                                                </div>
                                             </div>
                                         </div>
                                         {{-- end Genral --}}

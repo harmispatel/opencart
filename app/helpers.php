@@ -15,7 +15,6 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
-use DB;
 
 
 // Function of User Details
@@ -217,6 +216,11 @@ function themeID($url)
     {
         session()->put('theme_id', $theme_id);
     }
+    $new = ([
+        'theme_id' => $theme_id,
+        'store_id' => $store_id,
+    ]);
+    return $new;
 
 }
 
