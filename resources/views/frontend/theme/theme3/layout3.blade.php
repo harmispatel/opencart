@@ -3,6 +3,7 @@
     rel="stylesheet" />
 
 @php
+    $openclose = openclosetime();
     $template_setting = session('template_settings');
     $store_setting = session('store_settings');
     $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
@@ -341,9 +342,33 @@
             <h3 class="title text-capitalize">opening hours</h3>
             <p>Open 7 Days a Week</p>
         </div>
-        <div class="__time">
-            <div class="__time-item"><strong>Monday - Friday</strong><span>09:00 - 23:00</span></div>
+
+        @php
+            $openday =$openclose['openday'];
+            $fromtime = $openclose['fromtime'];
+            $totime = $openclose['totime'];
+        @endphp
+        @foreach ($openday as $key => $item)
+            @php
+                $t = count($item)-1;
+                $firstday = $item[0];
+                $lastday = $item[$t];
+            @endphp
+                <div class="__time">
+                    <div class="__time-item">
+                        <strong>{{ $firstday }} - {{ $lastday }}</strong>
+                        <span>{{ $fromtime[$key] }} - {{ $totime[$key] }}</span>
+                    </div>
+                    {{-- <div class="__time-item"><strong>Sunday</strong><span>12:00 - 23:00</span></div> --}}
+                </div>
+            <br>
+        @endforeach
+        {{-- <div class="__time">
+            <div class="__time-item">
+                <strong>{{ $openclose['days1'] }} - {{ $openclose['days2'] }}</strong>
+                <span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span>
+            </div>
             <div class="__time-item"><strong>Sunday</strong><span>12:00 - 23:00</span></div>
-        </div>
+        </div> --}}
     </div>
 </section>

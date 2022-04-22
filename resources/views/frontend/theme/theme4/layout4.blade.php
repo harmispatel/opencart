@@ -1,4 +1,5 @@
 @php
+$openclose = openclosetime();
 $temp_set = session('template_settings');
 $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -378,14 +379,43 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 Week</strong>
             <h3 class="title text-capitalize">opening hours</h3>
         </div>
-        <div class="__time">
-            <div class="__time-item"><strong>Mon - Fri</strong>
-                <div><span>09AM</span><span>23PM</span></div>
+        {{-- <div class="__time">
+            <div class="__time-item"><strong>{{ $openclose['days1'] }} - {{ $openclose['days2'] }}</strong>
+                <div><span>{{ $openclose['fromtime'] }}</span><span>{{ $openclose['totime'] }}</span></div>
             </div>
             <div class="__time-item"><strong>Sunday</strong>
                 <div><span>12AM</span><span>23PM</span></div>
             </div>
-        </div>
+        </div> --}}
+
+            @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+            @endphp
+            @foreach ($openday as $key => $item)
+                @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                @endphp
+                <div class="__time">
+                    <div class="__time-item"><strong>{{ $firstday }} - {{ $lastday }}</strong>
+                        <div><span>{{ $fromtime[$key] }}</span><span>{{ $totime[$key] }}</span></div>
+                    </div>
+                </div>
+                <br>
+                {{die}}
+            @endforeach
+
+        {{-- <div class="__time">
+            <div class="__time-item"><strong>{{ $openclose['days1'] }} - {{ $openclose['days2'] }}</strong>
+                <div><span>{{ $openclose['fromtime'] }}</span><span>{{ $openclose['totime'] }}</span></div>
+            </div>
+            <div class="__time-item"><strong>Sunday</strong>
+                <div><span>12AM</span><span>23PM</span></div>
+            </div>
+        </div> --}}
     </div>
 </section>
 

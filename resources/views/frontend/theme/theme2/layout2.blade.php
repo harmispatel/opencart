@@ -26,6 +26,7 @@
     </style>
 
     @php
+        $openclose = openclosetime();
         $template_setting = session('template_settings');
         $social_site = session('social_site');
         $store_setting = session('store_settings');
@@ -566,7 +567,7 @@
             <h3 class="title text-uppercase">opening hours</h3>
             <div class="_divider"></div><a href="tel:03254769875">TEL: 03254769875</a>
             <h3 class="title text-uppercase __divider">hours</h3>
-            <div class="__time"><span>MON-FRI</span><span>9.30AM-11PM</span></div>
+            <div class="__time"><span>{{ $openclose['days1'] }}-{{ $openclose['days2'] }}</span><span>{{ $openclose['fromtime'] }}-{{ $openclose['totime'] }}</span></div>
             <div class="__time"><span>SUN</span><span>9.30AM-11PM</span></div><img class="img-fluid"
                 src="{{ asset('public/assets/theme2/img/icon/opening-hours-bottom-divider.svg') }}" />
         </div>

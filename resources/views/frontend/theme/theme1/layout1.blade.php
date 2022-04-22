@@ -1,6 +1,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
 
 @php
+    $openclose = openclosetime();
     $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -404,6 +405,6 @@
           <div class="container text-center">
             <h3 class="title">Visit us</h3>
             <h3 class="sub-title">Opening Hours</h3><img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/opening-hours.svg') }}"/>
-            <p>Sunday to Tuesday 09.00 – 23:00  |  Sunday 08:00 – 23:00</p>
+            <p>{{ $openclose['days1'] }} to {{ $openclose['days2'] }} {{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}  |  Sunday 08:00 – 23:00</p>
           </div>
         </section>

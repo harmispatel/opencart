@@ -1,5 +1,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&amp;display=swap" rel="stylesheet" />
 @php
+    $openclose = openclosetime();
+    // echo '<pre>';
+    // print_r($openclose);
+    // exit();
+
 $temp_set = session('template_settings');
 $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -523,20 +528,44 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 src="{{ asset('public/assets/theme6/img/icon/time-clock.svg') }}" />
             <div class="__divider"></div><strong class="__time-title">OPEN NOW</strong>
             <div class="__divider"></div>
-            <div class="__time"><strong>Monday - Friday</strong>
+            @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+            @endphp
+            @foreach ($openday as $key => $item)
+                @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                @endphp
+                <div class="__time"><strong>{{ $firstday }} - {{ $lastday }}</strong>
+                    <div class="__time-box">
+                        <div class="__left-time"><span>{{ $fromtime[$key] }}</span></div>
+                        <div class="__time-divier"></div>
+                        <div class="__right-time"><span>{{ $totime[$key] }}</span></div>
+                    </div>
+                </div>
+                <br>
+            @endforeach
+
+
+            {{-- <div class="__time"><strong>{{ $openclose['days1'] }} - {{$openclose['days2']}}</strong>
                 <div class="__time-box">
                     <div class="__left-time"><span>09:00</span><span>AM</span></div>
+                    <div class="__left-time"><span>{{ $openclose['fromtime'] }}</span></div>
                     <div class="__time-divier"></div>
                     <div class="__right-time"><span>11:00</span><span>PM</span></div>
+                    <div class="__right-time"><span>{{ $openclose['totime'] }}</span></div>
                 </div>
-            </div>
-            <div class="__time"><strong>Sunday</strong>
+            </div> --}}
+            {{-- <div class="__time"><strong>Sunday</strong>
                 <div class="__time-box">
                     <div class="__left-time"><span>12:00</span><span>AM</span></div>
                     <div class="__time-divier"></div>
                     <div class="__right-time"><span>11:30</span><span>PM</span></div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>

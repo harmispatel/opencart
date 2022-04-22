@@ -17,7 +17,7 @@
 <header class="header-v5">
     <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
       <div class="container">
-        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span></div>
+        {{-- <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span></div> --}}
         <a class="logo" href="{{ route('home') }}">
           <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
       </a>
