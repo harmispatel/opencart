@@ -157,75 +157,93 @@
         <h3 class="section-title color-red">Best Categories</h3>
         <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
         <div class="categories-swiper">
-        <div class="swiper-button-next">
-            <i class="fas fa-arrow-right"></i>
-        </div>
-        <div class="swiper-button-prev">
-            <i class="fas fa-arrow-left"></i>
-        </div>
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <a class="swiper-slide" href="#">
-                    <div class="img">
-                        <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/>
-                    </div>
-                    <strong>Breakfast Chef 0</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 0</p>
-                </a>
-                <a class="swiper-slide" href="#">
-                    <div class="img">
-                        <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/>
-                    </div>
-                    <strong>Breakfast Chef 1</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 1</p>
-                </a>
-                <a class="swiper-slide" href="#">
-                    <div class="img">
-                        <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/>
-                    </div>
-                    <strong>Breakfast Chef 2</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                </a>
-                <a class="swiper-slide" href="#">
-                    <div class="img">
-                        <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/>
-                    </div>
-                    <strong>Breakfast Chef 3</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 3</p>
-                </a>
-                <a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/>
-                    </div>
-                    <strong>Breakfast Chef 4</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 4</p>
-                </a>
-                <a class="swiper-slide" href="#">
-                    <div class="img">
-                        <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/></div><strong>Breakfast Chef 5</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 5</p></a>
-                <a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/></div><strong>Breakfast Chef 6</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 6</p></a>
-                <a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/></div><strong>Breakfast Chef 7</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 7</p></a>
-                <a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/></div><strong>Breakfast Chef 8</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 8</p></a><a class="swiper-slide" href="#">
-                <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/></div><strong>Breakfast Chef 9</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 9</p></a><a class="swiper-slide" href="#">
-                <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/></div><strong>Breakfast Chef 10</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 10</p></a><a class="swiper-slide" href="#">
-                <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/></div><strong>Breakfast Chef 11</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 11</p></a><a class="swiper-slide" href="#">
-                <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/></div><strong>Breakfast Chef 12</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 12</p></a><a class="swiper-slide" href="#">
-                <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/></div><strong>Breakfast Chef 13</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 13</p></a><a class="swiper-slide" href="#">
-                <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/></div><strong>Breakfast Chef 14</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur 14</p></a>
+            <div class="swiper-button-next">
+                <i class="fas fa-arrow-right"></i>
             </div>
-        </div>
+            <div class="swiper-button-prev">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <div class="swiper">
+                <div class="swiper-wrapper">
+
+                    @if(count($best_categories) > 0)
+                        @foreach ($best_categories as $categorydet)
+                            <a class="swiper-slide" href="#">
+                                <div class="img">
+                                    @if (isset($category->hasOneCategoryDetails['image'])) --}}
+                                        <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
+                                    @else
+                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                    @endif
+                                </div>
+                                <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
+                                {{-- <strong>{{ isset($category->hasOneCategory->hasOneCategory['name']) ? $category->hasOneCategory->hasOneCategory['name'] : '' }}</strong> --}}
+                            </a>
+                        @endforeach
+                    @endif
+
+
+                    {{-- <a class="swiper-slide" href="#">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/>
+                        </div>
+                        <strong>Breakfast Chef 0</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 0</p>
+                    </a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/>
+                        </div>
+                        <strong>Breakfast Chef 1</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 1</p>
+                    </a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/>
+                        </div>
+                        <strong>Breakfast Chef 2</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 2</p>
+                    </a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/>
+                        </div>
+                        <strong>Breakfast Chef 3</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 3</p>
+                    </a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/>
+                        </div>
+                        <strong>Breakfast Chef 4</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 4</p>
+                    </a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/></div><strong>Breakfast Chef 5</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 5</p></a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/></div><strong>Breakfast Chef 6</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 6</p></a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/></div><strong>Breakfast Chef 7</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 7</p></a>
+                    <a class="swiper-slide" href="#">
+                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/></div><strong>Breakfast Chef 8</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 8</p></a><a class="swiper-slide" href="#">
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/></div><strong>Breakfast Chef 9</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 9</p></a><a class="swiper-slide" href="#">
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/></div><strong>Breakfast Chef 10</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 10</p></a><a class="swiper-slide" href="#">
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/></div><strong>Breakfast Chef 11</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 11</p></a><a class="swiper-slide" href="#">
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/></div><strong>Breakfast Chef 12</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 12</p></a><a class="swiper-slide" href="#">
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/></div><strong>Breakfast Chef 13</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 13</p></a><a class="swiper-slide" href="#">
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/></div><strong>Breakfast Chef 14</strong>
+                    <p>Lorem ipsum dolor sit amet, consectetur 14</p></a> --}}
+                </div>
+            </div>
     </div>
     </div>
 </section>
