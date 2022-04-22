@@ -560,14 +560,33 @@
         </div>
     </section>
     <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-        <div class="container"><img class="img-fluid"
-                src="{{ asset('public/assets/theme2/img/icon/opening-hours-top-divider.svg') }}" />
+        <div class="container"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/opening-hours-top-divider.svg') }}" />
             <h3 class="title text-uppercase">opening hours</h3>
             <div class="_divider"></div><a href="tel:03254769875">TEL: 03254769875</a>
             <h3 class="title text-uppercase __divider">hours</h3>
-            <div class="__time"><span>{{ $openclose['days1'] }}-{{ $openclose['days2'] }}</span><span>{{ $openclose['fromtime'] }}-{{ $openclose['totime'] }}</span></div>
-            <div class="__time"><span>SUN</span><span>9.30AM-11PM</span></div><img class="img-fluid"
-                src="{{ asset('public/assets/theme2/img/icon/opening-hours-bottom-divider.svg') }}" />
+            @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+            @endphp
+            @foreach ($openday as $key => $item)
+                @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                @endphp
+                <div class="__time">
+                    @if ($firstday == $lastday)
+                        <span>{{ $firstday }}</span>
+                    @else
+                        <span>{{ $firstday }}-{{ $lastday }}</span>
+                    @endif
+                        <span>{{ $fromtime[$key] }}-{{ $totime[$key] }}</span>
+                </div>
+                <br>
+            @endforeach
+            {{-- <div class="__time"><span>{{ $openclose['days1'] }}-{{ $openclose['days2'] }}</span><span>{{ $openclose['fromtime'] }}-{{ $openclose['totime'] }}</span></div>
+            <div class="__time"><span>SUN</span><span>9.30AM-11PM</span></div><img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/opening-hours-bottom-divider.svg') }}" /> --}}
         </div>
     </section>
 

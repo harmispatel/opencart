@@ -42,7 +42,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                     </div>
                 @endif
             </div>
-            {{-- <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span> --}}
+            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>{{ date('l') }}</span>
             </div>
         </div>
     </div>

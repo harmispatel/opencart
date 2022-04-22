@@ -405,6 +405,23 @@
           <div class="container text-center">
             <h3 class="title">Visit us</h3>
             <h3 class="sub-title">Opening Hours</h3><img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/opening-hours.svg') }}"/>
-            <p>{{ $openclose['days1'] }} to {{ $openclose['days2'] }} {{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}  |  Sunday 08:00 – 23:00</p>
+            @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+            @endphp
+            @foreach ($openday as $key => $item)
+                @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                @endphp
+                @if ($firstday == $lastday)
+                <p>{{ $firstday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
+                @else
+                <p>{{ $firstday }} to {{ $lastday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
+                @endif
+            @endforeach
+            {{-- <p>{{ $openclose['days1'] }} to {{ $openclose['days2'] }} {{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}  |  Sunday 08:00 – 23:00</p> --}}
           </div>
         </section>

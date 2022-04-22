@@ -356,7 +356,11 @@
             @endphp
                 <div class="__time">
                     <div class="__time-item">
-                        <strong>{{ $firstday }} - {{ $lastday }}</strong>
+                        @if ($firstday == $lastday)
+                            <strong>{{ $firstday }}</strong>
+                        @else
+                            <strong>{{ $firstday }} - {{ $lastday }}</strong>
+                        @endif
                         <span>{{ $fromtime[$key] }} - {{ $totime[$key] }}</span>
                     </div>
                     {{-- <div class="__time-item"><strong>Sunday</strong><span>12:00 - 23:00</span></div> --}}
