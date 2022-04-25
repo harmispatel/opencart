@@ -158,6 +158,7 @@ class CategoryController extends Controller
     // Function of Insert Category
     function categoryinsert(Request $request)
     {
+        $currentURL = public_url();
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -181,9 +182,10 @@ class CategoryController extends Controller
             $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
             $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
         }
-
-        $catdetail->image = isset($imgname) ? $imgname : '';
-        $catdetail->img_banner = isset($bannerimgname) ? $bannerimgname : '';
+        $categoryurl = $currentURL.'/public/admin/category/';
+        $bannerurl = $currentURL.'/public/admin/category/banner/';
+        $catdetail->image = $categoryurl.$imgname;
+        $catdetail->img_banner = $bannerurl.$bannerimgname;
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0){
             $availibleday = implode(",", $days);
@@ -418,6 +420,7 @@ class CategoryController extends Controller
             'category' => 'required',
         ]);
 
+        $currentURL = public_url();
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
 
@@ -434,7 +437,8 @@ class CategoryController extends Controller
             }
             $imgname = time().".". $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/category/'), $imgname);
-            $catdetail->image = $imgname;
+            $categoryurl = $currentURL.'/public/admin/category/';
+            $catdetail->image = $categoryurl.$imgname;
         }
 
         // Insert Banner Image
@@ -450,7 +454,8 @@ class CategoryController extends Controller
             }
             $bannerimgname = time().".". $request->file('banner')->getClientOriginalExtension();
             $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-            $catdetail->img_banner = $bannerimgname;
+            $bannerurl = $currentURL.'/public/admin/category/banner/';
+            $catdetail->img_banner = $bannerurl.$bannerimgname;
         }
 
         $days = isset($request->availibleday) ? $request->availibleday : 0;

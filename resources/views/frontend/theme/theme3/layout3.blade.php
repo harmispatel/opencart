@@ -4,6 +4,7 @@
 
 @php
     $openclose = openclosetime();
+    $review = storereview();
     $template_setting = session('template_settings');
     $store_setting = session('store_settings');
     $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
@@ -90,7 +91,15 @@
 <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container text-center">
         <div>
-            {!! $template_setting['polianna_store_description'] !!}
+            @if (!empty($template_setting['polianna_store_description']))
+                {!! $template_setting['polianna_store_description'] !!}
+            @else
+                <div class="default-title-v3">
+                    <h3 class="title color-green">Who are we?</h3>
+                </div>
+                <h4 class="__title">"Star Kebab & Pizza WANT TO BE LIMITED."</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquid consectetur deleniti dolorum est facilis labore maiores molestias odio officiis quam qui quisquam repellendus sapiente sequi suscipit tempora, ut. <br>Magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>At autem consequatur consequuntur dolor dolorum eligendi error excepturi facere illum, inventore laudantium, <br>libero minima mollitia nihil nobis quis quod tenetur vitae?</p>
+            @endif
         </div>
     </div>
 </section>
@@ -102,25 +111,36 @@
     </div>
     <div class="container">
         <div class="row list-item">
-            <div class="col-6 col-md-4 col-lg-2">
+            {{-- <div class="col-6 col-md-4 col-lg-2">
                 <div class="item">
                     <div class="img"><img class="img-fluid"
                             src="{{ asset('public/assets/theme3/demo-data/best-categories/0.svg') }}" /></div><strong
                         class="text-capitalize">burger</strong>
                 </div>
-            </div>
+            </div> --}}
+            @if(count($best_categories) > 0)
+            @foreach ($best_categories as $categorydet)
             <div class="col-6 col-md-4 col-lg-2">
                 <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/best-categories/1.svg') }}" /></div><strong
-                        class="text-capitalize">pizza</strong>
+                    <div class="img">
+                        @if (isset($categorydet->hasOneCategoryDetails['image']))
+                            {{-- <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/> --}}
+                            <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}" />
+                        @else
+                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                        @endif
+                    </div>
+                    <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
                 </div>
             </div>
-            <div class="col-6 col-md-4 col-lg-2">
+            @endforeach
+            @endif
+            {{-- <div class="col-6 col-md-4 col-lg-2">
                 <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/best-categories/2.svg') }}" /></div><strong
-                        class="text-capitalize">chicken</strong>
+                    <div class="img">
+                        <img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/best-categories/2.svg') }}" />
+                    </div>
+                        <strong class="text-capitalize">chicken</strong>
                 </div>
             </div>
             <div class="col-6 col-md-4 col-lg-2">
@@ -143,7 +163,7 @@
                             src="{{ asset('public/assets/theme3/demo-data/best-categories/5.svg') }}" /></div><strong
                         class="text-capitalize">drink</strong>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
@@ -212,30 +232,26 @@
         <div class="user-comments-v3-swiper position-relative">
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
+                    {{-- <div class="swiper-slide">
                         <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor
                                 incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud
                                 exercitation 0</p>
                         </div>
                         <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 1</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud
-                                exercitation 1</p>
+                    </div> --}}
+                    @foreach ($review['reviews'] as $item)
+                        <div class="swiper-slide">
+                            <div class="message-text">
+                                {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong> --}}
+                                <p>{{ $item->message }}</p>
+                            </div>
+                            <div class="message-info">
+                                <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
+                                {{-- <span>UX Designer</span> --}}
+                            </div>
                         </div>
-                        <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 2</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud
-                                exercitation 2</p>
-                        </div>
-                        <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <div class="swiper-pagination"></div>
@@ -298,17 +314,24 @@
     <form class="container" method="POST" action="{{ route('reservation') }}">
         {{ csrf_field() }}
         <div class="row align-items-center">
+        <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
+            <div class="default-title-v3">
+                <h3 class="title color-green text-capitalize">make a <br>reservation</h3>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+            </div>
+            <button class="btn btn-red text-capitalize">make reservation now</button>
+            </div>
             <div class="col-md-12 col-lg-7 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="row">
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
+                        <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
+                        <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
                         <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <select class="form-control" name="person">
+                            <select class="form-control" name="person" required>
                                 <option value="" selected="selected">Person</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -323,10 +346,10 @@
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="date" id="date" type="date" />
+                        <input class="form-control" name="date" id="date" type="date" required/>
                     </div>
                     <div class="col-12 col-sm-6">
-                        <input class="form-control" name="time" id="time" type="time" />
+                        <input class="form-control" name="time" id="time" type="time" required/>
                     </div>
                     <div class="col-12">
                         <button class="btn btn-red text-capitalize __mobile-show">make reservation now</button>

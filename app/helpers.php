@@ -15,7 +15,7 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
-
+use App\Models\Reviews;
 
 // Function of User Details
 function user_details()
@@ -763,5 +763,12 @@ function openclosetime()
     return $data;
 }
 
+function storereview()
+{
+    $front_store_id = session('front_store_id');
+    // $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest()->take(5)->toSql();
+    $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest('store_review_id')->take(3)->get();
 
+    return $data;
+}
 ?>

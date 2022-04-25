@@ -3,6 +3,7 @@
     rel="stylesheet" />
 
     @php
+        $review = storereview();
         $openclose = openclosetime();
         $template_setting = session('template_settings');
         $social_site = session('social_site');
@@ -196,10 +197,23 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-6">
-                <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}" /></div>
+                @if ($template_setting['polianna_banner_image'])
+                    <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}" /></div>
+                @else
+                    <img class="img-fluid" height="541" width="457" src="{{ asset('public/assets/demo-data/popular-foods/1.jpg')}}" /></div>
+                @endif
             <div class="col-sm-12 col-md-6">
                 <div style="height: 300px; overflow: hidden;" id="shopDescription">
-                    {!! $template_setting['polianna_store_description'] !!}
+                    @if (!empty($template_setting['polianna_store_description']))
+                        {!! $template_setting['polianna_store_description'] !!}
+                    @else
+                    <div class="default-title-v5">
+                        <strong class="sub-title color-orange text-uppercase">about us</strong>
+                      <h3 class="title">The Best restaurant <br> in <br> the city</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquid consectetur deleniti dolorum est facilis labore maiores molestias odio officiis quam qui quisquam repellendus sapiente sequi suscipit tempora, ut.</p>
+                      <p>Magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>At autem consequatur consequuntur dolor dolorum eligendi error excepturi facere illum, inventore laudantium, <br>libero minima mollitia nihil nobis quis quod tenetur vitae?</p>
+                    </div>
+                    @endif
                 </div>
                 <a class="btn mt-2 btn-orange text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
                 <a style="display: none;" class="btn mt-2 btn-orange text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
@@ -218,6 +232,48 @@
         <div class="best-categories-v5-swiper">
             <div class="swiper">
                 <div class="swiper-wrapper">
+                    {{-- <div class="swiper-slide">
+                        <div class="item">
+                            <div class="img"><img class="img-fluid"
+                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
+                            </div>
+                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
+                            </div>
+                        </div>
+                    </div> --}}
+                    @if(count($best_categories) > 0)
+                    @foreach ($best_categories as $categorydet)
+                    <div class="swiper-slide">
+                        <div class="item">
+                            <div class="img">
+                                @if (isset($categorydet->hasOneCategoryDetails['image']))
+                                    <img class="img-fluid" src="{{ $categorydet->hasOneCategoryDetails['image'] }}" />
+                                @else
+                                    <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                @endif
+                            </div>
+                                <div class="text-content">
+                                <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
+                                <p>{{ html_entity_decode($categorydet->hasOneCategoryDetails->hasOneCategory['description']) }}</p>
+                                <a href="">Read more</a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @endif
+                    {{-- <div class="swiper-slide">
+                        <div class="item">
+                            <div class="img">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
+                            </div>
+                            <div class="text-content">
+                                <strong class="text-capitalize">Soft mix Salad</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                                <a href="">Read more</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="swiper-slide">
                         <div class="item">
                             <div class="img"><img class="img-fluid"
@@ -307,37 +363,7 @@
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="best-categories-v5-swiper-control">
@@ -433,8 +459,7 @@
 </section>
 <section class="user-comments-v5 pt-75 pb-75">
     <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
-        <div class="default-title-v5"><strong class="sub-title text-uppercase color-orange">Recent Web
-                Reviews</strong>
+        <div class="default-title-v5"><strong class="sub-title text-uppercase color-orange">Recent Web Reviews</strong>
             <h3 class="title">What costumers says about best <br> food in restaurant</h3>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua.</p>
@@ -442,102 +467,22 @@
         <div class="user-comments-v5-swiper position-relative">
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><strong>Selçuk Aker 0</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            0</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 1</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            1</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 2</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            2</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 3</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            3</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 4</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            4</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 5</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            5</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 6</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            6</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 7</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            7</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 8</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            8</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 9</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            9</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 10</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            10</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 11</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            11</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 12</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            12</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 13</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            13</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 14</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            14</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 15</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            15</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 16</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            16</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 17</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            17</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 18</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            18</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 19</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            19</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 20</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            20</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 21</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            21</p><span>UX Designer</span>
-                    </div>
-                    <div class="swiper-slide"><strong>Selçuk Aker 22</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            22</p><span>UX Designer</span>
+                    @foreach ($review['reviews'] as $item)
+                        <div class="swiper-slide" style="min-height: 14rem;">
+                            <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
+                            <p>{{ $item->message }}</p>
+                            {{-- <span>UX Designer</span> --}}
+                        </div>
+                    @endforeach
+                    {{-- <div class="swiper-slide">
+                        <strong>Selçuk Aker 0</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut 0</p>
+                        <span>UX Designer</span>
                     </div>
                     <div class="swiper-slide"><strong>Selçuk Aker 23</strong>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                             23</p><span>UX Designer</span>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -630,22 +575,22 @@
         {{ csrf_field() }}
         <div class="row align-items-center">
             <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
-                <div class="default-title-v5"><strong
-                        class="sub-title color-orange text-capitalize">reservation</strong>
+                <div class="default-title-v5">
+                    <strong class="sub-title color-orange text-capitalize">reservation</strong>
                     <h3 class="title text-capitalize">What costumers says about best food in restaurant</h3>
                 </div>
             </div>
             <div class="col-md-12 col-lg-7 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="row">
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
+                        <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
+                        <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
                         <div class="icon"><i class="fas fa-chevron-down"></i>
-                            <select class="form-control" name="person">
+                            <select class="form-control" name="person" required>
                                 <option value="" selected="selected">Person</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
@@ -660,10 +605,10 @@
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="date" id="date" type="date" />
+                        <input class="form-control" name="date" id="date" type="date" required/>
                     </div>
                     <div class="col-12 col-sm-6 mb-4">
-                        <input class="form-control" name="time" id="time" type="time" />
+                        <input class="form-control" name="time" id="time" type="time" required/>
                     </div>
                     <div class="col-12 col-sm-6">
                         <button class="btn btn-orange text-capitalize">make reservation now</button>
