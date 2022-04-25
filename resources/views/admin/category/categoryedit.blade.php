@@ -342,7 +342,7 @@
                                         <input type="file" name="image" style="padding:3px;" id="image" class="form-control">
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->image))
-                                                <img src="{{ asset('public/admin/category/'.$data->image) }}" alt="Not Found" width="60">
+                                                <img src="{{ $data->image }}" alt="Not Found" width="60">
                                             @else
                                                 <h3 class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i></h3>
                                             @endif
@@ -354,7 +354,7 @@
                                         <input type="file" name="banner" style="padding:3px;" id="banner" class="form-control">
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->img_banner))
-                                                <img src="{{ asset('public/admin/category/banner/'.$data->img_banner) }}" alt="Not Found" width="60">
+                                                <img src="{{ $data->img_banner }}" alt="Not Found" width="60">
                                             @else
                                                 <h3 class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i></h3>
                                             @endif

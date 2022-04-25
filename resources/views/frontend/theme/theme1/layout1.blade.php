@@ -2,6 +2,8 @@
 
 @php
     $openclose = openclosetime();
+    $review = storereview();
+
     $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -138,14 +140,25 @@
         <div class="row">
             <div class="col-sm-12 col-md-6 wow animate__fadeInLeft" data-wow-duration="1s">
                 <div style="height: 300px; overflow: hidden;" id="shopDescription">
-                    {!! $template_setting['polianna_store_description'] !!}
+                    @if (!empty($template_setting['polianna_store_description']))
+                        {!! $template_setting['polianna_store_description'] !!}
+                    @else
+                    <h3 class="section-title color-green">Welcome to <br> Star Kebab &amp; Pizza</h3>
+                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>dolore eu fugiat nulla pariatur.</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br>commodo consequat.
+                        <br>Duis aute irure dolor in reprehenderit in voluptate velit esse dolore eu fugiat nulla pariatur.</p>
+                    @endif
                 </div>
                 <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
                 <a style="display: none;" class="btn mt-2 btn-green text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
             </div>
             <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="img-box">
-                    <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}"/>
+                    @if (!empty($template_setting['polianna_banner_image']))
+                        <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}"/>
+                    @else
+                        <img class="img-fluid" src="<img class="img-fluid" src="{{asset('/public/frontend/banners/wUnZa6jpg')}}"/>
+                    @endif
                 </div>
             </div>
         </div>
@@ -170,7 +183,7 @@
                         @foreach ($best_categories as $categorydet)
                             <a class="swiper-slide" href="#">
                                 <div class="img">
-                                    @if (isset($category->hasOneCategoryDetails['image']))
+                                    @if (isset($categorydet->hasOneCategoryDetails['image']))
                                         <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
                                     @else
                                         <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
@@ -312,28 +325,38 @@
         <section class="user-comments pt-110 pb-110">
           <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
             <h3 class="section-title color-red">Recent Web Reviews</h3>
-            <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+            {{-- <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p> --}}
             <div class="user-comments-swiper">
               <div class="swiper">
                 <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 0</p>
+                  {{-- <div class="swiper-slide">
+                    <div class="message-text">
+                        <strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 0</p>
                     </div>
-                    <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                  </div>
-                  <div class="swiper-slide">
-                    <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 1</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 1</p>
+                    <div class="message-info">
+                        <strong>Selçuk Aker</strong>
+                        <span>UX Designer</span>
                     </div>
-                    <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                  </div>
-                  <div class="swiper-slide">
+                </div> --}}
+                    @foreach ($review['reviews'] as $item)
+                        <div class="swiper-slide">
+                            <div class="message-text">
+                                {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 1</strong> --}}
+                                <p>{{ $item->message }}</p>
+                            </div>
+                            <div class="message-info">
+                                <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
+                                {{-- <span>UX Designer</span> --}}
+                            </div>
+                        </div>
+                    @endforeach
+                  {{-- <div class="swiper-slide">
                     <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 2</strong>
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 2</p>
                     </div>
                     <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                  </div>
+                  </div> --}}
                 </div>
               </div>
               <div class="swiper-pagination"></div>
@@ -347,14 +370,14 @@
             <form class="row" method="POST" action="{{ route('reservation') }}">
                 {{ csrf_field() }}
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" name="fullname" placeholder="Full Name" type="text"/>
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" name="phone" placeholder="Phone Number" type="text"/>
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <select class="form-control bg-dark" name="person">
+                  <select class="form-control bg-dark" name="person" required>
                     <option value="">Person</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -369,10 +392,10 @@
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control text-white" style="color-scheme: dark;" name="date" id="date" type="date"/>
+                <input class="form-control text-white" style="color-scheme: dark;" name="date" id="date" type="date" required/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" style="color-scheme: dark;" name="time" id="time" type="time"/>
+                <input class="form-control" style="color-scheme: dark;" name="time" id="time" type="time" required/>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
                 <button class="btn btn-green text-capitalize">make reservation now<i class="fas fa-arrow-right"></i></button>

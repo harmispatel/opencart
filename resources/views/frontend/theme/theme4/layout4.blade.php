@@ -1,5 +1,7 @@
 @php
 $openclose = openclosetime();
+$review = storereview();
+
 $temp_set = session('template_settings');
 $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -75,15 +77,6 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             </div>
             <div class="col-md-12 col-lg-5">
                 <div class="order-online-v4">
-                    {{-- <h1 class="__title">Welcome to <br>
-                        <span>STAR KEBAB & PIZZA</span>
-                    </h1>
-                    <strong class="title text-uppercase">order online</strong>
-                    <input class="form-control" placeholder="Eg. AA11AA" />
-                    <p>Please enter your postcode to view our<br> menu and place an order</p>
-                    <div class="btn__group"><a class="btn btn-purple text-uppercase">collection</a><a
-                            class="btn btn-green text-uppercase">delivery</a></div> --}}
-                    {{-- Online Order --}}
                     <h1 class="__title">Welcome to <br>
                         <span>STAR KEBAB & PIZZA</span>
                     </h1>
@@ -112,11 +105,23 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         <div class="row">
             <div class="col-12 col-md-12 col-lg-6">
                 <div>
-                    {!! $template_setting['polianna_store_description'] !!}
+                    @if (!empty( $template_setting['polianna_store_description']))
+                        {!! $template_setting['polianna_store_description'] !!}
+                    @else
+                    <div class="default-title-v4">
+                        <strong class="sub-title color-green">About Us</strong>
+                        <h3 class="title">Who are we?</h3>
+                    </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquid consectetur deleniti dolorum est facilis labore maiores molestias odio officiis quam qui quisquam repellendus sapiente sequi suscipit tempora, ut. <br>Magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    @endif
                 </div>
             </div>
             <div class="col-12 col-md-12 col-lg-6">
-                <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ $template_setting['polianna_banner_image'] }}" />
+                @if (!empty($template_setting['polianna_banner_image']))
+                    <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ $template_setting['polianna_banner_image'] }}" />
+                @else
+                    <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{asset('/public/frontend/banners/wUnZa6jpg')}}" />
+                @endif
             </div>
         </div>
     </div>
@@ -127,7 +132,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
     <div class="container">
         <div class="row list-item">
-            <div class="col-12 col-sm-6 col-lg-3">
+            {{-- <div class="col-12 col-sm-6 col-lg-3">
                 <div class="item">
                     <div class="img"><img class="img-fluid"
                             src="{{ asset('public/assets/theme4/demo-data/best-categories/0.jpg') }}" /></div>
@@ -135,20 +140,28 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         <p>Lorem ipsum dolor sit amet, consectetur</p>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+            @if(count($best_categories) > 0)
+            @foreach ($best_categories as $categorydet)
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/best-categories/1.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">Chochin Cake</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur</p>
+                    <div class="img">
+                        @if (isset($categorydet->hasOneCategoryDetails['image']))
+                            {{-- <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/> --}}
+                            <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}" />
+                        @else
+                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                        @endif
                     </div>
+                    <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
+                    <p>{{ html_entity_decode($categorydet->hasOneCategoryDetails->hasOneCategory['description']) }}</p>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-lg-3">
+            @endforeach
+            @endif
+            {{-- <div class="col-12 col-sm-6 col-lg-3">
                 <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/best-categories/2.jpg') }}" /></div>
+                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/best-categories/2.jpg') }}" /></div>
                     <div class="text-content"><strong class="text-capitalize">Eggs Chopies</strong>
                         <p>Lorem ipsum dolor sit amet, consectetur</p>
                     </div>
@@ -162,7 +175,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         <p>Lorem ipsum dolor sit amet, consectetur</p>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </section>
@@ -252,30 +265,28 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         <div class="user-comments-v4-swiper position-relative">
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
+                    {{-- <div class="swiper-slide">
                         <div class="message-text">
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor
                                 incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud
                                 exercitation 0</p>
                         </div>
-                        <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="message-text">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud
-                                exercitation 1</p>
+                        <div class="message-info">
+                            <strong>Selçuk Aker</strong>
+                            <span>UX Designer</span>
                         </div>
-                        <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="message-text">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud
-                                exercitation 2</p>
+                    </div> --}}
+                    @foreach ($review['reviews'] as $item)
+                        <div class="swiper-slide">
+                            <div class="message-text">
+                                <p>{{ $item->message }}</p>
+                            </div>
+                            <div class="message-info">
+                                <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
+                                {{-- <span>UX Designer</span> --}}
+                            </div>
                         </div>
-                        <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <div class="swiper-button-prev"></div>
@@ -334,20 +345,19 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
 <section class="reservation-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <form class="container" method="POST" action="{{ route('reservation') }}">
         {{ csrf_field() }}
-        <div class="default-title-v4 text-center"><strong class="sub-title color-purple text-capitalize">book
-                now</strong>
+        <div class="default-title-v4 text-center"><strong class="sub-title color-purple text-capitalize">book now</strong>
             <h3 class="title text-capitalize">make a reservation</h3>
         </div>
         <div class="row justify-content-center">
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <select class="form-control" name="person">
+                    <select class="form-control" name="person" required>
                         <option value="" selected="selected">Person</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -362,10 +372,10 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 </div>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" name="date" id="date" type="date" />
+                <input class="form-control" name="date" id="date" type="date" required/>
             </div>
             <div class="col-12 col-sm-6 col-md-4 mb-4">
-                <input class="form-control" name="time" id="time" type="time" />
+                <input class="form-control" name="time" id="time" type="time" required/>
             </div>
             <div class="col-12 col-sm-6 col-md-12 text-center">
                 <button class="btn btn-purple text-capitalize">make reservation now</button>

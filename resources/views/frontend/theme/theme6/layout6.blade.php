@@ -1,9 +1,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&amp;display=swap" rel="stylesheet" />
 @php
-    $openclose = openclosetime();
-    // echo '<pre>';
-    // print_r($openclose);
-    // exit();
+$openclose = openclosetime();
+$review = storereview();
 
 $temp_set = session('template_settings');
 $template_setting = isset($temp_set) ? $temp_set : '';
@@ -107,7 +105,16 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
 <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container">
         <div style="height: 300px; overflow: hidden;" id="shopDescription">
-            {!! $template_setting['polianna_store_description'] !!}
+            @if (!empty($template_setting['polianna_store_description']))
+                {!! $template_setting['polianna_store_description'] !!}
+            @else
+                <div class="default-title-v6">
+                    <strong class="sub-title color-orange text-uppercase">about us</strong>
+                    <h3 class="title text-uppercase">SEE WHO WE ARE AND WHAT WE OFFER!</h3>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aliquid consectetur deleniti dolorum est facilis labore maiores molestias odio officiis quam qui quisquam repellendus sapiente sequi suscipit tempora, ut.</p>
+                <p>Magnam. Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>At autem consequatur consequuntur dolor dolorum eligendi error excepturi facere illum, inventore laudantium, <br>libero minima mollitia nihil nobis quis quod tenetur vitae?</p>
+            @endif
         </div>
         <a class="btn mt-2 text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
         <a style="display: none;" class="btn mt-2 text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
@@ -121,14 +128,14 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         </div>
         <div class="row">
             <div class="col">
-                <input class="form-control" name="fullname" placeholder="Full Name" type="text" />
+                <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
             </div>
             <div class="col">
-                <input class="form-control" name="phone" placeholder="Phone Number" type="text" />
+                <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
             </div>
             <div class="col">
                 <div class="icon"><i class="fas fa-chevron-down"></i>
-                    <select class="form-control select2" name="person">
+                    <select class="form-control select2" name="person" required>
                         <option value="" selected="selected">Person</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -144,7 +151,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             </div>
             <div class="col">
                 <div class="icon">
-                    <input class="form-control icon" name="time" placeholder="Date &amp; Time"  type="datetime-local" />
+                    <input class="form-control icon" name="time" placeholder="Date &amp; Time"  type="datetime-local" required/>
                 </div>
             </div>
             <div class="col">
@@ -294,8 +301,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     </div>
 </section>
 <section class="popular-categories-v6 pt-90 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-    <div class="default-title-v6 text-center container"><strong class="sub-title text-uppercase">popular
-            categories</strong>
+    <div class="default-title-v6 text-center container"><strong class="sub-title text-uppercase">popular categories</strong>
         <h3 class="title text-capitalize">CHECK OUT OUR MENU AND SELECT SOMETHING FOR EVERYONE</h3>
     </div>
     <div class="container">
@@ -305,7 +311,37 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     href="" data-filter="soup">soup</a></div>
             <div class="swiper">
                 <div class="swiper-wrapper">
+                    {{-- <div class="swiper-slide" data-slide-filter="breakfast">
+                        <div class="item">
+                            <div class="img">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
+                            </div>
+                            <div class="text-content">
+                                <strong class="text-capitalize">breakfast</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                            </div>
+                        </div>
+                    </div> --}}
+                    @if(count($best_categories) > 0)
+                    @foreach ($best_categories as $categorydet)
                     <div class="swiper-slide" data-slide-filter="breakfast">
+                        <div class="item">
+                            <div class="img">
+                                @if (isset($categorydet->hasOneCategoryDetails['image']))
+                                    <img class="img-fluid" src="{{ $categorydet->hasOneCategoryDetails['image'] }}" />
+                                @else
+                                    <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                @endif
+                            </div>
+                                <div class="text-content">
+                                <strong class="text-capitalize">{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
+                                <p>{{ html_entity_decode($categorydet->hasOneCategoryDetails->hasOneCategory['description']) }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @endif
+                    {{-- <div class="swiper-slide" data-slide-filter="breakfast">
                         <div class="item">
                             <div class="img"><img class="img-fluid"
                                     src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
@@ -444,27 +480,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -479,36 +495,17 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
         <div class="user-comments-v6-swiper position-relative">
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
+                    {{-- <div class="swiper-slide">
                         <p>Aliquam auctor, elit id imperdiet sollicitudin, diam dui viverra lorem, in maximus eros
                             mauris in lacus. Phasellus malesuada posuere urna, ut imperdiet quam.Duis finibus mi ac
                             velit posuere venenatis.</p><strong>Selçuk Aker 0</strong>
-                    </div>
-                    <div class="swiper-slide">
-                        <p>Aliquam auctor, elit id imperdiet sollicitudin, diam dui viverra lorem, in maximus eros
-                            mauris in lacus. Phasellus malesuada posuere urna, ut imperdiet quam.Duis finibus mi ac
-                            velit posuere venenatis.</p><strong>Selçuk Aker 1</strong>
-                    </div>
-                    <div class="swiper-slide">
-                        <p>Aliquam auctor, elit id imperdiet sollicitudin, diam dui viverra lorem, in maximus eros
-                            mauris in lacus. Phasellus malesuada posuere urna, ut imperdiet quam.Duis finibus mi ac
-                            velit posuere venenatis.</p><strong>Selçuk Aker 2</strong>
-                    </div>
-                    <div class="swiper-slide">
-                        <p>Aliquam auctor, elit id imperdiet sollicitudin, diam dui viverra lorem, in maximus eros
-                            mauris in lacus. Phasellus malesuada posuere urna, ut imperdiet quam.Duis finibus mi ac
-                            velit posuere venenatis.</p><strong>Selçuk Aker 3</strong>
-                    </div>
-                    <div class="swiper-slide">
-                        <p>Aliquam auctor, elit id imperdiet sollicitudin, diam dui viverra lorem, in maximus eros
-                            mauris in lacus. Phasellus malesuada posuere urna, ut imperdiet quam.Duis finibus mi ac
-                            velit posuere venenatis.</p><strong>Selçuk Aker 4</strong>
-                    </div>
-                    <div class="swiper-slide">
-                        <p>Aliquam auctor, elit id imperdiet sollicitudin, diam dui viverra lorem, in maximus eros
-                            mauris in lacus. Phasellus malesuada posuere urna, ut imperdiet quam.Duis finibus mi ac
-                            velit posuere venenatis.</p><strong>Selçuk Aker 5</strong>
-                    </div>
+                    </div> --}}
+                    @foreach ($review['reviews'] as $item)
+                        <div class="swiper-slide">
+                            <p>{{ $item->message }}</p>
+                            <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
+                        </div>
+                    @endforeach
                 </div>
                 <div class="swiper-pagination"></div>
             </div>

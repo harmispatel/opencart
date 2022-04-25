@@ -86,7 +86,7 @@ $(function() {
         slidesPerView: 2,
         spaceBetween: 50,
         speed: 500,
-        loop: true,
+        loop: false,
         autoplay: {
             delay: 3000,
             disableOnInteraction: false,
