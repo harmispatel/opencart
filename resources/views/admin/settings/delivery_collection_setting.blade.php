@@ -233,7 +233,7 @@
         background: #fe0000;
         padding: 8px 30px 8px 12px;
         position: relative;
-        margin: 0 0 50px;
+        margin: 0 0 20px;
     }
 
     .distance-calculation p
@@ -354,7 +354,7 @@
                         {{-- Card Start --}}
                         <div class="card">
                             {{-- Form --}}
-                            <form method="POST" action="" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('manageDeliveryCollection') }}" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
 
                                 {{-- Card Header --}}
@@ -379,7 +379,7 @@
                                                         Enable Delivery/Collection
                                                     </td>
                                                     @php
-                                                        $enable_delivery = isset($enable_delivery->value) ? $enable_delivery->value : '';
+                                                        $enable_delivery = isset($enable_delivery->value) ? $enable_delivery->value : 'delivery';
                                                     @endphp
                                                     <td>
                                                         <p class="stylehieu">
@@ -398,7 +398,7 @@
                                         </div>
 
                                         @php
-                                            $delivery_option = isset($delivery_option->value) ? $delivery_option->value : '';
+                                            $delivery_option = isset($delivery_option->value) ? $delivery_option->value : 'post_codes';
                                         @endphp
 
                                         <div class="delivery-options" style="display: {{ ($enable_delivery == 'delivery' || $enable_delivery == 'both') ? 'block' : 'none'; }}">
@@ -437,9 +437,9 @@
                                                                 <td class="dis_opt">
                                                                     <p class="distance-opt-tab">
                                                                         @php
-                                                                            $is_distance_option = isset($is_distance_option->value) ? $is_distance_option->value : '';
+                                                                            $is_distance_option = isset($is_distance_option->value) ? $is_distance_option->value : '1';
                                                                         @endphp
-                                                                        <input id="deliveryby12" class="distance-opt vertical-top active" name="is_distance_option" type="radio" value ="1" {{ ($is_distance_option == 1) ? 'checked' : '' }}>
+                                                                        <input id="deliveryby12" class="distance-opt vertical-top active" name="is_distance_option" type="radio" value ="1" {{ ($is_distance_option == 1) ? 'checked' : '' }} onclick="$('.google-dis_api').hide(); $('.percentage-mileage').show();">
                                                                         <label for="deliveryby12">
                                                                             Local PostCode Distance
                                                                         </label>
@@ -447,7 +447,7 @@
                                                                 </td>
                                                                 <td class="dis_opt">
                                                                     <p class="distance-opt-tab active-style">
-                                                                        <input id="deliveryby32" class="distance-opt vertical-top" name="is_distance_option" type="radio" value ="2" {{ ($is_distance_option == 2) ? 'checked' : '' }}>
+                                                                        <input id="deliveryby32" class="distance-opt vertical-top" name="is_distance_option" type="radio" value ="2" {{ ($is_distance_option == 2) ? 'checked' : '' }} onclick="$('.google-dis_api').show(); $('.percentage-mileage').hide();">
                                                                         <label for="deliveryby32">
                                                                             Google API Distance
                                                                         </label>
@@ -490,7 +490,7 @@
                                                         <table style="width: auto;" cellpadding="0" cellspacing="0" border="0">
                                                             <tr>
                                                                 <td class="dis_opt input-td">
-                                                                    <input style="width: 400px;" type="text" name="google_distance_api_key"  value="{{ $google_distance_api_key }}" required />
+                                                                    <input style="width: 400px;" type="text" name="google_distance_api_key"  value="{{ $google_distance_api_key->value }}" required />
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -515,13 +515,13 @@
                                                             <tr>
                                                                 <td class="label-td">Group Name</td>
                                                                 <td class="input-td">
-                                                                    <input type="text" class="form-control" name="name_{{ $delivery_setting->id_delivery_settings }}" value="{{ $delivery_setting->name }}" required />
+                                                                    <input type="text" class="form-control" name="name_{{ $delivery_setting->id_delivery_settings }}" value="{{ $delivery_setting->name }}" />
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="label-td">Minimum Spend </td>
                                                                 <td class="input-td">
-                                                                    <input type="text" class="form-control" name="min_spend_{{ $delivery_setting->id_delivery_settings }}" value="{{ $delivery_setting->min_spend }}" required />
+                                                                    <input type="text" class="form-control" name="min_spend_{{ $delivery_setting->id_delivery_settings }}" value="{{ $delivery_setting->min_spend }}" />
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -532,7 +532,7 @@
                                                                             $flag = false;
                                                                         @endphp
 
-                                                                        @if (isset($delivery_setting->hasManyDeliveryFeeds))
+                                                                        @if (count($delivery_setting->hasManyDeliveryFeeds) > 0)
                                                                             @foreach ($delivery_setting->hasManyDeliveryFeeds as $feed)
 
                                                                                 @if ($max_feed < $feed->id_delivery_feeds)
@@ -543,7 +543,7 @@
 
                                                                                 <ul id="feed_{{ $delivery_setting->id_delivery_settings }}" class="id_delivery_feeds_{{ $feed->id_delivery_feeds }}">
                                                                                     <li>
-                                                                                        <input type="text" name="price_shipping_{{ $delivery_setting->id_delivery_settings }}[]" value="{{ $feed->price_shipping }}" style="width: 100%" required />
+                                                                                        <input type="text" name="price_shipping_{{ $delivery_setting->id_delivery_settings }}[]" value="{{ $feed->price_shipping }}" style="width: 100%" />
                                                                                     </li>
                                                                                     <li>
                                                                                         <span class="upto-span">
@@ -561,6 +561,18 @@
                                                                                     </li>
                                                                                 </ul>
                                                                             @endforeach
+                                                                        @else
+                                                                            <ul id="feed_{{$delivery_setting->id_delivery_settings }}">
+                                                                                <li>
+                                                                                    <input type="text" name="price_shipping_{{ $delivery_setting->id_delivery_settings }}[]" value="" style="width: 100%" />
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="upto-span">
+                                                                                        Up To :
+                                                                                    </span>
+                                                                                    <input type="text" name="price_upto_{{ $delivery_setting->id_delivery_settings }}[]" style="width: 75%" value="" />
+                                                                                </li>
+                                                                            </ul>
                                                                         @endif
                                                                     </div>
                                                                     <div class="addfeedplus"><b style="cursor: pointer" class="add_feeds" onclick="add_more({{ $delivery_setting->id_delivery_settings }});"><i class="fa fa-plus"></i> Add Fee</b>
@@ -598,7 +610,9 @@
                                                         <table>
                                                             <tr>
                                                                 <td class="label-td">Group Name </td>
-															    <td class="input-td"><input type="text" name="name_{{ $delivery_distance->id_delivery_settings }}" value="{{ $delivery_distance->name }}" required /></td>
+															    <td class="input-td">
+                                                                    <input type="text" name="name_{{ $delivery_distance->id_delivery_settings }}" value="{{ $delivery_distance->name }}"/>
+                                                                </td>
                                                             </tr>
                                                             <tr>
                                                                 <td class="label-td">Minimum Spend </td>
@@ -612,7 +626,7 @@
                                                                             $flag = false;
                                                                         @endphp
 
-                                                                        @if (isset($delivery_distance->hasManyDeliveryFeeds))
+                                                                        @if (count($delivery_distance->hasManyDeliveryFeeds) > 0)
                                                                             @foreach ($delivery_distance->hasManyDeliveryFeeds as $feed)
 
                                                                                 @if ($max_feed < $feed->id_delivery_feeds)
@@ -623,7 +637,7 @@
 
                                                                                 <ul id="feed_{{ $delivery_distance->id_delivery_settings }}" class="id_delivery_feeds_{{ $feed->id_delivery_feeds }}">
                                                                                     <li>
-                                                                                        <input type="text" name="price_shipping_{{ $delivery_distance->id_delivery_settings }}[]" value="{{ $feed->price_shipping }}" style="width: 100%" required />
+                                                                                        <input type="text" name="price_shipping_{{ $delivery_distance->id_delivery_settings }}[]" value="{{ $feed->price_shipping }}" style="width: 100%" />
                                                                                     </li>
                                                                                     <li>
                                                                                         <span class="upto-span">
@@ -641,6 +655,18 @@
                                                                                     </li>
                                                                                 </ul>
                                                                             @endforeach
+                                                                        @else
+                                                                            <ul id="feed_{{$delivery_distance->id_delivery_settings }}">
+                                                                                <li>
+                                                                                    <input type="text" name="price_shipping_{{ $delivery_distance->id_delivery_settings }}[]" value="" style="width: 100%" />
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="upto-span">
+                                                                                        Up To :
+                                                                                    </span>
+                                                                                    <input type="text" name="price_upto_{{ $delivery_distance->id_delivery_settings }}[]" style="width: 75%" value="" />
+                                                                                </li>
+                                                                            </ul>
                                                                         @endif
                                                                     </div>
                                                                     <div class="addfeedplus"><b style="cursor: pointer" class="add_feeds" onclick="add_more({{ $delivery_distance->id_delivery_settings }});"><i class="fa fa-plus"></i> Add Fee</b>
@@ -650,7 +676,7 @@
                                                             <tr>
                                                                 <td class="label-td">Distance (Miles) </td>
                                                                 <td class="input-td">
-                                                                    <input name="post_codes_{{ $delivery_distance->id_delivery_settings }}" value="{{ $delivery_distance->distance }}" required />
+                                                                    <input name="post_codes_{{ $delivery_distance->id_delivery_settings }}" value="{{ $delivery_distance->distance }}"/>
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -694,7 +720,7 @@
                                                                             $flag = false;
                                                                         @endphp
 
-                                                                        @if (isset($delivery_area->hasManyDeliveryFeeds))
+                                                                        @if (count($delivery_area->hasManyDeliveryFeeds) > 0)
                                                                             @foreach ($delivery_area->hasManyDeliveryFeeds as $feed)
 
                                                                                 @if ($max_feed < $feed->id_delivery_feeds)
@@ -705,7 +731,7 @@
 
                                                                                 <ul id="feed_{{ $delivery_area->id_delivery_settings }}" class="id_delivery_feeds_{{ $feed->id_delivery_feeds }}">
                                                                                     <li>
-                                                                                        <input type="text" name="price_shipping_{{ $delivery_area->id_delivery_settings }}[]" value="{{ $feed->price_shipping }}" style="width: 100%" required />
+                                                                                        <input type="text" name="price_shipping_{{ $delivery_area->id_delivery_settings }}[]" value="{{ $feed->price_shipping }}" style="width: 100%" />
                                                                                     </li>
                                                                                     <li>
                                                                                         <span class="upto-span">
@@ -723,6 +749,18 @@
                                                                                     </li>
                                                                                 </ul>
                                                                             @endforeach
+                                                                        @else
+                                                                            <ul id="feed_{{$delivery_area->id_delivery_settings }}">
+                                                                                <li>
+                                                                                    <input type="text" name="price_shipping_{{ $delivery_area->id_delivery_settings }}[]" value="" style="width: 100%" />
+                                                                                </li>
+                                                                                <li>
+                                                                                    <span class="upto-span">
+                                                                                        Up To :
+                                                                                    </span>
+                                                                                    <input type="text" name="price_upto_{{ $delivery_area->id_delivery_settings }}[]" style="width: 75%" value="" />
+                                                                                </li>
+                                                                            </ul>
                                                                         @endif
                                                                     </div>
                                                                     <div class="addfeedplus"><b style="cursor: pointer" class="add_feeds" onclick="add_more({{ $delivery_area->id_delivery_settings }});"><i class="fa fa-plus"></i> Add Fee</b>
@@ -732,7 +770,7 @@
                                                             <tr>
 																<td class="label-td">Areas </td>
 																<td class="input-td">
-																	<input class="inputtag" name="post_codes_{{ $delivery_area->id_delivery_settings }}" value="{{ $delivery_area->area }}" required />
+																	<input class="inputtag" name="post_codes_{{ $delivery_area->id_delivery_settings }}" value="{{ $delivery_area->area }}" />
                                                                 </td>
 															</tr>
                                                         </table>
@@ -754,8 +792,8 @@
                                     </div>
 
                                     <div class="food_form food_form_settt food-form-btn" style="display: {{ ($enable_delivery == 'collection') ? 'none' : 'block'; }}">
-                                        <b class="button-food" id="add_group" ref="{{ route('calculateDistance') }}" ><i class="fa fa-plus"></i> Add group</b>
-                                        <input type="hidden" id="action_delete" value="{{ route('calculateDistance') }}" />
+                                        <b class="button-food" id="add_group" ref="" style="cursor: pointer"><i class="fa fa-plus"></i> Add group</b>
+                                        <input type="hidden" id="action_delete" value="{{ route('deleteGroup') }}" />
                                         <input type="hidden" name="delivery_type" value="<?= $delivery_option; ?>" />
                                         <input class="button-food" type="submit" value=" Save" />
                                     </div>
@@ -788,6 +826,32 @@
 
 <script type="text/javascript">
 
+$(document).ready(function()
+{
+    $('#add_group').click(function()
+    {
+        $.ajax({
+            url: '{{ url("addGroup") }}',
+            type: 'POST',
+            data: {'delivery_type':$('input[name=delivery_type]').val()},
+            dataType: 'json',
+            beforeSend: function() {
+                $('.food_form').before('<span class="wait">&nbsp;<img src="public/admin/gif/gif3.gif" width="60" /></span>');
+            },
+            complete: function() {
+                $('.wait').remove();
+            },
+            success: function(response)
+            {
+                if(response.max_id)
+                {
+                    add_group(parseInt(response.max_id));
+                }
+            }
+        });
+    });
+});
+
     $('.inputtag').tagsInput({width:'600px', defaultText: 'add'});
 
 	var max_feed = {{ $max_feed }} + 1;
@@ -796,7 +860,7 @@
     // Add More Delivery Fee
     function add_more(id_delivery_settings)
     {
-        $('#feed_'+id_delivery_settings).after('<ul id="feed_'+id_delivery_settings+'" class="id_delivery_feeds_'+max_feed+'"><li><input type="text" value="" name="price_shipping_'+id_delivery_settings+'[]" required style="width:100%;"/></li><li><span class="upto-span">Up To:</span> <input type="text" value="" name="price_upto_'+id_delivery_settings+'[]" required style="width:75%;"></li><b onclick="remove_feed('+max_feed+')" class="remove_feed"> X</b></li></ul>');
+        $('#feed_'+id_delivery_settings).after('<ul id="feed_'+id_delivery_settings+'" class="id_delivery_feeds_'+max_feed+'"><li><input type="text" value="" name="price_shipping_'+id_delivery_settings+'[]" style="width:100%;"/></li><li><span class="upto-span">Up To:</span> <input type="text" value="" name="price_upto_'+id_delivery_settings+'[]" style="width:75%;"></li><b onclick="remove_feed('+max_feed+')" class="remove_feed"> X</b></li></ul>');
         max_feed++;
         return false;
     }
@@ -807,6 +871,155 @@
         $('.id_delivery_feeds_'+id_feed).remove();
         return false;
     }
+
+    function add_group(max_id){
+        if(class_even == 'odd'){
+            class_even = 'even';
+        } else{
+            class_even = 'odd';
+        }
+        if($('input[name="delivery_type"]').val()=='post_codes'){
+            var html = '';
+            html += '<div id="item_'+max_id+'" class="'+class_even+'">';
+            html += '<input type="hidden" name="delivery_type_'+max_id+'" value="'+$('input[name="delivery_type"]').val()+'"/>';
+            html += '<table>';
+            html += '<tbody><tr>';
+            html += '<td class="label-td">Group Name: </td>';
+            html += '<td class="input-td"><input type="text" value="" name="name_'+max_id+'"></td>';
+            html += '</tr>';
+            html += '<tr>';
+            html += '<td class="label-td">Minimum Spend: </td>';
+            html += '<td class="input-td"><input type="text" value="" name="min_spend_'+max_id+'"></td>';
+            html += '</tr>';
+            html += ' <tr>';
+            html += '<td class="label-td">Delivery Feeds: </td>';
+            html += '<td class="input-td">';
+            html += '<ul id="feed_'+max_id+'">';
+            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""></li><li> <span class="upto-span">Up To:</span> <input type="text" name="price_upto_'+max_id+'[]" value=""></li>'
+            html += '</ul>';
+            html += '<div class="addfeedplus"><b onclick="add_more('+max_id+');" class="add_feeds" href="">+Add Fee</b></div>';
+            html += '</td>';
+            html += '</tr>';
+            html += '<tr>';
+            html += '<td class="label-td">Post Codes: </td>';
+            html += '<td class="input-td"><input type="text" class="inputtag" name="post_codes_'+max_id+'" /></td>';
+            html += '</tr>';
+            html += '</tbody></table>';
+            html += '<div class="deleted-feed"><b class="delete_delivery" onclick="delete_delivery('+max_id+');">DELETE</b></div>';
+            html += '</div>';
+            max_feed++;
+        }else if($('input[name="delivery_type"]').val()=='distance'){
+            var html = '';
+            html += '<div id="item_'+max_id+'" class="'+class_even+'">';
+            html += '<input type="hidden" name="delivery_type_'+max_id+'" value="'+$('input[name="delivery_type"]').val()+'"/>';
+            html += '<table>';
+            html += '<tbody><tr>';
+            html += '<td class="label-td">Group Name: </td>';
+            html += '<td class="input-td"><input type="text" value="" name="name_'+max_id+'"></td>';
+            html += '</tr>';
+            html += '<tr>';
+            html += '<td class="label-td">Minimum Spend: </td>';
+            html += '<td class="input-td"><input type="text" value="" name="min_spend_'+max_id+'"></td>';
+            html += '</tr>';
+            html += ' <tr>';
+            html += '<td class="label-td">Delivery Feeds: </td>';
+            html += '<td class="input-td">';
+            html += '<ul id="feed_'+max_id+'">';
+            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""> </li><li><span class="upto-span">Up To:</span> <input type="text" name="price_upto_'+max_id+'[]" value=""></li>'
+            html += '</ul>';
+            html += '<div class="addfeedplus"><b onclick="add_more('+max_id+');" class="add_feeds" href="">+Add Fee</b></div>';
+            html += '</td>';
+            html += '</tr>';
+            html += '<tr>';
+            html += '<td class="label-td">Distance (Miles): </td>';
+            html += '<td class="input-td"><input type="text" name="post_codes_'+max_id+'" /></td>';
+            html += '</tr>';
+            html += '<tr>';
+
+            html += '</tbody></table>';
+            html += '<div class="deleted-feed"><b class="delete_delivery" onclick="delete_delivery('+max_id+');">DELETE</b></div>';
+            html += '</div>';
+            max_feed++;
+        }else{
+            var html = '';
+            html += '<div id="item_'+max_id+'" class="'+class_even+'">';
+            html += '<input type="hidden" name="delivery_type_'+max_id+'" value="'+$('input[name="delivery_type"]').val()+'"/>';
+            html += '<table>';
+            html += '<tbody><tr>';
+            html += '<td class="label-td">Group Name: </td>';
+            html += '<td class="input-td"><input type="text" value="" name="name_'+max_id+'"></td>';
+            html += '</tr>';
+            html += '<tr>';
+            html += '<td class="label-td">Minimum Spend: </td>';
+            html += '<td class="input-td"><input type="text" value="" name="min_spend_'+max_id+'"></td>';
+            html += '</tr>';
+            html += ' <tr>';
+            html += '<td class="label-td">Delivery Feeds: </td>';
+            html += '<td class="input-td">';
+            html += '<ul id="feed_'+max_id+'">';
+            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""> </li><li><span class="upto-span">Up To:</span><input type="text" name="price_upto_'+max_id+'[]" value=""></li>'
+            html += '</ul>';
+            html += '<div class="addfeedplus"><b onclick="add_more('+max_id+');" class="add_feeds" href="">+Add Fee</b></div>';
+            html += '</td>';
+            html += '</tr>';
+            html += '<tr>';
+            html += '<td class="label-td">Areas: </td>';
+            html += '<td class="input-td"><input type="text" class="inputtag" name="post_codes_'+max_id+'" /></td>';
+            html += '</tr>';
+            html += '</tbody></table>';
+            html += '<div class="deleted-feed"><b class="delete_delivery" onclick="delete_delivery('+max_id+');">DELETE</b></div>';
+            html += '</div>';
+            max_feed++;
+        }
+        $('.content_form').find('.'+$('input[name="delivery_type"]').val()).append(html);
+        $('.inputtag').tagsInput({width:'600px', defaultText: 'add'});
+    }
+
+    function delete_delivery(id_delivery_settings)
+    {
+        var r = confirm("Do you want delete delivery setting");
+        if (r == true) {
+            $.ajax({
+                url: $('#action_delete').val(),
+                type: 'post',
+                data: '&id_delivery_settings='+id_delivery_settings,
+                dataType: 'json',
+                success: function(response)
+                {
+                    location.reload();
+                }
+            });
+        }
+    }
+
+    $('.calculate-distance').click(function()
+    {
+        $.ajax({
+            url: $(this).attr('ref'),
+            type: 'post',
+            data: {'distance_postcode':$('input[name=distance_postcode]').val()},
+            dataType: 'json',
+            beforeSend: function() {
+                $('.error').remove();
+                $('.distance-calculation').after('<span class="wait">&nbsp;<img src="public/admin/gif/gif3.gif" width="60" /></span>');
+            },
+            complete: function() {
+                $('.wait').remove();
+            },
+            success: function(response)
+            {
+                if(response.json.error)
+                {
+                    $('.total-miles').html('');
+                    $('.distance-calculation').after('<span class="error text-danger">'+response.json.error+'</span>');
+                }
+                else
+                {
+                    $('.total-miles').html(response.json.success);
+                }
+            }
+        });
+    });
 
 
 </script>

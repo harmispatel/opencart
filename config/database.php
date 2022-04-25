@@ -83,6 +83,25 @@ return [
 
         ],
 
+        'mysql3' => [
+
+            'driver' => env('DB_CONNECTION_THIRD'),
+            'host' => env('DB_HOST_THIRD', '127.0.0.1'),
+            'port' => env('DB_PORT_THIRD', '3306'),
+            'database' => env('DB_DATABASE_THIRD', 'forge'),
+            'username' => env('DB_USERNAME_THIRD', 'forge'),
+            'password' => env('DB_PASSWORD_THIRD', ''),
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            // 'strict' => true,
+            'strict' => false,
+            'engine' => null,
+
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

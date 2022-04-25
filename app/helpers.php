@@ -33,6 +33,56 @@ function gettotalip($ip)
 }
 
 
+/* Google Distance matrix calculation Api */
+function calculationDistanceMatrix($lat1,$long1,$lat2,$long2,$api_key)
+{
+
+    // Create a new CURL instance<br>
+    $url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=".$lat1.",".$long1."&destinations=".$lat2.",".$long2."&mode=driving&alternatives=true&sensor=false&key=".$api_key;
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    $res = json_decode($response, true);
+
+    return $res;
+}
+
+
+function distance($lat1, $lon1, $lat2, $lon2, $unit)
+{
+    if (($lat1 == $lat2) && ($lon1 == $lon2))
+    {
+      return 0;
+    }
+    else
+    {
+
+        $theta = $lon1 - $lon2;
+        $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $miles = $dist * 60 * 1.1515;
+        $unit = strtoupper($unit);
+
+        if ($unit == "K")
+        {
+            return ($miles * 1.609344);
+        }
+        else if ($unit == "N") {
+            return ($miles * 0.8684);
+        }
+        else
+        {
+            return $miles;
+        }
+    }
+}
+
+
 //
 function themeActive()
 {
