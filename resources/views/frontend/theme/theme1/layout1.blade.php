@@ -126,7 +126,7 @@
             <input class="form-control" placeholder="Eg. AA11AA"/>
             <p>Please enter your postcode to view our<br> menu and place an order</p>
             <div class="btn__group">
-                <a class="btn btn-green text-uppercase">collection</a>
+                <a class="btn btn-green text-uppercase" href="{{ route('menu') }}">collection</a>
                 <a class="btn btn-red text-uppercase">delivery</a>
             </div>
         </div>
@@ -190,9 +190,37 @@
                                     @endif
                                 </div>
                                 <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
-
                             </a>
                         @endforeach
+                    @else
+                        <a class="swiper-slide" href="#">
+                            <div class="img">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/>
+                            </div>
+                            <strong>Breakfast Chef 0</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur 0</p>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="img">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/>
+                            </div>
+                            <strong>Breakfast Chef 1</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur 1</p>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="img">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/>
+                            </div>
+                            <strong>Breakfast Chef 2</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur 2</p>
+                        </a>
+                        <a class="swiper-slide" href="#">
+                            <div class="img">
+                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/>
+                            </div>
+                            <strong>Breakfast Chef 3</strong>
+                            <p>Lorem ipsum dolor sit amet, consectetur 3</p>
+                        </a>
                     @endif
 
 

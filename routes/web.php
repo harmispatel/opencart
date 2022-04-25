@@ -368,6 +368,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
     Route::post('updatesociallinks', [SettingsController::class, 'updatesociallinks'])->name('updatesociallinks');
     Route::post('calculateDistance', [SettingsController::class, 'calculateDistance'])->name('calculateDistance');
+    Route::post('addGroup', [SettingsController::class, 'addGroup'])->name('addGroup');
+    Route::post('deleteGroup', [SettingsController::class, 'deleteGroup'])->name('deleteGroup');
+    Route::post('manageDeliveryCollection', [SettingsController::class, 'manageDeliveryCollection'])->name('manageDeliveryCollection');
 
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');

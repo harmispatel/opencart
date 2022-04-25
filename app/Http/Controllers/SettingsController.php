@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\Currency;
 use App\Models\DeliverySettings;
 use App\Models\Language;
+use App\Models\Postcodes;
 use App\Models\Region;
 use App\Models\Settings;
 use App\Models\Store;
@@ -553,7 +554,136 @@ class SettingsController extends Controller
 
     public function calculateDistance(Request $request)
     {
+        $current_store_id = currentStoreId();
+        $keyword = $request->distance_postcode;
+        $data = [];
 
+        if(!empty($keyword) || $keyword != '')
+        {
+            $keyword = str_replace(' ', '', $keyword);
+            $keyword = substr_replace($keyword, ' ' . substr($keyword, -3), -3);
+			$keyword = strtoupper($keyword);
+
+            $postcode_setting = Settings::where('group','config')->where('store_id',$current_store_id)->where('key','map_post_code')->first();
+            $admin_postcode = isset($postcode_setting->value) ? $postcode_setting->value : '';
+
+            $milage_setting = Settings::where('group','deliverysetting')->where('store_id',$current_store_id)->where('key','road_mileage_percentage')->first();
+            $mileage_percentage = isset($milage_setting->value) ? $milage_setting->value : '';
+
+            $distance_setting = Settings::where('group','deliverysetting')->where('store_id',$current_store_id)->where('key','is_distance_option')->first();
+            $is_distance_option = isset($distance_setting->value) ? $distance_setting->value : '';
+
+            $res = Postcodes::where('Postcode',$keyword)->first();
+
+            if(isset($res))
+            {
+                $res2 = Postcodes::where('Postcode',$admin_postcode)->first();
+                $destinationLat = $res->Latitude;
+				$destinationLon = $res->Longitude;
+				$originLat      = $res2->Latitude;
+				$originLong     = $res2->Longitude;
+
+                if($is_distance_option == 2)
+                {
+                    $distance_key =  Settings::where('group','deliverysetting')->where('store_id',$current_store_id)->where('key','google_distance_api_key')->first();
+                    $google_distance_api_key = isset($distance_key->value) ? $distance_key->value : '';
+
+                    if(isset($google_distance_api_key) && !empty($google_distance_api_key))
+                    {
+						$result = calculationDistanceMatrix($originLat, $originLong, $destinationLat, $destinationLon,$google_distance_api_key);
+
+						if($result['status'] == 'OK')
+                        {
+							$result = $result['rows']['0']['elements']['0'];
+							$distanceNew = str_replace(',','.',$result['distance']['text']);
+							$json['success'] = number_format((float)$distanceNew,2,'.',',').' Miles';
+						}
+						else
+                        {
+							$json['error'] = $result['error_message'];
+						}
+					}
+					else
+                    {
+						$json['error'] = 'Invalid google distance api key.';
+					}
+				}
+                else
+                {
+                    if(!empty($mileage_percentage) || $mileage_percentage != '')
+                    {
+                        $distance 		= distance($originLat, $originLong, $destinationLat, $destinationLon, "M");
+                        $distanceNew 	= ($distance + ($mileage_percentage / 100) * $distance);
+                        $json['success'] = number_format((float)$distanceNew,2,'.',',').' Miles';
+                    }
+                    else
+                    {
+                        $json['error'] = 'Please Enter Mileage Percentage.';
+                    }
+				}
+
+            }
+            else
+            {
+                $json['error'] = 'Sorry! The postcode you entered doesn\'t exist. Please try another.';
+            }
+
+        }
+        else
+        {
+            $json['error'] = 'Please enter postcode';
+        }
+
+        return response()->json([
+            'json' => $json,
+        ]);
+
+    }
+
+
+    public function addGroup(Request $request)
+    {
+        $current_store_id = currentStoreId();
+        $delivery_type = $request->delivery_type;
+
+        $insert = new DeliverySettings;
+        $insert->id_store = $current_store_id;
+        $insert->delivery_type = $delivery_type;
+        $insert->name = "";
+        $insert->min_spend = "0.00";
+        $insert->post_codes = "";
+        $insert->distance = "";
+        $insert->area = "";
+        $insert->save();
+
+        $get_max_id = DeliverySettings::select('id_delivery_settings')->max('id_delivery_settings');
+
+        $max_id = isset($get_max_id) ? $get_max_id : 0;
+
+        return response()->json([
+            'max_id' => $max_id,
+        ]);
+
+    }
+
+    public function deleteGroup(Request $request)
+    {
+        $delivery_setting_id = $request->id_delivery_settings;
+
+        DeliverySettings::where('id_delivery_settings',$delivery_setting_id)->delete();
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+    public function manageDeliveryCollection(Request $request)
+    {
+        echo '<pre>';
+        print_r($request->all());
+        exit();
     }
 
 

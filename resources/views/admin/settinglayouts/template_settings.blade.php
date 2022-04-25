@@ -441,6 +441,14 @@
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Best Category Count</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="number" name="polianna_best_category_count" class="form-control" value="{{ $template_settings['polianna_best_category_count'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
                                                                         <th class="align-middle">
                                                                             <label>Store Description</label>
                                                                         </th>
