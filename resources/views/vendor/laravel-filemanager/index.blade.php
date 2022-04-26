@@ -91,39 +91,51 @@
             <div class="conatiner-fluid">
                 <div class="row" style="margin:0">
                     <div class="col-md-12">
+                        @php
+                            $galary_count = count($image);
+                            $image_count = isset($galary_count) ? $galary_count+1 : 1;
+                        @endphp
                         <form action="{{ route('storeGallary') }}" id="form" method="post" enctype="multipart-form/data" >
-                            <div class="row"  id="gallryappend">
-                                @foreach ($image as $images)
-                                <div class="demo{{ $loop->iteration }} col-md-3">
-                                    @csrf
-                                    <div class="image"
-                                        style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;">
-                                        <a onclick="$('.demo0').remove();" class="removeImg m-1"><i
-                                                class="fa fa-times" data-id="{{ $images->image_id }}"></i></a>
-                                        <div id="div1" style="width: 100px"></div>
-                                        <div class="imageOverlay">
-                                              @if (!empty($images->image) || $images->image != '')
-                                              <img class="w-100" src="{{asset('public/admin/product/'.$images->image)}}" alt="" 
-                                              id="thumb0"/>
-                                              @else
-                                              <img class="w-100"
-                                              src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt=""
-                                              id="thumb0" />
-                                              @endif
-                                            <span></span>
+                            <input type="hidden" name="img_count" id="img_count" value="{{ $image_count }}">
+                            @csrf
+                            <div class="row m-4"  id="gallryappend">
+                                @if (isset($image))
+                                    @foreach ($image as $images)
+                                        <div class="demo_{{ $loop->iteration }} col-md-3 mt-3">
+                                            <div class="image" style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;">
+
+                                                <a onclick="$('.demo_{{ $loop->iteration }}').remove();" class="removeImg m-1">
+                                                    <i class="fa fa-times" data-id="{{ $images->image_id }}"></i>
+                                                </a>
+
+                                                <div id="div{{ $loop->iteration }}" style="width: 100px;"></div>
+
+                                                <div class="imageOverlay">
+                                                    @if (!empty($images->image))
+                                                        <img class="w-100" src="{{ $images->image }}" id="thumb{{ $loop->iteration }}"/>
+                                                    @else
+                                                        <img class="w-100" src="{{ asset('public/admin/no_image.jpg') }}" id="thumb{{ $loop->iteration }}" />
+                                                    @endif
+                                                    <span></span>
+                                                </div>
+
+                                                <input type="hidden" name="image[{{ $loop->iteration }}][img]" value="{{ $images->image }}" id="image_{{ $loop->iteration }}"/>
+
+                                                <a class="browse_image img-de" onclick="showmodal({{ $loop->iteration }});">Browse</a>
+
+                                                <textarea name="image[{{ $loop->iteration }}][desc]" placeholder="Image Description" class="form-control">{{ $images->description }}</textarea>
+
+                                            </div>
                                         </div>
-                                        <input type="hidden" name="image" value="{{ $images->image_id }}" id="image" />
-                                        <a class="browse_image img-de" onclick="showmodal(0);">Browse</a>
-                                        <textarea name="description" placeholder="Image Description" class=" form-control" value="">{{ $images->description }}</textarea>
-                                    </div>
-                                </div>
-                                @endforeach
+                                    @endforeach
+                               @else
+                                    <h3 class="text-center">Images Not Avavilable</h3>
+                               @endif
                             </div>
                         </form>
 
-                        <div class="addImage" align="center">
-                            <button type="button" onclick="addGallary();" data-toggle="tooltip" title="Add Product"
-                                class="btn btn-primary">
+                        <div class="addImage mb-2 mt-2" align="center">
+                            <button type="button" onclick="addGallary();" class="btn btn-primary">
                                 <i class="fa fa-plus-circle"></i>ADD
                             </button>
                         </div>
@@ -415,13 +427,14 @@
 {{-- Use the line below instead of the above if you need to cache the script. --}}
 {{-- <script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script> --}}
 <script>
-    var modalToSelectedFilePath = "";
-     var gallary1 ='';
-    function getImageUrl(url) {
-        modalToSelectedFilePath = url;
 
+    var modalToSelectedFilePath = "";
+    var gallary1 ='';
+    function getImageUrl(url)
+    {
+        modalToSelectedFilePath = url;
     }
-    
+
     function closePopupAndSetPath(imageId) {
         var v=$('#test').attr('imageId');
         //  alert(v);
@@ -461,20 +474,48 @@
         maxFilesize: ({{ $helper->maxUploadSize() }} / 1000)
     }
 
-    var gallary = 1;
-    function addGallary() {
-        $('#gallryappend').append('<div class="demo'+gallary+' col-md-3"><div class="image" style="position:relative;display:inline-block;border: 2px solid black;overflow:hidden;"><a onclick="$(\'.demo'+gallary+'\').remove();" class="removeImg m-1"><i class="fa fa-times"></i></a><div id="div1" style="width: 100px"></div><div class="imageOverlay"><img class="w-100" src="http://localhost/myfood/image/cache/no_image-228x228.jpg" alt="" id="thumb'+gallary+'" /><span></span></div><input type="hidden" name="image['+gallary+'][img]" value="" id="image_'+gallary+'" /><a class="browse_image img-de" onclick="showmodal('+gallary+');">Browse</a><textarea name="image['+gallary+'][desc]" placeholder="Image Description" class=" form-control"></textarea></div></div>');
+
+    var gallary = $('#img_count').val();
+    function addGallary()
+    {
+        var html = '';
+        html += '<div class="demo_'+gallary+' col-md-3 mt-3">';
+        html += '<div class="image" style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;">';
+
+        html += '<a onclick="$(\'.demo_'+gallary+'\').remove();" class="removeImg m-1">';
+        html += '<i class="fa fa-times"></i>';
+        html += '</a>';
+
+        html += '<div id="div'+gallary+'" style="width: 100px;"></div>';
+
+        html += '<div class="imageOverlay">';
+        html += '<img class="w-100" src="{{ asset("public/admin/no_image.jpg") }}" id="thumb'+gallary+'" />';
+        html += '<span></span>';
+        html += '</div>';
+
+        html += '<input type="hidden" name="image['+gallary+'][img]" value="" id="image_'+gallary+'"/>';
+
+        html += '<a class="browse_image img-de" onclick="showmodal('+gallary+');">Browse</a>';
+        html += '<textarea name="image['+gallary+'][desc]" placeholder="Image Description" class="form-control"></textarea>';
+
+        html += '</div>';
+        html += '</div>';
+
         gallary ++;
+
+        $('#gallryappend').append(html);
     }
-   
+
+    $('#test').on('click',function()
+    {
+       var image_id = $(this).attr('imageid');
+
+       var image_url = $('#thumb'+image_id).attr('src');
+
+       $('#image_'+image_id).val('');
+       $('#image_'+image_id).val(image_url);
+
+    });
+
 </script>
-<script>
-   
-      
-        $('#removeImg').on('click',function(){
-              alert('hello');
-        });
-        // var companyid = $(this).data("id");
-        // alert(companyid);
-  
-</script>
+

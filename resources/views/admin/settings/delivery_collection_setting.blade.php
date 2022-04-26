@@ -770,7 +770,7 @@
                                                             <tr>
 																<td class="label-td">Areas </td>
 																<td class="input-td">
-																	<input class="inputtag" name="post_codes_{{ $delivery_area->id_delivery_settings }}" value="{{ $delivery_area->area }}" />
+																	<input class="inputtag" name="post_codes_{{ $delivery_area->id_delivery_settings }}" value="{{ $delivery_area->post_codes }}" />
                                                                 </td>
 															</tr>
                                                         </table>

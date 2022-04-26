@@ -30,7 +30,7 @@ $.fn.fab = function (options) {
     );
   });
 };
- 
+
 $(document).ready(function () {
 
   $('#fab').fab({
@@ -47,7 +47,7 @@ $(document).ready(function () {
       }
     ]
   });
-  
+
   actions.reverse().forEach(function (action) {
     $('#nav-buttons > ul').prepend(
       $('<li>').addClass('nav-item').append(
@@ -449,16 +449,16 @@ function loadItems(page) {
               }
             });
 
-          
-              
+
+
           if (item.thumb_url) {
             var image = $('<div onclick="getImageUrl(\''+item.thumb_url+'\')">').css('background-image', 'url("' + item.thumb_url + '?timestamp=' + item.time + '")');
           } else {
             var icon = $('<div>').addClass('ico');
             var image = $('<div onclick=getImageUrl("'+item.thumb_url+'")>').addClass('mime-icon ico-' + item.icon).append(icon);
           }
-          
-        
+
+
           template.find('.square').append(image);
           template.find('.item_name').text(item.name);
           template.find('time').text((new Date(item.time * 1000)).toLocaleString());

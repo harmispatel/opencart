@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\DeliverySettingFeeds;
 use App\Models\DeliverySettings;
 use App\Models\Language;
 use App\Models\Postcodes;
@@ -681,9 +682,136 @@ class SettingsController extends Controller
 
     public function manageDeliveryCollection(Request $request)
     {
-        echo '<pre>';
-        print_r($request->all());
-        exit();
+        $current_store_id = currentStoreId();
+        $store_postcode = '';
+
+        $data['enable_delivery'] = isset($request->enable_delivery) ? $request->enable_delivery : 'delivery';
+        $data['delivery_option'] = isset($request->delivery_option) ? $request->delivery_option : 'post_codes';
+        $data['is_distance_option'] = isset($request->is_distance_option) ? $request->is_distance_option : 1;
+        $data['road_mileage_percentage'] = isset($request->road_mileage_percentage) ? $request->road_mileage_percentage : '';
+        $data['google_distance_api_key'] = isset($request->google_distance_api_key) ? $request->google_distance_api_key : '';
+
+        foreach ($data as $key => $new)
+        {
+            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+
+            if (!empty($setting_id) || $setting_id != '')
+            {
+                $delivery_update = Settings::find($setting_id);
+                $delivery_update->value = $new;
+                $delivery_update->update();
+            }
+            else
+            {
+                $delivery_add = new Settings;
+                $delivery_add->store_id = $current_store_id;
+                $delivery_add->group = 'deliverysetting';
+                $delivery_add->key = $key;
+                $delivery_add->value = isset($new) ? $new : '';
+                $delivery_add->serialized = 0;
+                $delivery_add->save();
+            }
+
+        }
+
+        $results = DeliverySettings::where('id_store',$current_store_id)->get();
+
+        foreach($results as $result)
+        {
+            $name = 'name_'.$result->id_delivery_settings;
+
+            if(isset($request->$name))
+            {
+
+                $id = $result->id_delivery_settings;
+                $data = $request->all();
+
+                if($data['delivery_type_'.$id] == 'distance')
+                {
+                    $postcode = $data['post_codes_'.$id];
+
+                }
+                elseif($data['delivery_type_'.$id] == 'area')
+                {
+                    $postcode = ','.(string)trim($data['post_codes_'.$id], "\,\ ").',';
+                }
+                else
+                {
+                    $postcode = ','.(string)trim(str_replace(' ', '',$data['post_codes_'.$id]), "\,\ ").',';
+                }
+
+                $sql = DeliverySettings::find($id);
+                $sql->name = $data['name_'.$id];
+                $sql->min_spend = (float)$data['min_spend_'.$id];
+                $sql->delivery_type = $data['delivery_type_'.$id];
+                $sql->post_codes = $postcode;
+                $sql->update();
+
+                $postcode_key = 'post_codes_'.$id;
+                $qry = Settings::where('store_id',$current_store_id)->where('key',$postcode_key)->first();
+
+                $postcode_setting_id = isset($qry->setting_id) ? $qry->setting_id : '';
+
+                if(!empty($postcode_setting_id) || $postcode_setting_id != '')
+                {
+                    $update_postcode = Settings::find($postcode_setting_id);
+                    $update_postcode->value = trim($data['post_codes_'.$id], ',');
+                    $update_postcode->update();
+                }
+                else
+                {
+                    $postcode_add = new Settings;
+                    $postcode_add->store_id = $current_store_id;
+                    $postcode_add->group = 'config';
+                    $postcode_add->key = $postcode_key;
+                    $postcode_add->value = trim($data['post_codes_'.$id], ',');
+                    $postcode_add->serialized = 0;
+                    $postcode_add->save();
+                }
+
+                if(isset($data['price_shipping_'.$id]))
+                {
+                    DeliverySettingFeeds::where('id_delivery_settings',$id)->delete();
+
+                    foreach($data['price_shipping_'.$id] as $key => $value)
+                    {
+                        $delivery_feed = new DeliverySettingFeeds;
+                        $delivery_feed->id_delivery_settings = $id;
+                        $delivery_feed->price_upto = (float)$data['price_upto_'.$id][$key];
+                        $delivery_feed->price_shipping = (float)$data['price_shipping_'.$id][$key];
+                        $delivery_feed->save();
+                    }
+                }
+
+                $store_postcode .= ','.(string)trim(str_replace(' ', '',$request['post_codes_'.$result['id_delivery_settings']]), "\,\ ");
+
+                $qry1 = Settings::where('store_id',$current_store_id)->where('key','available_zones')->first();
+
+                $zone_setting_id = isset($qry1->setting_id) ? $qry1->setting_id : '';
+
+                if(!empty($zone_setting_id) || $zone_setting_id != '')
+                {
+                    $update_zone = Settings::find($zone_setting_id);
+                    $update_zone->value = trim($store_postcode, ',');
+                    $update_zone->update();
+                }
+                else
+                {
+                    $zone_add = new Settings;
+                    $zone_add->store_id = $current_store_id;
+                    $zone_add->group = 'config';
+                    $zone_add->key = 'available_zones';
+                    $zone_add->value = trim($store_postcode, ',');
+                    $zone_add->serialized = 0;
+                    $zone_add->save();
+                }
+
+            }
+        }
+
+        return redirect()->route('deliverycollectionsetting')->with('success', 'Settings Updated..');
+
     }
 
 
@@ -708,7 +836,8 @@ class SettingsController extends Controller
         $data['polianna_linkedin_id'] = $request->polianna_linkedin_id;
         $data['polianna_youtube_id'] = $request->polianna_youtube_id;
 
-        foreach ($data as $key => $new) {
+        foreach ($data as $key => $new)
+        {
             $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 

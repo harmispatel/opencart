@@ -54,6 +54,7 @@ class LayoutController extends Controller
             'polianna_store_fonts',
             'polianna_popular_food_count',
             'polianna_best_category_count',
+            'polianna_recent_review_count',
             'polianna_store_description',
             'polianna_banner_image',
 
@@ -250,6 +251,7 @@ class LayoutController extends Controller
         $data['polianna_store_fonts'] = isset($request->polianna_store_fonts) ? $request->polianna_store_fonts : '';
         $data['polianna_popular_food_count'] = isset($request->polianna_popular_food_count) ? $request->polianna_popular_food_count : '';
         $data['polianna_best_category_count'] = isset($request->polianna_best_category_count) ? $request->polianna_best_category_count : '';
+        $data['polianna_recent_review_count'] = isset($request->polianna_recent_review_count) ? $request->polianna_recent_review_count : '';
         $data['polianna_store_description'] = isset($request->polianna_store_description) ? $request->polianna_store_description : '';
         if($request->hasFile('polianna_banner_image'))
         {

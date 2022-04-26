@@ -434,7 +434,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th width="250" class="align-middle">
-                                                                            <label>Popular Food Count</label>
+                                                                            <label>Popular Food Limit</label>
                                                                         </th>
                                                                         <td>
                                                                             <input type="number" name="polianna_popular_food_count" class="form-control" value="{{ $template_settings['polianna_popular_food_count'] }}">
@@ -442,10 +442,18 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <th width="250" class="align-middle">
-                                                                            <label>Best Category Count</label>
+                                                                            <label>Best Category Limit</label>
                                                                         </th>
                                                                         <td>
                                                                             <input type="number" name="polianna_best_category_count" class="form-control" value="{{ $template_settings['polianna_best_category_count'] }}">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th width="250" class="align-middle">
+                                                                            <label>Recent Review Limit</label>
+                                                                        </th>
+                                                                        <td>
+                                                                            <input type="number" name="polianna_recent_review_count" class="form-control" value="{{ $template_settings['polianna_recent_review_count'] }}">
                                                                         </td>
                                                                     </tr>
                                                                     <tr>

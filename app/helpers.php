@@ -132,6 +132,8 @@ function storeThemeSettings($theme_id,$store_id)
 
         'polianna_store_fonts',
         'polianna_popular_food_count',
+        'polianna_recent_review_count',
+        'polianna_best_category_count',
         'polianna_store_description',
         'polianna_banner_image',
 
@@ -299,8 +301,9 @@ function getprice($sizeprice,$productsize){
 	return $setsizeprice;
 }
 
-function getimage($current_store){
-    $image=PhotoGallry::where('store_id',$current_store)->get();
+function getimage($current_store)
+{
+    $image=PhotoGallry::where('store_id',$current_store)->orderBy('image_id','ASC')->get();
     return $image;
 }
 
@@ -766,8 +769,12 @@ function openclosetime()
 function storereview()
 {
     $front_store_id = session('front_store_id');
-    // $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest()->take(5)->toSql();
-    $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest('store_review_id')->take(3)->get();
+    $current_theme_id = session('theme_id');
+
+    $review_limit_setting = Settings::select('value')->where('store_id',$front_store_id)->where('theme_id',$current_theme_id)->where('key','polianna_recent_review_count')->first();
+    $review_limit = isset($review_limit_setting['value']) ? $review_limit_setting['value'] : 1;
+
+    $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest('store_review_id')->take($review_limit)->get();
 
     return $data;
 }

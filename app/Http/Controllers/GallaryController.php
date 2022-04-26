@@ -14,7 +14,7 @@ class GallaryController extends Controller
     {
         return view('admin.gallary.gallarysettings');
     }
-   
+
     public function gallarysettingsstore(Request $request){
 
         $current_store_id = currentStoreId();
@@ -28,7 +28,7 @@ class GallaryController extends Controller
         $data['gallery_background_image'] = $request->gallery_background_image;
         foreach ($data as $key => $new) {
             $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
-           
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
             if (!empty($setting_id) || $setting_id != '') {
@@ -49,24 +49,44 @@ class GallaryController extends Controller
         }
 
         return redirect()->route('gallarysettings')->with('success', 'Settings Updated..');
-       
-       
-        
+
+
+
     }
 
     public function uploadgallary()
-    {  
+    {
         return view('vendor.laravel-filemanager.index');
     }
 
-    public function store(Request $request){
-       
-       
-        $data =$request->all();
-        return $data;
-          
+    public function store(Request $request)
+    {
+        $current_store_id = currentStoreId();
+
+       $images = isset($request->image) ? $request->image : '';
+
+       if($images != '' || !empty($images))
+       {
+           Gallary::where('store_id',$current_store_id)->delete();
+
+           foreach($images as $key => $image)
+           {
+                $img = isset($image['img']) ? $image['img'] : '';
+                $desc = isset($image['desc']) ? $image['desc'] : '';
+
+                $gallery = new Gallary;
+                $gallery->store_id = $current_store_id;
+                $gallery->image = $img;
+                $gallery->description = $desc;
+                $gallery->status = 1;
+                $gallery->save();
+           }
+       }
+
+       return redirect('uploadgallary');
+
     }
-    
+
 
 
 

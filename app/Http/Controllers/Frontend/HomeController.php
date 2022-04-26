@@ -14,14 +14,19 @@ use App\Models\Orders;
 use App\Models\Product_to_category;
 use App\Models\Settings;
 use DB;
+use Illuminate\Support\Facades\URL;
 
 class HomeController extends Controller
 {
 
     public function index()
     {
-        $front_store_id= session('front_store_id');
-        $current_theme_id = session('theme_id');
+        // $front_store_id= session('front_store_id');
+        // $current_theme_id = session('theme_id');
+        $currentURL = URL::to("/");
+        $current_theme = themeID($currentURL);
+        $current_theme_id = $current_theme['theme_id'];
+        $front_store_id =  $current_theme['store_id'];
 
         $food_limit_setting = Settings::select('value')->where('store_id',$front_store_id)->where('theme_id',$current_theme_id)->where('key','polianna_popular_food_count')->first();
         $food_limit =  isset($food_limit_setting['value']) ? $food_limit_setting['value'] : 1;
