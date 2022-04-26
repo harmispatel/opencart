@@ -417,9 +417,9 @@
 <script>
     var modalToSelectedFilePath = "";
      var gallary1 ='';
-    function getImageUrl(url) {
+    function getImageUrl(url) 
+    {
         modalToSelectedFilePath = url;
-
     }
     
     function closePopupAndSetPath(imageId) {
