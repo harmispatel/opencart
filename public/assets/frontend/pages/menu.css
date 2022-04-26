@@ -1,7 +1,7 @@
 .cate-part, .cart-part{
     position: sticky;
     top: 20px;
-    z-index: 99999;
+    z-index: 999;
 }
 
 
@@ -351,6 +351,38 @@ ul.box-category {
 .mob-view{
     display: none;
 }
+
+
+
+/* modal  */
+.csmodal{
+    top: 20% !important;
+}
+.csmodal .modal-header{padding-bottom: 0;border:none;}
+.csmodal .modal-body{text-align: center;}
+.csmodal .modal-title{color: #ff0000;font-size: 25px;}
+.csmodal .show_min{color: #151515;font-size: 18px;font-weight: 300;}
+.csmodal .controls input{
+    font-weight: 700;
+    margin-top: 30px;
+    text-align: center;
+    width: 340px;
+    margin-bottom: 20px;
+    color: #ADADAD;
+}
+.csmodal-btn, .csmodal-btn-close{
+    border-radius: 4px;
+    width: 100%;
+    max-width: 320px;
+    background: #00a600;
+    border: 1px solid #00a600;
+    font-family: 'Lato';
+    font-size: 20px;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
 
 @media only screen and (max-width:991px){
     .cate-list-part{

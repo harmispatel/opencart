@@ -39,7 +39,29 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
     <div class="bottom">
         <div class="working-time">
             <strong class="text-uppercase">Working Time:</strong>
-            <span>09:00 - 23:00</span>
+            {{-- <span>09:00 - 23:00</span> --}}
+            @php
+            $openday =$openclose['openday'];
+            $fromtime = $openclose['fromtime'];
+            $totime = $openclose['totime'];
+        @endphp
+        @foreach ($openday as $key => $item)
+            @foreach ($item as $value)
+                @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                    $today = date('l');
+                @endphp
+                @if ($today == $value)
+                    @if (!empty($value))
+                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                    @else
+                    {{-- <strong class="text-white">Today Close</strong> --}}
+                    @endif
+                @endif
+            @endforeach
+        @endforeach
         </div>
         <ul class="social-links">
             <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
@@ -78,12 +100,12 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             </div>
         </div>
         @else
-        <div class="swiper-slide" style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
+        <div class="swiper-slide" style="background-image: url('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg')">
             <div class="container">
                 <div class="slide-logo">
                     <img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" />
                 </div>
-                <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
+                <h2 class="__title">Our restaurant offers amazing dishes from around the world!</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aut dolorum eius
                     eligendi est ipsa iste, magnam nesciunt non nostrum odit, omnis quam reprehenderit vitae
                     voluptatem. Culpa mollitia placeat rem.</p>

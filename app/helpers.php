@@ -719,17 +719,18 @@ function openclosetime()
 
 
     // $closedate = unserialize($open_close['closing_dates']);
-    // $delivery = unserialize($open_close['delivery']);
-    // $collection = unserialize($open_close['collection']);
+    $delivery = unserialize($open_close['delivery']);
+    $collection = unserialize($open_close['collection']);
     // $timesetting = $open_close;
     $bussines = unserialize($open_close['bussines']);
     $days = $days;
     $times = $times;
+
     // echo '<pre>';
-    // print_r($bussines);
+    // print_r($collection);
     // exit();
 
-
+    // bussines Time
     $openday = array();
     $fromtime = array();
     $totime = array();
@@ -742,24 +743,77 @@ function openclosetime()
                 }
             }
             $openday[]=$day2;
-            // $totle = count($openday)-1;
-            // $data['days1'] = $openday[0];
-            // $data['days2'] = $openday[$totle];
-            // $formtime = [];
             foreach ($times as $key => $time) {
                 if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key) {
-                    // $data['fromtime'] = $time;
                     $fromtime[] = $time;
                 }
             }
             foreach ($times as $key => $time) {
                 if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {
-                    // $data['totime'] = $time;
                     $totime[] = $time;
                 }
             }
         }
     }
+
+    // Collection Time
+    $collectiondays = array();
+    $collectionfrom = array();
+    $collectionto = array();
+    if (isset($collection['day']) && count($collection['day'])) {
+        foreach ($collection['day'] as $keyday => $daytime) {
+            $collectionday = array();
+            foreach ($days as $key => $day) {
+                if (in_array($key, $daytime)) {
+                   $collectionday[] = $day;
+                }
+            }
+            $collectiondays[]=$collectionday;
+            foreach ($times as $key => $time) {
+                if (isset($collection['from'][$keyday]) && $collection['from'][$keyday] == $key) {
+                    $collectionfrom[] = $time;
+                }
+            }
+            foreach ($times as $key => $time) {
+                if (isset($collection['to'][$keyday]) && $collection['to'][$keyday] == $key) {
+                    $collectionto[] = $time;
+                }
+            }
+        }
+    }
+    // delivery Time
+    $deliverydays = array();
+    $deliveryfrom = array();
+    $deliveryto = array();
+    if (isset($delivery['day']) && count($delivery['day'])) {
+        foreach ($delivery['day'] as $keyday => $daytime) {
+            $deliveryday = array();
+            foreach ($days as $key => $day) {
+                if (in_array($key, $daytime)) {
+                   $deliveryday[] = $day;
+                }
+            }
+            $deliverydays[]=$deliveryday;
+            foreach ($times as $key => $time) {
+                if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
+                    $deliveryfrom[] = $time;
+                }
+            }
+            foreach ($times as $key => $time) {
+                if (isset($delivery['to'][$keyday]) && $collection['to'][$keyday] == $key) {
+                    $deliveryto[] = $time;
+                }
+            }
+        }
+    }
+    $data['deliverydays'] = $deliverydays;
+    $data['deliveryfrom'] = $deliveryfrom;
+    $data['deliveryto'] = $deliveryto;
+
+    $data['collectiondays'] = $collectiondays;
+    $data['collectionfrom'] = $collectionfrom;
+    $data['collectionto'] = $collectionto;
+
     $data['openday'] = $openday;
     $data['fromtime'] = $fromtime;
     $data['totime'] = $totime;

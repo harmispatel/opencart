@@ -1,4 +1,6 @@
 @php
+    $openclose = openclosetime();
+
     $template_setting = session('template_settings');
     $social_site = session('social_site');
     $store_setting = session('store_settings');
@@ -81,7 +83,26 @@
         </div>
         <div class="bottom">
             <div class="working-time">
-                <strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+                <strong class="text-uppercase">Working Time:</strong>
+                {{-- <span>09:00 - 23:00</span> --}}
+                @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+                @endphp
+                @foreach ($openday as $key => $item)
+                    @foreach ($item as $value)
+                    @php
+                    $t = count($item)-1;
+                    $firstday = $item[0];
+                    $lastday = $item[$t];
+                    $today = date('l');
+                    @endphp
+                        @if ($today == $value)
+                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @endif
+                        @endforeach
+                @endforeach
             </div>
             <ul class="social-links">
                 <li>
@@ -220,7 +241,26 @@
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
                           <div class="close-shop">
                             <h2>Sorry we are closed now!</h2>
-                            <span>We will be opening back at 16:00 Today</span>
+                            {{-- <span>We will be opening back at 16:00 Today</span> --}}
+                            @php
+                            $openday =$openclose['openday'];
+                            $fromtime = $openclose['fromtime'];
+                            $totime = $openclose['totime'];
+                            @endphp
+                            @foreach ($openday as $key => $item)
+                                @foreach ($item as $value)
+                                @php
+                                $t = count($item)-1;
+                                $firstday = $item[0];
+                                $lastday = $item[$t];
+                                $today = date('l');
+                                @endphp
+                                    @if ($today == $value)
+                                    {{-- <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong> --}}
+                                    <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
+                                    @endif
+                                    @endforeach
+                            @endforeach
                           </div>
                           <div class="mob-view-main">
                             <div class="mob-view" id="mob-view">
@@ -256,19 +296,67 @@
                                 <div class="order-type">
                                   <div class="order-type-innr">
                                     <div class="form-check">
-                                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                      <label class="form-check-label" for="flexRadioDefault1">
+                                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="collection">
+                                      <label class="form-check-label" for="collection">
                                         <h4>Delivery</h4>
-                                        <span>Starts at 16:50</span>
+                                        {{-- <span>Starts at 16:50</span> --}}
+                                        @php
+                                        // $openday =$openclose['openday'];
+                                        // $fromtime = $openclose['fromtime'];
+                                        // $totime = $openclose['totime'];
+
+                                        // Collection
+                                        $deliverydays =$openclose['deliverydays'];
+                                        $collectionfrom = $openclose['collectionfrom'];
+                                        $deliveryto = $openclose['deliveryto'];
+                                        @endphp
+                                        @foreach ($deliverydays as $key => $item)
+                                            @foreach ($item as $value)
+                                            @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            @endphp
+                                                @if ($today == $value)
+                                                {{-- <span>{{ $collectionfrom[$key] }} - {{ $deliveryto[$key] }}</span> --}}
+                                                <span>Starts at {{ $collectionfrom[$key] }}</span>
+                                                @endif
+                                                @endforeach
+                                        @endforeach
                                       </label>
                                     </div>
                                   </div>
                                   <div class="order-type-innr">
                                     <div class="form-check">
-                                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                      <label class="form-check-label" for="flexRadioDefault1">
+                                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="delivery">
+                                      <label class="form-check-label" for="delivery">
                                         <h4>Collection</h4>
-                                        <span>Starts at 16:50</span>
+                                        {{-- <span>Starts at 16:50</span> --}}
+                                        @php
+                                        // $openday =$openclose['openday'];
+                                        // $fromtime = $openclose['fromtime'];
+                                        // $totime = $openclose['totime'];
+
+                                        // delivery
+                                        $deliverydays =$openclose['deliverydays'];
+                                        $deliveryfrom = $openclose['deliveryfrom'];
+                                        $deliveryto = $openclose['deliveryto'];
+                                        @endphp
+                                        @foreach ($deliverydays as $key => $item)
+                                            @foreach ($item as $value)
+                                            @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            @endphp
+                                                @if ($today == $value)
+                                                {{-- <span>{{ $deliveryfrom[$key] }} - {{ $deliveryto[$key] }}</span> --}}
+                                                <span>Starts at {{ $deliveryfrom[$key] }}</span>
+                                                @endif
+                                                @endforeach
+                                        @endforeach
                                       </label>
                                     </div>
                                   </div>

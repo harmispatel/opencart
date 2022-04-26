@@ -30,7 +30,43 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
             </div>
             <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
             <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
-                @if ($store_open_close == 1)
+                @php
+                $openday =$openclose['openday'];
+                $fromtime = $openclose['fromtime'];
+                $totime = $openclose['totime'];
+                @endphp
+                @foreach ($openday as $key => $item)
+                @foreach ($item as $value)
+                    @php
+                        date_default_timezone_set("Asia/kolkata");
+                        $t = count($item)-1;
+                        $firstday = $item[0];
+                        $firsttime = date('G', strtotime($fromtime[$key]));
+                        $lastday = $item[$t];
+                        $lasttime = date('G', strtotime($totime[$key]));
+                        $today = date('G');
+                        $currentday = date('l');
+
+                    @endphp
+
+                    @if ($today >= $firsttime && $today <= $lasttime)
+                        @if ($currentday == $value)
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"
+                                    style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;" />
+                            </div>
+                        @endif
+                    @else
+                        @if ($currentday == $value)
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}"
+                                    style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;" />
+                            </div>
+                        @endif
+                    @endif
+                @endforeach
+            @endforeach
+                {{-- @if ($store_open_close == 1)
                     <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                         <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"
                             style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;" />
@@ -40,16 +76,10 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                         <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}"
                             style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;" />
                     </div>
-                @endif
+                @endif --}}
             </div>
             <div class="working-time">
                 <strong class="text-uppercase">Working Time:</strong>
-                {{-- <span>{{ date('l') }}</span> --}}
-                @php
-                $openday =$openclose['openday'];
-                $fromtime = $openclose['fromtime'];
-                $totime = $openclose['totime'];
-                @endphp
                 @foreach ($openday as $key => $item)
                     @foreach ($item as $value)
           @php
