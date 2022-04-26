@@ -88,9 +88,8 @@ class SettingsController extends Controller
 
         $open_close = [];
 
-        foreach($key as $row)
-        {
-            $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
 
             $open_close[$row] = isset($query->value) ? $query->value : '';
         }
@@ -102,7 +101,7 @@ class SettingsController extends Controller
         $bussines = unserialize($open_close['bussines']);
         $days = $this->days;
 
-        return view('admin.settings.open_close_time_settings', compact(['days','timesetting','times','bussines','closedate','delivery','collection']) );
+        return view('admin.settings.open_close_time_settings', compact(['days', 'timesetting', 'times', 'bussines', 'closedate', 'delivery', 'collection']));
     }
 
     public function mapandcategory()
@@ -160,14 +159,13 @@ class SettingsController extends Controller
 
         $map_category = [];
 
-        foreach($key as $row)
-        {
-            $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
 
             $map_category[$row] = isset($query->value) ? $query->value : '';
         }
 
-        return view('admin.settings.map_and_category',compact(['map_category','language','currency','countries']));
+        return view('admin.settings.map_and_category', compact(['map_category', 'language', 'currency', 'countries']));
     }
 
     public function geteditregionbycountry(Request $request)
@@ -176,30 +174,24 @@ class SettingsController extends Controller
 
         $edit_zone_id = isset($request->edit_zone_id) ? $request->edit_zone_id : '';
 
-       if(!empty($country_id))
-       {
-            $regions = Region::where('country_id',$country_id)->get();
+        if (!empty($country_id)) {
+            $regions = Region::where('country_id', $country_id)->get();
 
             $html = "";
 
-            if(count($regions) > 0)
-            {
-                foreach($regions as $region)
-                {
-                    $html .= '<option value="'.$region->zone_id.'"';
-                    if($edit_zone_id == $region->zone_id)
-                    {
+            if (count($regions) > 0) {
+                foreach ($regions as $region) {
+                    $html .= '<option value="' . $region->zone_id . '"';
+                    if ($edit_zone_id == $region->zone_id) {
                         $html .= 'selected';
-                    }
-                    else
-                    {
+                    } else {
                         $html .= '';
                     }
-                    $html .= '>'.$region->name.'</option>';
+                    $html .= '>' . $region->name . '</option>';
                 }
                 return response()->json($html);
             }
-       }
+        }
     }
 
 
@@ -207,21 +199,18 @@ class SettingsController extends Controller
     {
         $country_id = $request->country_id;
 
-       if(!empty($country_id))
-       {
-            $regions = Region::where('country_id',$country_id)->get();
+        if (!empty($country_id)) {
+            $regions = Region::where('country_id', $country_id)->get();
 
             $html = "";
 
-            if(count($regions) > 0)
-            {
-                foreach($regions as $region)
-                {
-                    $html .= '<option value="'.$region->zone_id.'">'.$region->name.'</option>';
+            if (count($regions) > 0) {
+                foreach ($regions as $region) {
+                    $html .= '<option value="' . $region->zone_id . '">' . $region->name . '</option>';
                 }
                 return response()->json($html);
             }
-       }
+        }
     }
 
     public function updatemapandcategory(Request $request)
@@ -248,43 +237,37 @@ class SettingsController extends Controller
         $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
         $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
         $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-        if($request->hasFile('config_logo'))
-        {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','config_logo')->first();
+        if ($request->hasFile('config_logo')) {
+            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_logo')->first();
 
             $old_name = isset($old->value) ? $old->value : '';
 
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
+            if (!empty($old_name) || $old_name != '') {
+                if (file_exists($old_name)) {
                     unlink($old_name);
                 }
             }
 
-            $logo_name = time().'.'.$request->file('config_logo')->getClientOriginalExtension();
-            $request->file('config_logo')->move(public_path('admin/store_images/logo'),$logo_name);
-            $data['config_logo'] = 'public/admin/store_images/logo/'.$logo_name;
+            $logo_name = time() . '.' . $request->file('config_logo')->getClientOriginalExtension();
+            $request->file('config_logo')->move(public_path('admin/store_images/logo'), $logo_name);
+            $data['config_logo'] = 'public/admin/store_images/logo/' . $logo_name;
         }
 
 
-        if($request->hasFile('config_icon'))
-        {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','config_icon')->first();
+        if ($request->hasFile('config_icon')) {
+            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_icon')->first();
 
             $old_name = isset($old->value) ? $old->value : '';
 
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
+            if (!empty($old_name) || $old_name != '') {
+                if (file_exists($old_name)) {
                     unlink($old_name);
                 }
             }
 
-            $icon_name = time().'.'.$request->file('config_icon')->getClientOriginalExtension();
-            $request->file('config_icon')->move(public_path('admin/store_images/icon'),$icon_name);
-            $data['config_icon'] = 'public/admin/store_images/icon/'.$logo_name;
+            $icon_name = time() . '.' . $request->file('config_icon')->getClientOriginalExtension();
+            $request->file('config_icon')->move(public_path('admin/store_images/icon'), $icon_name);
+            $data['config_icon'] = 'public/admin/store_images/icon/' . $logo_name;
         }
 
 
@@ -308,40 +291,33 @@ class SettingsController extends Controller
         $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
         $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
 
-        if($request->hasFile('suspend_logo'))
-        {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','suspend_logo')->first();
+        if ($request->hasFile('suspend_logo')) {
+            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'suspend_logo')->first();
 
             $old_name = isset($old->value) ? $old->value : '';
 
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
+            if (!empty($old_name) || $old_name != '') {
+                if (file_exists($old_name)) {
                     unlink($old_name);
                 }
             }
 
-            $suspend_logo_name = time().'.'.$request->file('suspend_logo')->getClientOriginalExtension();
-            $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'),$suspend_logo_name);
-            $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/'.$suspend_logo_name;
+            $suspend_logo_name = time() . '.' . $request->file('suspend_logo')->getClientOriginalExtension();
+            $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'), $suspend_logo_name);
+            $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/' . $suspend_logo_name;
         }
 
         $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
         $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
 
-       foreach($data as $key => $new)
-       {
+        foreach ($data as $key => $new) {
             $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
-            if (!empty($setting_id) || $setting_id != '')
-            {
+            if (!empty($setting_id) || $setting_id != '') {
                 $map_update = Settings::find($setting_id);
                 $map_update->value = $new;
                 $map_update->update();
-            }
-            else
-            {
+            } else {
                 $map_add = new Settings();
                 $map_add->store_id = $current_store_id;
                 $map_add->group = 'config';
@@ -359,15 +335,11 @@ class SettingsController extends Controller
         $store->ssl =  $data['config_ssl'];
         $store->update();
 
-        if($setting_page == 'map')
-        {
+        if ($setting_page == 'map') {
             return redirect()->route('mapandcategory')->with('success', 'Settings Updated..');
-        }
-        else
-        {
+        } else {
             return redirect()->route('shopsettings')->with('success', 'Settings Updated..');
         }
-
     }
 
 
@@ -426,15 +398,13 @@ class SettingsController extends Controller
 
         $map_category = [];
 
-        foreach($key as $row)
-        {
-            $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
 
             $map_category[$row] = isset($query->value) ? $query->value : '';
         }
 
-        return view('admin.settings.shop_settings',compact(['map_category','language','currency','countries']));
-
+        return view('admin.settings.shop_settings', compact(['map_category', 'language', 'currency', 'countries']));
     }
 
 
@@ -458,13 +428,12 @@ class SettingsController extends Controller
 
         $map_category = [];
 
-        foreach($key as $row)
-        {
-            $query = Settings::select('value')->where('store_id',$current_store_id)->where('key',$row)->first();
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
 
             $map_category[$row] = isset($query->value) ? $query->value : '';
         }
-        return view('admin.settings.app_settings',compact(['map_category']));
+        return view('admin.settings.app_settings', compact(['map_category']));
     }
 
     public function updateappsettings(Request $request)
@@ -477,23 +446,20 @@ class SettingsController extends Controller
         $data['app_available'] = isset($request->app_available) ? $request->app_available : '';
         $data['home_bg_color'] = isset($request->home_bg_color) ? $request->home_bg_color : '';
 
-        if($request->hasFile('menu_background_image'))
-        {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('key','menu_background_image')->first();
+        if ($request->hasFile('menu_background_image')) {
+            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'menu_background_image')->first();
 
             $old_name = isset($old->value) ? $old->value : '';
 
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
+            if (!empty($old_name) || $old_name != '') {
+                if (file_exists($old_name)) {
                     unlink($old_name);
                 }
             }
 
-            $menu_background_image = time().'.'.$request->file('menu_background_image')->getClientOriginalExtension();
-            $request->file('menu_background_image')->move(public_path('admin/app_backgrounds'),$menu_background_image);
-            $data['menu_background_image'] = 'public/admin/app_backgrounds/'.$menu_background_image;
+            $menu_background_image = time() . '.' . $request->file('menu_background_image')->getClientOriginalExtension();
+            $request->file('menu_background_image')->move(public_path('admin/app_backgrounds'), $menu_background_image);
+            $data['menu_background_image'] = 'public/admin/app_backgrounds/' . $menu_background_image;
         }
 
         $data['polianna_logo_bg_color'] = isset($request->polianna_logo_bg_color) ? $request->polianna_logo_bg_color : '';
@@ -502,19 +468,15 @@ class SettingsController extends Controller
         $data['polianna_notification_font_color'] = isset($request->polianna_notification_font_color) ? $request->polianna_notification_font_color : '';
         $data['title_image_url'] = isset($request->title_image_url) ? $request->title_image_url : '';
 
-        foreach($data as $key => $new)
-        {
+        foreach ($data as $key => $new) {
             $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
-            if (!empty($setting_id) || $setting_id != '')
-            {
+            if (!empty($setting_id) || $setting_id != '') {
                 $app_setting = Settings::find($setting_id);
                 $app_setting->value = $new;
                 $app_setting->update();
-            }
-            else
-            {
+            } else {
                 $app_setting = new Settings();
                 $app_setting->store_id = $current_store_id;
                 $app_setting->group = 'config';
@@ -532,23 +494,23 @@ class SettingsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        $data['enable_delivery'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','enable_delivery')->first();
+        $data['enable_delivery'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'enable_delivery')->first();
 
-        $data['delivery_option'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','delivery_option')->first();
+        $data['delivery_option'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'delivery_option')->first();
 
-        $data['is_distance_option'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','is_distance_option')->first();
+        $data['is_distance_option'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'is_distance_option')->first();
 
-        $data['road_mileage_percentage'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','road_mileage_percentage')->first();
+        $data['road_mileage_percentage'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'road_mileage_percentage')->first();
 
-        $data['google_distance_api_key'] = Settings::select('value')->where('store_id',$current_store_id)->where('key','google_distance_api_key')->first();
+        $data['google_distance_api_key'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'google_distance_api_key')->first();
 
-        $data['deliverysettings'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store',$current_store_id)->where('delivery_type','post_codes')->get();
+        $data['deliverysettings'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'post_codes')->get();
 
-        $data['deliverydistance'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store',$current_store_id)->where('delivery_type','distance')->get();
+        $data['deliverydistance'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'distance')->get();
 
-        $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store',$current_store_id)->where('delivery_type','area')->get();
+        $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'area')->get();
 
-        return view('admin.settings.delivery_collection_setting',$data);
+        return view('admin.settings.delivery_collection_setting', $data);
     }
 
 
@@ -558,86 +520,65 @@ class SettingsController extends Controller
         $keyword = $request->distance_postcode;
         $data = [];
 
-        if(!empty($keyword) || $keyword != '')
-        {
+        if (!empty($keyword) || $keyword != '') {
             $keyword = str_replace(' ', '', $keyword);
             $keyword = substr_replace($keyword, ' ' . substr($keyword, -3), -3);
-			$keyword = strtoupper($keyword);
+            $keyword = strtoupper($keyword);
 
-            $postcode_setting = Settings::where('group','config')->where('store_id',$current_store_id)->where('key','map_post_code')->first();
+            $postcode_setting = Settings::where('group', 'config')->where('store_id', $current_store_id)->where('key', 'map_post_code')->first();
             $admin_postcode = isset($postcode_setting->value) ? $postcode_setting->value : '';
 
-            $milage_setting = Settings::where('group','deliverysetting')->where('store_id',$current_store_id)->where('key','road_mileage_percentage')->first();
+            $milage_setting = Settings::where('group', 'deliverysetting')->where('store_id', $current_store_id)->where('key', 'road_mileage_percentage')->first();
             $mileage_percentage = isset($milage_setting->value) ? $milage_setting->value : '';
 
-            $distance_setting = Settings::where('group','deliverysetting')->where('store_id',$current_store_id)->where('key','is_distance_option')->first();
+            $distance_setting = Settings::where('group', 'deliverysetting')->where('store_id', $current_store_id)->where('key', 'is_distance_option')->first();
             $is_distance_option = isset($distance_setting->value) ? $distance_setting->value : '';
 
-            $res = Postcodes::where('Postcode',$keyword)->first();
+            $res = Postcodes::where('Postcode', $keyword)->first();
 
-            if(isset($res))
-            {
-                $res2 = Postcodes::where('Postcode',$admin_postcode)->first();
+            if (isset($res)) {
+                $res2 = Postcodes::where('Postcode', $admin_postcode)->first();
                 $destinationLat = $res->Latitude;
-				$destinationLon = $res->Longitude;
-				$originLat      = $res2->Latitude;
-				$originLong     = $res2->Longitude;
+                $destinationLon = $res->Longitude;
+                $originLat      = $res2->Latitude;
+                $originLong     = $res2->Longitude;
 
-                if($is_distance_option == 2)
-                {
-                    $distance_key =  Settings::where('group','deliverysetting')->where('store_id',$current_store_id)->where('key','google_distance_api_key')->first();
+                if ($is_distance_option == 2) {
+                    $distance_key =  Settings::where('group', 'deliverysetting')->where('store_id', $current_store_id)->where('key', 'google_distance_api_key')->first();
                     $google_distance_api_key = isset($distance_key->value) ? $distance_key->value : '';
 
-                    if(isset($google_distance_api_key) && !empty($google_distance_api_key))
-                    {
-						$result = calculationDistanceMatrix($originLat, $originLong, $destinationLat, $destinationLon,$google_distance_api_key);
+                    if (isset($google_distance_api_key) && !empty($google_distance_api_key)) {
+                        $result = calculationDistanceMatrix($originLat, $originLong, $destinationLat, $destinationLon, $google_distance_api_key);
 
-						if($result['status'] == 'OK')
-                        {
-							$result = $result['rows']['0']['elements']['0'];
-							$distanceNew = str_replace(',','.',$result['distance']['text']);
-							$json['success'] = number_format((float)$distanceNew,2,'.',',').' Miles';
-						}
-						else
-                        {
-							$json['error'] = $result['error_message'];
-						}
-					}
-					else
-                    {
-						$json['error'] = 'Invalid google distance api key.';
-					}
-				}
-                else
-                {
-                    if(!empty($mileage_percentage) || $mileage_percentage != '')
-                    {
-                        $distance 		= distance($originLat, $originLong, $destinationLat, $destinationLon, "M");
-                        $distanceNew 	= ($distance + ($mileage_percentage / 100) * $distance);
-                        $json['success'] = number_format((float)$distanceNew,2,'.',',').' Miles';
+                        if ($result['status'] == 'OK') {
+                            $result = $result['rows']['0']['elements']['0'];
+                            $distanceNew = str_replace(',', '.', $result['distance']['text']);
+                            $json['success'] = number_format((float)$distanceNew, 2, '.', ',') . ' Miles';
+                        } else {
+                            $json['error'] = $result['error_message'];
+                        }
+                    } else {
+                        $json['error'] = 'Invalid google distance api key.';
                     }
-                    else
-                    {
+                } else {
+                    if (!empty($mileage_percentage) || $mileage_percentage != '') {
+                        $distance         = distance($originLat, $originLong, $destinationLat, $destinationLon, "M");
+                        $distanceNew     = ($distance + ($mileage_percentage / 100) * $distance);
+                        $json['success'] = number_format((float)$distanceNew, 2, '.', ',') . ' Miles';
+                    } else {
                         $json['error'] = 'Please Enter Mileage Percentage.';
                     }
-				}
-
-            }
-            else
-            {
+                }
+            } else {
                 $json['error'] = 'Sorry! The postcode you entered doesn\'t exist. Please try another.';
             }
-
-        }
-        else
-        {
+        } else {
             $json['error'] = 'Please enter postcode';
         }
 
         return response()->json([
             'json' => $json,
         ]);
-
     }
 
 
@@ -663,19 +604,17 @@ class SettingsController extends Controller
         return response()->json([
             'max_id' => $max_id,
         ]);
-
     }
 
     public function deleteGroup(Request $request)
     {
         $delivery_setting_id = $request->id_delivery_settings;
 
-        DeliverySettings::where('id_delivery_settings',$delivery_setting_id)->delete();
+        DeliverySettings::where('id_delivery_settings', $delivery_setting_id)->delete();
 
         return response()->json([
             'success' => 1,
         ]);
-
     }
 
 
@@ -716,9 +655,7 @@ class SettingsController extends Controller
                 $social_update = Settings::find($setting_id);
                 $social_update->value = $new;
                 $social_update->update();
-            }
-            else
-            {
+            } else {
                 $social_add = new Settings;
                 $social_add->store_id = $current_store_id;
                 $social_add->group = 'polianna';
@@ -735,6 +672,9 @@ class SettingsController extends Controller
     // openclosetimeset
     public function openclosetimeset(Request $request)
     {
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
         $current_store_id = currentStoreId();
 
         $bissinessdays = serialize($request['bussines']);
@@ -753,22 +693,187 @@ class SettingsController extends Controller
         $data['collection_gaptime'] = isset($request->collection_gaptime) ? $request->collection_gaptime : '';
         $data['order_outof_bussiness_time'] = $request->order_outof_bussiness_time;
 
-        foreach($data as $key => $new)
-        {
+        foreach ($data as $key => $new) {
             $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
-            if (!empty($setting_id) || $setting_id != '')
-            {
+            if (!empty($setting_id) || $setting_id != '') {
                 $timesetting = Settings::find($setting_id);
                 $timesetting->value = $new;
                 $timesetting->update();
-            }
-            else
-            {
+            } else {
                 $timesetting = new Settings();
                 $timesetting->store_id = $current_store_id;
                 $timesetting->group = 'timesetting';
+                $timesetting->key = $key;
+                $timesetting->value = $new;
+                $timesetting->serialized = 1;
+                $timesetting->save();
+            }
+        }
+
+
+        /** time bussiness */
+        $opening_time_bussiness = $opening_time_delivery = $opening_time_collection = '';
+        $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
+
+        $timesetting = $request->all();
+        if (isset($timesetting['bussines']['day']) && count($timesetting['bussines']['day'])) {
+            foreach ($this->days as $keyday => $day) {
+                foreach ($timesetting['bussines']['day'] as $keybussines => $bussinesday) {
+                    if (in_array($keyday, $bussinesday)) {
+                        switch ($keyday) {
+                            case 0:
+                                $Everyday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 2:
+                                $Monday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 3:
+                                $Tuesday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 4:
+                                $Wednesday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 5:
+                                $Thursday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 6:
+                                $Friday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 7:
+                                $Saturday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                            case 8:
+                                $Sunday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
+                                break;
+                        }
+                    }
+                }
+            }
+            if (count($Monday) || count($Everyday)) $opening_time_bussiness .= ' Monday,' . implode('|', array_merge($Monday, $Everyday));
+            if (count($Tuesday) || count($Everyday)) $opening_time_bussiness .= ' Tuesday,' . implode('|', array_merge($Tuesday, $Everyday));
+            if (count($Wednesday) || count($Everyday)) $opening_time_bussiness .= ' Wednesday,' . implode('|', array_merge($Wednesday, $Everyday));
+            if (count($Thursday) || count($Everyday)) $opening_time_bussiness .= ' Thursday,' . implode('|', array_merge($Thursday, $Everyday));
+            if (count($Friday) || count($Everyday)) $opening_time_bussiness .= ' Friday,' . implode('|', array_merge($Friday, $Everyday));
+            if (count($Saturday) || count($Everyday)) $opening_time_bussiness .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
+            if (count($Sunday) || count($Everyday)) $opening_time_bussiness .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
+        }
+        /** time delivery */
+        $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
+        if (isset($timesetting['delivery_same_bussiness']) && $timesetting['delivery_same_bussiness'] == 1) {
+            $opening_time_delivery = $opening_time_bussiness;
+        } else if (isset($timesetting['delivery']['day']) && count($timesetting['delivery']['day'])) {
+            foreach ($this->days as $keyday => $day) {
+                foreach ($timesetting['delivery']['day'] as $keydelivery => $deliveryday) {
+                    if (in_array($keyday, $deliveryday)) {
+                        switch ($keyday) {
+                            case 0:
+                                $Everyday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 2:
+                                $Monday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 3:
+                                $Tuesday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 4:
+                                $Wednesday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 5:
+                                $Thursday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 6:
+                                $Friday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 7:
+                                $Saturday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                            case 8:
+                                $Sunday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
+                                break;
+                        }
+                    }
+                }
+            }
+            if (count($Monday) || count($Everyday)) $opening_time_delivery .= ' Monday,' . implode('|', array_merge($Monday, $Everyday));
+            if (count($Tuesday) || count($Everyday)) $opening_time_delivery .= ' Tuesday,' . implode('|', array_merge($Tuesday, $Everyday));
+            if (count($Wednesday) || count($Everyday)) $opening_time_delivery .= ' Wednesday,' . implode('|', array_merge($Wednesday, $Everyday));
+            if (count($Thursday) || count($Everyday)) $opening_time_delivery .= ' Thursday,' . implode('|', array_merge($Thursday, $Everyday));
+            if (count($Friday) || count($Everyday)) $opening_time_delivery .= ' Friday,' . implode('|', array_merge($Friday, $Everyday));
+            if (count($Saturday) || count($Everyday)) $opening_time_delivery .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
+            if (count($Sunday) || count($Everyday)) $opening_time_delivery .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
+        }
+        /** time collection */
+        $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
+        if (isset($timesetting['collection_same_bussiness']) && $timesetting['collection_same_bussiness'] == 1) {
+            $opening_time_collection = $opening_time_bussiness;
+        } else if (isset($timesetting['collection']['day']) && count($timesetting['collection']['day'])) {
+            foreach ($this->days as $keyday => $day) {
+                foreach ($timesetting['collection']['day'] as $keycollection => $collectionday) {
+                    if (in_array($keyday, $collectionday)) {
+                        switch ($keyday) {
+                            case 0:
+                                $Everyday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 2:
+                                $Monday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 3:
+                                $Tuesday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 4:
+                                $Wednesday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 5:
+                                $Thursday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 6:
+                                $Friday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 7:
+                                $Saturday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                            case 8:
+                                $Sunday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
+                                break;
+                        }
+                    }
+                }
+            }
+            if (count($Monday) || count($Everyday)) $opening_time_collection .= ' Monday,' . implode('|', array_merge($Monday, $Everyday));
+            if (count($Tuesday) || count($Everyday)) $opening_time_collection .= ' Tuesday,' . implode('|', array_merge($Tuesday, $Everyday));
+            if (count($Wednesday) || count($Everyday)) $opening_time_collection .= ' Wednesday,' . implode('|', array_merge($Wednesday, $Everyday));
+            if (count($Thursday) || count($Everyday)) $opening_time_collection .= ' Thursday,' . implode('|', array_merge($Thursday, $Everyday));
+            if (count($Friday) || count($Everyday)) $opening_time_collection .= ' Friday,' . implode('|', array_merge($Friday, $Everyday));
+            if (count($Saturday) || count($Everyday)) $opening_time_collection .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
+            if (count($Sunday) || count($Everyday)) $opening_time_collection .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
+        }
+
+
+        /***Closing Dates***/
+        if (isset($timesetting['closing_dates'])) {
+            $closing_dates = implode(',', array_filter($timesetting['closing_dates']));
+            $data['business_closing_dates'] = trim($closing_dates);
+        }
+
+
+        $data['opening_time_bussness'] = trim($opening_time_bussiness);
+        $data['opening_time_delivery'] = trim($opening_time_delivery);
+        $data['opening_time_collection'] = trim($opening_time_collection);
+
+        foreach ($data as $key => $new) {
+            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+
+            if (!empty($setting_id) || $setting_id != '') {
+                $timesetting = Settings::find($setting_id);
+                $timesetting->value = $new;
+                $timesetting->update();
+            } else {
+                $timesetting = new Settings();
+                $timesetting->store_id = $current_store_id;
+                $timesetting->group = 'config_time';
                 $timesetting->key = $key;
                 $timesetting->value = $new;
                 $timesetting->serialized = 1;
@@ -797,52 +902,48 @@ class SettingsController extends Controller
         $times1 = $this->times = $timearray;
 
         $html = '';
-        $html .= '<div class="col-sm-12" id="'.$type.'_'.$number.'">';
+        $html .= '<div class="col-sm-12" id="' . $type . '_' . $number . '">';
         $html .= '<div class="d-flex justify-content-between">';
-            $html .= '<div class="form-group col-sm-6">';
-            $html .= '<select class="selectday form-control" name="'.$type.'[day]['.$number.'][]" class="form-control" multiple="multiple">';
-            foreach($days as $key => $day)
-            {
-                $html .= '<option value="'.$key.'">'.$day.'</option>';
+        $html .= '<div class="form-group col-sm-6">';
+        $html .= '<select class="selectday form-control" name="' . $type . '[day][' . $number . '][]" class="form-control" multiple="multiple">';
+        foreach ($days as $key => $day) {
+            $html .= '<option value="' . $key . '">' . $day . '</option>';
+        }
+        $html .= '</select>';
+        $html .= '</div>';
+        $html .= '<div class="d-flex">';
+        $html .= '<div class="form-group">';
+        $html .= '<select class="selectday form-control" name="' . $type . '[from][' . $number . ']" class="form-control" style="width: 100% !importent;">';
+        foreach ($times1 as $key => $time) {
+            // $html .= '<option '.($key == "0:00") ? "selected" : "".' value="'.$key.'">'.$time.'</option>';
+            $html .= '<option >' . $time . '</option>';
+        }
+        $html .= '</select>';
+        $html .= '</div>';
+        $html .= '<div class="form-group px-3">';
+        $html .= '<select class="selectday form-control" name="' . $type . '[to][' . $number . ']" class="form-control" style="width: 100% !importent;">';
+        foreach ($times1 as $key => $time) {
+            $html .= '<option ';
+            if ($key == "23:50") {
+                $html .= "selected";
+            } else {
+                $html .= "";
             }
-            $html .= '</select>';
-            $html .= '</div>';
-            $html .= '<div class="d-flex">';
-            $html .= '<div class="form-group">';
-            $html .= '<select class="selectday form-control" name="'.$type.'[from]['.$number.']" class="form-control" style="width: 100% !importent;">';
-            foreach($times1 as $key => $time)
-            {
-                // $html .= '<option '.($key == "0:00") ? "selected" : "".' value="'.$key.'">'.$time.'</option>';
-                $html .= '<option >'.$time.'</option>';
-            }
-            $html .= '</select>';
-            $html .= '</div>';
-            $html .= '<div class="form-group px-3">';
-            $html .= '<select class="selectday form-control" name="'.$type.'[to]['.$number .']" class="form-control" style="width: 100% !importent;">';
-            foreach($times1 as $key => $time)
-            {
-                $html .= '<option ';
-                if ($key == "23:50") {
-                    $html .= "selected";
-                }
-                else{
-                    $html .= "";
-                }
-                $html .= '>'.$time.'</option>';
-                // $html .= '<option  '.($key == "23:50") ? "selected" : "".' value="'.$key.'">'.$time.'</option>';
-            }
-            $html .= '</select>';
-            $html .= '</div>';
-            $html .= '<div class="form-group">';
-            $html .= '<span class="btn btn-default" onclick="$(\'#'.$type.'_'.$number.' \').remove();">X</span>';
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '</div>';
-            $html .= '<script type="text/javascript">';
-            // $html .= '$("#'.$type.'_'.$number.' .selectday").chosen({width: "100%"});';
-            $html .= '$(".selectday").select2();';
-            $html .= '</script>';
+            $html .= '>' . $time . '</option>';
+            // $html .= '<option  '.($key == "23:50") ? "selected" : "".' value="'.$key.'">'.$time.'</option>';
+        }
+        $html .= '</select>';
+        $html .= '</div>';
+        $html .= '<div class="form-group">';
+        $html .= '<span class="btn btn-default" onclick="$(\'#' . $type . '_' . $number . ' \').remove();">X</span>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '<script type="text/javascript">';
+        // $html .= '$("#'.$type.'_'.$number.' .selectday").chosen({width: "100%"});';
+        $html .= '$(".selectday").select2();';
+        $html .= '</script>';
 
-     return response()->json(['html' => $html,]);
+        return response()->json(['html' => $html,]);
     }
 }
