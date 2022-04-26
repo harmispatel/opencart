@@ -396,6 +396,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
+Route::post('show', [MenuController::class, 'store'])->name('show');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 
 
