@@ -111,59 +111,53 @@
     </div>
     <div class="container">
         <div class="row list-item">
-            {{-- <div class="col-6 col-md-4 col-lg-2">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/best-categories/0.svg') }}" /></div><strong
-                        class="text-capitalize">burger</strong>
-                </div>
-            </div> --}}
             @if(count($best_categories) > 0)
-            @foreach ($best_categories as $categorydet)
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="item">
-                    <div class="img">
-                        @if (isset($categorydet->hasOneCategoryDetails['image']))
-                            {{-- <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/> --}}
-                            <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}" />
-                        @else
-                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
-                        @endif
+                @foreach ($best_categories as $categorydet)
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="item">
+                        <div class="img">
+                            @if (isset($categorydet->hasOneCategoryDetails['image']))
+                                {{-- <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/> --}}
+                                <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}" />
+                            @else
+                                <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                            @endif
+                        </div>
+                        <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
                     </div>
-                    <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
                 </div>
-            </div>
-            @endforeach
+                @endforeach
+            @else
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="item">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/best-categories/2.svg') }}" />
+                        </div>
+                            <strong class="text-capitalize">chicken</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme3/demo-data/best-categories/3.svg') }}" /></div><strong
+                            class="text-capitalize">cake</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme3/demo-data/best-categories/4.svg') }}" /></div><strong
+                            class="text-capitalize">noodle</strong>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 col-lg-2">
+                    <div class="item">
+                        <div class="img"><img class="img-fluid"
+                                src="{{ asset('public/assets/theme3/demo-data/best-categories/5.svg') }}" /></div><strong
+                            class="text-capitalize">drink</strong>
+                    </div>
+                </div>
             @endif
-            {{-- <div class="col-6 col-md-4 col-lg-2">
-                <div class="item">
-                    <div class="img">
-                        <img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/best-categories/2.svg') }}" />
-                    </div>
-                        <strong class="text-capitalize">chicken</strong>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/best-categories/3.svg') }}" /></div><strong
-                        class="text-capitalize">cake</strong>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/best-categories/4.svg') }}" /></div><strong
-                        class="text-capitalize">noodle</strong>
-                </div>
-            </div>
-            <div class="col-6 col-md-4 col-lg-2">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme3/demo-data/best-categories/5.svg') }}" /></div><strong
-                        class="text-capitalize">drink</strong>
-                </div>
-            </div> --}}
         </div>
     </div>
 </section>
@@ -275,7 +269,7 @@
                 @foreach ($photos as $photo)
                     <div class="col-12 col-md-6 col-lg-3">
                         <div class="item">
-                            @if (file_exists($photo->image))
+                            @if (!empty($photo->image))
                                 <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
                                 <img class="img-fluid" src="{{ $photo->image }}" />
                             @else

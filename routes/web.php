@@ -397,6 +397,8 @@ Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('show', [MenuController::class, 'store'])->name('show');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
+Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
+Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 
 
 

@@ -716,7 +716,7 @@ body.fixed-menu {
       font-size: 17px;
       @extend %font-weight-bold;
       text-align: center;
-      color: rgba(0,0,0,.20);
+      color: black;
       margin-bottom: 1rem;
 
       &::placeholder {
