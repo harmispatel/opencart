@@ -80,6 +80,8 @@
                     @endphp
                         @if ($today == $value)
                         <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @elseif ($firstday == "Every day")
+                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
                         @endforeach
                 @endforeach

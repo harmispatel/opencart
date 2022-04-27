@@ -46,7 +46,9 @@
                     $today = date('l');
                     @endphp
                         @if ($today == $value)
-                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @elseif ($firstday == "Every day")
+                        &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
                         @endforeach
                 @endforeach

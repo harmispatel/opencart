@@ -38,6 +38,8 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                     @endphp
                         @if ($today == $value)
                         <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @elseif ($firstday == "Every day")
+                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
                         @endforeach
                 @endforeach

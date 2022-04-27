@@ -397,6 +397,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 <div><span>12AM</span><span>23PM</span></div>
             </div>
         </div> --}}
+        <div class="__time">
 
             @php
                 $openday =$openclose['openday'];
@@ -409,7 +410,6 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     $firstday = $item[0];
                     $lastday = $item[$t];
                 @endphp
-                <div class="__time">
                     <div class="__time-item">
                         @if ($firstday == $lastday)
                         <strong>{{ $firstday }}</strong>
@@ -421,12 +421,8 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                             <span>{{ $totime[$key] }}</span>
                         </div>
                     </div>
-                </div>
-                <br>
-                @php
-                    break;
-                @endphp
                 @endforeach
+            </div>
 
         {{-- <div class="__time">
             <div class="__time-item"><strong>{{ $openclose['days1'] }} - {{ $openclose['days2'] }}</strong>
