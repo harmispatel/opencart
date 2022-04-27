@@ -684,7 +684,15 @@ class SettingsController extends Controller
                 $sql->name = $data['name_'.$id];
                 $sql->min_spend = (float)$data['min_spend_'.$id];
                 $sql->delivery_type = $data['delivery_type_'.$id];
-                $sql->post_codes = $postcode;
+
+                if($data['delivery_type_'.$id] == 'area')
+                {
+                    $sql->area = $postcode;
+                }
+                else
+                {
+                    $sql->post_codes = $postcode;
+                }
                 $sql->update();
 
                 $postcode_key = 'post_codes_'.$id;

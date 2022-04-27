@@ -479,7 +479,7 @@
                                                 <tr class="percentage-mileage" {{ $displyoptions }}>
                                                     <td class="label-td width100">Percentage value for road mileage<br/> (22% is Recommended)</td>
                                                     <td class="input-td widthhalf" style="padding-left: 73px; white-space: nowrap;">
-                                                        <input type="number" name="road_mileage_percentage" style="width:100%;" value="{{ $road_mileage_percentage }}" required />
+                                                        <input type="number" name="road_mileage_percentage" style="width:100%;" value="{{ $road_mileage_percentage }}" />
                                                         <span style="color:#000;">%</span>
                                                     </td>
                                                 </tr>
@@ -490,7 +490,7 @@
                                                         <table style="width: auto;" cellpadding="0" cellspacing="0" border="0">
                                                             <tr>
                                                                 <td class="dis_opt input-td">
-                                                                    <input style="width: 400px;" type="text" name="google_distance_api_key"  value="{{ $google_distance_api_key->value }}" required />
+                                                                    <input style="width: 400px;" type="text" name="google_distance_api_key"  value="{{ (isset($google_distance_api_key->value)) ? $google_distance_api_key->value : '' }}" />
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -770,7 +770,7 @@
                                                             <tr>
 																<td class="label-td">Areas </td>
 																<td class="input-td">
-																	<input class="inputtag" name="post_codes_{{ $delivery_area->id_delivery_settings }}" value="{{ $delivery_area->post_codes }}" />
+																	<input class="inputtag" name="post_codes_{{ $delivery_area->id_delivery_settings }}" value="{{ $delivery_area->area }}" />
                                                                 </td>
 															</tr>
                                                         </table>

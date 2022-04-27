@@ -192,7 +192,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                 @foreach ($photos as $photo)
                     <div class="col">
                         <div class="item">
-                            @if (file_exists($photo->image))
+                            @if (!empty($photo->image))
                                 <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
                                 <img class="img-fluid" src="{{ $photo->image }}" />
                             @else
