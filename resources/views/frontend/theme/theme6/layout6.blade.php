@@ -355,9 +355,6 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                         $catimage = isset($categorydet->has_one_product['image']) ? $categorydet->has_one_product['image'] : '';
                         $catname = isset($categorydet->has_one_product['name']) ? $categorydet->has_one_product['name'] : '132';
                         $catdesc = isset($categorydet->has_one_product['description']) ? $categorydet->has_one_product['description'] : '';
-                        echo $$categorydet->has_one_product['image'];
-                        echo $catname;
-                        echo $catdesc;
                     @endphp
                     <div class="swiper-slide" data-slide-filter="{{$categorydet->category_id}}">
                         <div class="item">
