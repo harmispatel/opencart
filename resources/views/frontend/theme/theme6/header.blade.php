@@ -79,11 +79,12 @@
                             $today = date('l');
                         @endphp
                         @if ($today == $value)
-                            @if (!empty($value))
-                                <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                            @else
-                            <strong class="text-white">Today Close</strong>
-                            @endif
+                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }} </strong>
+                        @elseif ($firstday == "Every day")
+                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            @elseif ($value == "")
+                            <strong>Close</strong>
+
                         @endif
                     @endforeach
                 @endforeach
