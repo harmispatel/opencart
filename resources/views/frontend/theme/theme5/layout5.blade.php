@@ -51,12 +51,34 @@
                     <h2 class="__title">"{{ $store_setting['config_name'] }}"</h2>
                     @if ($online_order_permission == 1)
                         <div class="order-online wow animate__fadeInUp" data-wow-duration="1s" style="text-align: center">
-                            <strong class="title text-uppercase " >order online</strong>
-                            <input class="form-control" placeholder="Eg. AA11AA" />
-                            <p>Please enter your postcode to view our<br> menu and place an order</p>
-                            <div class="btn__group">
-                                <a class="btn btn-red text-uppercase">collection</a>
-                                <a class="btn btn-yellow text-uppercase">delivery</a>
+                            <strong class="title text-uppercase">order online</strong>
+                            @if ($delivery_setting['enable_delivery'] != 'collection')
+                                <div class="srch-input">
+                                    @if($delivery_setting['delivery_option'] == 'area')
+                                        <select name="search_input2" class="form-control"  id="search_store">
+                                            <option value="">Select Area</option>
+                                            @foreach($areas as $area)
+                                                <option value="{{ $area }}">{{ $area }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input id="search_input1" placeholder="AB10 1BW" type="text"/>
+                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                    @endif
+                                </div>
+                                <div class="enter_postcode">
+                                    <p>Please enter your postcode to view our menu and place an order</p>
+                                </div>
+                            @endif
+                            <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
+                            <div class="button_content1" style ="">
+                                @if ($delivery_setting['enable_delivery'] != 'delivery')
+                                    <a class="btn btn-yellow text-uppercase collection_button1">collection</a>
+                                @endif
+
+                                @if ($delivery_setting['enable_delivery'] != 'collection')
+                                    <a class="btn btn-yellow text-uppercase delivery_button1">delivery</a>
+                                @endif
                             </div>
                         </div>
                     @endif

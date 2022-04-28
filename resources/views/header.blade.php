@@ -35,6 +35,8 @@
   <link rel="stylesheet" href="{{ asset('public/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- JQVMap -->
   <link rel="stylesheet" href="{{ asset('public/plugins/jqvmap/jqvmap.min.css') }}">
+  {{-- JQ UI --}}
+  <link rel="stylesheet" href="{{ asset('public/plugins/jquery-ui/jquery-ui.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('public/dist/css/adminlte.min.css') }}">
   <!-- Custom style -->

@@ -37,9 +37,7 @@
    @endif
 <!--Js Files-->
 
-<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet">
-<script src="YourJquery source path"></script>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+<script src="{{ asset('public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
 <script>
     function ShowMoreDescription()

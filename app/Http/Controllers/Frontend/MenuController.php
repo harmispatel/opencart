@@ -8,9 +8,7 @@ use App\Models\Category;
 use App\Models\CategorytoStore;
 use App\Models\Product;
 use App\Models\Product_to_category;
-
-
-
+use App\Models\Settings;
 
 class MenuController extends Controller
 {
@@ -24,11 +22,36 @@ class MenuController extends Controller
 
         $data['category'] =$category;
 
-        return view('frontend.pages.menu',['data'=>$data]);
+        $key = ([
+            'enable_delivery',
+            'delivery_option',
+        ]);
+
+        $delivery_setting = [];
+
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+
+            $delivery_setting[$row] = isset($query->value) ? $query->value : '';
+        }
+
+        return view('frontend.pages.menu',['data'=>$data,'delivery_setting'=>$delivery_setting]);
+    }
+
+    public function setDeliveyType(Request $request)
+    {
+        $d_type = $request->d_type;
+
+        session()->put('user_delivery_type',$d_type);
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
     }
 
     public function store(Request $request){
-       
+
         echo '<pre>';
         $description = $request->input('description');
         $productname = $request->input('productname');
