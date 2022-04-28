@@ -25,6 +25,10 @@ class Product_to_category extends Model
     {
         return $this->hasMany(OrderProduct::class,'product_id','product_id')->select('order_product_id','order_id','product_id');
     }
+    public function hasManyProduct()
+    {
+        return $this->hasMany(Product::class,'product_id','product_id');
+    }
 
     public function hasOneCategoryDetails()
     {

@@ -38,14 +38,11 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                 @foreach ($openday as $key => $item)
                 @foreach ($item as $value)
                     @php
-                        date_default_timezone_set("Asia/kolkata");
-                        $t = count($item)-1;
-                        $firstday = $item[0];
-                        $firsttime = date('G', strtotime($fromtime[$key]));
-                        $lastday = $item[$t];
-                        $lasttime = date('G', strtotime($totime[$key]));
-                        $today = date('G');
-                        $currentday = date('l');
+
+                    $firsttime = strtotime($fromtime[$key]);
+                    $lasttime = strtotime($totime[$key]);
+                    $today = time();
+                    $currentday = date('l');
 
                     @endphp
 
