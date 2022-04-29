@@ -133,7 +133,7 @@
                             @endforeach
                         </select>
                     @else
-                        <input id="search_input1" placeholder="AB10 1BW" type="text" id="search_store" />
+                        <input id="search_input1" placeholder="AB10 1BW" type="text"/>
                         <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                     @endif
                 </div>
@@ -142,7 +142,6 @@
                 </div>
             @endif
             <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
-
             <div class="button_content1" style ="">
                 @if ($delivery_setting['enable_delivery'] != 'delivery')
                     {{-- <input type="button" class="collection_button1 btn" value="Collection"> --}}

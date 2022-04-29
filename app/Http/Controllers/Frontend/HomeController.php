@@ -23,8 +23,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        // $front_store_id= session('front_store_id');
-        // $current_theme_id = session('theme_id');
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
