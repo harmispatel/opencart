@@ -23,6 +23,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FreeItemController;
 use App\Http\Controllers\Frontend\ContactUsController;
+use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\GallaryController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\LoyaltyController;
@@ -400,6 +401,11 @@ Route::post('show', [MenuController::class, 'store'])->name('show');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
+
+// login user
+Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
+Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
+
 
 
 
