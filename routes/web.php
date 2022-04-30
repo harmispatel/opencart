@@ -400,6 +400,3 @@ Route::post('show', [MenuController::class, 'store'])->name('show');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
-
-
-
