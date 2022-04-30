@@ -287,21 +287,20 @@ function getproductcount($demo){
 
 }
 
-function getproduct($front_store_id,$cat_id){
+function getproduct($front_store_id,$cat_id)
+{
+    $product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
+        $query->where('category_id', $cat_id);
+    })->get();
+    return $product;
 
-	$product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
-		$query->where('category_id', $cat_id);
-	})->get();
-	$size =ToppingSize::where('id_category',$cat_id)->get();
-
-	$result['product']=$product;
-	$result['size']=$size;
-	return $result;
 }
-function getprice($sizeprice,$productsize){
+function getsize($product_id)
+{
 
-	$setsizeprice=ToppingProductPriceSize::where('id_size',$sizeprice)->where('id_product',$productsize)->get();
-	return $setsizeprice;
+    $size =ToppingProductPriceSize::with(['hasOneToppingSize'])->where('id_product',$product_id)->get();
+    return $size;
+
 }
 
 function getimage($current_store)
@@ -844,7 +843,7 @@ function storereview()
 function addtoCart($request,$productid,$sizeid)
 {
     if(session()->has('cart1'))
-        { 
+        {
             $arr = session()->get('cart1');
         }
         else
@@ -854,7 +853,7 @@ function addtoCart($request,$productid,$sizeid)
 
         if ($sizeid != 0) {
             $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
-                $q->where('id_size', $sizeid);
+                $q->where('id_product_price_size', $sizeid);
             }])->where('product_id', $productid)->first();
             $data['price'] = $product->hasOneToppingProductPriceSize['price'];
             $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
@@ -870,13 +869,13 @@ function addtoCart($request,$productid,$sizeid)
             if(isset($arr['size'][$sizeid])){
                 $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
             }else{
-                $arr['size'][$sizeid] =$data; 
+                $arr['size'][$sizeid] =$data;
             }
         }else{
             if(isset($arr['withoutSize'][$productid])){
                 $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
             }else{
-                $arr['withoutSize'][$productid] =$data; 
+                $arr['withoutSize'][$productid] =$data;
             }
         }
         // $arr[] = $data;

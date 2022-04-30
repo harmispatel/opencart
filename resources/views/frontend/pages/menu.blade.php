@@ -9,6 +9,8 @@ $template_setting = session('template_settings');
 
 $user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
 
+$mycart = session()->get('cart1');
+
 @endphp
 
 <!doctype html>
@@ -48,7 +50,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
         } else {
             $theme_id = 1;
         }
-        
+
         $social = session('social_site');
         $social_site = isset($social) ? $social : '#';
     @endphp
@@ -191,7 +193,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                             @php
                                                 $cat_id = $value->category_id;
                                                 $front_store_id = session('front_store_id');
-                                                $result = getproduct($front_store_id, $cat_id);
+                                                $product = getproduct($front_store_id, $cat_id);
 
                                                 $catvalue = strtolower($value->name);
                                             @endphp
@@ -204,7 +206,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                         </button>
                                                     </h2>
 
-                                                    @foreach ($result['product'] as $values)
+                                                    @foreach ($product as $values)
                                                         <div id="collapse{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
@@ -227,35 +229,30 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                                         </div>
                                                                         <div class="col-md-5">
                                                                             <div class="options-bt-main">
-                                                                                @if (count($result['size']) > 0)
-                                                                                    @foreach ($result['size'] as $size)
+                                                                                @php
+                                                                                    $sizes = getsize($values->product_id);
+                                                                                @endphp
+                                                                                @if (count($sizes) > 0)
+                                                                                    @foreach ($sizes as $size)
                                                                                         @php
-                                                                                            $sizeprice = $size->id_size;
-                                                                                            print_r($size->id_size);
+                                                                                            $sizeprice = $size->id_product_price_size ;
                                                                                             $productsize = $values->hasOneProduct['product_id'];
-                                                                                            $setsizeprice = getprice($sizeprice, $productsize);
+                                                                                            $setsizeprice = $size->price;
                                                                                         @endphp
                                                                                         <div class="options-bt">
                                                                                             <div class="row">
                                                                                                 <div
                                                                                                     class="col-md-5">
-                                                                                                    <span>{{ $size->size }}</span>
+                                                                                                    <span>{{ $size->hasOneToppingSize['size'] }}</span>
                                                                                                 </div>
-                                                                                                <div
-                                                                                                    class="col-md-7">
-                                                                                                    @foreach ($setsizeprice as $setsizeprices)
-                                                                                                        <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});"
-                                                                                                            class="btn options-btn">
-
-                                                                                                            <span
-                                                                                                                class="sizeprice hide-carttext">£{{ $setsizeprices->price }}<i
-                                                                                                                    class="fa fa-shopping-basket"></i></span>
-                                                                                                            <span
-                                                                                                                class="show-carttext sizeprice"
-                                                                                                                style="display: none;">Added<i
-                                                                                                                    class="fa fa-check"></i></span>
+                                                                                                <div class="col-md-7">
+                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
+                                                                                                        <span class="sizeprice hide-carttext">
+                                                                                                            £ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added
+                                                                                                                <i class="fa fa-check"></i>
+                                                                                                            </span>
                                                                                                         </a>
-                                                                                                    @endforeach
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -280,9 +277,8 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                @foreach ($setsizeprice as $setsizeprices)
-                                                                                                                    <a href="" type="button" class="btn options-btn" onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i class="fa fa-shopping-basket"></i></a>
-                                                                                                                @endforeach
+
+                                                                                                                    <a class="btn options-btn" onclick="showId({{ $values->product_id }},0)">£{{ $setsizeprice}}<i class="fa fa-shopping-basket"></i></a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
@@ -359,17 +355,58 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                     </div>
                                     <div class="minibox-content">
                                         <div class="empty-box">
-                                            <span>Your shopping cart is empty!</span>
+                                           <table class="table">
+                                            @php
+                                                $subtotal = 0;
+                                            @endphp
+                                            @if(!empty($mycart) || $mycart != '')
+                                                @if (isset($mycart['size']))
+                                                    @foreach ($mycart['size'] as $cart)
+                                                        @php
+                                                            $price = $cart['price'] * $cart['quantity'];
+                                                            $subtotal += $price;
+                                                        @endphp
+                                                        <tr>
+                                                            <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                            <td>{{ $cart['quantity'] }}</td>
+                                                            <td>{{ $cart['size'] }}</td>
+                                                            <td>{{ $cart['name'] }}</td>
+                                                            <td>£ {{ $price }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                                @if (isset($mycart['withoutSize']))
+                                                    @foreach ($mycart['withoutSize'] as $cart)
+                                                        @php
+                                                            $price = $cart['price'] * $cart['quantity'];
+                                                            $subtotal += $price;
+                                                        @endphp
+                                                        <tr>
+                                                            <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                            <td>{{ $cart['quantity'] }}</td>
+                                                            <td colspan="2">{{ $cart['name'] }}</td>
+                                                            <td>£ {{ $price }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            @else
+                                                <span>Your shopping cart is empty!</span>
+                                            @endif
+                                           </table>
                                         </div>
                                         <div class="minicart-total">
                                             <ul class="minicart-list">
                                                 <li class="minicart-list-item">
-                                                    <div class="minicart-list-item-innr">
+                                                    <div class="minicart-list-item-innr sub-total">
                                                         <label>Sub-Total</label>
-                                                        <span>£0.00</span>
+                                                        @if(isset($subtotal))
+                                                            <span>£ {{ $subtotal }}</span>
+                                                        @else
+                                                            <span>£ 0.00</span>
+                                                        @endif
                                                     </div>
                                                 </li>
-                                                <li class="minicart-list-item">
+                                                <li class="minicart-list-item total">
                                                     <div class="minicart-list-item-innr">
                                                         <label>Total to pay:</label>
                                                         <span>£0.00</span>
@@ -626,9 +663,9 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
     function showId(product,sizeprice) {
 
         var sizeid = sizeprice;
-      
+
         var productid = product;
-       
+
         $.ajax({
             type: 'post',
             url: '{{ route('getid') }}',
@@ -638,10 +675,13 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                 'product_id': productid,
             },
             dataType: 'json',
-            success: function(result) {
+            success: function(result)
+            {
                 $('.empty-box').html('');
+                $('.sub-total').html('');
                 $('.empty-box').append(result.html);
-                }
+                $('.sub-total').append(result.subtotal);
+            }
         });
     }
 
