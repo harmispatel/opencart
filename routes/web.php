@@ -23,6 +23,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FreeItemController;
 use App\Http\Controllers\Frontend\ContactUsController;
+use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\GallaryController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\LoyaltyController;
@@ -395,10 +396,18 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
+Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
+Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
+
+// login user
+Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
+Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
+
 
 
 

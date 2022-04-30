@@ -123,11 +123,35 @@
     @if ($online_order_permission == 1)
         <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
             <strong class="title text-uppercase">order online</strong>
-            <input class="form-control" placeholder="Eg. AA11AA"/>
-            <p>Please enter your postcode to view our<br> menu and place an order</p>
-            <div class="btn__group">
-                <a class="btn btn-green text-uppercase" href="{{ route('menu') }}">collection</a>
-                <a class="btn btn-red text-uppercase">delivery</a>
+            @if ($delivery_setting['enable_delivery'] != 'collection')
+                <div class="srch-input">
+                    @if($delivery_setting['delivery_option'] == 'area')
+                        <select name="search_input2" class="form-control"  id="search_store">
+                            <option value="">Select Area</option>
+                            @foreach($areas as $area)
+                                <option value="{{ $area }}">{{ $area }}</option>
+                            @endforeach
+                        </select>
+                    @else
+                        <input id="search_input1" placeholder="AB10 1BW" type="text"/>
+                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                    @endif
+                </div>
+                <div class="enter_postcode">
+                    <p>Please enter your postcode to view our menu and place an order</p>
+                </div>
+            @endif
+            <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
+            <div class="button_content1" style ="">
+                @if ($delivery_setting['enable_delivery'] != 'delivery')
+                    {{-- <input type="button" class="collection_button1 btn" value="Collection"> --}}
+                    <a class="btn btn-green text-uppercase collection_button1">collection</a>
+                @endif
+
+                @if ($delivery_setting['enable_delivery'] != 'collection')
+                    <a class="btn btn-green text-uppercase delivery_button1">delivery</a>
+                    {{-- <input type="button" class="delivery_button1 btn" value="Delivery"> --}}
+                @endif
             </div>
         </div>
     @endif
@@ -222,275 +246,216 @@
                             <p>Lorem ipsum dolor sit amet, consectetur 3</p>
                         </a>
                     @endif
-
-
-                    {{-- <a class="swiper-slide" href="#">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/>
-                        </div>
-                        <strong>Breakfast Chef 0</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur 0</p>
-                    </a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/>
-                        </div>
-                        <strong>Breakfast Chef 1</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur 1</p>
-                    </a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/>
-                        </div>
-                        <strong>Breakfast Chef 2</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                    </a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/>
-                        </div>
-                        <strong>Breakfast Chef 3</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur 3</p>
-                    </a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/>
-                        </div>
-                        <strong>Breakfast Chef 4</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur 4</p>
-                    </a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/></div><strong>Breakfast Chef 5</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 5</p></a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/></div><strong>Breakfast Chef 6</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 6</p></a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/></div><strong>Breakfast Chef 7</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 7</p></a>
-                    <a class="swiper-slide" href="#">
-                        <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/></div><strong>Breakfast Chef 8</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 8</p></a><a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/></div><strong>Breakfast Chef 9</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 9</p></a><a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/></div><strong>Breakfast Chef 10</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 10</p></a><a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/></div><strong>Breakfast Chef 11</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 11</p></a><a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/></div><strong>Breakfast Chef 12</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 12</p></a><a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/></div><strong>Breakfast Chef 13</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 13</p></a><a class="swiper-slide" href="#">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/4.jpg') }}"/></div><strong>Breakfast Chef 14</strong>
-                    <p>Lorem ipsum dolor sit amet, consectetur 14</p></a> --}}
                 </div>
             </div>
+        </div>
+    </div>
+</section>
+
+<section class="popular-foods">
+    <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
+    <h3 class="section-title color-green">Popular Foods</h3>
+    <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+    <div class="popular-foods-swiper">
+        <div class="swiper">
+        <div class="swiper-wrapper">
+            @if (count($popular_foods) > 0)
+                @foreach ($popular_foods as $food)
+                    <a class="swiper-slide" href="#">
+                        <div class="box">
+                            <div class="img">
+                                @if (isset($food->hasOneProduct['image']))
+                                    <img class="img-fluid" src="{{ $food->hasOneProduct['image'] }}">
+                                @else
+                                    <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                @endif
+                            </div>
+                            <strong>{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
+                            @php
+                                $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
+                                $description = strip_tags($desc);
+
+                                if($description == '')
+                                {
+                                    echo '<p>-</p>';
+                                }
+                                else
+                                {
+                                    echo '<p>'.substr($description,0,30).'</p>';
+                                }
+                            @endphp
+                        </div>
+                    </a>
+                @endforeach
+            @else
+                <a class="swiper-slide" href="#">
+                    <div class="box">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                        </div>
+                        <strong>DEMO CAT 1</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 1</p>
+                    </div>
+                </a>
+                <a class="swiper-slide" href="#">
+                    <div class="box">
+                        <div class="img">
+                            <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
+                        </div>
+                        <strong>DEMO CAT 2</strong>
+                        <p>Lorem ipsum dolor sit amet, consectetur 2</p>
+                    </div>
+                </a>
+            @endif
+        </div>
+        </div>
+        <div class="swiper-pagination"></div>
     </div>
     </div>
 </section>
 
-        <section class="popular-foods">
-          <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
-            <h3 class="section-title color-green">Popular Foods</h3>
-            <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-            <div class="popular-foods-swiper">
-              <div class="swiper">
-                <div class="swiper-wrapper">
-                    @if (count($popular_foods) > 0)
-                        @foreach ($popular_foods as $food)
-                            <a class="swiper-slide" href="#">
-                                <div class="box">
-                                    <div class="img">
-                                        @if (isset($food->hasOneProduct['image']))
-                                            <img class="img-fluid" src="{{ $food->hasOneProduct['image'] }}">
-                                        @else
-                                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
-                                        @endif
-                                    </div>
-                                    <strong>{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
-                                    @php
-                                        $desc = html_entity_decode(isset($food->hasOneProduct->hasOneProductDescription['description']) ? $food->hasOneProduct->hasOneProductDescription['description'] : '');
-                                        $description = strip_tags($desc);
-
-                                        if($description == '')
-                                        {
-                                            echo '<p>-</p>';
-                                        }
-                                        else
-                                        {
-                                            echo '<p>'.substr($description,0,30).'</p>';
-                                        }
-                                    @endphp
-                                </div>
-                            </a>
-                        @endforeach
-                    @else
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 1</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 1</p>
-                            </div>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 2</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                            </div>
-                        </a>
-                    @endif
-                </div>
-              </div>
-              <div class="swiper-pagination"></div>
+<section class="user-comments pt-110 pb-110">
+    <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
+    <h3 class="section-title color-red">Recent Web Reviews</h3>
+    {{-- <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p> --}}
+    <div class="user-comments-swiper">
+        <div class="swiper">
+        <div class="swiper-wrapper">
+            {{-- <div class="swiper-slide">
+            <div class="message-text">
+                <strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 0</p>
             </div>
-          </div>
-        </section>
-        <section class="user-comments pt-110 pb-110">
-          <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
-            <h3 class="section-title color-red">Recent Web Reviews</h3>
-            {{-- <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p> --}}
-            <div class="user-comments-swiper">
-              <div class="swiper">
-                <div class="swiper-wrapper">
-                  {{-- <div class="swiper-slide">
+            <div class="message-info">
+                <strong>Selçuk Aker</strong>
+                <span>UX Designer</span>
+            </div>
+        </div> --}}
+            @foreach ($review['reviews'] as $item)
+                <div class="swiper-slide">
                     <div class="message-text">
-                        <strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 0</p>
+                        {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 1</strong> --}}
+                        <p>{{ $item->message }}</p>
                     </div>
                     <div class="message-info">
-                        <strong>Selçuk Aker</strong>
-                        <span>UX Designer</span>
+                        <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
+                        {{-- <span>UX Designer</span> --}}
                     </div>
-                </div> --}}
-                    @foreach ($review['reviews'] as $item)
-                        <div class="swiper-slide">
-                            <div class="message-text">
-                                {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 1</strong> --}}
-                                <p>{{ $item->message }}</p>
-                            </div>
-                            <div class="message-info">
-                                <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
-                                {{-- <span>UX Designer</span> --}}
-                            </div>
-                        </div>
-                    @endforeach
-                  {{-- <div class="swiper-slide">
-                    <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 2</strong>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 2</p>
-                    </div>
-                    <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
-                  </div> --}}
                 </div>
-              </div>
-              <div class="swiper-pagination"></div>
-            </div>
-          </div>
-        </section>
-        <section class="reservation pt-110 pb-110">
-          <div class="container wow animate__fadeInUp" data-wow-duration="1s">
-            <h3 class="section-title color-green divider-white text-capitalize">make a reservation</h3>
-            <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-            <form class="row" method="POST" action="{{ route('reservation') }}">
-                {{ csrf_field() }}
-              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <div class="icon"><i class="fas fa-chevron-down"></i>
-                  <select class="form-control bg-dark" name="person" required>
-                    <option value="">Person</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control text-white" style="color-scheme: dark;" name="date" id="date" type="date" required/>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <input class="form-control" style="color-scheme: dark;" name="time" id="time" type="time" required/>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
-                <button class="btn btn-green text-capitalize">make reservation now<i class="fas fa-arrow-right"></i></button>
-              </div>
-            </form>
-          </div>
-        </section>
-        <section class="photo-gallery pt-110 pb-110">
-          <div class="container wow animate__fadeInUp" data-wow-duration="1s">
-            <h3 class="section-title color-green divider-white text-capitalize">photo gallery</h3>
-            <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-          </div>
-          <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
-            <div class="row">
-                @if(isset($photos))
-                   @foreach ($photos as $photo)
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="{{ $photo->image }}"/>
-                        </div>
-                    </div>
-                   @endforeach
-                @else
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
-                        </div>
-                    </div>
-                @endif
-            </div>
-          </div>
-        </section>
-        <section class="opening-hours pt-110 wow animate__fadeInUp" data-wow-duration="1s" style="background-image: url({{ asset('public/assets/theme1/img/bg/opening-hours-bg.jpg')}}">
-          <div class="container text-center">
-            <h3 class="title">Visit us</h3>
-            <h3 class="sub-title">Opening Hours</h3><img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/opening-hours.svg') }}"/>
-            @php
-                $openday =$openclose['openday'];
-                $fromtime = $openclose['fromtime'];
-                $totime = $openclose['totime'];
-            @endphp
-            @foreach ($openday as $key => $item)
-                @php
-                    $t = count($item)-1;
-                    $firstday = $item[0];
-                    $lastday = $item[$t];
-                @endphp
-                @if ($firstday == $lastday)
-                <p>{{ $firstday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
-                @else
-                <p>{{ $firstday }} to {{ $lastday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
-                @endif
             @endforeach
-            {{-- <p>{{ $openclose['days1'] }} to {{ $openclose['days2'] }} {{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}  |  Sunday 08:00 – 23:00</p> --}}
-          </div>
-        </section>
+            {{-- <div class="swiper-slide">
+            <div class="message-text"><strong>THAT’S AN AWESOME RESTAURANT & FOOD 2</strong>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 2</p>
+            </div>
+            <div class="message-info"><strong>Selçuk Aker</strong><span>UX Designer</span></div>
+            </div> --}}
+        </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    </div>
+</section>
+<section class="reservation pt-110 pb-110">
+    <div class="container wow animate__fadeInUp" data-wow-duration="1s">
+    <h3 class="section-title color-green divider-white text-capitalize">make a reservation</h3>
+    <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+    <form class="row" method="POST" action="{{ route('reservation') }}">
+        {{ csrf_field() }}
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+        <input class="form-control" name="fullname" placeholder="Full Name" type="text" required/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+        <input class="form-control" name="phone" placeholder="Phone Number" type="text" required/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+        <div class="icon"><i class="fas fa-chevron-down"></i>
+            <select class="form-control bg-dark" name="person" required>
+            <option value="">Person</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            </select>
+        </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+        <input class="form-control text-white" style="color-scheme: dark;" name="date" id="date" type="date" required/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+        <input class="form-control" style="color-scheme: dark;" name="time" id="time" type="time" required/>
+        </div>
+        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+        <button class="btn btn-green text-capitalize">make reservation now<i class="fas fa-arrow-right"></i></button>
+        </div>
+    </form>
+    </div>
+</section>
+<section class="photo-gallery pt-110 pb-110">
+    <div class="container wow animate__fadeInUp" data-wow-duration="1s">
+    <h3 class="section-title color-green divider-white text-capitalize">photo gallery</h3>
+    <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+    </div>
+    <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
+    <div class="row">
+        @if(isset($photos))
+            @foreach ($photos as $photo)
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="box">
+                    <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="{{ $photo->image }}"/>
+                </div>
+            </div>
+            @endforeach
+        @else
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="box">
+                    <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="box">
+                    <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                <div class="box">
+                    <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
+                    <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
+                </div>
+            </div>
+        @endif
+    </div>
+    </div>
+</section>
+<section class="opening-hours pt-110 wow animate__fadeInUp" data-wow-duration="1s" style="background-image: url({{ asset('public/assets/theme1/img/bg/opening-hours-bg.jpg')}}">
+    <div class="container text-center">
+    <h3 class="title">Visit us</h3>
+    <h3 class="sub-title">Opening Hours</h3><img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/opening-hours.svg') }}"/>
+    @php
+        $openday =$openclose['openday'];
+        $fromtime = $openclose['fromtime'];
+        $totime = $openclose['totime'];
+    @endphp
+    @foreach ($openday as $key => $item)
+        @php
+            $t = count($item)-1;
+            $firstday = $item[0];
+            $lastday = $item[$t];
+        @endphp
+        @if ($firstday == $lastday)
+        <p>{{ $firstday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
+        @else
+        <p>{{ $firstday }} to {{ $lastday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
+        @endif
+    @endforeach
+    {{-- <p>{{ $openclose['days1'] }} to {{ $openclose['days2'] }} {{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}  |  Sunday 08:00 – 23:00</p> --}}
+    </div>
+</section>
+

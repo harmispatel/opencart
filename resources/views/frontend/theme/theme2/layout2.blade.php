@@ -1,30 +1,5 @@
     <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&amp;family=Oswald:wght@400;500&amp;family=Raleway:wght@400;700&amp;display=swap" rel="stylesheet" />
 
-    <style>
-        .grid-header
-        {
-            text-align: center;
-        }
-
-        .grid
-        {
-            margin: 1rem auto;
-        }
-
-        .grid-item
-        {
-            width: 250px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        img
-        {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-
     @php
         $review = storereview();
         $openclose = openclosetime();
@@ -237,131 +212,52 @@
             <div class="categories-swiper-v2 position-relative">
                 <div class="swiper">
                     <div class="swiper-wrapper">
-                        {{-- <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 0</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 0</p>
-                        </a> --}}
                         @if(count($best_categories) > 0)
-                        @foreach ($best_categories as $categorydet)
+                            @foreach ($best_categories as $categorydet)
+                                <a class="swiper-slide" href="#">
+                                    <div class="img">
+                                        @if (isset($categorydet->hasOneCategoryDetails['image']))
+                                            <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
+                                        @else
+                                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                        @endif
+                                    </div>
+                                    <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
+                                    <p>{{ html_entity_decode($categorydet->hasOneCategoryDetails->hasOneCategory['description']) }}</p>
+                                </a>
+                            @endforeach
+                        @else
                             <a class="swiper-slide" href="#">
                                 <div class="img">
-                                    @if (isset($categorydet->hasOneCategoryDetails['image']))
-                                        <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
-                                    @else
-                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
-                                    @endif
+                                    <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/best-categories/2.jpg') }}" />
                                 </div>
-                                <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
-                                <p>{{ html_entity_decode($categorydet->hasOneCategoryDetails->hasOneCategory['description']) }}</p>
+                                <strong>Breakfast Chef 2</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 2</p>
                             </a>
-                        @endforeach
+                            <a class="swiper-slide" href="#">
+                                <div class="img">
+                                    <img class="img-fluid"
+                                        src="{{ asset('public/assets/theme2/demo-data/best-categories/3.jpg') }}" />
+                                </div>
+                                <strong>Breakfast Chef 3</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 3</p>
+                            </a><a class="swiper-slide" href="#">
+                                <div class="img">
+                                    <img class="img-fluid"
+                                        src="{{ asset('public/assets/theme2/demo-data/best-categories/4.jpg') }}" />
+                                </div>
+                                <strong>Breakfast Chef 4</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 4</p>
+                            </a>
+                            <a class="swiper-slide" href="#">
+                                <div class="img">
+                                    <img class="img-fluid"
+                                        src="{{ asset('public/assets/theme2/demo-data/best-categories/0.jpg') }}" />
+                                </div>
+                                <strong>Breakfast Chef 5</strong>
+                                <p>Lorem ipsum dolor sit amet, consectetur 5</p>
+                            </a>
                         @endif
-                        {{-- <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid" src="{{ asset('public/assets/theme2/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 2</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/3.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 3</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 3</p>
-                        </a><a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/4.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 4</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 4</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 5</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 5</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 6</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 6</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 7</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 7</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/3.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 8</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 8</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/4.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 9</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 9</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 10</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 10</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 11</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 11</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 12</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 12</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/3.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 13</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 13</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid"
-                                    src="{{ asset('public/assets/theme2/demo-data/best-categories/4.jpg') }}" />
-                            </div>
-                            <strong>Breakfast Chef 14</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 14</p>
-                        </a> --}}
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
@@ -518,14 +414,14 @@
                     dolore eu fugiat nulla pariatur.</p>
             </div>
         </div>
-        <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
+        <div class="container-fluid wow animate__fadeInUp mb-3" data-wow-duration="1s">
 
-            <div class="row">
-                @if(isset($photos))
-                    <div class="grid">
+            <div class="row mb-3">
+                @if(count($photos) > 0)
+                    <div class="grid" style="height: auto;">
                         @foreach ($photos as $photo)
                             <div class="grid-item">
-                                @if(file_exists($photo->image))
+                                @if(!empty($photo->image))
                                     <img src="{{ $photo->image }}">
                                 @else
                                     <img src="{{ asset('public/frontend/other/no-image.jpg') }}">

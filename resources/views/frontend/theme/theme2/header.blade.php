@@ -28,13 +28,10 @@
             @foreach ($openday as $key => $item)
             @foreach ($item as $value)
                 @php
-                    date_default_timezone_set("Asia/kolkata");
-                    $t = count($item)-1;
-                    $firstday = $item[0];
-                    $firsttime = date('G', strtotime($fromtime[$key]));
-                    $lastday = $item[$t];
-                    $lasttime = date('G', strtotime($totime[$key]));
-                    $today = date('G');
+
+                    $firsttime = strtotime($fromtime[$key]);
+                    $lasttime = strtotime($totime[$key]);
+                    $today = time();
                     $currentday = date('l');
 
                 @endphp
@@ -79,6 +76,8 @@
                     $today = date('l');
                     @endphp
                         @if ($today == $value)
+                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @elseif ($firstday == "Every day")
                         <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
                         @endforeach

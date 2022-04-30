@@ -7,6 +7,7 @@ $store_setting = session('store_settings');
 $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
 $template_setting = session('template_settings');
 
+$user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
 
 @endphp
 
@@ -22,6 +23,25 @@ $template_setting = session('template_settings');
 
 <body>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered w-25">
+            <div class="modal-content">
+                <div class="modal-body p-5 text-danger">
+                    Sorry we are close now!
+                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Model --}}
+
+    {{-- User Delivery --}}
+    <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $user_delivery_type }}">
+    {{-- End User Delivery --}}
+
     @php
         if (session()->has('theme_id')) {
             $theme_id = session()->get('theme_id');
@@ -31,7 +51,6 @@ $template_setting = session('template_settings');
         
         $social = session('social_site');
         $social_site = isset($social) ? $social : '#';
-        
     @endphp
 
     @if (!empty($theme_id) || $theme_id != '')
@@ -86,7 +105,6 @@ $template_setting = session('template_settings');
         <div class="bottom">
             <div class="working-time">
                 <strong class="text-uppercase">Working Time:</strong>
-                {{-- <span>09:00 - 23:00</span> --}}
                 @php
                     $openday = $openclose['openday'];
                     $fromtime = $openclose['fromtime'];
@@ -145,10 +163,11 @@ $template_setting = session('template_settings');
                                                 @php
                                                     $demo = $category->category_id;
                                                     $productcount = getproductcount($demo);
+
+                                                    $catname = strtolower($category->name)
                                                 @endphp
                                                 <li>
-                                                    <a href="#" class="active">{{ $category->name }}
-                                                        ({{ $productcount }})
+                                                    <a href="#{{ str_replace(' ', '', $catname) }}" class="active">{{ $category->name }} ({{ $productcount }})
                                                     </a>
                                                 </li>
                                             @endforeach
@@ -173,36 +192,33 @@ $template_setting = session('template_settings');
                                                 $cat_id = $value->category_id;
                                                 $front_store_id = session('front_store_id');
                                                 $result = getproduct($front_store_id, $cat_id);
+
+                                                $catvalue = strtolower($value->name);
                                             @endphp
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse{{ $key }}"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapse{{ $key }}">
+                                                        <button class="accordion-button" id="{{ str_replace(' ','',$catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
 
                                                     @foreach ($result['product'] as $values)
-                                                        @php
-                                                            echo $values->product_id;
-                                                        @endphp
-                                                        <div id="collapse{{ $key }}"
-                                                            class="accordion-collapse collapse show"
-                                                            aria-labelledby="headingOne"
-                                                            data-bs-parent="#accordionExample">
+                                                        <div id="collapse{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
                                                                     <div class="row">
                                                                         <div class="col-md-7">
                                                                             <div class="acc-body-inr-title">
-                                                                                <h4>{{ $values->hasOneDescription['name'] }}
+                                                                                <h4>
+                                                                                    {{ $values->hasOneDescription['name'] }}
                                                                                 </h4>
-                                                                                <p>{{ strip_tags($values->hasOneDescription['description']) }}
+                                                                                @php
+                                                                                    $prodesc = html_entity_decode($values->hasOneDescription['description']);
+                                                                                @endphp
+                                                                                <p>
+                                                                                    {{ strip_tags($prodesc) }}
                                                                                 </p>
                                                                                 <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}"
                                                                                     width="80" height="80"
@@ -251,16 +267,34 @@ $template_setting = session('template_settings');
                                                                                                 <span>price</span>
                                                                                             </div>
                                                                                             <div class="col-md-7">
-                                                                                                <a onclick="showId({{ $values->product_id }},0);"
-                                                                                                    class="btn options-btn">
-                                                                                                    <span
-                                                                                                        class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i
-                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                    <span
-                                                                                                        class="show-carttext sizeprice"
-                                                                                                        style="display: none;">Added<i
-                                                                                                            class="fa fa-check"></i></span>
-                                                                                                </a>
+                                                                                            @foreach ($openday as $key => $item)
+                                                                                                    @foreach ($item as $value)
+                                                                                                        @php
+
+                                                                                                            $firsttime = strtotime($fromtime[$key]);
+                                                                                                            $lasttime = strtotime($totime[$key]);
+                                                                                                            $today = time();
+                                                                                                            $currentday = date('l');
+
+                                                                                                        @endphp
+
+                                                                                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                                                                                            @if ($currentday == $value)
+                                                                                                                @foreach ($setsizeprice as $setsizeprices)
+                                                                                                                    <a href="" type="button" class="btn options-btn" onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i class="fa fa-shopping-basket"></i></a>
+                                                                                                                @endforeach
+                                                                                                            @endif
+                                                                                                        @else
+                                                                                                            @if ($currentday == $value)
+                                                                                                                @foreach ($setsizeprice as $setsizeprices)
+                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprices->price }}<i class="fa fa-shopping-basket"></i></a>
+                                                                                                                @endforeach
+                                                                                                            @endif
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                @endforeach
+
+
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -283,35 +317,40 @@ $template_setting = session('template_settings');
 
                     <div class="col-md-5 col-lg-4">
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
-                            <div class="close-shop">
-                                <h2>Sorry we are closed now!</h2>
-                                {{-- <span>We will be opening back at 16:00 Today</span> --}}
-                                @php
-                                    $openday = $openclose['openday'];
-                                    $fromtime = $openclose['fromtime'];
-                                    $totime = $openclose['totime'];
-                                @endphp
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item) - 1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                        @endphp
-                                        @if ($today == $value)
-                                            {{-- <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong> --}}
-                                            <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
+
+                            @foreach ($openday as $key => $item)
+                                @foreach ($item as $value)
+                                    @php
+
+                                        $firsttime = strtotime($fromtime[$key]);
+                                        $lasttime = strtotime($totime[$key]);
+                                        $today = time();
+                                        $currentday = date('l');
+
+                                    @endphp
+
+                                    @if ($today >= $firsttime && $today <= $lasttime)
+                                        @if ($currentday == $value)
+                                            <div class="alert p-1 text-center" style="background: green;">
+                                                <h2 class="p-1 text-white mb-0">We are open now!</h2>
+                                            </div>
                                         @endif
-                                    @endforeach
+                                    @else
+                                        @if ($currentday == $value)
+                                            <div class="close-shop">
+                                                <h2>Sorry we are closed now!</h2>
+                                                <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
+                                            </div>
+                                        @endif
+                                    @endif
                                 @endforeach
-                            </div>
+                            @endforeach
+                            {{-- </div> --}}
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
                                     <span class="tg-icon" id="tg-icon"><i
                                             class="fas fa-angle-double-up"></i></span>
-                                    <div class="mob-basket">
-                                        0 X ITEMS | TOTAL: £0.00</div>
+                                    <div class="mob-basket">0 X ITEMS | TOTAL: £0.00</div>
                                 </div>
                                 <div class="minicart" id="minicart">
                                     <div class="minibox-title">
@@ -338,25 +377,32 @@ $template_setting = session('template_settings');
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="order-type">
-                                            <div class="order-type-innr">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                                        id="collection">
+                                        <div id="order_type_top" class="order-type">
+                                            @if ($delivery_setting['enable_delivery'] != 'delivery')
+                                                <div class="form-check m-auto">
+                                                    @if ($delivery_setting['enable_delivery'] == 'collection')
+                                                        <input class="form-check-input" type="radio"
+                                                            name="delivery_type" id="collection"
+                                                            {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }}
+                                                            value="collection">
+                                                    @else
+                                                        <input class="form-check-input" type="radio"
+                                                            name="delivery_type" id="collection" value="collection"
+                                                            {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
+                                                    @endif
                                                     <label class="form-check-label" for="collection">
-                                                        <h4>Delivery</h4>
-                                                        {{-- <span>Starts at 16:50</span> --}}
-                                                        @php
-                                                            // $openday =$openclose['openday'];
-                                                            // $fromtime = $openclose['fromtime'];
-                                                            // $totime = $openclose['totime'];
-                                                            
-                                                            // Collection
-                                                            $deliverydays = $openclose['deliverydays'];
-                                                            $collectionfrom = $openclose['collectionfrom'];
-                                                            $deliveryto = $openclose['deliveryto'];
-                                                        @endphp
-                                                        @foreach ($deliverydays as $key => $item)
+                                                        <h6>Collection</h6>
+                                                    </label><br>
+                                                    @php
+                                                        $collectiondays = $openclose['collectiondays'];
+                                                        $collectionfrom = $openclose['collectionfrom'];
+
+                                                        $collection_same_bussiness = isset($openclose['collection_same_bussiness']) ? $openclose['collection_same_bussiness'] : '';
+                                                    @endphp
+                                                    @if ($collection_same_bussiness == 1)
+                                                        <span>{{ ($openclose['collection_gaptime']) ? $openclose['collection_gaptime'] : "Select" }} Min</span>
+                                                    @else
+                                                        @foreach ($collectiondays as $key => $item)
                                                             @foreach ($item as $value)
                                                                 @php
                                                                     $t = count($item) - 1;
@@ -365,33 +411,29 @@ $template_setting = session('template_settings');
                                                                     $today = date('l');
                                                                 @endphp
                                                                 @if ($today == $value)
-                                                                    {{-- <span>{{ $collectionfrom[$key] }} - {{ $deliveryto[$key] }}</span> --}}
-                                                                    <span>Starts at
-                                                                        {{ $collectionfrom[$key] }}</span>
+                                                                    <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
                                                                 @endif
                                                             @endforeach
                                                         @endforeach
-                                                    </label>
+                                                    @endif
                                                 </div>
-                                            </div>
-                                            <div class="order-type-innr">
-                                                <div class="form-check">
-
-                                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                            @endif
+                                            @if ($delivery_setting['enable_delivery'] != 'collection')
+                                                <div class="form-check m-auto">
+                                                    <input class="form-check-input" type="radio" name="delivery_type"
                                                         id="delivery">
                                                     <label class="form-check-label" for="delivery">
-                                                        <h4>Collection</h4>
-                                                        {{-- <span>Starts at 16:50</span> --}}
-                                                        @php
-                                                            // $openday =$openclose['openday'];
-                                                            // $fromtime = $openclose['fromtime'];
-                                                            // $totime = $openclose['totime'];
-                                                            
-                                                            // delivery
-                                                            $deliverydays = $openclose['deliverydays'];
-                                                            $deliveryfrom = $openclose['deliveryfrom'];
-                                                            $deliveryto = $openclose['deliveryto'];
-                                                        @endphp
+                                                        <h6>Delivery</h6>
+                                                    </label><br>
+                                                    @php
+                                                        $deliverydays = $openclose['deliverydays'];
+                                                        $deliveryfrom = $openclose['deliveryfrom'];
+
+                                                        $delivery_same_bussiness = isset( $openclose['delivery_same_bussiness']) ?  $openclose['delivery_same_bussiness'] : '' ;
+                                                    @endphp
+                                                    @if ($delivery_same_bussiness == 1)
+                                                        <span>{{ ($openclose['delivery_gaptime']) ? $openclose['delivery_gaptime'] : "Select" }} Min</b></span>
+                                                    @else
                                                         @foreach ($deliverydays as $key => $item)
                                                             @foreach ($item as $value)
                                                                 @php
@@ -401,22 +443,47 @@ $template_setting = session('template_settings');
                                                                     $today = date('l');
                                                                 @endphp
                                                                 @if ($today == $value)
-                                                                    {{-- <span>{{ $deliveryfrom[$key] }} - {{ $deliveryto[$key] }}</span> --}}
-                                                                    <span>Starts at {{ $deliveryfrom[$key] }}</span>
+                                                                    <span>Starts at - <b>{{ $deliveryfrom[$key] }}</b></span>
                                                                 @endif
                                                             @endforeach
                                                         @endforeach
-                                                    </label>
+                                                    @endif
                                                 </div>
-                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="" class="btn disabled checkbt">Checkout</a>
-                            <div class="closed-now">
-                                <span class="closing-text ">We are closed now!</span>
-                            </div>
+                            @foreach ($openday as $key => $item)
+                                @foreach ($item as $value)
+                                    @php
+
+                                        $firsttime = strtotime($fromtime[$key]);
+                                        $lasttime = strtotime($totime[$key]);
+                                        $today = time();
+                                        $currentday = date('l');
+
+                                    @endphp
+
+                                    @if ($today >= $firsttime && $today <= $lasttime)
+                                        @if ($currentday == $value)
+                                            <a href="" class="btn checkbt"
+                                                style="background-color: green; color:white;">Checkout</a>
+                                            <div class="closed-now">
+                                                <span class="closing-text" style="color: green !important;">We are
+                                                    open now!</span>
+                                            </div>
+                                        @endif
+                                    @else
+                                        @if ($currentday == $value)
+                                            <a href="" class="btn disabled checkbt">Checkout</a>
+                                            <div class="closed-now">
+                                                <span class="closing-text">We are closed now!</span>
+                                            </div>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            @endforeach
                         </div>
                     </div>
 
@@ -425,13 +492,8 @@ $template_setting = session('template_settings');
         </div>
     </section>
 
-    {{-- <button type="button" class="btn btn-primary text1" data-bs-toggle="modal" data-bs-target="#exampleModal">
-      Launch demo modal
-    </button> --}}
-
     <!-- Modal -->
-    <div class="modal fade csmodal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade csmodal" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -439,7 +501,7 @@ $template_setting = session('template_settings');
                             class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
-                    <h5 class="modal-title" id="exampleModalLabel">Order Now</h5>
+                    <h5 class="modal-title" id="pricemodelLabel">Order Now</h5>
                     <p>Minimum delivery is £15.00</p>
                     <button class="btn csmodal-btn" onclick="showmodal();">Deliver my order</button>
                     <button class="btn csmodal-btn" data-bs-dismiss="modal">I will come and collect</button>
@@ -454,8 +516,7 @@ $template_setting = session('template_settings');
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i
-                            class="fas fa-times"></i></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <form action="">
                     <div class="modal-body">
@@ -497,10 +558,19 @@ $template_setting = session('template_settings');
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
+    $(document).ready(function() {
+        var status = $('#user_delivery_val').val();
+
+        if (status == '') {
+            $('#Modal').modal('show');
+        }
+
+    });
+
     function showmodal() {
 
         $('#Modal').modal('show');
-        $('#exampleModal').modal('hide');
+        $('#pricemodel').modal('hide');
     }
 
     function showmodalproduct() {
@@ -574,4 +644,26 @@ $template_setting = session('template_settings');
                 }
         });
     }
+
+    $('#collection').on('click', function() {
+        var d_type = $(this).val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('setDeliveyType') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'd_type': d_type,
+            },
+            dataType: "json",
+            success: function(response) {
+                location.reload();
+            }
+        });
+
+    });
+
+    $('#delivery').on('click', function() {
+        $('#Modal').modal('show');
+    });
 </script>

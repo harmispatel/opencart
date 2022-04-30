@@ -1026,4 +1026,35 @@ ul {
   border-color: #D91D1D;
 }
 
+/* New CSS */
+.srch-input {
+    position: relative;
+    margin: 12px 0 14px;
+}
+
+.postcode-input-error {
+    border: 3px solid red !important
+}
+
+.postcode-error {
+    font-size: 16px !important;
+    color: red !important;
+    float: left !important;
+    margin-left: 7% !important;
+    padding: 0 !important;
+    font-family: arial !important;
+    font-weight: 700 !important
+}
+
+.wrap_row {
+    border-bottom: 1px dashed red;
+    float: left;
+    width: 96%;
+  }
+
+  .input-xlarge {
+    float: left;
+    width: 100%;
+}
+
 /*# sourceMappingURL=app.css.map */

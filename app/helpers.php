@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
@@ -17,7 +18,7 @@ use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
 use App\Models\Product;
 use App\Models\Reviews;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\URL;
 
 // Function of User Details
 function user_details()
@@ -719,7 +720,6 @@ function openclosetime()
         $open_close[$row] = isset($query->value) ? $query->value : '';
     }
 
-
     // $closedate = unserialize($open_close['closing_dates']);
     $delivery = unserialize($open_close['delivery']);
     $collection = unserialize($open_close['collection']);
@@ -819,6 +819,12 @@ function openclosetime()
     $data['openday'] = $openday;
     $data['fromtime'] = $fromtime;
     $data['totime'] = $totime;
+
+    $data['collection_same_bussiness'] = $open_close['collection_same_bussiness'];
+    $data['delivery_same_bussiness'] = $open_close['delivery_same_bussiness'];
+
+    $data['collection_gaptime'] = $open_close['collection_gaptime'];
+    $data['delivery_gaptime'] = $open_close['delivery_gaptime'];
     return $data;
 }
 
@@ -882,4 +888,16 @@ function addtoCart($request,$productid,$sizeid)
 
 
 
+function getallproduct($id)
+{
+
+    $cat=$id;
+    $categorytoproduct = Product_to_category::with(['hasOneProduct','hasOneDescription'])->whereHas('hasOneProduct', function ($query) use ($cat) {
+        $query->where('category_id',$cat);
+    })->get();
+    // echo '<pre>';
+    // print_r($categorytoproduct->toArray());
+    // exit();
+    return $categorytoproduct;
+}
 ?>
