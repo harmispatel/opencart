@@ -52,24 +52,6 @@ class MenuController extends Controller
 
     public function store(Request $request){
 
-        echo '<pre>';
-        $description = $request->input('description');
-        $productname = $request->input('productname');
-        $image = $request->input('image');
-        $size = $request->input('size');
-        $price = $request->input('price');
-        $size1 = $request->input('size1');
-        $price1 = $request->input('price1');
-
-        // $description = $request->input('description');
-        print_r($description);echo "<br>";
-        print_r($productname);echo "<br>";
-        print_r($image);echo "<br>";
-        print_r($size);echo "<br>";
-        print_r($price);echo "<br>";
-        print_r($size1);echo "<br>";
-        print_r($price1);echo "<br>";
-        exit();
         return $request->all();
     }
 

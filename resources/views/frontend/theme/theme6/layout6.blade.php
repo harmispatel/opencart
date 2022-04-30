@@ -356,188 +356,44 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             <div class="__btn-list">
                 <a class="text-uppercase active" href="" data-filter="all">all</a>
                 @if(count($best_categories) > 0)
-                    @foreach ($best_categories as $categorydet)
+                    @foreach ($best_categories as $category)
                     @php
-                        // echo '<pre>';
-                        // print_r($categorydet->category_id);
-
+                        $product = $category->category_id;
                     @endphp
-                    <a class="text-uppercase" href="" data-filter="{{$categorydet->hasOneCategoryDetails->hasOneCategory['category_id']}}">{{ strtolower($categorydet->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
-                    {{-- <a class="text-uppercase"href="" data-filter="soup">soup</a> --}}
+                    <a class="text-uppercase" href="" data-filter="{{$product}}">{{ strtolower($category->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
+                    @php
+                        $allproducts = getallproduct($product);
+                        echo $product;
+                    @endphp
                     @endforeach
                 @endif
-                {{-- <a class="text-uppercase" href="" data-filter="breakfast">breakfast</a>
-                <a class="text-uppercase"href="" data-filter="soup">soup</a> --}}
             </div>
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    @if(count($categorytoproduct) > 0)
-                    @foreach ($categorytoproduct as $categorydet)
-                    @php
-                    // echo '<pre>';
-                    // print_r($categorydet->toArray());
-                    // exit();
-                        $catimage = isset($categorydet->has_one_product['image']) ? $categorydet->has_one_product['image'] : '';
-                        $catname = isset($categorydet->has_one_product['name']) ? $categorydet->has_one_product['name'] : '132';
-                        $catdesc = isset($categorydet->has_one_product['description']) ? $categorydet->has_one_product['description'] : '';
-                    @endphp
-                    <div class="swiper-slide" data-slide-filter="{{$categorydet->category_id}}">
-                        <div class="item">
-                            <div class="img">
-                                @if (!empty($catimage))
-                                    <img class="img-fluid" src="{{ asset('public/admin/product/'.$catimage) }}" />
-                                @else
-                                    <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
-                                @endif
-                            </div>
+                    @if(count($allproducts) > 0)
+                        @foreach ($allproducts as $categorydet)
+                        @php
+                            $catimage = $categorydet->hasOneProduct['image'];
+                            $catname = $categorydet->hasOneDescription['name'];
+                            $catdesc = $categorydet->hasOneDescription['description'];
+                        @endphp
+                        <div class="swiper-slide" data-slide-filter="{{$categorydet->category_id}}">
+                            <div class="item">
+                                <div class="img">
+                                    @if (!empty($catimage))
+                                        <img class="img-fluid" src="{{ asset('public/admin/product/'.$catimage) }}" />
+                                    @else
+                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                    @endif
+                                </div>
                                 <div class="text-content">
-                                <strong class="text-capitalize">{{ $catname }}</strong>
-                                <p>{{ html_entity_decode($catdesc) }}</p>
+                                    <strong class="text-capitalize">{{ html_entity_decode($catname) }}</strong>
+                                    <p>@php echo html_entity_decode($catdesc) @endphp</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    @endforeach
+                        @endforeach
                     @endif
-                    {{-- <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="breakfast">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">breakfast</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" data-slide-filter="soup">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme6/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">soup</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
                 <div class="swiper-pagination"></div>
             </div>

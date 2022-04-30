@@ -38,6 +38,7 @@
 <!--Js Files-->
 
 <script src="{{ asset('public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 
 <script>
     function ShowMoreDescription()
@@ -199,5 +200,132 @@
             },
         });
 
+
+        $('#register').on('click',function()
+        {
+            var form_data = new FormData(document.getElementById('registerform'));
+
+        $.ajax({
+        type: "POST",
+        url: "{{ url('customerregister') }}",
+        data: form_data,
+        dataType: "json",
+        contentType: false,
+        cache: false,
+        processData: false,
+            success: function (response) {
+                console.log(response);
+            },
+            error : function (message) {
+                console.log(message.responseJSON.errors);
+                var cust_title = message.responseJSON.errors.title;
+                var name = message.responseJSON.errors.name;
+                var surname = message.responseJSON.errors.surname;
+                var e_mail = message.responseJSON.errors.email;
+                var phone_no = message.responseJSON.errors.phone;
+                var pass = message.responseJSON.errors.password;
+                var confirmpassword = message.responseJSON.errors.confirmpassword;
+
+
+                // FirstName
+                if(cust_title)
+                {
+                    $('#titleerr').text('').show();
+                    $('#title').attr('class','form-control is-invalid');
+                    $('#titleerr').text(cust_title);
+                }
+                else
+                {
+                    $('#titleerr').text('').hide();
+                    $('#title').attr('class','form-control');
+                }
+
+                // FirstName
+                if(name)
+                {
+                    $('#fnameerr').text('').show();
+                    $('#name').attr('class','form-control is-invalid');
+                    $('#fnameerr').text(name);
+                }
+                else
+                {
+                    $('#fnameerr').text('').hide();
+                    $('#firstname').attr('class','form-control');
+                }
+
+                // LastName
+                if(surname)
+                {
+                    $('#surnameerr').text('').show();
+                    $('#surname').addClass('is-invalid');
+                    $('#surnameerr').text(surname).show();
+                }
+                else
+                {
+                    $('#surnameerr').text('').hide();
+                    $('#surname').attr('class','form-control');
+                }
+
+                // Email
+                if(e_mail)
+                {
+                    $('#emailerr').text('').show();
+                    $('#email').addClass('is-invalid');
+                    $('#emailerr').text(e_mail).show();
+                }
+                else
+                {
+                    $('#emailerr').text('').hide();
+                    $('#email').attr('class','form-control');
+                }
+
+                // Phone
+                if(phone_no)
+                {
+                    $('#phoneerr').text('').show();
+                    $('#phone').addClass('is-invalid');
+                    $('#phoneerr').text(phone_no).show();
+                }
+                else
+                {
+                    $('#phoneerr').text('').hide();
+                    $('#phone').attr('class','form-control');
+                }
+
+                // Password
+                if(pass)
+                {
+                    $('#passworderr').text('').show();
+                    $('#password').addClass('is-invalid');
+                    $('#passworderr').text(pass).show();
+                }
+                else
+                {
+                    $('#passworderr').text('').hide();
+                    $('#password').attr('class','form-control');
+                }
+
+                // Confirm Password
+                if(confirmpassword)
+                {
+                    $('#confirmpasswordwrr').text('').show();
+                    $('#confirmpassword').addClass('is-invalid');
+                    $('#confirmpassworderr').text(confirmpassword).show();
+                }
+                else
+                {
+                    $('#confirmpassworderr').text('').hide();
+                    $('#confirmpassword').attr('class','form-control');
+                }
+
+
+
+            }
+        });
     });
+
+});
 </script>
+
+
+

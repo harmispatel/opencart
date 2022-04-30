@@ -64,7 +64,6 @@
         <div class="working-time"><i class="far fa-clock"></i>
             <div>
                 <strong class="text-uppercase">Working Time:</strong>
-                {{-- <span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span> --}}
                 @php
                     $openday =$openclose['openday'];
                     $fromtime = $openclose['fromtime'];
@@ -92,17 +91,13 @@
 
 
         </div><a class="logo" href="{{ route('home') }}"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/></a>
-        {{-- @if ($store_open_close == 1) --}}
         @foreach ($openday as $key => $item)
             @foreach ($item as $value)
                 @php
-                    date_default_timezone_set("Asia/kolkata");
-                    $t = count($item)-1;
-                    $firstday = $item[0];
-                    $firsttime = date('G', strtotime($fromtime[$key]));
-                    $lastday = $item[$t];
-                    $lasttime = date('G', strtotime($totime[$key]));
-                    $today = date('G');
+
+                    $firsttime = strtotime($fromtime[$key]);
+                    $lasttime = strtotime($totime[$key]);
+                    $today = time();
                     $currentday = date('l');
 
                 @endphp
@@ -122,15 +117,6 @@
                 @endif
             @endforeach
         @endforeach
-        {{-- @if ($store_open_close == 1)
-        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
-            <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"/>
-        </div>
-        @else
-        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
-            <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}"/>
-        </div>
-        @endif --}}
         <a class="open-mobile-menu" href="javascript:void(0)">
             <span class="text-uppercase">menu</span>
             <i class="fas fa-bars"></i></a>

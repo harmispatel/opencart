@@ -48,15 +48,15 @@ class HomeController extends Controller
             return $query->hasManyOrders->count();
         });
 
-        $categorytoproduct = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
-            $query->where('store_id', $front_store_id);
-        })->get();
-        foreach ($categorytoproduct as $categorydet){
-                  $cat=$categorydet->category_id;
-            $categorytoproduct = Product_to_category::with(['hasOneProduct','hasOneDescription'])->whereHas('hasOneProduct', function ($query) use ($cat) {
-                $query->where('category_id',$cat);
-            })->get();
-        }
+        // $categorytoproduct = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
+        //     $query->where('store_id', $front_store_id);
+        // })->get();
+        // foreach ($categorytoproduct as $categorydet){
+        //           $cat=$categorydet->category_id;
+        //     $categorytoproduct = Product_to_category::with(['hasOneProduct','hasOneDescription'])->whereHas('hasOneProduct', function ($query) use ($cat) {
+        //         $query->where('category_id',$cat);
+        //     })->get();
+        // }
         // echo '<pre>';
         // print_r($data['best_categories']->toArray());
         // exit();
@@ -82,7 +82,7 @@ class HomeController extends Controller
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
-        return view('frontend.pages.home',compact(['photos','categorytoproduct','best_categories','popular_foods','delivery_setting','areas']));
+        return view('frontend.pages.home',compact(['photos','best_categories','popular_foods','delivery_setting','areas']));
     }
 
 

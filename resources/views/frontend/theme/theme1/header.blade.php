@@ -19,6 +19,44 @@
         color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
     }
 
+    .login-details-inr {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 10px;
+    }
+    .login-details-inr::before {
+        border-left: 1px solid #ccc;
+        color: #ccc;
+        float: none;
+        font-size: 16px;
+        height: 22px;
+        line-height: 22px;
+        margin: 0;
+        padding-left: 5px;
+        padding-right: 25px;
+        pointer-events: none;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: 9px;
+        width: 22px;
+    }
+    .login-details-inr input{
+        padding: 10px;
+    }
+    .login-details-inr select{
+        padding: 10px;
+        appearance: none !important;
+        background: none;
+    }
+    .modal-login h2, .new-account-modal h2{
+        font-size: 18px;
+    }
+    /* .modal-login .btn,.new-account-modal .btn{
+        background-color: #4ED58C;
+        color: #fff;
+    } */
+
 
 </style>
 
@@ -57,13 +95,9 @@
             @foreach ($openday as $key => $item)
             @foreach ($item as $value)
                 @php
-                    date_default_timezone_set("Asia/kolkata");
-                    $t = count($item)-1;
-                    $firstday = $item[0];
-                    $firsttime = date('G', strtotime($fromtime[$key]));
-                    $lastday = $item[$t];
-                    $lasttime = date('G', strtotime($totime[$key]));
-                    $today = date('G');
+                    $firsttime = strtotime($fromtime[$key]);
+                    $lasttime = strtotime($totime[$key]);
+                    $today = time();
                     $currentday = date('l');
 
                 @endphp
@@ -113,12 +147,12 @@
             </ul>
             <ul class="authentication-links">
                 <li>
-                    <a href="#">
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
                         <i class="far fa-user"></i><span>Login</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
                         <i class="fas fa-sign-in-alt"></i><span>Register</span>
                     </a>
                 </li>
@@ -163,4 +197,94 @@
         </div>
     </div>
 </header>
+{{-- <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">
+    Launch demo modal
+  </button> --}}
+
+  <!-- Modal -->
+  <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+
+            <div class="modal-login mb-3">
+                <form id="userlogin">
+                    <h2>LOG IN</h2>
+                    <div class="login-details-inr fa fa-envelope w-100">
+                        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                    </div>
+                        <div class="login-details-inr fa fa-lock w-100">
+                        <input placeholder="Password" type="password" name="password" value="" class="w-100">
+                    </div>
+                    <div class="login-modal-last d-flex justify-content-between">
+                        <a href="">Forgotten Password?</a>
+                        <div class="check-modal">
+                            <label for="remember">Remember Me</label>
+                            <input type="checkbox" id="remember">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+            <div class="new-account-modal">
+                <form id="registerform" method="POST">
+                    {{ csrf_field() }}
+                    <h2>Create an account</h2>
+                    <div class="login-details-inr fa fa-sort-up w-100">
+                        <select name="title" id="title" class="w-100">
+                            <option value="" disabled selected>Title</option>
+                            <option value="1">Mr.</option>
+                            <option value="2">Mrs.</option>
+                            <option value="3">Ms.</option>
+                            <option value="4">Miss.</option>
+                            <option value="5">Dr.</option>
+                            <option value="6">Prof.</option>
+                        </select>
+                        <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
+                    </div>
+                    <div class="login-details-inr fa fa-user w-100">
+                        <div class="w-50 d-inline-block float-start">
+                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100">
+                            <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
+                        </div>
+                        <div class="w-50 d-inline-block float-end">
+                            <input placeholder="Surname" type="text" id="surname" name="surname" value="" class="w-100">
+                            <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
+                        </div>
+                    </div>
+                    <div class="login-details-inr fa fa-envelope w-100">
+                        <input placeholder="Email address" type="text" id="email" name="email" value="" class="w-100">
+                        <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
+                    </div>
+                    <div class="login-details-inr fa fa-phone-alt w-100">
+                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="" class="w-100">
+                        <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
+                    </div>
+                    <div class="login-details-inr fa fa-lock w-100">
+                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100">
+                        <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
+                    </div>
+                    <div class="login-details-inr fa fa-lock w-100">
+                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
+                        <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
+                    </div>
+                    <a id="register" class="btn btn-success">Register</a>
+
+                </form>
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 {{-- End Header --}}
+
+{{-- @php
+            echo '<pre>';
+        print_r(session()->all());
+        exit();
+@endphp --}}
