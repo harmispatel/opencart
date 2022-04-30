@@ -36,7 +36,7 @@ class HomeController extends Controller
 
 
         $data['photos'] = Gallary::where('store_id',$front_store_id)->get();
-
+         
         $data['best_categories'] = Product_to_category::with(['hasManyOrders','hasOneCategoryDetails'])->select('category_id','product_id', DB::raw('count(*) as total_category'))->whereHas('hasOneCategoryDetails',function ($q) use ($front_store_id)
         {
             $q->whereHas('hasManyCategoryStore',function ($q1) use ($front_store_id)

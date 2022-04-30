@@ -45,4 +45,9 @@ class Product_to_category extends Model
     {
         return $this->hasOne(ToppingProductPriceSize::class,'id_product','product_id');
     }
+
+    public function hasOneToppingSize()
+    {
+        return $this->hasOne(ToppingSize::class,'id_category','category_id');
+    }
 }
