@@ -42,4 +42,20 @@ class MenuController extends Controller
         exit();
 
     }
+    public function setDeliveyType(Request $request)
+    {
+        $d_type = $request->d_type;
+
+        session()->put('user_delivery_type',$d_type);
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+    public function store(Request $request){
+
+        return $request->all();
+    }
 }

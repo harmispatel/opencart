@@ -210,7 +210,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
-
             <div class="modal-login mb-3">
                 <form id="userlogin">
                     <h2>LOG IN</h2>
