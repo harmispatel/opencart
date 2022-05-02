@@ -9,6 +9,8 @@ $template_setting = session('template_settings');
 
 $user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
 
+$mycart = session()->get('cart1');
+
 @endphp
 
 <!doctype html>
@@ -163,10 +165,11 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                 @php
                                                     $demo = $category->category_id;
                                                     $productcount = getproductcount($demo);
+
+                                                    $catname = strtolower($category->name)
                                                 @endphp
                                                 <li>
-                                                    <a href="#" class="active">{{ $category->name }}
-                                                        ({{ $productcount }})
+                                                    <a href="#{{ str_replace(' ', '', $catname) }}" class="active">{{ $category->name }} ({{ $productcount }})
                                                     </a>
                                                 </li>
                                             @endforeach
@@ -190,25 +193,21 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                             @php
                                                 $cat_id = $value->category_id;
                                                 $front_store_id = session('front_store_id');
-                                                $result = getproduct($front_store_id, $cat_id);
+                                                $product = getproduct($front_store_id, $cat_id);
+
+                                                $catvalue = strtolower($value->name);
                                             @endphp
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse{{ $key }}"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapse{{ $key }}">
+                                                        <button class="accordion-button" id="{{ str_replace(' ','',$catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
-                                                    @foreach ($result['product'] as $values)
-                                                        <div id="collapse{{ $key }}"
-                                                            class="accordion-collapse collapse show"
-                                                            aria-labelledby="headingOne"
-                                                            data-bs-parent="#accordionExample">
+
+                                                    @foreach ($product as $values)
+                                                        <div id="collapse{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
                                                                     <div class="row">
@@ -217,8 +216,11 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                                                 <h4>
                                                                                     {{ $values->hasOneDescription['name'] }}
                                                                                 </h4>
+                                                                                @php
+                                                                                    $prodesc = html_entity_decode($values->hasOneDescription['description']);
+                                                                                @endphp
                                                                                 <p>
-                                                                                    {{ strip_tags($values->hasOneDescription['description']) }}
+                                                                                    {{ strip_tags($prodesc) }}
                                                                                 </p>
                                                                                 <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}"
                                                                                     width="80" height="80"
@@ -227,17 +229,39 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                                         </div>
                                                                         <div class="col-md-5">
                                                                             <div class="options-bt-main">
-                                                                                @foreach ($result['size'] as $size)
-                                                                                    @php
-                                                                                        $sizeprice = $size->id_size;
-                                                                                        $productsize = $values->hasOneProduct['product_id'];
-                                                                                        $setsizeprice = getprice($sizeprice, $productsize);
-                                                                                    @endphp
-
+                                                                                @php
+                                                                                    $sizes = getsize($values->product_id);
+                                                                                @endphp
+                                                                                @if (count($sizes) > 0)
+                                                                                    @foreach ($sizes as $size)
+                                                                                        @php
+                                                                                            $sizeprice = $size->id_product_price_size ;
+                                                                                            $productsize = $values->hasOneProduct['product_id'];
+                                                                                            $setsizeprice = $size->price;
+                                                                                        @endphp
+                                                                                        <div class="options-bt">
+                                                                                            <div class="row">
+                                                                                                <div
+                                                                                                    class="col-md-5">
+                                                                                                    <span>{{ $size->hasOneToppingSize['size'] }}</span>
+                                                                                                </div>
+                                                                                                <div class="col-md-7">
+                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
+                                                                                                        <span class="sizeprice hide-carttext">
+                                                                                                            £ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added
+                                                                                                                <i class="fa fa-check"></i>
+                                                                                                            </span>
+                                                                                                        </a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                @else
                                                                                     <div class="options-bt">
                                                                                         <div class="row">
                                                                                             <div class="col-md-5">
-                                                                                                <span>{{ $size->size }}</span>
+                                                                                                <span>price</span>
                                                                                             </div>
                                                                                             <div class="col-md-7">
                                                                                             @foreach ($openday as $key => $item)
@@ -253,23 +277,13 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                @foreach ($setsizeprice as $setsizeprices)
-                                                                                                                    <a href=""
-                                                                                                                        type="button"
-                                                                                                                        class="btn options-btn"
-                                                                                                                        onclick="showmodalproduct();">£{{ $setsizeprices->price }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></a>
-                                                                                                                @endforeach
+
+                                                                                                                    <a class="btn options-btn" onclick="showId({{ $values->product_id }},0)">£{{ $setsizeprice}}<i class="fa fa-shopping-basket"></i></a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
                                                                                                                 @foreach ($setsizeprice as $setsizeprices)
-                                                                                                                    <a href=""
-                                                                                                                        type="button"
-                                                                                                                        data-bs-toggle="modal"
-                                                                                                                        data-bs-target="#pricemodel"
-                                                                                                                        class="btn options-btn">£{{ $setsizeprices->price }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></a>
+                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprices->price }}<i class="fa fa-shopping-basket"></i></a>
                                                                                                                 @endforeach
                                                                                                             @endif
                                                                                                         @endif
@@ -280,7 +294,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                @endforeach
+                                                                                @endif
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -332,8 +346,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                 <div class="mob-view" id="mob-view">
                                     <span class="tg-icon" id="tg-icon"><i
                                             class="fas fa-angle-double-up"></i></span>
-                                    <div class="mob-basket">
-                                        0 X ITEMS | TOTAL: £0.00</div>
+                                    <div class="mob-basket">0 X ITEMS | TOTAL: £0.00</div>
                                 </div>
                                 <div class="minicart" id="minicart">
                                     <div class="minibox-title">
@@ -342,17 +355,58 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                     </div>
                                     <div class="minibox-content">
                                         <div class="empty-box">
-                                            <span>Your shopping cart is empty!</span>
+                                           <table class="table">
+                                            @php
+                                                $subtotal = 0;
+                                            @endphp
+                                            @if(!empty($mycart) || $mycart != '')
+                                                @if (isset($mycart['size']))
+                                                    @foreach ($mycart['size'] as $cart)
+                                                        @php
+                                                            $price = $cart['price'] * $cart['quantity'];
+                                                            $subtotal += $price;
+                                                        @endphp
+                                                        <tr>
+                                                            <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                            <td>{{ $cart['quantity'] }}</td>
+                                                            <td>{{ $cart['size'] }}</td>
+                                                            <td>{{ $cart['name'] }}</td>
+                                                            <td>£ {{ $price }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                                @if (isset($mycart['withoutSize']))
+                                                    @foreach ($mycart['withoutSize'] as $cart)
+                                                        @php
+                                                            $price = $cart['price'] * $cart['quantity'];
+                                                            $subtotal += $price;
+                                                        @endphp
+                                                        <tr>
+                                                            <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                            <td>{{ $cart['quantity'] }}</td>
+                                                            <td colspan="2">{{ $cart['name'] }}</td>
+                                                            <td>£ {{ $price }}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            @else
+                                                <span>Your shopping cart is empty!</span>
+                                            @endif
+                                           </table>
                                         </div>
                                         <div class="minicart-total">
                                             <ul class="minicart-list">
                                                 <li class="minicart-list-item">
-                                                    <div class="minicart-list-item-innr">
+                                                    <div class="minicart-list-item-innr sub-total">
                                                         <label>Sub-Total</label>
-                                                        <span>£0.00</span>
+                                                        @if(isset($subtotal))
+                                                            <span>£ {{ $subtotal }}</span>
+                                                        @else
+                                                            <span>£ 0.00</span>
+                                                        @endif
                                                     </div>
                                                 </li>
-                                                <li class="minicart-list-item">
+                                                <li class="minicart-list-item total">
                                                     <div class="minicart-list-item-innr">
                                                         <label>Total to pay:</label>
                                                         <span>£0.00</span>
@@ -374,20 +428,26 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                     @php
                                                         $collectiondays = $openclose['collectiondays'];
                                                         $collectionfrom = $openclose['collectionfrom'];
+
+                                                        $collection_same_bussiness = isset($openclose['collection_same_bussiness']) ? $openclose['collection_same_bussiness'] : '';
                                                     @endphp
-                                                    @foreach ($collectiondays as $key => $item)
-                                                        @foreach ($item as $value)
-                                                            @php
-                                                                $t = count($item) - 1;
-                                                                $firstday = $item[0];
-                                                                $lastday = $item[$t];
-                                                                $today = date('l');
-                                                            @endphp
-                                                            @if ($today == $value)
-                                                                <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
-                                                            @endif
+                                                    @if ($collection_same_bussiness == 1)
+                                                        <span>{{ ($openclose['collection_gaptime']) ? $openclose['collection_gaptime'] : "Select" }} Min</span>
+                                                    @else
+                                                        @foreach ($collectiondays as $key => $item)
+                                                            @foreach ($item as $value)
+                                                                @php
+                                                                    $t = count($item) - 1;
+                                                                    $firstday = $item[0];
+                                                                    $lastday = $item[$t];
+                                                                    $today = date('l');
+                                                                @endphp
+                                                                @if ($today == $value)
+                                                                    <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
+                                                                @endif
+                                                            @endforeach
                                                         @endforeach
-                                                    @endforeach
+                                                    @endif
                                                 </div>
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -399,21 +459,26 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                     @php
                                                         $deliverydays = $openclose['deliverydays'];
                                                         $deliveryfrom = $openclose['deliveryfrom'];
+
+                                                        $delivery_same_bussiness = isset( $openclose['delivery_same_bussiness']) ?  $openclose['delivery_same_bussiness'] : '' ;
                                                     @endphp
-                                                    @foreach ($deliverydays as $key => $item)
-                                                        @foreach ($item as $value)
-                                                            @php
-                                                                $t = count($item) - 1;
-                                                                $firstday = $item[0];
-                                                                $lastday = $item[$t];
-                                                                $today = date('l');
-                                                            @endphp
-                                                            @if ($today == $value)
-                                                                <span>Starts at -
-                                                                    <b>{{ $deliveryfrom[$key] }}</b></span>
-                                                            @endif
+                                                    @if ($delivery_same_bussiness == 1)
+                                                        <span>{{ ($openclose['delivery_gaptime']) ? $openclose['delivery_gaptime'] : "Select" }} Min</b></span>
+                                                    @else
+                                                        @foreach ($deliverydays as $key => $item)
+                                                            @foreach ($item as $value)
+                                                                @php
+                                                                    $t = count($item) - 1;
+                                                                    $firstday = $item[0];
+                                                                    $lastday = $item[$t];
+                                                                    $today = date('l');
+                                                                @endphp
+                                                                @if ($today == $value)
+                                                                    <span>Starts at - <b>{{ $deliveryfrom[$key] }}</b></span>
+                                                                @endif
+                                                            @endforeach
                                                         @endforeach
-                                                    @endforeach
+                                                    @endif
                                                 </div>
                                             @endif
                                         </div>
@@ -497,9 +562,6 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
         </div>
     </div>
 
-
-
-
     @if (!empty($theme_id) || $theme_id != '')
         {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
@@ -562,6 +624,52 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
         } else {
             $("#tg-icon").html('<i class="fas fa-angle-double-up"></i>');
         }
+    }
+</script>
+
+<script>
+    // $(document).ready(function() {
+    //     $('.options-btn').on('click', function(e) {
+    //         e.preventDefault()
+    //         $('.hide-carttext').hide();
+
+    //         $('.show-carttext').show(function() {
+    //             setTimeout(function() {
+    //                 $('.hide-carttext').hide();
+    //             }, 2000);
+    //         });
+    //         // $('.hide-carttext').show();
+
+    //         // $('.hide-carttext').show();
+
+    //     });
+
+    // });
+</script>
+<script>
+    function showId(product,sizeprice) {
+
+        var sizeid = sizeprice;
+
+        var productid = product;
+
+        $.ajax({
+            type: 'post',
+            url: '{{ route('getid') }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'size_id': sizeid,
+                'product_id': productid,
+            },
+            dataType: 'json',
+            success: function(result)
+            {
+                $('.empty-box').html('');
+                $('.sub-total').html('');
+                $('.empty-box').append(result.html);
+                $('.sub-total').append(result.subtotal);
+            }
+        });
     }
 
     $('#collection').on('click', function() {

@@ -16,6 +16,7 @@ use App\Models\Postcodes;
 use App\Models\Product_to_category;
 use App\Models\Settings;
 use DB;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\URL;
 
 class HomeController extends Controller

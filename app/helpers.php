@@ -16,6 +16,7 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
+use App\Models\Product;
 use App\Models\Reviews;
 use Illuminate\Support\Facades\URL;
 
@@ -286,21 +287,20 @@ function getproductcount($demo){
 
 }
 
-function getproduct($front_store_id,$cat_id){
+function getproduct($front_store_id,$cat_id)
+{
+    $product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
+        $query->where('category_id', $cat_id);
+    })->get();
+    return $product;
 
-	$product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
-		$query->where('category_id', $cat_id);
-	})->get();
-	$size =ToppingSize::where('id_category',$cat_id)->get();
-
-	$result['product']=$product;
-	$result['size']=$size;
-	return $result;
 }
-function getprice($sizeprice,$productsize){
+function getsize($product_id)
+{
 
-	$setsizeprice=ToppingProductPriceSize::where('id_size',$sizeprice)->where('id_product',$productsize)->get();
-	return $setsizeprice;
+    $size =ToppingProductPriceSize::with(['hasOneToppingSize'])->where('id_product',$product_id)->get();
+    return $size;
+
 }
 
 function getimage($current_store)
@@ -786,27 +786,27 @@ function openclosetime()
     $deliverydays = array();
     $deliveryfrom = array();
     $deliveryto = array();
-    if (isset($delivery['day']) && count($delivery['day'])) {
-        foreach ($delivery['day'] as $keyday => $daytime) {
-            $deliveryday = array();
-            foreach ($days as $key => $day) {
-                if (in_array($key, $daytime)) {
-                   $deliveryday[] = $day;
-                }
-            }
-            $deliverydays[]=$deliveryday;
-            foreach ($times as $key => $time) {
-                if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
-                    $deliveryfrom[] = $time;
-                }
-            }
-            foreach ($times as $key => $time) {
-                if (isset($delivery['to'][$keyday]) && $collection['to'][$keyday] == $key) {
-                    $deliveryto[] = $time;
-                }
-            }
-        }
-    }
+    // if (isset($delivery['day']) && count($delivery['day'])) {
+    //     foreach ($delivery['day'] as $keyday => $daytime) {
+    //         $deliveryday = array();
+    //         foreach ($days as $key => $day) {
+    //             if (in_array($key, $daytime)) {
+    //                $deliveryday[] = $day;
+    //             }
+    //         }
+    //         $deliverydays[]=$deliveryday;
+    //         foreach ($times as $key => $time) {
+    //             if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
+    //                 $deliveryfrom[] = $time;
+    //             }
+    //         }
+    //         foreach ($times as $key => $time) {
+    //             if (isset($delivery['to'][$keyday]) && $collection['to'][$keyday] == $key) {
+    //                 $deliveryto[] = $time;
+    //             }
+    //         }
+    //     }
+    // }
     $data['deliverydays'] = $deliverydays;
     $data['deliveryfrom'] = $deliveryfrom;
     $data['deliveryto'] = $deliveryto;
@@ -839,6 +839,53 @@ function storereview()
 
     return $data;
 }
+
+function addtoCart($request,$productid,$sizeid)
+{
+    if(session()->has('cart1'))
+        {
+            $arr = session()->get('cart1');
+        }
+        else
+        {
+            $arr = array();
+        }
+
+        if ($sizeid != 0) {
+            $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
+                $q->where('id_product_price_size', $sizeid);
+            }])->where('product_id', $productid)->first();
+            $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+            $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+        } else {
+            $product = Product::select('product_id', 'image', 'price')->with(['hasOneProductDescription'])->where('product_id', $productid)->first();
+            $data['price'] = $product->price;
+        }
+        $data['name'] = $product->hasOneProductDescription['name'];
+        $data['description'] = $product->hasOneProductDescription['description'];
+        $data['image'] = $product->image;
+        $data['quantity'] = 1;
+        if ($sizeid != 0) {
+            if(isset($arr['size'][$sizeid])){
+                $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
+            }else{
+                $arr['size'][$sizeid] =$data;
+            }
+        }else{
+            if(isset($arr['withoutSize'][$productid])){
+                $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
+            }else{
+                $arr['withoutSize'][$productid] =$data;
+            }
+        }
+        // $arr[] = $data;
+
+        $request->session()->put('cart1',$arr);
+
+        $request->session()->save();
+}
+
+
 
 function getallproduct($id)
 {

@@ -29,7 +29,7 @@
                     <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                 </li>
                 <li class="{{ request()->is('checkout') ? 'active' : '' }}">
-                    <a class="text-uppercase" href="#">check out</a>
+                    <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                 </li>
                 <li class="{{ request()->is('contact') ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>

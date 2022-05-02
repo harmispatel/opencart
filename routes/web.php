@@ -33,6 +33,7 @@ use App\Http\Controllers\NewOrderController;
 use App\Http\Controllers\ProductIconsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\Frontend\CheckoutController;
 use Illuminate\Support\Facades\Auth;
 
 //frontend
@@ -397,8 +398,9 @@ Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
-Route::post('show', [MenuController::class, 'store'])->name('show');
+Route::post('getid', [MenuController::class, 'getid'])->name('getid');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
+Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 
