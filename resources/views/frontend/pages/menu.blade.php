@@ -252,10 +252,10 @@ $mycart = session()->get('cart1');
                                                                                         <div class="options-bt">
                                                                                             <div class="row">
                                                                                                 <div
-                                                                                                    class="col-md-5">
+                                                                                                    class="col-md-6">
                                                                                                     <span>{{ $size->hasOneToppingSize['size'] }}</span>
                                                                                                 </div>
-                                                                                                <div class="col-md-7">
+                                                                                                <div class="col-md-6">
                                                                                                     <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
                                                                                                         <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added
@@ -575,7 +575,6 @@ $mycart = session()->get('cart1');
             </div>
         </div>
     </div>
-
     @if (!empty($theme_id) || $theme_id != '')
         {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
@@ -594,6 +593,7 @@ $mycart = session()->get('cart1');
 
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 <script>
     $(document).ready(function() {
