@@ -364,14 +364,9 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
                                                 <div class="form-check m-auto">
                                                     @if ($delivery_setting['enable_delivery'] == 'collection')
-                                                        <input class="form-check-input" type="radio"
-                                                            name="delivery_type" id="collection"
-                                                            {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }}
-                                                            value="collection">
+                                                        <input class="form-check-input" type="radio" name="delivery_type" id="collection" {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }} value="collection">
                                                     @else
-                                                        <input class="form-check-input" type="radio"
-                                                            name="delivery_type" id="collection" value="collection"
-                                                            {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" name="delivery_type" id="collection" value="collection" {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
                                                     @endif
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
@@ -389,8 +384,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                                                 $today = date('l');
                                                             @endphp
                                                             @if ($today == $value)
-                                                                <span>Starts at -
-                                                                    <b>{{ $collectionfrom[$key] }}</b></span>
+                                                                <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
                                                             @endif
                                                         @endforeach
                                                     @endforeach
@@ -398,8 +392,7 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
-                                                    <input class="form-check-input" type="radio" name="delivery_type"
-                                                        id="delivery">
+                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery">
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -440,11 +433,9 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
 
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value)
-                                            <a href="" class="btn checkbt"
-                                                style="background-color: green; color:white;">Checkout</a>
+                                            <a href="" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
                                             <div class="closed-now">
-                                                <span class="closing-text" style="color: green !important;">We are
-                                                    open now!</span>
+                                                <span class="closing-text" style="color: green !important;">We are open now!</span>
                                             </div>
                                         @endif
                                     @else
@@ -470,16 +461,14 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i
-                            class="fas fa-times"></i></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <h5 class="modal-title" id="pricemodelLabel">Order Now</h5>
                     <p>Minimum delivery is £15.00</p>
                     <button class="btn csmodal-btn" onclick="showmodal();">Deliver my order</button>
                     <button class="btn csmodal-btn" data-bs-dismiss="modal">I will come and collect</button>
-                    <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
-                        back</button>
+                    <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                 </div>
             </div>
         </div>
@@ -494,19 +483,16 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
                 <form action="">
                     <div class="modal-body">
                         <h5 class="modal-title" id="ModalLabel">Please Enter Your Post Code</h5>
-                        <div class="show_min">To start placing delivery order, please enter your full postcode
-                            here:
+                        <div class="show_min">To start placing delivery order, please enter your full postcode here:
                         </div>
                         <div class="controls">
                             <input type="text" name="keyword" placeholder="eg.AA1 1bb" required>
                             {{-- <samp>@error('keyword'){{ "Sorry!!!! We don't do delivery to your area" }}@enderror</samp> --}}
                         </div>
                         <button type="submit" class="btn csmodal-btn">Deliver my order</button><br>
-                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
-                            back</button>
+                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
