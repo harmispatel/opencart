@@ -34,6 +34,7 @@ use App\Http\Controllers\ProductIconsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Frontend\MyBasketController;
 use Illuminate\Support\Facades\Auth;
 
 //frontend
@@ -71,6 +72,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // Dashboard
     Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
+
     Route::post('setStore', [HomeController::class, 'setStore'])->name('setStore');
 
 
@@ -266,6 +268,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
 
+    
     // Countries
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
     Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
@@ -403,11 +406,12 @@ Route::post('reservation', [ReservationController::class, 'index'])->name('reser
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
+Route::get('mybasket', [MyBasketController::class, 'mybasket'])->name('mybasket');
+
 
 // login user
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
-
 
 
 

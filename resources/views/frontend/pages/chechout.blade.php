@@ -137,7 +137,7 @@ $template_setting = session('template_settings');
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item">
                     <h2 class="accordion-header accordion-button" id="headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <span>Accordion Item #1</span>
+                        <span> Log in</span>
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                       <div class="accordion-body">
@@ -171,7 +171,7 @@ $template_setting = session('template_settings');
                   </div>
                   <div class="accordion-item">
                     <h2 class="accordion-header accordion-button" id="headingtwo" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
-                        <span>Accordion Item #1</span>
+                        <span>Guest checkout</span>
                     </h2>
                     <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
                       <div class="accordion-body">
@@ -212,7 +212,7 @@ $template_setting = session('template_settings');
                   </div>
                   <div class="accordion-item">
                     <h2 class="accordion-header accordion-button" id="headingthree" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">
-                        <span>Accordion Item #1</span>
+                    <span>Create an account</span>
                     </h2>
                     <div id="collapsethree" class="accordion-collapse collapse" aria-labelledby="headingthree" data-bs-parent="#accordionExample">
                       <div class="accordion-body">

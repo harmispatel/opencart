@@ -90,8 +90,8 @@ ul.box-category {
 
 .empty-box {
     background: #f4f4f4;
-    padding:5px;
-    border-bottom:1px solid #e5ded4;
+    padding: 5px;
+    border-bottom: 1px solid #e5ded4;
 }
 
 .empty-box span {
@@ -285,7 +285,7 @@ ul.box-category {
     background-color: #ee5b60;
 }
 
-.options-btn i{
+.options-btn i {
     margin-left: 10px;
     margin-top: 2px;
     width: 22px;
@@ -308,7 +308,7 @@ ul.box-category {
     color: #000 !important;
     margin: 0 !important;
     display: flex;
-    width: 50px;
+    width: 72px;
 }
 
 .options-bt-main .options-bt:first-child {
@@ -404,53 +404,70 @@ ul.box-category {
     font-weight: 600;
     margin-bottom: 20px;
 }
-.check-main{
+
+.check-main {
     padding: 50px 0 200px;
 }
-.check-progress{
+
+.check-progress {
     margin-bottom: 30px;
     text-align: center;
 }
-.check-progress .progress{
+
+.check-progress .progress {
     border-radius: 30px;
 }
-.check-main .accordion-item{
+
+.check-main .accordion-item {
     border: none;
 }
-.check-main .accordion-item .accordion-button:not(.collapsed){
+
+.check-main .accordion-item .accordion-button:not(.collapsed) {
     background: none !important;
 }
-.check-main .accordion-item .accordion-button{
+
+.check-main .accordion-item .accordion-button {
     border-bottom: 2px solid #000;
     padding: 16px 16px 0 0;
 }
-.check-main .accordion-item .accordion-button span{
+
+.check-main .accordion-item .accordion-button span {
     margin: 0 0 10px 50px;
 }
-.check-main .accordion-button:before{
+
+.check-main .accordion-button:before {
     content: " ";
     position: absolute;
     border: 15px solid #000;
     bottom: 0;
 }
 
-.fb-log-bt{
+.fb-log-bt {
     background-color: #3c579a;
     display: inline-block;
 }
-.fb-log-bt span{
+
+.fb-log-bt span {
     color: #fff;
     font-size: 12px;
 }
-.fb-log-bt i{color: #fff;font-size: 20px;}
-.fb-log-bt:hover span, .fb-log-bt:hover i{
+
+.fb-log-bt i {
+    color: #fff;
+    font-size: 20px;
+}
+
+.fb-log-bt:hover span,
+.fb-log-bt:hover i {
     color: #ff0000;
 }
+
 .email-detail {
     display: inline-block;
     position: relative;
     margin-bottom: 10px;
 }
+
 .email-detail::before {
     border-left: 1px solid #ccc;
     color: #ccc;
@@ -468,7 +485,8 @@ ul.box-category {
     top: 9px;
     width: 22px;
 }
-.select-ic::before{
+
+.select-ic::before {
     border-left: 1px solid #cccccc;
     color: #cccccc;
     content: '\f0dd';
@@ -482,17 +500,104 @@ ul.box-category {
     right: 13px;
     top: 4px;
 }
-.email-detail input{
+
+.email-detail input {
     padding: 10px;
 }
-.email-detail select{
+
+.email-detail select {
     padding: 10px;
     appearance: none !important;
 }
-.email-btn .btn{
+
+.email-btn .btn {
     background-color: #F4494E !important;
     color: #fff;
     padding: 5px 25px;
+}
+
+.basket-main, .member-main, .register-main, .contact-main{
+    padding: 50px 0 200px;
+}
+.basket-title h2, .member-title h2{
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+.basket-product-detail, .coupon-inr, .contact-map{
+    margin-bottom: 30px;
+}
+
+
+.basket-product-detail  thead tr{
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+.basket-product-detail  tbody{
+    border-top: none !important;
+}
+.basket-product-detail .table th,td{
+    font-size: 14px;
+    color: #000;
+}
+.basket-product-detail .table td{
+    color: #888888;
+}
+.qu-inr input{
+    padding: 10px;
+    width: 100%;
+    max-width: 50px;
+}
+.qu-inr a i{
+    color:#F4494E;
+}
+.coupon-title h2{
+    font-size: 20px;
+}
+.coupon-apply .accordion-item{
+    border: none;
+}
+.coupon-apply .accordion-item:hover .accordion-header.collapsed{
+    color: #F4494E;
+}
+.coupon-apply .accordion-item .accordion-header.accordion-button, .accordion-body{
+    background-color: #eee !important;
+    box-shadow: none !important;
+    color: #000;
+}
+.coupon-apply .accordion-item .accordion-button.collapsed:after{
+    background: none !important;
+    content: '\f107' !important;
+    font-family: "Font Awesome 5 Free";
+}
+.coupon-apply .accordion-item .accordion-button:not(.collapsed):after{
+    transform: rotate3d(23,0,0 ,180deg);
+}
+.basket-total{
+    background-color: #f6f6f6;
+    margin-bottom: 15px;
+    overflow: auto;
+    padding: 10px 1px;
+}
+.basket-total .table{
+    float: right;
+    max-width: 300px;
+    margin-bottom: 0;
+}
+.basket-total .table td span{
+    color: #F4494E;
+}
+.basket-bt{
+    padding-top: 15px;
+    margin-bottom: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+.basket-bt .btn{
+    background-color: #F4494E;
+    color: #fff;
+    font-weight: 700;
 }
 
 @media only screen and (max-width:991px) {
