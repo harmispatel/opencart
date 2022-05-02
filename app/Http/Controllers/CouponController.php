@@ -88,7 +88,7 @@ class CouponController extends Controller
             'coupon_name' => 'required',
         ]);
 
-        date_default_timezone_set('Asia/Kolkata');
+
 
         // Insert New Coupon
         $coupon = new Coupon;
@@ -168,7 +168,7 @@ class CouponController extends Controller
         $coupon->uses_customer = isset($request->usercostomer) ? $request->usercostomer : "0";
         $coupon->status = isset($request->status) ? $request->status : "0";
         $coupon->on_off = isset($request->on_off) ? $request->on_off : "0";
-        date_default_timezone_set('Asia/Kolkata');
+
         $coupon->date_added = date("Y-m-d h:i:s");
         $coupon->update();
 

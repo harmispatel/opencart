@@ -9,9 +9,15 @@
 
     $store_set = session('store_settings');
     $store_setting = isset($store_set) ? $store_set : '';
-
+    
     $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-
+    
+    // $data = session()->all();
+    //     echo '<pre>';
+    //     print_r($data);
+    //     exit();
+    $userlogin = session('username');
+     // die;
 @endphp
 
 <style>
@@ -145,6 +151,18 @@
                     <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
                 </li>
             </ul>
+            @if (!empty($userlogin))
+            <ul class="authentication-links">
+                <li>
+                    <a href="#">{{ $userlogin }}</a>
+                </li>
+                <li>
+                    <a type="button" id="customersignout">
+                        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                    </a>
+                </li>
+            </ul>            
+            @else            
             <ul class="authentication-links">
                 <li>
                     <a type="button" data-bs-toggle="modal" data-bs-target="#login">
@@ -157,6 +175,7 @@
                     </a>
                 </li>
             </ul>
+            @endif
         </div>
         <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="background: {{ $template_setting['polianna_navbar_background'] }};">
             <a class="logo" href="{{ route('home') }}">
@@ -229,6 +248,12 @@
                     <button type="submit" class="btn btn-success">Submit</button>
                 </form>
             </div>
+            @php
+                $currentURL = URL::to("/");
+                $current_theme = themeID($currentURL);
+                $current_theme_id = $current_theme['theme_id'];
+                $front_store_id =  $current_theme['store_id'];
+            @endphp
             <div class="new-account-modal">
                 <form id="registerform" method="POST">
                     {{ csrf_field() }}
@@ -243,32 +268,33 @@
                             <option value="5">Dr.</option>
                             <option value="6">Prof.</option>
                         </select>
-                        <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
+                        <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
                     </div>
                     <div class="login-details-inr fa fa-user w-100">
                         <div class="w-50 d-inline-block float-start">
-                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100">
+                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100" required autocomplete="name" autofocus>
+                            <input type="hidden" name="front_store_id" value="{{ $front_store_id }}">
                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
                         </div>
                         <div class="w-50 d-inline-block float-end">
-                            <input placeholder="Surname" type="text" id="surname" name="surname" value="" class="w-100">
+                            <input placeholder="Surname" type="text" id="surname" name="surname" value="" class="w-100" required autocomplete="surname" autofocus>
                             <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
                         </div>
                     </div>
                     <div class="login-details-inr fa fa-envelope w-100">
-                        <input placeholder="Email address" type="text" id="email" name="email" value="" class="w-100">
+                        <input placeholder="Email address" type="text" id="email" name="email" value="" class="w-100" required autocomplete="email" autofocus>
                         <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
                     </div>
                     <div class="login-details-inr fa fa-phone-alt w-100">
-                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="" class="w-100">
+                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="" class="w-100" required autocomplete="phone" autofocus>
                         <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
                     </div>
                     <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100">
+                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100" required autocomplete="password" autofocus>
                         <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
                     </div>
                     <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
+                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100" required autocomplete="confirmpassword" autofocus>
                         <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
                     </div>
                     <a id="register" class="btn btn-success">Register</a>

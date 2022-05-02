@@ -194,7 +194,7 @@ class ProductController extends Controller
 
 
             $product = new Product();
-            date_default_timezone_set('Asia/Kolkata');
+
             $product->model = isset($request->model) ? $request->model : 0;
             $product->sku = isset($request->sku) ? $request->sku : 0;
             $product->upc = isset($request->upc) ? $request->upc : 0;
@@ -346,7 +346,7 @@ class ProductController extends Controller
         ]);
 
         $product = new Product();
-        date_default_timezone_set('Asia/Kolkata');
+
         $product->model = isset($request->model) ? $request->model : 0;
         $product->sku = isset($request->sku) ? $request->sku : "";
         $product->upc = isset($request->upc) ? $request->upc : "";
@@ -675,7 +675,7 @@ class ProductController extends Controller
     {
         $product_id = $request->product_id;
         $product = Product::find($product_id);
-        date_default_timezone_set('Asia/Kolkata');
+
         $product->model = isset($request->model) ? $request->model : "";
         $product->model = $request->model;
         $product->sku = isset($request->sku) ? $request->sku : "";

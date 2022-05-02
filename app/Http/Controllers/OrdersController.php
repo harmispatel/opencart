@@ -325,7 +325,7 @@ class OrdersController extends Controller
         // $neworder->currency_id          = isset($request->firstname) ? $request->firstname : "";
         // $neworder->currency_code        = isset($request->firstname) ? $request->firstname : "";
         // $neworder->currency_value       = isset($request->firstname) ? $request->firstname : "";
-        date_default_timezone_set('Asia/Kolkata');
+
         $neworder->date_added = date("Y-m-d h:i:s");
         $neworder->date_modified = date("Y-m-d h:i:s");
         $neworder->save();
@@ -333,7 +333,7 @@ class OrdersController extends Controller
         echo '<pre>';
         print_r($neworder->toArray());
         exit();
-        
+
     }
 
 
@@ -345,7 +345,7 @@ class OrdersController extends Controller
         $orderhisins->order_id = $request->order_id;
         $orderhisins->notify  = isset($request->notify) ? $request->notify : "0";
         $orderhisins->comment = isset($request->comment) ? $request->comment : "";
-        date_default_timezone_set('Asia/Kolkata');
+
         $orderhisins->date_added = date("Y-m-d h:i:s");
         $orderhisins->save();
 
@@ -477,7 +477,7 @@ class OrdersController extends Controller
         $proreturn->comment                         = isset($request->comment) ? $request->comment : '';
         $proreturn->return_reason_id = $request->return_reason_id;
         $proreturn->return_action_id = $request->return_action_id;
-        date_default_timezone_set('Asia/Kolkata');
+
         $proreturn->date_added = date("Y-m-d h:i:s");
         $proreturn->date_modified = date("Y-m-d h:i:s");
         $proreturn->save();

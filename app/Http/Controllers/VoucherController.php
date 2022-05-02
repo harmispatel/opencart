@@ -106,7 +106,7 @@ class VoucherController extends Controller
         $voucher->message = $request->message;
         $voucher->amount = $request->amount;
         $voucher->status = $request->status;
-        date_default_timezone_set('Asia/Kolkata');
+
         $voucher->date_added = date("Y-m-d h:i:s");
         $voucher->update();
 
@@ -167,7 +167,7 @@ class VoucherController extends Controller
         $voucher->message = $request->message;
         $voucher->amount = $request->amount;
         $voucher->status = $request->status;
-        date_default_timezone_set('Asia/Kolkata');
+
         $voucher->date_added = date("Y-m-d h:i:s");;
         $voucher->save();
 

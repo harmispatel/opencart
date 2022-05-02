@@ -214,7 +214,14 @@
         cache: false,
         processData: false,
             success: function (response) {
-                console.log(response);
+                location.reload();
+                // $('#registerform').trigger('reset');
+                // $('#login').modal('hide');
+                // alert('Login Success');
+                // console.log(response);
+
+
+
             },
             error : function (message) {
                 console.log(message.responseJSON.errors);
@@ -322,6 +329,23 @@
 
             }
         });
+    });
+    $('#customersignout').click(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "post",
+            url: "{{  route('customerlogout') }}",
+            // data: "_token": "{{ csrf_token() }}",
+            dataType: "dataType",
+            success: function (response) {
+
+            }
+        });
+
     });
 
 });

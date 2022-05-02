@@ -407,6 +407,7 @@ Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postc
 // login user
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
+Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])->name('customerlogout');
 
 
 

@@ -198,7 +198,7 @@ class CategoryController extends Controller
         $catdetail->column = isset($request->columns) ? $request->columns : 1;
         $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
         $catdetail->status = isset($request->status) ? $request->status : 0;
-        date_default_timezone_set('Asia/Kolkata');
+
         $catdetail->date_added = date("Y-m-d h:i:s");
         $catdetail->date_modified = date("Y-m-d h:i:s");
         $catdetail->availibleday = $availibleday;
@@ -289,7 +289,7 @@ class CategoryController extends Controller
             $catdetail->column = isset($request->columns) ? $request->columns : 1;
             $catdetail->sort_order = isset($request->sortorder) ? $request->sortorder : 0;
             $catdetail->status = isset($request->status) ? $request->status : 0;
-            date_default_timezone_set('Asia/Kolkata');
+
             $catdetail->date_added = date("Y-m-d h:i:s");
             $catdetail->date_modified = date("Y-m-d h:i:s");
             $catdetail->availibleday = $availibleday;
@@ -473,7 +473,7 @@ class CategoryController extends Controller
         $catdetail->sort_order = $request->sortorder;
         $catdetail->status = isset($request->status) ? $request->status : 0;
         $catdetail->status = isset($request->status) ? $request->status : 0;
-        date_default_timezone_set('Asia/Kolkata');
+
         $catdetail->availibleday = $availibleday;
         $catdetail->update();
 

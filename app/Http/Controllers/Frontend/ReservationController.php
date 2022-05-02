@@ -24,7 +24,7 @@ class ReservationController extends Controller
         $reservations->comment = isset($request->comment) ? $request->comment :'';
         $reservations->booking_status = isset($request->booking_status) ? $request->booking_status :'';
         $reservations->message = isset($request->message) ? $request->message :'';
-        date_default_timezone_set('Asia/Kolkata');
+
         $reservations->created_date = date("Y-m-d h:i:s");
         $reservations->ip =  $_SERVER['REMOTE_ADDR'];
         $reservations->save();
