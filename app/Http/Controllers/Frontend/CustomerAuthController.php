@@ -41,7 +41,6 @@ class CustomerAuthController extends Controller
 
         // Validation
         $request->validate([
-            'title' => 'required',
             'name' => 'required',
             'surname' => 'required',
             'email' => 'required|email|unique:oc_customer,email',
@@ -77,7 +76,6 @@ class CustomerAuthController extends Controller
         session()->put('username', $customer->firstname);
 
 
-        return response()->json();
     }
 
     public function customerlogout()

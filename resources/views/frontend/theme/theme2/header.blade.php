@@ -117,12 +117,12 @@
                         </a>
                     </li>
                 </ul>
-                <a class="menu-shopping-cart" href="">
+                <a class="menu-shopping-cart" href="{{ route('mybasket') }}">
                     <i class="fas fa-shopping-basket"></i>
                     <div class="price-box">
                         <strong>Shopping Cart:</strong>
                         <div class="price">
-                            <i class="fas fa-dollar-sign"></i><span class="pirce-value">32.10</span>
+                            <i class="fas fa-dollar-sign"></i><span class="pirce-value"></span>
                         </div>
                     </div>
                 </a>

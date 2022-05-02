@@ -231,6 +231,7 @@
         <div class="modal-body text-center">
             <div class="modal-login mb-3">
                 <form id="userlogin">
+                    {{ csrf_field() }}
                     <h2>LOG IN</h2>
                     <div class="login-details-inr fa fa-envelope w-100">
                         <input placeholder="Email address" type="text" name="email" value="" class="w-100">
@@ -245,7 +246,7 @@
                             <input type="checkbox" id="remember">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                    <button type="submit" class="btn btn-success" id="userlogin">Login</button>
                 </form>
             </div>
             @php
@@ -255,7 +256,8 @@
                 $front_store_id =  $current_theme['store_id'];
             @endphp
             <div class="new-account-modal">
-                <form id="registerform" method="POST">
+                <form action="{{ route('customerregister') }}" 
+                enctype="multipart/form-data" id="registerform"  method="POST">
                     {{ csrf_field() }}
                     <h2>Create an account</h2>
                     <div class="login-details-inr fa fa-sort-up w-100">
@@ -297,11 +299,9 @@
                         <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100" required autocomplete="confirmpassword" autofocus>
                         <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
                     </div>
-                    <a id="register" class="btn btn-success">Register</a>
-
+                    <button type="submit" form="registerform" class="btn btn-success">Create</button>
                 </form>
             </div>
-
         </div>
       </div>
     </div>

@@ -166,10 +166,12 @@ $mycart = session()->get('cart1');
                                                     $demo = $category->category_id;
                                                     $productcount = getproductcount($demo);
 
-                                                    $catname = strtolower($category->name)
+                                                    $catname = strtolower($category->name);
                                                 @endphp
                                                 <li>
-                                                    <a href="#{{ str_replace(' ', '', $catname) }}" class="active">{{ $category->name }} ({{ $productcount }})
+                                                    <a href="#{{ str_replace(' ', '', $catname) }}"
+                                                        class="active">{{ $category->name }}
+                                                        ({{ $productcount }})
                                                     </a>
                                                 </li>
                                             @endforeach
@@ -200,14 +202,22 @@ $mycart = session()->get('cart1');
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" id="{{ str_replace(' ','',$catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
+                                                        <button class="accordion-button"
+                                                            id="{{ str_replace(' ', '', $catvalue) }}" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse{{ $key }}"
+                                                            aria-expanded="true"
+                                                            aria-controls="collapse{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
 
                                                     @foreach ($product as $values)
-                                                        <div id="collapse{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        <div id="collapse{{ $key }}"
+                                                            class="accordion-collapse collapse show"
+                                                            aria-labelledby="headingOne"
+                                                            data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
                                                                     <div class="row">
@@ -235,17 +245,17 @@ $mycart = session()->get('cart1');
                                                                                 @if (count($sizes) > 0)
                                                                                     @foreach ($sizes as $size)
                                                                                         @php
-                                                                                            $sizeprice = $size->id_product_price_size ;
+                                                                                            $sizeprice = $size->id_product_price_size;
                                                                                             $productsize = $values->hasOneProduct['product_id'];
                                                                                             $setsizeprice = $size->price;
                                                                                         @endphp
                                                                                         <div class="options-bt">
                                                                                             <div class="row">
                                                                                                 <div
-                                                                                                    class="col-md-5">
+                                                                                                    class="col-md-6">
                                                                                                     <span>{{ $size->hasOneToppingSize['size'] }}</span>
                                                                                                 </div>
-                                                                                                <div class="col-md-7">
+                                                                                                <div class="col-md-6">
                                                                                                     <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
                                                                                                         <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added
@@ -257,41 +267,25 @@ $mycart = session()->get('cart1');
                                                                                         </div>
                                                                                     @endforeach
                                                                                 @else
-                                                                                    <div class="options-bt">
-                                                                                        <div class="row">
-                                                                                            <div class="col-md-5">
-                                                                                                <span>price</span>
-                                                                                            </div>
-                                                                                            <div class="col-md-7">
-                                                                                            @foreach ($openday as $key => $item)
-                                                                                                    @foreach ($item as $value)
-                                                                                                        @php
-
-                                                                                                            $firsttime = strtotime($fromtime[$key]);
-                                                                                                            $lasttime = strtotime($totime[$key]);
-                                                                                                            $today = time();
-                                                                                                            $currentday = date('l');
-
-                                                                                                        @endphp
-
-                                                                                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                            @if ($currentday == $value)
-                                                                                                                <a class="btn options-btn" onclick="showId({{ $values->product_id }},0)">£{{ $setsizeprice}}<i class="fa fa-shopping-basket"></i></a>
-                                                                                                            @endif
-                                                                                                        @else
-                                                                                                            @if ($currentday == $value)
-                                                                                                                {{-- @foreach ($setsizeprice as $setsizeprices) --}}
-                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></a>
-                                                                                                                {{-- @endforeach --}}
-                                                                                                            @endif
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                @endforeach
-
-
-                                                                                            </div>
+                                                                                <div class="options-bt">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-5">
+                                                                                            <span>price</span>
+                                                                                        </div>
+                                                                                        <div class="col-md-7">
+                                                                                            <a onclick="showId({{ $values->product_id }},0);"
+                                                                                                class="btn options-btn">
+                                                                                                <span
+                                                                                                    class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i
+                                                                                                        class="fa fa-shopping-basket"></i></span>
+                                                                                                <span
+                                                                                                    class="show-carttext sizeprice"
+                                                                                                    style="display: none;">Added<i
+                                                                                                        class="fa fa-check"></i></span>
+                                                                                            </a>
                                                                                         </div>
                                                                                     </div>
+                                                                                </div>
                                                                                 @endif
                                                                             </div>
                                                                         </div>
@@ -353,51 +347,51 @@ $mycart = session()->get('cart1');
                                     </div>
                                     <div class="minibox-content">
                                         <div class="empty-box">
-                                           <table class="table">
-                                            @php
-                                                $subtotal = 0;
-                                            @endphp
-                                            @if(!empty($mycart) || $mycart != '')
-                                                @if (isset($mycart['size']))
-                                                    @foreach ($mycart['size'] as $cart)
-                                                        @php
-                                                            $price = $cart['price'] * $cart['quantity'];
-                                                            $subtotal += $price;
-                                                        @endphp
-                                                        <tr>
-                                                            <td><i class="fa fa-times-circle text-danger"></i></td>
-                                                            <td>{{ $cart['quantity'] }}</td>
-                                                            <td>{{ $cart['size'] }}</td>
-                                                            <td>{{ $cart['name'] }}</td>
-                                                            <td>£ {{ $price }}</td>
-                                                        </tr>
-                                                    @endforeach
+                                            <table class="table">
+                                                @php
+                                                    $subtotal = 0;
+                                                @endphp
+                                                @if (!empty($mycart) || $mycart != '')
+                                                    @if (isset($mycart['size']))
+                                                        @foreach ($mycart['size'] as $cart)
+                                                            @php
+                                                                $price = $cart['price'] * $cart['quantity'];
+                                                                $subtotal += $price;
+                                                            @endphp
+                                                            <tr>
+                                                                <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                                <td>{{ $cart['quantity'] }}</td>
+                                                                <td>{{ $cart['size'] }}</td>
+                                                                <td>{{ $cart['name'] }}</td>
+                                                                <td>£ {{ $price }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                    @if (isset($mycart['withoutSize']))
+                                                        @foreach ($mycart['withoutSize'] as $cart)
+                                                            @php
+                                                                $price = $cart['price'] * $cart['quantity'];
+                                                                $subtotal += $price;
+                                                            @endphp
+                                                            <tr>
+                                                                <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                                <td>{{ $cart['quantity'] }}</td>
+                                                                <td colspan="2">{{ $cart['name'] }}</td>
+                                                                <td>£ {{ $price }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif
+                                                @else
+                                                    <span>Your shopping cart is empty!</span>
                                                 @endif
-                                                @if (isset($mycart['withoutSize']))
-                                                    @foreach ($mycart['withoutSize'] as $cart)
-                                                        @php
-                                                            $price = $cart['price'] * $cart['quantity'];
-                                                            $subtotal += $price;
-                                                        @endphp
-                                                        <tr>
-                                                            <td><i class="fa fa-times-circle text-danger"></i></td>
-                                                            <td>{{ $cart['quantity'] }}</td>
-                                                            <td colspan="2">{{ $cart['name'] }}</td>
-                                                            <td>£ {{ $price }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endif
-                                            @else
-                                                <span>Your shopping cart is empty!</span>
-                                            @endif
-                                           </table>
+                                            </table>
                                         </div>
                                         <div class="minicart-total">
                                             <ul class="minicart-list">
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr sub-total">
                                                         <label>Sub-Total</label>
-                                                        @if(isset($subtotal))
+                                                        @if (isset($subtotal))
                                                             <span>£ {{ $subtotal }}</span>
                                                         @else
                                                             <span>£ 0.00</span>
@@ -407,7 +401,11 @@ $mycart = session()->get('cart1');
                                                 <li class="minicart-list-item total">
                                                     <div class="minicart-list-item-innr">
                                                         <label>Total to pay:</label>
-                                                        <span>£0.00</span>
+                                                        {{-- @if (isset($subtotal))
+                                                            <span>£ {{ $subtotal }}</span>
+                                                        @else --}}
+                                                        <span>£ 0.00</span>
+                                                        {{-- @endif --}}
                                                     </div>
                                                 </li>
                                             </ul>
@@ -430,7 +428,8 @@ $mycart = session()->get('cart1');
                                                         $collection_same_bussiness = isset($openclose['collection_same_bussiness']) ? $openclose['collection_same_bussiness'] : '';
                                                     @endphp
                                                     @if ($collection_same_bussiness == 1)
-                                                        <span>{{ ($openclose['collection_gaptime']) ? $openclose['collection_gaptime'] : "Select" }} Min</span>
+                                                        <span>{{ $openclose['collection_gaptime'] ? $openclose['collection_gaptime'] : 'Select' }}
+                                                            Min</span>
                                                     @else
                                                         @foreach ($collectiondays as $key => $item)
                                                             @foreach ($item as $value)
@@ -441,7 +440,8 @@ $mycart = session()->get('cart1');
                                                                     $today = date('l');
                                                                 @endphp
                                                                 @if ($today == $value)
-                                                                    <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
+                                                                    <span>Starts at -
+                                                                        <b>{{ $collectionfrom[$key] }}</b></span>
                                                                 @endif
                                                             @endforeach
                                                         @endforeach
@@ -458,10 +458,11 @@ $mycart = session()->get('cart1');
                                                         $deliverydays = $openclose['deliverydays'];
                                                         $deliveryfrom = $openclose['deliveryfrom'];
 
-                                                        $delivery_same_bussiness = isset( $openclose['delivery_same_bussiness']) ?  $openclose['delivery_same_bussiness'] : '' ;
+                                                        $delivery_same_bussiness = isset($openclose['delivery_same_bussiness']) ? $openclose['delivery_same_bussiness'] : '';
                                                     @endphp
                                                     @if ($delivery_same_bussiness == 1)
-                                                        <span>{{ ($openclose['delivery_gaptime']) ? $openclose['delivery_gaptime'] : "Select" }} Min</b></span>
+                                                        <span>{{ $openclose['delivery_gaptime'] ? $openclose['delivery_gaptime'] : 'Select' }}
+                                                            Min</b></span>
                                                     @else
                                                         @foreach ($deliverydays as $key => $item)
                                                             @foreach ($item as $value)
@@ -472,7 +473,8 @@ $mycart = session()->get('cart1');
                                                                     $today = date('l');
                                                                 @endphp
                                                                 @if ($today == $value)
-                                                                    <span>Starts at - <b>{{ $deliveryfrom[$key] }}</b></span>
+                                                                    <span>Starts at -
+                                                                        <b>{{ $deliveryfrom[$key] }}</b></span>
                                                                 @endif
                                                             @endforeach
                                                         @endforeach
@@ -481,39 +483,53 @@ $mycart = session()->get('cart1');
                                             @endif
                                         </div>
                                     </div>
+                                    @if (!empty($mycart) || $mycart != '')
+                                        <a href="{{ route('checkout') }}" class="btn  checkbt">Checkout</a>
+                                        <div class="closed-now">
+                                            <span class="closing-text">We are closed now!</span>
+                                        </div>
+                                    @else
+                                        <a href="{{ route('checkout') }}" class="btn  checkbt">Checkout</a>
+                                        <div class="closed-now">
+                                            <span class="closing-text">We are closed now!</span>
+                                        </div>
+                                    @endif
+
                                 </div>
                             </div>
-                            @foreach ($openday as $key => $item)
+                            {{-- @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
-
                                         $firsttime = strtotime($fromtime[$key]);
                                         $lasttime = strtotime($totime[$key]);
                                         $today = time();
                                         $currentday = date('l');
-
                                     @endphp
-
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value)
-                                            <a href="" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                                            @if (!empty($mycart) || $mycart != '')
+                                                <a href="{{ route('checkout') }}" class="btn checkbt"
+                                                    style="background-color: green; color:white;">Checkout</a>
+                                            @else
+                                                <a href="#" class="btn checkbt"
+                                                    style="background-color: green; color:white;">Checkout</a>
+                                            @endif
                                             <div class="closed-now">
                                                 <span class="closing-text" style="color: green !important;">We are open now!</span>
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value)
-                                            <a href="" class="btn disabled checkbt">Checkout</a>
+                                            <a href="{{ route('') }}" class="btn disabled checkbt">Checkout</a>
                                             <div class="closed-now">
                                                 <span class="closing-text">We are closed now!</span>
                                             </div>
                                         @endif
                                     @endif
                                 @endforeach
-                            @endforeach
+                            @endforeach --}}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -559,7 +575,6 @@ $mycart = session()->get('cart1');
             </div>
         </div>
     </div>
-
     @if (!empty($theme_id) || $theme_id != '')
         {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
@@ -578,6 +593,7 @@ $mycart = session()->get('cart1');
 
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 
 <script>
     $(document).ready(function() {
@@ -645,7 +661,7 @@ $mycart = session()->get('cart1');
     // });
 </script>
 <script>
-    function showId(product,sizeprice) {
+    function showId(product, sizeprice) {
 
         var sizeid = sizeprice;
 
@@ -660,8 +676,7 @@ $mycart = session()->get('cart1');
                 'product_id': productid,
             },
             dataType: 'json',
-            success: function(result)
-            {
+            success: function(result) {
                 $('.empty-box').html('');
                 $('.sub-total').html('');
                 $('.empty-box').append(result.html);
