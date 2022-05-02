@@ -35,6 +35,8 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\MyBasketController;
+use App\Http\Controllers\Frontend\Cartcontroller;
+
 use Illuminate\Support\Facades\Auth;
 
 //frontend
@@ -407,6 +409,8 @@ Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout'
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 Route::get('mybasket', [MyBasketController::class, 'mybasket'])->name('mybasket');
+Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
+
 
 
 // login user

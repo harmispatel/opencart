@@ -7,5 +7,7 @@ use Illuminate\Http\Request;
 
 class Cartcontroller extends Controller
 {
-    //
+    public function cart(Request $request){
+        return view('frontend.pages.cart');
+    }
 }

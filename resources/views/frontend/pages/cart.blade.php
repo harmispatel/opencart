@@ -100,10 +100,25 @@ $mycart = session()->get('cart1');
                 <div class="basket-title">
                     <h2>SHOPPING CART</h2>
                 </div>
-                <div class="basket-bt">
+                <div class="pb-4">
+                    <h6>Your shopping cart is empty!</h6>
+                </div>
+                <div class="emty-bt">
                     <a href="{{ route('home') }}"> <button class="btn">Continue Shopping</button></a>
                 </div>
             </div>
+            {{-- <div>
+                <ul class="pull-left footer_menu">
+                    demo test </ul>
+                <ul class="pull-right ftr_sm">
+                    <li><a target="_blank" href="https://www.facebook.com"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li><a target="_blank" href="https://twitter.com/"><i class="fa fa-twitter"></i>
+                        </a></li>
+                    <li><a target="_blank" href="https://www.google.co.uk"><i class="fa fa-google"></i>
+                        </a></li>
+                </ul>
+            </div> --}}
         </div>
     </section>
     @if (!empty($theme_id) || $theme_id != '')
