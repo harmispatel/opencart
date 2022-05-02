@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\Console\Input\Input;
 
@@ -26,13 +25,16 @@ class CustomerAuthController extends Controller
          if (Customer::where('email', '=', $email)->exists()) {
             // user found
             // Hash::check(Input::get('currPassword') , $data->password
-                $customer = Customer::select('firstname')->where('email', '=', $email)->get();
-                $name = $customer[0]->firstname;
-                session()->put('username', $name);
+            // if (Customer::select('password', )->where('email', '=', $email)) {
+            //     # code...
+            // }
+            $customer = Customer::select('firstname')->where('email', '=', $email)->get();
+            $name = $customer[0]->firstname;
+            session()->put('username', $name);
 
-                return response()->json([
-                    'status' => 1,
-                ]);
+            return response()->json([
+                'status' => 1,
+            ]);
          }
          else{
             return response()->json([
