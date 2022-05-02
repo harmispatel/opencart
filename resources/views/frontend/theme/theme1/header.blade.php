@@ -157,9 +157,10 @@
                     <a href="#">{{ $userlogin }}</a>
                 </li>
                 <li>
-                    <a type="button" id="customersignout">
-                        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
-                    </a>
+                    <form method="POST" action="{{ route('customerlogout') }}">
+                        {{ csrf_field() }}
+                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+                     </form>
                 </li>
             </ul>            
             @else            
@@ -216,10 +217,6 @@
         </div>
     </div>
 </header>
-{{-- <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">
-    Launch demo modal
-  </button> --}}
 
   <!-- Modal -->
   <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
@@ -230,14 +227,17 @@
         </div>
         <div class="modal-body text-center">
             <div class="modal-login mb-3">
-                <form id="userlogin">
+                <form id="userlogin" method="POST">
                     {{ csrf_field() }}
                     <h2>LOG IN</h2>
+                    <div id="loginerr"></div>
                     <div class="login-details-inr fa fa-envelope w-100">
                         <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                        <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
                     </div>
                         <div class="login-details-inr fa fa-lock w-100">
                         <input placeholder="Password" type="password" name="password" value="" class="w-100">
+                        <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
                     </div>
                     <div class="login-modal-last d-flex justify-content-between">
                         <a href="">Forgotten Password?</a>
@@ -246,18 +246,11 @@
                             <input type="checkbox" id="remember">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success" id="userlogin">Login</button>
+                    <button type="submit" form="userlogin" class="btn btn-success" id="loginform">Login</button>
                 </form>
             </div>
-            @php
-                $currentURL = URL::to("/");
-                $current_theme = themeID($currentURL);
-                $current_theme_id = $current_theme['theme_id'];
-                $front_store_id =  $current_theme['store_id'];
-            @endphp
             <div class="new-account-modal">
-                <form action="{{ route('customerregister') }}" 
-                enctype="multipart/form-data" id="registerform"  method="POST">
+                <form action="{{ route('customerregister') }}" id="registerform"  method="POST">
                     {{ csrf_field() }}
                     <h2>Create an account</h2>
                     <div class="login-details-inr fa fa-sort-up w-100">
@@ -274,32 +267,32 @@
                     </div>
                     <div class="login-details-inr fa fa-user w-100">
                         <div class="w-50 d-inline-block float-start">
-                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100" required autocomplete="name" autofocus>
+                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100">
                             <input type="hidden" name="front_store_id" value="{{ $front_store_id }}">
                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
                         </div>
                         <div class="w-50 d-inline-block float-end">
-                            <input placeholder="Surname" type="text" id="surname" name="surname" value="" class="w-100" required autocomplete="surname" autofocus>
+                            <input placeholder="Surname" type="text" id="surname" name="surname" value="" class="w-100">
                             <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
                         </div>
                     </div>
                     <div class="login-details-inr fa fa-envelope w-100">
-                        <input placeholder="Email address" type="text" id="email" name="email" value="" class="w-100" required autocomplete="email" autofocus>
+                        <input placeholder="Email address" type="text" id="email" name="email" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
                     </div>
                     <div class="login-details-inr fa fa-phone-alt w-100">
-                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="" class="w-100" required autocomplete="phone" autofocus>
+                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
                     </div>
                     <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100" required autocomplete="password" autofocus>
+                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
                     </div>
                     <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100" required autocomplete="confirmpassword" autofocus>
+                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
                     </div>
-                    <button type="submit" form="registerform" class="btn btn-success">Create</button>
+                    <button type="submit" form="registerform" id="register" class="btn btn-success">Create</button>
                 </form>
             </div>
         </div>
@@ -308,8 +301,10 @@
   </div>
 {{-- End Header --}}
 
-{{-- @php
-            echo '<pre>';
-        print_r(session()->all());
-        exit();
-@endphp --}}
+@php
+    
+// $data = session()->all();
+// echo '<pre>';
+// print_r($data);
+// exit();
+@endphp

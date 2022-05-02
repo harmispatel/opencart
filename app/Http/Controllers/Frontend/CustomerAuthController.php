@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session as FacadesSession;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
+use Symfony\Component\Console\Input\Input;
 
 class CustomerAuthController extends Controller
 {
@@ -19,21 +18,34 @@ class CustomerAuthController extends Controller
             'password' => 'required',
         ]);
 
-        $email = session()->get('email');
-// echo '<pre>';
-// print_r($email);
-// exit();
-        // $userlogin = new Customer;
-        // $userlogin->
+
+        $email = $request->email;
+        $pass = $request->password;
+        $password = Customer::select('password')->where('email', '=', $email)->get();
+        // Hash::check
+         if (Customer::where('email', '=', $email)->exists()) {
+            // user found
+            // Hash::check(Input::get('currPassword') , $data->password
+                $customer = Customer::select('firstname')->where('email', '=', $email)->get();
+                $name = $customer[0]->firstname;
+                session()->put('username', $name);
+
+                return response()->json([
+                    'status' => 1,
+                ]);
+         }
+         else{
+            return response()->json([
+                'status' => 0,
+            ]);
+         }
+
 
 
     }
 
     public function customerregister(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
@@ -41,6 +53,7 @@ class CustomerAuthController extends Controller
 
         // Validation
         $request->validate([
+            'title' => 'required',
             'name' => 'required',
             'surname' => 'required',
             'email' => 'required|email|unique:oc_customer,email',
@@ -76,11 +89,14 @@ class CustomerAuthController extends Controller
         session()->put('username', $customer->firstname);
 
 
+        return response()->json();
     }
 
     public function customerlogout()
     {
-        FacadesSession::flush();
-        return Redirect::to('/');
+        // echo 'Hello';
+        // exit();
+        session()->flush();
+        return redirect()->back();
     }
 }

@@ -201,8 +201,9 @@
         });
 
 
-        $('#register').on('click',function()
+        $('#register').on('click',function(e)
         {
+            e.preventDefault();
             var form_data = new FormData(document.getElementById('registerform'));
 
         $.ajax({
@@ -215,13 +216,6 @@
         processData: false,
             success: function (response) {
                 location.reload();
-                // $('#registerform').trigger('reset');
-                // $('#login').modal('hide');
-                // alert('Login Success');
-                // console.log(response);
-
-
-
             },
             error : function (message) {
                 console.log(message.responseJSON.errors);
@@ -330,25 +324,66 @@
             }
         });
     });
-    $('#customersignout').click(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "post",
-            url: "{{  route('customerlogout') }}",
-            // data: "_token": "{{ csrf_token() }}",
-            dataType: "dataType",
-            success: function (response) {
 
-            }
-        });
 
+        $('#loginform').on('click',function(e)
+        {
+            e.preventDefault();
+            var login_data = new FormData(document.getElementById('userlogin'));
+
+            $.ajax({
+                type: "POST",
+                url: "{{ url('customerlogin') }}",
+                data: login_data,
+                dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                    success: function (response) {
+                        if (response.status == 0) {
+                            $('#loginerr').html('<div class="alert alert-sm alert-warning alert-dismissible fade show" role="alert">\
+                                                        <strong>Warning!</strong> No match for E-Mail Address and/or Password.\
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>\
+                                                </div>');
+                        }
+                        else{
+                            location.reload();
+                        }
+
+                    },
+                    error : function (message) {
+                        var e_mail = message.responseJSON.errors.email;
+                        var pass = message.responseJSON.errors.password;
+
+                    // Email
+                    if(e_mail)
+                    {
+                        $('#emailerr').text('').show();
+                        $('#email').addClass('is-invalid');
+                        $('#emailerr').text(e_mail).show();
+                    }
+                    else
+                    {
+                        $('#emailerr').text('').hide();
+                        $('#email').attr('class','form-control');
+                    }
+
+                    // Password
+                    if(pass)
+                    {
+                        $('#passworderr').text('').show();
+                        $('#password').addClass('is-invalid');
+                        $('#passworderr').text(pass).show();
+                    }
+                    else
+                    {
+                        $('#passworderr').text('').hide();
+                        $('#password').attr('class','form-control');
+                    }
+                }
+            });
+        });
     });
-
-});
 </script>
 
 
