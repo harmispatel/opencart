@@ -126,7 +126,7 @@ $mycart = session()->get('cart1');
                         <td>
                           <div class="qu-inr">
                             <input type="text" name="" value="{{ $cart['quantity'] }}">
-                            <a href=""><i class="fa fa-refresh"></i></a>
+                            <a href="" class="px-2"><img src="{{ asset('public/images/update.png') }}"></a>
                             <a href=""><i class="fas fa-times"></i></a>
                           </div>
                         </td>
@@ -149,7 +149,7 @@ $mycart = session()->get('cart1');
                         <td>
                           <div class="qu-inr">
                             <input type="text" name="" value="{{ $cart['quantity'] }}">
-                            <a href=""><i class="fa fa-refresh"></i></a>
+                            <a href="" class="px-2"><img src="{{ asset('public/images/update.png') }}"></a>
                             <a href=""><i class="fas fa-times"></i></a>
                           </div>
                         </td>

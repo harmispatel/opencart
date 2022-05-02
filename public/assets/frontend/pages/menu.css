@@ -510,7 +510,7 @@ ul.box-category {
     appearance: none !important;
 }
 
-.email-btn .btn {
+.email-btn .btn, .back-bt {
     background-color: #F4494E !important;
     color: #fff;
     padding: 5px 25px;
@@ -594,10 +594,16 @@ ul.box-category {
     display: flex;
     justify-content: space-between;
 }
-.basket-bt .btn{
+.basket-bt .btn, .emty-bt .btn{
     background-color: #F4494E;
     color: #fff;
     font-weight: 700;
+}
+.emty-bt{
+    text-align: right;
+    padding-top: 15px;
+    margin-bottom: 20px;
+    border-top: 1px solid #eee;
 }
 
 @media only screen and (max-width:991px) {

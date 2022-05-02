@@ -489,12 +489,11 @@ $mycart = session()->get('cart1');
                                             <span class="closing-text">We are closed now!</span>
                                         </div>
                                     @else
-                                        <a href="{{ route('checkout') }}" class="btn  checkbt">Checkout</a>
+                                        <a href="{{ route('cart') }}" class="btn  checkbt">Checkout</a>
                                         <div class="closed-now">
                                             <span class="closing-text">We are closed now!</span>
                                         </div>
                                     @endif
-
                                 </div>
                             </div>
                             {{-- @foreach ($openday as $key => $item)

@@ -123,10 +123,10 @@ $template_setting = session('template_settings');
             </ul>
         </div>
     </sidebar>
-    <section class="check-main">
+    <section class="check-main ">
         <div class="container"> 
           <div class="check-inr">
-            <div class="row">
+            <div class="row" id="Checkout">
               <div class="col-md-12">
                 <div class="check-progress">
                   <h2>Checkout - step 1/3</h2>
@@ -160,7 +160,7 @@ $template_setting = session('template_settings');
                                   <input placeholder="password" type="password" name="email" value="" class="w-100">
                                 </div>
                                 <div class="email-btn">
-                                  <button class="btn">Log in</button>
+                                  <button class="btn" id="login">Log in</button>
                                 </div>
                               </div>
                             </div>
@@ -262,7 +262,116 @@ $template_setting = session('template_settings');
             </div>
           </div>
         </div>
-      </section>
+    </section>
+    <section class="check-main d-none" >
+      <div class="container" > 
+        <div class="check-inr">
+          <div class="row justify-content-center" id="demo">
+            <div class="col-md-12">
+              <div class="check-progress">
+                <h2>Checkout - step 2/3</h2>
+                <div class="progress">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 66.66%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+              <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header accordion-button" id="headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      <span> Order Type</span>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="login-details w-100">
+                              
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                  I will collect my order
+                                </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header accordion-button" id="headingtwo" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
+                      <span>Collection Time</span>
+                  </h2>
+                  <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="login-details w-100">
+                              <div class="email-detail fa fa-sort-up w-100">
+                                <select class="time_select" name="time_method">
+                                  <option selected="selected" id="time_0" value="ASAP">ASAP</option>
+                                  <option id="time_1" value="13:45-14:00">13:45-14:00</option>
+                                  <option id="time_2" value="14:00-14:15">14:00-14:15</option>
+                                  <option id="time_3" value="14:15-14:30">14:15-14:30</option>
+                                  <option id="time_4" value="14:30-14:45">14:30-14:45</option>
+                                  <option id="time_5" value="14:45-15:00">14:45-15:00</option>
+                                  <option id="time_6" value="15:00-15:15">15:00-15:15</option>
+                                  <option id="time_7" value="15:15-15:30">15:15-15:30</option>
+                                  <option id="time_8" value="15:30-15:45">15:30-15:45</option>
+                                  <option id="time_9" value="15:45-16:00">15:45-16:00</option>
+                                  <option id="time_10" value="16:00-16:15">16:00-16:15</option>
+                                  <option id="time_11" value="16:15-16:30">16:15-16:30</option>
+                                  <option id="time_12" value="16:30-16:45">16:30-16:45</option>
+                                  <option id="time_13" value="16:45-17:00">16:45-17:00</option>
+                                  <option id="time_14" value="17:00-17:15">17:00-17:15</option>
+                                  <option id="time_15" value="17:15-17:30">17:15-17:30</option>
+                                  <option id="time_16" value="17:30-17:45">17:30-17:45</option>
+                                  <option id="time_17" value="17:45-18:00">17:45-18:00</option>
+                                  <option id="time_18" value="18:00-18:15">18:00-18:15</option>
+                                  <option id="time_19" value="18:15-18:30">18:15-18:30</option>
+                                  <option id="time_20" value="18:30-18:45">18:30-18:45</option>
+                                  <option id="time_21" value="18:45-19:00">18:45-19:00</option>
+                                  <option id="time_22" value="19:00-19:15">19:00-19:15</option>
+                                  <option id="time_23" value="19:15-19:30">19:15-19:30</option>
+                                  <option id="time_24" value="19:30-19:45">19:30-19:45</option>
+                                  <option id="time_25" value="19:45-20:00">19:45-20:00</option>
+                                  <option id="time_26" value="20:00-20:15">20:00-20:15</option>
+                                  <option id="time_27" value="20:15-20:30">20:15-20:30</option>
+                                  <option id="time_28" value="20:30-20:45">20:30-20:45</option>
+                                  <option id="time_29" value="20:45-21:00">20:45-21:00</option>
+                                  <option id="time_30" value="21:00-21:15">21:00-21:15</option>
+                                  <option id="time_31" value="21:15-21:30">21:15-21:30</option>
+                                  <option id="time_32" value="21:30-21:45">21:30-21:45</option>
+                                  <option id="time_33" value="21:45-22:00">21:45-22:00</option>
+                                  <option id="time_34" value="22:00-22:15">22:00-22:15</option>
+                                  <option id="time_35" value="22:15-22:30">22:15-22:30</option>
+                                  <option id="time_36" value="22:30-22:45">22:30-22:45</option>
+                                  <option id="time_37" value="22:45-23:00">22:45-23:00</option>
+                                  <option id="time_38" value="23:00-23:15">23:00-23:15</option>
+                                  <option id="time_39" value="23:15-23:30">23:15-23:30</option>
+                                  <option id="time_40" value="23:30-23:45">23:30-23:45</option>
+                                  <option id="time_41" value="23:45-00:00">23:45-00:00</option>
+                          </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mt-4">
+              <div class="backbtn d-flex justify-content-between">
+                <button class="btn"><i class="fa fa-angle-left"></i> Back</button>
+                <button class="btn back-bt">Next</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
 
 
@@ -283,3 +392,12 @@ $template_setting = session('template_settings');
 </body>
 
 </html>
+
+<script>
+      $('#login').click(function (e) { 
+        e.preventDefault();
+        $('#demo').show();
+       $('#Checkout').hide();
+        //  alert('hello');
+      });
+</script>

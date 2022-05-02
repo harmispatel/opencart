@@ -63,6 +63,7 @@ class MenuController extends Controller
 
         if (isset($mycart['size'])) {
             foreach ($mycart['size'] as $cart) {
+               
                 $price = $cart['price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger"></i></td>';
