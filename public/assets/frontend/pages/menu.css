@@ -90,8 +90,8 @@ ul.box-category {
 
 .empty-box {
     background: #f4f4f4;
-    padding:5px;
-    border-bottom:1px solid #e5ded4;
+    padding: 5px;
+    border-bottom: 1px solid #e5ded4;
 }
 
 .empty-box span {
@@ -285,7 +285,7 @@ ul.box-category {
     background-color: #ee5b60;
 }
 
-.options-btn i{
+.options-btn i {
     margin-left: 10px;
     margin-top: 2px;
     width: 22px;
@@ -308,7 +308,7 @@ ul.box-category {
     color: #000 !important;
     margin: 0 !important;
     display: flex;
-    width: 50px;
+    width: 72px;
 }
 
 .options-bt-main .options-bt:first-child {
@@ -404,53 +404,70 @@ ul.box-category {
     font-weight: 600;
     margin-bottom: 20px;
 }
-.check-main{
+
+.check-main {
     padding: 50px 0 200px;
 }
-.check-progress{
+
+.check-progress {
     margin-bottom: 30px;
     text-align: center;
 }
-.check-progress .progress{
+
+.check-progress .progress {
     border-radius: 30px;
 }
-.check-main .accordion-item{
+
+.check-main .accordion-item {
     border: none;
 }
-.check-main .accordion-item .accordion-button:not(.collapsed){
+
+.check-main .accordion-item .accordion-button:not(.collapsed) {
     background: none !important;
 }
-.check-main .accordion-item .accordion-button{
+
+.check-main .accordion-item .accordion-button {
     border-bottom: 2px solid #000;
     padding: 16px 16px 0 0;
 }
-.check-main .accordion-item .accordion-button span{
+
+.check-main .accordion-item .accordion-button span {
     margin: 0 0 10px 50px;
 }
-.check-main .accordion-button:before{
+
+.check-main .accordion-button:before {
     content: " ";
     position: absolute;
     border: 15px solid #000;
     bottom: 0;
 }
 
-.fb-log-bt{
+.fb-log-bt {
     background-color: #3c579a;
     display: inline-block;
 }
-.fb-log-bt span{
+
+.fb-log-bt span {
     color: #fff;
     font-size: 12px;
 }
-.fb-log-bt i{color: #fff;font-size: 20px;}
-.fb-log-bt:hover span, .fb-log-bt:hover i{
+
+.fb-log-bt i {
+    color: #fff;
+    font-size: 20px;
+}
+
+.fb-log-bt:hover span,
+.fb-log-bt:hover i {
     color: #ff0000;
 }
+
 .email-detail {
     display: inline-block;
     position: relative;
     margin-bottom: 10px;
 }
+
 .email-detail::before {
     border-left: 1px solid #ccc;
     color: #ccc;
@@ -468,7 +485,8 @@ ul.box-category {
     top: 9px;
     width: 22px;
 }
-.select-ic::before{
+
+.select-ic::before {
     border-left: 1px solid #cccccc;
     color: #cccccc;
     content: '\f0dd';
@@ -482,14 +500,17 @@ ul.box-category {
     right: 13px;
     top: 4px;
 }
-.email-detail input{
+
+.email-detail input {
     padding: 10px;
 }
-.email-detail select{
+
+.email-detail select {
     padding: 10px;
     appearance: none !important;
 }
-.email-btn .btn{
+
+.email-btn .btn {
     background-color: #F4494E !important;
     color: #fff;
     padding: 5px 25px;

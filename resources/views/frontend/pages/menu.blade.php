@@ -255,22 +255,13 @@ $mycart = session()->get('cart1');
                                                                                                     class="col-md-5">
                                                                                                     <span>{{ $size->hasOneToppingSize['size'] }}</span>
                                                                                                 </div>
-                                                                                                <div
-                                                                                                    class="col-md-7">
-                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});"
-                                                                                                        class="btn options-btn">
-                                                                                                        <span
-                                                                                                            class="sizeprice hide-carttext">
-                                                                                                            £
-                                                                                                            {{ $setsizeprice }}<i
-                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                        <span
-                                                                                                            class="show-carttext sizeprice"
-                                                                                                            style="display: none;">Added
-                                                                                                            <i
-                                                                                                                class="fa fa-check"></i>
-                                                                                                        </span>
-                                                                                                    </a>
+                                                                                                <div class="col-md-7">
+                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
+                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added
+                                                                                                                <i class="fa fa-check"></i>
+                                                                                                            </span>
+                                                                                                        </a>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -423,14 +414,9 @@ $mycart = session()->get('cart1');
                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
                                                 <div class="form-check m-auto">
                                                     @if ($delivery_setting['enable_delivery'] == 'collection')
-                                                        <input class="form-check-input" type="radio"
-                                                            name="delivery_type" id="collection"
-                                                            {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }}
-                                                            value="collection">
+                                                        <input class="form-check-input" type="radio" name="delivery_type" id="collection" {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }} value="collection">
                                                     @else
-                                                        <input class="form-check-input" type="radio"
-                                                            name="delivery_type" id="collection" value="collection"
-                                                            {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" name="delivery_type" id="collection" value="collection" {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
                                                     @endif
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
@@ -464,8 +450,7 @@ $mycart = session()->get('cart1');
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
-                                                    <input class="form-check-input" type="radio" name="delivery_type"
-                                                        id="delivery">
+                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery">
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -530,8 +515,7 @@ $mycart = session()->get('cart1');
                                                     style="background-color: green; color:white;">Checkout</a>
                                             @endif
                                             <div class="closed-now">
-                                                <span class="closing-text" style="color: green !important;">We are
-                                                    open now!</span>
+                                                <span class="closing-text" style="color: green !important;">We are open now!</span>
                                             </div>
                                         @endif
                                     @else
@@ -556,16 +540,14 @@ $mycart = session()->get('cart1');
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i
-                            class="fas fa-times"></i></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <h5 class="modal-title" id="pricemodelLabel">Order Now</h5>
                     <p>Minimum delivery is £15.00</p>
                     <button class="btn csmodal-btn" onclick="showmodal();">Deliver my order</button>
                     <button class="btn csmodal-btn" data-bs-dismiss="modal">I will come and collect</button>
-                    <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
-                        back</button>
+                    <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                 </div>
             </div>
         </div>
@@ -580,19 +562,16 @@ $mycart = session()->get('cart1');
                 <form action="">
                     <div class="modal-body">
                         <h5 class="modal-title" id="ModalLabel">Please Enter Your Post Code</h5>
-                        <div class="show_min">To start placing delivery order, please enter your full postcode
-                            here:
+                        <div class="show_min">To start placing delivery order, please enter your full postcode here:
                         </div>
                         <div class="controls">
                             <input type="text" name="keyword" placeholder="eg.AA1 1bb" required>
                             {{-- <samp>@error('keyword'){{ "Sorry!!!! We don't do delivery to your area" }}@enderror</samp> --}}
                         </div>
                         <button type="submit" class="btn csmodal-btn">Deliver my order</button><br>
-                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
-                            back</button>
+                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
