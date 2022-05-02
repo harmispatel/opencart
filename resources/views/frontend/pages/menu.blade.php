@@ -242,8 +242,7 @@ $mycart = session()->get('cart1');
                                                                                         <div class="options-bt">
                                                                                             <div class="row">
                                                                                                 <div
-                                                                                                    class="col-md-5">
-                                                                                                    <span>{{ $size->hasOneToppingSize['size'] }}</span>
+                                                                                                    class="col-md-5">                                                                                                    <span>{{ isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '' }}</span>
                                                                                                 </div>
                                                                                                 <div class="col-md-7">
                                                                                                     <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
@@ -282,9 +281,7 @@ $mycart = session()->get('cart1');
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
-                                                                                                                @foreach ($setsizeprice as $setsizeprices)
-                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprices->price }}<i class="fa fa-shopping-basket"></i></a>
-                                                                                                                @endforeach
+                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprice}}<i class="fa fa-shopping-basket"></i></a>
                                                                                                             @endif
                                                                                                         @endif
                                                                                                     @endforeach
