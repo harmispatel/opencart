@@ -247,8 +247,7 @@ $mycart = session()->get('cart1');
                                                                                                 </div>
                                                                                                 <div class="col-md-7">
                                                                                                     <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
-                                                                                                        <span class="sizeprice hide-carttext">
-                                                                                                            £ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added
                                                                                                                 <i class="fa fa-check"></i>
                                                                                                             </span>
@@ -277,14 +276,13 @@ $mycart = session()->get('cart1');
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-
-                                                                                                                    <a class="btn options-btn" onclick="showId({{ $values->product_id }},0)">£{{ $setsizeprice}}<i class="fa fa-shopping-basket"></i></a>
+                                                                                                                <a class="btn options-btn" onclick="showId({{ $values->product_id }},0)">£{{ $setsizeprice}}<i class="fa fa-shopping-basket"></i></a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
-                                                                                                                @foreach ($setsizeprice as $setsizeprices)
-                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprices->price }}<i class="fa fa-shopping-basket"></i></a>
-                                                                                                                @endforeach
+                                                                                                                {{-- @foreach ($setsizeprice as $setsizeprices) --}}
+                                                                                                                    <a href="" type="button" data-bs-toggle="modal" data-bs-target="#pricemodel" class="btn options-btn">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></a>
+                                                                                                                {{-- @endforeach --}}
                                                                                                             @endif
                                                                                                         @endif
                                                                                                     @endforeach

@@ -235,7 +235,7 @@
                     <h2>Create an account</h2>
                     <div class="login-details-inr fa fa-sort-up w-100">
                         <select name="title" id="title" class="w-100">
-                            <option value="" disabled selected>Title</option>
+                            <option disabled selected>Title</option>
                             <option value="1">Mr.</option>
                             <option value="2">Mrs.</option>
                             <option value="3">Ms.</option>
