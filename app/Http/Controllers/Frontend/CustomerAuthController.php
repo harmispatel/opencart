@@ -24,12 +24,13 @@ class CustomerAuthController extends Controller
 
     public function customerregister(Request $request)
     {
+          echo "vcbgvghv";
+          
         // $currentURL = URL::to("/");
         // $current_theme = themeID($currentURL);
         // $current_theme_id = $current_theme['theme_id'];
         // $front_store_id =  $current_theme['store_id'];
         $request->validate([
-            'title' => 'required',
             'name' => 'required',
             'surname' => 'required',
             'email' => 'required|email',
@@ -41,6 +42,5 @@ class CustomerAuthController extends Controller
         // $userlogin = new Customer;
         // $userlogin-> = $request->$front_store_id;
 
-        return response()->json();
     }
 }

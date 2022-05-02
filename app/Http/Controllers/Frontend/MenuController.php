@@ -12,6 +12,7 @@ use App\Models\Settings;
 use App\Models\ToppingSize;
 use App\Models\ToppingProductPriceSize;
 use Illuminate\Support\Facades\Session;
+
 class MenuController extends Controller
 {
     public function index()
@@ -38,7 +39,7 @@ class MenuController extends Controller
         }
 
 
-        return view('frontend.pages.menu',['data'=>$data,'delivery_setting'=>$delivery_setting]);
+        return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting]);
     }
 
     public function getid(Request $request)
@@ -49,7 +50,7 @@ class MenuController extends Controller
         // exit;
 
 
-        addtoCart($request,$productid,$sizeid);
+        addtoCart($request, $productid, $sizeid);
 
         $mycart = $request->session()->get('cart1');
         // echo "<pre>";
@@ -60,61 +61,55 @@ class MenuController extends Controller
 
         $html .= '<table class="table">';
 
-        if(isset($mycart['size']))
-        {
-            foreach($mycart['size'] as $cart)
-            {
+        if (isset($mycart['size'])) {
+            foreach ($mycart['size'] as $cart) {
                 $price = $cart['price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger"></i></td>';
-                $html .= '<td>'.$cart['quantity'].'x</td>';
-                $html .= '<td>'.$cart['size'].'</td>';
-                $html .= '<td>'.$cart['name'].'</td>';
-                $html .= '<td style="width: 80px;">£ '.$price.'</td>';
+                $html .= '<td>' . $cart['quantity'] . 'x</td>';
+                $html .= '<td>' . $cart['size'] . '</td>';
+                $html .= '<td>' . $cart['name'] . '</td>';
+                $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
             }
         }
-        if(isset($mycart['withoutSize']))
-        {
-            foreach($mycart['withoutSize'] as $cart)
-            {
+        if (isset($mycart['withoutSize'])) {
+            foreach ($mycart['withoutSize'] as $cart) {
                 $price = $cart['price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger"></i></td>';
-                $html .= '<td>'.$cart['quantity'].'x</td>';
-                $html .= '<td colspan="2">'.$cart['name'].'</td>';
-                $html .= '<td style="width: 80px;">£ '.$price.'</td>';
+                $html .= '<td>' . $cart['quantity'] . 'x</td>';
+                $html .= '<td colspan="2">' . $cart['name'] . '</td>';
+                $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
             }
         }
 
         $html .= '</table>';
-
         $html2 = '';
         $html2 .= '<label>Sub-Total</label>
-        <span>£ '.$subtotal.'</span>';
+        <span>£ ' . $subtotal . '</span>';
 
         return response()->json([
             'html' => $html,
             'subtotal' => $html2,
         ]);
-
     }
     public function setDeliveyType(Request $request)
     {
         $d_type = $request->d_type;
 
-        session()->put('user_delivery_type',$d_type);
+        session()->put('user_delivery_type', $d_type);
 
         return response()->json([
             'success' => 1,
         ]);
-
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         return $request->all();
     }

@@ -266,6 +266,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
 
+    
     // Countries
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
     Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
@@ -407,7 +408,6 @@ Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postc
 // login user
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
-
 
 
 
