@@ -11,6 +11,10 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
 
 $mycart = session()->get('cart1');
 
+// echo '<pre>';
+// print_r(session()->all());
+// exit();
+
 @endphp
 
 <!doctype html>

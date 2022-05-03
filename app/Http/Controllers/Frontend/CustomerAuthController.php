@@ -18,36 +18,26 @@ class CustomerAuthController extends Controller
             'password' => 'required',
         ]);
 
-
-        // $string = ' PHP with Edureka';
-        // if (md5($string) =='9a1359e7be2d2670780b85471675dc72'){
-        //     echo "PHP with Edureka is Fun";
-        // }
-        // else {
-        //     echo"look for the error";
-        // }
-
         $email = $request->email;
         $pass = $request->password;
         $emailexist = Customer::where('email', '=', $email)->exists();
         $customername = Customer::select('firstname','password')->where('email', '=', $email)->first();
 
-        //  if (Customer::where('email', '=', $email)->first()) {
          if ($emailexist && md5($pass) == $customername->password) {
-                $customer = Customer::select('firstname')->where('email', '=', $email)->get();
-                $name = $customer[0]->firstname;
-                session()->put('username', $name);
-
-                return response()->json([
-                    'status' => 1,
-                ]);
+                session()->put('username', $customername->firstname);
+                // return response()->json([
+                //     'status' => 1,
+                // ]);
+            // return redirect()->route('member');
+            return redirect()->back();
          }
          else{
-                return response()->json([
-                    'status' => 0,
-                ]);
+                // return response()->json([
+                //     'status' => 0,
+                // ]);
+                return redirect()->back();
          }
-
+        //  return redirect()->back();
 
 
     }

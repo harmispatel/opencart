@@ -405,6 +405,9 @@ ul.box-category {
     margin-bottom: 20px;
 }
 
+
+/* innerpage css */
+
 .check-main {
     padding: 50px 0 200px;
 }
@@ -435,7 +438,7 @@ ul.box-category {
     margin: 0 0 10px 50px;
 }
 
-.check-main .accordion-button:before {
+.check-inr .accordion-button:before {
     content: " ";
     position: absolute;
     border: 15px solid #000;
@@ -462,13 +465,13 @@ ul.box-category {
     color: #ff0000;
 }
 
-.email-detail {
+.login-details-inr {
     display: inline-block;
     position: relative;
     margin-bottom: 10px;
 }
 
-.email-detail::before {
+.login-details-inr::before {
     border-left: 1px solid #ccc;
     color: #ccc;
     float: none;
@@ -501,109 +504,272 @@ ul.box-category {
     top: 4px;
 }
 
-.email-detail input {
+.login-details-inr input {
     padding: 10px;
 }
 
-.email-detail select {
+.login-details-inr select {
     padding: 10px;
     appearance: none !important;
 }
 
-.email-btn .btn, .back-bt {
+.email-btn .btn {
     background-color: #F4494E !important;
     color: #fff;
     padding: 5px 25px;
 }
 
-.basket-main, .member-main, .register-main, .contact-main{
+.basket-main,
+.member-main,
+.register-main,
+.contact-main {
     padding: 50px 0 200px;
 }
-.basket-title h2, .member-title h2{
+
+.basket-title h2,
+.member-title h2 {
     font-size: 30px;
     margin-bottom: 30px;
 }
-.basket-product-detail, .coupon-inr, .contact-map{
+
+.basket-product-detail,
+.coupon-inr,
+.contact-map {
     margin-bottom: 30px;
 }
 
-
-.basket-product-detail  thead tr{
+.basket-product-detail thead tr {
     background-color: #f8f8f8;
     border-bottom: 1px solid #ddd;
     border-top: 1px solid #ddd;
 }
-.basket-product-detail  tbody{
+
+.basket-product-detail tbody {
     border-top: none !important;
 }
-.basket-product-detail .table th,td{
+
+.basket-product-detail .table th,
+td {
     font-size: 14px;
     color: #000;
 }
-.basket-product-detail .table td{
+
+.basket-product-detail .table td {
     color: #888888;
 }
-.qu-inr input{
+
+.qu-inr input {
     padding: 10px;
     width: 100%;
     max-width: 50px;
 }
-.qu-inr a i{
-    color:#F4494E;
-}
-.coupon-title h2{
-    font-size: 20px;
-}
-.coupon-apply .accordion-item{
-    border: none;
-}
-.coupon-apply .accordion-item:hover .accordion-header.collapsed{
+
+.qu-inr a i {
     color: #F4494E;
 }
-.coupon-apply .accordion-item .accordion-header.accordion-button, .accordion-body{
+
+.coupon-title h2 {
+    font-size: 20px;
+}
+
+.coupon-apply .accordion-item {
+    border: none;
+}
+
+.coupon-apply .accordion-item:hover .accordion-header.collapsed {
+    color: #F4494E;
+}
+
+.coupon-apply .accordion-item .accordion-header.accordion-button,
+.accordion-body {
     background-color: #eee !important;
     box-shadow: none !important;
     color: #000;
 }
-.coupon-apply .accordion-item .accordion-button.collapsed:after{
+
+.coupon-apply .accordion-item .accordion-button::after {
     background: none !important;
-    content: '\f107' !important;
+    content: '\f107';
     font-family: "Font Awesome 5 Free";
 }
-.coupon-apply .accordion-item .accordion-button:not(.collapsed):after{
-    transform: rotate3d(23,0,0 ,180deg);
+
+.coupon-apply .accordion-item .accordion-button:not(.collapsed)::after {
+    transform: rotate3d(23, 0, 0, 180deg);
 }
-.basket-total{
+
+.basket-total {
     background-color: #f6f6f6;
     margin-bottom: 15px;
     overflow: auto;
     padding: 10px 1px;
 }
-.basket-total .table{
+
+.basket-total .table {
     float: right;
     max-width: 300px;
     margin-bottom: 0;
 }
-.basket-total .table td span{
+
+.basket-total .table td span {
     color: #F4494E;
 }
-.basket-bt{
+
+.basket-bt {
     padding-top: 15px;
     margin-bottom: 20px;
     border-top: 1px solid #eee;
     display: flex;
     justify-content: space-between;
 }
-.basket-bt .btn, .emty-bt .btn{
+
+.basket-bt .btn {
     background-color: #F4494E;
     color: #fff;
     font-weight: 700;
 }
-.emty-bt{
-    text-align: right;
+
+.new-customer,
+.login-inr {
+    padding: 20px 15px;
+}
+
+.new-customer h2,
+.login-inr h2 {
+    font-size: 20px;
+}
+
+.new-customer label,
+.login-inr label {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #777777;
+    font-weight: 600;
+}
+
+.new-customer p {
+    font-size: 12px;
+}
+
+.login-inr a {
+    font-size: 14px;
+    color: #F4494E;
+    font-weight: 600;
+}
+
+.member-inr .mem-reg-bt,
+.log-bt,
+.back-bt {
+    background: #F4494E;
+    color: #fff;
+}
+
+
+/* regsiter */
+
+.register-title {
+    margin-bottom: 20px;
+}
+
+.register-title h2 {
+    font-size: 30px;
+}
+
+.register-title p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.register-title p a {
+    color: #4ED58C;
+}
+
+.reg-details {
+    margin-bottom: 15px;
+}
+
+.reg-details h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.reg-details .table tr td:first-child {
+    width: 160px;
+    vertical-align: middle;
+}
+
+.reg-details .table tr td {
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+}
+
+.reg-details .table tr td input,
+.reg-details .table tr td select {
+    width: 50%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #000;
+    font-size: 14px;
+}
+
+.reg-details .table tr td input[type="radio"] {
+    width: auto;
+}
+
+.radio-bt {
+    vertical-align: middle;
+}
+
+.reg-details .table tr td span.required {
+    color: #F4494E;
+    font-size: 20px;
+}
+
+.reg-bt {
     padding-top: 15px;
     margin-bottom: 20px;
     border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.reg-bt .btn,
+.map-bt,
+.sub-bt {
+    background-color: #F4494E;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.reg-success p {
+    margin-bottom: 15px !important;
+}
+
+.contact-info-left {
+    border-right: 1px solid #000;
+}
+
+.contact-title h2 {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.map-info,
+.contact-details {
+    padding: 15px;
+}
+
+.map-info h3,
+.contact-details h3 {
+    font-size: 20px;
+}
+
+.map-info .login-details-inr {
+    margin-bottom: 20px;
+}
+
+.shop-location {
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width:991px) {

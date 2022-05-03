@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Auth;
 
 //frontend
 use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
+use App\Http\Controllers\Frontend\MemberController;
 use App\Http\Controllers\Frontend\MenuController;
 use App\Http\Controllers\Frontend\ReservationController;
 
@@ -270,7 +271,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Route::get('editreview/{id}',[ReviewsController::class,'edit'])->name('editreview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
 
-    
+
     // Countries
     Route::get('countries', [CountryController::class, 'index'])->name('countries');
     Route::get('addcountry', [CountryController::class, 'add'])->name('addcountry');
@@ -401,6 +402,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
+Route::get('member', [MemberController::class, 'member'])->name('member');
+Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
