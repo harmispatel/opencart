@@ -153,9 +153,7 @@
             </ul>
             @if (!empty($userlogin))
             <ul class="authentication-links">
-                <li>
-                    <a href="#">{{ $userlogin }}</a>
-                </li>
+                <li>You are logged in as<a href="#"> ({{ $userlogin }})</a></li>
                 <li>
                     <form method="POST" action="{{ route('customerlogout') }}">
                         {{ csrf_field() }}
@@ -177,6 +175,42 @@
                 </li>
             </ul>
             @endif
+            {{-- @guest
+            @if (Route::has('customerlogin'))
+
+                <li>
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                        <i class="far fa-user"></i><span>{{ __('Login') }}</span>
+                    </a>
+                </li>
+                
+            @endif
+
+            @if (Route::has('register'))
+
+                <li>
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                        <i class="fas fa-sign-in-alt"></i><span>{{ __('Register') }}</span>
+                    </a>
+                </li>
+            @endif
+        @else
+        <li class="nav-item dropdown">
+            <a type="button">
+                {{ Auth::user()->firstname }}
+            </a>
+
+                <a class="dropdown-item" href="{{ route('customerlogout') }}"
+                   onclick="event.preventDefault();
+                                 document.getElementById('logout-form').submit();">
+                    {{ __('Logout') }}
+                </a>
+
+                <form id="logout-form" action="{{ route('customerlogout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+        </li>
+    @endguest --}}
         </div>
         <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="background: {{ $template_setting['polianna_navbar_background'] }};">
             <a class="logo" href="{{ route('home') }}">
@@ -268,7 +302,6 @@
                     <div class="login-details-inr fa fa-user w-100">
                         <div class="w-50 d-inline-block float-start">
                             <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100">
-                            <input type="hidden" name="front_store_id" value="{{ $front_store_id }}">
                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
                         </div>
                         <div class="w-50 d-inline-block float-end">

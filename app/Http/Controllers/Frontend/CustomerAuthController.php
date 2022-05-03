@@ -7,6 +7,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Symfony\Component\Console\Input\Input;
+use Illuminate\Support\Facades\Hash;
 
 class CustomerAuthController extends Controller
 {
@@ -18,28 +19,33 @@ class CustomerAuthController extends Controller
         ]);
 
 
+        // $string = ' PHP with Edureka';
+        // if (md5($string) =='9a1359e7be2d2670780b85471675dc72'){
+        //     echo "PHP with Edureka is Fun";
+        // }
+        // else {
+        //     echo"look for the error";
+        // }
+
         $email = $request->email;
         $pass = $request->password;
-        $password = Customer::select('password')->where('email', '=', $email)->get();
-        // Hash::check
-         if (Customer::where('email', '=', $email)->exists()) {
-            // user found
-            // Hash::check(Input::get('currPassword') , $data->password
-            // if (Customer::select('password', )->where('email', '=', $email)) {
-            //     # code...
-            // }
-            $customer = Customer::select('firstname')->where('email', '=', $email)->get();
-            $name = $customer[0]->firstname;
-            session()->put('username', $name);
+        $emailexist = Customer::where('email', '=', $email)->exists();
+        $customername = Customer::select('firstname','password')->where('email', '=', $email)->first();
 
-            return response()->json([
-                'status' => 1,
-            ]);
+        //  if (Customer::where('email', '=', $email)->first()) {
+         if ($emailexist && md5($pass) == $customername->password) {
+                $customer = Customer::select('firstname')->where('email', '=', $email)->get();
+                $name = $customer[0]->firstname;
+                session()->put('username', $name);
+
+                return response()->json([
+                    'status' => 1,
+                ]);
          }
          else{
-            return response()->json([
-                'status' => 0,
-            ]);
+                return response()->json([
+                    'status' => 0,
+                ]);
          }
 
 
@@ -73,7 +79,7 @@ class CustomerAuthController extends Controller
         $customer->email = isset($request->email) ? $request->email : '';
         $customer->telephone = isset($request->phone) ? $request->phone : '';
         $customer->fax = isset($request->fax) ? $request->fax : '';
-        $customer->password = isset($request->password) ? bcrypt($request->password) : '';
+        $customer->password = md5($request->password);
         $customer->salt = genratetoken(9);
         $customer->cart = isset($request->cart) ? $request->cart : '';
         $customer->wishlist = isset($request->wishlist) ? $request->wishlist : '';
@@ -90,14 +96,14 @@ class CustomerAuthController extends Controller
 
         session()->put('username', $customer->firstname);
 
-
+// echo '<pre>';
+// print_r($customer);
+// exit();
         return response()->json();
     }
 
     public function customerlogout()
     {
-        // echo 'Hello';
-        // exit();
         session()->flush();
         return redirect()->back();
     }
