@@ -471,6 +471,10 @@ ul.box-category {
     margin-bottom: 10px;
 }
 
+.vouchercode::before {
+    right: 17% !important;
+}
+
 .login-details-inr::before {
     border-left: 1px solid #ccc;
     color: #ccc;

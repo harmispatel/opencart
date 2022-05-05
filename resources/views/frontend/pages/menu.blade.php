@@ -81,13 +81,13 @@ $mycart = session()->get('cart1');
                     <a class="text-uppercase" href="{{ route('home') }}">home</a>
                 </li>
                 <li>
-                    <a class="text-uppercase" href="{{ route('home') }}">member</a>
+                    <a class="text-uppercase" href="{{ route('member') }}">member</a>
                 </li>
                 <li>
                     <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                 </li>
                 <li>
-                    <a class="text-uppercase" href="{{ route('menu') }}">check out</a>
+                    <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                 </li>
                 <li>
                     <a class="text-uppercase" href="{{ route('menu') }}">contact us</a>
@@ -206,12 +206,7 @@ $mycart = session()->get('cart1');
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button"
-                                                            id="{{ str_replace(' ', '', $catvalue) }}" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse{{ $key }}"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapse{{ $key }}">
+                                                        <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
@@ -365,9 +360,9 @@ $mycart = session()->get('cart1');
                                                             <tr>
                                                                 <td><i class="fa fa-times-circle text-danger"></i></td>
                                                                 <td>{{ $cart['quantity'] }}</td>
-                                                                <td>{{ $cart['size'] }}</td>
+                                                                <td>{{ html_entity_decode($cart['size']) }}</td>
                                                                 <td>{{ $cart['name'] }}</td>
-                                                                <td>£ {{ $price }}</td>
+                                                                <td>£{{ $price }}</td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -381,7 +376,7 @@ $mycart = session()->get('cart1');
                                                                 <td><i class="fa fa-times-circle text-danger"></i></td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
-                                                                <td>£ {{ $price }}</td>
+                                                                <td>£{{ $price }}</td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -398,7 +393,7 @@ $mycart = session()->get('cart1');
                                                         @if (isset($subtotal))
                                                             <span>£ {{ $subtotal }}</span>
                                                         @else
-                                                            <span>£ 0.00</span>
+                                                            <span>£ {{ $subtotal }}</span>
                                                         @endif
                                                     </div>
                                                 </li>
@@ -408,7 +403,7 @@ $mycart = session()->get('cart1');
                                                         {{-- @if (isset($subtotal))
                                                             <span>£ {{ $subtotal }}</span>
                                                         @else --}}
-                                                        <span>£ 0.00</span>
+                                                        <span>£ {{ $subtotal }}</span>
                                                         {{-- @endif --}}
                                                     </div>
                                                 </li>
@@ -493,7 +488,7 @@ $mycart = session()->get('cart1');
                                             <span class="closing-text">We are closed now!</span>
                                         </div>
                                     @else
-                                        <a href="{{ route('cart') }}" class="btn  checkbt">Checkout</a>
+                                        <a href="{{ route('checkout') }}" class="btn  checkbt">Checkout</a>
                                         <div class="closed-now">
                                             <span class="closing-text">We are closed now!</span>
                                         </div>

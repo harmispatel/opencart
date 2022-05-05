@@ -11,6 +11,8 @@ $user_delivery_type = session()->has('user_delivery_type') ? session('user_deliv
 
 $mycart = session()->get('cart1');
 
+$userlogin = session('username');
+
 @endphp
 
 <!doctype html>
@@ -102,6 +104,7 @@ $mycart = session()->get('cart1');
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+        @if (empty($userlogin))
           <div class="member-inr">
             <div class="member-title">
               <h2>ACCOUNT LOGIN</h2>
@@ -150,6 +153,136 @@ $mycart = session()->get('cart1');
               </div>
             </div>
           </div>
+          @else
+          <section class="check-main ">
+            <div class="container">
+              <div class="check-inr">
+                <div class="row" id="Checkout">
+                  <div class="col-md-12">
+                    <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header accordion-button" id="headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                          <span>My personal details</span>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                          <div class="row justify-content-center">
+                            <div class="col-md-4">
+                              <div class="login-main text-center">
+                                  <form action="{{ route('customerdetailupdate') }}" method="POST">
+                                    {{ csrf_field() }}
+                                    <div class="login-details-inr fa fa-sort-up w-100">
+                                        <select name="title" id="title" class="w-100">
+                                            <option disabled selected>Title</option>
+                                            <option value="1">Mr.</option>
+                                            <option value="2">Mrs.</option>
+                                            <option value="3">Ms.</option>
+                                            <option value="4">Miss.</option>
+                                            <option value="5">Dr.</option>
+                                            <option value="6">Prof.</option>
+                                        </select>
+                                        <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
+                                    </div>
+                                    <div class="login-details-inr fa fa-user w-100">
+                                        <div class="w-50 d-inline-block float-start">
+                                            <input placeholder="Name" type="text" id="name" name="name" value="{{ isset($customers->firstname) ? $customers->firstname : '' }}" class="w-100">
+                                            <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
+                                        </div>
+                                        <div class="w-50 d-inline-block float-end">
+                                            <input placeholder="Surname" type="text" id="surname" name="surname" value="{{ isset($customers->lastname) ? $customers->lastname : '' }}" class="w-100">
+                                            <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
+                                        </div>
+                                    </div>
+                                    <div class="login-details-inr fa fa-envelope w-100">
+                                        <input placeholder="Email address" type="text" id="email" name="email" value="{{ isset($customers->email) ? $customers->email : '' }}" class="w-100">
+                                        <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
+                                    </div>
+                                    <div class="login-details-inr fa fa-phone-alt w-100">
+                                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="{{ isset($customers->telephone) ? $customers->telephone : '' }}" class="w-100">
+                                        <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
+                                    </div>
+                                    <div class="login-details-inr fa fa-lock w-100">
+                                        <input placeholder="Password" type="password" id="password" name="password" value="{{ isset($customers->password) ? $customers->password : '' }}" class="w-100">
+                                        <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
+                                    </div>
+                                    <div class="login-details-inr fa fa-lock w-100">
+                                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
+                                        <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Update</button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header accordion-button" id="headingtwo" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
+                            <span>My addresses</span>
+                        </h2>
+                        <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <div class="row justify-content-center">
+                              <div class="col-md-10">
+                                <div class="login-main text-center">
+                                  <div class="login-details w-100">
+                                    <div class="row">
+                                      <div class="col-sm-6 mb-3">
+                                        <div class="card" style="min-height: 12rem !important;">
+                                            <div class="card-body">
+                                            <h5 class="card-title">Default Address</h5>
+                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-6 mb-3">
+                                          <div class="card" style="min-height: 12rem !important;">
+                                            <div class="card-body d-flex align-items-center justify-content-center">
+                                                <a href="{{ route('addnewaddress') }}"><h5 class="card-title">+ADD NEW ADDRESS</h5></a>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="accordion-item">
+                        <h2 class="accordion-header accordion-button" id="headingthree" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">
+                        <span>My order history</span>
+                        </h2>
+                        <div id="collapsethree" class="accordion-collapse collapse" aria-labelledby="headingthree" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <div class="row justify-content-center">
+                              <div class="col-md-10">
+                                <div class="login-main text-center">
+                                  <div class="login-details w-100">
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="card">
+                                          <div class="card-body">
+                                            <h5 class="card-title">Order History</h5>
+                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+        @endif
         </div>
       </section>
     @if (!empty($theme_id) || $theme_id != '')

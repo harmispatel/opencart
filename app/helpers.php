@@ -864,6 +864,7 @@ function addtoCart($request,$productid,$sizeid)
         $data['name'] = $product->hasOneProductDescription['name'];
         $data['description'] = $product->hasOneProductDescription['description'];
         $data['image'] = $product->image;
+        $data['model'] = $product->model;
         $data['quantity'] = 1;
         if ($sizeid != 0) {
             if(isset($arr['size'][$sizeid])){

@@ -404,6 +404,7 @@ Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::get('member', [MemberController::class, 'member'])->name('member');
 Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
+Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
@@ -420,6 +421,7 @@ Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
 Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])->name('customerlogout');
+Route::post('customerdetailupdate', [CustomerAuthController::class, 'customerdetailupdate'])->name('customerdetailupdate');
 
 
 

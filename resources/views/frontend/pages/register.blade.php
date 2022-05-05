@@ -96,32 +96,54 @@ $mycart = session()->get('cart1');
     </sidebar>
     <section class="register-main">
         <div class="container">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
           <div class="register-inr">
             <div class="register-title">
               <h2>REGISTER ACCOUNT</h2>
               <p>If you already have an account with us, please login at the<a href="{{ route('member') }}"> login page</a>.</p>
             </div>
             <div class="reg-details">
-              <form>
+              <form action="{{ route('customerregister') }}" method="POST">
+                {{ csrf_field() }}
                 <div class="reg-details-inr">
                   <h3>Your Personal Details</h3>
                   <table class="table">
                     <tbody>
                       <tr>
                         <td><span class="required">*</span>First Name :</td>
-                        <td><input type="text" name="firstname" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="name" value=""></td>
+                        @error('name')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Last Name :</td>
-                        <td><input type="text" name="lastname" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="surname" value=""></td>
+                        @error('surname')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td><span class="required">*</span> E-Mail :</td>
-                        <td><input type="text" name="email" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="email" value=""></td>
+                        @error('email')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Telephone:</td>
-                        <td><input type="text" name="telephone" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="phone" value=""></td>
+                        @error('phone')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td>Fax :</td>
@@ -144,7 +166,10 @@ $mycart = session()->get('cart1');
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Address line 1 :</td>
-                        <td><input type="text" name="address_1" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="address_1" value=""></td>
+                        @error('address_1')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td>Address line 2 :</td>
@@ -152,27 +177,36 @@ $mycart = session()->get('cart1');
                       </tr>
                       <tr>
                         <td><span class="required">*</span>City :</td>
-                        <td><input type="text" name="city" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="city" value=""></td>
+                        @error('city')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td>Post Code :</td>
-                        <td><input type="text" name="postcode" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="postcode" value=""></td>
+                        @error('postcode')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
-                        <td><span class="required">*</span>Country :</td>
+                        <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Country :</td>
                         <td>
-                          <select>
-                            <option>India</option>
-                            <option>China</option>
-                            <option>Japan</option>
-                            <option>Pakistan</option>
+                          <select name="country">
+                            <option value="1">India</option>
+                            <option value="2">China</option>
+                            <option value="3">Japan</option>
+                            <option value="4">Pakistan</option>
                           </select>
                         </td>
+                        @error('country')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
-                        <td><span class="required">*</span>Region / State :</td>
+                        <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Region / State :</td>
                         <td>
-                          <select>
+                          <select name="state">
                             <option>--- Please Select ---</option>
                             <option>GJ</option>
                             <option>RJ</option>
@@ -180,6 +214,9 @@ $mycart = session()->get('cart1');
                             <option>UP</option>
                           </select>
                         </td>
+                        @error('state')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                     </tbody>
                   </table>
@@ -190,11 +227,17 @@ $mycart = session()->get('cart1');
                     <tbody>
                       <tr>
                         <td><span class="required">*</span>Password :</td>
-                        <td><input type="password" name="password" value=""></td>
+                        <td><input type="password" class="@error('title', 'post') is-invalid @enderror" name="password" value=""></td>
+                        @error('password')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Password Confirm :</td>
-                        <td><input type="password" name="password_confirm" value=""></td>
+                        <td><input type="password" class="@error('title', 'post') is-invalid @enderror" name="confirmpassword" value=""></td>
+                        @error('confirmpassword')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                       </tr>
                     </tbody>
                   </table>
@@ -216,7 +259,7 @@ $mycart = session()->get('cart1');
                   </table>
                 </div>
                 <div class="reg-bt">
-                  <button class="btn">Continue</button>
+                  <button type="submit" class="btn">Continue</button>
                 </div>
               </form>
             </div>

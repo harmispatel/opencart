@@ -153,7 +153,7 @@
             </ul>
             @if (!empty($userlogin))
             <ul class="authentication-links">
-                <li>You are logged in as<a href="#"> ({{ $userlogin }})</a></li>
+                <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
                 <li>
                     <form method="POST" action="{{ route('customerlogout') }}">
                         {{ csrf_field() }}
@@ -227,7 +227,7 @@
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
                 <li>
-                    <a class="text-uppercase" href="#" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
                 </li>
                 <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contact')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>

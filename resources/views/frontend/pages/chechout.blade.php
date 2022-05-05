@@ -12,6 +12,10 @@ $userlogin = session('username');
 $userdeliverytype = session('user_delivery_type');
 
 $mycart = session()->get('cart1');
+
+// echo '<pre>';
+// print_r(session()->all());
+// exit();
 @endphp
 
 <!doctype html>
@@ -23,6 +27,63 @@ $mycart = session()->get('cart1');
     <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
     {{-- End CSS --}}
 </head>
+<style>
+    .myfoodbasketpayments_gateway, .cod, .pp_express {
+    text-align: left;
+    border-radius: 4px;
+    margin: 10px 0px;
+    position: relative;
+    padding: 20px 10px 15px 35px;
+    height: 62px;
+    border: solid 1px #d7d7d7;
+    display: flex;
+    align-items: center;
+}
+.login-details input[type="radio"]:checked + .check_btn:after {
+    content: ' ';
+    position: absolute;
+    z-index: 15;
+    left: 12px;
+    width: 12px;
+    height: 12px;
+    background-color: #005cc8;
+    top: 26px;
+    border-radius: 50%
+}
+
+span.check_btn:before {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: solid 2px #cacaca;
+    position: absolute;
+    left: 8px;
+    top: 37%;
+    content: "";
+    border-radius: 100%;
+}
+.checked {
+    background: #e46161;
+}
+.checkout-content input[type="radio"], .checkout-content input[type="checkbox"] {
+    margin: 2px 6px 0 0;
+    min-width: 20px;
+    vertical-align: -2px;
+}
+.myfoodbasketpayments_gateway input[type="radio"] {
+    top: 23px;
+}
+.myfoodbasketpayments_gateway input[type="radio"], .cod input[type="radio"], .pp_express input[type="radio"] {
+    position: absolute;
+    left: 0;
+    top: 0 !important;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    opacity: 0;
+}
+</style>
 
 <body>
 
@@ -211,7 +272,7 @@ $mycart = session()->get('cart1');
                                   <input placeholder="phone number" type="text" name="email" value="" class="w-100">
                                 </div>
                                 <div class="email-btn">
-                                  <button class="btn">Checkout</button>
+                                  <button type="submit" class="btn">Checkout</button>
                                 </div>
                               </div>
                             </div>
@@ -230,36 +291,39 @@ $mycart = session()->get('cart1');
                           <div class="col-md-4">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                  <select name="gender" class="w-100">
-                                    <option value="">Title</option>
-                                    <option value="1">Mr.</option>
-                                    <option value="2">Mrs.</option>
-                                    <option value="3">Ms.</option>
-                                    <option value="4">Miss.</option>
-                                    <option value="5">Dr.</option>
-                                    <option value="6">Prof.</option>
-                                  </select>
-                                </div>
-                                <div class="login-details-inr fa fa-user w-100 d-flex">
-                                  <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                  <input placeholder="Surname" type="text" name="surname" value="" class="w-50">
-                                </div>
-                                <div class="login-details-inr fa fa-envelope w-100">
-                                  <input placeholder="Email address" type="text" name="email" value="" class="w-100">
-                                </div>
-                                <div class="login-details-inr fa fa-phone-alt w-100">
-                                  <input placeholder="phone number" type="text" name="number" value="" class="w-100">
-                                </div>
-                                <div class="login-details-inr fa fa-lock w-100">
-                                  <input placeholder="password" type="password" name="password" value="" class="w-100">
-                                </div>
-                                <div class="login-details-inr fa fa-lock w-100">
-                                  <input placeholder="Confirm Password" type="password" name="confirm" value="" class="w-100">
-                                </div>
-                                <div class="email-btn">
-                                  <button class="btn">Create</button>
-                                </div>
+                                <form action="{{ route('customerregister') }}" method="post">
+                                    {{ csrf_field() }}
+                                    <div class="login-details-inr fa fa-sort-up w-100">
+                                        <select name="gender" class="w-100">
+                                            <option value="">Title</option>
+                                            <option value="1">Mr.</option>
+                                            <option value="2">Mrs.</option>
+                                            <option value="3">Ms.</option>
+                                            <option value="4">Miss.</option>
+                                            <option value="5">Dr.</option>
+                                            <option value="6">Prof.</option>
+                                        </select>
+                                    </div>
+                                    <div class="login-details-inr fa fa-user w-100 d-flex">
+                                        <input placeholder="Name" type="text" name="name" value="" class="w-50">
+                                        <input placeholder="Surname" type="text" name="surname" value="" class="w-50">
+                                    </div>
+                                    <div class="login-details-inr fa fa-envelope w-100">
+                                        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-phone-alt w-100">
+                                        <input placeholder="phone number" type="text" name="number" value="" class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-lock w-100">
+                                        <input placeholder="password" type="password" name="password" value="" class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-lock w-100">
+                                        <input placeholder="Confirm Password" type="password" name="confirm" value="" class="w-100">
+                                    </div>
+                                    <div class="email-btn">
+                                        <button type="submit" class="btn">Create</button>
+                                    </div>
+                                </form>
                               </div>
                             </div>
                           </div>
@@ -274,7 +338,7 @@ $mycart = session()->get('cart1');
         </div>
     </section>
     @else
-    <section class="check-main" >
+    <section class="check-main" id="checkout2">
       <div class="container" >
         <div class="check-inr">
           <div class="row justify-content-center" id="demo">
@@ -297,7 +361,7 @@ $mycart = session()->get('cart1');
                           <div class="login-main text-center">
                             <div class="login-details w-100">
                                 <div class="mb-1">
-                                <input class="form-check-input" type="radio" name="order" {{ isset($userdeliverytype) == 'collection' ? $userdeliverytype : 'checked' }} id="collect">
+                                <input class="form-check-input" type="radio" name="order" {{ isset($userdeliverytype) == 'collection' ? $userdeliverytype : 'checked' }} id="collect" checked>
                                 <label class="form-check-label" for="collect">
                                   I will collect my order
                                 </label>
@@ -453,7 +517,6 @@ $mycart = session()->get('cart1');
                             <div class="login-details w-100">
                             <form method="POST">
                                 {{ csrf_field() }}
-                                <h2>Create an account</h2>
                                 <div class="login-details-inr fas fa-address-book w-100">
                                     <select name="address" id="address" class="w-100">
                                         <option disabled selected>Address</option>
@@ -496,8 +559,8 @@ $mycart = session()->get('cart1');
             </div>
             <div class="col-md-4 mt-4">
               <div class="backbtn d-flex justify-content-between">
-                <button class="btn"><i class="fa fa-angle-left"></i> Back</button>
-                <button class="btn back-bt">Next</button>
+                <button class="btn disabled" disabled><i class="fa fa-angle-left"></i> Back</button>
+                <button class="btn back-bt" id="next">Next</button>
               </div>
             </div>
           </div>
@@ -506,7 +569,7 @@ $mycart = session()->get('cart1');
     </section>
     @endif
 
-    <section class="check-main" >
+    <section class="check-main" id="checkout3" style="display: none">
         <div class="container" >
           <div class="check-inr">
             <div class="row justify-content-center" id="demo">
@@ -541,8 +604,8 @@ $mycart = session()->get('cart1');
                                                 @endphp
                                                 <tr>
                                                     <td><i class="fa fa-times-circle text-danger"></i></td>
-                                                    <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 50px"></td>
-                                                    <td>{{ $cart['size'] }}</td>
+                                                    <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 40px"></td>
+                                                    <td>{{ html_entity_decode($cart['size']) }}</td>
                                                     <td>{{ $cart['name'] }}</td>
                                                     <td>£ {{ $price }}</td>
                                                 </tr>
@@ -556,7 +619,8 @@ $mycart = session()->get('cart1');
                                                 @endphp
                                                 <tr>
                                                     <td><i class="fa fa-times-circle text-danger"></i></td>
-                                                    <td>{{ $cart['quantity'] }}</td>
+                                                    <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 40px"></td>
+                                                    {{-- <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 50px">{{ $cart['quantity'] }}</td> --}}
                                                     <td colspan="2">{{ $cart['name'] }}</td>
                                                     <td>£ {{ $price }}</td>
                                                 </tr>
@@ -576,21 +640,21 @@ $mycart = session()->get('cart1');
                   </div>
                   <div class="accordion-item" id="colloctiontime">
                     <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                        <span>Collection Time</span>
+                        <span>Coupons/Vouchers/Loyalty</span>
                     </h2>
                     <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
                       <div class="accordion-body">
                         <div class="row justify-content-center">
-                          <div class="col-md-4">
+                          <div class="col-md-5">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                  <select class="time_select w-100" name="time_method">
-                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option>
-                                    <option id="time_1" value="13:45-14:00">13:45-14:00</option>
-                                    <option id="time_2" value="14:00-14:15">14:00-14:15</option>
-                                    <option id="time_3" value="14:15-14:30">14:15-14:30</option>
-                                  </select>
+                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                    <input placeholder="Voucher Code" type="text" id="vouchercode" name="vouchercode" value="" class="w-100">
+                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                </div>
+                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                    <input placeholder="Coupon Code" type="text" id="couponcode" name="couponcode" value="" class="w-100">
+                                    <button class="ms-2 btn btn-danger">APPLY</button>
                                 </div>
                               </div>
                             </div>
@@ -599,9 +663,9 @@ $mycart = session()->get('cart1');
                       </div>
                     </div>
                   </div>
-                  <div class="accordion-item" id="dileverytime" style="display: none">
+                  <div class="accordion-item" id="dileverytime">
                     <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                        <span>Dilevery Time</span>
+                        <span>Payment Options</span>
                     </h2>
                     <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
                       <div class="accordion-body">
@@ -609,21 +673,44 @@ $mycart = session()->get('cart1');
                           <div class="col-md-4">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                  <select class="time_select w-100" name="time_method">
-                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option>
-                                    <option id="time_1" value="13:45-14:00">13:45-14:00</option>
-                                    <option id="time_2" value="14:00-14:15">14:00-14:15</option>
-                                  </select>
+                                <div class="payment-class myfoodbasketpayments_gateway">
+                                    <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{asset('public/frontend/other/checkout-payment-card.png')}}">
+                                </div>
+                                <div class="payment-class myfoodbasketpayments_gateway">
+                                    <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{asset('public/frontend/other/paypal.png')}}">
+                                </div>
+                                <div class="payment-class myfoodbasketpayments_gateway">
+                                    <input type="radio" name="payment_method" value="3" id="myfoodbasketpayments_gateway2" class="text-bold change_color"><span class="check_btn"></span><img src="{{asset('public/frontend/other/cash.png')}}"><label class="ybc_cod" for="cod">Cash on Delivery </label>
                                 </div>
                               </div>
+                              {{-- <div class="buttons box-action">
+                                <div class="backbtn ">
+                                    <input type="button" onclick="$('#payment-method').addClass('stepcheckout');$('#payment-address').removeClass('stepcheckout');return false;" value="Back" class="button text-bold change_color">
+                                    <button class="btn"><i class="fa fa-angle-left"></i> Back</button>
+                                </div>
+                                <div class="right">
+                                    <input type="button" value="Pay £51.60" id="button-payment-method" class="button">
+                                </div>
+                                    <div style="display:none;" id="ybcnotification"> <div class="ybcnoti" style="font-size: 10px;">Please Wait! we are confirming the payment.</div><img src="/image/ajax-loader.gif">
+                                </div>
+                              </div> --}}
+
                             </div>
+
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <div class="col-md-4 mt-4">
+                    <div class="backbtn d-flex justify-content-between">
+                      <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
+                      {{-- <input type="button" value="Back" class="fa fa-angle-left bg-none"> --}}
+                      {{-- <button class="btn back-bt" id="next">Next</button> --}}
+                      <input type="button" value="Pay £51.60" id="button-payment-method" class="btn back-bt">
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -668,6 +755,23 @@ $mycart = session()->get('cart1');
         $('#colloctiontime').show();
         $('#dileverytime').hide();
         $('#deliveryaddress').hide();
+      });
+
+      var deliver = $('#deliver').val();
+      if (deliver == 'on') {
+        $('#colloctiontime').hide();
+        $('#dileverytime').show();
+        $('#deliveryaddress').show();
+      }
+      else{
+        $('#colloctiontime').show();
+        $('#dileverytime').hide();
+        $('#deliveryaddress').hide();
+      }
+
+      $('#next').on("click", function () {
+        $('#checkout2').hide();
+        $('#checkout3').show();
       });
 
           // Get Payment Address By Customer Address ID
