@@ -62,7 +62,23 @@
         $('.collection_button1').click(function()
         {
             var catpath = location.href + 'menu';
-            window.location = catpath;
+            var type = 'collection';
+
+            $.ajax({
+                    type: "POST",
+                    url: "{{ url('checkZipCode') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'type' : type,
+                    },
+                    dataType: "json",
+                    success: function (data)
+                    {
+                        if(data.success == 'collection')
+                        window.location = catpath;
+                    }
+                });
+
         });
 
         $('.delivery_button1').click(function()
@@ -110,6 +126,81 @@
                         else
                         {
                             var catpath = location.href + 'menu';
+                            window.location = catpath;
+                        }
+
+                    },
+                    error: function()
+                    {
+                        $('#search_result1').css('display','none');
+                        $('#loading_icon1').css('display','none');
+
+                        $('.store_list').css('color','red');
+                        $('div.enter_postcode p').css('display','none');
+                        $('.store_list').removeClass('wrap_row');
+                    }
+                });
+
+            }
+            else
+            {
+                $('div.enter_postcode p').addClass('postcode-error');
+                $('#loading_icon1').css('display','none');
+                    if($('.store_list').length > 0)
+                    $('.store_list').remove();
+                if(keyword.length <= 0)
+                {
+                    $('#search_input1').addClass('postcode-input-error');
+                }
+            }
+
+        });
+
+        $('.delivery_button2').click(function()
+        {
+            $('#search_result1').css('display','none');
+
+            var keyword = $('#search_input1').val() == undefined ? $('select[name=search_input2] option').filter(':selected').val() : $('#search_input1').val().trim();
+
+            var checkbox = 1;
+
+            if((keyword.length > 0) || (checkbox == 0))
+            {
+                $('#search_input1').removeClass('postcode-input-error');
+                $('div.enter_postcode p').removeClass('postcode-error');
+                $('#loading_icon1').css('display','block');
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('checkZipCode') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'keyword' : keyword,
+                        'checkbox' : checkbox,
+                    },
+                    dataType: "json",
+                    success: function (data)
+                    {
+                        if($('.store_list').length > 0)
+                            $('.store_list').remove();
+                        $('#loading_icon1').css('display','none');
+
+                        if(data.success != 'EXIST')
+                        {
+                            $('#search_result1').html(data.error);
+                            $('#search_result1').css('display','block');
+                            $('.store_list').css('color','red');
+                            $('div.enter_postcode p').css('display','none');
+                            $('.store_list').removeClass('wrap_row');
+                            setTimeout(function ()
+                            {
+                                $('div.enter_postcode p').css('display','block');
+                                $('#search_result1').css('display','none');
+                            }, 5000);
+                        }
+                        else
+                        {
+                            var catpath = location.href;
                             window.location = catpath;
                         }
 

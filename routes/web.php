@@ -178,7 +178,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
-    Route::post('addneworders', [OrdersController::class, 'addneworde   rs'])->name('addneworders');
+    Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
     Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
 
     Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
@@ -408,6 +408,7 @@ Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('a
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
+Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
