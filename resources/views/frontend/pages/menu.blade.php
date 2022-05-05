@@ -349,8 +349,10 @@ $mycart = session()->get('cart1');
                                             <table class="table">
                                                 @php
                                                     $subtotal = 0;
+                                                  
                                                 @endphp
                                                 @if (!empty($mycart) || $mycart != '')
+                                                     
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $cart)
                                                             @php

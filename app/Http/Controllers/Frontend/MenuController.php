@@ -10,6 +10,10 @@ use App\Models\Product;
 use App\Models\Product_to_category;
 use App\Models\Settings;
 use App\Models\ToppingSize;
+use App\Models\CouponProduct;
+use App\Models\Coupon;
+
+
 use App\Models\ToppingProductPriceSize;
 use Illuminate\Support\Facades\Session;
 
@@ -48,16 +52,16 @@ class MenuController extends Controller
         $sizeid = $request->size_id;
         // session()->forget('cart1');
         // exit;
-
+       
+     
 
         addtoCart($request, $productid, $sizeid);
 
         $mycart = $request->session()->get('cart1');
-        // echo "<pre>";
-        // print_r($mycart);
-        // exit;
         $html = '';
         $subtotal = 0;
+        
+
 
         $html .= '<table class="table">';
 
@@ -73,6 +77,7 @@ class MenuController extends Controller
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
+                
             }
         }
         if (isset($mycart['withoutSize'])) {
@@ -87,15 +92,19 @@ class MenuController extends Controller
                 $subtotal += $price;
             }
         }
-
+       
+                 
         $html .= '</table>';
         $html2 = '';
+        $html3 = '';
         $html2 .= '<label>Sub-Total</label>
         <span>£ ' . $subtotal . '</span>';
+        
 
         return response()->json([
             'html' => $html,
             'subtotal' => $html2,
+           
         ]);
     }
     public function setDeliveyType(Request $request)
