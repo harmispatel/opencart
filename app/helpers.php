@@ -786,27 +786,27 @@ function openclosetime()
     $deliverydays = array();
     $deliveryfrom = array();
     $deliveryto = array();
-    // if (isset($delivery['day']) && count($delivery['day'])) {
-    //     foreach ($delivery['day'] as $keyday => $daytime) {
-    //         $deliveryday = array();
-    //         foreach ($days as $key => $day) {
-    //             if (in_array($key, $daytime)) {
-    //                $deliveryday[] = $day;
-    //             }
-    //         }
-    //         $deliverydays[]=$deliveryday;
-    //         foreach ($times as $key => $time) {
-    //             if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
-    //                 $deliveryfrom[] = $time;
-    //             }
-    //         }
-    //         foreach ($times as $key => $time) {
-    //             if (isset($delivery['to'][$keyday]) && $collection['to'][$keyday] == $key) {
-    //                 $deliveryto[] = $time;
-    //             }
-    //         }
-    //     }
-    // }
+    if (isset($delivery['day']) && count($delivery['day'])) {
+        foreach ($delivery['day'] as $keyday => $daytime) {
+            $deliveryday = array();
+            foreach ($days as $key => $day) {
+                if (in_array($key, $daytime)) {
+                   $deliveryday[] = $day;
+                }
+            }
+            $deliverydays[]=$deliveryday;
+            foreach ($times as $key => $time) {
+                if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
+                    $deliveryfrom[] = $time;
+                }
+            }
+            foreach ($times as $key => $time) {
+                if (isset($delivery['to'][$keyday]) && $collection['to'][$keyday] == $key) {
+                    $deliveryto[] = $time;
+                }
+            }
+        }
+    }
     $data['deliverydays'] = $deliverydays;
     $data['deliveryfrom'] = $deliveryfrom;
     $data['deliveryto'] = $deliveryto;
@@ -866,6 +866,7 @@ function addtoCart($request,$productid,$sizeid)
         $data['image'] = $product->image;
         $data['model'] = $product->model;
         $data['quantity'] = 1;
+        $data['product_id'] = $productid;
         if ($sizeid != 0) {
             if(isset($arr['size'][$sizeid])){
                 $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;

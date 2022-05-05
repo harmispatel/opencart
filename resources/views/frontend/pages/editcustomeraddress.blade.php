@@ -107,84 +107,61 @@ $mycart = session()->get('cart1');
             @endif
           <div class="register-inr">
             <div class="register-title">
-              <h2>REGISTER ACCOUNT</h2>
-              <p>If you already have an account with us, please login at the<a href="{{ route('member') }}"> login page</a>.</p>
+              <h2>ADDRESS BOOK</h2>
             </div>
             <div class="reg-details">
-              <form action="{{ route('customerregister') }}" method="POST">
+              <form action="{{ route('updatecustomeraddress') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="reg-details-inr">
-                  <h3>Your Personal Details</h3>
+                  <h3>Edit address</h3>
+                </div>
+                <div class="reg-details-inr">
                   <table class="table">
                     <tbody>
-                      <tr>
+                        <tr>
                         <td><span class="required">*</span>First Name :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="name" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="name" value="{{ $customeraddress->firstname }}"></td>
+                        <input type="hidden" name="address_id" value="{{ $customeraddress->address_id }}">
                         @error('name')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
-                      </tr>
-                      <tr>
+                        </tr>
+                        <tr>
                         <td><span class="required">*</span>Last Name :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="lastname" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="lastname" value="{{ $customeraddress->lastname }}"></td>
                         @error('lastname')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
-                      </tr>
-                      <tr>
-                        <td><span class="required">*</span> E-Mail :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="email" value=""></td>
-                        @error('email')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                      </tr>
-                      <tr>
-                        <td><span class="required">*</span>Telephone:</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="phone" value=""></td>
-                        @error('phone')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                      </tr>
-                      <tr>
-                        <td>Fax :</td>
-                        <td><input type="text" name="fax" value=""></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="reg-details-inr">
-                  <h3>Your Address</h3>
-                  <table class="table">
-                    <tbody>
+                        </tr>
                       <tr>
                         <td>Company :</td>
-                        <td><input type="text" name="company" value=""></td>
+                        <td><input type="text" name="company" value="{{ $customeraddress->company }}"></td>
                       </tr>
                       <tr>
                         <td>Company ID :</td>
-                        <td><input type="text" name="company_id" value=""></td>
+                        <td><input type="text" name="company_id" value="{{ $customeraddress->company_id }}"></td>
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Address line 1 :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="address_1" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="address_1" value="{{ $customeraddress->address_1 }}"></td>
                         @error('address_1')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                       </tr>
                       <tr>
                         <td>Address line 2 :</td>
-                        <td><input type="text" name="address_2" value=""></td>
+                        <td><input type="text" name="address_2" value="{{ $customeraddress->address_2 }}"></td>
                       </tr>
                       <tr>
                         <td><span class="required">*</span>City :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="city" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="city" value="{{ $customeraddress->city }}"></td>
                         @error('city')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                       </tr>
                       <tr>
                         <td>Post Code :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="postcode" value=""></td>
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="postcode" value="{{ $customeraddress->postcode }}"></td>
                         @error('postcode')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -192,11 +169,11 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Country :</td>
                         <td>
-                          <select name="country">
-                            <option value="1">India</option>
-                            <option value="2">China</option>
-                            <option value="3">Japan</option>
-                            <option value="4">Pakistan</option>
+                          <select name="country" id="country_id" onchange="getstate();">
+                              <option value="" disabled selected>Select Country</option>
+                            @foreach ($countries as $countrie)
+                                <option value="{{ $countrie->country_id }}" {{ isset($customeraddress->country_id) == $countrie->country_id ? 'selected'  : ''}}>{{ $countrie->name }}</option>
+                            @endforeach
                           </select>
                         </td>
                         @error('country')
@@ -206,52 +183,21 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Region / State :</td>
                         <td>
-                          <select name="state">
-                            <option>--- Please Select ---</option>
-                            <option>GJ</option>
-                            <option>RJ</option>
-                            <option>MP</option>
-                            <option>UP</option>
+                          <select class="country_region_id" name="country_region_id">
+                            <option value="" selected disabled>Select Region/State</option>
+                            <option value="" {{ isset($customeraddress->country_id) == $countrie->country_id ? 'selected'  : ''}}>Select Region/State</option>
                           </select>
                         </td>
                         @error('state')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                       </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="reg-details-inr">
-                  <h3>Your Password</h3>
-                  <table class="table">
-                    <tbody>
                       <tr>
-                        <td><span class="required">*</span>Password :</td>
-                        <td><input type="password" class="@error('title', 'post') is-invalid @enderror" name="password" value=""></td>
-                        @error('password')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                      </tr>
-                      <tr>
-                        <td><span class="required">*</span>Password Confirm :</td>
-                        <td><input type="password" class="@error('title', 'post') is-invalid @enderror" name="confirmpassword" value=""></td>
-                        @error('confirmpassword')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="reg-details-inr">
-                  <h3>Newsletter</h3>
-                  <table class="table">
-                    <tbody>
-                      <tr>
-                        <td><span class="required">*</span>Subscribe :</td>
+                        <td><span class="required">*</span>Default Address :</td>
                         <td class="radio-bt">
-                          <input type="radio" name="newsletter" value="1">
+                          <input type="radio" name="defaultaddress" value="1">
                           <span>Yes</span>
-                          <input type="radio" name="newsletter" value="0" checked="checked">
+                          <input type="radio" name="defaultaddress" value="0" checked="checked" >
                           <span>No</span>
                         </td>
                       </tr>
@@ -285,5 +231,22 @@ $mycart = session()->get('cart1');
 </html>
 
 <script>
-
+    // START Function Get Stat Country ID
+    function getstate()
+    {
+        var country_id = $('#country_id :selected').val();
+        $.ajax({
+                type: "POST",
+                url: "{{ route('getRegionbyCountry') }}",
+                data: {'country_id': country_id,"_token": "{{ csrf_token() }}",},
+                dataType: "json",
+                success: function(response)
+                {
+                    alert("hi")
+                    $('.country_region_id').text('');
+                    $('.country_region_id').append(response);
+                },
+        });
+    }
+    // End Function Country ID
 </script>

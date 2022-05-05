@@ -7,13 +7,9 @@ $store_setting = session('store_settings');
 $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
 $template_setting = session('template_settings');
 
-$user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
+$user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
 
 $mycart = session()->get('cart1');
-
-// echo '<pre>';
-// print_r(session()->all());
-// exit();
 
 @endphp
 
@@ -31,7 +27,7 @@ $mycart = session()->get('cart1');
 
 
     <!-- Modal -->
-    <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
+    <div class="modal fade" id="storeclose" tabindex="-1" aria-labelledby="storecloseLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered w-25">
             <div class="modal-content">
                 <div class="modal-body p-5 text-danger">
@@ -251,40 +247,78 @@ $mycart = session()->get('cart1');
                                                                                         <div class="options-bt">
                                                                                             <div class="row">
                                                                                                 <div
-                                                                                                    class="col-md-6">
+                                                                                                    class="col-md-5">
                                                                                                     <span>{{ $size->hasOneToppingSize['size'] }}</span>
                                                                                                 </div>
-                                                                                                <div class="col-md-6">
-                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
-                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added
-                                                                                                                <i class="fa fa-check"></i>
-                                                                                                            </span>
-                                                                                                        </a>
+                                                                                                <div class="col-md-7">
+                                                                                                    @foreach ($openday as $key => $item)
+                                                                                                        @foreach ($item as $value)
+                                                                                                            @php
+                                                                                                                $firsttime = strtotime($fromtime[$key]);
+                                                                                                                $lasttime = strtotime($totime[$key]);
+                                                                                                                $today = time();
+                                                                                                                $currentday = date('l');
+                                                                                                            @endphp
+                                                                                                            @if ($today >= $firsttime && $today <= $lasttime)
+                                                                                                                @if ($currentday == $value)
+                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
+                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added
+                                                                                                                            <i class="fa fa-check"></i>
+                                                                                                                        </span>
+                                                                                                                    </a>
+                                                                                                                @endif
+                                                                                                            @else
+                                                                                                                @if ($currentday == $value)
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added
+                                                                                                                            <i class="fa fa-check"></i>
+                                                                                                                        </span>
+                                                                                                                    </a>
+                                                                                                                @endif
+                                                                                                            @endif
+                                                                                                        @endforeach
+                                                                                                    @endforeach
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     @endforeach
                                                                                 @else
-                                                                                <div class="options-bt">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-5">
-                                                                                            <span>price</span>
-                                                                                        </div>
-                                                                                        <div class="col-md-7">
-                                                                                            <a onclick="showId({{ $values->product_id }},0);"
-                                                                                                class="btn options-btn">
-                                                                                                <span
-                                                                                                    class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i
-                                                                                                        class="fa fa-shopping-basket"></i></span>
-                                                                                                <span
-                                                                                                    class="show-carttext sizeprice"
-                                                                                                    style="display: none;">Added<i
-                                                                                                        class="fa fa-check"></i></span>
-                                                                                            </a>
+                                                                                    <div class="options-bt">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-5">
+                                                                                                <span>price</span>
+                                                                                            </div>
+                                                                                            <div class="col-md-7">
+                                                                                                @foreach ($openday as $key => $item)
+                                                                                                    @foreach ($item as $value)
+                                                                                                        @php
+                                                                                                            $firsttime = strtotime($fromtime[$key]);
+                                                                                                            $lasttime = strtotime($totime[$key]);
+                                                                                                            $today = time();
+                                                                                                            $currentday = date('l');
+                                                                                                        @endphp
+                                                                                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                                                                                            @if ($currentday == $value)
+                                                                                                                <a onclick="showId({{ $values->product_id }},0);" class="btn options-btn">
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                </a>
+                                                                                                            @endif
+                                                                                                        @else
+                                                                                                            @if ($currentday == $value)
+                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                </a>
+                                                                                                            @endif
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                @endforeach
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                </div>
                                                                                 @endif
                                                                             </div>
                                                                         </div>
@@ -351,16 +385,17 @@ $mycart = session()->get('cart1');
                                                     $subtotal = 0;
                                                   
                                                 @endphp
-                                                @if (!empty($mycart) || $mycart != '')
-                                                     
+                                                @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
-                                                        @foreach ($mycart['size'] as $cart)
+                                                        @foreach ($mycart['size'] as $key => $cart)
                                                             @php
                                                                 $price = $cart['price'] * $cart['quantity'];
                                                                 $subtotal += $price;
                                                             @endphp
                                                             <tr>
-                                                                <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                                <td>
+                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
+                                                                </td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
                                                                 <td>{{ $cart['name'] }}</td>
@@ -375,7 +410,9 @@ $mycart = session()->get('cart1');
                                                                 $subtotal += $price;
                                                             @endphp
                                                             <tr>
-                                                                <td><i class="fa fa-times-circle text-danger"></i></td>
+                                                                <td>
+                                                                    <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0)" style="cursor: pointer"></i>
+                                                                </td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
                                                                 <td>£{{ $price }}</td>
@@ -451,7 +488,7 @@ $mycart = session()->get('cart1');
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
-                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery">
+                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $user_delivery_type == 'delivery' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -484,20 +521,9 @@ $mycart = session()->get('cart1');
                                             @endif
                                         </div>
                                     </div>
-                                    @if (!empty($mycart) || $mycart != '')
-                                        <a href="{{ route('checkout') }}" class="btn  checkbt">Checkout</a>
-                                        <div class="closed-now">
-                                            <span class="closing-text">We are closed now!</span>
-                                        </div>
-                                    @else
-                                        <a href="{{ route('checkout') }}" class="btn  checkbt">Checkout</a>
-                                        <div class="closed-now">
-                                            <span class="closing-text">We are closed now!</span>
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
-                            {{-- @foreach ($openday as $key => $item)
+                            @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
                                         $firsttime = strtotime($fromtime[$key]);
@@ -509,10 +535,10 @@ $mycart = session()->get('cart1');
                                         @if ($currentday == $value)
                                             @if (!empty($mycart) || $mycart != '')
                                                 <a href="{{ route('checkout') }}" class="btn checkbt"
-                                                    style="background-color: green; color:white;">Checkout</a>
+                                                style="background-color: green; color:white;">Checkout</a>
                                             @else
-                                                <a href="#" class="btn checkbt"
-                                                    style="background-color: green; color:white;">Checkout</a>
+                                                <a href="{{ route('cart') }}" class="btn checkbt"
+                                                style="background-color: green; color:white;">Checkout</a>
                                             @endif
                                             <div class="closed-now">
                                                 <span class="closing-text" style="color: green !important;">We are open now!</span>
@@ -520,14 +546,16 @@ $mycart = session()->get('cart1');
                                         @endif
                                     @else
                                         @if ($currentday == $value)
-                                            <a href="{{ route('') }}" class="btn disabled checkbt">Checkout</a>
                                             <div class="closed-now">
-                                                <span class="closing-text">We are closed now!</span>
+                                                <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                                <div class="closed-now">
+                                                    <span class="closing-text">We are closed now!</span>
+                                                </div>
                                             </div>
                                         @endif
                                     @endif
                                 @endforeach
-                            @endforeach --}}
+                            @endforeach
                         </div>
                     </div>
                 </div>
@@ -562,13 +590,33 @@ $mycart = session()->get('cart1');
                 <form action="">
                     <div class="modal-body">
                         <h5 class="modal-title" id="ModalLabel">Please Enter Your Post Code</h5>
-                        <div class="show_min">To start placing delivery order, please enter your full postcode here:
-                        </div>
                         <div class="controls">
-                            <input type="text" name="keyword" placeholder="eg.AA1 1bb" required>
-                            {{-- <samp>@error('keyword'){{ "Sorry!!!! We don't do delivery to your area" }}@enderror</samp> --}}
+                            @if ($delivery_setting['enable_delivery'] != 'collection')
+                                <div class="srch-input">
+                                    @if($delivery_setting['delivery_option'] == 'area')
+                                        <select name="search_input2" class="form-control"  id="search_store">
+                                            <option value="">Select Area</option>
+                                            @foreach($areas as $area)
+                                                <option value="{{ $area }}">{{ $area }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input id="search_input1" placeholder="AB10 1BW" type="text"/>
+                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                    @endif
+                                    <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
+                                </div>
+                                <div class="enter_postcode">
+                                    <p>Please enter your postcode to view our menu and place an order</p>
+                                </div>
+                            @endif
                         </div>
-                        <button type="submit" class="btn csmodal-btn">Deliver my order</button><br>
+                        @if ($delivery_setting['enable_delivery'] != 'delivery')
+                            <a class="btn csmodal-btn collection_button2">I will come and Collect</a>
+                        @endif
+                        @if ($delivery_setting['enable_delivery'] != 'collection')
+                            <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
+                        @endif
                         <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
                 </form>
@@ -596,8 +644,16 @@ $mycart = session()->get('cart1');
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function()
+    {
         var status = $('#user_delivery_val').val();
+        var coll = $("input[name='delivery_type']:checked").val();
+
+        if(coll == 'collection')
+        {
+            $('#Modal').modal('hide');
+            return false;
+        }
 
         if (status == '') {
             $('#Modal').modal('show');
@@ -664,8 +720,24 @@ $mycart = session()->get('cart1');
     function showId(product, sizeprice) {
 
         var sizeid = sizeprice;
-
         var productid = product;
+        var status = $('#user_delivery_val').val();
+
+        var coll = $("input[name='delivery_type']:checked").val();
+
+        if(coll == 'collection')
+        {
+            $('#Modal').modal('hide');
+        }
+        else
+        {
+            if (status == '')
+            {
+                $('#Modal').modal('show');
+                return false;
+            }
+        }
+
 
         $.ajax({
             type: 'post',
@@ -679,8 +751,12 @@ $mycart = session()->get('cart1');
             success: function(result) {
                 $('.empty-box').html('');
                 $('.sub-total').html('');
+                $('#cart_products').html('');
+                $('.pirce-value').html('');
                 $('.empty-box').append(result.html);
                 $('.sub-total').append(result.subtotal);
+                $('#cart_products').append(result.cart_products);
+                $('.pirce-value').append(result.headertotal);
             }
         });
     }
@@ -706,4 +782,26 @@ $mycart = session()->get('cart1');
     $('#delivery').on('click', function() {
         $('#Modal').modal('show');
     });
+
+    function deletecartproduct(prod_id,size_id)
+    {
+        var sizeid = size_id;
+        var productid = prod_id;
+
+        $.ajax({
+            type: 'post',
+            url: '{{ url("deletecartproduct") }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'size_id': sizeid,
+                'product_id': productid,
+            },
+            dataType: 'json',
+            success: function(result)
+            {
+                location.reload();
+            }
+        });
+    }
+
 </script>

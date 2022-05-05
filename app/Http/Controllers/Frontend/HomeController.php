@@ -95,6 +95,19 @@ class HomeController extends Controller
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
+        $type = $request->type;
+
+        if(!empty($type) || $type != '')
+        {
+            if($type == 'collection')
+            {
+                session()->put('flag_post_code', 'collection');
+                $json['success'] = 'collection';
+                return response()->json($json);
+
+            }
+        }
+
         if(isset($request->keyword))
         {
             $keyword = trim($request->keyword);

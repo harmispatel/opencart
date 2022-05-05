@@ -189,8 +189,8 @@ $userlogin = session('username');
                                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
                                         </div>
                                         <div class="w-50 d-inline-block float-end">
-                                            <input placeholder="Surname" type="text" id="surname" name="surname" value="{{ isset($customers->lastname) ? $customers->lastname : '' }}" class="w-100">
-                                            <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
+                                            <input placeholder="lastname" type="text" id="lastname" name="lastname" value="{{ isset($customers->lastname) ? $customers->lastname : '' }}" class="w-100">
+                                            <div class="invalid-feedback text-start" style="display: none" id="lastnameerr"></div>
                                         </div>
                                     </div>
                                     <div class="login-details-inr fa fa-envelope w-100">
@@ -202,7 +202,7 @@ $userlogin = session('username');
                                         <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
                                     </div>
                                     <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="Password" type="password" id="password" name="password" value="{{ isset($customers->password) ? $customers->password : '' }}" class="w-100">
+                                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100">
                                         <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
                                     </div>
                                     <div class="login-details-inr fa fa-lock w-100">
@@ -228,14 +228,20 @@ $userlogin = session('username');
                                 <div class="login-main text-center">
                                   <div class="login-details w-100">
                                     <div class="row">
+                                    @foreach ($customeraddress as $address)
                                       <div class="col-sm-6 mb-3">
                                         <div class="card" style="min-height: 12rem !important;">
-                                            <div class="card-body">
+                                            <div class="card-body text-start">
                                             <h5 class="card-title">Default Address</h5>
-                                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                            <p><small>{{$address->firstname}} {{$address->firstname}} <br> {{ $address->company }} <br> {{ $address->company_id }} <br>{{ $address->address_1 }} <br> {{ $address->address_2 }} <br> {{ $address->city }}  {{ $address->postcode }}<br> {{ $address->country_id }} <br> {{ $address->zone_id }}</small></p>
+                                            </div>
+                                            <div class="card-footer bg-transparent border-success">
+                                                <a href="{{ route('customeraddressedit',$address->address_id) }}" class="float-start"><i class="far fa-edit"></i>EDIT ADDRESS</a>
+                                                <a href="{{ route('customeraddressdelete',$address->address_id)}}" class="float-end"><i class="far fa-edit"></i>DELETE</a>
                                             </div>
                                         </div>
                                         </div>
+                                        @endforeach
                                         <div class="col-sm-6 mb-3">
                                           <div class="card" style="min-height: 12rem !important;">
                                             <div class="card-body d-flex align-items-center justify-content-center">

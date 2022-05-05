@@ -263,7 +263,7 @@ span.check_btn:before {
                                 </div>
                                 <div class="login-details-inr fa fa-user w-100 d-flex">
                                   <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                  <input placeholder="Surname" type="text" name="surname" value="" class="w-50">
+                                  <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
                                 </div>
                                 <div class="login-details-inr fa fa-envelope w-100">
                                   <input placeholder="Email address" type="text" name="email" value="" class="w-100">
@@ -306,7 +306,7 @@ span.check_btn:before {
                                     </div>
                                     <div class="login-details-inr fa fa-user w-100 d-flex">
                                         <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                        <input placeholder="Surname" type="text" name="surname" value="" class="w-50">
+                                        <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
                                     </div>
                                     <div class="login-details-inr fa fa-envelope w-100">
                                         <input placeholder="Email address" type="text" name="email" value="" class="w-100">

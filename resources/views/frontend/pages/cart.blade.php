@@ -1,21 +1,17 @@
 @php
-$openclose = openclosetime();
+    $openclose = openclosetime();
+    $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
+    $user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
 
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
-
-$user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
-
-$mycart = session()->get('cart1');
-
+    $mycart = session()->get('cart1');
 @endphp
 
 <!doctype html>
 <html>
-
 <head>
     {{-- CSS --}}
     @include('frontend.include.head')
@@ -25,15 +21,14 @@ $mycart = session()->get('cart1');
 
 <body>
 
-
     <!-- Modal -->
     <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered w-25">
             <div class="modal-content">
                 <div class="modal-body p-5 text-danger">
                     Sorry we are close now!
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close  float-end" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
                 </div>
             </div>
         </div>
@@ -45,12 +40,15 @@ $mycart = session()->get('cart1');
     {{-- End User Delivery --}}
 
     @php
-        if (session()->has('theme_id')) {
+        if (session()->has('theme_id'))
+        {
             $theme_id = session()->get('theme_id');
-        } else {
+        }
+        else
+        {
             $theme_id = 1;
         }
-        
+
         $social = session('social_site');
         $social_site = isset($social) ? $social : '#';
     @endphp
@@ -94,33 +92,119 @@ $mycart = session()->get('cart1');
             </ul>
         </div>
     </sidebar>
+
     <section class="basket-main">
         <div class="container">
             <div class="basket-inr">
                 <div class="basket-title">
                     <h2>SHOPPING CART</h2>
                 </div>
-                <div class="pb-4">
-                    <h6>Your shopping cart is empty!</h6>
-                </div>
+                @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
+                    <div class="basket-product-detail">
+                        <form>
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $subtotal = 0;
+                                    @endphp
+                                    @if (isset($mycart['size']))
+                                        @foreach ($mycart['size'] as $key => $cart)
+                                            @php
+                                                $price = ($cart['price']) * ($cart['quantity']);
+                                            @endphp
+                                            <tr>
+                                                <td>
+                                                    <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
+                                                </td>
+                                                <td class="align-middle">
+                                                    <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <div class="qu-inr">
+                                                        <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                        <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }})" class="px-2">
+                                                            <img src="{{ asset('public/images/update.png') }}">
+                                                        </a>
+                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }})">
+                                                            <i class="fas fa-times"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <b>{{ $cart['price'] }}</b>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <b>{{ number_format($price,2) }}</b>
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $subtotal += $price;
+                                            @endphp
+                                        @endforeach
+                                    @endif
+
+                                    @if (isset($mycart['withoutSize']))
+                                        @foreach ($mycart['withoutSize'] as $key=> $cart)
+                                            @php
+                                                $price = $cart['price'] * $cart['quantity'];
+                                            @endphp
+                                            <tr>
+                                                <td>
+                                                    <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
+                                                </td>
+                                                <td class="align-middle">
+                                                    <b>{{ $cart['name'] }}</b>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <div class="qu-inr">
+                                                        <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                        <a onclick="updatecart({{ $key }},0)" class="px-2">
+                                                            <img src="{{ asset('public/images/update.png') }}">
+                                                        </a>
+                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},0)">
+                                                            <i class="fas fa-times"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <b>{{ $cart['price'] }}</b>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <b>{{ number_format($price,2) }}</b>
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $subtotal += $price;
+                                            @endphp
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                @else
+                    <div class="pb-4">
+                        <h6>Your shopping cart is empty!</h6>
+                    </div>
+                @endif
+
                 <div class="emty-bt">
-                    <a href="{{ route('home') }}"> <button class="btn">Continue Shopping</button></a>
+                    <a href="{{ route('home') }}"> <button class="btn text-white" style="background: rgb(250, 146, 146);">Continue Shopping</button></a>
                 </div>
             </div>
-            {{-- <div>
-                <ul class="pull-left footer_menu">
-                    demo test </ul>
-                <ul class="pull-right ftr_sm">
-                    <li><a target="_blank" href="https://www.facebook.com"><i class="fa fa-facebook"></i></a>
-                    </li>
-                    <li><a target="_blank" href="https://twitter.com/"><i class="fa fa-twitter"></i>
-                        </a></li>
-                    <li><a target="_blank" href="https://www.google.co.uk"><i class="fa fa-google"></i>
-                        </a></li>
-                </ul>
-            </div> --}}
         </div>
     </section>
+
+
     @if (!empty($theme_id) || $theme_id != '')
         {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
@@ -136,9 +220,60 @@ $mycart = session()->get('cart1');
     {{-- END JS --}}
 
 </body>
-
 </html>
 
 <script>
+    function updatecart(product,sizeprice)
+    {
+        var sizeid = sizeprice;
+        var productid = product;
 
+        if(sizeid == 0)
+        {
+            var loop_id = $('#qty_'+product).val();
+        }
+        else
+        {
+            var loop_id = $('#qty_'+sizeid).val();
+        }
+
+
+        $.ajax({
+            type: 'post',
+            url: '{{ route('getid') }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'size_id': sizeid,
+                'product_id': productid,
+                'loop_id': loop_id,
+            },
+            dataType: 'json',
+            success: function(result)
+            {
+                location.reload();
+            }
+        });
+    }
+
+    function deletecartproduct(prod_id,size_id)
+    {
+        var sizeid = size_id;
+        var productid = prod_id;
+
+        $.ajax({
+            type: 'post',
+            url: '{{ url("deletecartproduct") }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'size_id': sizeid,
+                'product_id': productid,
+            },
+            dataType: 'json',
+            success: function(result)
+            {
+                location.reload();
+            }
+        });
+    }
 </script>
+

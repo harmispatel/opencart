@@ -110,7 +110,7 @@ $mycart = session()->get('cart1');
               <h2>ADDRESS BOOK</h2>
             </div>
             <div class="reg-details">
-              <form action="{{ route('customerregister') }}" method="POST">
+              <form action="{{ route('newaddress') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="reg-details-inr">
                   <h3>Edit address</h3>
@@ -127,8 +127,8 @@ $mycart = session()->get('cart1');
                         </tr>
                         <tr>
                         <td><span class="required">*</span>Last Name :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="surname" value=""></td>
-                        @error('surname')
+                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="lastname" value=""></td>
+                        @error('lastname')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         </tr>
@@ -168,11 +168,11 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Country :</td>
                         <td>
-                          <select name="country">
-                            <option value="1">India</option>
-                            <option value="2">China</option>
-                            <option value="3">Japan</option>
-                            <option value="4">Pakistan</option>
+                          <select name="country" id="country_id" onchange="getstate();">
+                              <option value="" disabled selected>Select Country</option>
+                            @foreach ($countries as $countrie)
+                                <option value="{{ $countrie->country_id }}">{{ $countrie->name }}</option>
+                            @endforeach
                           </select>
                         </td>
                         @error('country')
@@ -182,12 +182,8 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Region / State :</td>
                         <td>
-                          <select name="state">
-                            <option>--- Please Select ---</option>
-                            <option>GJ</option>
-                            <option>RJ</option>
-                            <option>MP</option>
-                            <option>UP</option>
+                          <select class="country_region_id" name="country_region_id">
+                            <option value="" selected disabled>Select Region/State</option>
                           </select>
                         </td>
                         @error('state')
@@ -233,5 +229,27 @@ $mycart = session()->get('cart1');
 </html>
 
 <script>
-
+    // START Function Get Stat Country ID
+    function getstate()
+    {
+        var country_id = $('#country_id :selected').val();
+            alert(country_id);
+        $.ajax({
+                type: "POST",
+                url: "{{ route('getRegionbyCountry') }}",
+                data: {'country_id': country_id,"_token": "{{ csrf_token() }}",},
+                dataType: "json",
+                success: function(response)
+                {
+                    alert("hi")
+                    $('.country_region_id').text('');
+                    $('.country_region_id').append(response);
+                },
+                error: function(response)
+                {
+                    alert("Err")
+                }
+        });
+    }
+    // End Function Country ID
 </script>
