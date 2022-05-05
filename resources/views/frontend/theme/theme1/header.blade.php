@@ -288,6 +288,7 @@
                     <div id="loginerr"></div>
                     <div class="login-details-inr fa fa-envelope w-100">
                         <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                        <input type="hidden" name="ajaxlogin" value="1">
                         <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
                     </div>
                         <div class="login-details-inr fa fa-lock w-100">
@@ -326,8 +327,9 @@
                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
                         </div>
                         <div class="w-50 d-inline-block float-end">
-                            <input placeholder="Surname" type="text" id="surname" name="surname" value="" class="w-100">
-                            <div class="invalid-feedback text-start" style="display: none" id="surnameerr"></div>
+                            <input placeholder="lastname" type="text" id="lastname" name="lastname" value="" class="w-100">
+                            <input type="hidden" name="ajaxregister" value="1">
+                            <div class="invalid-feedback text-start" style="display: none" id="lastnameerr"></div>
                         </div>
                     </div>
                     <div class="login-details-inr fa fa-envelope w-100">
