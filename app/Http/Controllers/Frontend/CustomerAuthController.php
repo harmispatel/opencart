@@ -53,29 +53,27 @@ class CustomerAuthController extends Controller
 
     public function customerregister(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
-        // $current_theme_id = $current_theme['theme_id'];
+        $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
         // Validation
-        // $request->validate([
-        //     'title' => 'required',
-        //     'name' => 'required',
-        //     'lastname' => 'required',
-        //     'email' => 'required|email|unique:oc_customer,email',
-        //     'phone' => 'required|min:10',
-        //     'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
-        //     'confirmpassword' => 'min:6|required_with:password|same:password',
-        //     // 'address_1' => 'required',
-        //     // 'city' => 'required',
-        //     // 'postcode' => 'required',
-        //     // 'country' => 'required',
-        //     // 'state' => 'required',
-        // ]);
+        $request->validate([
+            'title' => 'required',
+            'name' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:oc_customer,email',
+            'phone' => 'required|min:10',
+            'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
+            'confirmpassword' => 'min:6|required_with:password|same:password',
+            // 'address_1' => 'required',
+            // 'city' => 'required',
+            // 'postcode' => 'required',
+            // 'country' => 'required',
+            // 'state' => 'required',
+        ]);
+
         $ajaxregister = $request->ajaxregister;
         $customer = new Customer;
         $customer->store_id = $front_store_id;

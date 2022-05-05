@@ -537,7 +537,7 @@ $mycart = session()->get('cart1');
                                                 style="background-color: green; color:white;">Checkout</a>
                                             @else
                                                 <a href="{{ route('cart') }}" class="btn checkbt"
-                                                    style="background-color: green; color:white;">Checkout</a>
+                                                style="background-color: green; color:white;">Checkout</a>
                                             @endif
                                             <div class="closed-now">
                                                 <span class="closing-text" style="color: green !important;">We are open now!</span>
@@ -610,7 +610,12 @@ $mycart = session()->get('cart1');
                                 </div>
                             @endif
                         </div>
-                        <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
+                        @if ($delivery_setting['enable_delivery'] != 'delivery')
+                            <a class="btn csmodal-btn collection_button2">I will come and Collect</a>
+                        @endif
+                        @if ($delivery_setting['enable_delivery'] != 'collection')
+                            <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
+                        @endif
                         <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
                 </form>
@@ -638,8 +643,16 @@ $mycart = session()->get('cart1');
 
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function()
+    {
         var status = $('#user_delivery_val').val();
+        var coll = $("input[name='delivery_type']:checked").val();
+
+        if(coll == 'collection')
+        {
+            $('#Modal').modal('hide');
+            return false;
+        }
 
         if (status == '') {
             $('#Modal').modal('show');
@@ -709,11 +722,21 @@ $mycart = session()->get('cart1');
         var productid = product;
         var status = $('#user_delivery_val').val();
 
-        if (status == '')
+        var coll = $("input[name='delivery_type']:checked").val();
+
+        if(coll == 'collection')
         {
-            $('#Modal').modal('show');
-            return false;
+            $('#Modal').modal('hide');
         }
+        else
+        {
+            if (status == '')
+            {
+                $('#Modal').modal('show');
+                return false;
+            }
+        }
+
 
         $.ajax({
             type: 'post',

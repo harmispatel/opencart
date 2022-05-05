@@ -81,6 +81,28 @@
 
         });
 
+        $('.collection_button2').click(function()
+        {
+            var catpath = location.href;
+            var type = 'collection';
+
+            $.ajax({
+                    type: "POST",
+                    url: "{{ url('checkZipCode') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'type' : type,
+                    },
+                    dataType: "json",
+                    success: function (data)
+                    {
+                        if(data.success == 'collection')
+                        window.location = catpath;
+                    }
+                });
+
+        });
+
         $('.delivery_button1').click(function()
         {
             $('#search_result1').css('display','none');

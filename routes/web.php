@@ -418,6 +418,16 @@ Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
 
 
 
+// Member
+Route::get('member', [MemberController::class, 'member'])->name('member');
+Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
+Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
+Route::post('newaddress', [MemberController::class, 'newaddress'])->name('newaddress');
+Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddressdelete'])->name('customeraddressdelete');
+Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
+Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
+
+
 // login user
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
