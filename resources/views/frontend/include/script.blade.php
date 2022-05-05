@@ -221,7 +221,7 @@
                 console.log(message.responseJSON.errors);
                 var cust_title = message.responseJSON.errors.title;
                 var name = message.responseJSON.errors.name;
-                var surname = message.responseJSON.errors.surname;
+                var lastname = message.responseJSON.errors.lastname;
                 var e_mail = message.responseJSON.errors.email;
                 var phone_no = message.responseJSON.errors.phone;
                 var pass = message.responseJSON.errors.password;
@@ -255,16 +255,16 @@
                 }
 
                 // LastName
-                if(surname)
+                if(lastname)
                 {
-                    $('#surnameerr').text('').show();
-                    $('#surname').addClass('is-invalid');
-                    $('#surnameerr').text(surname).show();
+                    $('#lastnameerr').text('').show();
+                    $('#lastname').addClass('is-invalid');
+                    $('#lastnameerr').text(lastname).show();
                 }
                 else
                 {
-                    $('#surnameerr').text('').hide();
-                    $('#surname').attr('class','form-control');
+                    $('#lastnameerr').text('').hide();
+                    $('#lastname').attr('class','form-control');
                 }
 
                 // Email

@@ -19,6 +19,7 @@ class CustomerAuthController extends Controller
             'password' => 'required',
         ]);
 
+        $ajaxlogin = $request->ajaxlogin;
         $email = $request->email;
         $pass = $request->password;
         $emailexist = Customer::where('email', '=', $email)->exists();
@@ -27,20 +28,25 @@ class CustomerAuthController extends Controller
          if ($emailexist && md5($pass) == $customername->password) {
                 session()->put('username', $customername->firstname);
                 session()->put('userid', $customername->customer_id);
-
-                // return response()->json([
-                //     'status' => 1,
-                // ]);
-            // return redirect()->route('member');
-            return back();
+            if ($ajaxlogin == 1) {
+                return response()->json([
+                    'status' => 1,
+                ]);
+            }
+            else{
+                return redirect()->back();
+            }
          }
          else{
-                // return response()->json([
-                //     'status' => 0,
-                // ]);
+             if ($ajaxlogin == 1) {
+                 return response()->json([
+                     'status' => 0,
+                 ]);
+             }
+             else {
                 return redirect()->back();
+             }
          }
-        //  return redirect()->back();
 
 
     }
@@ -59,7 +65,7 @@ class CustomerAuthController extends Controller
         // $request->validate([
         //     'title' => 'required',
         //     'name' => 'required',
-        //     'surname' => 'required',
+        //     'lastname' => 'required',
         //     'email' => 'required|email|unique:oc_customer,email',
         //     'phone' => 'required|min:10',
         //     'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
@@ -70,11 +76,11 @@ class CustomerAuthController extends Controller
         //     // 'country' => 'required',
         //     // 'state' => 'required',
         // ]);
-
+        $ajaxregister = $request->ajaxregister;
         $customer = new Customer;
         $customer->store_id = $front_store_id;
         $customer->firstname = isset($request->name) ? $request->name : '';
-        $customer->lastname = isset($request->surname) ? $request->surname : '';
+        $customer->lastname = isset($request->lastname) ? $request->lastname : '';
         $customer->email = isset($request->email) ? $request->email : '';
         $customer->telephone = isset($request->phone) ? $request->phone : '';
         $customer->fax = isset($request->fax) ? $request->fax : '';
@@ -119,7 +125,14 @@ class CustomerAuthController extends Controller
         session()->put('username', $customer->firstname);
         session()->put('userid',$lastInsertedID);
 
-        // return response()->json();
+        if ($ajaxregister == 1) {
+            return response()->json([
+                'status' => 1,
+            ]);
+        }
+        else{
+            return redirect()->back();
+        }
         return back();
 
 
@@ -128,7 +141,7 @@ class CustomerAuthController extends Controller
     public function customerlogout()
     {
         session()->flush();
-        return back();
+        return redirect()->route('home');
     }
 
     public function customerdetailupdate(Request $request)
@@ -143,7 +156,7 @@ class CustomerAuthController extends Controller
         // $request->validate([
         //     'title' => 'required',
         //     'name' => 'required',
-        //     'surname' => 'required',
+        //     'lastname' => 'required',
         //     'email' => 'required|email|unique:oc_customer,email',
         //     'phone' => 'required|min:10',
         //     'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
@@ -158,7 +171,7 @@ class CustomerAuthController extends Controller
         $customer = Customer::find($customerid);
         $customer->store_id = $front_store_id;
         $customer->firstname = isset($request->name) ? $request->name : '';
-        $customer->lastname = isset($request->surname) ? $request->surname : '';
+        $customer->lastname = isset($request->lastname) ? $request->lastname : '';
         $customer->email = isset($request->email) ? $request->email : '';
         $customer->telephone = isset($request->phone) ? $request->phone : '';
         $customer->fax = isset($request->fax) ? $request->fax : '';

@@ -402,12 +402,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
-Route::get('member', [MemberController::class, 'member'])->name('member');
-Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
-Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
-Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
+Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
@@ -415,6 +412,14 @@ Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postc
 Route::get('mybasket', [MyBasketController::class, 'mybasket'])->name('mybasket');
 Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
 
+// Member
+Route::get('member', [MemberController::class, 'member'])->name('member');
+Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
+Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
+Route::post('newaddress', [MemberController::class, 'newaddress'])->name('newaddress');
+Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddressdelete'])->name('customeraddressdelete');
+Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
+Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
 
 
 // login user
