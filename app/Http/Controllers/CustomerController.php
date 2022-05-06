@@ -13,7 +13,7 @@ use App\Models\CustomerIP;
 use App\Models\CustomerReward;
 use App\Models\CustomerTransaction;
 use Illuminate\Http\Request;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {

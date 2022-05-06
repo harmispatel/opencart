@@ -519,7 +519,7 @@ span.check_btn:before {
                             <form method="POST">
                                 {{ csrf_field() }}
                                 <div class="login-details-inr fas fa-address-book w-100">
-                                    <select name="address" id="address" class="w-100 address">
+                                    <select name="address" id="address" class="w-100 address" onchange="Getcustomeraddress();">
                                         <option disabled selected>Choose Address</option>
                                     </select>
                                     <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
@@ -792,23 +792,20 @@ span.check_btn:before {
     });
 
     // Get Payment Address By Customer Address ID
-    //     var payment_address_id = $(this).val();
-    //     $.ajax({
-    //             type: "GET",
-    //             url: "{{ url('payment_and_shipping_address') }}/" + payment_address_id,
-    //             dataType: "json",
-    //             success: function(response)
-    //             {
-    //                 $('#payment_firstname').val(response.firstname);
-    //                 $('#payment_lastname').val(response.lastname);
-    //                 $('#payment_company').val(response.company);
-    //                 $('#payment_company_id').val(response.company_id);
-    //                 $('#payment_address_1').val(response.address_1);
-    //                 $('#payment_address_2').val(response.address_2);
-    //                 $('#payment_city').val(response.city);
-    //                 $('#payment_postcode').val(response.postcode);
-    //             }
-    // });
+    function Getcustomeraddress() {
+        var payment_address_id = $('#address').val();
+        $.ajax({
+            type: "GET",
+            url: "{{ url('getcustomeraddress') }}/" + payment_address_id,
+            dataType: "json",
+            success: function(response)
+            {
+                $('#address_1').val(response.address_1);
+                $('#address_2').val(response.address_2);
+                $('#postcode').val(response.postcode);
+            }
+        });
+     }
     // End Get Payment Address By Customer ID
 
 

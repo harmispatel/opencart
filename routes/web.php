@@ -112,7 +112,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('editcustomer/{id}', [CustomerController::class, 'edit'])->name('editcustomer');
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
     Route::post('updatecustomer', [CustomerController::class, 'update'])->name('updatecustomer');
-    Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
+    // Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
     Route::post('getcustomerhistory', [CustomerController::class, 'getcustomerhistory'])->name('getcustomerhistory');
     Route::post('storecustomerhistory', [CustomerController::class, 'storecustomerhistory'])->name('storecustomerhistory');
     Route::post('getcustomertransactions', [CustomerController::class, 'getcustomertransactions'])->name('getcustomertransactions');
@@ -181,7 +181,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
     Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
 
-    Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
+    // Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
     Route::get('payment_and_shipping_address/{id}', [OrdersController::class, 'payment_and_shipping_address'])->name('payment_and_shipping_address');
 
     // Order returns
@@ -415,6 +415,14 @@ Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name(
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 Route::get('success', [MyBasketController::class, 'success'])->name('success');
 Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
+
+
+// Get state by conrty
+Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
+
+// Get customer Address
+Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
+Route::get('getcustomeraddress/{id}', [CheckoutController::class, 'getcustomeraddress'])->name('getcustomeraddress');
 
 
 
