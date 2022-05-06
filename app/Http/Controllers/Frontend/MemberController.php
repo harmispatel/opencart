@@ -26,7 +26,8 @@ class MemberController extends Controller
     }
     public function memberregister()
     {
-        return view('frontend.pages.register');
+        $countries = Country::get();
+        return view('frontend.pages.register',compact('countries'));
     }
 
     public function addnewaddress()
@@ -39,6 +40,15 @@ class MemberController extends Controller
     {
         $userlogin = session('userid');
         if (!empty($userlogin)) {
+              // Validation
+            $request->validate([
+                'name' => 'required',
+                'lastname' => 'required',
+                'address_1' => 'required',
+                'city' => 'required',
+                'country' => 'required',
+                'country_region_id' => 'required',
+            ]);
             $customeraddress = new CustomerAddress;
             $customeraddress->customer_id = $userlogin;
             $customeraddress->firstname = $request->name;

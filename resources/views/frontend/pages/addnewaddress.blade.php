@@ -110,6 +110,15 @@ $mycart = session()->get('cart1');
               <h2>ADDRESS BOOK</h2>
             </div>
             <div class="reg-details">
+                @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
               <form action="{{ route('newaddress') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="reg-details-inr">
@@ -202,7 +211,8 @@ $mycart = session()->get('cart1');
                     </tbody>
                   </table>
                 </div>
-                <div class="reg-bt">
+                <div class="reg-bt d-flex justify-content-between">
+                  <button type="submit" class="btn">Continue</button>
                   <button type="submit" class="btn">Continue</button>
                 </div>
               </form>
@@ -233,21 +243,21 @@ $mycart = session()->get('cart1');
     function getstate()
     {
         var country_id = $('#country_id :selected').val();
-            alert(country_id);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
         $.ajax({
                 type: "POST",
-                url: "{{ route('getRegionbyCountry') }}",
-                data: {'country_id': country_id,"_token": "{{ csrf_token() }}",},
+                url: "{{ url('getRegionbyCountry') }}",
+                data: {'country_id': country_id,"_token": "{{ csrf_token() }}"},
+                // data: {'country_id': country_id,"_token": "{{ csrf_token() }}"},
                 dataType: "json",
                 success: function(response)
                 {
-                    alert("hi")
                     $('.country_region_id').text('');
                     $('.country_region_id').append(response);
-                },
-                error: function(response)
-                {
-                    alert("Err")
                 }
         });
     }

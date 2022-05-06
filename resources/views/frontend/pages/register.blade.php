@@ -192,12 +192,12 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Country :</td>
                         <td>
-                          <select name="country">
-                            <option value="1">India</option>
-                            <option value="2">China</option>
-                            <option value="3">Japan</option>
-                            <option value="4">Pakistan</option>
-                          </select>
+                        <select name="country" id="country_id" onchange="getstate();">
+                            <option value="" disabled selected>Select Country</option>
+                            @foreach ($countries as $countrie)
+                                <option value="{{ $countrie->country_id }}">{{ $countrie->name }}</option>
+                            @endforeach
+                        </select>
                         </td>
                         @error('country')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -206,13 +206,9 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Region / State :</td>
                         <td>
-                          <select name="state">
-                            <option>--- Please Select ---</option>
-                            <option>GJ</option>
-                            <option>RJ</option>
-                            <option>MP</option>
-                            <option>UP</option>
-                          </select>
+                        <select class="country_region_id" name="country_region_id">
+                            <option value="" selected disabled>Select Region/State</option>
+                            </select>
                         </td>
                         @error('state')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -258,7 +254,8 @@ $mycart = session()->get('cart1');
                     </tbody>
                   </table>
                 </div>
-                <div class="reg-bt">
+                <div class="reg-bt d-flex justify-content-between">
+                  <a href="{{ route('member') }}" type="submit" class="btn">Back</a>
                   <button type="submit" class="btn">Continue</button>
                 </div>
               </form>
@@ -285,5 +282,23 @@ $mycart = session()->get('cart1');
 </html>
 
 <script>
-
+    // START Function Get Stat Country ID
+    function getstate()
+    {
+        var country_id = $('#country_id :selected').val();
+        $.ajax({
+                type: "POST",
+                url: "{{ url('getRegionbyCountry') }}",
+                data: {'country_id': country_id,"_token": "{{ csrf_token() }}"},
+                // data: {'country_id': country_id,"_token": "{{ csrf_token() }}"},
+                dataType: "json",
+                cache: false,
+                success: function(response)
+                {
+                    $('.country_region_id').text('');
+                    $('.country_region_id').append(response);
+                }
+        });
+    }
+    // End Function Country ID
 </script>
