@@ -1,22 +1,30 @@
 @php
-$openclose = openclosetime();
+    $openclose = openclosetime();
 
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
+    $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
 
-$userlogin = session('username');
-$customerid = session('userid');
+    $userlogin = session('username');
+    $customerid = session('userid');
 
-$userdeliverytype = session('user_delivery_type');
+    $userdeliverytype = session('flag_post_code');
 
-$mycart = session()->get('cart1');
+    $subtotal = '';
 
-// echo '<pre>';
-// print_r(session()->all());
-// exit();
+    if(session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart(session()->get('userid'));
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
+
 @endphp
 
 <!doctype html>
@@ -362,13 +370,13 @@ span.check_btn:before {
                           <div class="login-main text-center">
                             <div class="login-details w-100">
                                 <div class="mb-1">
-                                <input class="form-check-input" type="radio" name="order" {{ isset($userdeliverytype) == 'collection' ? $userdeliverytype : 'checked' }} id="collect" checked>
+                                <input class="form-check-input" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
                                 <label class="form-check-label" for="collect">
                                   I will collect my order
                                 </label>
                             </div>
                             <div>
-                                <input class="form-check-input" type="radio" name="order" id="deliver" {{ isset($userdeliverytype) == 'delivery' ? $userdeliverytype : 'checked' }}>
+                                <input class="form-check-input" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
                                 <label class="form-check-label" for="deliver">
                                     Deliver to my address
                                 </label>
@@ -593,45 +601,103 @@ span.check_btn:before {
                           <div class="col-md-6">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <table class="table">
-                                    @php
-                                        $subtotal = 0;
-                                    @endphp
-                                    @if (!empty($mycart) || $mycart != '')
-                                        @if (isset($mycart['size']))
-                                            @foreach ($mycart['size'] as $cart)
-                                                @php
-                                                    $price = $cart['price'] * $cart['quantity'];
-                                                    $subtotal += $price;
-                                                @endphp
-                                                <tr>
-                                                    <td><i class="fa fa-times-circle text-danger"></i></td>
-                                                    <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 40px"></td>
-                                                    <td>{{ html_entity_decode($cart['size']) }}</td>
-                                                    <td>{{ $cart['name'] }}</td>
-                                                    <td>£ {{ $price }}</td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                        @if (isset($mycart['withoutSize']))
-                                            @foreach ($mycart['withoutSize'] as $cart)
-                                                @php
-                                                    $price = $cart['price'] * $cart['quantity'];
-                                                    $subtotal += $price;
-                                                @endphp
-                                                <tr>
-                                                    <td><i class="fa fa-times-circle text-danger"></i></td>
-                                                    <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 40px"></td>
-                                                    {{-- <td><input min="1" max="999" type="number" value="{{ $cart['quantity'] }}" style="width: 50px">{{ $cart['quantity'] }}</td> --}}
-                                                    <td colspan="2">{{ $cart['name'] }}</td>
-                                                    <td>£ {{ $price }}</td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    @else
-                                        <span>Your shopping cart is empty!</span>
-                                    @endif
-                                </table>
+                                @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
+                                    <div class="basket-product-detail">
+                                        <form>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Image</th>
+                                                        <th>Product Name</th>
+                                                        <th>Quantity</th>
+                                                        <th>Unit Price</th>
+                                                        <th>Price</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $subtotal = 0;
+                                                    @endphp
+                                                    @if (isset($mycart['size']))
+                                                        @foreach ($mycart['size'] as $key => $cart)
+                                                            @php
+                                                                $price = ($cart['price']) * ($cart['quantity']);
+                                                            @endphp
+                                                            <tr>
+                                                                <td>
+                                                                    <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <div class="qu-inr">
+                                                                        <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                        <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
+                                                                            <img src="{{ asset('public/images/update.png') }}">
+                                                                        </a>
+                                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <b>{{ $cart['price'] }}</b>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <b>{{ number_format($price,2) }}</b>
+                                                                </td>
+                                                            </tr>
+                                                            @php
+                                                                $subtotal += $price;
+                                                            @endphp
+                                                        @endforeach
+                                                    @endif
+
+                                                    @if (isset($mycart['withoutSize']))
+                                                        @foreach ($mycart['withoutSize'] as $key=> $cart)
+                                                            @php
+                                                                $price = $cart['price'] * $cart['quantity'];
+                                                            @endphp
+                                                            <tr>
+                                                                <td>
+                                                                    <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <b>{{ $cart['name'] }}</b>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <div class="qu-inr">
+                                                                        <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                        <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
+                                                                            <img src="{{ asset('public/images/update.png') }}">
+                                                                        </a>
+                                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
+                                                                            <i class="fas fa-times"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <b>{{ $cart['price'] }}</b>
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <b>{{ number_format($price,2) }}</b>
+                                                                </td>
+                                                            </tr>
+                                                            @php
+                                                                $subtotal += $price;
+                                                            @endphp
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="pb-4">
+                                        <h6>Your shopping cart is empty!</h6>
+                                    </div>
+                                @endif
                               </div>
                               </div>
                             </div>
@@ -675,27 +741,16 @@ span.check_btn:before {
                           <div class="col-md-4">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="payment-class myfoodbasketpayments_gateway">
+                                {{-- <div class="payment-class myfoodbasketpayments_gateway">
                                     <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{asset('public/frontend/other/checkout-payment-card.png')}}">
                                 </div>
                                 <div class="payment-class myfoodbasketpayments_gateway">
                                     <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{asset('public/frontend/other/paypal.png')}}">
-                                </div>
+                                </div> --}}
                                 <div class="payment-class myfoodbasketpayments_gateway">
-                                    <input type="radio" name="payment_method" value="3" id="myfoodbasketpayments_gateway2" class="text-bold change_color"><span class="check_btn"></span><img src="{{asset('public/frontend/other/cash.png')}}"><label class="ybc_cod" for="cod">Cash on Delivery </label>
+                                    <input type="radio" name="payment_method" value="3" id="cod" class="text-bold change_color pay_btn"><span class="check_btn"></span><img src="{{asset('public/frontend/other/cash.png')}}"><label class="ybc_cod" for="cod">Cash on Delivery </label>
                                 </div>
                               </div>
-                              {{-- <div class="buttons box-action">
-                                <div class="backbtn ">
-                                    <input type="button" onclick="$('#payment-method').addClass('stepcheckout');$('#payment-address').removeClass('stepcheckout');return false;" value="Back" class="button text-bold change_color">
-                                    <button class="btn"><i class="fa fa-angle-left"></i> Back</button>
-                                </div>
-                                <div class="right">
-                                    <input type="button" value="Pay £51.60" id="button-payment-method" class="button">
-                                </div>
-                                    <div style="display:none;" id="ybcnotification"> <div class="ybcnoti" style="font-size: 10px;">Please Wait! we are confirming the payment.</div><img src="/image/ajax-loader.gif">
-                                </div>
-                              </div> --}}
 
                             </div>
 
@@ -708,9 +763,8 @@ span.check_btn:before {
                 <div class="col-md-4 mt-4">
                     <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
-                      {{-- <input type="button" value="Back" class="fa fa-angle-left bg-none"> --}}
-                      {{-- <button class="btn back-bt" id="next">Next</button> --}}
-                      <input type="button" value="Pay £51.60" id="button-payment-method" class="btn back-bt">
+                      <input type="hidden" name="total" id="total" value="{{ $subtotal }}">
+                      <input type="button" value="Pay £ {{ $subtotal }}" id="button-payment-method" class="btn back-bt" disabled>
                     </div>
                   </div>
               </div>
@@ -740,6 +794,26 @@ span.check_btn:before {
 </html>
 
 <script>
+
+        $('document').ready(function(){
+            var d_type = $('input[name="order"]:checked').val();
+
+            if(d_type == 'delivery')
+            {
+                $('#colloctiontime').hide();
+                $('#dileverytime').show();
+                $('#deliveryaddress').show();
+            }
+
+            if(d_type == 'collection')
+            {
+                $('#colloctiontime').show();
+                $('#dileverytime').hide();
+                $('#deliveryaddress').hide();
+            }
+
+        });
+
       $('#login').click(function (e) {
         e.preventDefault();
         $('#demo').show();
@@ -747,6 +821,18 @@ span.check_btn:before {
         //  alert('hello');
       });
 
+      $('.pay_btn').on('click',function()
+      {
+            var method_type = $('input[name="payment_method"]:checked').val();
+
+            if(method_type == 3)
+            {
+                $('#button-payment-method').val('');
+                $('#button-payment-method').val('CONFIRM');
+            }
+
+            $('#button-payment-method').removeAttr('disabled');
+      });
 
       $('#deliver').on("click", function () {
         $('#colloctiontime').hide();
@@ -777,6 +863,34 @@ span.check_btn:before {
       });
 
 
+    // Checkout
+    $('#button-payment-method').on('click',function()
+    {
+        var method_type = $('input[name="payment_method"]:checked').val();
+        var total = $('#total').val();
+
+        $.ajax({
+            type: "post",
+            url: "{{ url('confirmorder') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'p_method': method_type,
+                'total': total,
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                if(response.success_cod == 1)
+                {
+                    alert('success');
+                    var new_url = response.success_url;
+                    window.location = new_url;
+                }
+            }
+        });
+
+    });
+    // End Checkout
 
 
     // Get address
@@ -811,5 +925,61 @@ span.check_btn:before {
     // });
     // End Get Payment Address By Customer ID
 
+    function updatecart(product,sizeprice,uid)
+    {
+        var sizeid = sizeprice;
+        var productid = product;
+        var userid = uid;
+
+        if(sizeid == 0)
+        {
+            var loop_id = $('#qty_'+product).val();
+        }
+        else
+        {
+            var loop_id = $('#qty_'+sizeid).val();
+        }
+
+
+        $.ajax({
+            type: 'post',
+            url: '{{ route('getid') }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'size_id': sizeid,
+                'product_id': productid,
+                'loop_id': loop_id,
+                'user_id': userid,
+            },
+            dataType: 'json',
+            success: function(result)
+            {
+                location.reload();
+            }
+        });
+    }
+
+    function deletecartproduct(prod_id,size_id,uid)
+    {
+        var sizeid = size_id;
+        var productid = prod_id;
+        var userid = uid;
+
+        $.ajax({
+            type: 'post',
+            url: '{{ url("deletecartproduct") }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'size_id': sizeid,
+                'product_id': productid,
+                'user_id': userid,
+            },
+            dataType: 'json',
+            success: function(result)
+            {
+                location.reload();
+            }
+        });
+    }
 
 </script>

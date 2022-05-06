@@ -7,7 +7,18 @@
     $template_setting = session('template_settings');
     $user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
 
-    $mycart = session()->get('cart1');
+
+    if(session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart(session()->get('userid'));
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
+
 @endphp
 
 <!doctype html>
@@ -131,10 +142,10 @@
                                                 <td class="align-middle">
                                                     <div class="qu-inr">
                                                         <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
-                                                        <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }})" class="px-2">
+                                                        <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
                                                             <img src="{{ asset('public/images/update.png') }}">
                                                         </a>
-                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }})">
+                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
                                                             <i class="fas fa-times"></i>
                                                         </a>
                                                     </div>
@@ -167,10 +178,10 @@
                                                 <td class="align-middle">
                                                     <div class="qu-inr">
                                                         <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
-                                                        <a onclick="updatecart({{ $key }},0)" class="px-2">
+                                                        <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
                                                             <img src="{{ asset('public/images/update.png') }}">
                                                         </a>
-                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},0)">
+                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
                                                             <i class="fas fa-times"></i>
                                                         </a>
                                                     </div>
@@ -191,15 +202,75 @@
                             </table>
                         </form>
                     </div>
+                    <div class="coupon-inr">
+                        <div class="coupon-title">
+                          <h2>What would you like to do next?</h2>
+                          <p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+                        </div>
+                        <div class="coupon-apply">
+                          <div class="accordion" id="accordionPanelsStayOpenExample">
+                            <div class="accordion-item">
+                              <h2 class="accordion-header accordion-button collapsed" id="panelsStayOpen-headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                                Use Coupon Code
+                              </h2>
+                              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                                <div class="accordion-body">
+                                   <form id="coupon">
+                                    Enter your coupon here:&nbsp;
+                                    <input type="text" name="coupon" value="">
+                                    <input type="hidden" name="next" value="coupon">
+                                    &nbsp;
+                                    <input type="submit" value="Apply" class="btn btn-danger">
+                                   </form>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-item">
+                              <h2 class="accordion-header accordion-button collapsed" id="panelsStayOpen-headingTwo" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                                Use Gift Voucher
+                              </h2>
+                              <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                                <div class="accordion-body">
+                                  <form id="gift-voucher">
+                                    Enter your gift voucher code here:&nbsp;
+                                    <input type="text" name="voucher" value="">
+                                    <input type="hidden" name="next" value="voucher">
+                                    &nbsp;
+                                    <input type="submit" value="Apply" class="btn btn-danger">
+                                   </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="basket-total">
+                        <table class="table table-responsive">
+                          <tbody>
+                            <tr>
+                              <td><b>Sub-Total:</b></td>
+                              <td><span><b>£{{ $subtotal }}</b></span></td>
+                            </tr>
+                            <tr>
+                              <td><b>Total to pay:</b></td>
+                              <td><span><b>£{{ $subtotal  }}</b></span></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="basket-bt">
+                        <a href="{{ route('home') }}"> <button class="btn">Continue Shopping</button></a>
+                        <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
+                      </div>
                 @else
                     <div class="pb-4">
                         <h6>Your shopping cart is empty!</h6>
                     </div>
+                    <div class="emty-bt">
+                        <a href="{{ route('home') }}"> <button class="btn text-white" style="background: rgb(250, 146, 146);">Continue Shopping</button></a>
+                    </div>
                 @endif
 
-                <div class="emty-bt">
-                    <a href="{{ route('home') }}"> <button class="btn text-white" style="background: rgb(250, 146, 146);">Continue Shopping</button></a>
-                </div>
             </div>
         </div>
     </section>
@@ -223,10 +294,11 @@
 </html>
 
 <script>
-    function updatecart(product,sizeprice)
+    function updatecart(product,sizeprice,uid)
     {
         var sizeid = sizeprice;
         var productid = product;
+        var userid = uid;
 
         if(sizeid == 0)
         {
@@ -246,6 +318,7 @@
                 'size_id': sizeid,
                 'product_id': productid,
                 'loop_id': loop_id,
+                'user_id': userid,
             },
             dataType: 'json',
             success: function(result)
@@ -255,10 +328,11 @@
         });
     }
 
-    function deletecartproduct(prod_id,size_id)
+    function deletecartproduct(prod_id,size_id,uid)
     {
         var sizeid = size_id;
         var productid = prod_id;
+        var userid = uid;
 
         $.ajax({
             type: 'post',
@@ -267,6 +341,7 @@
                 "_token": "{{ csrf_token() }}",
                 'size_id': sizeid,
                 'product_id': productid,
+                'user_id': userid,
             },
             dataType: 'json',
             success: function(result)

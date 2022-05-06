@@ -14,29 +14,56 @@
   
     $userlogin = session('username');
 
-    $cart = session()->get('cart1');
-    $cart_size = isset($cart['size']) ? count($cart['size']) : 0;
-    $cart_withoutsize = isset($cart['withoutSize']) ? count($cart['withoutSize']) : 0;
-    $cart_products = $cart_size + $cart_withoutsize;
-
     $html = '';
     $headertotal = 0;
 
-    if (isset($cart['size'])) 
+    if(session()->has('userid'))
     {
-        foreach ($cart['size'] as $mycart) 
+        $cart = getuserCart(session()->get('userid'));
+        $cart_size = isset($cart['size']) ? count($cart['size']) : 0;
+        $cart_withoutsize = isset($cart['withoutSize']) ? count($cart['withoutSize']) : 0;
+        $cart_products = $cart_size + $cart_withoutsize;
+
+        if (isset($cart['size'])) 
         {
-            $price = $mycart['price'] * $mycart['quantity'];
-            $headertotal += $price;
+            foreach ($cart['size'] as $mycart) 
+            {
+                $price = $mycart['price'] * $mycart['quantity'];
+                $headertotal += $price;
+            }
+        }
+        if (isset($cart['withoutSize'])) 
+        {
+            foreach ($cart['withoutSize'] as $mycart) 
+            {
+                    $price = $mycart['price'] * $mycart['quantity'];
+                    $headertotal += $price;
+            }
         }
     }
-    if (isset($cart['withoutSize'])) 
+    else 
     {
-       foreach ($cart['withoutSize'] as $mycart) 
-       {
-            $price = $mycart['price'] * $mycart['quantity'];
-            $headertotal += $price;
-       }
+        $cart = session()->get('cart1');
+        $cart_size = isset($cart['size']) ? count($cart['size']) : 0;
+        $cart_withoutsize = isset($cart['withoutSize']) ? count($cart['withoutSize']) : 0;
+        $cart_products = $cart_size + $cart_withoutsize;
+
+        if (isset($cart['size'])) 
+        {
+            foreach ($cart['size'] as $mycart) 
+            {
+                $price = $mycart['price'] * $mycart['quantity'];
+                $headertotal += $price;
+            }
+        }
+        if (isset($cart['withoutSize'])) 
+        {
+            foreach ($cart['withoutSize'] as $mycart) 
+            {
+                $price = $mycart['price'] * $mycart['quantity'];
+                $headertotal += $price;
+            }
+        }
     }
    
 @endphp
@@ -247,10 +274,7 @@
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                @php
-                    $mycart =session()->get('cart1'); 
-                @endphp
-                @if ($mycart == '')
+                @if ($cart == '')
                     <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
                     </li>

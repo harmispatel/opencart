@@ -7,14 +7,12 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
-use Symfony\Component\Console\Input\Input;
-use Illuminate\Support\Facades\Hash;
 
 class CustomerAuthController extends Controller
 {
     public function customerlogin(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
@@ -188,7 +186,7 @@ class CustomerAuthController extends Controller
         $customer->wishlist = isset($request->wishlist) ? $request->wishlist : '';
         $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
         $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
-        $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : '';
+        $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : 1;
         $customer->ip =  $_SERVER['REMOTE_ADDR'];
         $customer->status = isset($request->status) ? $request->status : 1;
         $customer->approved = isset($request->approved) ? $request->approved : 1;

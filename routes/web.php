@@ -36,7 +36,7 @@ use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\MyBasketController;
 use App\Http\Controllers\Frontend\Cartcontroller;
-
+use App\Http\Controllers\Frontend\CustomerOrder;
 use Illuminate\Support\Facades\Auth;
 
 //frontend
@@ -427,6 +427,8 @@ Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddr
 Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
 Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
 
+// Order
+Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
 
 // login user
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
