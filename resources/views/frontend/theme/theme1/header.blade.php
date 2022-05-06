@@ -268,7 +268,7 @@
                 <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
                 </li>
-                <li>
+                <li class="{{ ((request()->is('member'))) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('member') }}" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
                 </li>
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
@@ -305,7 +305,6 @@
         </div>
     </div>
 </header>
-{{-- End Header --}}
 
 @php
     
