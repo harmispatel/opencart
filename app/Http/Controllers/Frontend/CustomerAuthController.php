@@ -112,18 +112,29 @@ class CustomerAuthController extends Controller
         $customeraddress->country_id = isset($request->country) ? $request->country : '';
         $customeraddress->zone_id = isset($request->state) ? $request->state : '';
         $customer->save();
-        // echo '<pre>';
-        // print_r($customeraddress->toArray());
-        // exit();
-
-
-
 
 
         session()->put('username', $customer->firstname);
         session()->put('userid',$lastInsertedID);
 
-        if ($ajaxregister == 1) {
+        if(session()->has('userid'))
+        {
+            if(session()->has('cart1'))
+            {
+                $cart = session()->get('cart1');
+                $serial = serialize($cart);
+                $base64 = base64_encode($serial);
+                $user_id = session()->get('userid');
+                $user = Customer::find($user_id);
+                $user->cart = $base64;
+                $user->update();
+
+                session()->forget('cart1');
+            }
+        }
+
+        if ($ajaxregister == 1)
+        {
             return response()->json([
                 'status' => 1,
             ]);
@@ -131,7 +142,6 @@ class CustomerAuthController extends Controller
         else{
             return redirect()->back();
         }
-        return back();
 
 
     }
