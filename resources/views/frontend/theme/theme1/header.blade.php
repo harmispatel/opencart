@@ -283,8 +283,6 @@
 </header>
 {{-- End Header --}}
 
-  
-
 @php
     
 // $data = session()->all();
