@@ -281,90 +281,9 @@
         </div>
     </div>
 </header>
-
-  <!-- Modal -->
-  <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-            <div class="modal-login mb-3">
-                <form action="{{ route('customerlogin') }}" id="userlogin" method="POST">
-                    {{ csrf_field() }}
-                    <h2>LOG IN</h2>
-                    <div id="loginerr"></div>
-                    <div class="login-details-inr fa fa-envelope w-100">
-                        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
-                        <input type="hidden" name="ajaxlogin" value="1">
-                        <div class="invalid-feedback text-start" style="display: none" id="loginemailerr"></div>
-                    </div>
-                        <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Password" type="password" name="password" value="" class="w-100">
-                        <div class="invalid-feedback text-start" style="display: none" id="loginpassworderr"></div>
-                    </div>
-                    <div class="login-modal-last d-flex justify-content-between">
-                        <a href="">Forgotten Password?</a>
-                        <div class="check-modal">
-                            <label for="remember">Remember Me</label>
-                            <input type="checkbox" id="remember">
-                        </div>
-                    </div>
-                    <button type="submit" form="userlogin" class="btn btn-success" id="loginform">Login</button>
-                </form>
-            </div>
-            <div class="new-account-modal">
-                <form action="{{ route('customerregister') }}" id="registerform"  method="POST">
-                    {{ csrf_field() }}
-                    <h2>Create an account</h2>
-                    <div class="login-details-inr fa fa-sort-up w-100">
-                        <select name="title" id="title" class="w-100">
-                            <option disabled selected>Title</option>
-                            <option value="1">Mr.</option>
-                            <option value="2">Mrs.</option>
-                            <option value="3">Ms.</option>
-                            <option value="4">Miss.</option>
-                            <option value="5">Dr.</option>
-                            <option value="6">Prof.</option>
-                        </select>
-                        <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
-                    </div>
-                    <div class="login-details-inr fa fa-user w-100">
-                        <div class="w-50 d-inline-block float-start">
-                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100">
-                            <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
-                        </div>
-                        <div class="w-50 d-inline-block float-end">
-                            <input placeholder="lastname" type="text" id="lastname" name="lastname" value="" class="w-100">
-                            <input type="hidden" name="ajaxregister" value="1">
-                            <div class="invalid-feedback text-start" style="display: none" id="lastnameerr"></div>
-                        </div>
-                    </div>
-                    <div class="login-details-inr fa fa-envelope w-100">
-                        <input placeholder="Email address" type="text" id="email" name="email" value="" class="w-100">
-                        <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
-                    </div>
-                    <div class="login-details-inr fa fa-phone-alt w-100">
-                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="" class="w-100">
-                        <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
-                    </div>
-                    <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100">
-                        <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
-                    </div>
-                    <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
-                        <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
-                    </div>
-                    <button type="submit" form="registerform" id="register" class="btn btn-success">Create</button>
-                </form>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
 {{-- End Header --}}
+
+  
 
 @php
     
