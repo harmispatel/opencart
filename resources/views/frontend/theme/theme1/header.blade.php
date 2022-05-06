@@ -11,13 +11,34 @@
     $store_setting = isset($store_set) ? $store_set : '';
     
     $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-    
-    // $data = session()->all();
-    //     echo '<pre>';
-    //     print_r($data);
-    //     exit();
+  
     $userlogin = session('username');
-     // die;
+
+    $cart = session()->get('cart1');
+    $cart_size = isset($cart['size']) ? count($cart['size']) : 0;
+    $cart_withoutsize = isset($cart['withoutSize']) ? count($cart['withoutSize']) : 0;
+    $cart_products = $cart_size + $cart_withoutsize;
+
+    $html = '';
+    $headertotal = 0;
+
+    if (isset($cart['size'])) 
+    {
+        foreach ($cart['size'] as $mycart) 
+        {
+            $price = $mycart['price'] * $mycart['quantity'];
+            $headertotal += $price;
+        }
+    }
+    if (isset($cart['withoutSize'])) 
+    {
+       foreach ($cart['withoutSize'] as $mycart) 
+       {
+            $price = $mycart['price'] * $mycart['quantity'];
+            $headertotal += $price;
+       }
+    }
+   
 @endphp
 
 <style>
@@ -226,21 +247,30 @@
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                <li>
-                    <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
-                </li>
+                @php
+                    $mycart =session()->get('cart1'); 
+                @endphp
+                @if ($mycart == '')
+                    <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                        <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    </li>
+                @else
+                    <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                        <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    </li>
+                @endif  
                 <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contact')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                 </li>
             </ul>
-            <a class="menu-shopping-cart" href="">
+            <a class="menu-shopping-cart" href="{{ route('cart') }}">
                 <div class="number">
-                    <i class="fas fa-shopping-basket"></i><span>2</span>
+                    <i class="fas fa-shopping-basket"></i><span id="cart_products">{{ $cart_products }}</span>
                 </div>
                 <div class="price-box">
-                    <strong>Shopping Cart:</strong>
+                    <strong>Shopping Cart</strong>
                     <div class="price">
-                        <i class="fas fa-dollar-sign"></i><span class="pirce-value">32.10</span>
+                        <i class="fas fa-pound-sign"></i> <span class="pirce-value">{{ $headertotal }}</span>
                     </div>
                 </div>
             </a>

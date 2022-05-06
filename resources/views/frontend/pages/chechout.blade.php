@@ -192,7 +192,7 @@ span.check_btn:before {
         </div>
     </sidebar>
     @if (empty($userlogin))
-    <section class="check-main ">
+    <section class="check-main" id="checkout1">
         <div class="container">
           <div class="check-inr">
             <div class="row" id="Checkout">

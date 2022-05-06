@@ -97,9 +97,18 @@
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
-                    <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                   @php
+                       $mycart =session()->get('cart1'); 
+                   @endphp
+                  @if ($mycart == '')
+                  <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                    <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
                 </li>
+                  @else
+                  <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                      <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                  </li>
+                  @endif  
                 <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contactUs')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                 </li>
