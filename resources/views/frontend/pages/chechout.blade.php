@@ -8,6 +8,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
 $template_setting = session('template_settings');
 
 $userlogin = session('username');
+$customerid = session('userid');
 
 $userdeliverytype = session('user_delivery_type');
 
@@ -518,9 +519,10 @@ span.check_btn:before {
                             <form method="POST">
                                 {{ csrf_field() }}
                                 <div class="login-details-inr fas fa-address-book w-100">
-                                    <select name="address" id="address" class="w-100">
-                                        <option disabled selected>Address</option>
+                                    <select name="address" id="address" class="w-100 address">
+                                        <option disabled selected>Choose Address</option>
                                     </select>
+                                    <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
                                     <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
                                 </div>
                                 <div class="login-details-inr fas fa-map-marker-alt w-100">
@@ -774,25 +776,39 @@ span.check_btn:before {
         $('#checkout3').show();
       });
 
-          // Get Payment Address By Customer Address ID
 
-        var payment_address_id = $(this).val();
-        $.ajax({
-                type: "GET",
-                url: "{{ url('payment_and_shipping_address') }}/" + payment_address_id,
-                dataType: "json",
-                success: function(response)
-                {
-                    $('#payment_firstname').val(response.firstname);
-                    $('#payment_lastname').val(response.lastname);
-                    $('#payment_company').val(response.company);
-                    $('#payment_company_id').val(response.company_id);
-                    $('#payment_address_1').val(response.address_1);
-                    $('#payment_address_2').val(response.address_2);
-                    $('#payment_city').val(response.city);
-                    $('#payment_postcode').val(response.postcode);
-                }
+
+
+    // Get address
+    var customerid = $(' #customerid ').val();
+    // alert(customerid)
+    $.ajax({
+        type: "get",
+        url: "{{ url('getaddress') }}/" + customerid,
+        dataType: "json",
+        success: function(response) {
+            $('.address').html(response);
+        }
     });
+
+    // Get Payment Address By Customer Address ID
+    //     var payment_address_id = $(this).val();
+    //     $.ajax({
+    //             type: "GET",
+    //             url: "{{ url('payment_and_shipping_address') }}/" + payment_address_id,
+    //             dataType: "json",
+    //             success: function(response)
+    //             {
+    //                 $('#payment_firstname').val(response.firstname);
+    //                 $('#payment_lastname').val(response.lastname);
+    //                 $('#payment_company').val(response.company);
+    //                 $('#payment_company_id').val(response.company_id);
+    //                 $('#payment_address_1').val(response.address_1);
+    //                 $('#payment_address_2').val(response.address_2);
+    //                 $('#payment_city').val(response.city);
+    //                 $('#payment_postcode').val(response.postcode);
+    //             }
+    // });
     // End Get Payment Address By Customer ID
 
 
