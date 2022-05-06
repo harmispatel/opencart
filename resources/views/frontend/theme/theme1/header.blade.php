@@ -291,18 +291,18 @@
         </div>
         <div class="modal-body text-center">
             <div class="modal-login mb-3">
-                <form id="userlogin" method="POST">
+                <form action="{{ route('customerlogin') }}" id="userlogin" method="POST">
                     {{ csrf_field() }}
                     <h2>LOG IN</h2>
                     <div id="loginerr"></div>
                     <div class="login-details-inr fa fa-envelope w-100">
                         <input placeholder="Email address" type="text" name="email" value="" class="w-100">
                         <input type="hidden" name="ajaxlogin" value="1">
-                        <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
+                        <div class="invalid-feedback text-start" style="display: none" id="loginemailerr"></div>
                     </div>
                         <div class="login-details-inr fa fa-lock w-100">
                         <input placeholder="Password" type="password" name="password" value="" class="w-100">
-                        <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
+                        <div class="invalid-feedback text-start" style="display: none" id="loginpassworderr"></div>
                     </div>
                     <div class="login-modal-last d-flex justify-content-between">
                         <a href="">Forgotten Password?</a>

@@ -131,8 +131,6 @@ class CustomerAuthController extends Controller
         else{
             return redirect()->back();
         }
-        return back();
-
 
     }
 
@@ -151,20 +149,20 @@ class CustomerAuthController extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         // Validation
-        // $request->validate([
-        //     'title' => 'required',
-        //     'name' => 'required',
-        //     'lastname' => 'required',
-        //     'email' => 'required|email|unique:oc_customer,email',
-        //     'phone' => 'required|min:10',
-        //     'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
-        //     'confirmpassword' => 'min:6|required_with:password|same:password',
-        //     // 'address_1' => 'required',
-        //     // 'city' => 'required',
-        //     // 'postcode' => 'required',
-        //     // 'country' => 'required',
-        //     // 'state' => 'required',
-        // ]);
+        $request->validate([
+            'title' => 'required',
+            'name' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:oc_customer,email',
+            'phone' => 'required|min:10',
+            'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
+            'confirmpassword' => 'min:6|required_with:password|same:password',
+            // 'address_1' => 'required',
+            // 'city' => 'required',
+            // 'postcode' => 'required',
+            // 'country' => 'required',
+            // 'state' => 'required',
+        ]);
 
         $customer = Customer::find($customerid);
         $customer->store_id = $front_store_id;

@@ -471,27 +471,27 @@
                     // Email
                     if(e_mail)
                     {
-                        $('#emailerr').text('').show();
-                        $('#email').addClass('is-invalid');
-                        $('#emailerr').text(e_mail).show();
+                        $('#loginemailerr').text('').show();
+                        $('#loginemail').addClass('is-invalid');
+                        $('#loginemailerr').text(e_mail).show();
                     }
                     else
                     {
-                        $('#emailerr').text('').hide();
-                        $('#email').attr('class','form-control');
+                        $('#loginemailerr').text('').hide();
+                        $('#loginemail').attr('class','form-control');
                     }
 
                     // Password
                     if(pass)
                     {
-                        $('#passworderr').text('').show();
-                        $('#password').addClass('is-invalid');
-                        $('#passworderr').text(pass).show();
+                        $('#loginpassworderr').text('').show();
+                        $('#loginpassword').addClass('is-invalid');
+                        $('#loginpassworderr').text(pass).show();
                     }
                     else
                     {
-                        $('#passworderr').text('').hide();
-                        $('#password').attr('class','form-control');
+                        $('#loginpassworderr').text('').hide();
+                        $('#loginpassword').attr('class','form-control');
                     }
                 }
             });
