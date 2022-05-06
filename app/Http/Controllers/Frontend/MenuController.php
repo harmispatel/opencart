@@ -12,6 +12,10 @@ use App\Models\Product;
 use App\Models\Product_to_category;
 use App\Models\Settings;
 use App\Models\ToppingSize;
+use App\Models\CouponProduct;
+use App\Models\Coupon;
+
+
 use App\Models\ToppingProductPriceSize;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
@@ -109,6 +113,8 @@ class MenuController extends Controller
 
         $html = '';
         $subtotal = 0;
+        
+
 
         $html .= '<table class="table">';
 
@@ -124,6 +130,7 @@ class MenuController extends Controller
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
+                
             }
         }
         if (isset($mycart['withoutSize'])) {
@@ -138,11 +145,14 @@ class MenuController extends Controller
                 $subtotal += $price;
             }
         }
-
+       
+                 
         $html .= '</table>';
         $html2 = '';
+        $html3 = '';
         $html2 .= '<label>Sub-Total</label>
         <span>£ ' . $subtotal . '</span>';
+        
 
         $headertotal = 0;
         $headertotal = $subtotal;

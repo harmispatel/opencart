@@ -383,6 +383,7 @@ $mycart = session()->get('cart1');
                                             <table class="table">
                                                 @php
                                                     $subtotal = 0;
+                                                  
                                                 @endphp
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
