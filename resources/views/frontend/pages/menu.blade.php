@@ -400,6 +400,8 @@
                                                             @php
                                                                 $price = $cart['price'] * $cart['quantity'];
                                                                 $subtotal += $price;
+                                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                                $total=$subtotal-$couponcode;
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -417,6 +419,8 @@
                                                             @php
                                                                 $price = $cart['price'] * $cart['quantity'];
                                                                 $subtotal += $price;
+                                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                                $total=$subtotal-$couponcode;
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -445,14 +449,16 @@
                                                         @endif
                                                     </div>
                                                 </li>
-                                                <li class="minicart-list-item total">
-                                                    <div class="minicart-list-item-innr">
+                                                <li class="minicart-list-item">
+                                                    <div class="minicart-list-item-innr discount">
+                                                        <label>Coupon({{ $Coupon->code }})</label>
+                                                            <span>£ -{{ $couponcode }}</span>
+                                                    </div>
+                                                </li>
+                                                <li class="minicart-list-item">
+                                                    <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                        {{-- @if (isset($subtotal))
-                                                            <span>£ {{ $subtotal }}</span>
-                                                        @else --}}
-                                                        <span>£ {{ $subtotal }}</span>
-                                                        {{-- @endif --}}
+                                                          <span>£ {{ $total }}</span> 
                                                     </div>
                                                 </li>
                                             </ul>
@@ -762,11 +768,15 @@
             success: function(result) {
                 $('.empty-box').html('');
                 $('.sub-total').html('');
+                $('.total').html('');
                 $('#cart_products').html('');
+                $('.discount').html('');
                 $('.pirce-value').html('');
                 $('.empty-box').append(result.html);
                 $('.sub-total').append(result.subtotal);
                 $('#cart_products').append(result.cart_products);
+                $('.discount').append(result.discount);
+                $('.total').append(result.total);
                 $('.pirce-value').append(result.headertotal);
             }
         });

@@ -131,6 +131,8 @@
                                         @foreach ($mycart['size'] as $key => $cart)
                                             @php
                                                 $price = ($cart['price']) * ($cart['quantity']);
+                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                $total=$subtotal-$couponcode;
                                             @endphp
                                             <tr>
                                                 <td>
@@ -159,6 +161,8 @@
                                             </tr>
                                             @php
                                                 $subtotal += $price;
+                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                $total=$subtotal-$couponcode;
                                             @endphp
                                         @endforeach
                                     @endif
@@ -195,6 +199,8 @@
                                             </tr>
                                             @php
                                                 $subtotal += $price;
+                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                $total=$subtotal-$couponcode;
                                             @endphp
                                         @endforeach
                                     @endif
@@ -252,8 +258,12 @@
                               <td><span><b>£{{ $subtotal }}</b></span></td>
                             </tr>
                             <tr>
+                                <td><b>Coupon({{ $Coupon->code }}):</b></td>
+                                <td><span><b>£-{{ $couponcode  }}</b></span></td>
+                              </tr>
+                            <tr>
                               <td><b>Total to pay:</b></td>
-                              <td><span><b>£{{ $subtotal  }}</b></span></td>
+                              <td><span><b>£{{ $total  }}</b></span></td>
                             </tr>
                           </tbody>
                         </table>
