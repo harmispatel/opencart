@@ -254,12 +254,12 @@
                                                                                             $setsizeprice = $size->price;
                                                                                         @endphp
                                                                                         <div class="options-bt">
-                                                                                            <div class="row">
+                                                                                            <div class="row align-items-center">
                                                                                                 <div
-                                                                                                    class="col-md-5">
-                                                                                                    <span>{{ $size->hasOneToppingSize['size'] }}</span>
+                                                                                                    class="col-md-3">
+                                                                                                    <span>{{ html_entity_decode($size->hasOneToppingSize['size']) }}</span>
                                                                                                 </div>
-                                                                                                <div class="col-md-7">
+                                                                                                <div class="col-md-9">
                                                                                                     @foreach ($openday as $key => $item)
                                                                                                         @foreach ($item as $value)
                                                                                                             @php
@@ -295,11 +295,11 @@
                                                                                     @endforeach
                                                                                 @else
                                                                                     <div class="options-bt">
-                                                                                        <div class="row">
-                                                                                            <div class="col-md-5">
+                                                                                        <div class="row align-items-center">
+                                                                                            <div class="col-md-3">
                                                                                                 <span>price</span>
                                                                                             </div>
-                                                                                            <div class="col-md-7">
+                                                                                            <div class="col-md-9">
                                                                                                 @foreach ($openday as $key => $item)
                                                                                                     @foreach ($item as $value)
                                                                                                         @php
@@ -392,7 +392,6 @@
                                             <table class="table">
                                                 @php
                                                     $subtotal = 0;
-
                                                 @endphp
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
