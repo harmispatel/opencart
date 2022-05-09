@@ -204,7 +204,8 @@ $mycart = session()->get('cart1');
                     </tbody>
                   </table>
                 </div>
-                <div class="reg-bt">
+                <div class="reg-bt d-flex justify-content-between">
+                  <a href="{{ route('member') }}" type="submit" class="btn">Back</a>
                   <button type="submit" class="btn">Continue</button>
                 </div>
               </form>
@@ -242,7 +243,6 @@ $mycart = session()->get('cart1');
                 dataType: "json",
                 success: function(response)
                 {
-                    alert("hi")
                     $('.country_region_id').text('');
                     $('.country_region_id').append(response);
                 },

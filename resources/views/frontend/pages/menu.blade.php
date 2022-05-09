@@ -1,15 +1,24 @@
 @php
-$openclose = openclosetime();
+    $openclose = openclosetime();
 
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
+    $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
 
-$user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    $user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
 
-$mycart = session()->get('cart1');
+    if(session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart($userid);
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
 
 @endphp
 
@@ -261,7 +270,7 @@ $mycart = session()->get('cart1');
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }});" class="btn options-btn">
+                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});" class="btn options-btn">
                                                                                                                         <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         <span class="show-carttext sizeprice" style="display: none;">Added
                                                                                                                             <i class="fa fa-check"></i>
@@ -301,7 +310,7 @@ $mycart = session()->get('cart1');
                                                                                                         @endphp
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a onclick="showId({{ $values->product_id }},0);" class="btn options-btn">
+                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
                                                                                                                     <span class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
@@ -383,7 +392,7 @@ $mycart = session()->get('cart1');
                                             <table class="table">
                                                 @php
                                                     $subtotal = 0;
-                                                  
+
                                                 @endphp
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
@@ -394,7 +403,7 @@ $mycart = session()->get('cart1');
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
+                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
@@ -411,7 +420,7 @@ $mycart = session()->get('cart1');
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0)" style="cursor: pointer"></i>
+                                                                    <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
@@ -717,10 +726,11 @@ $mycart = session()->get('cart1');
     // });
 </script>
 <script>
-    function showId(product, sizeprice) {
-
+    function showId(product, sizeprice, uid)
+    {
         var sizeid = sizeprice;
         var productid = product;
+        var userid = uid;
         var status = $('#user_delivery_val').val();
 
         var coll = $("input[name='delivery_type']:checked").val();
@@ -746,6 +756,7 @@ $mycart = session()->get('cart1');
                 "_token": "{{ csrf_token() }}",
                 'size_id': sizeid,
                 'product_id': productid,
+                'user_id': userid,
             },
             dataType: 'json',
             success: function(result) {
@@ -783,10 +794,11 @@ $mycart = session()->get('cart1');
         $('#Modal').modal('show');
     });
 
-    function deletecartproduct(prod_id,size_id)
+    function deletecartproduct(prod_id,size_id,uid)
     {
         var sizeid = size_id;
         var productid = prod_id;
+        var userid = uid;
 
         $.ajax({
             type: 'post',
@@ -795,6 +807,7 @@ $mycart = session()->get('cart1');
                 "_token": "{{ csrf_token() }}",
                 'size_id': sizeid,
                 'product_id': productid,
+                'user_id': userid,
             },
             dataType: 'json',
             success: function(result)

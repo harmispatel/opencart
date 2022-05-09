@@ -5,6 +5,7 @@ use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
 use App\Models\CategoryDetail;
+use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
 use App\Models\Option;
@@ -840,51 +841,133 @@ function storereview()
     return $data;
 }
 
-function addtoCart($request,$productid,$sizeid)
+function getuserCart($userId)
 {
-    if(session()->has('cart1'))
+    $customer = Customer::select('cart')->where('customer_id',$userId)->first();
+    $cust_cart = isset($customer->cart) ? $customer->cart : '';
+    $base64decode = base64_decode($cust_cart);
+    $cart = unserialize($base64decode);
+    return $cart;
+}
+
+function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
+{
+    if(isset($cart))
+    {
+        $arr = $cart;
+    }
+    else
+    {
+        $arr = array();
+    }
+
+    if($sizeid != 0)
+    {
+        $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
+            $q->where('id_product_price_size', $sizeid);
+        }])->where('product_id', $productid)->first();
+        $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+        $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+    }
+    else
+    {
+        $product = Product::select('product_id', 'image', 'price')->with(['hasOneProductDescription'])->where('product_id', $productid)->first();
+        $data['price'] = $product->price;
+    }
+    $data['name'] = $product->hasOneProductDescription['name'];
+    $data['description'] = $product->hasOneProductDescription['description'];
+    $data['image'] = $product->image;
+    $data['model'] = $product->model;
+    $data['quantity'] = 1;
+    $data['product_id'] = $productid;
+
+    if ($sizeid != 0)
+    {
+        if(isset($arr['size'][$sizeid]))
         {
-            $arr = session()->get('cart1');
+            $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
         }
         else
         {
-            $arr = array();
+            $arr['size'][$sizeid] =$data;
         }
-
-        if ($sizeid != 0) {
-            $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
-                $q->where('id_product_price_size', $sizeid);
-            }])->where('product_id', $productid)->first();
-            $data['price'] = $product->hasOneToppingProductPriceSize['price'];
-            $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
-        } else {
-            $product = Product::select('product_id', 'image', 'price')->with(['hasOneProductDescription'])->where('product_id', $productid)->first();
-            $data['price'] = $product->price;
+    }
+    else
+    {
+        if(isset($arr['withoutSize'][$productid]))
+        {
+            $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
         }
-        $data['name'] = $product->hasOneProductDescription['name'];
-        $data['description'] = $product->hasOneProductDescription['description'];
-        $data['image'] = $product->image;
-        $data['model'] = $product->model;
-        $data['quantity'] = 1;
-        $data['product_id'] = $productid;
-        if ($sizeid != 0) {
-            if(isset($arr['size'][$sizeid])){
-                $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
-            }else{
-                $arr['size'][$sizeid] =$data;
-            }
-        }else{
-            if(isset($arr['withoutSize'][$productid])){
-                $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
-            }else{
-                $arr['withoutSize'][$productid] =$data;
-            }
+        else
+        {
+            $arr['withoutSize'][$productid] =$data;
         }
-        // $arr[] = $data;
+    }
 
-        $request->session()->put('cart1',$arr);
+    $serial = serialize($arr);
+    $base64 = base64_encode($serial);
+    $user_id = $userid;
+    $user = Customer::find($user_id);
+    $user->cart = $base64;
+    $user->update();
 
-        $request->session()->save();
+}
+
+function addtoCart($request,$productid,$sizeid)
+{
+    if(session()->has('cart1'))
+    {
+        $arr = session()->get('cart1');
+    }
+    else
+    {
+        $arr = array();
+    }
+
+    if ($sizeid != 0)
+    {
+        $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
+            $q->where('id_product_price_size', $sizeid);
+        }])->where('product_id', $productid)->first();
+        $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+        $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+    }
+    else
+    {
+        $product = Product::select('product_id', 'image', 'price')->with(['hasOneProductDescription'])->where('product_id', $productid)->first();
+        $data['price'] = $product->price;
+    }
+    $data['name'] = $product->hasOneProductDescription['name'];
+    $data['description'] = $product->hasOneProductDescription['description'];
+    $data['image'] = $product->image;
+    $data['model'] = $product->model;
+    $data['quantity'] = 1;
+    $data['product_id'] = $productid;
+    if ($sizeid != 0)
+    {
+        if(isset($arr['size'][$sizeid]))
+        {
+            $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
+        }
+        else
+        {
+            $arr['size'][$sizeid] =$data;
+        }
+    }
+    else
+    {
+        if(isset($arr['withoutSize'][$productid]))
+        {
+            $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
+        }
+        else
+        {
+            $arr['withoutSize'][$productid] =$data;
+        }
+    }
+
+    $request->session()->put('cart1',$arr);
+    $request->session()->save();
 }
 
 

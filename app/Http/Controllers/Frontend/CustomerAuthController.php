@@ -7,14 +7,12 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
-use Symfony\Component\Console\Input\Input;
-use Illuminate\Support\Facades\Hash;
 
 class CustomerAuthController extends Controller
 {
     public function customerlogin(Request $request)
     {
-        $this->validate($request, [
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
@@ -112,18 +110,29 @@ class CustomerAuthController extends Controller
         $customeraddress->country_id = isset($request->country) ? $request->country : '';
         $customeraddress->zone_id = isset($request->state) ? $request->state : '';
         $customer->save();
-        // echo '<pre>';
-        // print_r($customeraddress->toArray());
-        // exit();
-
-
-
 
 
         session()->put('username', $customer->firstname);
         session()->put('userid',$lastInsertedID);
 
-        if ($ajaxregister == 1) {
+        if(session()->has('userid'))
+        {
+            if(session()->has('cart1'))
+            {
+                $cart = session()->get('cart1');
+                $serial = serialize($cart);
+                $base64 = base64_encode($serial);
+                $user_id = session()->get('userid');
+                $user = Customer::find($user_id);
+                $user->cart = $base64;
+                $user->update();
+
+                session()->forget('cart1');
+            }
+        }
+
+        if ($ajaxregister == 1)
+        {
             return response()->json([
                 'status' => 1,
             ]);
@@ -131,8 +140,6 @@ class CustomerAuthController extends Controller
         else{
             return redirect()->back();
         }
-        return back();
-
 
     }
 
@@ -151,20 +158,20 @@ class CustomerAuthController extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         // Validation
-        // $request->validate([
-        //     'title' => 'required',
-        //     'name' => 'required',
-        //     'lastname' => 'required',
-        //     'email' => 'required|email|unique:oc_customer,email',
-        //     'phone' => 'required|min:10',
-        //     'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
-        //     'confirmpassword' => 'min:6|required_with:password|same:password',
-        //     // 'address_1' => 'required',
-        //     // 'city' => 'required',
-        //     // 'postcode' => 'required',
-        //     // 'country' => 'required',
-        //     // 'state' => 'required',
-        // ]);
+        $request->validate([
+            'title' => 'required',
+            'name' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email|unique:oc_customer,email',
+            'phone' => 'required|min:10',
+            'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
+            'confirmpassword' => 'min:6|required_with:password|same:password',
+            // 'address_1' => 'required',
+            // 'city' => 'required',
+            // 'postcode' => 'required',
+            // 'country' => 'required',
+            // 'state' => 'required',
+        ]);
 
         $customer = Customer::find($customerid);
         $customer->store_id = $front_store_id;
@@ -179,7 +186,7 @@ class CustomerAuthController extends Controller
         $customer->wishlist = isset($request->wishlist) ? $request->wishlist : '';
         $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
         $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
-        $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : '';
+        $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : 1;
         $customer->ip =  $_SERVER['REMOTE_ADDR'];
         $customer->status = isset($request->status) ? $request->status : 1;
         $customer->approved = isset($request->approved) ? $request->approved : 1;

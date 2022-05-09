@@ -233,7 +233,7 @@ $userlogin = session('username');
                                         <div class="card" style="min-height: 12rem !important;">
                                             <div class="card-body text-start">
                                             <h5 class="card-title">Default Address</h5>
-                                            <p><small>{{$address->firstname}} {{$address->firstname}} <br> {{ $address->company }} <br> {{ $address->company_id }} <br>{{ $address->address_1 }} <br> {{ $address->address_2 }} <br> {{ $address->city }}  {{ $address->postcode }}<br> {{ $address->country_id }} <br> {{ $address->zone_id }}</small></p>
+                                            <p class="m-0" style="line-height: 15px; font-size: 15px"><small>{{$address->firstname}} {{$address->firstname}} <br> {{ isset($address->company) ? $address->company : '' }} {{ $address->company_id }} <br>{{ $address->address_1 }} <br> {{ $address->address_2 }} <br> {{ $address->city }}  {{ $address->postcode }}<br> {{ $address->country_id }} <br> {{ $address->zone_id }}</small></p>
                                             </div>
                                             <div class="card-footer bg-transparent border-success">
                                                 <a href="{{ route('customeraddressedit',$address->address_id) }}" class="float-start"><i class="far fa-edit"></i>EDIT ADDRESS</a>

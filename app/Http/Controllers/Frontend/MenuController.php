@@ -13,9 +13,7 @@ use App\Models\Product_to_category;
 use App\Models\Settings;
 use App\Models\ToppingSize;
 use App\Models\CouponProduct;
-
-
-
+use App\Models\Customer;
 use App\Models\ToppingProductPriceSize;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
@@ -63,49 +61,121 @@ class MenuController extends Controller
 
         $productid = $request->product_id;
         $sizeid = $request->size_id;
+        $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
-
 
         if(!empty($loopid) || $loopid != '')
         {
             if($loopid <= 0)
             {
-                if($sizeid == 0)
+                if($userid == 0)
                 {
-                    session()->forget('cart1.withoutSize.'.$productid);
-                }
-                else
-                {
-                    session()->forget('cart1.size.'.$sizeid);
-                }
-            }
-            else
-            {
-                if($sizeid == 0)
-                {
-                    session()->forget('cart1.withoutSize.'.$productid);
-                    for($i=1;$i<=$loopid;$i++)
+                    if($sizeid == 0)
                     {
-                        addtoCart($request, $productid, $sizeid);
+                        session()->forget('cart1.withoutSize.'.$productid);
+                    }
+                    else
+                    {
+                        session()->forget('cart1.size.'.$sizeid);
                     }
                 }
                 else
                 {
-                    session()->forget('cart1.size.'.$sizeid);
-                    for($i=1;$i<=$loopid;$i++)
+                    $cart = getuserCart($userid);
+                    if($sizeid == 0)
                     {
-                        addtoCart($request, $productid, $sizeid);
+                        unset($cart['withoutSize'][$productid]);
+                    }
+                    else
+                    {
+                        unset($cart['size'][$sizeid]);
+                    }
+                    $serial = serialize($cart);
+                    $base64 = base64_encode($serial);
+                    $user_id = $userid;
+                    $user = Customer::find($user_id);
+                    $user->cart = $base64;
+                    $user->update();
+                }
+            }
+            else
+            {
+                if($userid == 0)
+                {
+                    if($sizeid == 0)
+                    {
+                        session()->forget('cart1.withoutSize.'.$productid);
+                        for($i=1;$i<=$loopid;$i++)
+                        {
+                            addtoCart($request, $productid, $sizeid);
+                        }
+                    }
+                    else
+                    {
+                        session()->forget('cart1.size.'.$sizeid);
+                        for($i=1;$i<=$loopid;$i++)
+                        {
+                            addtoCart($request, $productid, $sizeid);
+                        }
+                    }
+                }
+                else
+                {
+                    $cart = getuserCart($userid);
+                    if($sizeid == 0)
+                    {
+                        unset($cart['withoutSize'][$productid]);
+                        $serial = serialize($cart);
+                        $base64 = base64_encode($serial);
+                        $user = Customer::find($userid);
+                        $user->cart = $base64;
+                        $user->update();
+                        for($i=1;$i<=$loopid;$i++)
+                        {
+                            $newcart = getuserCart($userid);
+                            addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
+                        }
+                    }
+                    else
+                    {
+                        unset($cart['size'][$sizeid]);
+                        unset($cart['withoutSize'][$productid]);
+                        $serial = serialize($cart);
+                        $base64 = base64_encode($serial);
+                        $user = Customer::find($userid);
+                        $user->cart = $base64;
+                        $user->update();
+                        for($i=1;$i<=$loopid;$i++)
+                        {
+                            $newcart = getuserCart($userid);
+                            addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
+                        }
                     }
                 }
             }
         }
         else
         {
-            addtoCart($request, $productid, $sizeid);
+            if($userid == 0)
+            {
+                addtoCart($request, $productid, $sizeid);
+            }
+            else
+            {
+                $cart = getuserCart($userid);
+                addtoCartUser($request, $productid, $sizeid, $cart, $userid);
+            }
         }
 
+        if($userid == 0)
+        {
+            $mycart = $request->session()->get('cart1');
+        }
+        else
+        {
+            $mycart = getuserCart($userid);
+        }
 
-        $mycart = $request->session()->get('cart1');
 
         $cart_size = isset($mycart['size']) ? count($mycart['size']) : 0;
         $cart_withoutsize = isset($mycart['withoutSize']) ? count($mycart['withoutSize']) : 0;
@@ -113,7 +183,7 @@ class MenuController extends Controller
 
         $html = '';
         $subtotal = 0;
-        
+
 
 
         $html .= '<table class="table">';
@@ -130,7 +200,7 @@ class MenuController extends Controller
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
-                
+
             }
         }
         if (isset($mycart['withoutSize'])) {
@@ -145,14 +215,14 @@ class MenuController extends Controller
                 $subtotal += $price;
             }
         }
-       
-                 
+
+
         $html .= '</table>';
         $html2 = '';
         $html3 = '';
         $html2 .= '<label>Sub-Total</label>
         <span>£ ' . $subtotal . '</span>';
-        
+
 
         $headertotal = 0;
         $headertotal = $subtotal;
@@ -170,14 +240,42 @@ class MenuController extends Controller
     {
         $productid = $request->product_id;
         $sizeid = $request->size_id;
+        $userid = $request->user_id;
 
-        if($sizeid == 0)
+        if($userid == 0)
         {
-            session()->forget('cart1.withoutSize.'.$productid);
+            if($sizeid == 0)
+            {
+                session()->forget('cart1.withoutSize.'.$productid);
+            }
+            else
+            {
+                session()->forget('cart1.size.'.$sizeid);
+            }
         }
         else
         {
-            session()->forget('cart1.size.'.$sizeid);
+            $cart = getuserCart($userid);
+
+            if(isset($cart))
+            {
+                if($sizeid == 0)
+                {
+                    unset($cart['withoutSize'][$productid]);
+                }
+                else
+                {
+                    unset($cart['size'][$sizeid]);
+                }
+            }
+
+            $serial = serialize($cart);
+            $base64 = base64_encode($serial);
+            $user_id = $userid;
+            $user = Customer::find($user_id);
+            $user->cart = $base64;
+            $user->update();
+
         }
 
         return response()->json([
