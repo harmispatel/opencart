@@ -674,6 +674,8 @@ span.check_btn:before {
                                                             </tr>
                                                             @php
                                                                 $subtotal += $price;
+                                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                                $total=$subtotal-$couponcode;
                                                             @endphp
                                                         @endforeach
                                                     @endif
@@ -710,12 +712,32 @@ span.check_btn:before {
                                                             </tr>
                                                             @php
                                                                 $subtotal += $price;
+                                                                $couponcode=($subtotal*$Coupon->discount)/100;
+                                                                $total=$subtotal-$couponcode;
                                                             @endphp
                                                         @endforeach
                                                     @endif
                                                 </tbody>
                                             </table>
                                         </form>
+                                    </div>
+                                    <div class="basket-total">
+                                      <table class="table table-responsive">
+                                        <tbody>
+                                          <tr>
+                                            <td><b>Sub-Total:</b></td>
+                                            <td><span><b>£{{ $subtotal }}</b></span></td>
+                                          </tr>
+                                          <tr>
+                                              <td><b>Coupon({{ $Coupon->code }}):</b></td>
+                                              <td><span><b>£-{{ $couponcode  }}</b></span></td>
+                                            </tr>
+                                          <tr>
+                                            <td><b>Total to pay:</b></td>
+                                            <td><span><b>£{{ $total  }}</b></span></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
                                     </div>
                                 @else
                                     <div class="pb-4">
@@ -787,8 +809,8 @@ span.check_btn:before {
                 <div class="col-md-4 mt-4">
                     <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
-                      <input type="hidden" name="total" id="total" value="{{ $subtotal }}">
-                      <input type="button" value="Pay £ {{ $subtotal }}" id="button-payment-method" class="btn back-bt" disabled>
+                      <input type="hidden" name="total" id="total" value="{{ $total }}">
+                      <input type="button" value="Pay £ {{ $total }}" id="button-payment-method" class="btn back-bt" disabled>
                     </div>
                   </div>
               </div>
