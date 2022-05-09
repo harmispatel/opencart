@@ -17,7 +17,7 @@ class MemberController extends Controller
 
         if (!empty($userlogin)) {
             $customers = Customer::where('customer_id',$userlogin)->first();
-            $customeraddress = CustomerAddress::where('customer_id',$userlogin)->get();
+            $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$userlogin)->get();
             return view('frontend.pages.member',compact('customers','customeraddress'));
         }
         else {
@@ -36,6 +36,22 @@ class MemberController extends Controller
         $countries = Country::get();
         return view('frontend.pages.addnewaddress', compact('countries'));
     }
+
+    public function changeDefAddress(Request $request)
+    {
+        $addressid = $request->address_id;
+        $customerid = $request->customer_id;
+
+        $edit_cust = Customer::find($customerid);
+        $edit_cust->address_id = $addressid;
+        $edit_cust->update();
+
+        return response()->json([
+            'success' => 1
+        ]);
+
+    }
+
     public function newaddress(Request $request)
     {
         $userlogin = session('userid');
@@ -65,6 +81,13 @@ class MemberController extends Controller
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->save();
 
+            if($request->default == 1)
+            {
+                $edit_cust = Customer::find($userlogin);
+                $edit_cust->address_id = $customeraddress->address_id;
+                $edit_cust->update();
+            }
+
             return redirect()->route('member');
         }
         else {
@@ -87,8 +110,10 @@ class MemberController extends Controller
 
     public function updatecustomeraddress(Request $request)
     {
+        $userlogin = session('userid');
         $addressid = $request->address_id;
-        if (!empty($addressid)) {
+        if (!empty($addressid))
+        {
             $customeraddress = CustomerAddress::find($addressid);
             $customeraddress->firstname = $request->name;
             $customeraddress->lastname = $request->lastname;
@@ -103,6 +128,13 @@ class MemberController extends Controller
             $customeraddress->phone = isset($request->phone) ? $request->phone : '0';
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->update();
+
+            if($request->defaultaddress == 1)
+            {
+                $edit_cust = Customer::find($userlogin);
+                $edit_cust->address_id = $customeraddress->address_id;
+                $edit_cust->update();
+            }
 
             return redirect()->route('member');
         }

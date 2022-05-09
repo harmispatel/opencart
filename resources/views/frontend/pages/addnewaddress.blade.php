@@ -202,9 +202,9 @@ $mycart = session()->get('cart1');
                       <tr>
                         <td><span class="required">*</span>Default Address :</td>
                         <td class="radio-bt">
-                          <input type="radio" name="newsletter" value="1">
+                          <input type="radio" name="default" value="1">
                           <span>Yes</span>
-                          <input type="radio" name="newsletter" value="0" checked="checked">
+                          <input type="radio" name="default" value="0" checked="checked">
                           <span>No</span>
                         </td>
                       </tr>
