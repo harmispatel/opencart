@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class MyBasketController extends Controller
 {
-    public function mybasket(Request $request){
-        return view('frontend.pages.mybasket');
+    public function success(Request $request){
+        return view('frontend.pages.success');
     }
 }
