@@ -11,7 +11,8 @@
 
 <!--Js Files-->
    @if (!empty($theme_id) || $theme_id != '')
-        <script type="text/javascript" src="{{ asset('public/assets/theme'.$theme_id.'/plugins/jquery/dist/jquery.min.js') }}"></script>
+        {{-- <script type="text/javascript" src="{{ asset('public/assets/theme'.$theme_id.'/plugins/jquery/dist/jquery.min.js') }}"></script> --}}
+        <script src="{{ asset('public/assets/js/jquery_v3.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('public/assets/theme'.$theme_id.'/plugins/moment/min/moment.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('public/assets/theme'.$theme_id.'/plugins/moment/min/locales.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/js/bootstrap.min.js') }}"></script>
@@ -314,127 +315,130 @@
         });
 
 
-        $('#register').on('click',function(e)
+        $('#register').on('click',function()
         {
-            e.preventDefault();
             var form_data = new FormData(document.getElementById('registerform'));
 
-        $.ajax({
-        type: "POST",
-        url: "{{ url('customerregister') }}",
-        data: form_data,
-        dataType: "json",
-        contentType: false,
-        cache: false,
-        processData: false,
-            success: function (response) {
-                location.reload();
-            },
-            error : function (message) {
-                console.log(message.responseJSON.errors);
-                var cust_title = message.responseJSON.errors.title;
-                var name = message.responseJSON.errors.name;
-                var lastname = message.responseJSON.errors.lastname;
-                var e_mail = message.responseJSON.errors.email;
-                var phone_no = message.responseJSON.errors.phone;
-                var pass = message.responseJSON.errors.password;
-                var confirmpassword = message.responseJSON.errors.confirmpassword;
+            $.ajax({
+                        type: "POST",
+                        url: "{{ url('customerregister') }}",
+                        data: form_data,
+                        dataType: "json",
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function (response)
+                        {
+                            if(response.status == 1)
+                            {
+                                location.reload();
+                            }
+                        },
+                        error : function (message)
+                        {
+                            var cust_title = message.responseJSON.errors.title;
+                            var name = message.responseJSON.errors.name;
+                            var lastname = message.responseJSON.errors.lastname;
+                            var e_mail = message.responseJSON.errors.email;
+                            var phone_no = message.responseJSON.errors.phone;
+                            var pass = message.responseJSON.errors.password;
+                            var confirmpassword = message.responseJSON.errors.confirmpassword;
 
 
-                // FirstName
-                if(cust_title)
-                {
-                    $('#titleerr').text('').show();
-                    $('#title').attr('class','form-control is-invalid');
-                    $('#titleerr').text(cust_title);
-                }
-                else
-                {
-                    $('#titleerr').text('').hide();
-                    $('#title').attr('class','form-control');
-                }
+                            // Title
+                            if(cust_title)
+                            {
+                                $('#titleerr').text('').show();
+                                $('#title').attr('class','form-control is-invalid');
+                                $('#titleerr').text(cust_title);
+                            }
+                            else
+                            {
+                                $('#titleerr').text('').hide();
+                                $('#title').attr('class','form-control');
+                            }
 
-                // FirstName
-                if(name)
-                {
-                    $('#fnameerr').text('').show();
-                    $('#name').attr('class','form-control is-invalid');
-                    $('#fnameerr').text(name);
-                }
-                else
-                {
-                    $('#fnameerr').text('').hide();
-                    $('#firstname').attr('class','form-control');
-                }
+                            // FirstName
+                            if(name)
+                            {
+                                $('#fnameerr').text('').show();
+                                $('#name').attr('class','form-control is-invalid');
+                                $('#fnameerr').text(name);
+                            }
+                            else
+                            {
+                                $('#fnameerr').text('').hide();
+                                $('#firstname').attr('class','form-control');
+                            }
 
-                // LastName
-                if(lastname)
-                {
-                    $('#lastnameerr').text('').show();
-                    $('#lastname').addClass('is-invalid');
-                    $('#lastnameerr').text(lastname).show();
-                }
-                else
-                {
-                    $('#lastnameerr').text('').hide();
-                    $('#lastname').attr('class','form-control');
-                }
+                            // LastName
+                            if(lastname)
+                            {
+                                $('#lastnameerr').text('').show();
+                                $('#lastname').attr('class','form-control is-invalid');
+                                $('#lastnameerr').text(lastname).show();
+                            }
+                            else
+                            {
+                                $('#lastnameerr').text('').hide();
+                                $('#lastname').attr('class','form-control');
+                            }
 
-                // Email
-                if(e_mail)
-                {
-                    $('#emailerr').text('').show();
-                    $('#email').addClass('is-invalid');
-                    $('#emailerr').text(e_mail).show();
-                }
-                else
-                {
-                    $('#emailerr').text('').hide();
-                    $('#email').attr('class','form-control');
-                }
+                            // Email
+                            if(e_mail)
+                            {
+                                $('#emailerr').text('').show();
+                                $('#email').addClass('is-invalid');
+                                $('#emailerr').text(e_mail).show();
+                            }
+                            else
+                            {
+                                $('#emailerr').text('').hide();
+                                $('#email').attr('class','form-control');
+                            }
 
-                // Phone
-                if(phone_no)
-                {
-                    $('#phoneerr').text('').show();
-                    $('#phone').addClass('is-invalid');
-                    $('#phoneerr').text(phone_no).show();
-                }
-                else
-                {
-                    $('#phoneerr').text('').hide();
-                    $('#phone').attr('class','form-control');
-                }
+                            // Phone
+                            if(phone_no)
+                            {
+                                $('#phoneerr').text('').show();
+                                $('#phone').addClass('is-invalid');
+                                $('#phoneerr').text(phone_no).show();
+                            }
+                            else
+                            {
+                                $('#phoneerr').text('').hide();
+                                $('#phone').attr('class','form-control');
+                            }
 
-                // Password
-                if(pass)
-                {
-                    $('#passworderr').text('').show();
-                    $('#password').addClass('is-invalid');
-                    $('#passworderr').text(pass).show();
-                }
-                else
-                {
-                    $('#passworderr').text('').hide();
-                    $('#password').attr('class','form-control');
-                }
+                            // Password
+                            if(pass)
+                            {
+                                $('#passworderr').text('').show();
+                                $('#password').addClass('is-invalid');
+                                $('#passworderr').text(pass).show();
+                            }
+                            else
+                            {
+                                $('#passworderr').text('').hide();
+                                $('#password').attr('class','form-control');
+                            }
 
-                // Confirm Password
-                if(confirmpassword)
-                {
-                    $('#confirmpasswordwrr').text('').show();
-                    $('#confirmpassword').addClass('is-invalid');
-                    $('#confirmpassworderr').text(confirmpassword).show();
-                }
-                else
-                {
-                    $('#confirmpassworderr').text('').hide();
-                    $('#confirmpassword').attr('class','form-control');
-                }
+                            // Confirm Password
+                            if(confirmpassword)
+                            {
+                                $('#confirmpasswordwrr').text('').show();
+                                $('#confirmpassword').addClass('is-invalid');
+                                $('#confirmpassworderr').text(confirmpassword).show();
+                            }
+                            else
+                            {
+                                $('#confirmpassworderr').text('').hide();
+                                $('#confirmpassword').attr('class','form-control');
+                            }
 
 
 
-            }
+                        }
         });
     });
 

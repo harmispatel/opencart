@@ -431,6 +431,7 @@ Route::get('member', [MemberController::class, 'member'])->name('member');
 Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
 Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
 Route::post('newaddress', [MemberController::class, 'newaddress'])->name('newaddress');
+Route::post('changeDefAddress', [MemberController::class, 'changeDefAddress'])->name('changeDefAddress');
 Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddressdelete'])->name('customeraddressdelete');
 Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
 Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
@@ -438,7 +439,7 @@ Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomerad
 // Order
 Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
 
-// login user
+// login customer
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
 Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])->name('customerlogout');

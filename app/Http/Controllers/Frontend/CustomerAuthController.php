@@ -51,28 +51,47 @@ class CustomerAuthController extends Controller
 
     public function customerregister(Request $request)
     {
+
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
-        // Validation
-        $request->validate([
-            'title' => 'required',
-            'name' => 'required',
-            'lastname' => 'required',
-            'email' => 'required|email|unique:oc_customer,email',
-            'phone' => 'required|min:10',
-            'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
-            'confirmpassword' => 'min:6|required_with:password|same:password',
-            // 'address_1' => 'required',
-            // 'city' => 'required',
-            // 'postcode' => 'required',
-            // 'country' => 'required',
-            // 'state' => 'required',
-        ]);
+        $ajaxregister = isset($request->ajaxregister) ? $request->ajaxregister : 0;
 
-        $ajaxregister = $request->ajaxregister;
+        $address_check = isset($request->address_required) ? $request->address_required : 0;
+
+        if($address_check != 1 || $ajaxregister == 1)
+        {
+            // Validation
+            $request->validate([
+                'title' => 'required',
+                'name' => 'required',
+                'lastname' => 'required',
+                'email' => 'required|email|unique:oc_customer,email',
+                'phone' => 'required|min:10',
+                'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
+                'confirmpassword' => 'min:6|required_with:password|same:password',
+            ]);
+        }
+        else
+        {
+            // $request->validate([
+            //     'title' => 'required',
+            //     'name' => 'required',
+            //     'lastname' => 'required',
+            //     'email' => 'required|email|unique:oc_customer,email',
+            //     'phone' => 'required|min:10',
+            //     'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
+            //     'confirmpassword' => 'min:6|required_with:password|same:password',
+            //     'address_1' => 'required',
+            //     'city' => 'required',
+            //     'postcode' => 'required',
+            //     'country' => 'required',
+            //     'state' => 'required',
+            // ]);
+        }
+
         $customer = new Customer;
         $customer->store_id = $front_store_id;
         $customer->firstname = isset($request->name) ? $request->name : '';
@@ -99,18 +118,26 @@ class CustomerAuthController extends Controller
         $lastInsertedID = $customer->customer_id;
 
         // Customer Address
-        $customeraddress = new CustomerAddress;
-        $customeraddress->customer_id = $lastInsertedID;
-        $customeraddress->company = isset($request->company) ? $request->company : '';
-        $customeraddress->company_id = isset($request->company_id) ? $request->company_id : '';
-        $customeraddress->address_1 = isset($request->address_1) ? $request->address_1 : '';
-        $customeraddress->address_2 = isset($request->address_2) ? $request->address_2 : '';
-        $customeraddress->city = isset($request->city) ? $request->city : '';
-        $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '';
-        $customeraddress->country_id = isset($request->country) ? $request->country : '';
-        $customeraddress->zone_id = isset($request->state) ? $request->state : '';
-        $customer->save();
+        if($address_check == 1)
+        {
+            $customeraddress = new CustomerAddress;
+            $customeraddress->customer_id = $lastInsertedID;
+            $customeraddress->firstname = isset($request->name) ? $request->name : '';
+            $customeraddress->lastname = isset($request->lastname) ? $request->lastname : '';
+            $customeraddress->company = isset($request->company) ? $request->company : '';
+            $customeraddress->company_id = isset($request->company_id) ? $request->company_id : '';
+            $customeraddress->address_1 = isset($request->address_1) ? $request->address_1 : '';
+            $customeraddress->address_2 = isset($request->address_2) ? $request->address_2 : '';
+            $customeraddress->city = isset($request->city) ? $request->city : '';
+            $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '';
+            $customeraddress->country_id = isset($request->country) ? $request->country : '';
+            $customeraddress->zone_id = isset($request->state) ? $request->state : '';
+            $customeraddress->save();
+        }
 
+        $edit_cust = Customer::find($lastInsertedID);
+        $edit_cust->address_id = $customeraddress->address_id;
+        $edit_cust->update();
 
         session()->put('username', $customer->firstname);
         session()->put('userid',$lastInsertedID);
@@ -137,8 +164,9 @@ class CustomerAuthController extends Controller
                 'status' => 1,
             ]);
         }
-        else{
-            return redirect()->back();
+        else
+        {
+            return redirect()->route('member');
         }
 
     }
@@ -154,7 +182,7 @@ class CustomerAuthController extends Controller
         $customerid = session('userid');
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
-        // $current_theme_id = $current_theme['theme_id'];
+        $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
         // Validation
@@ -162,58 +190,42 @@ class CustomerAuthController extends Controller
             'title' => 'required',
             'name' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|unique:oc_customer,email',
+            'email' => 'required',
             'phone' => 'required|min:10',
-            'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
-            'confirmpassword' => 'min:6|required_with:password|same:password',
-            // 'address_1' => 'required',
-            // 'city' => 'required',
-            // 'postcode' => 'required',
-            // 'country' => 'required',
-            // 'state' => 'required',
         ]);
 
+        $email = $request->email;
+
+        $check_unique = Customer::where('customer_id','!=',$customerid)->where('email',$email)->first();
+
+        if(!empty($check_unique) || $check_unique != '')
+        {
+            $request->validate([
+                'email' => 'required|email|unique:oc_customer,email',
+            ]);
+        }
+
+        if(!empty($request->password) && !empty($request->confirmpassword))
+        {
+            $request->validate([
+                'password' => 'min:6|required_with:confirmpassword|same:confirmpassword',
+                'confirmpassword' => 'min:6|required_with:password|same:password',
+            ]);
+        }
+
+
         $customer = Customer::find($customerid);
-        $customer->store_id = $front_store_id;
         $customer->firstname = isset($request->name) ? $request->name : '';
         $customer->lastname = isset($request->lastname) ? $request->lastname : '';
         $customer->email = isset($request->email) ? $request->email : '';
         $customer->telephone = isset($request->phone) ? $request->phone : '';
-        $customer->fax = isset($request->fax) ? $request->fax : '';
         $customer->password = md5($request->password);
-        $customer->salt = genratetoken(9);
-        $customer->cart = isset($request->cart) ? $request->cart : '';
-        $customer->wishlist = isset($request->wishlist) ? $request->wishlist : '';
-        $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
-        $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
         $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : 1;
         $customer->ip =  $_SERVER['REMOTE_ADDR'];
-        $customer->status = isset($request->status) ? $request->status : 1;
-        $customer->approved = isset($request->approved) ? $request->approved : 1;
-        $customer->token = isset($request->token) ? $request->token : '';
-        $customer->date_added = date('Y-m-d');
-        $customer->gender_id = isset($request->gender_id) ? $request->gender_id : 1;
+        $customer->gender_id = isset($request->title) ? $request->title : 1;
         $customer->update();
-        // echo '<pre>';
-        // print_r($customer->toArray());
 
-        // $lastinsertid = $customer->id;
-        // // Customer Address
-        // $customeraddress = CustomerAddress::find($customerid);
-        // $customeraddress->customer_id = $lastinsertid;
-        // $customeraddress->company = isset($request->company) ? $request->company : '';
-        // $customeraddress->company_id = isset($request->company_id) ? $request->company_id : '';
-        // $customeraddress->address_1 = isset($request->address_1) ? $request->address_1 : '';
-        // $customeraddress->address_2 = isset($request->address_2) ? $request->address_2 : '';
-        // $customeraddress->city = isset($request->city) ? $request->city : '';
-        // $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '';
-        // $customeraddress->country_id = isset($request->country) ? $request->country : '';
-        // $customeraddress->zone_id = isset($request->state) ? $request->state : '';
-        // $customer->update();
-        // echo '<pre>';
-        // print_r($customeraddress->toArray());
-        // exit();
-        return back();
+        return redirect()->route('member');
 
     }
 }

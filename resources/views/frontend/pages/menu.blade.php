@@ -257,7 +257,7 @@
                                                                                             <div class="row">
                                                                                                 <div
                                                                                                     class="col-md-5">
-                                                                                                    <span>{{ $size->hasOneToppingSize['size'] }}</span>
+                                                                                                    <span>{{ isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '' }}</span>
                                                                                                 </div>
                                                                                                 <div class="col-md-7">
                                                                                                     @foreach ($openday as $key => $item)
@@ -647,11 +647,6 @@
     {{-- END JS --}}
 
 </body>
-
-</html>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
 <script>
     $(document).ready(function()
     {
@@ -818,3 +813,6 @@
     }
 
 </script>
+</html>
+
+

@@ -128,7 +128,7 @@
                         <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
                     </div>
-                    <button type="submit" form="registerform" id="register" class="btn btn-success">Create</button>
+                    <a form="registerform" id="register" class="btn btn-success">Register</a>
                 </form>
             </div>
         </div>

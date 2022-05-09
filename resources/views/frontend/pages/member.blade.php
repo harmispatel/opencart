@@ -174,12 +174,12 @@ $userlogin = session('username');
                                     <div class="login-details-inr fa fa-sort-up w-100">
                                         <select name="title" id="title" class="w-100">
                                             <option disabled selected>Title</option>
-                                            <option value="1">Mr.</option>
-                                            <option value="2">Mrs.</option>
-                                            <option value="3">Ms.</option>
-                                            <option value="4">Miss.</option>
-                                            <option value="5">Dr.</option>
-                                            <option value="6">Prof.</option>
+                                            <option value="1" {{ ($customers->gender_id == 1) ? 'selected' : '' }}>Mr.</option>
+                                            <option value="2" {{ ($customers->gender_id == 2) ? 'selected' : '' }}>Mrs.</option>
+                                            <option value="3" {{ ($customers->gender_id == 3) ? 'selected' : '' }}>Ms.</option>
+                                            <option value="4" {{ ($customers->gender_id == 4) ? 'selected' : '' }}>Miss.</option>
+                                            <option value="5" {{ ($customers->gender_id == 5) ? 'selected' : '' }}>Dr.</option>
+                                            <option value="6" {{ ($customers->gender_id == 6) ? 'selected' : '' }}>Prof.</option>
                                         </select>
                                         <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
                                     </div>
@@ -229,15 +229,70 @@ $userlogin = session('username');
                                   <div class="login-details w-100">
                                     <div class="row">
                                     @foreach ($customeraddress as $address)
-                                      <div class="col-sm-6 mb-3">
-                                        <div class="card" style="min-height: 12rem !important;">
+                                      <div class="col-md-6 mb-3">
+                                        <div class="card">
                                             <div class="card-body text-start">
-                                            <h5 class="card-title">Default Address</h5>
-                                            <p class="m-0" style="line-height: 15px; font-size: 15px"><small>{{$address->firstname}} {{$address->firstname}} <br> {{ isset($address->company) ? $address->company : '' }} {{ $address->company_id }} <br>{{ $address->address_1 }} <br> {{ $address->address_2 }} <br> {{ $address->city }}  {{ $address->postcode }}<br> {{ $address->country_id }} <br> {{ $address->zone_id }}</small></p>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h5 class="card-title">Address {{ $loop->iteration }}</h5>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input class="float-end" type="radio" onclick="changeDefaultAddress({{ $address->address_id }},{{ $customers->customer_id }})" name="def_add" id="def_add" style="width: 25px; height: 25px;" {{ ($customers->address_id == $address->address_id) ? 'checked' : '' }}>
+                                                    </div>
+                                                </div><hr>
+                                                <div>
+                                                    <table class="table p-0">
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>:</th>
+                                                            <td>{{$address->firstname}} {{$address->lastname}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Company</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->company)) ? $address->company : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Company ID</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->company_id)) ? $address->company_id : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Address 1</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->address_1)) ? $address->address_1 : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Address 2</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->address_2)) ? $address->address_2 : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>City</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->city)) ? $address->city : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Postcode</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->postcode)) ? $address->postcode : '' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Region</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->hasOneRegion['name'])) ? $address->hasOneRegion['name'] : '-' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Country</th>
+                                                            <th>:</th>
+                                                            <td>{{ (isset($address->hasOneCountry['name'])) ? $address->hasOneCountry['name'] : '-' }}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            <div class="card-footer bg-transparent border-success">
-                                                <a href="{{ route('customeraddressedit',$address->address_id) }}" class="float-start"><i class="far fa-edit"></i>EDIT ADDRESS</a>
-                                                <a href="{{ route('customeraddressdelete',$address->address_id)}}" class="float-end"><i class="far fa-edit"></i>DELETE</a>
+                                            <div class="card-footer">
+                                                <a href="{{ route('customeraddressedit',$address->address_id) }}" class="float-start text-primary"><i class="far fa-edit"></i> EDIT ADDRESS</a>
+                                                <a href="{{ route('customeraddressdelete',$address->address_id)}}" class="float-end text-danger"><i class="fa fa-times"></i> DELETE</a>
                                             </div>
                                         </div>
                                         </div>
@@ -307,8 +362,31 @@ $userlogin = session('username');
 
 </body>
 
+<script>
+    function changeDefaultAddress(addressid,custid)
+    {
+        var address_id = addressid;
+        var customer_id = custid;
+
+        $.ajax({
+            type: 'post',
+            url: '{{ url("changeDefAddress") }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'address_id': address_id,
+                'customer_id': customer_id,
+            },
+            dataType: 'json',
+            success: function(result) {
+                if(result.success == 1)
+                {
+                    alert('Default Address has been changed Successfully.');
+                }
+            }
+        });
+
+    }
+</script>
+
 </html>
 
-<script>
-
-</script>

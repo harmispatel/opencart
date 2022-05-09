@@ -111,7 +111,7 @@ $mycart = session()->get('cart1');
               <p>If you already have an account with us, please login at the<a href="{{ route('member') }}"> login page</a>.</p>
             </div>
             <div class="reg-details">
-              <form action="{{ route('customerregister') }}" method="POST">
+              <form action="{{ route('customerregister') }}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="reg-details-inr">
                   <h3>Your Personal Details</h3>
@@ -119,10 +119,14 @@ $mycart = session()->get('cart1');
                     <tbody>
                       <tr>
                         <td><span class="required">*</span>First Name :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="name" value=""></td>
-                        @error('name')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <td>
+                            <input type="text" class="form-control {{ ($errors->has('name')) ? 'is-invalid' : '' }}" name="name" value="">
+                            @if ($errors->has('name'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('name') }}
+                                </div>
+                            @endif
+                        </td>
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Last Name :</td>
@@ -158,7 +162,10 @@ $mycart = session()->get('cart1');
                     <tbody>
                       <tr>
                         <td>Company :</td>
-                        <td><input type="text" name="company" value=""></td>
+                        <td>
+                            <input type="text" name="company" value="">
+                            <input type="hidden" name="address_required" value="1">
+                        </td>
                       </tr>
                       <tr>
                         <td>Company ID :</td>
