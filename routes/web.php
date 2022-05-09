@@ -413,7 +413,7 @@ Route::post('reservation', [ReservationController::class, 'index'])->name('reser
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
-Route::get('mybasket', [MyBasketController::class, 'mybasket'])->name('mybasket');
+Route::get('success', [MyBasketController::class, 'success'])->name('success');
 Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
 
 
