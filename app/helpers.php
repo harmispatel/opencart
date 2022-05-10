@@ -802,7 +802,7 @@ function openclosetime()
                 }
             }
             foreach ($times as $key => $time) {
-                if (isset($delivery['to'][$keyday]) && $collection['to'][$keyday] == $key) {
+                if (isset($delivery['to'][$keyday]) && $delivery['to'][$keyday] == $key) {
                     $deliveryto[] = $time;
                 }
             }

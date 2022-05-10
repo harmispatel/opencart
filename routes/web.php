@@ -402,15 +402,14 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
-Route::get('member', [MemberController::class, 'member'])->name('member');
-Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
-Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
 Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::post('voucher', [CheckoutController::class, 'voucher'])->name('voucher');
+Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 Route::get('success', [MyBasketController::class, 'success'])->name('success');
@@ -423,6 +422,7 @@ Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountr
 // Get customer Address
 Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
 Route::get('getcustomeraddress/{id}', [CheckoutController::class, 'getcustomeraddress'])->name('getcustomeraddress');
+
 
 
 

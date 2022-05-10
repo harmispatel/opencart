@@ -27,7 +27,7 @@ class MenuController extends Controller
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
         // $front_store_id =  $current_theme['store_id'];
-        $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+        $Coupon =Coupon::select('name','code','discount','date_start','date_end')->where('store_id',$front_store_id)->first();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->get();
@@ -69,6 +69,8 @@ class MenuController extends Controller
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
 
         $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+
+
 
         if(!empty($loopid) || $loopid != '')
         {

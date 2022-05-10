@@ -14,15 +14,6 @@
 
     $subtotal = '';
 
-    if(session()->has('guest_user'))
-    {
-        $guestlogin = session()->get('guest_user');
-    }
-    else {
-        $guestlogin = '';
-    }
-
-
     if(session()->has('userid'))
     {
         $userid = session()->get('userid');
@@ -126,6 +117,7 @@ span.check_btn:before {
         @include('frontend.theme.theme1.header')
         {{-- End Header --}}
     @endif
+
 <sidebar class="mobile-menu">
         <a class="close far fa-times-circle" href="#"></a>
         <a class="logo" href="#slide">
@@ -208,189 +200,64 @@ span.check_btn:before {
             </ul>
         </div>
     </sidebar>
-    @if (empty($userlogin) && empty($guestlogin))
-        <section class="check-main" id="checkout1">
-            <div class="container">
-            <div class="check-inr">
-                <div class="row" id="Checkout">
-                <div class="col-md-12">
-                    <div class="check-progress">
-                    <h2>Checkout - step 1/3</h2>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    </div>
-                    <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                    <h2 class="accordion-header accordion-button" id="headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        <span> Log in</span>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                            <div class="login-main text-center">
-                                <div class="fb-login ">
-                                <a href="" class="btn fb-log-bt">
-                                    <i class="fab fa-facebook-square"></i> <span>Login with facebook</span>
-                                </a>
-                                </div>
-                                <div class="my-3">
-                                <strong>OR</strong>
-                                </div>
-                                <form action="{{ route('customerlogin') }}" method="POST">
-                                {{ csrf_field() }}
-                                <div class="login-details w-100">
-                                    <div class="login-details-inr fa fa-envelope w-100">
-                                    <input placeholder="Email address" type="text" name="email" value="" class="w-100">
-                                    </div>
-                                    <div class="login-details-inr fa fa-lock w-100">
-                                    <input placeholder="password" type="password" name="password" value="" class="w-100">
-                                    </div>
-                                    <div class="email-btn">
-                                    <button class="btn" id="login">Log in</button>
-                                    </div>
-                                </div>
-                                </form>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header accordion-button" id="headingtwo" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
-                            <span>Guest checkout</span>
-                        </h2>
-                        <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <div class="login-main text-center">
-                                <div class="login-details w-100">
-                                    <form enctype="multipart/form-data" id="guestuser">
-                                        @csrf
-                                        <div class="login-details-inr fa fa-sort-up w-100">
-                                            <select name="title" class="w-100" id="gender">
-                                                <option value="">Title</option>
-                                                <option value="1">Mr.</option>
-                                                <option value="2">Mrs.</option>
-                                                <option value="3">Ms.</option>
-                                                <option value="4">Miss.</option>
-                                                <option value="5">Dr.</option>
-                                                <option value="6">Prof.</option>
-                                            </select>
-                                            <div class="invalid-feedback" id="genderarr" style="display: none; text-align:left;"></div>
-                                        </div>
-
-                                        <div class="login-details-inr fa fa-user w-100">
-                                            <input placeholder="FirstName" type="text" name="firstname" value="" class="w-100" id="fname">
-                                            <div class="invalid-feedback" id="fnamearr" style="display: none; text-align:left;"></div>
-                                        </div>
-
-                                        <div class="login-details-inr fa fa-user w-100">
-                                            <input placeholder="lastname" type="text" name="lastname" value="" class="w-100" id="lname">
-                                            <div class="invalid-feedback" id="lnamearr" style="display: none; text-align:left;"></div>
-                                        </div>
-
-                                        <div class="login-details-inr fa fa-envelope w-100">
-                                            <input placeholder="Email address" type="text" name="email" value="" class="w-100" id="email">
-                                            <div class="invalid-feedback" id="emailarr" style="display: none; text-align:left;"></div>
-                                        </div>
-
-                                        <div class="login-details-inr fa fa-phone-alt w-100">
-                                            <input placeholder="phone number" type="text" name="phone" value="" class="w-100" id="phone">
-                                            <div class="invalid-feedback" id="phonearr" style="display: none; text-align:left;"></div>
-                                        </div>
-
-                                        <div class="email-btn">
-                                            <a class="btn" onclick="guestCheckout();">Checkout</a>
-                                        </div>
-                                    </form>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header accordion-button" id="headingthree" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">
-                        <span>Create an account</span>
-                        </h2>
-                        <div id="collapsethree" class="accordion-collapse collapse" aria-labelledby="headingthree" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <div class="login-main text-center">
-                                <div class="login-details w-100">
-                                    <form action="{{ route('customerregister') }}" method="post">
-                                        {{ csrf_field() }}
-                                        <div class="login-details-inr fa fa-sort-up w-100">
-                                            <select name="gender" class="w-100">
-                                                <option value="">Title</option>
-                                                <option value="1">Mr.</option>
-                                                <option value="2">Mrs.</option>
-                                                <option value="3">Ms.</option>
-                                                <option value="4">Miss.</option>
-                                                <option value="5">Dr.</option>
-                                                <option value="6">Prof.</option>
-                                            </select>
-                                        </div>
-                                        <div class="login-details-inr fa fa-user w-100 d-flex">
-                                            <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                            <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
-                                        </div>
-                                        <div class="login-details-inr fa fa-envelope w-100">
-                                            <input placeholder="Email address" type="text" name="email" value="" class="w-100">
-                                        </div>
-                                        <div class="login-details-inr fa fa-phone-alt w-100">
-                                            <input placeholder="phone number" type="text" name="number" value="" class="w-100">
-                                        </div>
-                                        <div class="login-details-inr fa fa-lock w-100">
-                                            <input placeholder="password" type="password" name="password" value="" class="w-100">
-                                        </div>
-                                        <div class="login-details-inr fa fa-lock w-100">
-                                            <input placeholder="Confirm Password" type="password" name="confirm" value="" class="w-100">
-                                        </div>
-                                        <div class="email-btn">
-                                            <button type="submit" class="btn">Create</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
-        </section>
-    @else
-        <section class="check-main" id="checkout2">
-        <div class="container" >
-            <div class="check-inr">
-            <div class="row justify-content-center" id="demo">
-                <div class="col-md-12">
+    @if (empty($userlogin))
+    <section class="check-main" id="checkout1">
+        <div class="container">
+          <div class="check-inr">
+            <div class="row" id="Checkout">
+              <div class="col-md-12">
                 <div class="check-progress">
-                    <h2>Checkout - step 2/3</h2>
-                    <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 66.66%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                  <h2>Checkout - step 1/3</h2>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
                 </div>
                 <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                    <h2 class="accordion-header accordion-button" id="headingOne" type="button" >
-                        <span> Order Type</span>
+                <div class="accordion-item">
+                  <h2 class="accordion-header accordion-button" id="headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      <span> Log in</span>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="fb-login ">
+                              <a href="" class="btn fb-log-bt">
+                                <i class="fab fa-facebook-square"></i> <span>Login with facebook</span>
+                              </a>
+                            </div>
+                            <div class="my-3">
+                              <strong>OR</strong>
+                            </div>
+                            <form action="{{ route('customerlogin') }}" method="POST">
+                              {{ csrf_field() }}
+                              <div class="login-details w-100">
+                                  <div class="login-details-inr fa fa-envelope w-100">
+                                  <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                                  </div>
+                                  <div class="login-details-inr fa fa-lock w-100">
+                                  <input placeholder="password" type="password" name="password" value="" class="w-100">
+                                  </div>
+                                  <div class="email-btn">
+                                  <button class="btn" id="login">Log in</button>
+                                  </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header accordion-button" id="headingtwo" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
+                        <span>Guest checkout</span>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
+                    <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
                         <div class="row justify-content-center">
-                            <div class="col-md-4">
+                          <div class="col-md-4">
                             <div class="login-main text-center">
                                 <div class="login-details w-100">
                                     <div class="mb-1">
@@ -399,208 +266,363 @@ span.check_btn:before {
                                     I will collect my order
                                     </label>
                                 </div>
+                                <div class="login-details-inr fa fa-user w-100 d-flex">
+                                  <input placeholder="Name" type="text" name="name" value="" class="w-50">
+                                  <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
+                                </div>
+                                <div class="login-details-inr fa fa-envelope w-100">
+                                  <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                                </div>
+                                <div class="login-details-inr fa fa-phone-alt w-100">
+                                  <input placeholder="phone number" type="text" name="email" value="" class="w-100">
+                                </div>
+                                <div class="email-btn">
+                                  <button type="submit" class="btn">Checkout</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header accordion-button" id="headingthree" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">
+                    <span>Create an account</span>
+                    </h2>
+                    <div id="collapsethree" class="accordion-collapse collapse" aria-labelledby="headingthree" data-bs-parent="#accordionExample">
+                      <div class="accordion-body">
+                        <div class="row justify-content-center">
+                          <div class="col-md-4">
+                            <div class="login-main text-center">
+                              <div class="login-details w-100">
+                                <form action="{{ route('customerregister') }}" method="post">
+                                    {{ csrf_field() }}
+                                    <div class="login-details-inr fa fa-sort-up w-100">
+                                        <select name="gender" class="w-100">
+                                            <option value="">Title</option>
+                                            <option value="1">Mr.</option>
+                                            <option value="2">Mrs.</option>
+                                            <option value="3">Ms.</option>
+                                            <option value="4">Miss.</option>
+                                            <option value="5">Dr.</option>
+                                            <option value="6">Prof.</option>
+                                        </select>
+                                    </div>
+                                    <div class="login-details-inr fa fa-user w-100 d-flex">
+                                        <input placeholder="Name" type="text" name="name" value="" class="w-50">
+                                        <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
+                                    </div>
+                                    <div class="login-details-inr fa fa-envelope w-100">
+                                        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-phone-alt w-100">
+                                        <input placeholder="phone number" type="text" name="number" value="" class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-lock w-100">
+                                        <input placeholder="password" type="password" name="password" value="" class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-lock w-100">
+                                        <input placeholder="Confirm Password" type="password" name="confirm" value="" class="w-100">
+                                    </div>
+                                    <div class="email-btn">
+                                        <button type="submit" class="btn">Create</button>
+                                    </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    @else
+    <section class="check-main" id="checkout2">
+      <div class="container" >
+        <div class="check-inr">
+          <div class="row justify-content-center" id="demo">
+            <div class="col-md-12">
+              <div class="check-progress">
+                <h2>Checkout - step 2/3</h2>
+                <div class="progress">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 66.66%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+              <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header accordion-button" id="headingOne" type="button" >
+                      <span> Order Type</span>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="login-details w-100">
+                                @if ($delivery_setting['enable_delivery'] != 'collection')
                                 <div>
                                     <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
                                     <label class="form-check-label" for="deliver">
                                         Deliver to my address
                                     </label>
                                 </div>
+                                @endif
+
+                                @if ($delivery_setting['enable_delivery'] != 'delivery')
+                                <div class="mb-1">
+                                    <input class="form-check-input" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
+                                    <label class="form-check-label" for="collect">
+                                      I will collect my order
+                                    </label>
                                 </div>
+                                @endif
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                @php
+
+                    // $start= strtotime('12:00');
+                    // $end=strtotime('23:30');
+                    // for ($i=$start;$i<=$end;$i = $i + 15*60)
+                    // {
+                    //     echo date('H:i',$i).'-'.date('H:i',$i).'<br>';
+                    //     // echo date('H:i',$i).'<br>';
+                    // }
+                    // die;
+                @endphp
+                <div class="accordion-item" id="colloctiontime">
+                  <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
+                      <span>Collection Time</span>
+                  </h2>
+                  <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="login-details w-100">
+                              <div class="login-details-inr fa fa-sort-up w-100">
+                                {{-- <select class="time_select w-100" name="time_method">
+                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option> --}}
+                                @php
+                                    $collectiondays = $openclose['collectiondays'];
+                                    $collectionfrom = $openclose['collectionfrom'];
+                                    $collectionto   = $openclose['collectionto'];
+                                @endphp
+                                @foreach ($collectiondays as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            date_default_timezone_set("Asia/kolkata");
+                                            $today = date('l');
+                                            $currenttime = time();
+                                            $start = strtotime($collectionfrom[$key]);
+                                            $end = strtotime($collectionto[$key]);
+                                        @endphp
+                                            @for ($i=$currenttime; $i<=$end - 15*60; $i = $i + 15*60)
+                                                @if ($today == $value)
+                                                    <option value="{{ date('H:i',$i).'-'.date('H:i',$i + 15*60)}}">{{ date('H:i',$i).'-'.date('H:i',$i + 15*60)}}</option>
+                                                @elseif ($firstday == "Every day")
+                                                    <option value="{{ date('H:i',$i).'-'.date('H:i',$i)}}">{{ date('H:i',$i).'-'.date('H:i',$i)}}</option>
+                                                @endif
+                                            @endfor
+                                    @endforeach
+                                @endforeach
+                                {{-- </select> --}}
+                                {{-- <select class="time_select w-100" name="time_method">
+                                  <option selected="selected" id="time_0" value="ASAP">ASAP</option>
+                                  <option id="time_1" value="13:45-14:00">13:45-14:00</option>
+                                  <option id="time_2" value="14:00-14:15">14:00-14:15</option>
+                                  <option id="time_3" value="14:15-14:30">14:15-14:30</option>
+                                  <option id="time_4" value="14:30-14:45">14:30-14:45</option>
+                                  <option id="time_5" value="14:45-15:00">14:45-15:00</option>
+                                  <option id="time_6" value="15:00-15:15">15:00-15:15</option>
+                                  <option id="time_7" value="15:15-15:30">15:15-15:30</option>
+                                  <option id="time_8" value="15:30-15:45">15:30-15:45</option>
+                                  <option id="time_9" value="15:45-16:00">15:45-16:00</option>
+                                  <option id="time_10" value="16:00-16:15">16:00-16:15</option>
+                                  <option id="time_11" value="16:15-16:30">16:15-16:30</option>
+                                  <option id="time_12" value="16:30-16:45">16:30-16:45</option>
+                                  <option id="time_13" value="16:45-17:00">16:45-17:00</option>
+                                  <option id="time_14" value="17:00-17:15">17:00-17:15</option>
+                                  <option id="time_15" value="17:15-17:30">17:15-17:30</option>
+                                  <option id="time_16" value="17:30-17:45">17:30-17:45</option>
+                                  <option id="time_17" value="17:45-18:00">17:45-18:00</option>
+                                  <option id="time_18" value="18:00-18:15">18:00-18:15</option>
+                                  <option id="time_19" value="18:15-18:30">18:15-18:30</option>
+                                  <option id="time_20" value="18:30-18:45">18:30-18:45</option>
+                                  <option id="time_21" value="18:45-19:00">18:45-19:00</option>
+                                  <option id="time_22" value="19:00-19:15">19:00-19:15</option>
+                                  <option id="time_23" value="19:15-19:30">19:15-19:30</option>
+                                  <option id="time_24" value="19:30-19:45">19:30-19:45</option>
+                                  <option id="time_25" value="19:45-20:00">19:45-20:00</option>
+                                  <option id="time_26" value="20:00-20:15">20:00-20:15</option>
+                                  <option id="time_27" value="20:15-20:30">20:15-20:30</option>
+                                  <option id="time_28" value="20:30-20:45">20:30-20:45</option>
+                                  <option id="time_29" value="20:45-21:00">20:45-21:00</option>
+                                  <option id="time_30" value="21:00-21:15">21:00-21:15</option>
+                                  <option id="time_31" value="21:15-21:30">21:15-21:30</option>
+                                  <option id="time_32" value="21:30-21:45">21:30-21:45</option>
+                                  <option id="time_33" value="21:45-22:00">21:45-22:00</option>
+                                  <option id="time_34" value="22:00-22:15">22:00-22:15</option>
+                                  <option id="time_35" value="22:15-22:30">22:15-22:30</option>
+                                  <option id="time_36" value="22:30-22:45">22:30-22:45</option>
+                                  <option id="time_37" value="22:45-23:00">22:45-23:00</option>
+                                  <option id="time_38" value="23:00-23:15">23:00-23:15</option>
+                                  <option id="time_39" value="23:15-23:30">23:15-23:30</option>
+                                  <option id="time_40" value="23:30-23:45">23:30-23:45</option>
+                                  <option id="time_41" value="23:45-00:00">23:45-00:00</option>
+                                </select> --}}
+                              </div>
                             </div>
+                          </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item" id="dileverytime" style="display: none">
+                  <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
+                      <span>Dilevery Time</span>
+                  </h2>
+                  <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="login-details w-100">
+                              <div class="login-details-inr fa fa-sort-up w-100">
+                                <select class="time_select w-100" name="time_method">
+                                  <option selected="selected" id="time_0" value="ASAP">ASAP</option>
+                                  <option id="time_1" value="13:45-14:00">13:45-14:00</option>
+                                  <option id="time_2" value="14:00-14:15">14:00-14:15</option>
+                                  <option id="time_3" value="14:15-14:30">14:15-14:30</option>
+                                  <option id="time_4" value="14:30-14:45">14:30-14:45</option>
+                                  <option id="time_5" value="14:45-15:00">14:45-15:00</option>
+                                  <option id="time_6" value="15:00-15:15">15:00-15:15</option>
+                                  <option id="time_7" value="15:15-15:30">15:15-15:30</option>
+                                  <option id="time_8" value="15:30-15:45">15:30-15:45</option>
+                                  <option id="time_9" value="15:45-16:00">15:45-16:00</option>
+                                  <option id="time_10" value="16:00-16:15">16:00-16:15</option>
+                                  <option id="time_11" value="16:15-16:30">16:15-16:30</option>
+                                  <option id="time_12" value="16:30-16:45">16:30-16:45</option>
+                                  <option id="time_13" value="16:45-17:00">16:45-17:00</option>
+                                  <option id="time_14" value="17:00-17:15">17:00-17:15</option>
+                                  <option id="time_15" value="17:15-17:30">17:15-17:30</option>
+                                  <option id="time_16" value="17:30-17:45">17:30-17:45</option>
+                                  <option id="time_17" value="17:45-18:00">17:45-18:00</option>
+                                  <option id="time_18" value="18:00-18:15">18:00-18:15</option>
+                                  <option id="time_19" value="18:15-18:30">18:15-18:30</option>
+                                  <option id="time_20" value="18:30-18:45">18:30-18:45</option>
+                                  <option id="time_21" value="18:45-19:00">18:45-19:00</option>
+                                  <option id="time_22" value="19:00-19:15">19:00-19:15</option>
+                                  <option id="time_23" value="19:15-19:30">19:15-19:30</option>
+                                  <option id="time_24" value="19:30-19:45">19:30-19:45</option>
+                                  <option id="time_25" value="19:45-20:00">19:45-20:00</option>
+                                  <option id="time_26" value="20:00-20:15">20:00-20:15</option>
+                                  <option id="time_27" value="20:15-20:30">20:15-20:30</option>
+                                  <option id="time_28" value="20:30-20:45">20:30-20:45</option>
+                                  <option id="time_29" value="20:45-21:00">20:45-21:00</option>
+                                  <option id="time_30" value="21:00-21:15">21:00-21:15</option>
+                                  <option id="time_31" value="21:15-21:30">21:15-21:30</option>
+                                  <option id="time_32" value="21:30-21:45">21:30-21:45</option>
+                                  <option id="time_33" value="21:45-22:00">21:45-22:00</option>
+                                  <option id="time_34" value="22:00-22:15">22:00-22:15</option>
+                                  <option id="time_35" value="22:15-22:30">22:15-22:30</option>
+                                  <option id="time_36" value="22:30-22:45">22:30-22:45</option>
+                                  <option id="time_37" value="22:45-23:00">22:45-23:00</option>
+                                  <option id="time_38" value="23:00-23:15">23:00-23:15</option>
+                                  <option id="time_39" value="23:15-23:30">23:15-23:30</option>
+                                  <option id="time_40" value="23:30-23:45">23:30-23:45</option>
+                                  <option id="time_41" value="23:45-00:00">23:45-00:00</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
-                    </div>
-                    <div class="accordion-item" id="colloctiontime">
-                    <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                        <span>Collection Time</span>
-                    </h2>
-                    <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                            <div class="login-main text-center">
-                                <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                    <select class="time_select w-100" name="time_method">
-                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option>
-                                    <option id="time_1" value="13:45-14:00">13:45-14:00</option>
-                                    <option id="time_2" value="14:00-14:15">14:00-14:15</option>
-                                    <option id="time_3" value="14:15-14:30">14:15-14:30</option>
-                                    <option id="time_4" value="14:30-14:45">14:30-14:45</option>
-                                    <option id="time_5" value="14:45-15:00">14:45-15:00</option>
-                                    <option id="time_6" value="15:00-15:15">15:00-15:15</option>
-                                    <option id="time_7" value="15:15-15:30">15:15-15:30</option>
-                                    <option id="time_8" value="15:30-15:45">15:30-15:45</option>
-                                    <option id="time_9" value="15:45-16:00">15:45-16:00</option>
-                                    <option id="time_10" value="16:00-16:15">16:00-16:15</option>
-                                    <option id="time_11" value="16:15-16:30">16:15-16:30</option>
-                                    <option id="time_12" value="16:30-16:45">16:30-16:45</option>
-                                    <option id="time_13" value="16:45-17:00">16:45-17:00</option>
-                                    <option id="time_14" value="17:00-17:15">17:00-17:15</option>
-                                    <option id="time_15" value="17:15-17:30">17:15-17:30</option>
-                                    <option id="time_16" value="17:30-17:45">17:30-17:45</option>
-                                    <option id="time_17" value="17:45-18:00">17:45-18:00</option>
-                                    <option id="time_18" value="18:00-18:15">18:00-18:15</option>
-                                    <option id="time_19" value="18:15-18:30">18:15-18:30</option>
-                                    <option id="time_20" value="18:30-18:45">18:30-18:45</option>
-                                    <option id="time_21" value="18:45-19:00">18:45-19:00</option>
-                                    <option id="time_22" value="19:00-19:15">19:00-19:15</option>
-                                    <option id="time_23" value="19:15-19:30">19:15-19:30</option>
-                                    <option id="time_24" value="19:30-19:45">19:30-19:45</option>
-                                    <option id="time_25" value="19:45-20:00">19:45-20:00</option>
-                                    <option id="time_26" value="20:00-20:15">20:00-20:15</option>
-                                    <option id="time_27" value="20:15-20:30">20:15-20:30</option>
-                                    <option id="time_28" value="20:30-20:45">20:30-20:45</option>
-                                    <option id="time_29" value="20:45-21:00">20:45-21:00</option>
-                                    <option id="time_30" value="21:00-21:15">21:00-21:15</option>
-                                    <option id="time_31" value="21:15-21:30">21:15-21:30</option>
-                                    <option id="time_32" value="21:30-21:45">21:30-21:45</option>
-                                    <option id="time_33" value="21:45-22:00">21:45-22:00</option>
-                                    <option id="time_34" value="22:00-22:15">22:00-22:15</option>
-                                    <option id="time_35" value="22:15-22:30">22:15-22:30</option>
-                                    <option id="time_36" value="22:30-22:45">22:30-22:45</option>
-                                    <option id="time_37" value="22:45-23:00">22:45-23:00</option>
-                                    <option id="time_38" value="23:00-23:15">23:00-23:15</option>
-                                    <option id="time_39" value="23:15-23:30">23:15-23:30</option>
-                                    <option id="time_40" value="23:30-23:45">23:30-23:45</option>
-                                    <option id="time_41" value="23:45-00:00">23:45-00:00</option>
+                  </div>
+                </div>
+                <div class="accordion-item" id="deliveryaddress" style="display: none">
+                  <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
+                      <span>Delivery address</span>
+                  </h2>
+                  <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="row justify-content-center">
+                        <div class="col-md-4">
+                          <div class="login-main text-center">
+                            <div class="login-details w-100">
+                            <form method="POST">
+                                {{ csrf_field() }}
+                                <div class="login-details-inr fas fa-address-book w-100">
+                                    <select name="address" id="address" class="w-100 address" onchange="Getcustomeraddress();">
+                                        <option disabled selected>Choose Address</option>
                                     </select>
+                                    <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
+                                    <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
                                 </div>
+                                <div class="login-details-inr fas fa-map-marker-alt w-100">
+                                    <input placeholder="Address line 1:" type="text" id="address_1" name="address_1" value="" class="w-100">
                                 </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="accordion-item" id="dileverytime" style="display: none">
-                    <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                        <span>Dilevery Time</span>
-                    </h2>
-                    <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                            <div class="login-main text-center">
-                                <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                    <select class="time_select w-100" name="time_method">
-                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option>
-                                    <option id="time_1" value="13:45-14:00">13:45-14:00</option>
-                                    <option id="time_2" value="14:00-14:15">14:00-14:15</option>
-                                    <option id="time_3" value="14:15-14:30">14:15-14:30</option>
-                                    <option id="time_4" value="14:30-14:45">14:30-14:45</option>
-                                    <option id="time_5" value="14:45-15:00">14:45-15:00</option>
-                                    <option id="time_6" value="15:00-15:15">15:00-15:15</option>
-                                    <option id="time_7" value="15:15-15:30">15:15-15:30</option>
-                                    <option id="time_8" value="15:30-15:45">15:30-15:45</option>
-                                    <option id="time_9" value="15:45-16:00">15:45-16:00</option>
-                                    <option id="time_10" value="16:00-16:15">16:00-16:15</option>
-                                    <option id="time_11" value="16:15-16:30">16:15-16:30</option>
-                                    <option id="time_12" value="16:30-16:45">16:30-16:45</option>
-                                    <option id="time_13" value="16:45-17:00">16:45-17:00</option>
-                                    <option id="time_14" value="17:00-17:15">17:00-17:15</option>
-                                    <option id="time_15" value="17:15-17:30">17:15-17:30</option>
-                                    <option id="time_16" value="17:30-17:45">17:30-17:45</option>
-                                    <option id="time_17" value="17:45-18:00">17:45-18:00</option>
-                                    <option id="time_18" value="18:00-18:15">18:00-18:15</option>
-                                    <option id="time_19" value="18:15-18:30">18:15-18:30</option>
-                                    <option id="time_20" value="18:30-18:45">18:30-18:45</option>
-                                    <option id="time_21" value="18:45-19:00">18:45-19:00</option>
-                                    <option id="time_22" value="19:00-19:15">19:00-19:15</option>
-                                    <option id="time_23" value="19:15-19:30">19:15-19:30</option>
-                                    <option id="time_24" value="19:30-19:45">19:30-19:45</option>
-                                    <option id="time_25" value="19:45-20:00">19:45-20:00</option>
-                                    <option id="time_26" value="20:00-20:15">20:00-20:15</option>
-                                    <option id="time_27" value="20:15-20:30">20:15-20:30</option>
-                                    <option id="time_28" value="20:30-20:45">20:30-20:45</option>
-                                    <option id="time_29" value="20:45-21:00">20:45-21:00</option>
-                                    <option id="time_30" value="21:00-21:15">21:00-21:15</option>
-                                    <option id="time_31" value="21:15-21:30">21:15-21:30</option>
-                                    <option id="time_32" value="21:30-21:45">21:30-21:45</option>
-                                    <option id="time_33" value="21:45-22:00">21:45-22:00</option>
-                                    <option id="time_34" value="22:00-22:15">22:00-22:15</option>
-                                    <option id="time_35" value="22:15-22:30">22:15-22:30</option>
-                                    <option id="time_36" value="22:30-22:45">22:30-22:45</option>
-                                    <option id="time_37" value="22:45-23:00">22:45-23:00</option>
-                                    <option id="time_38" value="23:00-23:15">23:00-23:15</option>
-                                    <option id="time_39" value="23:15-23:30">23:15-23:30</option>
-                                    <option id="time_40" value="23:30-23:45">23:30-23:45</option>
-                                    <option id="time_41" value="23:45-00:00">23:45-00:00</option>
-                                    </select>
+                                <div class="login-details-inr fas fa-map-marker-alt w-100">
+                                    <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="" class="w-100">
                                 </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="accordion-item" id="deliveryaddress" style="display: none">
-                    <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                        <span>Delivery address</span>
-                    </h2>
-                    <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                        <div class="row justify-content-center">
-                            <div class="col-md-4">
-                            <div class="login-main text-center">
-                                <div class="login-details w-100">
-                                <form method="POST">
-                                    {{ csrf_field() }}
-                                    <div class="login-details-inr fas fa-address-book w-100">
-                                        <select name="address" id="address" class="w-100 address" onchange="Getcustomeraddress();">
-                                            <option disabled selected>Choose Address</option>
+                                <div class="login-details-inr fas fa-address-card w-100">
+                                @if($delivery_setting['delivery_option'] == 'area')
+                                    <div class="w-50 d-inline-block float-start">
+                                        <select name="area" id="area" class="w-100">
+                                            <option disabled selected>Select Area</option>
+                                            <option value="1">india</option>
+                                            <option value="2">uk</option>
                                         </select>
-                                        <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
-                                        <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
                                     </div>
-                                    <div class="login-details-inr fas fa-map-marker-alt w-100">
-                                        <input placeholder="Address line 1:" type="text" id="address_1" name="address_1" value="" class="w-100">
+                                @else
+                                    <div class="w-50 d-inline-block float-start">
+                                        <input placeholder="city" type="test" id="city" name="city" value="" class="w-100">
                                     </div>
-                                    <div class="login-details-inr fas fa-map-marker-alt w-100">
-                                        <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="" class="w-100">
+                                @endif
+                                    <div class="w-50 d-inline-block float-end">
+                                        <input placeholder="Postcode" type="number" id="postcode" name="postcode" value="" class="w-100">
                                     </div>
-                                    <div class="login-details-inr fas fa-address-card w-100">
-                                        <div class="w-50 d-inline-block float-start">
-                                            <select name="area" id="area" class="w-100">
-                                                <option disabled selected>Select Area</option>
-                                                <option value="1">india</option>
-                                                <option value="2">uk</option>
-                                            </select>
-                                        </div>
-                                        <div class="w-50 d-inline-block float-end">
-                                            <input placeholder="Postcode" type="number" id="postcode" name="postcode" value="" class="w-100">
-                                        </div>
-                                    </div>
-                                    <div class="login-details-inr fas fa-phone-alt w-100">
-                                        <input placeholder="Phone Number" type="number" id="phone" name="phone" value="" class="w-100">
-                                    </div>
-                                    <div class="login-details-inr fa fa-road w-100">
-                                        <textarea placeholder="Aditional directions (optional)" cols="30" rows="5" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100"></textarea>
-                                    </div>
-                                </form>
                                 </div>
+                                <div class="login-details-inr fas fa-phone-alt w-100">
+                                    <input placeholder="Phone Number" type="number" id="phone" name="phone" value="" class="w-100">
+                                </div>
+                                <div class="login-details-inr fa fa-road w-100">
+                                    <textarea placeholder="Aditional directions (optional)" cols="30" rows="5" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100"></textarea>
+                                </div>
+                            </form>
                             </div>
-                            </div>
+                          </div>
                         </div>
-                        </div>
+                      </div>
                     </div>
-                    </div>
+                  </div>
                 </div>
-                </div>
-                <div class="col-md-4 mt-4">
-                <div class="backbtn d-flex justify-content-between">
-                    <button class="btn disabled"><i class="fa fa-angle-left"></i> Back</button>
-                    <button class="btn back-bt" id="next">Next</button>
-                </div>
-                </div>
+              </div>
             </div>
+            <div class="col-md-4 mt-4">
+              <div class="backbtn d-flex justify-content-between">
+                <button class="btn disabled" disabled><i class="fa fa-angle-left"></i> Back</button>
+                <button class="btn back-bt" id="next">Next</button>
+              </div>
             </div>
+          </div>
         </div>
-        </section>
+      </div>
+    </section>
     @endif
 
     <section class="check-main" id="checkout3" style="display: none">
@@ -674,8 +696,6 @@ span.check_btn:before {
                                                             </tr>
                                                             @php
                                                                 $subtotal += $price;
-                                                                $couponcode=($subtotal*$Coupon->discount)/100;
-                                                                $total=$subtotal-$couponcode;
                                                             @endphp
                                                         @endforeach
                                                     @endif
@@ -712,32 +732,12 @@ span.check_btn:before {
                                                             </tr>
                                                             @php
                                                                 $subtotal += $price;
-                                                                $couponcode=($subtotal*$Coupon->discount)/100;
-                                                                $total=$subtotal-$couponcode;
                                                             @endphp
                                                         @endforeach
                                                     @endif
                                                 </tbody>
                                             </table>
                                         </form>
-                                    </div>
-                                    <div class="basket-total">
-                                      <table class="table table-responsive">
-                                        <tbody>
-                                          <tr>
-                                            <td><b>Sub-Total:</b></td>
-                                            <td><span><b>£{{ $subtotal }}</b></span></td>
-                                          </tr>
-                                          <tr>
-                                              <td><b>Coupon({{ $Coupon->code }}):</b></td>
-                                              <td><span><b>£-{{ $couponcode  }}</b></span></td>
-                                            </tr>
-                                          <tr>
-                                            <td><b>Total to pay:</b></td>
-                                            <td><span><b>£{{ $total  }}</b></span></td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
                                     </div>
                                 @else
                                     <div class="pb-4">
@@ -762,13 +762,28 @@ span.check_btn:before {
                           <div class="col-md-5">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                    <input placeholder="Voucher Code" type="text" id="vouchercode" name="vouchercode" value="" class="w-100">
-                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                <div id="voucher" class="content">
+                                    <form action="{{route('voucher')}}" method="post" enctype="multipart/form-data" id="voucher_form">
+                                        @csrf
+                                        <div style="display: none;">Enter your gift voucher code here:&nbsp;</div>
+                                        <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                            <input type="text" name="voucher" value=""  placeholder="Voucher Code" class="w-100">
+                                            <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                            <!-- <input type="hidden" name="voucher" value="voucher"> -->
+                                        </div>
+                                        <!-- <p class="text-danger" id="couponError">dwfa</p> -->
+                                    </form>
                                 </div>
-                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                    <input placeholder="Coupon Code" type="text" id="couponcode" name="couponcode" value="" class="w-100">
-                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                <div id="coupon" class="content">
+                                    <form action="{{route('coupon')}}" method="post" enctype="multipart/form-data" id="coupon_form">
+                                    @csrf
+                                        <div style="display: none;">Enter your coupon here:&nbsp;</div>
+                                        <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                            <input type="text" name="coupon" value="" placeholder="Coupon Code" class="w-100">
+                                            <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                        </div>
+                                        <p class="text-danger" id="couponError"></p>
+                                    </form>
                                 </div>
                               </div>
                             </div>
@@ -809,8 +824,8 @@ span.check_btn:before {
                 <div class="col-md-4 mt-4">
                     <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
-                      <input type="hidden" name="total" id="total" value="{{ $total }}">
-                      <input type="button" value="Pay £ {{ $total }}" id="button-payment-method" class="btn back-bt" disabled>
+                      <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                      <input type="button" value="Pay £ {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
                     </div>
                   </div>
               </div>
@@ -825,11 +840,11 @@ span.check_btn:before {
     {{-- Footer --}}
     @include('frontend.theme.theme' . $theme_id . '.footer')
     {{-- End Footer --}}
-@else
+    @else
     {{-- Footer --}}
     @include('frontend.theme.theme1.footer')
     {{-- End Footer --}}
-@endif
+    @endif
 
 {{-- JS --}}
 @include('frontend.include.script')
@@ -926,104 +941,6 @@ span.check_btn:before {
         $('#checkout3').show();
       });
 
-    // Guest Checkout
-    function guestCheckout()
-    {
-        var form_data = new FormData(document.getElementById('guestuser'));
-
-        $.ajax({
-            type: "POST",
-            url: "{{ url('registerguestuser') }}",
-            data: form_data,
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (response)
-            {
-                if(response.success == 1)
-                {
-                    location.reload();
-                }
-            },
-            error : function (message)
-            {
-                var gender = message.responseJSON.errors.title;
-                var firstname = message.responseJSON.errors.firstname;
-                var lastname = message.responseJSON.errors.lastname;
-                var email = message.responseJSON.errors.email;
-                var phone = message.responseJSON.errors.phone;
-
-                // Title
-                if(gender)
-                {
-                    $('#genderarr').text('').show();
-                    $('#gender').attr('class','form-control is-invalid');
-                    $('#genderarr').text(gender);
-                }
-                else
-                {
-                    $('#genderarr').text('').hide();
-                    $('#gender').attr('class','form-control');
-                }
-
-                // FirstName
-                if(firstname)
-                {
-                    $('#fnamearr').text('').show();
-                    $('#fname').attr('class','form-control is-invalid');
-                    $('#fnamearr').text(firstname);
-                }
-                else
-                {
-                    $('#fnamearr').text('').hide();
-                    $('#fname').attr('class','form-control');
-                }
-
-                // LastName
-                if(lastname)
-                {
-                    $('#lnamearr').text('').show();
-                    $('#lname').attr('class','form-control is-invalid');
-                    $('#lnamearr').text(lastname);
-                }
-                else
-                {
-                    $('#lnamearr').text('').hide();
-                    $('#lname').attr('class','form-control');
-                }
-
-                // Email
-                if(email)
-                {
-                    $('#emailarr').text('').show();
-                    $('#email').attr('class','form-control is-invalid');
-                    $('#emailarr').text(email);
-                }
-                else
-                {
-                    $('#emailarr').text('').hide();
-                    $('#email').attr('class','form-control');
-                }
-
-                // Phone No
-                if(phone)
-                {
-                    $('#phonearr').text('').show();
-                    $('#phone').attr('class','form-control is-invalid');
-                    $('#phonearr').text(phone);
-                }
-                else
-                {
-                    $('#phonearr').text('').hide();
-                    $('#phone').attr('class','form-control');
-                }
-
-            }
-        });
-
-    }
-    // End Guest Checkout
 
     // Checkout
     $('#button-payment-method').on('click',function()
@@ -1046,12 +963,6 @@ span.check_btn:before {
                 {
                     alert('success');
                     var new_url = response.success_url;
-                    window.location = new_url;
-                }
-
-                if(response.guest_success_cod == 1)
-                {
-                    var new_url = response.guest_success_url;
                     window.location = new_url;
                 }
             }
@@ -1087,6 +998,7 @@ span.check_btn:before {
                 $('#address_1').val(response.address_1);
                 $('#address_2').val(response.address_2);
                 $('#postcode').val(response.postcode);
+                $('#city').val(response.city);
             }
         });
      }
@@ -1149,8 +1061,44 @@ span.check_btn:before {
         });
     }
 
+    $('#voucher_form').submit(function(e){
+        e.preventDefault();
+        var  voucher=$("input[name='voucher']").val();
+
+        $.ajax({
+                type: 'post',
+                url: '{{ url("voucher") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'voucher': voucher,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    console.log(result);
+                }
+        });
+    });
+
+    $('#coupon_form').submit(function(e){
+        e.preventDefault();
+        var  coupon=$("input[name='coupon']").val();
+
+        $.ajax({
+                type: 'post',
+                url: '{{ url("coupon") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'coupon': coupon,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    $('#couponError').text(result.json);
+                }
+        });
+    });
 
 </script>
 
 </html>
-
