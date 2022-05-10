@@ -851,13 +851,28 @@ span.check_btn:before {
                           <div class="col-md-5">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                    <input placeholder="Voucher Code" type="text" id="vouchercode" name="vouchercode" value="" class="w-100">
-                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                <div id="voucher" class="content">
+                                    <form action="{{route('voucher')}}" method="post" enctype="multipart/form-data" id="voucher_form">
+                                        @csrf
+                                        <div style="display: none;">Enter your gift voucher code here:&nbsp;</div>
+                                        <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                            <input type="text" name="voucher" value=""  placeholder="Voucher Code" class="w-100">
+                                            <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                            <!-- <input type="hidden" name="voucher" value="voucher"> -->
+                                        </div>
+                                        <!-- <p class="text-danger" id="couponError">dwfa</p> -->
+                                    </form>
                                 </div>
-                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                    <input placeholder="Coupon Code" type="text" id="couponcode" name="couponcode" value="" class="w-100">
-                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                <div id="coupon" class="content">
+                                    <form action="{{route('coupon')}}" method="post" enctype="multipart/form-data" id="coupon_form">
+                                    @csrf
+                                        <div style="display: none;">Enter your coupon here:&nbsp;</div>
+                                        <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                            <input type="text" name="coupon" value="" placeholder="Coupon Code" class="w-100">
+                                            <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                        </div>
+                                        <p class="text-danger" id="couponError"></p>
+                                    </form>
                                 </div>
                               </div>
                             </div>
@@ -898,8 +913,8 @@ span.check_btn:before {
                 <div class="col-md-4 mt-4">
                     <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
-                      <input type="hidden" name="total" id="total" value="{{ $total }}">
-                      <input type="button" value="Pay £ {{ $total }}" id="button-payment-method" class="btn back-bt" disabled>
+                      <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                      <input type="button" value="Pay £ {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
                     </div>
                   </div>
               </div>
@@ -1216,9 +1231,46 @@ span.check_btn:before {
             }
         });
     }
+   
+    $('#voucher_form').submit(function(e){
+        e.preventDefault();
+        var  voucher=$("input[name='voucher']").val();
+        
+        $.ajax({
+                type: 'post',
+                url: '{{ url("voucher") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'voucher': voucher,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    console.log(result);
+                }
+        });
+    });
+
+    $('#coupon_form').submit(function(e){
+        e.preventDefault();
+        var  coupon=$("input[name='coupon']").val();
+        
+        $.ajax({
+                type: 'post',
+                url: '{{ url("coupon") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'coupon': coupon,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    $('#couponError').text(result.json);
+                }
+        });
+    });
 
 
 </script>
 
 </html>
-

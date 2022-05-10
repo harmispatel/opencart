@@ -408,6 +408,8 @@ Route::post('getid', [MenuController::class, 'getid'])->name('getid');
 Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::post('voucher', [CheckoutController::class, 'voucher'])->name('voucher');
+Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 Route::get('success', [MyBasketController::class, 'success'])->name('success');
@@ -420,6 +422,7 @@ Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountr
 // Get customer Address
 Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
 Route::get('getcustomeraddress/{id}', [CheckoutController::class, 'getcustomeraddress'])->name('getcustomeraddress');
+
 
 
 

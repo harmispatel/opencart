@@ -39,12 +39,12 @@ class CheckoutController extends Controller
 
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
-        return view('frontend.pages.chechout',compact('delivery_setting'));
-
+        
         $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+        return view('frontend.pages.chechout',compact('delivery_setting','Coupon'));
 
 
-        return view('frontend.pages.chechout',['Coupon'=>$Coupon]);
+        // return view('frontend.pages.chechout',['Coupon'=>$Coupon]);
     }
 
     // Get Payment & Shipping Address By Customer Address ID
@@ -53,4 +53,21 @@ class CheckoutController extends Controller
         $address = CustomerAddress::where('address_id', '=', $id)->first();
         return response()->json($address);
     }
+
+    public function voucher(Request $request){
+      print_r($request->voucher);    
+    }
+
+    public function coupon(Request $request){
+        $Coupon=$request->coupon;
+        $couponcode=coupon::where('code',$Coupon)->first();
+        $code = isset($couponcode->code) ? $couponcode->code : '';
+       
+        if(!empty($code) || $code != ''){
+            $json ='Success: Your coupon discount has been applied!';
+        }else{
+            $json ='Warning: Coupon is either invalid, expired or reached its usage limit!';
+        }
+        return response()->json(['json'=>$json]);
+      }
 }

@@ -266,6 +266,7 @@
                                                                                                                 $firsttime = strtotime($fromtime[$key]);
                                                                                                                 $lasttime = strtotime($totime[$key]);
                                                                                                                 $today = time();
+                                                                                                                $date =date("Y-m-d");
                                                                                                                 $currentday = date('l');
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
@@ -397,6 +398,8 @@
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $key => $cart)
                                                             @php
+                                                                $date_start=$Coupon->date_start;
+                                                                $date_end=$Coupon->date_end;
                                                                 $price = $cart['price'] * $cart['quantity'];
                                                                 $subtotal += $price;
                                                                 $couponcode=($subtotal*$Coupon->discount)/100;
@@ -447,17 +450,19 @@
                                                             <span>£ {{ $subtotal }}</span>
                                                         @endif
                                                     </div>
-                                                </li>
-                                                <li class="minicart-list-item">
-                                                    <div class="minicart-list-item-innr discount">
-                                                        <label>Coupon({{ $Coupon->code }})</label>
-                                                            <span>£ -{{ $couponcode }}</span>
-                                                    </div>
-                                                </li>
+                                                </li> 
+                                                  @if(isset($mycart['size']) && !empty($mycart['size']))
+                                                  <li class="minicart-list-item">
+                                                      <div class="minicart-list-item-innr discount">
+                                                          <label>Coupon({{ $Coupon->code }})</label>
+                                                              <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                      </div>
+                                                  </li>
+                                                  @endif
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                          <span>£ {{ $total }}</span> 
+                                                          <span>£ {{ isset($total) ? $total : '' }}</span> 
                                                     </div>
                                                 </li>
                                             </ul>
@@ -823,5 +828,4 @@
 
 </script>
 </html>
-
 
