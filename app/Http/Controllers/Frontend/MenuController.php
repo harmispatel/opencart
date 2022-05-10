@@ -69,10 +69,6 @@ class MenuController extends Controller
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
 
         $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
-        // echo '<pre>';
-        // print_r($Coupon->discount);
-        // exit();
-         
 
         if(!empty($loopid) || $loopid != '')
         {
@@ -199,11 +195,11 @@ class MenuController extends Controller
         $html .= '<table class="table">';
 
         if (isset($mycart['size'])) {
-            foreach ($mycart['size'] as $cart) {
+            foreach ($mycart['size'] as $key => $cart) {
 
                 $price = $cart['price'] * $cart['quantity'];
                 $html .= '<tr>';
-                $html .= '<td><i class="fa fa-times-circle text-danger"></i></td>';
+                $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct('.$cart['product_id'].','.$key.','.$userid.')" style="cursor:pointer;"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
                 $html .= '<td>' . $cart['size'] . '</td>';
                 $html .= '<td>' . $cart['name'] . '</td>';
@@ -212,18 +208,19 @@ class MenuController extends Controller
                 $subtotal += $price;
                 $couponcode=($subtotal*$Coupon->discount)/100;
                 $total=$subtotal-$couponcode;
-               
-                
-                
+
+
+
             }
-            
-            
+
+
         }
         if (isset($mycart['withoutSize'])) {
+            $sizeid = 0;
             foreach ($mycart['withoutSize'] as $cart) {
                 $price = $cart['price'] * $cart['quantity'];
                 $html .= '<tr>';
-                $html .= '<td><i class="fa fa-times-circle text-danger"></i></td>';
+                $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct('.$cart['product_id'].','.$sizeid.','.$userid.')" style="cursor:pointer"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
                 $html .= '<td colspan="2">' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
@@ -231,12 +228,12 @@ class MenuController extends Controller
                 $subtotal += $price;
                 $couponcode=($subtotal*$Coupon->discount)/100;
                 $total=$subtotal-$couponcode;
-                
+
             }
-            
-          
+
+
         }
-      
+
 
         $html .= '</table>';
         $html2 = '';
@@ -249,7 +246,7 @@ class MenuController extends Controller
         $html4 .= '<label><b>Total to pay:</b></label>
         <span>£ '. $total . '</span>';
 
-       
+
         $headertotal = 0;
         $headertotal = $subtotal;
 
@@ -319,6 +316,237 @@ class MenuController extends Controller
     public function setDeliveyType(Request $request)
     {
         $d_type = $request->d_type;
+
+        // Check User ID
+        if(session()->has('userid'))
+        {
+            $userid = session()->get('userid');
+        }
+        else
+        {
+            $userid = 0;
+        }
+
+        // Guest User
+        if($userid == 0)
+        {
+            if(session()->has('cart1'))
+            {
+                $cart = session()->get('cart1');
+
+                if(!empty($cart) || isset($cart))
+                {
+                    // For Collection Price
+                    if($d_type == 'collection')
+                    {
+                        if(isset($cart['size']) && !empty($cart['size']))
+                        {
+                            foreach ($cart['size'] as $key => $value)
+                            {
+                                $size_id = $key;
+                                $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
+                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+
+                                if($coll_price == 0.00)
+                                {
+                                    $cart['size'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $cart['size'][$key]['price'] = $coll_price;
+                                }
+                                session()->put('cart1',$cart);
+                            }
+                        }
+
+                        if(isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                        {
+                            foreach ($cart['withoutSize'] as $key => $value)
+                            {
+                                $prod_id = $key;
+                                $prod = Product::where('product_id',$prod_id)->first();
+                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+
+                                if($coll_price == 0.00)
+                                {
+                                    $cart['withoutSize'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $cart['withoutSize'][$key]['price'] = $coll_price;
+                                }
+
+                                session()->put('cart1',$cart);
+                            }
+                        }
+                    }
+
+                    // For Delivery Price
+                    if($d_type == 'delivery')
+                    {
+                        if(isset($cart['size']) && !empty($cart['size']))
+                        {
+                            foreach ($cart['size'] as $key => $value)
+                            {
+                                $size_id = $key;
+                                $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
+                                $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+
+                                if($del_price == 0.00)
+                                {
+                                    $cart['size'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $cart['size'][$key]['price'] = $del_price;
+                                }
+                                session()->put('cart1',$cart);
+                            }
+                        }
+
+                        if(isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                        {
+                            foreach ($cart['withoutSize'] as $key => $value)
+                            {
+                                $prod_id = $key;
+                                $prod = Product::where('product_id',$prod_id)->first();
+                                $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+
+                                if($del_price == 0.00)
+                                {
+                                    $cart['withoutSize'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $cart['withoutSize'][$key]['price'] = $del_price;
+                                }
+
+                                session()->put('cart1',$cart);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(!empty($userid))
+            {
+                $customer_cart = getuserCart($userid);
+
+                if(isset($customer_cart) && !empty($customer_cart))
+                {
+                    // For Collection Price
+                    if($d_type == 'collection')
+                    {
+                        if(isset($customer_cart['size']) && !empty($customer_cart['size']))
+                        {
+                            foreach ($customer_cart['size'] as $key => $value)
+                            {
+                                $size_id = $key;
+                                $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
+                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+
+                                if($coll_price == 0.00)
+                                {
+                                    $customer_cart['size'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $customer_cart['size'][$key]['price'] = $coll_price;
+                                }
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+
+                        if(isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                        {
+                            foreach ($customer_cart['withoutSize'] as $key => $value)
+                            {
+                                $prod_id = $key;
+                                $prod = Product::where('product_id',$prod_id)->first();
+                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+
+                                if($coll_price == 0.00)
+                                {
+                                    $customer_cart['withoutSize'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $customer_cart['withoutSize'][$key]['price'] = $coll_price;
+                                }
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+                    }
+
+                    // For Delivery Price
+                    if($d_type == 'delivery')
+                    {
+                        if(isset($customer_cart['size']) && !empty($customer_cart['size']))
+                        {
+                            foreach ($customer_cart['size'] as $key => $value)
+                            {
+                                $size_id = $key;
+                                $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
+                                $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+
+                                if($del_price == 0.00)
+                                {
+                                    $customer_cart['size'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $customer_cart['size'][$key]['price'] = $del_price;
+                                }
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+
+                        if(isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                        {
+                            foreach ($customer_cart['withoutSize'] as $key => $value)
+                            {
+                                $prod_id = $key;
+                                $prod = Product::where('product_id',$prod_id)->first();
+                                $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+
+                                if($del_price == 0.00)
+                                {
+                                    $customer_cart['withoutSize'][$key]['price'] = $prod->price;
+                                }
+                                else
+                                {
+                                    $customer_cart['withoutSize'][$key]['price'] = $del_price;
+                                }
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         session()->put('flag_post_code', $d_type);
 

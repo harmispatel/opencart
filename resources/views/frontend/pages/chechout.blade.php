@@ -394,13 +394,13 @@ span.check_btn:before {
                             <div class="login-main text-center">
                                 <div class="login-details w-100">
                                     <div class="mb-1">
-                                    <input class="form-check-input" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
+                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
                                     <label class="form-check-label" for="collect">
                                     I will collect my order
                                     </label>
                                 </div>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
+                                    <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
                                     <label class="form-check-label" for="deliver">
                                         Deliver to my address
                                     </label>
@@ -858,6 +858,26 @@ span.check_btn:before {
 
         });
 
+        $('.collection_type').click(function()
+        {
+            var d_type = $('input[name="order"]:checked').val();
+
+            $.ajax({
+                type: "post",
+                url: "{{ url('setDeliveyType') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'd_type': d_type,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+
+                }
+            });
+
+        });
+
       $('#login').click(function (e) {
         e.preventDefault();
         $('#demo').show();
@@ -1052,6 +1072,8 @@ span.check_btn:before {
             $('.address').html(response);
         }
     });
+
+
 
     // Get Payment Address By Customer Address ID
     function Getcustomeraddress() {

@@ -251,13 +251,40 @@
                                                                                         @php
                                                                                             $sizeprice = $size->id_product_price_size;
                                                                                             $productsize = $values->hasOneProduct['product_id'];
-                                                                                            $setsizeprice = $size->price;
+
+                                                                                            if($user_delivery_type == 'collection')
+                                                                                            {
+                                                                                                if(!empty($size->collection_price) && $size->collection_price != 0.00 )
+                                                                                                {
+                                                                                                    $setsizeprice = $size->collection_price;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    $setsizeprice = $size->price;
+                                                                                                }
+                                                                                            }
+                                                                                            elseif($user_delivery_type == 'delivery')
+                                                                                            {
+                                                                                                if(!empty($size->delivery_price) && $size->delivery_price != 0.00 )
+                                                                                                {
+                                                                                                    $setsizeprice = $size->delivery_price;
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    $setsizeprice = $size->price;
+                                                                                                }
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                $setsizeprice = $size->price;
+                                                                                            }
+
                                                                                         @endphp
                                                                                         <div class="options-bt">
                                                                                             <div class="row align-items-center">
                                                                                                 <div
                                                                                                     class="col-md-3">
-                                                                                                    <span>{{ html_entity_decode($size->hasOneToppingSize['size']) }}</span>
+                                                                                                    <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
                                                                                                 </div>
                                                                                                 <div class="col-md-9">
                                                                                                     @foreach ($openday as $key => $item)
@@ -307,18 +334,47 @@
                                                                                                             $lasttime = strtotime($totime[$key]);
                                                                                                             $today = time();
                                                                                                             $currentday = date('l');
+
+                                                                                                            if($user_delivery_type == 'collection')
+                                                                                                            {
+                                                                                                                if(!empty($values->hasOneProduct['collection_price']) && $values->hasOneProduct['collection_price'] != 0.00 )
+                                                                                                                {
+                                                                                                                    $setprice = $values->hasOneProduct['collection_price'];
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    $setprice = $values->hasOneProduct['price'];
+                                                                                                                }
+                                                                                                            }
+                                                                                                            elseif($user_delivery_type == 'delivery')
+                                                                                                            {
+                                                                                                                if(!empty($values->hasOneProduct['delivery_price']) && $values->hasOneProduct['delivery_price'] != 0.00 )
+                                                                                                                {
+                                                                                                                    $setprice = $values->hasOneProduct['delivery_price'];
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    $setprice = $values->hasOneProduct['price'];
+                                                                                                                }
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                $setprice = $values->hasOneProduct['price'];
+                                                                                                            }
+
                                                                                                         @endphp
+
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
                                                                                                                 <a onclick="showId({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
                                                                                                                 <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $values->hasOneProduct['price'] }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
@@ -450,14 +506,14 @@
                                                 </li>
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr discount">
-                                                        <label>Coupon({{ $Coupon->code }})</label>
-                                                            <span>£ -{{ $couponcode }}</span>
+                                                        <label>Coupon({{ isset($Coupon->code) ? $Coupon->code : '' }})</label>
+                                                            <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
                                                     </div>
                                                 </li>
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                          <span>£ {{ $total }}</span> 
+                                                          <span>£ {{ isset($total) ? $total : '' }}</span>
                                                     </div>
                                                 </li>
                                             </ul>

@@ -852,6 +852,8 @@ function getuserCart($userId)
 
 function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
 {
+    $delivery_type = session()->get('flag_post_code');
+
     if(isset($cart))
     {
         $arr = $cart;
@@ -866,13 +868,78 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
         $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
             $q->where('id_product_price_size', $sizeid);
         }])->where('product_id', $productid)->first();
-        $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+
+        if($delivery_type == 'collection')
+        {
+            $coll_price = isset($product->hasOneToppingProductPriceSize['collection_price']) ? $product->hasOneToppingProductPriceSize['collection_price'] : 0.00;
+
+            if($coll_price == 0.00)
+            {
+                $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+            }
+            else
+            {
+                $data['price'] = $coll_price;
+            }
+
+        }
+        elseif($delivery_type == 'delivery')
+        {
+            $del_price = isset($product->hasOneToppingProductPriceSize['delivery_price']) ? $product->hasOneToppingProductPriceSize['delivery_price'] : 0.00;
+
+            if($del_price == 0.00)
+            {
+                $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+            }
+            else
+            {
+                $data['price'] = $del_price;
+            }
+
+        }
+        else
+        {
+            $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+        }
+
         $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
     }
     else
     {
-        $product = Product::select('product_id', 'image', 'price')->with(['hasOneProductDescription'])->where('product_id', $productid)->first();
-        $data['price'] = $product->price;
+        $product = Product::with(['hasOneProductDescription'])->where('product_id', $productid)->first();
+
+        if($delivery_type == 'collection')
+        {
+            $coll_price = isset($product->collection_price) ? $product->collection_price : 0.00;
+
+            if($coll_price == 0.00)
+            {
+                $data['price'] = $product->price;
+            }
+            else
+            {
+                $data['price'] = $coll_price;
+            }
+
+        }
+        elseif($delivery_type == 'delivery')
+        {
+            $del_price = isset($product->delivery_price) ? $product->delivery_price : 0.00;
+
+            if($del_price == 0.00)
+            {
+                $data['price'] = $product->price;
+            }
+            else
+            {
+                $data['price'] = $del_price;
+            }
+        }
+        else
+        {
+            $data['price'] = $product->price;
+        }
+
     }
     $data['name'] = $product->hasOneProductDescription['name'];
     $data['description'] = $product->hasOneProductDescription['description'];
@@ -915,6 +982,8 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
 
 function addtoCart($request,$productid,$sizeid)
 {
+    $delivery_type = session()->get('flag_post_code');
+
     if(session()->has('cart1'))
     {
         $arr = session()->get('cart1');
@@ -929,13 +998,77 @@ function addtoCart($request,$productid,$sizeid)
         $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
             $q->where('id_product_price_size', $sizeid);
         }])->where('product_id', $productid)->first();
-        $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+
+        if($delivery_type == 'collection')
+        {
+            $coll_price = isset($product->hasOneToppingProductPriceSize['collection_price']) ? $product->hasOneToppingProductPriceSize['collection_price'] : 0.00;
+
+            if($coll_price == 0.00)
+            {
+                $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+            }
+            else
+            {
+                $data['price'] = $coll_price;
+            }
+
+        }
+        elseif($delivery_type == 'delivery')
+        {
+            $del_price = isset($product->hasOneToppingProductPriceSize['delivery_price']) ? $product->hasOneToppingProductPriceSize['delivery_price'] : 0.00;
+
+            if($del_price == 0.00)
+            {
+                $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+            }
+            else
+            {
+                $data['price'] = $del_price;
+            }
+
+        }
+        else
+        {
+            $data['price'] = $product->hasOneToppingProductPriceSize['price'];
+        }
+
         $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
     }
     else
     {
-        $product = Product::select('product_id', 'image', 'price')->with(['hasOneProductDescription'])->where('product_id', $productid)->first();
-        $data['price'] = $product->price;
+        $product = Product::with(['hasOneProductDescription'])->where('product_id', $productid)->first();
+
+        if($delivery_type == 'collection')
+        {
+            $coll_price = isset($product->collection_price) ? $product->collection_price : 0.00;
+
+            if($coll_price == 0.00)
+            {
+                $data['price'] = $product->price;
+            }
+            else
+            {
+                $data['price'] = $coll_price;
+            }
+
+        }
+        elseif($delivery_type == 'delivery')
+        {
+            $del_price = isset($product->delivery_price) ? $product->delivery_price : 0.00;
+
+            if($del_price == 0.00)
+            {
+                $data['price'] = $product->price;
+            }
+            else
+            {
+                $data['price'] = $del_price;
+            }
+        }
+        else
+        {
+            $data['price'] = $product->price;
+        }
     }
     $data['name'] = $product->hasOneProductDescription['name'];
     $data['description'] = $product->hasOneProductDescription['description'];
@@ -943,6 +1076,7 @@ function addtoCart($request,$productid,$sizeid)
     $data['model'] = $product->model;
     $data['quantity'] = 1;
     $data['product_id'] = $productid;
+
     if ($sizeid != 0)
     {
         if(isset($arr['size'][$sizeid]))
