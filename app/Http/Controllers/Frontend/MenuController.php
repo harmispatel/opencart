@@ -23,11 +23,7 @@ class MenuController extends Controller
     public function index()
     {
         $front_store_id = session('front_store_id');
-        $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
-        // $front_store_id =  $current_theme['store_id'];
-        $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->get();
@@ -52,7 +48,7 @@ class MenuController extends Controller
         }
 
 
-        return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas'=>$areas,'Coupon'=>$Coupon]);
+        return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas'=>$areas]);
     }
 
     public function getid(Request $request)
@@ -67,12 +63,6 @@ class MenuController extends Controller
         $sizeid = $request->size_id;
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
-
-        $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
-        // echo '<pre>';
-        // print_r($Coupon->discount);
-        // exit();
-         
 
         if(!empty($loopid) || $loopid != '')
         {
@@ -210,14 +200,8 @@ class MenuController extends Controller
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
-                $couponcode=($subtotal*$Coupon->discount)/100;
-                $total=$subtotal-$couponcode;
-               
-                
-                
+
             }
-            
-            
         }
         if (isset($mycart['withoutSize'])) {
             foreach ($mycart['withoutSize'] as $cart) {
@@ -229,27 +213,17 @@ class MenuController extends Controller
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
                 $subtotal += $price;
-                $couponcode=($subtotal*$Coupon->discount)/100;
-                $total=$subtotal-$couponcode;
-                
             }
-            
-          
         }
-      
+
 
         $html .= '</table>';
         $html2 = '';
-        $html3 ='';
-        $html4 ='';
+        $html3 = '';
         $html2 .= '<label>Sub-Total</label>
         <span>£ ' . $subtotal . '</span>';
-        $html3 .= '<label>Coupon('.$Coupon->code.')</label>
-        <span>£ -' .$couponcode. '</span>';
-        $html4 .= '<label><b>Total to pay:</b></label>
-        <span>£ '. $total . '</span>';
 
-       
+
         $headertotal = 0;
         $headertotal = $subtotal;
 
@@ -259,11 +233,6 @@ class MenuController extends Controller
             'subtotal' => $html2,
             'headertotal' => $headertotal,
             'cart_products' => $cart_products,
-            'discount' => $html3,
-            'total' => $html4,
-            'coupon' =>$Coupon,
-
-
         ]);
     }
 
