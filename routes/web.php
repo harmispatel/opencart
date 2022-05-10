@@ -443,4 +443,6 @@ Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])
 Route::post('customerdetailupdate', [CustomerAuthController::class, 'customerdetailupdate'])->name('customerdetailupdate');
 
 
+// Guest User
+Route::post('registerguestuser', [CustomerAuthController::class, 'registerguestuser'])->name('registerguestuser');
 

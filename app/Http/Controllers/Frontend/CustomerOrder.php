@@ -49,7 +49,92 @@ class CustomerOrder extends Controller
         {
             if($user_id == 0)
             {
-                exit;
+                $guest_user = session()->get('guest_user');
+
+                if(!empty($guest_user))
+                {
+                    $guestUserCart = session()->get('cart1');
+
+                    // Guest Order
+                    $gorder = new Orders;
+                    $gorder->invoice_no = 0;
+                    $gorder->invoice_prefix = 'INV-2013-00';
+                    $gorder->store_id = $front_store_id;
+                    $gorder->store_name = isset($store->name) ? $store->name : '';
+                    $gorder->store_url = isset($store->url) ? $store->url : '';
+                    $gorder->customer_id = 0;
+                    $gorder->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 0;
+                    $gorder->firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                    $gorder->email = isset($guest_user['email']) ? $guest_user['email'] : '';
+                    $gorder->telephone = isset($guest_user['phone']) ? $guest_user['phone'] : '';
+                    $gorder->fax = isset($request->fax) ? $request->fax : '';
+                    $gorder->payment_firstname = '';
+                    $gorder->payment_lastname = '';
+                    $gorder->payment_company = '';
+                    $gorder->payment_company_id = 0;
+                    $gorder->payment_tax_id = 0;
+                    $gorder->payment_address_1 = '';
+                    $gorder->payment_address_2 = '';
+                    $gorder->payment_city = '';
+                    $gorder->payment_postcode = '';
+                    $gorder->payment_country = 0;
+                    $gorder->payment_country_id = 0;
+                    $gorder->payment_zone = 0;
+                    $gorder->payment_zone_id = 0;
+                    $gorder->payment_address_format = '';
+                    $gorder->payment_method = 'Cash on Delivery';
+                    $gorder->payment_code = 'cod';
+                    $gorder->shipping_firstname = '';
+                    $gorder->shipping_lastname = '';
+                    $gorder->shipping_company = '';
+                    $gorder->shipping_address_1 = '';
+                    $gorder->shipping_address_2 = '';
+                    $gorder->shipping_city = '';
+                    $gorder->shipping_postcode = '';
+                    $gorder->shipping_country = 0;
+                    $gorder->shipping_country_id = 0;
+                    $gorder->shipping_zone = 0;
+                    $gorder->shipping_zone_id = 0;
+                    $gorder->shipping_address_format = '';
+                    $gorder->shipping_method = '';
+                    $gorder->shipping_code = '';
+                    $gorder->comment = '';
+                    $gorder->total = $total;
+                    $gorder->order_status_id = 5; //Complete
+                    $gorder->message = '';
+                    $gorder->accepted_time = '';
+                    $gorder->affiliate_id = 0;
+                    $gorder->commission = 0.00;
+                    $gorder->language_id = 1;
+                    $gorder->currency_id = 1;
+                    $gorder->currency_code = "GBP";
+                    $gorder->currency_value = "1.00000000";
+                    $gorder->ip = isset($request->ip) ? $request->ip : '';
+                    $gorder->forwarded_ip = '';
+                    $gorder->user_agent = '';
+                    $gorder->accept_language = '';
+                    $gorder->date_added = date('Y-m-d h:i:s');
+                    $gorder->date_modified = date('Y-m-d h:i:s');
+                    $gorder->flag_post_code = session()->get('flag_post_code');
+                    $gorder->free_item = '';
+                    $gorder->timedelivery = '';
+                    $gorder->gender_id = '';
+                    $gorder->clear_history = 0;
+                    $gorder->is_delete = 0;
+                    $gorder->save();
+
+                    session()->forget('cart1');
+                    session()->forget('guest_user');
+
+                    $new_url = $currentURL.'/success';
+
+                    return response()->json([
+                        'guest_success_cod' => 1,
+                        'guest_success_url' => $new_url,
+                    ]);
+
+                }
             }
             else
             {

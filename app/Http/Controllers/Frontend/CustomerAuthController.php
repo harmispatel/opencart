@@ -18,15 +18,20 @@ class CustomerAuthController extends Controller
         ]);
 
         $ajaxlogin = $request->ajaxlogin;
+
         $email = $request->email;
-        $pass = $request->password;
+        $pass = md5($request->password);
         $emailexist = Customer::where('email', '=', $email)->exists();
+
         $customername = Customer::select('customer_id','firstname','password')->where('email', '=', $email)->first();
 
-         if ($emailexist && md5($pass) == $customername->password) {
-                session()->put('username', $customername->firstname);
-                session()->put('userid', $customername->customer_id);
-            if ($ajaxlogin == 1) {
+         if (($emailexist == 1) && ($pass == $customername->password))
+         {
+            session()->put('username', $customername->firstname);
+            session()->put('userid', $customername->customer_id);
+
+            if ($ajaxlogin == 1)
+            {
                 return response()->json([
                     'status' => 1,
                 ]);
@@ -35,13 +40,16 @@ class CustomerAuthController extends Controller
                 return redirect()->back();
             }
          }
-         else{
-             if ($ajaxlogin == 1) {
-                 return response()->json([
-                     'status' => 0,
-                 ]);
+         else
+         {
+             if ($ajaxlogin == 1)
+             {
+                return response()->json([
+                    'status' => 0,
+                ]);
              }
-             else {
+             else
+             {
                 return redirect()->back();
              }
          }
@@ -228,4 +236,30 @@ class CustomerAuthController extends Controller
         return redirect()->route('member');
 
     }
+
+
+    public function registerguestuser(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+        ]);
+
+        $data['title'] = isset($request->title) ? $request->title : 1;
+        $data['fname'] = isset($request->firstname) ? $request->firstname : '';
+        $data['lname'] = isset($request->lastname) ? $request->lastname : '';
+        $data['email'] = isset($request->email) ? $request->email : '';
+        $data['phone'] = isset($request->phone) ? $request->phone : '';
+
+        session()->put('guest_user',$data);
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
 }
