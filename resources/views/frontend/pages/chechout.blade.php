@@ -652,7 +652,7 @@ span.check_btn:before {
                                     <div class="login-details-inr fas fa-map-marker-alt w-100">
                                         <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="" class="w-100">
                                     </div>
-                                    <div class="login-details-inr fas fa-address-card w-100">
+                                    {{-- <div class="login-details-inr fas fa-address-card w-100">
                                         <div class="w-50 d-inline-block float-start">
                                             <select name="area" id="area" class="w-100">
                                                 <option disabled selected>Select Area</option>
@@ -663,7 +663,7 @@ span.check_btn:before {
                                         <div class="w-50 d-inline-block float-end">
                                             <input placeholder="Postcode" type="number" id="postcode" name="postcode" value="" class="w-100">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="login-details-inr fas fa-phone-alt w-100">
                                         <input placeholder="Phone Number" type="number" id="phone" name="phone" value="" class="w-100">
                                     </div>
