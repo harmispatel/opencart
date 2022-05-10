@@ -451,13 +451,13 @@
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr discount">
                                                         <label>Coupon({{ $Coupon->code }})</label>
-                                                            <span>£ -{{ $couponcode }}</span>
+                                                            <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
                                                     </div>
                                                 </li>
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                          <span>£ {{ $total }}</span> 
+                                                          <span>£ {{ isset($total) ? $total : '' }}</span>
                                                     </div>
                                                 </li>
                                             </ul>
