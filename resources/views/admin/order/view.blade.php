@@ -274,7 +274,10 @@
                                                             @foreach ($productorders as $order)
                                                                 <tr>
                                                                     <td>
-                                                                        <a href="{{ route('editproduct',$order->product_id) }}">
+                                                                        @if (!empty($order->name_size_base))
+                                                                            <span class="text-info">{{ html_entity_decode($order->name_size_base) }}</span> -
+                                                                        @endif
+                                                                        <a class="text-primary">
                                                                             {{ htmlspecialchars_decode($order->name) }}
                                                                         </a>
                                                                         @php
