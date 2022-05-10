@@ -369,18 +369,23 @@ span.check_btn:before {
                         <div class="col-md-4">
                           <div class="login-main text-center">
                             <div class="login-details w-100">
+                                @if ($delivery_setting['enable_delivery'] != 'collection')
+                                <div>
+                                    <input class="form-check-input" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
+                                    <label class="form-check-label" for="deliver">
+                                        Deliver to my address
+                                    </label>
+                                </div>
+                                @endif
+
+                                @if ($delivery_setting['enable_delivery'] != 'delivery')
                                 <div class="mb-1">
-                                <input class="form-check-input" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
-                                <label class="form-check-label" for="collect">
-                                  I will collect my order
-                                </label>
-                            </div>
-                            <div>
-                                <input class="form-check-input" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
-                                <label class="form-check-label" for="deliver">
-                                    Deliver to my address
-                                </label>
-                            </div>
+                                    <input class="form-check-input" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
+                                    <label class="form-check-label" for="collect">
+                                      I will collect my order
+                                    </label>
+                                </div>
+                                @endif
                             </div>
                           </div>
                         </div>
@@ -388,6 +393,20 @@ span.check_btn:before {
                     </div>
                   </div>
                 </div>
+                @php
+                    // $startTime = '09:00:00';
+                    // $endTime = '11:00:00';
+
+                    // $times = array();
+                    // $last_inc = $startTime;
+                    // while($last_inc < $endTime) {
+                    //     $times[] = $last_inc;
+                    //     $last_inc = date("H:i:s", strtotime("+15 minutes $last_inc"));
+                    // }
+                    // echo '<pre>';
+                    // // print_r($times);
+                    // exit();
+                @endphp
                 <div class="accordion-item" id="colloctiontime">
                   <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
                       <span>Collection Time</span>
@@ -400,6 +419,78 @@ span.check_btn:before {
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
                                 <select class="time_select w-100" name="time_method">
+                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option>
+                                @php
+                                    $collectiondays = $openclose['collectiondays'];
+                                    $collectionfrom = $openclose['collectionfrom'];
+                                    $collectionto = $openclose['collectionto'];
+                                @endphp
+                                {{-- @foreach ($collectiondays as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item) - 1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+
+                                            $firsttime = strtotime("+15 minutes",$fromtime[$key]);
+                                            $lasttime = strtotime("+15 minutes",$totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                        @endphp
+                                        @if ($currentday == $value)
+                                            <option value="{{ $key }}">{{ $collectionfrom[$key] }} - {{ strtotime("+15 minutes" ,$totime[$key]) }}</option>
+                                        @elseif ($firstday == "Every day")
+                                            <option value="{{ $key }}">{{ $collectionfrom[$key] }} - {{ $collectionto[$key] }}</option>
+                                        @endif
+                                    @endforeach
+                                @endforeach --}}
+                                {{-- @php
+                                    // $startTime = '09:00:00';
+                                    // $endTime = '11:00:00';
+
+                                    $startTime = strtotime($fromtime[$key]);
+                                    $endTime = strtotime($totime[$key]);
+                                    $today = time();
+                                    $currentday = date('l');
+
+                                    $times = array();
+                                    $last_inc = $startTime;
+                                    while($last_inc < $endTime) {
+                                        $times[] = $last_inc;
+                                        $last_inc = date("H:i:s", strtotime("+15 minutes $last_inc"));
+                                        echo '<option selected="selected" id="time_0" value="'.$times.'">'.$times.'</option>';
+                                    }
+                                    // echo '<pre>';
+                                    // print_r($times);
+                                    // exit();
+                                @endphp --}}
+                                {{-- @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+
+                                        @endphp
+
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value)
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value)
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                @endforeach --}}
+                                </select>
+                                {{-- <select class="time_select w-100" name="time_method">
                                   <option selected="selected" id="time_0" value="ASAP">ASAP</option>
                                   <option id="time_1" value="13:45-14:00">13:45-14:00</option>
                                   <option id="time_2" value="14:00-14:15">14:00-14:15</option>
@@ -442,7 +533,7 @@ span.check_btn:before {
                                   <option id="time_39" value="23:15-23:30">23:15-23:30</option>
                                   <option id="time_40" value="23:30-23:45">23:30-23:45</option>
                                   <option id="time_41" value="23:45-00:00">23:45-00:00</option>
-                                </select>
+                                </select> --}}
                               </div>
                             </div>
                           </div>
@@ -540,6 +631,7 @@ span.check_btn:before {
                                     <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="" class="w-100">
                                 </div>
                                 <div class="login-details-inr fas fa-address-card w-100">
+                                @if($delivery_setting['delivery_option'] == 'area')
                                     <div class="w-50 d-inline-block float-start">
                                         <select name="area" id="area" class="w-100">
                                             <option disabled selected>Select Area</option>
@@ -547,6 +639,11 @@ span.check_btn:before {
                                             <option value="2">uk</option>
                                         </select>
                                     </div>
+                                @else
+                                    <div class="w-50 d-inline-block float-start">
+                                        <input placeholder="city" type="test" id="city" name="city" value="" class="w-100">
+                                    </div>
+                                @endif
                                     <div class="w-50 d-inline-block float-end">
                                         <input placeholder="Postcode" type="number" id="postcode" name="postcode" value="" class="w-100">
                                     </div>
@@ -779,19 +876,17 @@ span.check_btn:before {
     {{-- Footer --}}
     @include('frontend.theme.theme' . $theme_id . '.footer')
     {{-- End Footer --}}
-@else
+    @else
     {{-- Footer --}}
     @include('frontend.theme.theme1.footer')
     {{-- End Footer --}}
-@endif
+    @endif
 
 {{-- JS --}}
 @include('frontend.include.script')
 {{-- END JS --}}
 
 </body>
-
-</html>
 
 <script>
 
@@ -917,6 +1012,7 @@ span.check_btn:before {
                 $('#address_1').val(response.address_1);
                 $('#address_2').val(response.address_2);
                 $('#postcode').val(response.postcode);
+                $('#city').val(response.city);
             }
         });
      }
@@ -980,3 +1076,6 @@ span.check_btn:before {
     }
 
 </script>
+
+</html>
+

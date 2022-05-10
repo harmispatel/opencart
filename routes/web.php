@@ -402,9 +402,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
-Route::get('member', [MemberController::class, 'member'])->name('member');
-Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
-Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
