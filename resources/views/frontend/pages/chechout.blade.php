@@ -563,7 +563,7 @@ span.check_btn:before {
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $key => $cart)
                                                             @php
-                                                                $price = ($cart['price']) * ($cart['quantity']);
+                                                                $price = ($cart['main_price']) * ($cart['quantity']);
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -584,7 +584,7 @@ span.check_btn:before {
                                                                     </div>
                                                                 </td>
                                                                 <td class="align-middle">
-                                                                    <b>{{ $cart['price'] }}</b>
+                                                                    <b>{{ $cart['main_price'] }}</b>
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <b>{{ number_format($price,2) }}</b>
@@ -599,7 +599,7 @@ span.check_btn:before {
                                                     @if (isset($mycart['withoutSize']))
                                                         @foreach ($mycart['withoutSize'] as $key=> $cart)
                                                             @php
-                                                                $price = $cart['price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -620,7 +620,7 @@ span.check_btn:before {
                                                                     </div>
                                                                 </td>
                                                                 <td class="align-middle">
-                                                                    <b>{{ $cart['price'] }}</b>
+                                                                    <b>{{ $cart['main_price'] }}</b>
                                                                 </td>
                                                                 <td class="align-middle">
                                                                     <b>{{ number_format($price,2) }}</b>
