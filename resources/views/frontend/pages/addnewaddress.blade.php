@@ -111,14 +111,14 @@ $mycart = session()->get('cart1');
             </div>
             <div class="reg-details">
                 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
               <form action="{{ route('newaddress') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="reg-details-inr">

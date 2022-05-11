@@ -42,6 +42,9 @@ class CheckoutController extends Controller
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
+        // $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+        // return view('frontend.pages.chechout',compact('delivery_setting','Coupon'));
+
         $openclose = openclosetime();
         // collection
         $deliverydays = $openclose['deliverydays'];

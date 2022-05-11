@@ -410,6 +410,7 @@ Route::post('reservation', [ReservationController::class, 'index'])->name('reser
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('voucher', [CheckoutController::class, 'voucher'])->name('voucher');
 Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
+Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 Route::get('success', [MyBasketController::class, 'success'])->name('success');

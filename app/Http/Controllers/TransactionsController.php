@@ -20,7 +20,7 @@ class TransactionsController extends Controller
         $startdate = $request->start;
         $enddate = $request->end;
         $current_store_id = currentStoreId();
-        $customerorder = CustomerOrder::with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+        $customerorder = CustomerOrder::where('store_id',$current_store_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
 
 
         $html = '';
@@ -40,7 +40,7 @@ class TransactionsController extends Controller
                 $html .= '</td>';
                 $html .= '<td>';
                 $rejected_sum = CustomerOrder::where('store_id', $order->store_id)->where('order_status', 7)->whereBetween('customer_order.order_date', [$startdate, $enddate])->sum('order_amount');
-                $html .= number_format($rejected_sum,2);
+                $html .= '£'.number_format($rejected_sum,2);
                 $html .= '</td>';
                 $html .= '<td>';
                 $accepted_count = CustomerOrder::where('store_id', $order->store_id)->where('order_status', 15)->whereBetween('customer_order.order_date', [$startdate, $enddate])->count();
@@ -48,13 +48,13 @@ class TransactionsController extends Controller
                 $html .= '</td>';
                 $html .= '<td>';
                 $accepted_totle = CustomerOrder::where('store_id', $order->store_id)->where('order_status', 15)->whereBetween('customer_order.order_date', [$startdate, $enddate])->sum('order_amount');
-                $html .= number_format($accepted_totle,2);
+                $html .= '£'.number_format($accepted_totle,2);
                 $html .= '</td>';
                 $html .= '<td>';
                 $commission = CustomerOrder::where('store_id', $order->store_id)->whereBetween('customer_order.order_date', [$startdate, $enddate])->sum('commission_fee');
-                $html .= number_format($commission,2);
+                $html .= '£'.number_format($commission,2);
                 $html .= '</td>';
-                $html .= '<td>' . number_format($accepted_totle - $commission,2) . '</td>';
+                $html .= '<td>£' . number_format($accepted_totle - $commission,2) . '</td>';
                 $html .= '</tr>';
 
                 $rejected_count_tot += $rejected_count;
@@ -70,11 +70,11 @@ class TransactionsController extends Controller
             return response()->json([
                 'customerorder' => $html,
                 'reject' => $rejected_count_tot,
-                'reject_amt' => number_format($rejected_sum_amt,2),
+                'reject_amt' => '£'.number_format($rejected_sum_amt,2),
                 'accept' => $accepted_count_tot,
-                'accept_tot' => number_format($accepted_tot,2),
-                'commission' => number_format($commission_tot,2),
-                'totle' => number_format($totle,2),
+                'accept_tot' => '£'.number_format($accepted_tot,2),
+                'commission' => '£'.number_format($commission_tot,2),
+                'totle' => '£'.number_format($totle,2),
             ]);
         } else {
             // $html .= '<tr>';

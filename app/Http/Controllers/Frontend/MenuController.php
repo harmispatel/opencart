@@ -27,7 +27,7 @@ class MenuController extends Controller
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
         // $front_store_id =  $current_theme['store_id'];
-        $Coupon =Coupon::select('name','code','discount','date_start','date_end')->where('store_id',$front_store_id)->first();
+        $Coupon =Coupon::select('name','code','discount','date_start','date_end','type')->where('store_id',$front_store_id)->first();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->get();
@@ -68,7 +68,7 @@ class MenuController extends Controller
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
 
-        $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+        $Coupon =Coupon::select('name','code','discount','type')->where('store_id',$front_store_id)->first();
 
 
 
@@ -212,6 +212,15 @@ class MenuController extends Controller
                 $subtotal += $price;
                 $couponcode=($subtotal*$Coupon->discount)/100;
                 $total=$subtotal-$couponcode+$delivery_charge;
+                if ($Coupon->type == 'P') {
+                    $couponcode = ($subtotal * $Coupon->discount) / 100;
+                }
+                if ($Coupon->type == 'F') {
+                    $couponcode = $subtotal - $Coupon->discount;
+                }
+                $total=$subtotal-$couponcode;
+
+
 
             }
 
@@ -229,8 +238,13 @@ class MenuController extends Controller
                 $html .= '</tr>';
                 $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                 $subtotal += $price;
-                $couponcode=($subtotal*$Coupon->discount)/100;
-                $total=$subtotal-$couponcode+$delivery_charge;
+                if ($Coupon->type == 'P') {
+                    $couponcode = ($subtotal * $Coupon->discount) / 100;
+                }
+                if ($Coupon->type == 'F') {
+                    $couponcode = $subtotal - $Coupon->discount;
+                }
+                $total=$subtotal-$couponcode;
 
             }
 
@@ -317,6 +331,18 @@ class MenuController extends Controller
         ]);
 
     }
+    public function getcoupon(Request $request){
+        $Coupon=$request->coupon;
+        $couponcode=coupon::where('code',$Coupon)->first();
+        $code = isset($couponcode->code) ? $couponcode->code : '';
+
+        if(!empty($code) || $code != ''){
+            $json ='Your coupon discount has been applied!';
+        }else{
+            $json ='Coupon not valid';
+        }
+        return response()->json(['json'=>$json]);
+      }
 
 
     public function setDeliveyType(Request $request)

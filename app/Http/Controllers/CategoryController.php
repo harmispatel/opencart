@@ -175,17 +175,17 @@ class CategoryController extends Controller
         {
             $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/category'), $imgname);
+            $categoryurl = $currentURL.'/public/admin/category/';
+            $catdetail->image = $categoryurl.$imgname;
         }
 
         // Insert Banner Image
         if ($request->hasFile('banner')) {
             $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
             $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
+            $bannerurl = $currentURL.'/public/admin/category/banner/';
+            $catdetail->img_banner = $bannerurl.$bannerimgname;
         }
-        $categoryurl = $currentURL.'/public/admin/category/';
-        $bannerurl = $currentURL.'/public/admin/category/banner/';
-        $catdetail->image = $categoryurl.$imgname;
-        $catdetail->img_banner = $bannerurl.$bannerimgname;
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0){
             $availibleday = implode(",", $days);

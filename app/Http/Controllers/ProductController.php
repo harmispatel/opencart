@@ -389,7 +389,7 @@ class ProductController extends Controller
         $product_description->product_id = $product->product_id;
         $product_description->language_id = 1;
         $product_description->name = isset($request->product) ? $request->product : 0;
-        $product_description->description = isset($request->description) ? $request->description : 0;
+        $product_description->description = isset($request->description) ? $request->description : '';
         $product_description->meta_description = isset($request->meta_description) ? $request->meta_description : '';
         $product_description->meta_keyword = isset($request->meta_keyword) ? $request->meta_keyword : '';
         $product_description->tag = isset($request->tag) ? $request->tag : '';
@@ -419,7 +419,7 @@ class ProductController extends Controller
         $category_id = $request->category_id;
 
 
-        $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->get();
+        $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->orderBy('product_id','DESC')->get();
 
         $headers = ToppingSize::where('id_category', $category_id)->get();
         $head_count = count($headers) + 1;
@@ -716,7 +716,7 @@ class ProductController extends Controller
 
         $product_description->language_id = 1;
         $product_description->name = isset($request->product) ? $request->product : 0;
-        $product_description->description = isset($request->description) ? $request->description : 0;
+        $product_description->description = isset($request->description) ? $request->description : '';
         $product_description->meta_description = isset($request->meta_description) ? $request->meta_description : '';
         $product_description->meta_keyword = isset($request->meta_keyword) ? $request->meta_keyword : '';
         $product_description->tag = isset($request->tag) ? $request->tag : '';
@@ -764,15 +764,15 @@ class ProductController extends Controller
                 $toppingProductPriceSize->update();
             }
         } else {
-            foreach ($mainprice as $key => $mainprices) {
-                $toppingProductPriceSize = new ToppingProductPriceSize;
-                $toppingProductPriceSize->id_size = $id_size[$key];
-                $toppingProductPriceSize->id_product = $product_id;
-                $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                $toppingProductPriceSize->save();
-            }
+            // foreach ($mainprice as $key => $mainprices) {
+            //     $toppingProductPriceSize = new ToppingProductPriceSize;
+            //     $toppingProductPriceSize->id_size = $id_size[$key];
+            //     $toppingProductPriceSize->id_product = $product_id;
+            //     $toppingProductPriceSize->price = $mainprices;
+            //     $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+            //     $toppingProductPriceSize->collection_price = $collectionprice[$key];
+            //     $toppingProductPriceSize->save();
+            // }
         }
 
 
