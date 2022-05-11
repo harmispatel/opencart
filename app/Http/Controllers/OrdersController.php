@@ -81,6 +81,10 @@ class OrdersController extends Controller
             $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
                 $query->where('store_id',$current_store_id);
             })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+
+            // echo '<pre>';
+            // print_r($posts);
+            // exit();
         }
 
         $data = array();
@@ -191,7 +195,7 @@ class OrdersController extends Controller
         $orderstatus = OrderStatus::all();
 
         // Get Totals By Order ID
-        $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+        $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->orderBy('order_total_id','DESC')->get();
 
         // Get Total Products By Order ID
         $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();

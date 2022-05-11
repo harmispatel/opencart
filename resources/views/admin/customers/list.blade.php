@@ -150,6 +150,7 @@
         serverSide: true,
         "scrollX": true,
         ajax: "{{ route('getcustomers') }}",
+        "order": [0, 'desc'],
         columns: [
             {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
             {data: 'customer_name', name: 'customer_name'},

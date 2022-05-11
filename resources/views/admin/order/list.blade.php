@@ -134,6 +134,7 @@
             "type": "POST",
             "data":{ _token: "{{csrf_token()}}"},
         },
+        "order": [0, 'desc'],
         columns: [
                     {"data" : "checkbox", "orderable":false, "bSortable": true},
                     {"data" : "order_id"},
