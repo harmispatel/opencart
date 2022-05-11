@@ -413,76 +413,11 @@ span.check_btn:before {
                           <div class="login-main text-center">
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
-                                {{-- <select class="time_select w-100" name="time_method">
-                                    <option selected="selected" id="time_0" value="ASAP">ASAP</option> --}}
-                                @php
-                                    $collectiondays = $openclose['collectiondays'];
-                                    $collectionfrom = $openclose['collectionfrom'];
-                                    $collectionto   = $openclose['collectionto'];
-                                @endphp
-                                @foreach ($collectiondays as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            date_default_timezone_set("Asia/kolkata");
-                                            $today = date('l');
-                                            $currenttime = time();
-                                            $start = strtotime($collectionfrom[$key]);
-                                            $end = strtotime($collectionto[$key]);
-                                        @endphp
-                                            @for ($i=$currenttime; $i<=$end - 15*60; $i = $i + 15*60)
-                                                @if ($today == $value)
-                                                    <option value="{{ date('H:i',$i).'-'.date('H:i',$i + 15*60)}}">{{ date('H:i',$i).'-'.date('H:i',$i + 15*60)}}</option>
-                                                @elseif ($firstday == "Every day")
-                                                    <option value="{{ date('H:i',$i).'-'.date('H:i',$i)}}">{{ date('H:i',$i).'-'.date('H:i',$i)}}</option>
-                                                @endif
-                                            @endfor
+                                <select class="time_select w-100" name="time_method">
+                                    @foreach ($collectionresult as $key => $colecttime)
+                                        <option id="time_{{ $key }}" {{ ($key == 0) ? 'selected' : '' }} value="{{ $colecttime }}">{{ $colecttime }}</option>
                                     @endforeach
-                                @endforeach
-                                {{-- </select> --}}
-                                {{-- <select class="time_select w-100" name="time_method">
-                                  <option selected="selected" id="time_0" value="ASAP">ASAP</option>
-                                  <option id="time_1" value="13:45-14:00">13:45-14:00</option>
-                                  <option id="time_2" value="14:00-14:15">14:00-14:15</option>
-                                  <option id="time_3" value="14:15-14:30">14:15-14:30</option>
-                                  <option id="time_4" value="14:30-14:45">14:30-14:45</option>
-                                  <option id="time_5" value="14:45-15:00">14:45-15:00</option>
-                                  <option id="time_6" value="15:00-15:15">15:00-15:15</option>
-                                  <option id="time_7" value="15:15-15:30">15:15-15:30</option>
-                                  <option id="time_8" value="15:30-15:45">15:30-15:45</option>
-                                  <option id="time_9" value="15:45-16:00">15:45-16:00</option>
-                                  <option id="time_10" value="16:00-16:15">16:00-16:15</option>
-                                  <option id="time_11" value="16:15-16:30">16:15-16:30</option>
-                                  <option id="time_12" value="16:30-16:45">16:30-16:45</option>
-                                  <option id="time_13" value="16:45-17:00">16:45-17:00</option>
-                                  <option id="time_14" value="17:00-17:15">17:00-17:15</option>
-                                  <option id="time_15" value="17:15-17:30">17:15-17:30</option>
-                                  <option id="time_16" value="17:30-17:45">17:30-17:45</option>
-                                  <option id="time_17" value="17:45-18:00">17:45-18:00</option>
-                                  <option id="time_18" value="18:00-18:15">18:00-18:15</option>
-                                  <option id="time_19" value="18:15-18:30">18:15-18:30</option>
-                                  <option id="time_20" value="18:30-18:45">18:30-18:45</option>
-                                  <option id="time_21" value="18:45-19:00">18:45-19:00</option>
-                                  <option id="time_22" value="19:00-19:15">19:00-19:15</option>
-                                  <option id="time_23" value="19:15-19:30">19:15-19:30</option>
-                                  <option id="time_24" value="19:30-19:45">19:30-19:45</option>
-                                  <option id="time_25" value="19:45-20:00">19:45-20:00</option>
-                                  <option id="time_26" value="20:00-20:15">20:00-20:15</option>
-                                  <option id="time_27" value="20:15-20:30">20:15-20:30</option>
-                                  <option id="time_28" value="20:30-20:45">20:30-20:45</option>
-                                  <option id="time_29" value="20:45-21:00">20:45-21:00</option>
-                                  <option id="time_30" value="21:00-21:15">21:00-21:15</option>
-                                  <option id="time_31" value="21:15-21:30">21:15-21:30</option>
-                                  <option id="time_32" value="21:30-21:45">21:30-21:45</option>
-                                  <option id="time_33" value="21:45-22:00">21:45-22:00</option>
-                                  <option id="time_34" value="22:00-22:15">22:00-22:15</option>
-                                  <option id="time_35" value="22:15-22:30">22:15-22:30</option>
-                                  <option id="time_36" value="22:30-22:45">22:30-22:45</option>
-                                  <option id="time_37" value="22:45-23:00">22:45-23:00</option>
-                                  <option id="time_38" value="23:00-23:15">23:00-23:15</option>
-                                  <option id="time_39" value="23:15-23:30">23:15-23:30</option>
-                                  <option id="time_40" value="23:30-23:45">23:30-23:45</option>
-                                  <option id="time_41" value="23:45-00:00">23:45-00:00</option>
-                                </select> --}}
+                                </select>
                               </div>
                             </div>
                           </div>
@@ -503,48 +438,9 @@ span.check_btn:before {
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
                                 <select class="time_select w-100" name="time_method">
-                                  <option selected="selected" id="time_0" value="ASAP">ASAP</option>
-                                  <option id="time_1" value="13:45-14:00">13:45-14:00</option>
-                                  <option id="time_2" value="14:00-14:15">14:00-14:15</option>
-                                  <option id="time_3" value="14:15-14:30">14:15-14:30</option>
-                                  <option id="time_4" value="14:30-14:45">14:30-14:45</option>
-                                  <option id="time_5" value="14:45-15:00">14:45-15:00</option>
-                                  <option id="time_6" value="15:00-15:15">15:00-15:15</option>
-                                  <option id="time_7" value="15:15-15:30">15:15-15:30</option>
-                                  <option id="time_8" value="15:30-15:45">15:30-15:45</option>
-                                  <option id="time_9" value="15:45-16:00">15:45-16:00</option>
-                                  <option id="time_10" value="16:00-16:15">16:00-16:15</option>
-                                  <option id="time_11" value="16:15-16:30">16:15-16:30</option>
-                                  <option id="time_12" value="16:30-16:45">16:30-16:45</option>
-                                  <option id="time_13" value="16:45-17:00">16:45-17:00</option>
-                                  <option id="time_14" value="17:00-17:15">17:00-17:15</option>
-                                  <option id="time_15" value="17:15-17:30">17:15-17:30</option>
-                                  <option id="time_16" value="17:30-17:45">17:30-17:45</option>
-                                  <option id="time_17" value="17:45-18:00">17:45-18:00</option>
-                                  <option id="time_18" value="18:00-18:15">18:00-18:15</option>
-                                  <option id="time_19" value="18:15-18:30">18:15-18:30</option>
-                                  <option id="time_20" value="18:30-18:45">18:30-18:45</option>
-                                  <option id="time_21" value="18:45-19:00">18:45-19:00</option>
-                                  <option id="time_22" value="19:00-19:15">19:00-19:15</option>
-                                  <option id="time_23" value="19:15-19:30">19:15-19:30</option>
-                                  <option id="time_24" value="19:30-19:45">19:30-19:45</option>
-                                  <option id="time_25" value="19:45-20:00">19:45-20:00</option>
-                                  <option id="time_26" value="20:00-20:15">20:00-20:15</option>
-                                  <option id="time_27" value="20:15-20:30">20:15-20:30</option>
-                                  <option id="time_28" value="20:30-20:45">20:30-20:45</option>
-                                  <option id="time_29" value="20:45-21:00">20:45-21:00</option>
-                                  <option id="time_30" value="21:00-21:15">21:00-21:15</option>
-                                  <option id="time_31" value="21:15-21:30">21:15-21:30</option>
-                                  <option id="time_32" value="21:30-21:45">21:30-21:45</option>
-                                  <option id="time_33" value="21:45-22:00">21:45-22:00</option>
-                                  <option id="time_34" value="22:00-22:15">22:00-22:15</option>
-                                  <option id="time_35" value="22:15-22:30">22:15-22:30</option>
-                                  <option id="time_36" value="22:30-22:45">22:30-22:45</option>
-                                  <option id="time_37" value="22:45-23:00">22:45-23:00</option>
-                                  <option id="time_38" value="23:00-23:15">23:00-23:15</option>
-                                  <option id="time_39" value="23:15-23:30">23:15-23:30</option>
-                                  <option id="time_40" value="23:30-23:45">23:30-23:45</option>
-                                  <option id="time_41" value="23:45-00:00">23:45-00:00</option>
+                                    @foreach ($dileveryresult as $key => $deliverytime)
+                                        <option id="time_{{$key}}" value="{{$deliverytime}}">{{ $deliverytime }}</option>
+                                    @endforeach
                                 </select>
                               </div>
                             </div>
