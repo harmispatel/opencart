@@ -191,6 +191,7 @@ class MenuController extends Controller
 
         $html = '';
         $subtotal = 0;
+        $delivery_charge = 0;
 
 
 
@@ -207,9 +208,10 @@ class MenuController extends Controller
                 $html .= '<td>' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
+                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                 $subtotal += $price;
                 $couponcode=($subtotal*$Coupon->discount)/100;
-                $total=$subtotal-$couponcode;
+                $total=$subtotal-$couponcode+$delivery_charge;
 
             }
 
@@ -225,9 +227,10 @@ class MenuController extends Controller
                 $html .= '<td colspan="2">' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
+                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                 $subtotal += $price;
                 $couponcode=($subtotal*$Coupon->discount)/100;
-                $total=$subtotal-$couponcode;
+                $total=$subtotal-$couponcode+$delivery_charge;
 
             }
 
@@ -239,12 +242,15 @@ class MenuController extends Controller
         $html2 = '';
         $html3 ='';
         $html4 ='';
+        $html5 = '';
         $html2 .= '<label>Sub-Total</label>
         <span>£ '.$subtotal.'</span>';
         $html3 .= '<label>Coupon('.$Coupon->code.')</label>
         <span>£ -' .$couponcode. '</span>';
         $html4 .= '<label><b>Total to pay:</b></label>
         <span>£ '. $total . '</span>';
+        $html5 .= '<label><b>Delivery Charge:</b></label>
+        <span>£ '. $delivery_charge . '</span>';
 
 
         $headertotal = 0;
@@ -259,7 +265,7 @@ class MenuController extends Controller
             'discount' => $html3,
             'total' => $html4,
             'coupon' =>$Coupon,
-
+            'delivery_charge' =>$html5,
 
         ]);
     }
@@ -315,6 +321,14 @@ class MenuController extends Controller
 
     public function setDeliveyType(Request $request)
     {
+
+        $currentURL = URL::to("/");
+        $current_theme = themeID($currentURL);
+        $current_theme_id = $current_theme['theme_id'];
+        $front_store_id =  $current_theme['store_id'];
+
+        $Coupon =Coupon::where('store_id',$front_store_id)->first();
+
         $d_type = $request->d_type;
 
         // Check User ID
@@ -359,6 +373,26 @@ class MenuController extends Controller
                                 $prod = Product::where('product_id',$prod_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
                                 $cart['withoutSize'][$key]['del_price'] = $del_price;
+                                session()->put('cart1',$cart);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(isset($cart['size']) && !empty($cart['size']))
+                        {
+                            foreach ($cart['size'] as $key => $value)
+                            {
+                                $cart['size'][$key]['del_price'] = 0.00;
+                                session()->put('cart1',$cart);
+                            }
+                        }
+
+                        if(isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                        {
+                            foreach ($cart['withoutSize'] as $key => $value)
+                            {
+                                $cart['withoutSize'][$key]['del_price'] = 0.00;
                                 session()->put('cart1',$cart);
                             }
                         }
@@ -411,15 +445,118 @@ class MenuController extends Controller
                             }
                         }
                     }
+                    else
+                    {
+                        if(isset($customer_cart['size']) && !empty($customer_cart['size']))
+                        {
+                            foreach ($customer_cart['size'] as $key => $value)
+                            {
+                                $customer_cart['size'][$key]['del_price'] = 0.00;
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+
+                        if(isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                        {
+                            foreach ($customer_cart['withoutSize'] as $key => $value)
+                            {
+                                $customer_cart['withoutSize'][$key]['del_price'] = 0.00;
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+                    }
                 }
             }
         }
 
 
+        // Get New Delivery Total & Total
+        $del_total = 0;
+        $coupontotal = 0;
+        $sub_total = 0;
+
+        if($userid == 0)
+        {
+            if(session()->has('cart1'))
+            {
+                $cart = session()->get('cart1');
+
+                if(!empty($cart) || isset($cart))
+                {
+                    if(isset($cart['size']) && !empty($cart['size']))
+                    {
+                        foreach ($cart['size'] as $key => $value)
+                        {
+                            $del_total += $value['del_price'];
+                            $sub_total += $value['main_price'] * $value['quantity'];
+                        }
+                    }
+
+                    if(isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                    {
+                        foreach ($cart['withoutSize'] as $key => $value)
+                        {
+                            $del_total += $value['del_price'];
+                            $sub_total += $value['main_price'] * $value['quantity'];
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(!empty($userid))
+            {
+                $customer_cart = getuserCart($userid);
+
+                if(isset($customer_cart) && !empty($customer_cart))
+                {
+                    if(isset($customer_cart['size']) && !empty($customer_cart['size']))
+                    {
+                        foreach ($customer_cart['size'] as $key => $value)
+                        {
+                            $del_total += $value['del_price'];
+                            $sub_total += $value['main_price'] * $value['quantity'];
+                        }
+                    }
+
+                    if(isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                    {
+                        foreach ($customer_cart['withoutSize'] as $key => $value)
+                        {
+                            $del_total += $value['del_price'];
+                            $sub_total += $value['main_price'] * $value['quantity'];
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($Coupon->type == 'P') {
+            $coupontotal = ($sub_total * $Coupon->discount) / 100;
+        }
+        if ($Coupon->type == 'F') {
+            $coupontotal = $sub_total - $Coupon->discount;
+        }
+
+        $total_pay = $sub_total - $coupontotal;
+
         session()->put('flag_post_code', $d_type);
 
         return response()->json([
             'success' => 1,
+            'delivery_charge' => '£ '.$del_total,
+            'total_pay' => '£ '.$total_pay,
         ]);
     }
 

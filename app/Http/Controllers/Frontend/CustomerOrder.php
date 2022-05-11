@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\OrderCart;
+use App\Models\OrderHistory;
 use App\Models\OrderProduct;
 use App\Models\Orders;
+use App\Models\OrderTotal;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -21,9 +24,14 @@ class CustomerOrder extends Controller
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
-        $delivery_type = session('flag_post_code');
+        $delivery_type = session()->get('flag_post_code');
 
         $total = $request->total;
+        $subtotal = $request->subtotal;
+        $delivery_charge = $request->delivery_charge;
+        $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
+        $couponname = $request->couponname;
+
 
         // Store Details
         $store = Store::where('store_id',$front_store_id)->first();
@@ -117,7 +125,7 @@ class CustomerOrder extends Controller
                         $gorder->currency_id = 1;
                         $gorder->currency_code = "GBP";
                         $gorder->currency_value = "1.00000000";
-                        $gorder->ip = isset($request->ip) ? $request->ip : '';
+                        $gorder->ip = $_SERVER['REMOTE_ADDR'];
                         $gorder->forwarded_ip = '';
                         $gorder->user_agent = '';
                         $gorder->accept_language = '';
@@ -145,8 +153,8 @@ class CustomerOrder extends Controller
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['price'];
-                                    $gorder_product->total = $cart['price'] *  $cart['quantity'];
+                                    $gorder_product->price = $cart['main_price'];
+                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
@@ -166,8 +174,8 @@ class CustomerOrder extends Controller
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['price'];
-                                    $gorder_product->total = $cart['price'] *  $cart['quantity'];
+                                    $gorder_product->price = $cart['main_price'];
+                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
@@ -189,14 +197,67 @@ class CustomerOrder extends Controller
                         $gorder_to_cart->session_order = $base64;
                         $gorder_to_cart->save();
 
+
+                        // Guest Order History
+                        $gorderhistory = new OrderHistory;
+                        $gorderhistory->order_id = $gorder->order_id;
+                        $gorderhistory->order_status_id = 5; //Complete
+                        $gorderhistory->notify = 1;
+                        $gorderhistory->comment = '';
+                        $gorderhistory->date_added = date('Y-m-d h:i:s');
+                        $gorderhistory->save();
+
+                        // Order Delivery
+                        $gorderdelivery = new OrderTotal;
+                        $gorderdelivery->order_id = $gorder->order_id;
+                        $gorderdelivery->code = 'delivery';
+                        $gorderdelivery->title = 'Delivery';
+                        $gorderdelivery->text = '£ 0.00';
+                        $gorderdelivery->value = 0.00;
+                        $gorderdelivery->sort_order = 0;
+                        $gorderdelivery->save();
+
+                        // Coupon Code
+                        if($couponcode != 0)
+                        {
+                            $gordercoupon = new OrderTotal;
+                            $gordercoupon->order_id = $gorder->order_id;
+                            $gordercoupon->code = 'coupon';
+                            $gordercoupon->title = 'Coupon('.$couponname.')';
+                            $gordercoupon->text = '£ -'.$couponcode;
+                            $gordercoupon->value = '-'.$couponcode;
+                            $gordercoupon->sort_order = 0;
+                            $gordercoupon->save();
+                        }
+
+                        // Subtotal
+                        $gordersubtotal = new OrderTotal;
+                        $gordersubtotal->order_id = $gorder->order_id;
+                        $gordersubtotal->code = 'sub_total';
+                        $gordersubtotal->title = 'Sub-Total';
+                        $gordersubtotal->text = '£ '.$subtotal;
+                        $gordersubtotal->value = $subtotal;
+                        $gordersubtotal->sort_order = 0;
+                        $gordersubtotal->save();
+
+                        // Total to Pay
+                        $gordertotal = new OrderTotal;
+                        $gordertotal->order_id = $gorder->order_id;
+                        $gordertotal->code = 'total';
+                        $gordertotal->title = 'Total to Pay';
+                        $gordertotal->text = '£ '.$total;
+                        $gordertotal->value = $total;
+                        $gordertotal->sort_order = 0;
+                        $gordertotal->save();
+
                         session()->forget('cart1');
                         session()->forget('guest_user');
 
                         $new_url = $currentURL.'/success';
 
                         return response()->json([
-                            'guest_success_cod' => 1,
-                            'guest_success_url' => $new_url,
+                            'success' => 1,
+                            'success_url' => $new_url,
                         ]);
 
                     }
@@ -290,8 +351,8 @@ class CustomerOrder extends Controller
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['price'];
-                                $order_product->total = $cart['price'] *  $cart['quantity'];
+                                $order_product->price = $cart['main_price'];
+                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
@@ -311,8 +372,8 @@ class CustomerOrder extends Controller
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['price'];
-                                $order_product->total = $cart['price'] *  $cart['quantity'];
+                                $order_product->price = $cart['main_price'];
+                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
@@ -335,10 +396,62 @@ class CustomerOrder extends Controller
                     $customer_update->cart = '';
                     $customer_update->update();
 
-                    $new_url = $currentURL;
+                    // Order History
+                    $orderhistory = new OrderHistory;
+                    $orderhistory->order_id = $order->order_id;
+                    $orderhistory->order_status_id = 5; //Complete
+                    $orderhistory->notify = 1;
+                    $orderhistory->comment = '';
+                    $orderhistory->date_added = date('Y-m-d h:i:s');
+                    $orderhistory->save();
+
+                    // Order Delivery
+                    $orderdelivery = new OrderTotal;
+                    $orderdelivery->order_id = $order->order_id;
+                    $orderdelivery->code = 'delivery';
+                    $orderdelivery->title = 'Delivery';
+                    $orderdelivery->text = '£ 0.00';
+                    $orderdelivery->value = 0.00;
+                    $orderdelivery->sort_order = 0;
+                    $orderdelivery->save();
+
+                    // Coupon Code
+                    if($couponcode != 0)
+                    {
+                        $ordercoupon = new OrderTotal;
+                        $ordercoupon->order_id = $order->order_id;
+                        $ordercoupon->code = 'coupon';
+                        $ordercoupon->title = 'Coupon('.$couponname.')';
+                        $ordercoupon->text = '£ -'.$couponcode;
+                        $ordercoupon->value = '-'.$couponcode;
+                        $ordercoupon->sort_order = 0;
+                        $ordercoupon->save();
+                    }
+
+                    // Subtotal
+                    $ordersubtotal = new OrderTotal;
+                    $ordersubtotal->order_id = $order->order_id;
+                    $ordersubtotal->code = 'sub_total';
+                    $ordersubtotal->title = 'Sub-Total';
+                    $ordersubtotal->text = '£ '.$subtotal;
+                    $ordersubtotal->value = $subtotal;
+                    $ordersubtotal->sort_order = 0;
+                    $ordersubtotal->save();
+
+                    // Total to Pay
+                    $ordertotal = new OrderTotal;
+                    $ordertotal->order_id = $order->order_id;
+                    $ordertotal->code = 'total';
+                    $ordertotal->title = 'Total to Pay';
+                    $ordertotal->text = '£ '.$total;
+                    $ordertotal->value = $total;
+                    $ordertotal->sort_order = 0;
+                    $ordertotal->save();
+
+                    $new_url = $currentURL.'/success';
 
                     return response()->json([
-                        'success_cod' => 1,
+                        'success' => 1,
                         'success_url' => $new_url,
                     ]);
                 }

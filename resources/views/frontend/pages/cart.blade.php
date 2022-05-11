@@ -130,7 +130,7 @@
                                     @if (isset($mycart['size']))
                                         @foreach ($mycart['size'] as $key => $cart)
                                             @php
-                                                $price = ($cart['price']) * ($cart['quantity']);
+                                                $price = ($cart['main_price']) * ($cart['quantity']);
                                                 $couponcode=($subtotal*$Coupon->discount)/100;
                                                 $total=$subtotal-$couponcode;
                                             @endphp
@@ -153,7 +153,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ $cart['price'] }}</b>
+                                                    <b>{{ $cart['main_price'] }}</b>
                                                 </td>
                                                 <td class="align-middle">
                                                     <b>{{ number_format($price,2) }}</b>
@@ -170,7 +170,7 @@
                                     @if (isset($mycart['withoutSize']))
                                         @foreach ($mycart['withoutSize'] as $key=> $cart)
                                             @php
-                                                $price = $cart['price'] * $cart['quantity'];
+                                                $price = $cart['main_price'] * $cart['quantity'];
                                             @endphp
                                             <tr>
                                                 <td>
@@ -191,7 +191,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ $cart['price'] }}</b>
+                                                    <b>{{ $cart['main_price'] }}</b>
                                                 </td>
                                                 <td class="align-middle">
                                                     <b>{{ number_format($price,2) }}</b>

@@ -9,4 +9,5 @@ class OrderTotal extends Model
 {
     use HasFactory;
     protected $table = "oc_order_total";
+    public $timestamps = false;
 }

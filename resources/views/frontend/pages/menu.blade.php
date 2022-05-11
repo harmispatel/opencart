@@ -418,7 +418,7 @@
                                                                 <td>
                                                                     <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
                                                                 </td>
-                                                                <td>{{ $cart['quantity'] }}</td>
+                                                                <td>{{ $cart['quantity'] }}x</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
                                                                 <td>{{ $cart['name'] }}</td>
                                                                 <td>£{{ $price }}</td>
@@ -444,7 +444,7 @@
                                                                 <td>
                                                                     <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer"></i>
                                                                 </td>
-                                                                <td>{{ $cart['quantity'] }}</td>
+                                                                <td>{{ $cart['quantity'] }}x</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
                                                                 <td>£{{ $price }}</td>
                                                             </tr>
@@ -476,7 +476,7 @@
                                                     </li>
                                                 @endif
                                                 <li class="minicart-list-item">
-                                                    <div class="minicart-list-item-innr sub-total">
+                                                    <div class="minicart-list-item-innr del_charge">
                                                         <label>Delivery Charge</label>
                                                         <span>£ {{ $delivery_charge }}</span>
                                                     </div>
@@ -734,25 +734,6 @@
 </script>
 
 <script>
-    // $(document).ready(function() {
-    //     $('.options-btn').on('click', function(e) {
-    //         e.preventDefault()
-    //         $('.hide-carttext').hide();
-
-    //         $('.show-carttext').show(function() {
-    //             setTimeout(function() {
-    //                 $('.hide-carttext').hide();
-    //             }, 2000);
-    //         });
-    //         // $('.hide-carttext').show();
-
-    //         // $('.hide-carttext').show();
-
-    //     });
-
-    // });
-</script>
-<script>
     function showId(product, sizeprice, uid)
     {
         var sizeid = sizeprice;
@@ -793,12 +774,14 @@
                 $('#cart_products').html('');
                 $('.discount').html('');
                 $('.pirce-value').html('');
+                $('.del_charge').html('');
                 $('.empty-box').append(result.html);
                 $('.sub-total').append(result.subtotal);
                 $('#cart_products').append(result.cart_products);
                 $('.discount').append(result.discount);
                 $('.total').append(result.total);
                 $('.pirce-value').append(result.headertotal);
+                $('.del_charge').append(result.delivery_charge);
             }
         });
     }

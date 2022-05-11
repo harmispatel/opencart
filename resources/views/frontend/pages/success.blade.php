@@ -24,19 +24,6 @@ $mycart = session()->get('cart1');
 </head>
 
 <body>
-    <!-- Modal -->
-    <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered w-25">
-            <div class="modal-content">
-                <div class="modal-body p-5 text-danger">
-                    Sorry we are close now!
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End Model --}}
 
     {{-- User Delivery --}}
     <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $user_delivery_type }}">
@@ -48,7 +35,7 @@ $mycart = session()->get('cart1');
         } else {
             $theme_id = 1;
         }
-        
+
         $social = session('social_site');
         $social_site = isset($social) ? $social : '#';
     @endphp
@@ -96,11 +83,27 @@ $mycart = session()->get('cart1');
         <div class="container">
             <div class="basket-inr">
                 <div id="content" class="ybc-statusorder">
-                    <h1 id="ybcthankyou" align="center">THANK YOU FOR YOUR ORDER</h1>
-                    <div id="ybcnotification">
-                        <p class="ybc-wait" align="center">Connecting to restaurant, this may take few minutes ..</p>
-                        <p class="ybc-confund" align="center">If you do not like to wait, you can always come back to this link
-                            below to check your order status</p>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h1>THANK YOU FOR YOUR ORDER</h1>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 m-auto">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <th>YOUR ORDER ID</th>
+                                            <th>:</th>
+                                            <td>12345678910</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <a href="{{ route('home') }}">Return to Home</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,6 +126,8 @@ $mycart = session()->get('cart1');
 
 </html>
 
-<script>
-
-</script>
+<script type="text/javascript" >
+    function preventBack(){window.history.forward();}
+     setTimeout("preventBack()", 0);
+     window.onunload=function(){null};
+ </script>

@@ -112,6 +112,74 @@ class HomeController extends Controller
 
         if($type == 'collection')
         {
+
+            if($userid == 0)
+            {
+                if(session()->has('cart1'))
+                {
+                    $cart = session()->get('cart1');
+
+                    if(!empty($cart) || isset($cart))
+                    {
+                        if(isset($cart['size']) && !empty($cart['size']))
+                        {
+                            foreach ($cart['size'] as $key => $value)
+                            {
+                                $cart['size'][$key]['del_price'] = 0.00;
+                                session()->put('cart1',$cart);
+                            }
+                        }
+
+                        if(isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                        {
+                            foreach ($cart['withoutSize'] as $key => $value)
+                            {
+                                $cart['withoutSize'][$key]['del_price'] = 0.00;
+                                session()->put('cart1',$cart);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(!empty($userid))
+                {
+                    $customer_cart = getuserCart($userid);
+
+                    if(isset($customer_cart) && !empty($customer_cart))
+                    {
+                        if(isset($customer_cart['size']) && !empty($customer_cart['size']))
+                        {
+                            foreach ($customer_cart['size'] as $key => $value)
+                            {
+                                $customer_cart['size'][$key]['del_price'] = 0.00;
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+
+                        if(isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                        {
+                            foreach ($customer_cart['withoutSize'] as $key => $value)
+                            {
+                                $customer_cart['withoutSize'][$key]['del_price'] = 0.00;
+
+                                $serial = serialize($customer_cart);
+                                $base64 = base64_encode($serial);
+                                $user = Customer::find($userid);
+                                $user->cart = $base64;
+                                $user->update();
+                            }
+                        }
+                    }
+                }
+            }
+
             session()->put('flag_post_code', 'collection');
             $json['success'] = 'collection';
             return response()->json($json);

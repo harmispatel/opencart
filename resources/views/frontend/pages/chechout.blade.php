@@ -7,6 +7,14 @@
     $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
     $template_setting = session('template_settings');
 
+    if(session()->has('guest_user'))
+    {
+        $guestlogin = session()->get('guest_user');
+    }
+    else {
+        $guestlogin = '';
+    }
+
     $userlogin = session('username');
     $customerid = session('userid');
 
@@ -200,7 +208,7 @@ span.check_btn:before {
             </ul>
         </div>
     </sidebar>
-    @if (empty($userlogin))
+    @if (empty($userlogin) && empty($guestlogin))
     <section class="check-main" id="checkout1">
         <div class="container">
           <div class="check-inr">
@@ -260,31 +268,46 @@ span.check_btn:before {
                           <div class="col-md-4">
                             <div class="login-main text-center">
                                 <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                    <select name="gender" class="w-100">
-                                        <option value="">Title</option>
-                                        <option value="1">Mr.</option>
-                                        <option value="2">Mrs.</option>
-                                        <option value="3">Ms.</option>
-                                        <option value="4">Miss.</option>
-                                        <option value="5">Dr.</option>
-                                        <option value="6">Prof.</option>
-                                    </select>
+                                    <form enctype="multipart/form-data" id="guestuser">
+                                        @csrf
+                                        <div class="login-details-inr fa fa-sort-up w-100">
+                                            <select name="title" class="w-100" id="gender">
+                                                <option value="">Title</option>
+                                                <option value="1">Mr.</option>
+                                                <option value="2">Mrs.</option>
+                                                <option value="3">Ms.</option>
+                                                <option value="4">Miss.</option>
+                                                <option value="5">Dr.</option>
+                                                <option value="6">Prof.</option>
+                                            </select>
+                                            <div class="invalid-feedback" id="genderarr" style="display: none; text-align:left;"></div>
+                                        </div>
+
+                                        <div class="login-details-inr fa fa-user w-100">
+                                            <input placeholder="FirstName" type="text" name="firstname" value="" class="w-100" id="fname">
+                                            <div class="invalid-feedback" id="fnamearr" style="display: none; text-align:left;"></div>
+                                        </div>
+
+                                        <div class="login-details-inr fa fa-user w-100">
+                                            <input placeholder="lastname" type="text" name="lastname" value="" class="w-100" id="lname">
+                                            <div class="invalid-feedback" id="lnamearr" style="display: none; text-align:left;"></div>
+                                        </div>
+
+                                        <div class="login-details-inr fa fa-envelope w-100">
+                                            <input placeholder="Email address" type="text" name="email" value="" class="w-100" id="email">
+                                            <div class="invalid-feedback" id="emailarr" style="display: none; text-align:left;"></div>
+                                        </div>
+
+                                        <div class="login-details-inr fa fa-phone-alt w-100">
+                                            <input placeholder="phone number" type="text" name="phone" value="" class="w-100" id="phone">
+                                            <div class="invalid-feedback" id="phonearr" style="display: none; text-align:left;"></div>
+                                        </div>
+
+                                        <div class="email-btn">
+                                            <a class="btn" onclick="guestCheckout();">Checkout</a>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="login-details-inr fa fa-user w-100 d-flex">
-                                  <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                  <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
-                                </div>
-                                <div class="login-details-inr fa fa-envelope w-100">
-                                  <input placeholder="Email address" type="text" name="email" value="" class="w-100">
-                                </div>
-                                <div class="login-details-inr fa fa-phone-alt w-100">
-                                  <input placeholder="phone number" type="text" name="email" value="" class="w-100">
-                                </div>
-                                <div class="email-btn">
-                                  <button type="submit" class="btn">Checkout</button>
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -549,102 +572,140 @@ span.check_btn:before {
                             <div class="login-main text-center">
                               <div class="login-details w-100">
                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
-                                    <div class="basket-product-detail">
-                                        <form>
-                                            <table class="table table-responsive">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Image</th>
-                                                        <th>Product Name</th>
-                                                        <th>Quantity</th>
-                                                        <th>Unit Price</th>
-                                                        <th>Price</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @php
-                                                        $subtotal = 0;
-                                                    @endphp
-                                                    @if (isset($mycart['size']))
-                                                        @foreach ($mycart['size'] as $key => $cart)
-                                                            @php
-                                                                $price = ($cart['main_price']) * ($cart['quantity']);
-                                                            @endphp
-                                                            <tr>
-                                                                <td>
-                                                                    <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <div class="qu-inr">
-                                                                        <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
-                                                                        <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
-                                                                            <img src="{{ asset('public/images/update.png') }}">
-                                                                        </a>
-                                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
-                                                                            <i class="fas fa-times"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <b>{{ $cart['main_price'] }}</b>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <b>{{ number_format($price,2) }}</b>
-                                                                </td>
-                                                            </tr>
-                                                            @php
-                                                                $subtotal += $price;
-                                                            @endphp
-                                                        @endforeach
-                                                    @endif
+                                <div class="basket-product-detail">
+                                    <form>
+                                        <table class="table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Product Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $subtotal = 0;
+                                                    $delivery_charge = 0;
+                                                @endphp
+                                                @if (isset($mycart['size']))
+                                                    @foreach ($mycart['size'] as $key => $cart)
+                                                        @php
+                                                            $price = ($cart['main_price']) * ($cart['quantity']);
+                                                            if(isset($cart['del_price']) && !empty($cart['del_price']))
+                                                            {
+                                                                $delivery_charge += $cart['del_price'];
+                                                            }
+                                                        @endphp
+                                                        <tr>
+                                                            <td>
+                                                                <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="qu-inr">
+                                                                    <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                    <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
+                                                                        <img src="{{ asset('public/images/update.png') }}">
+                                                                    </a>
+                                                                    <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <b>{{ $cart['main_price'] }}</b>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <b>{{ number_format($price,2) }}</b>
+                                                            </td>
+                                                        </tr>
+                                                        @php
+                                                            $subtotal += $price;
+                                                            $couponcode=($subtotal*$Coupon->discount)/100;
+                                                            $total=$subtotal-$couponcode;
+                                                        @endphp
+                                                    @endforeach
+                                                @endif
 
-                                                    @if (isset($mycart['withoutSize']))
-                                                        @foreach ($mycart['withoutSize'] as $key=> $cart)
-                                                            @php
-                                                                $price = $cart['main_price'] * $cart['quantity'];
-                                                            @endphp
-                                                            <tr>
-                                                                <td>
-                                                                    <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <b>{{ $cart['name'] }}</b>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <div class="qu-inr">
-                                                                        <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
-                                                                        <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
-                                                                            <img src="{{ asset('public/images/update.png') }}">
-                                                                        </a>
-                                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
-                                                                            <i class="fas fa-times"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <b>{{ $cart['main_price'] }}</b>
-                                                                </td>
-                                                                <td class="align-middle">
-                                                                    <b>{{ number_format($price,2) }}</b>
-                                                                </td>
-                                                            </tr>
-                                                            @php
-                                                                $subtotal += $price;
-                                                            @endphp
-                                                        @endforeach
-                                                    @endif
-                                                </tbody>
-                                            </table>
-                                        </form>
-                                    </div>
-                                @else
-                                    <div class="pb-4">
-                                        <h6>Your shopping cart is empty!</h6>
-                                    </div>
-                                @endif
+                                                @if (isset($mycart['withoutSize']))
+                                                    @foreach ($mycart['withoutSize'] as $key=> $cart)
+                                                        @php
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                            if(isset($cart['del_price']) && !empty($cart['del_price']))
+                                                            {
+                                                                $delivery_charge += $cart['del_price'];
+                                                            }
+                                                        @endphp
+                                                        <tr>
+                                                            <td>
+                                                                <img src="{{ asset('public/admin/product/'.$cart['image']) }}" width="80" height="80">
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <b>{{ $cart['name'] }}</b>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <div class="qu-inr">
+                                                                    <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                    <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
+                                                                        <img src="{{ asset('public/images/update.png') }}">
+                                                                    </a>
+                                                                    <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
+                                                                        <i class="fas fa-times"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <b>{{ $cart['main_price'] }}</b>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <b>{{ number_format($price,2) }}</b>
+                                                            </td>
+                                                        </tr>
+                                                        @php
+                                                            $subtotal += $price;
+                                                            $couponcode=($subtotal*$Coupon->discount)/100;
+                                                            $total=$subtotal-$couponcode+$delivery_charge;
+                                                        @endphp
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                                <div class="basket-total">
+                                  <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <td><b>Sub-Total:</b></td>
+                                            <td><span><b>£ {{ $subtotal }}</b></span></td>
+                                        </tr>
+                                        <tr>
+                                            @php
+                                                $couponname = isset($Coupon->code) ? $Coupon->code : '';
+                                            @endphp
+                                          <td><b>Coupon({{ $Coupon->code }}):</b></td>
+                                          <td><span><b>£ -{{ $couponcode  }}</b></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Delivery Charge :</b></td>
+                                            <td><span><b id="del_charge">£ {{ $delivery_charge  }}</b></span></td>
+                                          </tr>
+                                        <tr>
+                                            <td><b>Total to pay:</b></td>
+                                            <td><span><b id="total_pay">£ {{ $total }}</b></span></td>
+                                        </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                            @else
+                                <div class="pb-4">
+                                    <h6>Your shopping cart is empty!</h6>
+                                </div>
+                            @endif
                               </div>
                               </div>
                             </div>
@@ -726,6 +787,10 @@ span.check_btn:before {
                     <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
                       <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                      <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
+                      <input type="hidden" name="delivery_charge" id="delivery_charge" value="{{ isset($delivery_charge) ? $delivery_charge : '' }}">
+                      <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
+                      <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
                       <input type="button" value="Pay £ {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
                     </div>
                   </div>
@@ -774,6 +839,105 @@ span.check_btn:before {
 
         });
 
+         // Guest Checkout
+    function guestCheckout()
+    {
+        var form_data = new FormData(document.getElementById('guestuser'));
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('registerguestuser') }}",
+            data: form_data,
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response)
+            {
+                if(response.success == 1)
+                {
+                    location.reload();
+                }
+            },
+            error : function (message)
+            {
+                var gender = message.responseJSON.errors.title;
+                var firstname = message.responseJSON.errors.firstname;
+                var lastname = message.responseJSON.errors.lastname;
+                var email = message.responseJSON.errors.email;
+                var phone = message.responseJSON.errors.phone;
+
+                // Title
+                if(gender)
+                {
+                    $('#genderarr').text('').show();
+                    $('#gender').attr('class','form-control is-invalid');
+                    $('#genderarr').text(gender);
+                }
+                else
+                {
+                    $('#genderarr').text('').hide();
+                    $('#gender').attr('class','form-control');
+                }
+
+                // FirstName
+                if(firstname)
+                {
+                    $('#fnamearr').text('').show();
+                    $('#fname').attr('class','form-control is-invalid');
+                    $('#fnamearr').text(firstname);
+                }
+                else
+                {
+                    $('#fnamearr').text('').hide();
+                    $('#fname').attr('class','form-control');
+                }
+
+                // LastName
+                if(lastname)
+                {
+                    $('#lnamearr').text('').show();
+                    $('#lname').attr('class','form-control is-invalid');
+                    $('#lnamearr').text(lastname);
+                }
+                else
+                {
+                    $('#lnamearr').text('').hide();
+                    $('#lname').attr('class','form-control');
+                }
+
+                // Email
+                if(email)
+                {
+                    $('#emailarr').text('').show();
+                    $('#email').attr('class','form-control is-invalid');
+                    $('#emailarr').text(email);
+                }
+                else
+                {
+                    $('#emailarr').text('').hide();
+                    $('#email').attr('class','form-control');
+                }
+
+                // Phone No
+                if(phone)
+                {
+                    $('#phonearr').text('').show();
+                    $('#phone').attr('class','form-control is-invalid');
+                    $('#phonearr').text(phone);
+                }
+                else
+                {
+                    $('#phonearr').text('').hide();
+                    $('#phone').attr('class','form-control');
+                }
+
+            }
+        });
+
+    }
+    // End Guest Checkout
+
         $('.collection_type').click(function()
         {
             var d_type = $('input[name="order"]:checked').val();
@@ -788,7 +952,13 @@ span.check_btn:before {
                 dataType: "json",
                 success: function(response)
                 {
-
+                    if(response.success == 1)
+                    {
+                        $('#del_charge').text('');
+                        $('#del_charge').text(response.delivery_charge);
+                        $('#total_pay').text('');
+                        $('#total_pay').text(response.total_pay);
+                    }
                 }
             });
 
@@ -848,6 +1018,10 @@ span.check_btn:before {
     {
         var method_type = $('input[name="payment_method"]:checked').val();
         var total = $('#total').val();
+        var subtotal = $('#subtotal').val();
+        var delivery_charge = $('#delivery_charge').val();
+        var couponcode = $('#couponcode').val();
+        var couponname = $('#couponname').val();
 
         $.ajax({
             type: "post",
@@ -856,11 +1030,15 @@ span.check_btn:before {
                 "_token": "{{ csrf_token() }}",
                 'p_method': method_type,
                 'total': total,
+                'subtotal': subtotal,
+                'delivery_charge': delivery_charge,
+                'couponcode': couponcode,
+                'couponname': couponname,
             },
             dataType: "json",
             success: function(response)
             {
-                if(response.success_cod == 1)
+                if(response.success == 1)
                 {
                     alert('success');
                     var new_url = response.success_url;
