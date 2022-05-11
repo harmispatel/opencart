@@ -259,17 +259,12 @@ span.check_btn:before {
                         <div class="row justify-content-center">
                           <div class="col-md-4">
                             <div class="login-main text-center">
-                              <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-sort-up w-100">
-                                  <select name="gender" class="w-100">
-                                    <option value="">Title</option>
-                                    <option value="1">Mr.</option>
-                                    <option value="2">Mrs.</option>
-                                    <option value="3">Ms.</option>
-                                    <option value="4">Miss.</option>
-                                    <option value="5">Dr.</option>
-                                    <option value="6">Prof.</option>
-                                  </select>
+                                <div class="login-details w-100">
+                                    <div class="mb-1">
+                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
+                                    <label class="form-check-label" for="collect">
+                                    I will collect my order
+                                    </label>
                                 </div>
                                 <div class="login-details-inr fa fa-user w-100 d-flex">
                                   <input placeholder="Name" type="text" name="name" value="" class="w-50">
@@ -372,7 +367,7 @@ span.check_btn:before {
                             <div class="login-details w-100">
                                 @if ($delivery_setting['enable_delivery'] != 'collection')
                                 <div>
-                                    <input class="form-check-input" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
+                                    <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ ($userdeliverytype == 'delivery') ? 'checked' : '' }} value="delivery">
                                     <label class="form-check-label" for="deliver">
                                         Deliver to my address
                                     </label>
@@ -767,13 +762,28 @@ span.check_btn:before {
                           <div class="col-md-5">
                             <div class="login-main text-center">
                               <div class="login-details w-100">
-                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                    <input placeholder="Voucher Code" type="text" id="vouchercode" name="vouchercode" value="" class="w-100">
-                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                <div id="voucher" class="content">
+                                    <form action="{{route('voucher')}}" method="post" enctype="multipart/form-data" id="voucher_form">
+                                        @csrf
+                                        <div style="display: none;">Enter your gift voucher code here:&nbsp;</div>
+                                        <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                            <input type="text" name="voucher" value=""  placeholder="Voucher Code" class="w-100">
+                                            <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                            <!-- <input type="hidden" name="voucher" value="voucher"> -->
+                                        </div>
+                                        <!-- <p class="text-danger" id="couponError">dwfa</p> -->
+                                    </form>
                                 </div>
-                                <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                    <input placeholder="Coupon Code" type="text" id="couponcode" name="couponcode" value="" class="w-100">
-                                    <button class="ms-2 btn btn-danger">APPLY</button>
+                                <div id="coupon" class="content">
+                                    <form action="{{route('coupon')}}" method="post" enctype="multipart/form-data" id="coupon_form">
+                                    @csrf
+                                        <div style="display: none;">Enter your coupon here:&nbsp;</div>
+                                        <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
+                                            <input type="text" name="coupon" value="" placeholder="Coupon Code" class="w-100">
+                                            <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                        </div>
+                                        <p class="text-danger" id="couponError"></p>
+                                    </form>
                                 </div>
                               </div>
                             </div>
@@ -814,8 +824,8 @@ span.check_btn:before {
                 <div class="col-md-4 mt-4">
                     <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
-                      <input type="hidden" name="total" id="total" value="{{ $subtotal }}">
-                      <input type="button" value="Pay £ {{ $subtotal }}" id="button-payment-method" class="btn back-bt" disabled>
+                      <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                      <input type="button" value="Pay £ {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
                     </div>
                   </div>
               </div>
@@ -860,6 +870,26 @@ span.check_btn:before {
                 $('#dileverytime').hide();
                 $('#deliveryaddress').hide();
             }
+
+        });
+
+        $('.collection_type').click(function()
+        {
+            var d_type = $('input[name="order"]:checked').val();
+
+            $.ajax({
+                type: "post",
+                url: "{{ url('setDeliveyType') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'd_type': d_type,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+
+                }
+            });
 
         });
 
@@ -954,6 +984,8 @@ span.check_btn:before {
         }
     });
 
+
+
     // Get Payment Address By Customer Address ID
     function Getcustomeraddress() {
         var payment_address_id = $('#address').val();
@@ -1029,7 +1061,44 @@ span.check_btn:before {
         });
     }
 
+    $('#voucher_form').submit(function(e){
+        e.preventDefault();
+        var  voucher=$("input[name='voucher']").val();
+
+        $.ajax({
+                type: 'post',
+                url: '{{ url("voucher") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'voucher': voucher,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    console.log(result);
+                }
+        });
+    });
+
+    $('#coupon_form').submit(function(e){
+        e.preventDefault();
+        var  coupon=$("input[name='coupon']").val();
+
+        $.ajax({
+                type: 'post',
+                url: '{{ url("coupon") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'coupon': coupon,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    $('#couponError').text(result.json);
+                }
+        });
+    });
+
 </script>
 
 </html>
-
