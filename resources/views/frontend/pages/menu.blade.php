@@ -251,34 +251,7 @@
                                                                                         @php
                                                                                             $sizeprice = $size->id_product_price_size;
                                                                                             $productsize = $values->hasOneProduct['product_id'];
-
-                                                                                            if($user_delivery_type == 'collection')
-                                                                                            {
-                                                                                                if(!empty($size->collection_price) && $size->collection_price != 0.00 )
-                                                                                                {
-                                                                                                    $setsizeprice = $size->collection_price;
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    $setsizeprice = $size->price;
-                                                                                                }
-                                                                                            }
-                                                                                            elseif($user_delivery_type == 'delivery')
-                                                                                            {
-                                                                                                if(!empty($size->delivery_price) && $size->delivery_price != 0.00 )
-                                                                                                {
-                                                                                                    $setsizeprice = $size->delivery_price;
-                                                                                                }
-                                                                                                else
-                                                                                                {
-                                                                                                    $setsizeprice = $size->price;
-                                                                                                }
-                                                                                            }
-                                                                                            else
-                                                                                            {
-                                                                                                $setsizeprice = $size->price;
-                                                                                            }
-
+                                                                                            $setsizeprice = $size->price;
                                                                                         @endphp
                                                                                         <div class="options-bt">
                                                                                             <div class="row align-items-center">
@@ -335,34 +308,7 @@
                                                                                                             $lasttime = strtotime($totime[$key]);
                                                                                                             $today = time();
                                                                                                             $currentday = date('l');
-
-                                                                                                            if($user_delivery_type == 'collection')
-                                                                                                            {
-                                                                                                                if(!empty($values->hasOneProduct['collection_price']) && $values->hasOneProduct['collection_price'] != 0.00 )
-                                                                                                                {
-                                                                                                                    $setprice = $values->hasOneProduct['collection_price'];
-                                                                                                                }
-                                                                                                                else
-                                                                                                                {
-                                                                                                                    $setprice = $values->hasOneProduct['price'];
-                                                                                                                }
-                                                                                                            }
-                                                                                                            elseif($user_delivery_type == 'delivery')
-                                                                                                            {
-                                                                                                                if(!empty($values->hasOneProduct['delivery_price']) && $values->hasOneProduct['delivery_price'] != 0.00 )
-                                                                                                                {
-                                                                                                                    $setprice = $values->hasOneProduct['delivery_price'];
-                                                                                                                }
-                                                                                                                else
-                                                                                                                {
-                                                                                                                    $setprice = $values->hasOneProduct['price'];
-                                                                                                                }
-                                                                                                            }
-                                                                                                            else
-                                                                                                            {
-                                                                                                                $setprice = $values->hasOneProduct['price'];
-                                                                                                            }
-
+                                                                                                            $setprice = $values->hasOneProduct['price'];
                                                                                                         @endphp
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
@@ -449,6 +395,7 @@
                                             <table class="table">
                                                 @php
                                                     $subtotal = 0;
+                                                    $delivery_charge = 0;
                                                 @endphp
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
@@ -456,10 +403,16 @@
                                                             @php
                                                                 $date_start=$Coupon->date_start;
                                                                 $date_end=$Coupon->date_end;
-                                                                $price = $cart['price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
                                                                 $subtotal += $price;
                                                                 $couponcode=($subtotal*$Coupon->discount)/100;
                                                                 $total=$subtotal-$couponcode;
+
+                                                                if(isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                {
+                                                                    $delivery_charge += $cart['del_price'];
+                                                                }
+
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -472,13 +425,20 @@
                                                             </tr>
                                                         @endforeach
                                                     @endif
+
                                                     @if (isset($mycart['withoutSize']))
                                                         @foreach ($mycart['withoutSize'] as $cart)
                                                             @php
-                                                                $price = $cart['price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
                                                                 $subtotal += $price;
                                                                 $couponcode=($subtotal*$Coupon->discount)/100;
-                                                                $total=$subtotal-$couponcode;
+
+                                                                if(isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                {
+                                                                    $delivery_charge += $cart['del_price'];
+                                                                }
+
+                                                                $total=$subtotal-$couponcode+$delivery_charge;
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -507,14 +467,20 @@
                                                         @endif
                                                     </div>
                                                 </li>
-                                                  @if(isset($mycart['size']) && !empty($mycart['size']))
-                                                  <li class="minicart-list-item">
-                                                      <div class="minicart-list-item-innr discount">
-                                                          <label>Coupon({{ $Coupon->code }})</label>
-                                                              <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
-                                                      </div>
-                                                  </li>
-                                                  @endif
+                                                @if(isset($mycart['size']) && !empty($mycart['size']))
+                                                    <li class="minicart-list-item">
+                                                        <div class="minicart-list-item-innr discount">
+                                                            <label>Coupon({{ $Coupon->code }})</label>
+                                                            <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                        </div>
+                                                    </li>
+                                                @endif
+                                                <li class="minicart-list-item">
+                                                    <div class="minicart-list-item-innr sub-total">
+                                                        <label>Delivery Charge</label>
+                                                        <span>£ {{ $delivery_charge }}</span>
+                                                    </div>
+                                                </li>
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>

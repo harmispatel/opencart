@@ -199,7 +199,7 @@ class MenuController extends Controller
         if (isset($mycart['size'])) {
             foreach ($mycart['size'] as $key => $cart) {
 
-                $price = $cart['price'] * $cart['quantity'];
+                $price = $cart['main_price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct('.$cart['product_id'].','.$key.','.$userid.')" style="cursor:pointer;"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
@@ -211,8 +211,6 @@ class MenuController extends Controller
                 $couponcode=($subtotal*$Coupon->discount)/100;
                 $total=$subtotal-$couponcode;
 
-
-
             }
 
 
@@ -220,7 +218,7 @@ class MenuController extends Controller
         if (isset($mycart['withoutSize'])) {
             $sizeid = 0;
             foreach ($mycart['withoutSize'] as $cart) {
-                $price = $cart['price'] * $cart['quantity'];
+                $price = $cart['main_price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct('.$cart['product_id'].','.$sizeid.','.$userid.')" style="cursor:pointer"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
@@ -242,7 +240,7 @@ class MenuController extends Controller
         $html3 ='';
         $html4 ='';
         $html2 .= '<label>Sub-Total</label>
-        <span>£ ' . $subtotal . '</span>';
+        <span>£ '.$subtotal.'</span>';
         $html3 .= '<label>Coupon('.$Coupon->code.')</label>
         <span>£ -' .$couponcode. '</span>';
         $html4 .= '<label><b>Total to pay:</b></label>
@@ -338,51 +336,6 @@ class MenuController extends Controller
 
                 if(!empty($cart) || isset($cart))
                 {
-                    // For Collection Price
-                    if($d_type == 'collection')
-                    {
-                        if(isset($cart['size']) && !empty($cart['size']))
-                        {
-                            foreach ($cart['size'] as $key => $value)
-                            {
-                                $size_id = $key;
-                                $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
-                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-
-                                if($coll_price == 0.00)
-                                {
-                                    $cart['size'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $cart['size'][$key]['price'] = $coll_price;
-                                }
-                                session()->put('cart1',$cart);
-                            }
-                        }
-
-                        if(isset($cart['withoutSize']) && !empty($cart['withoutSize']))
-                        {
-                            foreach ($cart['withoutSize'] as $key => $value)
-                            {
-                                $prod_id = $key;
-                                $prod = Product::where('product_id',$prod_id)->first();
-                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-
-                                if($coll_price == 0.00)
-                                {
-                                    $cart['withoutSize'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $cart['withoutSize'][$key]['price'] = $coll_price;
-                                }
-
-                                session()->put('cart1',$cart);
-                            }
-                        }
-                    }
-
                     // For Delivery Price
                     if($d_type == 'delivery')
                     {
@@ -393,15 +346,7 @@ class MenuController extends Controller
                                 $size_id = $key;
                                 $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-
-                                if($del_price == 0.00)
-                                {
-                                    $cart['size'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $cart['size'][$key]['price'] = $del_price;
-                                }
+                                $cart['size'][$key]['del_price'] = $del_price;
                                 session()->put('cart1',$cart);
                             }
                         }
@@ -413,16 +358,7 @@ class MenuController extends Controller
                                 $prod_id = $key;
                                 $prod = Product::where('product_id',$prod_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-
-                                if($del_price == 0.00)
-                                {
-                                    $cart['withoutSize'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $cart['withoutSize'][$key]['price'] = $del_price;
-                                }
-
+                                $cart['withoutSize'][$key]['del_price'] = $del_price;
                                 session()->put('cart1',$cart);
                             }
                         }
@@ -438,60 +374,6 @@ class MenuController extends Controller
 
                 if(isset($customer_cart) && !empty($customer_cart))
                 {
-                    // For Collection Price
-                    if($d_type == 'collection')
-                    {
-                        if(isset($customer_cart['size']) && !empty($customer_cart['size']))
-                        {
-                            foreach ($customer_cart['size'] as $key => $value)
-                            {
-                                $size_id = $key;
-                                $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
-                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-
-                                if($coll_price == 0.00)
-                                {
-                                    $customer_cart['size'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $customer_cart['size'][$key]['price'] = $coll_price;
-                                }
-
-                                $serial = serialize($customer_cart);
-                                $base64 = base64_encode($serial);
-                                $user = Customer::find($userid);
-                                $user->cart = $base64;
-                                $user->update();
-                            }
-                        }
-
-                        if(isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
-                        {
-                            foreach ($customer_cart['withoutSize'] as $key => $value)
-                            {
-                                $prod_id = $key;
-                                $prod = Product::where('product_id',$prod_id)->first();
-                                $coll_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-
-                                if($coll_price == 0.00)
-                                {
-                                    $customer_cart['withoutSize'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $customer_cart['withoutSize'][$key]['price'] = $coll_price;
-                                }
-
-                                $serial = serialize($customer_cart);
-                                $base64 = base64_encode($serial);
-                                $user = Customer::find($userid);
-                                $user->cart = $base64;
-                                $user->update();
-                            }
-                        }
-                    }
-
                     // For Delivery Price
                     if($d_type == 'delivery')
                     {
@@ -502,15 +384,7 @@ class MenuController extends Controller
                                 $size_id = $key;
                                 $prod = ToppingProductPriceSize::where('id_product_price_size',$size_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-
-                                if($del_price == 0.00)
-                                {
-                                    $customer_cart['size'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $customer_cart['size'][$key]['price'] = $del_price;
-                                }
+                                $customer_cart['size'][$key]['del_price'] = $del_price;
 
                                 $serial = serialize($customer_cart);
                                 $base64 = base64_encode($serial);
@@ -527,15 +401,7 @@ class MenuController extends Controller
                                 $prod_id = $key;
                                 $prod = Product::where('product_id',$prod_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-
-                                if($del_price == 0.00)
-                                {
-                                    $customer_cart['withoutSize'][$key]['price'] = $prod->price;
-                                }
-                                else
-                                {
-                                    $customer_cart['withoutSize'][$key]['price'] = $del_price;
-                                }
+                                $customer_cart['withoutSize'][$key]['del_price'] = $del_price;
 
                                 $serial = serialize($customer_cart);
                                 $base64 = base64_encode($serial);

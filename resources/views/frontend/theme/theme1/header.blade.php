@@ -28,7 +28,7 @@
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price = $mycart['price'] * $mycart['quantity'];
+                $price = $mycart['main_price'] * $mycart['quantity'];
                 $headertotal += $price;
             }
         }
@@ -36,8 +36,8 @@
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                    $price = $mycart['price'] * $mycart['quantity'];
-                    $headertotal += $price;
+                $price = $mycart['main_price'] * $mycart['quantity'];
+                $headertotal += $price;
             }
         }
     }
@@ -52,7 +52,7 @@
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price = $mycart['price'] * $mycart['quantity'];
+                $price = $mycart['main_price'] * $mycart['quantity'];
                 $headertotal += $price;
             }
         }
@@ -60,7 +60,7 @@
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                $price = $mycart['price'] * $mycart['quantity'];
+                $price = $mycart['main_price'] * $mycart['quantity'];
                 $headertotal += $price;
             }
         }
