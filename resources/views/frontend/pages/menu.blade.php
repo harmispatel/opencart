@@ -1,24 +1,21 @@
 @php
-    $openclose = openclosetime();
+$openclose = openclosetime();
 
-    $template_setting = session('template_settings');
-    $social_site = session('social_site');
-    $store_setting = session('store_settings');
-    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-    $template_setting = session('template_settings');
+$template_setting = session('template_settings');
+$social_site = session('social_site');
+$store_setting = session('store_settings');
+$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+$template_setting = session('template_settings');
 
-    $user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
+$user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
 
-    if(session()->has('userid'))
-    {
-        $userid = session()->get('userid');
-        $mycart = getuserCart($userid);
-    }
-    else
-    {
-        $userid = 0;
-        $mycart = session()->get('cart1');
-    }
+if (session()->has('userid')) {
+    $userid = session()->get('userid');
+    $mycart = getuserCart($userid);
+} else {
+    $userid = 0;
+    $mycart = session()->get('cart1');
+}
 
 @endphp
 
@@ -211,7 +208,12 @@
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="true" aria-controls="collapse{{ $key }}">
+                                                        <button class="accordion-button"
+                                                            id="{{ str_replace(' ', '', $catvalue) }}" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse{{ $key }}"
+                                                            aria-expanded="true"
+                                                            aria-controls="collapse{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
@@ -252,65 +254,71 @@
                                                                                             $sizeprice = $size->id_product_price_size;
                                                                                             $productsize = $values->hasOneProduct['product_id'];
 
-                                                                                            if($user_delivery_type == 'collection')
-                                                                                            {
-                                                                                                if(!empty($size->collection_price) && $size->collection_price != 0.00 )
-                                                                                                {
+                                                                                            if ($user_delivery_type == 'collection') {
+                                                                                                if (!empty($size->collection_price) && $size->collection_price != 0.0) {
                                                                                                     $setsizeprice = $size->collection_price;
-                                                                                                }
-                                                                                                else
-                                                                                                {
+                                                                                                } else {
                                                                                                     $setsizeprice = $size->price;
                                                                                                 }
-                                                                                            }
-                                                                                            elseif($user_delivery_type == 'delivery')
-                                                                                            {
-                                                                                                if(!empty($size->delivery_price) && $size->delivery_price != 0.00 )
-                                                                                                {
+                                                                                            } elseif ($user_delivery_type == 'delivery') {
+                                                                                                if (!empty($size->delivery_price) && $size->delivery_price != 0.0) {
                                                                                                     $setsizeprice = $size->delivery_price;
-                                                                                                }
-                                                                                                else
-                                                                                                {
+                                                                                                } else {
                                                                                                     $setsizeprice = $size->price;
                                                                                                 }
-                                                                                            }
-                                                                                            else
-                                                                                            {
+                                                                                            } else {
                                                                                                 $setsizeprice = $size->price;
                                                                                             }
 
                                                                                         @endphp
                                                                                         <div class="options-bt">
-                                                                                            <div class="row align-items-center">
+                                                                                            <div
+                                                                                                class="row align-items-center">
                                                                                                 <div
                                                                                                     class="col-md-3">
                                                                                                     <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
                                                                                                 </div>
-                                                                                                <div class="col-md-9">
+                                                                                                <div
+                                                                                                    class="col-md-9">
                                                                                                     @foreach ($openday as $key => $item)
                                                                                                         @foreach ($item as $value)
                                                                                                             @php
                                                                                                                 $firsttime = strtotime($fromtime[$key]);
                                                                                                                 $lasttime = strtotime($totime[$key]);
                                                                                                                 $today = time();
-                                                                                                                $date =date("Y-m-d");
+                                                                                                                $date = date('Y-m-d');
                                                                                                                 $currentday = date('l');
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});" class="btn options-btn">
-                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added
-                                                                                                                            <i class="fa fa-check"></i>
+                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                        class="btn options-btn">
+                                                                                                                        <span
+                                                                                                                            class="sizeprice hide-carttext">£
+                                                                                                                            {{ $setsizeprice }}<i
+                                                                                                                                class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span
+                                                                                                                            class="show-carttext sizeprice"
+                                                                                                                            style="display: none;">Added
+                                                                                                                            <i
+                                                                                                                                class="fa fa-check"></i>
                                                                                                                         </span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
-                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added
-                                                                                                                            <i class="fa fa-check"></i>
+                                                                                                                    <a class="btn options-btn"
+                                                                                                                        data-bs-toggle="modal"
+                                                                                                                        data-bs-target="#storeclose">
+                                                                                                                        <span
+                                                                                                                            class="sizeprice hide-carttext">£
+                                                                                                                            {{ $setsizeprice }}<i
+                                                                                                                                class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span
+                                                                                                                            class="show-carttext sizeprice"
+                                                                                                                            style="display: none;">Added
+                                                                                                                            <i
+                                                                                                                                class="fa fa-check"></i>
                                                                                                                         </span>
                                                                                                                     </a>
                                                                                                                 @endif
@@ -323,7 +331,8 @@
                                                                                     @endforeach
                                                                                 @else
                                                                                     <div class="options-bt">
-                                                                                        <div class="row align-items-center">
+                                                                                        <div
+                                                                                            class="row align-items-center">
                                                                                             <div class="col-md-3">
                                                                                                 <span>price</span>
                                                                                             </div>
@@ -336,30 +345,19 @@
                                                                                                             $today = time();
                                                                                                             $currentday = date('l');
 
-                                                                                                            if($user_delivery_type == 'collection')
-                                                                                                            {
-                                                                                                                if(!empty($values->hasOneProduct['collection_price']) && $values->hasOneProduct['collection_price'] != 0.00 )
-                                                                                                                {
+                                                                                                            if ($user_delivery_type == 'collection') {
+                                                                                                                if (!empty($values->hasOneProduct['collection_price']) && $values->hasOneProduct['collection_price'] != 0.0) {
                                                                                                                     $setprice = $values->hasOneProduct['collection_price'];
-                                                                                                                }
-                                                                                                                else
-                                                                                                                {
+                                                                                                                } else {
                                                                                                                     $setprice = $values->hasOneProduct['price'];
                                                                                                                 }
-                                                                                                            }
-                                                                                                            elseif($user_delivery_type == 'delivery')
-                                                                                                            {
-                                                                                                                if(!empty($values->hasOneProduct['delivery_price']) && $values->hasOneProduct['delivery_price'] != 0.00 )
-                                                                                                                {
+                                                                                                            } elseif ($user_delivery_type == 'delivery') {
+                                                                                                                if (!empty($values->hasOneProduct['delivery_price']) && $values->hasOneProduct['delivery_price'] != 0.0) {
                                                                                                                     $setprice = $values->hasOneProduct['delivery_price'];
-                                                                                                                }
-                                                                                                                else
-                                                                                                                {
+                                                                                                                } else {
                                                                                                                     $setprice = $values->hasOneProduct['price'];
                                                                                                                 }
-                                                                                                            }
-                                                                                                            else
-                                                                                                            {
+                                                                                                            } else {
                                                                                                                 $setprice = $values->hasOneProduct['price'];
                                                                                                             }
 
@@ -367,16 +365,29 @@
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});"
+                                                                                                                    class="btn options-btn">
+                                                                                                                    <span
+                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
+                                                                                                                            class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span
+                                                                                                                        class="show-carttext sizeprice"
+                                                                                                                        style="display: none;">Added<i
+                                                                                                                            class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                <a class="btn options-btn"
+                                                                                                                    data-bs-toggle="modal"
+                                                                                                                    data-bs-target="#storeclose">
+                                                                                                                    <span
+                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
+                                                                                                                            class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span
+                                                                                                                        class="show-carttext sizeprice"
+                                                                                                                        style="display: none;">Added<i
+                                                                                                                            class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @endif
@@ -454,16 +465,25 @@
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $key => $cart)
                                                             @php
-                                                                $date_start=$Coupon->date_start;
-                                                                $date_end=$Coupon->date_end;
+                                                                $date_start = isset($Coupon->date_start) ? $Coupon->date_start : '';
+                                                                $date_end = isset($Coupon->date_end) ? $Coupon->date_end : '';
                                                                 $price = $cart['price'] * $cart['quantity'];
                                                                 $subtotal += $price;
-                                                                $couponcode=($subtotal*$Coupon->discount)/100;
-                                                                $total=$subtotal-$couponcode;
+
+                                                                if ($Coupon->type == 'P') {
+                                                                    $couponcode =($subtotal * $Coupon->discount) / 100;
+                                                                }
+                                                                if ($Coupon->type == 'F') {
+                                                                    $couponcode =$subtotal - $Coupon->discount;
+                                                                }
+                                                                $total = $subtotal - $couponcode;
+
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
+                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})"
+                                                                        class="fa fa-times-circle text-danger"
+                                                                        style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
@@ -477,12 +497,19 @@
                                                             @php
                                                                 $price = $cart['price'] * $cart['quantity'];
                                                                 $subtotal += $price;
-                                                                $couponcode=($subtotal*$Coupon->discount)/100;
-                                                                $total=$subtotal-$couponcode;
+                                                                if ($Coupon->type == 'P') {
+                                                                    $couponcode = ($subtotal * $Coupon->discount) / 100;
+                                                                }
+                                                                if ($Coupon->type == 'F') {
+                                                                    $couponcode = $subtotal - $Coupon->discount;
+                                                                }
+                                                                $total = $subtotal - $couponcode;
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer"></i>
+                                                                    <i class="fa fa-times-circle text-danger"
+                                                                        onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})"
+                                                                        style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
@@ -507,18 +534,47 @@
                                                         @endif
                                                     </div>
                                                 </li>
-                                                  @if(isset($mycart['size']) && !empty($mycart['size']))
-                                                  <li class="minicart-list-item">
-                                                      <div class="minicart-list-item-innr discount">
-                                                          <label>Coupon({{ $Coupon->code }})</label>
-                                                              <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
-                                                      </div>
-                                                  </li>
-                                                  @endif
+                                                @if (isset($mycart['size']) && !empty($mycart['size']))
+                                                    @if ($date >= $date_start && $date <= $date_end)
+                                                        <li class="minicart-list-item">
+                                                            <div class="minicart-list-item-innr discount">
+                                                                <label>Coupon({{ $Coupon->code }})</label>
+                                                                <span>£
+                                                                   - {{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                            </div>
+                                                            <label class="addcoupon"><a
+                                                                    style="color: #ff0000;font-size:14px;"
+                                                                    onclick="showcoupon();">Change Coupon
+                                                                    Code</a></label>
+                                                            <div class="showcoupons">
+                                                                <form action="{{ route('getcoupon') }}" method="POST"
+                                                                    id="from_showcoupon">
+                                                                    @csrf
+                                                                    <div class="myDiv" style="display:none;">
+                                                                        <input style="float:left;padding:5px 2px"
+                                                                            type="text" name="coupon"
+                                                                            placeholder="Enter your coupon here"
+                                                                            class="coupon-val ">
+                                                                        &nbsp;
+                                                                        <input
+                                                                            style="text-transform: uppercase;float:right;"
+                                                                            type="submit" value="Apply"
+                                                                            class="btn btn-danger ">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <p class="text-danger" id="couponError"></p>
+                                                        </li>
+                                                        {{-- <li class="minicart-list-item applyCoupon">
+                                                    <div>
+                                                    </div>
+                                                </li> --}}
+                                                    @endif
+                                                @endif
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                          <span>£ {{ isset($total) ? $total : '' }}</span>
+                                                        <span>£ {{ isset($total) ? $total : '' }}</span>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -527,9 +583,14 @@
                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
                                                 <div class="form-check m-auto">
                                                     @if ($delivery_setting['enable_delivery'] == 'collection')
-                                                        <input class="form-check-input" type="radio" name="delivery_type" id="collection" {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }} value="collection">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="delivery_type" id="collection"
+                                                            {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }}
+                                                            value="collection">
                                                     @else
-                                                        <input class="form-check-input" type="radio" name="delivery_type" id="collection" value="collection" {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio"
+                                                            name="delivery_type" id="collection" value="collection"
+                                                            {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
                                                     @endif
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
@@ -563,7 +624,9 @@
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
-                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $user_delivery_type == 'delivery' ? 'checked' : '' }}>
+                                                    <input class="form-check-input" type="radio" name="delivery_type"
+                                                        id="delivery"
+                                                        {{ $user_delivery_type == 'delivery' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -610,19 +673,21 @@
                                         @if ($currentday == $value)
                                             @if (!empty($mycart) || $mycart != '')
                                                 <a href="{{ route('checkout') }}" class="btn checkbt"
-                                                style="background-color: green; color:white;">Checkout</a>
+                                                    style="background-color: green; color:white;">Checkout</a>
                                             @else
                                                 <a href="{{ route('cart') }}" class="btn checkbt"
-                                                style="background-color: green; color:white;">Checkout</a>
+                                                    style="background-color: green; color:white;">Checkout</a>
                                             @endif
                                             <div class="closed-now">
-                                                <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                                <span class="closing-text" style="color: green !important;">We are
+                                                    open now!</span>
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value)
                                             <div class="closed-now">
-                                                <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                                <button class="btn w-100 checkbt" disabled
+                                                    style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
                                                 <div class="closed-now">
                                                     <span class="closing-text">We are closed now!</span>
                                                 </div>
@@ -643,14 +708,16 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i class="fas fa-times"></i></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"><i
+                            class="fas fa-times"></i></button>
                 </div>
                 <div class="modal-body">
                     <h5 class="modal-title" id="pricemodelLabel">Order Now</h5>
                     <p>Minimum delivery is £15.00</p>
                     <button class="btn csmodal-btn" onclick="showmodal();">Deliver my order</button>
                     <button class="btn csmodal-btn" data-bs-dismiss="modal">I will come and collect</button>
-                    <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
+                    <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
+                        back</button>
                 </div>
             </div>
         </div>
@@ -668,16 +735,17 @@
                         <div class="controls">
                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                 <div class="srch-input">
-                                    @if($delivery_setting['delivery_option'] == 'area')
-                                        <select name="search_input2" class="form-control"  id="search_store">
+                                    @if ($delivery_setting['delivery_option'] == 'area')
+                                        <select name="search_input2" class="form-control" id="search_store">
                                             <option value="">Select Area</option>
-                                            @foreach($areas as $area)
+                                            @foreach ($areas as $area)
                                                 <option value="{{ $area }}">{{ $area }}</option>
                                             @endforeach
                                         </select>
                                     @else
-                                        <input id="search_input1" placeholder="AB10 1BW" type="text"/>
-                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                        <input id="search_input1" placeholder="AB10 1BW" type="text" />
+                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}"
+                                            style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                     @endif
                                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
                                 </div>
@@ -692,7 +760,8 @@
                         @if ($delivery_setting['enable_delivery'] != 'collection')
                             <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
                         @endif
-                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
+                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
+                            back</button>
                     </div>
                 </form>
             </div>
@@ -714,13 +783,11 @@
 
 </body>
 <script>
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         var status = $('#user_delivery_val').val();
         var coll = $("input[name='delivery_type']:checked").val();
 
-        if(coll == 'collection')
-        {
+        if (coll == 'collection') {
             $('#Modal').modal('hide');
             return false;
         }
@@ -787,8 +854,7 @@
     // });
 </script>
 <script>
-    function showId(product, sizeprice, uid)
-    {
+    function showId(product, sizeprice, uid) {
         var sizeid = sizeprice;
         var productid = product;
         var userid = uid;
@@ -796,14 +862,10 @@
 
         var coll = $("input[name='delivery_type']:checked").val();
 
-        if(coll == 'collection')
-        {
+        if (coll == 'collection') {
             $('#Modal').modal('hide');
-        }
-        else
-        {
-            if (status == '')
-            {
+        } else {
+            if (status == '') {
                 $('#Modal').modal('show');
                 return false;
             }
@@ -859,15 +921,14 @@
         $('#Modal').modal('show');
     });
 
-    function deletecartproduct(prod_id,size_id,uid)
-    {
+    function deletecartproduct(prod_id, size_id, uid) {
         var sizeid = size_id;
         var productid = prod_id;
         var userid = uid;
 
         $.ajax({
             type: 'post',
-            url: '{{ url("deletecartproduct") }}',
+            url: '{{ url('deletecartproduct') }}',
             data: {
                 "_token": "{{ csrf_token() }}",
                 'size_id': sizeid,
@@ -875,13 +936,35 @@
                 'user_id': userid,
             },
             dataType: 'json',
-            success: function(result)
-            {
+            success: function(result) {
                 location.reload();
             }
         });
     }
 
-</script>
-</html>
+    // $(".showcoupons").hide();
+    function showcoupon() {
 
+        $('.myDiv').toggle();
+    }
+
+    $('#from_showcoupon').submit(function(e) {
+        e.preventDefault();
+        var coupon = $("input[name='coupon']").val();
+
+        $.ajax({
+            type: 'post',
+            url: '{{ url('getcoupon') }}',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'coupon': coupon,
+            },
+            dataType: 'json',
+            success: function(result) {
+                $('#couponError').text(result.json);
+            }
+        });
+    });
+</script>
+
+</html>

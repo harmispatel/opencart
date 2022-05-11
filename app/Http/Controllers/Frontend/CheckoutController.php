@@ -40,7 +40,7 @@ class CheckoutController extends Controller
 
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
-        
+
         // $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
         // return view('frontend.pages.chechout',compact('delivery_setting','Coupon'));
 
@@ -148,14 +148,14 @@ class CheckoutController extends Controller
     }
 
     public function voucher(Request $request){
-      print_r($request->voucher);    
+      print_r($request->voucher);
     }
 
     public function coupon(Request $request){
         $Coupon=$request->coupon;
         $couponcode=coupon::where('code',$Coupon)->first();
         $code = isset($couponcode->code) ? $couponcode->code : '';
-       
+
         if(!empty($code) || $code != ''){
             $json ='Success: Your coupon discount has been applied!';
         }else{
