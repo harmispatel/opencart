@@ -260,11 +260,16 @@ span.check_btn:before {
                           <div class="col-md-4">
                             <div class="login-main text-center">
                                 <div class="login-details w-100">
-                                    <div class="mb-1">
-                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
-                                    <label class="form-check-label" for="collect">
-                                    I will collect my order
-                                    </label>
+                                <div class="login-details-inr fa fa-sort-up w-100">
+                                    <select name="gender" class="w-100">
+                                        <option value="">Title</option>
+                                        <option value="1">Mr.</option>
+                                        <option value="2">Mrs.</option>
+                                        <option value="3">Ms.</option>
+                                        <option value="4">Miss.</option>
+                                        <option value="5">Dr.</option>
+                                        <option value="6">Prof.</option>
+                                    </select>
                                 </div>
                                 <div class="login-details-inr fa fa-user w-100 d-flex">
                                   <input placeholder="Name" type="text" name="name" value="" class="w-50">
@@ -376,7 +381,7 @@ span.check_btn:before {
 
                                 @if ($delivery_setting['enable_delivery'] != 'delivery')
                                 <div class="mb-1">
-                                    <input class="form-check-input" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
+                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} value="collection">
                                     <label class="form-check-label" for="collect">
                                       I will collect my order
                                     </label>
