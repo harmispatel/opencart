@@ -28,7 +28,7 @@ class Cartcontroller extends Controller
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
-        $Coupon =Coupon::select('name','code','discount')->where('store_id',$front_store_id)->first();
+        $Coupon =Coupon::select('*')->where('store_id',$front_store_id)->first();
 
 
         return view('frontend.pages.cart',['Coupon'=>$Coupon]);
