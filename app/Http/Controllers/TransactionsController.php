@@ -20,7 +20,7 @@ class TransactionsController extends Controller
         $startdate = $request->start;
         $enddate = $request->end;
         $current_store_id = currentStoreId();
-        $customerorder = CustomerOrder::with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+        $customerorder = CustomerOrder::where('store_id',$current_store_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
 
 
         $html = '';

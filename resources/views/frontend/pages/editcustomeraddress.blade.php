@@ -170,9 +170,9 @@ $mycart = session()->get('cart1');
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Country :</td>
                         <td>
                           <select name="country" id="country_id" onchange="getstate();">
-                              <option value="" disabled selected>Select Country</option>
-                            @foreach ($countries as $countrie)
-                                <option value="{{ $countrie->country_id }}" {{ isset($customeraddress->country_id) == $countrie->country_id ? 'selected'  : ''}}>{{ $countrie->name }}</option>
+                            <option value="" disabled selected>Select Country</option>
+                            @foreach ($countries as $country)
+                                    <option value="{{ $country->country_id }}" {{ ($customeraddress->country_id == $country->country_id) ? 'selected' : '' }}>{{ $country->name }}</option>
                             @endforeach
                           </select>
                         </td>
@@ -184,8 +184,15 @@ $mycart = session()->get('cart1');
                         <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Region / State :</td>
                         <td>
                           <select class="country_region_id" name="country_region_id">
-                            <option value="" selected disabled>Select Region/State</option>
-                            <option value="" {{ isset($customeraddress->country_id) == $countrie->country_id ? 'selected'  : ''}}>Select Region/State</option>
+                            @php
+                                $zone_id = $customeraddress->zone_id;
+                                $zone = getZonebyId($zone_id);
+                            @endphp
+                            @if(!empty($zone))
+                                <option value="{{ $zone->zone_id }}">{{ $zone->name }}</option>
+                            @else
+                                <option value=""> -- Select Region -- </option>
+                            @endif
                           </select>
                         </td>
                         @error('state')

@@ -172,8 +172,10 @@
 
                                             <div class="form-floating">
                                                 <label for="summernote" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Leave a comment here" name="description" id="summernote"
-                                                    style="height: 200px">{{ isset($product->description) ? $product->description : '' }}</textarea>
+                                                @php
+                                                    $productdescription = html_entity_decode($product->description)
+                                                @endphp
+                                                <textarea class="form-control" name="description" id="summernote" style="height: 200px">{{ isset($productdescription) ? $productdescription : '' }}</textarea>
                                             </div>
                                             <hr>
                                             <div class="class=mb-3">

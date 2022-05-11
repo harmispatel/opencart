@@ -29,7 +29,7 @@ class OptionController extends Controller
         $current_store_id = currentStoreId();
 
         // Get Suboptions By Current Store ID
-        $data['suboptions'] = Topping::where('store_topping',$current_store_id)->get();
+        $data['suboptions'] = Topping::where('store_topping',$current_store_id)->orderBy('id_topping','DESC')->get();
 
         return view('admin.menuoptions.add',$data);
     }
