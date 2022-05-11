@@ -66,27 +66,30 @@ class CheckoutController extends Controller
                 date_default_timezone_set("Asia/kolkata");
                 $today = date('l');
                 $currenttime = time();
-                $start = strtotime($collectionfrom[$key]);
-                $end = strtotime($collectionto[$key]);
+                // $start = strtotime($collectionfrom[$key]);
+                // $end = strtotime($collectionto[$key]);
+                $start = $collectionfrom[$key];
+                $end = $collectionto[$key];
 
-                if (strtotime($start) <= strtotime($currenttime) && strtotime($currenttime) <= strtotime($end)) {
+                if (strtotime($start) <= $currenttime && $currenttime <= strtotime($end)) {
                     $result[] = 'ASAP';
                 }
 
-                $timebetween = date('H:i', (strtotime($currenttime) + $gaptime * 60));
+                $timebetween = date('H:i', strtotime($currenttime + $gaptime * 60));
+                echo $timebetween;
+                exit;
                 foreach ($manghour as $hour){
                     foreach ($mangminus as $minus) {
                         $temptime = $hour . ':' . $minus;
                         if (strtotime($timebetween) < strtotime($temptime) && strtotime($start) <= strtotime($temptime) && strtotime($temptime) <= strtotime($end)) {
                             if (!in_array($temptime, $result))
                                 $result[] = $temptime . '-' . date('H:i', (strtotime($temptime) + 15 * 60));
-                                echo 'Hello';
                         }
                     }
                 }
-                // echo '<pre>';
-                // print_r($result);
-                // exit();
+                echo '<pre>';
+                print_r($result);
+                exit();
                 // for ($i = $currenttime; $i <= $end - 15 * 60; $i = $i + 15 * 60) {
                 //     echo '<pre>';
                 //     print_r(date('H:i',$i).'-'.date('H:i',$i + 15*60));
