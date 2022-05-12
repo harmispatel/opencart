@@ -417,19 +417,6 @@ span.check_btn:before {
                     </div>
                   </div>
                 </div>
-
-
-                @php
-
-                    // $start= strtotime('12:00');
-                    // $end=strtotime('23:30');
-                    // for ($i=$start;$i<=$end;$i = $i + 15*60)
-                    // {
-                    //     echo date('H:i',$i).'-'.date('H:i',$i).'<br>';
-                    //     // echo date('H:i',$i).'<br>';
-                    // }
-                    // die;
-                @endphp
                 <div class="accordion-item" id="colloctiontime">
                   <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
                       <span>Collection Time</span>
@@ -442,8 +429,9 @@ span.check_btn:before {
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
                                 <select class="time_select w-100" name="time_method">
+                                    <option value="ASAP" selected>ASAP</option>
                                     @foreach ($collectionresult as $key => $colecttime)
-                                        <option id="time_{{ $key }}" {{ ($key == 0) ? 'selected' : '' }} value="{{ $colecttime }}">{{ $colecttime }}</option>
+                                        <option id="time_{{ $key }}" value="{{ $colecttime }}">{{ $colecttime }}</option>
                                     @endforeach
                                 </select>
                               </div>
@@ -466,6 +454,7 @@ span.check_btn:before {
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
                                 <select class="time_select w-100" name="time_method">
+                                    <option value="ASAP" selected>ASAP</option>
                                     @foreach ($dileveryresult as $key => $deliverytime)
                                         <option id="time_{{$key}}" value="{{$deliverytime}}">{{ $deliverytime }}</option>
                                     @endforeach
@@ -490,13 +479,15 @@ span.check_btn:before {
                             <div class="login-details w-100">
                             <form method="POST">
                                 {{ csrf_field() }}
-                                <div class="login-details-inr fas fa-address-book w-100">
-                                    <select name="address" id="address" class="w-100 address" onchange="Getcustomeraddress();">
-                                        <option disabled selected>Choose Address</option>
-                                    </select>
-                                    <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
-                                    <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
-                                </div>
+                                @if (empty($guestlogin))
+                                    <div class="login-details-inr fas fa-address-book w-100">
+                                        <select name="address" id="address" class="w-100 address" onchange="Getcustomeraddress();">
+                                            <option disabled selected>Choose Address</option>
+                                        </select>
+                                        <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
+                                        <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
+                                    </div>
+                                @endif
                                 <div class="login-details-inr fas fa-map-marker-alt w-100">
                                     <input placeholder="Address line 1:" type="text" id="address_1" name="address_1" value="" class="w-100">
                                 </div>
@@ -508,8 +499,9 @@ span.check_btn:before {
                                     <div class="w-50 d-inline-block float-start">
                                         <select name="area" id="area" class="w-100">
                                             <option disabled selected>Select Area</option>
-                                            <option value="1">india</option>
-                                            <option value="2">uk</option>
+                                            @foreach($areas as $area)
+                                                <option value="{{ $area }}">{{ $area }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 @else

@@ -36,6 +36,10 @@ class CheckoutController extends Controller
             'delivery_option',
         ]);
 
+        $get_areas = DeliverySettings::select('area','id_delivery_settings')->where('id_store',$front_store_id)->where('delivery_type','area')->first();
+        $area_explode = explode(',',isset($get_areas->area) ? $get_areas->area : '');
+        $areas = array_filter($area_explode);
+
         foreach ($key as $row) {
             $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
 
@@ -50,13 +54,25 @@ class CheckoutController extends Controller
         $deliverydays = $openclose['deliverydays'];
         $deliveryfrom = $openclose['deliveryfrom'];
         $deliveryto   = $openclose['deliveryto'];
-        $deliverygaptime   = $openclose['delivery_gaptime'];
+        $dile_gaptime   = $openclose['delivery_gaptime'];
 
         // delivery
         $collectiondays = $openclose['collectiondays'];
         $collectionfrom = $openclose['collectionfrom'];
         $collectionto   = $openclose['collectionto'];
-        $collectiongaptime   = $openclose['collection_gaptime'];
+        $co_gaptime   = $openclose['collection_gaptime'];
+        if (empty($co_gaptime)) {
+            $collectiongaptime = 1;
+        }
+        else{
+            $collectiongaptime = $co_gaptime;
+        }
+        if (empty($dile_gaptime)) {
+            $deliverygaptime = 1;
+        }
+        else{
+            $deliverygaptime = $dile_gaptime;
+        }
         date_default_timezone_set('Asia/Kolkata');
 
         $manghour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
@@ -71,9 +87,9 @@ class CheckoutController extends Controller
                 $end = $collectionto[$key];
                 $currentday = date('l');
                 if ($currentday == $value) {
-                    if (strtotime($start) <= $currenttime && $currenttime <= strtotime($end)) {
-                        $collectionresult[] = 'ASAP';
-                    }
+                    // if (strtotime($start) <= $currenttime && $currenttime <= strtotime($end)) {
+                    //     $collectionresult[] = 'ASAP';
+                    // }
                     $timebetween = date('H:i', ($currenttime + $collectiongaptime * 60));
                     foreach ($manghour as $hour) {
                         foreach ($mangminus as $minus) {
@@ -97,9 +113,9 @@ class CheckoutController extends Controller
                 $end = $deliveryto[$key];
                 $currentday = date('l');
                 if ($currentday == $value) {
-                    if (strtotime($start) <= $currenttime && $currenttime <= strtotime($end)) {
-                        $dileveryresult[] = 'ASAP';
-                    }
+                    // if (strtotime($start) <= $currenttime && $currenttime <= strtotime($end)) {
+                    //     $dileveryresult[] = 'ASAP';
+                    // }
                     $timebetween = date('H:i', ($currenttime + $deliverygaptime * 60));
                     foreach ($manghour as $hour) {
                         foreach ($mangminus as $minus) {
@@ -119,7 +135,7 @@ class CheckoutController extends Controller
         // exit();
 
         $Coupon = Coupon::select('name', 'code', 'discount')->where('store_id', $front_store_id)->first();
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult','dileveryresult'));
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult','dileveryresult','areas'));
     }
 
     // Get Payment & Shipping Address By Customer Address ID
