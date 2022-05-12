@@ -15,6 +15,8 @@
         $guestlogin = '';
     }
 
+    $c = session()->get('guest_user_address');
+
     $userlogin = session('username');
     $customerid = session('userid');
 
@@ -31,6 +33,7 @@
     {
         $userid = 0;
         $mycart = session()->get('cart1');
+        $customer_addr = session()->get('guest_user_address');
     }
 
 @endphp
@@ -417,6 +420,8 @@ span.check_btn:before {
                     </div>
                   </div>
                 </div>
+                <form method="POST" id="delivery_address" enctype="multipart/form-data">
+                    {{ csrf_field() }}
                 <div class="accordion-item" id="colloctiontime">
                   <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
                       <span>Collection Time</span>
@@ -428,7 +433,7 @@ span.check_btn:before {
                           <div class="login-main text-center">
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
-                                <select class="time_select w-100" name="time_method">
+                                <select class="time_select w-100" name="time_method" id="col_time">
                                     <option value="ASAP" selected>ASAP</option>
                                     @foreach ($collectionresult as $key => $colecttime)
                                         <option id="time_{{ $key }}" value="{{ $colecttime }}">{{ $colecttime }}</option>
@@ -453,7 +458,7 @@ span.check_btn:before {
                           <div class="login-main text-center">
                             <div class="login-details w-100">
                               <div class="login-details-inr fa fa-sort-up w-100">
-                                <select class="time_select w-100" name="time_method">
+                                <select class="time_select w-100" name="time_method" id="del_time">
                                     <option value="ASAP" selected>ASAP</option>
                                     @foreach ($dileveryresult as $key => $deliverytime)
                                         <option id="time_{{$key}}" value="{{$deliverytime}}">{{ $deliverytime }}</option>
@@ -477,47 +482,53 @@ span.check_btn:before {
                         <div class="col-md-4">
                           <div class="login-main text-center">
                             <div class="login-details w-100">
-                            <form method="POST">
-                                {{ csrf_field() }}
                                 @if (empty($guestlogin))
                                     <div class="login-details-inr fas fa-address-book w-100">
                                         <select name="address" id="address" class="w-100 address" onchange="Getcustomeraddress();">
-                                            <option disabled selected>Choose Address</option>
+
                                         </select>
                                         <input type="hidden" id="customerid" name="customerid" value="{{ $customerid }}">
                                         <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
                                     </div>
                                 @endif
                                 <div class="login-details-inr fas fa-map-marker-alt w-100">
-                                    <input placeholder="Address line 1:" type="text" id="address_1" name="address_1" value="" class="w-100">
+                                    <input placeholder="Address line 1:" type="text" id="address_1" name="address_1" value="{{ isset($customer_addr['address_1']) ? $customer_addr['address_1'] : '' }}" class="w-100">
+                                    <div class="invalid-feedback" id="address_1err" style="display: none;text-align: left;"></div>
                                 </div>
                                 <div class="login-details-inr fas fa-map-marker-alt w-100">
-                                    <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="" class="w-100">
+                                    <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="{{ isset($customer_addr['address_2']) ? $customer_addr['address_2'] : '' }}" class="w-100">
                                 </div>
                                 <div class="login-details-inr fas fa-address-card w-100">
-                                @if($delivery_setting['delivery_option'] == 'area')
-                                    <div class="w-50 d-inline-block float-start">
-                                        <select name="area" id="area" class="w-100">
-                                            <option disabled selected>Select Area</option>
-                                            @foreach($areas as $area)
-                                                <option value="{{ $area }}">{{ $area }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                @else
-                                    <div class="w-50 d-inline-block float-start">
-                                        <input placeholder="city" type="test" id="city" name="city" value="" class="w-100">
-                                    </div>
-                                @endif
+                                    @if($delivery_setting['delivery_option'] == 'area')
+                                        <div class="w-50 d-inline-block float-start">
+                                            <select name="area" id="area" class="w-100">
+                                                <option value="">Select Area</option>
+                                                @php
+                                                    $old_area = isset($customer_addr['area']) ? $customer_addr['area'] : '';
+                                                @endphp
+                                                @foreach($areas as $area)
+                                                    <option value="{{ $area }}" {{ ($area == $old_area) ? 'selected' : '' }}>{{ $area }}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback" id="areaerr" style="display: none;text-align: left;"></div>
+                                        </div>
+                                    @else
+                                        <div class="w-50 d-inline-block float-start">
+                                            <input placeholder="city" type="test" id="city" name="city" value="{{ isset($customer_addr['city']) ? $customer_addr['city'] : '' }}" class="w-100">
+                                            <div class="invalid-feedback" id="cityerr" style="display: none;text-align: left;"></div>
+                                        </div>
+                                    @endif
                                     <div class="w-50 d-inline-block float-end">
-                                        <input placeholder="Postcode" type="number" id="postcode" name="postcode" value="" class="w-100">
+                                        <input placeholder="Postcode" type="text" id="postcode" name="postcode" value="{{ isset($customer_addr['postcode']) ? $customer_addr['postcode'] : '' }}" class="w-100">
+                                        <div class="invalid-feedback" id="postcodeerr" style="display: none;text-align: left;"></div>
                                     </div>
                                 </div>
                                 <div class="login-details-inr fas fa-phone-alt w-100">
-                                    <input placeholder="Phone Number" type="number" id="phone" name="phone" value="" class="w-100">
+                                    <input placeholder="Phone Number" type="number" id="phone_no" name="phone_no" value="{{ isset($customer_addr['phone_no']) ? $customer_addr['phone_no'] : '' }}" class="w-100">
+                                    <div class="invalid-feedback" id="phone_noerr" style="display: none;text-align: left;"></div>
                                 </div>
                                 <div class="login-details-inr fa fa-road w-100">
-                                    <textarea placeholder="Aditional directions (optional)" cols="30" rows="5" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100"></textarea>
+                                    <textarea placeholder="Aditional directions (optional)" cols="30" rows="5" id="additional_directions" name="additional_directions" class="w-100">{{ isset($customer_addr['additional_directions']) ? $customer_addr['additional_directions'] : '' }}</textarea>
                                 </div>
                             </form>
                             </div>
@@ -532,7 +543,12 @@ span.check_btn:before {
             <div class="col-md-4 mt-4">
               <div class="backbtn d-flex justify-content-between">
                 <button class="btn disabled" disabled><i class="fa fa-angle-left"></i> Back</button>
-                <button class="btn back-bt" id="next">Next</button>
+                @if ($userdeliverytype == 'delivery')
+                    <a class="btn back-bt del_next" onclick="DeliveryAddress();">Next</a>
+                @endif
+                @if ($userdeliverytype == 'collection')
+                    <a class="btn back-bt coll_next" id="next">Next</a>
+                @endif
               </div>
             </div>
           </div>
@@ -810,28 +826,29 @@ span.check_btn:before {
 
 </body>
 
-<script>
+<script type="text/javascript">
 
-        $('document').ready(function(){
-            var d_type = $('input[name="order"]:checked').val();
+    $('document').ready(function()
+    {
+        var d_type = $('input[name="order"]:checked').val();
 
-            if(d_type == 'delivery')
-            {
-                $('#colloctiontime').hide();
-                $('#dileverytime').show();
-                $('#deliveryaddress').show();
-            }
+        if(d_type == 'delivery')
+        {
+            $('#colloctiontime').hide();
+            $('#dileverytime').show();
+            $('#deliveryaddress').show();
+        }
 
-            if(d_type == 'collection')
-            {
-                $('#colloctiontime').show();
-                $('#dileverytime').hide();
-                $('#deliveryaddress').hide();
-            }
+        if(d_type == 'collection')
+        {
+            $('#colloctiontime').show();
+            $('#dileverytime').hide();
+            $('#deliveryaddress').hide();
+        }
 
-        });
+    });
 
-         // Guest Checkout
+    // Guest Checkout
     function guestCheckout()
     {
         var form_data = new FormData(document.getElementById('guestuser'));
@@ -930,51 +947,170 @@ span.check_btn:before {
     }
     // End Guest Checkout
 
-        $('.collection_type').click(function()
-        {
-            var d_type = $('input[name="order"]:checked').val();
+    // Delivery Address
+    function DeliveryAddress()
+    {
+        var form_data = new FormData(document.getElementById('delivery_address'));
 
-            $.ajax({
-                type: "post",
-                url: "{{ url('setDeliveyType') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'd_type': d_type,
-                },
-                dataType: "json",
-                success: function(response)
+        var time_select_del = $('#del_time').val();
+        var time_select_col = $('#col_time').val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('customerdeliveryaddress') }}",
+            data: form_data,
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response)
+            {
+                if(response.success == 1)
                 {
-                    if(response.success == 1)
-                    {
-                        $('#del_charge').text('');
-                        $('#del_charge').text(response.delivery_charge);
-                        $('#total_pay').text('');
-                        $('#total_pay').text(response.total_pay);
-                    }
+                    $('#checkout2').hide();
+                    $('#checkout3').show();
                 }
-            });
 
+                if(response.errors == 1)
+                {
+                    $('#postcodeerr').text('').show();
+                    $('#postcode').attr('class','form-control is-invalid');
+                    $('#postcodeerr').text(response.errors_message);
+                }
+            },
+            error : function (message)
+            {
+                if(typeof(message.responseJSON) != "undefined" && message.responseJSON !== null)
+                {
+                    var address_1 = message.responseJSON.errors.address_1;
+                    var city = message.responseJSON.errors.city;
+                    var postcode = message.responseJSON.errors.postcode;
+                    var phone_no = message.responseJSON.errors.phone_no;
+                    var area = message.responseJSON.errors.area;
+                }
+
+                // Address 1
+                if(address_1)
+                {
+                    $('#address_1err').text('').show();
+                    $('#address_1').attr('class','form-control is-invalid');
+                    $('#address_1err').text(address_1);
+                }
+                else
+                {
+                    $('#address_1err').text('').hide();
+                    $('#address_1').attr('class','form-control');
+                }
+
+                // City
+                if(city)
+                {
+                    $('#cityerr').text('').show();
+                    $('#city').attr('class','form-control is-invalid');
+                    $('#cityerr').text(city);
+                }
+                else
+                {
+                    $('#cityerr').text('').hide();
+                    $('#city').attr('class','form-control');
+                }
+
+                // Postcode
+                if(postcode)
+                {
+                    $('#postcodeerr').text('').show();
+                    $('#postcode').attr('class','form-control is-invalid');
+                    $('#postcodeerr').text(postcode);
+                }
+                else
+                {
+                    $('#postcodeerr').text('').hide();
+                    $('#postcode').attr('class','form-control');
+                }
+
+                // Phone
+                if(phone_no)
+                {
+                    $('#phone_noerr').text('').show();
+                    $('#phone_no').attr('class','form-control is-invalid');
+                    $('#phone_noerr').text(phone_no);
+                }
+                else
+                {
+                    $('#phone_noerr').text('').hide();
+                    $('#phone_no').attr('class','form-control');
+                }
+
+                // Area
+                if(area)
+                {
+                    $('#areaerr').text('').show();
+                    $('#area').attr('class','form-control is-invalid');
+                    $('#areaerr').text(area);
+                }
+                else
+                {
+                    $('#areaerr').text('').hide();
+                    $('#area').attr('class','form-control');
+                }
+
+            }
         });
 
-      $('#login').click(function (e) {
+    }
+    // End Delivery Address
+
+    // Change Delivery Type
+    $('.collection_type').click(function()
+    {
+        var d_type = $('input[name="order"]:checked').val();
+
+        $.ajax({
+            type: "post",
+            url: "{{ url('setDeliveyType') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                'd_type': d_type,
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                if(response.success == 1)
+                {
+                    $('#del_charge').text('');
+                    $('#del_charge').text(response.delivery_charge);
+                    $('#total_pay').text('');
+                    $('#total_pay').text(response.total_pay);
+
+                    location.reload();
+                }
+            }
+        });
+
+    });
+    // End Change Delivery
+
+
+    $('#login').click(function (e)
+    {
         e.preventDefault();
         $('#demo').show();
-       $('#Checkout').hide();
+        $('#Checkout').hide();
         //  alert('hello');
-      });
+    });
 
-      $('.pay_btn').on('click',function()
-      {
-            var method_type = $('input[name="payment_method"]:checked').val();
+    $('.pay_btn').on('click',function()
+    {
+        var method_type = $('input[name="payment_method"]:checked').val();
 
-            if(method_type == 3)
-            {
-                $('#button-payment-method').val('');
-                $('#button-payment-method').val('CONFIRM');
-            }
+        if(method_type == 3)
+        {
+            $('#button-payment-method').val('');
+            $('#button-payment-method').val('CONFIRM');
+        }
 
-            $('#button-payment-method').removeAttr('disabled');
-      });
+        $('#button-payment-method').removeAttr('disabled');
+    });
 
       $('#deliver').on("click", function () {
         $('#colloctiontime').hide();
@@ -1070,6 +1206,7 @@ span.check_btn:before {
                 $('#address_2').val(response.address_2);
                 $('#postcode').val(response.postcode);
                 $('#city').val(response.city);
+                $('#phone_no').val(response.phone);
             }
         });
      }
