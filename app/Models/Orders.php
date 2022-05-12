@@ -42,5 +42,9 @@ class Orders extends Model
     {
         return $this->hasOne(Region::class,'zone_id','payment_zone_id');
     }
+    public function hasManyOrderProduct()
+    {
+        return $this->hasMany(OrderProduct::class,'order_id','order_id');
+    }
 
 }

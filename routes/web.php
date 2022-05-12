@@ -436,6 +436,7 @@ Route::post('changeDefAddress', [MemberController::class, 'changeDefAddress'])->
 Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddressdelete'])->name('customeraddressdelete');
 Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
 Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
+Route::post('getcustomerorderdetail', [MemberController::class, 'getcustomerorderdetail'])->name('getcustomerorderdetail');
 
 // Order
 Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');

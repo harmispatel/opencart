@@ -98,10 +98,13 @@
                                                 </select>
                                             </div>
                                             <hr>
+                                            @php
+                                                $productname = html_entity_decode($product->name);
+                                            @endphp
                                             <div class="mb-3">
                                                 <label for="product" class="form-label"><span class="text-danger">*</span>Product Name</label>
                                                 <input type="text" class="form-control" name="product" id="product"
-                                                    placeholder="Product Name" value="{{ isset($product->name) ? $product->name : '' }}" required>
+                                                    placeholder="Product Name" value="{{ isset($productname) ? $productname : '' }}" required>
                                             </div>
                                             <hr>
                                             <div class="mb-3">
