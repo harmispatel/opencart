@@ -702,8 +702,10 @@ class ProductController extends Controller
         $order_type = $request['order_type'];
         $product->order_type = isset($order_type) ? $order_type : 0;
         $day = $request['day'];
-        $days = implode(',', $day);
-        $product->availibleday = isset($days) ? $days : 0;
+        if (!empty($day)) {
+            $days = implode(',', $day);
+        }
+        $product->availibleday = isset($days) ? $days : '';
         if ($request->hasFile('image')) {
             $Image = $request->file('image');
             $filename = time() . '.' . $Image->getClientOriginalExtension();

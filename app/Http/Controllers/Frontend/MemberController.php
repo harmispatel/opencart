@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
+use App\Models\Orders;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -18,7 +19,11 @@ class MemberController extends Controller
         if (!empty($userlogin)) {
             $customers = Customer::where('customer_id',$userlogin)->first();
             $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$userlogin)->get();
-            return view('frontend.pages.member',compact('customers','customeraddress'));
+            $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('customer_id',$userlogin)->get();
+            // echo '<pre>';
+            // print_r($customerorders->toArray());
+            // exit();
+            return view('frontend.pages.member',compact('customers','customeraddress','customerorders'));
         }
         else {
             return view('frontend.pages.member');
@@ -141,5 +146,15 @@ class MemberController extends Controller
         else {
             return redirect()->route('home');
         }
+    }
+
+    public function getcustomerorderdetail(Request $request)
+    {
+        $cusromerOrderId = $request->customerorderid;
+        // $customers = Customer::where('customer_id',$cusromerOrderId)->first();
+        // $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$cusromerOrderId)->get();
+        $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('order_id',$cusromerOrderId)->get();
+
+        return response()->json(['customerorders' => $customerorders]);
     }
 }

@@ -557,10 +557,10 @@ class OrdersController extends Controller
         $addresses = CustomerAddress::where('customer_id', '=', $id)->get();
 
         $html = "";
-        $html .= "<option value=''>--None--</option>";
+        $html .= '<option value="0">Select Your Address</option>';
         foreach ($addresses as $address)
         {
-            $html .= '<option value="'.$address->address_id.'">'.$address->firstname.' '.$address->lastname. ', '.$address->address_1.', '.$address->city.'</option>';
+            $html .= '<option value="'.$address->address_id.'">'.$address->address_1.', '.$address->city.'</option>';
         }
         return response()->json($html);
     }
