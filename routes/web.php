@@ -440,8 +440,9 @@ Route::post('getcustomerorderdetail', [MemberController::class, 'getcustomerorde
 
 // Order
 Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
+Route::post('customerdeliveryaddress', [CustomerOrder::class, 'customerdeliveryaddress'])->name('customerdeliveryaddress');
 
-// login customer
+// customer
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
 Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
 Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])->name('customerlogout');
