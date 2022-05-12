@@ -592,7 +592,7 @@ span.check_btn:before {
                                                 @if (isset($mycart['size']))
                                                     @foreach ($mycart['size'] as $key => $cart)
                                                         @php
-                                                            $price = ($cart['main_price']) * ($cart['quantity']);
+                                                            $price = (isset($cart['main_price']) ? $cart['main_price'] : 0) * ($cart['quantity']);
                                                             if(isset($cart['del_price']) && !empty($cart['del_price']))
                                                             {
                                                                 $delivery_charge += $cart['del_price'];
@@ -617,7 +617,7 @@ span.check_btn:before {
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <b>{{ $cart['main_price'] }}</b>
+                                                                <b>{{ isset($cart['main_price']) ? $cart['main_price'] : 0 }}</b>
                                                             </td>
                                                             <td class="align-middle">
                                                                 <b>{{ number_format($price,2) }}</b>
@@ -625,7 +625,12 @@ span.check_btn:before {
                                                         </tr>
                                                         @php
                                                             $subtotal += $price;
-                                                            $couponcode=($subtotal*$Coupon->discount)/100;
+                                                                if ($Coupon['type'] == 'P') {
+                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                                }
+                                                                if ($Coupon['type'] == 'F') {
+                                                                    $couponcode = $Coupon['discount'];
+                                                                }
                                                             $total=$subtotal-$couponcode;
                                                         @endphp
                                                     @endforeach
@@ -634,7 +639,7 @@ span.check_btn:before {
                                                 @if (isset($mycart['withoutSize']))
                                                     @foreach ($mycart['withoutSize'] as $key=> $cart)
                                                         @php
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                            $price = isset($cart['main_price']) ? $cart['main_price'] : 0 * $cart['quantity'];
                                                             if(isset($cart['del_price']) && !empty($cart['del_price']))
                                                             {
                                                                 $delivery_charge += $cart['del_price'];
@@ -659,7 +664,7 @@ span.check_btn:before {
                                                                 </div>
                                                             </td>
                                                             <td class="align-middle">
-                                                                <b>{{ $cart['main_price'] }}</b>
+                                                                <b>{{ isset($cart['main_price']) ? $cart['main_price'] : 0 }}</b>
                                                             </td>
                                                             <td class="align-middle">
                                                                 <b>{{ number_format($price,2) }}</b>
@@ -667,7 +672,14 @@ span.check_btn:before {
                                                         </tr>
                                                         @php
                                                             $subtotal += $price;
-                                                            $couponcode=($subtotal*$Coupon->discount)/100;
+                                                            if ($Coupon['type'] == 'P')
+                                                            {
+                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                            }
+                                                            if ($Coupon['type'] == 'F')
+                                                            {
+                                                                    $couponcode = $Coupon['discount'];
+                                                            }
                                                             $total=$subtotal-$couponcode+$delivery_charge;
                                                         @endphp
                                                     @endforeach
@@ -683,11 +695,11 @@ span.check_btn:before {
                                             <td><b>Sub-Total:</b></td>
                                             <td><span><b>£ {{ $subtotal }}</b></span></td>
                                         </tr>
-                                        <tr>
+                                        <tr class="coupon_code">
                                             @php
-                                                $couponname = isset($Coupon->code) ? $Coupon->code : '';
+                                                $couponname = isset($Coupon['code']) ?$Coupon['code'] : '';
                                             @endphp
-                                          <td><b>Coupon({{ $Coupon->code }}):</b></td>
+                                          <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
                                           <td><span><b>£ -{{ $couponcode  }}</b></span></td>
                                         </tr>
                                         <tr>
@@ -1165,7 +1177,7 @@ span.check_btn:before {
 
         $.ajax({
                 type: 'post',
-                url: '{{ url("coupon") }}',
+                url: '{{ url("getcoupon") }}',
                 data: {
                     "_token": "{{ csrf_token() }}",
                     'coupon': coupon,
@@ -1173,6 +1185,8 @@ span.check_btn:before {
                 dataType: 'json',
                 success: function(result)
                 {
+                    // $('.coupon_code').html();
+                    // $('.coupon_code').append(result.coupon_code);
                     $('#couponError').text(result.json);
                 }
         });

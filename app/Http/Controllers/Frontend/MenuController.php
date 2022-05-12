@@ -27,7 +27,9 @@ class MenuController extends Controller
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
         // $front_store_id =  $current_theme['store_id'];
-        $Coupon =Coupon::select('name','code','discount','date_start','date_end','type')->where('store_id',$front_store_id)->first();
+        $Coupon=session()->get('currentcoupon');
+        // print_r($Coupon['name']);exit;
+        // $Coupon =Coupon::select('name','code','discount','date_start','date_end','type')->where('store_id',$front_store_id)->first();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->get();
@@ -68,7 +70,7 @@ class MenuController extends Controller
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
 
-        $Coupon =Coupon::select('name','code','discount','type')->where('store_id',$front_store_id)->first();
+        $Coupon=session()->get('currentcoupon');
 
 
 
@@ -210,13 +212,13 @@ class MenuController extends Controller
                 $html .= '</tr>';
                 $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                 $subtotal += $price;
-                $couponcode=($subtotal*$Coupon->discount)/100;
+                $couponcode=($subtotal*$Coupon['discount'])/100;
                 $total=$subtotal-$couponcode+$delivery_charge;
-                if ($Coupon->type == 'P') {
-                    $couponcode = ($subtotal * $Coupon->discount) / 100;
+                if ($Coupon['type'] == 'P') {
+                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
                 }
-                if ($Coupon->type == 'F') {
-                    $couponcode = $subtotal - $Coupon->discount;
+                if ($Coupon['type'] == 'F') {
+                    $couponcode =  $Coupon['discount'];
                 }
                 $total=$subtotal-$couponcode;
 
@@ -238,11 +240,11 @@ class MenuController extends Controller
                 $html .= '</tr>';
                 $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                 $subtotal += $price;
-                if ($Coupon->type == 'P') {
-                    $couponcode = ($subtotal * $Coupon->discount) / 100;
+                if ($Coupon['type'] == 'P') {
+                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
                 }
-                if ($Coupon->type == 'F') {
-                    $couponcode = $subtotal - $Coupon->discount;
+                if ($Coupon['type'] == 'F') {
+                    $couponcode = $Coupon['discount'];
                 }
                 $total=$subtotal-$couponcode;
 
@@ -256,15 +258,19 @@ class MenuController extends Controller
         $html2 = '';
         $html3 ='';
         $html4 ='';
-        $html5 = '';
+        $html5 ='';
+        $html6 ='';
         $html2 .= '<label>Sub-Total</label>
         <span>£ '.$subtotal.'</span>';
-        $html3 .= '<label>Coupon('.$Coupon->code.')</label>
-        <span>£ -' .$couponcode. '</span>';
         $html4 .= '<label><b>Total to pay:</b></label>
         <span>£ '. $total . '</span>';
         $html5 .= '<label><b>Delivery Charge:</b></label>
         <span>£ '. $delivery_charge . '</span>';
+        $html3 .= '<label>Coupon('.$Coupon['code'].')</label>
+        <span>£ -' .$couponcode. '</span>';
+        // $html6 .='<lable class="addcoupon"><a style="color: #ff0000;font-size:14px;"
+        // onclick="showcoupon();">Change Coupon Code</a></lable>';
+        $html6 ='hello';
 
 
         $headertotal = 0;
@@ -280,6 +286,8 @@ class MenuController extends Controller
             'total' => $html4,
             'coupon' =>$Coupon,
             'delivery_charge' =>$html5,
+            'change_coupon' =>$html6,
+
 
         ]);
     }
@@ -333,15 +341,70 @@ class MenuController extends Controller
     }
     public function getcoupon(Request $request){
         $Coupon=$request->coupon;
-        $couponcode=coupon::where('code',$Coupon)->first();
-        $code = isset($couponcode->code) ? $couponcode->code : '';
+        $front_store_id = session('front_store_id');
+        $Couponcode=coupon::where('code',$Coupon)->where('store_id',$front_store_id)->first();
+        $code =$Couponcode->toArray();
+
+        session()->put('currentcoupon', $code);
+        session()->save();
+
+        if(session()->has('userid')){
+            $userid = session()->get('userid');
+        }else
+        {
+            $userid =0;
+        }
+
+        if($userid == 0)
+        {
+            $mycart = $request->session()->get('cart1');
+        }
+        else
+        {
+            $mycart = getuserCart($userid);
+        }
+
+        $subtotal = 0;
+        foreach($mycart['size'] as $key => $cart){
+            $price = $cart['main_price'] * $cart['quantity'];
+            $subtotal += $price;
+            if ($Couponcode->type == 'P') {
+                $couponcode = ($subtotal * $Couponcode->discount) / 100;
+            }
+            if ($Couponcode->type == 'F') {
+                $couponcode = $Couponcode->discount;
+            }
+            $total=$subtotal-$couponcode;
+        }
+
+        foreach($mycart['withoutSize'] as $key => $cart){
+            $price = $cart['main_price'] * $cart['quantity'];
+            $subtotal += $price;
+            if ($Couponcode->type == 'P') {
+                $couponcode = ($subtotal * $Couponcode->discount) / 100;
+            }
+            if ($Couponcode->type == 'F') {
+                $couponcode = $Couponcode->discount;
+            }
+            $total=$subtotal-$couponcode;
+        }
+        $html3 ='';
+        $html4 ='';
+        $html3 .= '<label>Coupon('.$Couponcode->code.')</label>
+        <span>£ -' .$couponcode. '</span>';
+        $html4 .= '<label><b>Total to pay:</b></label>
+        <span>£ '. $total . '</span>';
+        $code = isset($Couponcode->code) ? $Couponcode->code : '';
+
+        // $html5 .='<td><b>Coupon('.$Couponcode->code.'):</b></td>';
 
         if(!empty($code) || $code != ''){
             $json ='Your coupon discount has been applied!';
         }else{
             $json ='Coupon not valid';
         }
-        return response()->json(['json'=>$json]);
+        // return response()->json(['couponcode'=>$html3,'total'=>$html4]);
+        return response()->json(['couponcode'=>$html3,'total'=>$html4,'json'=>$json ]);
       }
 
 
@@ -590,6 +653,13 @@ class MenuController extends Controller
     {
 
         return $request->all();
+    }
+
+    public function searchcouponcode(Request $request){
+        $front_store_id = session('front_store_id');
+        $query = $request->get('query');
+        $filterResult = Coupon::select('code')->where('code', 'LIKE', '%'. $query. '%')->where('store_id',$front_store_id)->get();
+        return response()->json($filterResult);
     }
 
 }

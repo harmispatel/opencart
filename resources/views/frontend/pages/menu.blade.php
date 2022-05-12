@@ -16,7 +16,9 @@ if (session()->has('userid')) {
     $userid = 0;
     $mycart = session()->get('cart1');
 }
-
+// echo "<pre>";
+//  print_r(session()->get('currentcoupon'));
+//  exit;
 @endphp
 
 <!doctype html>
@@ -465,23 +467,21 @@ if (session()->has('userid')) {
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $key => $cart)
-                                                            @php
-                                                                $date_start=$Coupon->date_start;
-                                                                $date_end=$Coupon->date_end;
-                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                        @php
+                                                                $date_start = $Coupon['date_start'];
+                                                                $date_end =$Coupon['date_end'];
+                                                                $price = isset($cart['main_price']) ?$cart['main_price'] : 0 * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if(isset($cart['del_price']) && !empty($cart['del_price']))
-                                                                {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
 
-
-                                                                if ($Coupon->type == 'P') {
-                                                                    $couponcode =($subtotal * $Coupon->discount) / 100;
+                                                                if ($Coupon['type'] == 'P') {
+                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
                                                                 }
-                                                                if ($Coupon->type == 'F') {
-                                                                    $couponcode =$subtotal - $Coupon->discount;
+                                                                if ($Coupon['type'] == 'F') {
+                                                                    $couponcode = $Coupon['discount'];
                                                                 }
                                                                 $total = $subtotal - $couponcode;
 
@@ -506,18 +506,17 @@ if (session()->has('userid')) {
                                                                 $price = $cart['main_price'] * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if(isset($cart['del_price']) && !empty($cart['del_price']))
-                                                                {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
 
-                                                                if ($Coupon->type == 'P') {
-                                                                    $couponcode = ($subtotal * $Coupon->discount) / 100;
+                                                                if ($Coupon['type'] == 'P') {
+                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
                                                                 }
-                                                                if ($Coupon->type == 'F') {
-                                                                    $couponcode = $subtotal - $Coupon->discount;
+                                                                if ($Coupon['type'] == 'F') {
+                                                                    $couponcode = $Coupon['discount'];
                                                                 }
-                                                                $total=$subtotal-$couponcode+$delivery_charge;
+                                                                $total = $subtotal - $couponcode + $delivery_charge;
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -557,22 +556,26 @@ if (session()->has('userid')) {
                                                 @if (isset($mycart['size']) && !empty($mycart['size']))
                                                     @if ($date >= $date_start && $date <= $date_end)
                                                         <li class="minicart-list-item">
-                                                            <div class="minicart-list-item-innr discount">
-                                                                <label>Coupon({{ $Coupon->code }})</label>
+                                                            <div class="minicart-list-item-innr coupon_code">
+                                                                <label
+                                                                    id="coupontext">Coupon({{ $Coupon['code'] }})</label>
                                                                 <span>£
-                                                                   - {{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                                    -
+                                                                    {{ isset($couponcode) ? $couponcode : '' }}</span>
                                                             </div>
-                                                            <label class="addcoupon"><a
-                                                                    style="color: #ff0000;font-size:14px;"
-                                                                    onclick="showcoupon();">Change Coupon
-                                                                    Code</a></label>
+                                                            <div class="minicart-list-item-innr addcoupon">
+
+                                                                <label><a style="color: #ff0000;font-size:14px;"
+                                                                        onclick="showcoupon();">Change Coupon
+                                                                        Code</a></label>
+                                                            </div>
                                                             <div class="showcoupons">
                                                                 <form action="{{ route('getcoupon') }}" method="POST"
                                                                     id="from_showcoupon">
                                                                     @csrf
                                                                     <div class="myDiv" style="display:none;">
                                                                         <input style="float:left;padding:5px 2px"
-                                                                            type="text" name="coupon"
+                                                                            type="text" name="coupon" id="searchcoupon"
                                                                             placeholder="Enter your coupon here"
                                                                             class="coupon-val ">
                                                                         &nbsp;
@@ -583,12 +586,8 @@ if (session()->has('userid')) {
                                                                     </div>
                                                                 </form>
                                                             </div>
-                                                            <p class="text-danger" id="couponError"></p>
+                                                            <p style="color:#00FF00" id="couponError"></p>
                                                         </li>
-                                                        {{-- <li class="minicart-list-item applyCoupon">
-                                                    <div>
-                                                    </div>
-                                                </li> --}}
                                                     @endif
                                                 @endif
                                                 <li class="minicart-list-item">
@@ -803,21 +802,6 @@ if (session()->has('userid')) {
 
 </body>
 <script>
-    $(document).ready(function() {
-        var status = $('#user_delivery_val').val();
-        var coll = $("input[name='delivery_type']:checked").val();
-
-        if (coll == 'collection') {
-            $('#Modal').modal('hide');
-            return false;
-        }
-
-        if (status == '') {
-            $('#Modal').modal('show');
-        }
-
-    });
-
     function showmodal() {
 
         $('#Modal').modal('show');
@@ -855,8 +839,7 @@ if (session()->has('userid')) {
 </script>
 
 <script>
-    function showId(product, sizeprice, uid)
-    {
+    function showId(product, sizeprice, uid) {
         var sizeid = sizeprice;
         var productid = product;
         var userid = uid;
@@ -889,16 +872,19 @@ if (session()->has('userid')) {
                 $('.sub-total').html('');
                 $('.total').html('');
                 $('#cart_products').html('');
-                $('.discount').html('');
+                $('.coupon_code').html('');
+                $('.addcoupon').html('');
                 $('.pirce-value').html('');
                 $('.del_charge').html('');
                 $('.empty-box').append(result.html);
                 $('.sub-total').append(result.subtotal);
                 $('#cart_products').append(result.cart_products);
-                $('.discount').append(result.discount);
+                $('.coupon_code').append(result.discount);
                 $('.total').append(result.total);
                 $('.pirce-value').append(result.headertotal);
                 $('.del_charge').append(result.delivery_charge);
+                $('.addcoupon').append(result.change_coupon);
+
             }
         });
     }
@@ -966,8 +952,25 @@ if (session()->has('userid')) {
             dataType: 'json',
             success: function(result) {
                 $('#couponError').text(result.json);
+                $('.coupon_code').html('');
+                $('.total').html('');
+                $('.coupon_code').append(result.couponcode);
+                $('.total').append(result.total);
             }
         });
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+<script>
+    var route = "{{ url('searchcouponcode') }}";
+    $('#searchcoupon').typeahead({
+        source: function(query, process) {
+            return $.get(route, {
+                query: query
+            }, function(data) {
+                return process(data);
+            });
+        }
     });
 </script>
 

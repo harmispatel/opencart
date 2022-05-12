@@ -117,8 +117,8 @@ class CheckoutController extends Controller
         // echo '<pre>';
         // print_r($dileveryresult);
         // exit();
-
-        $Coupon = Coupon::select('name', 'code', 'discount')->where('store_id', $front_store_id)->first();
+        $Coupon=session()->get('currentcoupon');
+        // $Coupon = Coupon::select('name', 'code', 'discount')->where('store_id', $front_store_id)->first();
         return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult','dileveryresult'));
     }
 

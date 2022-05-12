@@ -28,7 +28,7 @@
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price = $mycart['main_price'] * $mycart['quantity'];
+                $price = isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
                 $headertotal += $price;
             }
         }
@@ -36,7 +36,7 @@
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                $price = $mycart['main_price'] * $mycart['quantity'];
+                $price = isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
                 $headertotal += $price;
             }
         }

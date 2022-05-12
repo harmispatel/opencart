@@ -409,8 +409,6 @@ Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 Route::post('voucher', [CheckoutController::class, 'voucher'])->name('voucher');
-Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
-Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
 Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
 Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
 Route::get('success', [MyBasketController::class, 'success'])->name('success');
@@ -450,3 +448,7 @@ Route::post('customerdetailupdate', [CustomerAuthController::class, 'customerdet
 // Guest User
 Route::post('registerguestuser', [CustomerAuthController::class, 'registerguestuser'])->name('registerguestuser');
 
+//  coupon
+Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
+Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
+Route::get('searchcouponcode', [MenuController::class, 'searchcouponcode'])->name('searchcouponcode');
