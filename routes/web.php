@@ -79,6 +79,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('setStore', [HomeController::class, 'setStore'])->name('setStore');
 
 
+    // Create store
+    Route::get('createstore', [SettingsController::class, 'createstore'])->name('createstore');
+    Route::post('savestoredata', [SettingsController::class, 'savestoredata'])->name('savestoredata');
+
     //Users
     Route::get('users', [AllUserController::class, 'index'])->name('users');
     Route::get('adduser', [AllUserController::class, 'add'])->name('adduser');
@@ -435,6 +439,9 @@ Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddr
 Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
 Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
 Route::post('getcustomerorderdetail', [MemberController::class, 'getcustomerorderdetail'])->name('getcustomerorderdetail');
+
+// Order review send
+Route::post('orderreviwe',[MemberController::class , 'orderreviwe'])->name('orderreviwe');
 
 // Order
 Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');

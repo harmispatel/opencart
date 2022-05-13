@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Orders;
+use App\Models\Reviews;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -19,9 +20,9 @@ class MemberController extends Controller
         if (!empty($userlogin)) {
             $customers = Customer::where('customer_id',$userlogin)->first();
             $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$userlogin)->get();
-            $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('customer_id',$userlogin)->get();
+            $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('customer_id',$userlogin)->orderBy('order_id','DESC')->get();
             // echo '<pre>';
-            // print_r($customerorders->toArray());
+            // print_r($customerorders);
             // exit();
             return view('frontend.pages.member',compact('customers','customeraddress','customerorders'));
         }
@@ -165,7 +166,7 @@ class MemberController extends Controller
         $html .=             '<div class="orderinfo-adress sang" style="text-align: center;">';
         $html .=                 '<div class="contact-info">';
         $html .=                     '<div class="content">';
-        $html .=                         '<p class="etsAddress">'.$store_setting["config_address"].'<br></p>Tel:'. $customerorders->telephone .'';
+        $html .=                         '<p class="etsAddress">'.$store_setting["config_address"].'<br></p>Tel:'. $store_setting["config_telephone"] .'';
         $html .=                     '</div>';
         $html .=                 '</div>';
         $html .=             '</div>';
@@ -220,16 +221,18 @@ class MemberController extends Controller
         $html .=                     '<tbody>';
         $html .=                         '<tr>';
         $html .=                             '<td></td>';
-        $html .=                             '<td class="text-start" style="text-transform: uppercase; font-weight: 700; padding-bottom: 10px">'.ucwords($customerorders->firstname).'&nbsp;'.ucwords($customerorders->firstname).' </td>';
+        $html .=                             '<td class="text-start" style="text-transform: uppercase; font-weight: 700; padding-bottom: 10px">'.ucwords($customerorders->firstname).'&nbsp;'.ucwords($customerorders->lastname).' </td>';
         $html .=                             '<td></td>';
         $html .=                         '</tr>';
-        $html .=                         '<tr>';
-        $html .=                             '<td><b>Delivery to:</b></td>';
-        $html .=                             '<td class="pb-2">';
-        $html .=                                 '<div class="text-start">test test<br>company new<br>london<br>london2<br>Test1 369852<br></div>';
-        $html .=                             '</td>';
-        $html .=                             '<td></td>';
-        $html .=                         '</tr>';
+                            if ($customerorders->flag_post_code == 'delivery') {
+                                $html .= '<tr>';
+                                $html .=     '<td><b>Delivery to:</b></td>';
+                                $html .=     '<td class="pb-2">';
+                                $html .=         '<div class="text-start">'.$customerorders->firstname.' '.$customerorders->lastname.'<br>'. $customerorders->payment_company .'<br>'. $customerorders->payment_address_1 .'<br>'. $customerorders->payment_address_2 .'<br>'. $customerorders->payment_city .'<br>'.$customerorders->payment_city.' '.$customerorders->payment_postcode.'<br></div>';
+                                $html .=     '</td>';
+                                $html .=     '<td></td>';
+                                $html .= '</tr>';
+                            }
         $html .=                         '<tr>';
         $html .=                             '<td><b>Telephone:</b></td>';
         $html .=                             '<td class="text-start pb-2">';
@@ -252,12 +255,41 @@ class MemberController extends Controller
         $html .=         '</div>';
         $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
         $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
-        $html .=             '<a class="btn btn-success mx-2" href="#" data-idorder="805682" class="button action-write-review"><i class="fa fa-commenting-o" aria-hidden="true"></i> Review</a>';
+        $html .=             '<a class="btn btn-success mx-2" href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="fa fa-commenting-o" aria-hidden="true"></i>Review</a>';
         $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fa fa-repeat" aria-hidden="true"></i> Re-Order </a>';
         $html .=         '</div>';
         $html .=     '</div>';
         $html .= '</div>';
 
         return response()->json(['customerorders' => $html]);
+    }
+
+    public function orderreviwe(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'message' => 'required'
+        ]);
+
+        // echo '<pre>';
+        // print_r($request->all());
+
+        $review = new Reviews;
+        $review->customer_id = $request->customer_id;
+        $review->store_id = $request->store_id;
+        $review->order_id = $request->order_id;
+        $review->title = $request->title;
+        $review->message = $request->message;
+        $review->quality = $request->quality;
+        $review->service = $request->service;
+        $review->timing = $request->timing;
+        $review->status = $request->status;
+        $review->date_added = date('Y-m-d H:i:s');
+        $review->date_modifid = date('Y-m-d H:i:s');
+        $review->save();
+
+        return response()->json([
+            'success' => 1,
+        ]);
     }
 }
