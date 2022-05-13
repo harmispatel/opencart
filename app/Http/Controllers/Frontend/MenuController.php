@@ -22,11 +22,10 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $front_store_id = session('front_store_id');
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
-        // $front_store_id =  $current_theme['store_id'];
+        $front_store_id =  $current_theme['store_id'];
         // $Coupon=session()->get('currentcoupon');
 
         if(session()->has('currentcoupon'))

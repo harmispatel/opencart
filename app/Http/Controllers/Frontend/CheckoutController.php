@@ -143,7 +143,7 @@ class CheckoutController extends Controller
             $Coupon = Coupon::where('store_id',$front_store_id)->first();
         }
         // $Coupon = Coupon::select('name', 'code', 'discount')->where('store_id', $front_store_id)->first();
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult','dileveryresult'));
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult','dileveryresult','areas'));
     }
 
     // Get Payment & Shipping Address By Customer Address ID
