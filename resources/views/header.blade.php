@@ -73,7 +73,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item pt-1 pr-3">
-        <a class="btn btn-sm btn-success"><i class="fa fa-plus"></i> NEW</a>
+        <a href="{{ route('createstore') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> NEW</a>
       </li>
       <li class="nav-item">
           @php

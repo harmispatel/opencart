@@ -52,146 +52,52 @@ $userlogin = session('username');
           <h5 class="modal-title" id="orderreceiptLabel">Modal title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            <div id="wrapper">
-                <span class="close-viewoder"></span>
-                <div id="content" style="text-align: center;">
-                    <div id="printthis" style="float: left; width: 100%;">
+        <div class="modal-body mb-3" id="customerordermodal">
 
-                        <div class="orderinfo-adress sang" style="text-align: center;">
-                            <div class="contact-info">
-                                <div class="content">
-                                    <p class="etsAddress">
-                                        <br>{{ $store_setting['config_address'] }}<br> </p>
-                                        {{-- Tel:{{ $customerorders['telephone'] }} --}}
-                                </div>
-                            </div>
-                        </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                        <div class="orderinfo-date">
-                            {{-- <b class="order-dates">Date: <span>{{ date('d-m-Y',strtotime($customerorders['date_added'])) }}</span></b>
-                            <b class="order-id" style="float: right;">Order ID: <span>#{{ $customerorders['order_id'] }}</span></b> --}}
-                        </div>
-                        <h3 class="order-delivery" style="border-bottom: 2px solid #777777;  color: #777777;  float: left;  font-size: 30px;  font-weight: bold;  padding-bottom: 10px;  text-align: center;  text-transform: uppercase;  width: 100%;">delivery</h3>
-                        <table class="list list-item" style="float: left;width:100%;margin: 0;">
-                            <thead>
-                                <tr>
-                                    <!--<th></th>-->
-                                    <th align="left" style="min-width:50px" class="center">Qty</th>
-                                    <th align="left" class="left">Item</th>
-                                    <th align="right" class="right">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td align="left" class="center" style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">1x</td>
-                                    <td align="left" class="left" style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;"><span class="name-parent">MUSHROOMS</span><br>
-                                        <div class="topping_text"><span class="bg" style="display:block"></span></div>
-                                    </td>
-                                    <td align="right" class="right" style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">£5.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="box-order-total" style="float: left;width: 100%;border-bottom: 1px solid #dddddd;">
-                            <table style="float: left;width: 100%;">
-                                <tbody style="float: left;width: 100%;">
-                                    <tr style="float: left;width: 100%;">
-                                        <td style="width: 50%;border-right: 1px solid #ddd;text-align: center;">
-                                            <!-- <td rowspan="3" class="iconsocialcod">-->
-                                            <strong>COD</strong>
-                                            <!--<span>28.8000</span>-->
-                                        </td>
-                                        <td style="width: 50%;">
-                                            <table>
-                                                <tbody>
-
-                                                    <tr class="order-left-right" style="border-bottom: 1px dotted #ddd;  float: left;  padding: 2px 0;  width: 100%;">
-                                                        <td class="left" style="float: left;"><b>Sub-Total:</b></td>
-                                                        <td class="right" style="float: right;font-weight: normal;">£36.00
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr class="order-left-right" style="border-bottom: 1px dotted #ddd;  float: left;  padding: 2px 0;  width: 100%;">
-                                                        <td class="left" style="float: left;"><b>Coupon(20PEROFF):</b>
-                                                        </td>
-                                                        <td class="right" style="float: right;font-weight: normal;">£-7.20
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr class="order-left-right" style="border-bottom: 1px dotted #ddd;  float: left;  padding: 2px 0;  width: 100%;">
-                                                        <td class="left" style="float: left;"><b>Delivery:</b></td>
-                                                        <td class="right" style="float: right;font-weight: normal;">£0.00
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr class="order-left-right" style="border-bottom: 1px dotted #ddd;  float: left;  padding: 2px 0;  width: 100%;">
-                                                        <td class="left" style="float: left;"><b>Service Charge:</b></td>
-                                                        <td class="right" style="float: right;font-weight: normal;">£0.00
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr class="order-left-right" style="border-bottom: 1px dotted #ddd;  float: left;  padding: 2px 0;  width: 100%;">
-                                                        <td class="left" style="float: left;"><b>Total to pay:</b></td>
-                                                        <td class="right" style="float: right;font-weight: normal;">£28.80
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="delivery-to" style="float: left;width: 100%;">
-                            <table class="list" style="float: left;width: 100%;">
-                                <tbody style="float: left;width: 100%;">
-                                    <tr>
-                                        <td></td>
-                                        <td class="left" style="text-transform: uppercase;">test&nbsp;test </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 150px;font-weight: bold;">Delivery to:</td>
-                                        <td class="left">
-                                            <div class="">test test<br>company new<br>london<br>london2<br>Test1 369852
-                                                <br></div>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 150px;font-weight: bold;">Telephone:</td>
-
-                                        <td class="left">
-                                            <a href="tel:12345678">
-                                                12345678
-                                            </a>
-                                        </td>
-                                        <td></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 150px;font-weight: bold;">Wanted by:</td>
-                                        <td class="left">
-                                            12:30-12:45 </td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-                        <div class="buttons action-order-view" style="float: left;width: 100%;border-top: 1px solid #000;margin-bottom: 0;">
-                            <h3 class="alert-thanks" style="color: #777777;  float: left;  font-size: 24px;  font-style: italic;  margin-bottom: 15px;  text-align: center; width: 100%;">Thanks for your custom!</h3>
-                        </div>
-                    </div>
-                    <div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">
-                        <a style="background-color: red;color:#fff;  float: none;  font-size: 12px;  font-weight: bold;  line-height: 26px;  margin: 0 4px;  padding: 3px 0;  text-transform: capitalize;  width: 26%;" onclick="printthis(); return false;" id="Print" class="button button_print_infor"
-                            href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
-                        <a style="background-color: #ff0808;color:#fff;  float: none;  font-size: 12px;  font-weight: bold;  line-height: 26px;  margin: 0 4px;  padding: 3px 0;  text-transform: capitalize;  width: 26%;" href="#" data-idorder="805682" class="button action-write-review"><i class="fa fa-commenting-o" aria-hidden="true"></i> Review</a>
-                        <a style="background-color: #ff0808;color:#fff;  float: none;  font-size: 12px;  font-weight: bold;  line-height: 26px;  margin: 0 4px;  padding: 3px 0;  text-transform: capitalize;  width: 26%;" href="https://www.kebabpizza.myfoodbasket.net/index.php?route=account/order&amp;order_id=805682" class="button"><i class="fa fa-repeat" aria-hidden="true"></i> Re-Order </a>
-                    </div>
-                </div>
+  <!-- Order review Modal -->
+  <div class="modal fade" id="orderreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreviewLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orderreviewLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-3">
+            <form id="reviewform" action="{{ route('orderreviwe') }}" method="POST">
+                {{ csrf_field() }}
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" name="reviewtitle" id="title">
+                <div class="invalid-feedback" id="reviewtitleerr" style="display: none; text-align:left;"></div>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" name="reviewmessage" rows="2"></textarea>
+                <div class="invalid-feedback" id="reviewmessageerr" style="display: none; text-align:left;"></div>
+              </div>
+            <div class="mb-3">
+                <label for="foodquality" class="form-label">Food Quality</label>
+                <input type="number" class="form-control" value="3" name="foodquality" id="foodquality">
+            </div>
+            <div class="mb-3">
+                <label for="customerservice" class="form-label">Customer service</label>
+                <input type="number" class="form-control" value="3" name="customerservice" id="customerservice">
+            </div>
+            <div class="mb-3">
+                <label for="timing" class="form-label">Timing</label>
+                <input type="number" class="form-control" value="3" name="timing" id="timing">
             </div>
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" form="reviewform" id="sendreview" class="btn btn-primary">Send</button>
+        </div>
+    </form>
       </div>
     </div>
   </div>
@@ -503,7 +409,7 @@ $userlogin = session('username');
                                                             <th>Time</th>
                                                             <th>:</th>
                                                             {{-- <td>16:20</td> --}}
-                                                            <td>{{date('H:i',strtotime($orders->date_added))}}</td>
+                                                            <td>{{ $orders->timedelivery }}</td>
                                                         </tr>
                                                         <tr>
                                                             <th>Products</th>
@@ -521,7 +427,7 @@ $userlogin = session('username');
                                             <div class="card-footer">
                                                 <span class="float-start text-bold" style="font-size: 23px"><i class="fa fa-shopping-basket" aria-hidden="true"></i> £{{ number_format($orders->total,2) }}</span>
                                                 {{-- <button type="button" class="float-end btn btn-danger" data-bs-toggle="modal" data-bs-target="#orderreceipt">View</button> --}}
-                                                <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail">View</button>
+                                                <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail" data-bs-toggle="modal" data-bs-target="#orderreceipt">View</button>
                                             </div>
                                         </div>
                                     </div>
@@ -586,8 +492,8 @@ $userlogin = session('username');
 
 
     $('.customerorderdetail').on('click', function () {
-       var customerorderid = $('.customerorderdetail').val();
-    //    alert(customerorderid)
+       var customerorderid = $(this).val();
+    //    alert(customerorderid);
        $.ajax({
            type: "POST",
            url: '{{ url("getcustomerorderdetail") }}',
@@ -597,11 +503,99 @@ $userlogin = session('username');
             },
            dataType: 'json',
            success: function (response) {
-                console.log(response.customerorders);
+                // console.log(response.customerorders);
+                $('#customerordermodal').html(response.customerorders);
            }
        });
     });
 
+
+// print
+function printDiv(divId,title) {
+
+    let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
+
+    // mywindow.document.write(`<html><head><title>${title}</title>`);
+    mywindow.document.write('</head><body >');
+    mywindow.document.write(document.getElementById(divId).innerHTML);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+    mywindow.print();
+    mywindow.close();
+
+    return true;
+}
+
+
+//  Order Review submite
+    $('#sendreview').on('click', function () {
+        console.log("Click");
+        var form_data = new FormData(document.getElementById('reviewform'));
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('orderreviwe') }}",
+            data: form_data,
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response)
+            {
+                if(response.success == 1)
+                {
+                    $('#checkout2').hide();
+                    $('#checkout3').show();
+                }
+
+                if(response.errors == 1)
+                {
+                    $('#postcodeerr').text('').show();
+                    $('#postcode').attr('class','form-control is-invalid');
+                    $('#postcodeerr').text(response.errors_message);
+                }
+            },
+            error : function (message)
+            {
+                if(typeof(message.responseJSON) != "undefined" && message.responseJSON !== null)
+                {
+                    var title   = message.responseJSON.errors.title;
+                    var message = message.responseJSON.errors.message;
+                }
+
+                // Title
+                if(title)
+                {
+                    $('#reviewtitleerr').text('').show();
+                    $('#reviewtitle').attr('class','form-control is-invalid');
+                    $('#reviewtitleerr').text(title);
+                }
+                else
+                {
+                    $('#reviewtitle').text('').hide();
+                    $('#reviewtitleerr').attr('class','form-control');
+                }
+
+                // Message
+                if(message)
+                {
+                    $('#reviewmessageerr').text('').show();
+                    $('#reviewmessage').attr('class','form-control is-invalid');
+                    $('#reviewmessageerr').text(message);
+                }
+                else
+                {
+                    $('#reviewmessageerr').text('').hide();
+                    $('#reviewmessage').attr('class','form-control');
+                }
+
+            }
+        });
+    });
+    // End Order Review submite
 
 </script>
 

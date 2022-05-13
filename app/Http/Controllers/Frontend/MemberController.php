@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Orders;
+use App\Models\Reviews;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -19,9 +20,9 @@ class MemberController extends Controller
         if (!empty($userlogin)) {
             $customers = Customer::where('customer_id',$userlogin)->first();
             $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$userlogin)->get();
-            $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('customer_id',$userlogin)->get();
+            $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('customer_id',$userlogin)->orderBy('order_id','DESC')->get();
             // echo '<pre>';
-            // print_r($customerorders->toArray());
+            // print_r($customerorders);
             // exit();
             return view('frontend.pages.member',compact('customers','customeraddress','customerorders'));
         }
@@ -153,8 +154,142 @@ class MemberController extends Controller
         $cusromerOrderId = $request->customerorderid;
         // $customers = Customer::where('customer_id',$cusromerOrderId)->first();
         // $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$cusromerOrderId)->get();
-        $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus'])->where('order_id',$cusromerOrderId)->get();
+        $customerorders = Orders::with(['hasManyOrderProduct','hasOneOrderStatus','hasManyOrderTotal'])->where('order_id',$cusromerOrderId)->first();
+        // echo '<pre>';
+        // print_r($customerorders->toArray());
+        // exit();
+        $store_setting = session('store_settings');
+        $html = '';
+        $html .= '<div id="wrapper">';
+        $html .=     '<div id="content" style="text-align: center;">';
+        $html .=         '<div id="printthis" style="float: left; width: 100%;">';
+        $html .=             '<div class="orderinfo-adress sang" style="text-align: center;">';
+        $html .=                 '<div class="contact-info">';
+        $html .=                     '<div class="content">';
+        $html .=                         '<p class="etsAddress">'.$store_setting["config_address"].'<br></p>Tel:'. $store_setting["config_telephone"] .'';
+        $html .=                     '</div>';
+        $html .=                 '</div>';
+        $html .=             '</div>';
+        $html .=             '<div class="orderinfo-date d-flex justify-content-between">';
+        $html .=                 '<span> <b class="order-dates">Date:</b>'. date('d/m/Y',strtotime($customerorders->date_added)) .'</span>';
+        $html .=                 '<span> <b class="order-id">Order ID:</b>'. $customerorders->order_id .'</span></b>';
+        $html .=             '</div>';
+        $html .=             '<h3 class="order-delivery" style="border-bottom: 2px solid #777777;  color: #777777;  float: left;  font-size: 30px;  font-weight: bold;  padding-bottom: 10px;  text-align: center;  text-transform: uppercase;  width: 100%;">delivery</h3>';
+        $html .=             '<table class="list list-item" style="float: left;width:100%;margin: 0;">';
+        $html .=                 '<thead>';
+        $html .=                     '<tr>';
+        $html .=                         '<th>Qty</th>';
+        $html .=                         '<th>Item</th>';
+        $html .=                         '<th>Total</th>';
+        $html .=                     '</tr>';
+        $html .=                 '</thead>';
+        $html .=                 '<tbody>';
+                    foreach ($customerorders['hasManyOrderProduct'] as $value) {
+                        $html .= '<tr>';
+                        $html .=     '<td style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">'. $value->quantity .'x</td>';
+                        $html .=     '<td style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;"><span class="name-parent">'. $value->name .'</span><br><div class="topping_text"><span class="bg" style="display:block"></span></div></td>';
+                        $html .=     '<td style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">£'. number_format($value->total,2) .'</td>';
+                        $html .= '</tr>';
+                    }
+        $html .=                 '</tbody>';
+        $html .=             '</table>';
+        $html .=             '<div class="box-order-total" style="float: left;width: 100%;border-bottom: 1px solid #dddddd;">';
+        $html .=                 '<table style="float: left;width: 100%;">';
+        $html .=                     '<tbody style="float: left;width: 100%;">';
+        $html .=                         '<tr style="float: left;width: 100%;">';
+        $html .=                             '<td style="width: 50%;border-right: 1px solid #ddd;text-align: center;">';
+        $html .=                                 '<strong>'. $customerorders->payment_code .'</strong>';
+        $html .=                             '</td>';
+        $html .=                             '<td style="width: 50%;">';
+        $html .=                                 '<table>';
+        $html .=                                     '<tbody>';
+                                            foreach ($customerorders['hasManyOrderTotal'] as $total) {
+                                                $html .= '<tr class="order-left-right" style="border-bottom: 1px dotted #ddd;  float: left;  padding: 2px 0;  width: 100%;">';
+                                                $html .=     '<td class="left" style="float: left;"><b>'. $total->title.':</b></td>';
+                                                $html .=     '<td class="right" style="float: right;font-weight: normal;">'. $total->text.'</td>';
+                                                $html .= '</tr>';
+                                            }
+        $html .=                                     '</tbody>';
+        $html .=                                 '</table>';
+        $html .=                             '</td>';
+        $html .=                         '</tr>';
+        $html .=                     '</tbody>';
+        $html .=                 '</table>';
+        $html .=             '</div>';
+        $html .=             '<div class="delivery-to d-flex justify-content-center" style="width: 100%;">';
+        $html .=                 '<table class="list" style="width: 80%;margin: 20px 0">';
+        $html .=                     '<tbody>';
+        $html .=                         '<tr>';
+        $html .=                             '<td></td>';
+        $html .=                             '<td class="text-start" style="text-transform: uppercase; font-weight: 700; padding-bottom: 10px">'.ucwords($customerorders->firstname).'&nbsp;'.ucwords($customerorders->lastname).' </td>';
+        $html .=                             '<td></td>';
+        $html .=                         '</tr>';
+                            if ($customerorders->flag_post_code == 'delivery') {
+                                $html .= '<tr>';
+                                $html .=     '<td><b>Delivery to:</b></td>';
+                                $html .=     '<td class="pb-2">';
+                                $html .=         '<div class="text-start">'.$customerorders->firstname.' '.$customerorders->lastname.'<br>'. $customerorders->payment_company .'<br>'. $customerorders->payment_address_1 .'<br>'. $customerorders->payment_address_2 .'<br>'. $customerorders->payment_city .'<br>'.$customerorders->payment_city.' '.$customerorders->payment_postcode.'<br></div>';
+                                $html .=     '</td>';
+                                $html .=     '<td></td>';
+                                $html .= '</tr>';
+                            }
+        $html .=                         '<tr>';
+        $html .=                             '<td><b>Telephone:</b></td>';
+        $html .=                             '<td class="text-start pb-2">';
+        $html .=                                 '<a href="tel:'. $customerorders->telephone .'">'. $customerorders->telephone .'</a>';
+        $html .=                             '</td>';
+        $html .=                             '<td></td>';
+        $html .=                         '</tr>';
+        $html .=                         '<tr>';
+        $html .=                             '<td><b>Wanted by:</b></td>';
+        $html .=                             '<td class="text-start">';
+        $html .=                                 ''. $customerorders->timedelivery .' </td>';
+        $html .=                             '<td></td>';
+        $html .=                         '</tr>';
+        $html .=                     '</tbody>';
+        $html .=                 '</table>';
+        $html .=             '</div>';
+        $html .=             '<div class="pt-3" style="float: left;width: 100%;border-top: 1px solid #ddd;margin-bottom: 0;">';
+        $html .=                 '<h3 style="color: #777777;  float: left;  font-size: 24px;  font-style: italic;  margin-bottom: 15px;  text-align: center; width: 100%;">Thanks for your custom!</h3>';
+        $html .=             '</div>';
+        $html .=         '</div>';
+        $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
+        $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
+        $html .=             '<a class="btn btn-success mx-2" href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="fa fa-commenting-o" aria-hidden="true"></i>Review</a>';
+        $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fa fa-repeat" aria-hidden="true"></i> Re-Order </a>';
+        $html .=         '</div>';
+        $html .=     '</div>';
+        $html .= '</div>';
 
-        return response()->json(['customerorders' => $customerorders]);
+        return response()->json(['customerorders' => $html]);
+    }
+
+    public function orderreviwe(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'message' => 'required'
+        ]);
+
+        // echo '<pre>';
+        // print_r($request->all());
+
+        $review = new Reviews;
+        $review->customer_id = $request->customer_id;
+        $review->store_id = $request->store_id;
+        $review->order_id = $request->order_id;
+        $review->title = $request->title;
+        $review->message = $request->message;
+        $review->quality = $request->quality;
+        $review->service = $request->service;
+        $review->timing = $request->timing;
+        $review->status = $request->status;
+        $review->date_added = date('Y-m-d H:i:s');
+        $review->date_modifid = date('Y-m-d H:i:s');
+        $review->save();
+
+        return response()->json([
+            'success' => 1,
+        ]);
     }
 }
