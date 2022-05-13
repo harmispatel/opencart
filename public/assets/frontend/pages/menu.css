@@ -776,6 +776,15 @@ td {
     margin-bottom: 20px;
 }
 
+
+/* member modal order resipt */
+
+.orderinfo-date {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 20PX;
+}
+
 @media only screen and (max-width:991px) {
     .cate-list-part {
         display: none;

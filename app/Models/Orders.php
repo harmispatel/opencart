@@ -46,5 +46,9 @@ class Orders extends Model
     {
         return $this->hasMany(OrderProduct::class,'order_id','order_id');
     }
+    public function hasManyOrderTotal()
+    {
+        return $this->hasMany(OrderTotal::class,'order_id','order_id');
+    }
 
 }
