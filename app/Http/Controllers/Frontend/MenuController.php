@@ -26,7 +26,8 @@ class MenuController extends Controller
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
-        // $Coupon=session()->get('currentcoupon');
+
+        $current_date = strtotime(date('Y-m-d'));
 
         if(session()->has('currentcoupon'))
         {
@@ -34,11 +35,26 @@ class MenuController extends Controller
         }
         else
         {
-            $Coupon = Coupon::where('store_id',$front_store_id)->first();
+            $get_coupon = Coupon::where('store_id',$front_store_id)->first();
+
+            if(!empty($get_coupon) || $get_coupon != '')
+            {
+                $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
+                $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
+
+                if($current_date >= $start_date && $current_date < $end_date)
+                {
+                    $Coupon = $get_coupon;
+                }
+                else
+                {
+                    $Coupon = '';
+                }
+
+            }
+
         }
 
-        // print_r($Coupon['name']);exit;
-        // $Coupon =Coupon::select('name','code','discount','date_start','date_end','type')->where('store_id',$front_store_id)->first();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->get();
@@ -79,6 +95,7 @@ class MenuController extends Controller
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
 
+        $current_date = strtotime(date('Y-m-d'));
 
         if(session()->has('currentcoupon'))
         {
@@ -86,7 +103,24 @@ class MenuController extends Controller
         }
         else
         {
-            $Coupon = Coupon::where('store_id',$front_store_id)->first();
+            $get_coupon = Coupon::where('store_id',$front_store_id)->first();
+
+            if(!empty($get_coupon) || $get_coupon != '')
+            {
+                $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
+                $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
+
+                if($current_date >= $start_date && $current_date < $end_date)
+                {
+                    $Coupon = $get_coupon;
+                }
+                else
+                {
+                    $Coupon = '';
+                }
+
+            }
+
         }
 
         if(!empty($loopid) || $loopid != '')
@@ -202,21 +236,19 @@ class MenuController extends Controller
         }
 
 
-        $cart_size = isset($mycart['size']) ? count($mycart['size']) : 0;
-        $cart_withoutsize = isset($mycart['withoutSize']) ? count($mycart['withoutSize']) : 0;
-        $cart_products = $cart_size + $cart_withoutsize;
 
         $html = '';
         $subtotal = 0;
         $delivery_charge = 0;
-
+        $cart_products = 0;
 
 
         $html .= '<table class="table">';
 
-        if (isset($mycart['size'])) {
-            foreach ($mycart['size'] as $key => $cart) {
-
+        if (isset($mycart['size']))
+        {
+            foreach ($mycart['size'] as $key => $cart)
+            {
                 $price = $cart['main_price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct('.$cart['product_id'].','.$key.','.$userid.')" style="cursor:pointer;"></i></td>';
@@ -225,27 +257,25 @@ class MenuController extends Controller
                 $html .= '<td>' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
+
+                // Delivery Charge
                 $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+
+                // Sub Total
                 $subtotal += $price;
-                $couponcode=($subtotal*$Coupon['discount'])/100;
-                $total=$subtotal-$couponcode+$delivery_charge;
-                if ($Coupon['type'] == 'P') {
-                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                }
-                if ($Coupon['type'] == 'F') {
-                    $couponcode =  $Coupon['discount'];
-                }
-                $total=$subtotal-$couponcode;
 
-
+                // Header Count
+                $cart_products += $cart['quantity'];
 
             }
 
-
         }
-        if (isset($mycart['withoutSize'])) {
+
+        if (isset($mycart['withoutSize']))
+        {
             $sizeid = 0;
-            foreach ($mycart['withoutSize'] as $cart) {
+            foreach ($mycart['withoutSize'] as $cart)
+            {
                 $price = $cart['main_price'] * $cart['quantity'];
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct('.$cart['product_id'].','.$sizeid.','.$userid.')" style="cursor:pointer"></i></td>';
@@ -253,57 +283,63 @@ class MenuController extends Controller
                 $html .= '<td colspan="2">' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
                 $html .= '</tr>';
+
+                // Delivery Charge
                 $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+
+                // Subtotal
                 $subtotal += $price;
-                if ($Coupon['type'] == 'P') {
-                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                }
-                if ($Coupon['type'] == 'F') {
-                    $couponcode = $Coupon['discount'];
-                }
-                $total=$subtotal-$couponcode;
+
+                // Header Count
+                $cart_products += $cart['quantity'];
 
             }
 
+        }
+        $html .= '</table>';
 
+
+        $coupon_html ='';
+
+        // Coupon Code
+        if(!empty($Coupon) || $Coupon != '')
+        {
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($subtotal * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode =  $Coupon['discount'];
+            }
+            $coupon_html .= '<label>Coupon('.$Coupon['code'].')</label><span>£ -' .$couponcode. '</span>';
+            // Main Total
+            $total=$subtotal-$couponcode+$delivery_charge;
+        }
+        else
+        {
+            $total=$subtotal+$delivery_charge;
         }
 
 
-        $html .= '</table>';
-        $html2 = '';
-        $html3 ='';
-        $html4 ='';
-        $html5 ='';
-        $html6 ='';
-        $html2 .= '<label>Sub-Total</label>
-        <span>£ '.$subtotal.'</span>';
-        $html4 .= '<label><b>Total to pay:</b></label>
-        <span>£ '. $total . '</span>';
-        $html5 .= '<label><b>Delivery Charge:</b></label>
-        <span>£ '. $delivery_charge . '</span>';
-        $html3 .= '<label>Coupon('.$Coupon['code'].')</label>
-        <span>£ -' .$couponcode. '</span>';
-        // $html6 .='<lable class="addcoupon"><a style="color: #ff0000;font-size:14px;"
-        // onclick="showcoupon();">Change Coupon Code</a></lable>';
-        $html6 ='hello';
-
-
+        $subtotl_html = '';
+        $deliverycharge_html ='';
         $headertotal = 0;
-        $headertotal = $subtotal;
+        $total_html ='';
 
+        $subtotl_html .= '<label>Sub-Total</label><span>£ '.$subtotal.'</span>';
+        $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>£ '. $delivery_charge . '</span>';
+        $total_html .= '<label><b>Total to pay:</b></label><span>£ '.$total.'</span>';
+        $headertotal += $total;
 
         return response()->json([
             'html' => $html,
-            'subtotal' => $html2,
-            'headertotal' => $headertotal,
+            'subtotal' => $subtotl_html,
+            'delivery_charge' =>$deliverycharge_html,
             'cart_products' => $cart_products,
-            'discount' => $html3,
-            'total' => $html4,
-            'coupon' =>$Coupon,
-            'delivery_charge' =>$html5,
-            'change_coupon' =>$html6,
-
-
+            'headertotal' => $headertotal,
+            'total' => $total_html,
+            'couponcode' => $coupon_html,
         ]);
     }
 
@@ -354,72 +390,120 @@ class MenuController extends Controller
         ]);
 
     }
-    public function getcoupon(Request $request){
-        $Coupon=$request->coupon;
-        $front_store_id = session('front_store_id');
-        $Couponcode=coupon::where('code',$Coupon)->where('store_id',$front_store_id)->first();
-        $code =$Couponcode->toArray();
+    public function getcoupon(Request $request)
+    {
+        $currentURL = URL::to("/");
+        $current_theme = themeID($currentURL);
+        $current_theme_id = $current_theme['theme_id'];
+        $front_store_id =  $current_theme['store_id'];
 
-        session()->put('currentcoupon', $code);
-        session()->save();
+        $current_date = strtotime(date('Y-m-d'));
 
-        if(session()->has('userid')){
+        if(session()->has('userid'))
+        {
             $userid = session()->get('userid');
-        }else
+        }
+        else
         {
             $userid =0;
         }
 
-        if($userid == 0)
+        $Coupon=$request->coupon;
+        $Couponcode=coupon::where('code',$Coupon)->where('store_id',$front_store_id)->first();
+
+        if(!empty($Couponcode) || $Couponcode != '') // Valid Coupon
         {
-            $mycart = $request->session()->get('cart1');
+            $start_date = isset($Couponcode->date_start) ? strtotime($Couponcode->date_start) : '';
+            $end_date = isset($Couponcode->date_end) ? strtotime($Couponcode->date_end) : '';
+
+            if($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+            {
+                $code =$Couponcode->toArray();
+                session()->put('currentcoupon', $code);
+                session()->save();
+
+                if($userid == 0)
+                {
+                    $mycart = $request->session()->get('cart1');
+                }
+                else
+                {
+                    $mycart = getuserCart($userid);
+                }
+
+                $subtotal = 0;
+                $delivery_charge = 0;
+
+                if(isset($mycart['size']) || !empty($mycart['size']))
+                {
+                    foreach($mycart['size'] as $key => $cart)
+                    {
+                        $price = $cart['main_price'] * $cart['quantity'];
+                        $subtotal += $price;
+                        $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+                    }
+                }
+
+                if(isset($mycart['withoutSize']) || !empty($mycart['withoutSize']))
+                {
+                    foreach($mycart['withoutSize'] as $key => $cart)
+                    {
+                        $price = $cart['main_price'] * $cart['quantity'];
+                        $subtotal += $price;
+                        $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+                    }
+                }
+
+                if ($Couponcode->type == 'P')
+                {
+                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                }
+                if ($Couponcode->type == 'F')
+                {
+                    $couponcode = $Couponcode->discount;
+                }
+
+                $total = $subtotal-$couponcode+$delivery_charge;
+
+                $total_html ='';
+                $couponcode_html ='';
+                $success_message ='';
+
+                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                $couponcode_html .= '<label>Coupon('.$Couponcode->code.')</label><span>£ -' .$couponcode. '</span>';
+                $total_html .= '<label><b>Total to pay:</b></label><span>£ '. $total . '</span>';
+
+                return response()->json([
+                    'success' => 1,
+                    'success_message' => $success_message,
+                    'couponcode'=>$couponcode_html,
+                    'total'=>$total_html,
+                    'headertotal'=>$total,
+                ]);
+
+            }
+            else // Expired Coupon
+            {
+                $error_msg = '';
+                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                return response()->json([
+                    'errors' => 1,
+                    'errors_message' => $error_msg,
+                ]);
+            }
+
         }
-        else
+        else // Invalid Coupon
         {
-            $mycart = getuserCart($userid);
+            $error_msg = '';
+            $error_msg .= '<span class="text-danger">Please enter valid Coupon Code</span>';
+            return response()->json([
+                'errors' => 1,
+                'errors_message' => $error_msg,
+            ]);
         }
 
-        $subtotal = 0;
-        foreach($mycart['size'] as $key => $cart){
-            $price = $cart['main_price'] * $cart['quantity'];
-            $subtotal += $price;
-            if ($Couponcode->type == 'P') {
-                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-            }
-            if ($Couponcode->type == 'F') {
-                $couponcode = $Couponcode->discount;
-            }
-            $total=$subtotal-$couponcode;
-        }
 
-        foreach($mycart['withoutSize'] as $key => $cart){
-            $price = $cart['main_price'] * $cart['quantity'];
-            $subtotal += $price;
-            if ($Couponcode->type == 'P') {
-                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-            }
-            if ($Couponcode->type == 'F') {
-                $couponcode = $Couponcode->discount;
-            }
-            $total=$subtotal-$couponcode;
-        }
-        $html3 ='';
-        $html4 ='';
-        $html3 .= '<label>Coupon('.$Couponcode->code.')</label>
-        <span>£ -' .$couponcode. '</span>';
-        $html4 .= '<label><b>Total to pay:</b></label>
-        <span>£ '. $total . '</span>';
-        $code = isset($Couponcode->code) ? $Couponcode->code : '';
-
-        // $html5 .='<td><b>Coupon('.$Couponcode->code.'):</b></td>';
-
-        if(!empty($code) || $code != ''){
-            $json ='Your coupon discount has been applied!';
-        }else{
-            $json ='Coupon not valid';
-        }
-        // return response()->json(['couponcode'=>$html3,'total'=>$html4]);
-        return response()->json(['couponcode'=>$html3,'total'=>$html4,'json'=>$json ]);
       }
 
 
@@ -670,10 +754,15 @@ class MenuController extends Controller
         return $request->all();
     }
 
-    public function searchcouponcode(Request $request){
-        $front_store_id = session('front_store_id');
-        $query = $request->get('query');
-        $filterResult = Coupon::select('code')->where('code', 'LIKE', '%'. $query. '%')->where('store_id',$front_store_id)->get();
+    public function searchcouponcode(Request $request)
+    {
+        $currentURL = URL::to("/");
+        $current_theme = themeID($currentURL);
+        $current_theme_id = $current_theme['theme_id'];
+        $front_store_id =  $current_theme['store_id'];
+
+        $coupon = $request->coupon;
+        $filterResult = Coupon::select('code')->where('code', 'LIKE', '%'.$coupon.'%')->where('store_id',$front_store_id)->get();
         return response()->json($filterResult);
     }
 

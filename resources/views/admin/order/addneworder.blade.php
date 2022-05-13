@@ -900,7 +900,7 @@
         delay: 500,
 
         select: function(event, ui) {
-            $(' #productid ').val(ui.item.proid);
+            $('#productid').val(ui.item.proid);
             //  return false;
         },
 

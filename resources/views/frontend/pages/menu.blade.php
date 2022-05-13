@@ -1,24 +1,28 @@
 @php
-$openclose = openclosetime();
+    // Open Close Time
+    $openclose = openclosetime();
 
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
+    // Get Template Settings
+    $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
 
-$user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // User Delivery Type
+    $user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
 
-if (session()->has('userid')) {
-    $userid = session()->get('userid');
-    $mycart = getuserCart($userid);
-} else {
-    $userid = 0;
-    $mycart = session()->get('cart1');
-}
-// echo "<pre>";
-//  print_r(session()->get('currentcoupon'));
-//  exit;
+    if (session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart($userid);
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
+
 @endphp
 
 <!doctype html>
@@ -255,23 +259,7 @@ if (session()->has('userid')) {
                                                                                         @php
                                                                                             $sizeprice = $size->id_product_price_size;
                                                                                             $productsize = $values->hasOneProduct['product_id'];
-
-                                                                                            if ($user_delivery_type == 'collection') {
-                                                                                                if (!empty($size->collection_price) && $size->collection_price != 0.0) {
-                                                                                                    $setsizeprice = $size->collection_price;
-                                                                                                } else {
-                                                                                                    $setsizeprice = $size->price;
-                                                                                                }
-                                                                                            } elseif ($user_delivery_type == 'delivery') {
-                                                                                                if (!empty($size->delivery_price) && $size->delivery_price != 0.0) {
-                                                                                                    $setsizeprice = $size->delivery_price;
-                                                                                                } else {
-                                                                                                    $setsizeprice = $size->price;
-                                                                                                }
-                                                                                            } else {
-                                                                                                $setsizeprice = $size->price;
-                                                                                            }
-
+                                                                                            $setsizeprice = $size->price;
                                                                                         @endphp
                                                                                         <div class="options-bt">
                                                                                             <div
@@ -346,23 +334,7 @@ if (session()->has('userid')) {
                                                                                                             $lasttime = strtotime($totime[$key]);
                                                                                                             $today = time();
                                                                                                             $currentday = date('l');
-
-                                                                                                            if ($user_delivery_type == 'collection') {
-                                                                                                                if (!empty($values->hasOneProduct['collection_price']) && $values->hasOneProduct['collection_price'] != 0.0) {
-                                                                                                                    $setprice = $values->hasOneProduct['collection_price'];
-                                                                                                                } else {
-                                                                                                                    $setprice = $values->hasOneProduct['price'];
-                                                                                                                }
-                                                                                                            } elseif ($user_delivery_type == 'delivery') {
-                                                                                                                if (!empty($values->hasOneProduct['delivery_price']) && $values->hasOneProduct['delivery_price'] != 0.0) {
-                                                                                                                    $setprice = $values->hasOneProduct['delivery_price'];
-                                                                                                                } else {
-                                                                                                                    $setprice = $values->hasOneProduct['price'];
-                                                                                                                }
-                                                                                                            } else {
-                                                                                                                $setprice = $values->hasOneProduct['price'];
-                                                                                                            }
-
+                                                                                                            $setprice = $values->hasOneProduct['price'];
                                                                                                         @endphp
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
@@ -467,24 +439,14 @@ if (session()->has('userid')) {
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $key => $cart)
-                                                        @php
-                                                                $date_start = $Coupon['date_start'];
-                                                                $date_end =$Coupon['date_end'];
-                                                                $price = isset($cart['main_price']) ?$cart['main_price'] : 0 * $cart['quantity'];
+                                                            @php
+                                                                $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
-
-                                                                if ($Coupon['type'] == 'P') {
-                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                                                }
-                                                                if ($Coupon['type'] == 'F') {
-                                                                    $couponcode = $Coupon['discount'];
-                                                                }
-                                                                $total = $subtotal - $couponcode;
-
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -506,17 +468,10 @@ if (session()->has('userid')) {
                                                                 $price = $cart['main_price'] * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
-
-                                                                if ($Coupon['type'] == 'P') {
-                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                                                }
-                                                                if ($Coupon['type'] == 'F') {
-                                                                    $couponcode = $Coupon['discount'];
-                                                                }
-                                                                $total = $subtotal - $couponcode + $delivery_charge;
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -535,6 +490,24 @@ if (session()->has('userid')) {
                                                 @endif
                                             </table>
                                         </div>
+                                        @php
+                                            if (!empty($Coupon) || $Coupon != '')
+                                            {
+                                                if ($Coupon['type'] == 'P')
+                                                {
+                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                }
+                                                if ($Coupon['type'] == 'F')
+                                                {
+                                                    $couponcode = $Coupon['discount'];
+                                                }
+                                                $total = $subtotal - $couponcode + $delivery_charge;
+                                            }
+                                            else
+                                            {
+                                                $total = $subtotal + $delivery_charge;
+                                            }
+                                        @endphp
                                         <div class="minicart-total">
                                             <ul class="minicart-list">
                                                 <li class="minicart-list-item">
@@ -553,42 +526,57 @@ if (session()->has('userid')) {
                                                         <span>£ {{ $delivery_charge }}</span>
                                                     </div>
                                                 </li>
-                                                @if (isset($mycart['size']) && !empty($mycart['size']))
-                                                    @if ($date >= $date_start && $date <= $date_end)
+                                                @if ( (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) )
                                                         <li class="minicart-list-item">
                                                             <div class="minicart-list-item-innr coupon_code">
-                                                                <label
-                                                                    id="coupontext">Coupon({{ $Coupon['code'] }})</label>
-                                                                <span>£
-                                                                    -
-                                                                    {{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                                @if ($Coupon != '' || !empty($Coupon))
+                                                                    <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
+                                                                    <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                                @endif
                                                             </div>
                                                             <div class="minicart-list-item-innr addcoupon">
-
-                                                                <label><a style="color: #ff0000;font-size:14px;"
-                                                                        onclick="showcoupon();">Change Coupon
-                                                                        Code</a></label>
+                                                                <label>
+                                                                    @if ($Coupon != '' || !empty($Coupon))
+                                                                        <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">
+                                                                            Change Coupon Code
+                                                                        </a>
+                                                                    @else
+                                                                        <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">
+                                                                            Apply New Coupon Code
+                                                                        </a>
+                                                                    @endif
+                                                                </label>
                                                             </div>
-                                                            <div class="showcoupons">
-                                                                <form action="{{ route('getcoupon') }}" method="POST"
-                                                                    id="from_showcoupon">
-                                                                    @csrf
-                                                                    <div class="myDiv" style="display:none;">
-                                                                        <input style="float:left;padding:5px 2px"
-                                                                            type="text" name="coupon" id="searchcoupon"
-                                                                            placeholder="Enter your coupon here"
-                                                                            class="coupon-val ">
-                                                                        &nbsp;
-                                                                        <input
-                                                                            style="text-transform: uppercase;float:right;"
-                                                                            type="submit" value="Apply"
-                                                                            class="btn btn-danger ">
-                                                                    </div>
-                                                                </form>
+                                                            <div class="minicart-list-item-innr">
+                                                                <div class="showcoupons">
+                                                                    <form method="POST" id="from_showcoupon">
+                                                                        @csrf
+                                                                        <div class="myDiv" style="display:none;">
+                                                                            <div class="row">
+                                                                                <div class="col-md-8">
+                                                                                    <input style="float:left;padding:5px 2px" type="text" name="coupon" value="" id="searchcoupon" placeholder="Enter your coupon here" class="coupon-val ">
+                                                                                </div>
+                                                                                <div class="col-md-4 text-right">
+                                                                                    <input style="text-transform: uppercase;" type="submit" value="Apply" class="btn btn-danger ">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-md-12">
+                                                                                    <div id="error"></div>
+                                                                                    <div id="success"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                             </div>
-                                                            <p style="color:#00FF00" id="couponError"></p>
                                                         </li>
-                                                    @endif
+                                                @else
+                                                    <li class="minicart-list-item">
+                                                        <div class="minicart-list-item-innr coupon_code">
+
+                                                        </div>
+                                                    </li>
                                                 @endif
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
@@ -802,6 +790,23 @@ if (session()->has('userid')) {
 
 </body>
 <script>
+    $(document).ready(function()
+    {
+        var status = $('#user_delivery_val').val();
+        var coll = $("input[name='delivery_type']:checked").val();
+
+        if(coll == 'collection')
+        {
+            $('#Modal').modal('hide');
+            return false;
+        }
+
+        if (status == '') {
+            $('#Modal').modal('show');
+        }
+
+    });
+
     function showmodal() {
 
         $('#Modal').modal('show');
@@ -839,7 +844,8 @@ if (session()->has('userid')) {
 </script>
 
 <script>
-    function showId(product, sizeprice, uid) {
+    function showId(product, sizeprice, uid)
+    {
         var sizeid = sizeprice;
         var productid = product;
         var userid = uid;
@@ -847,10 +853,14 @@ if (session()->has('userid')) {
 
         var coll = $("input[name='delivery_type']:checked").val();
 
-        if (coll == 'collection') {
+        if (coll == 'collection')
+        {
             $('#Modal').modal('hide');
-        } else {
-            if (status == '') {
+        }
+        else
+        {
+            if (status == '')
+            {
                 $('#Modal').modal('show');
                 return false;
             }
@@ -867,23 +877,35 @@ if (session()->has('userid')) {
                 'user_id': userid,
             },
             dataType: 'json',
-            success: function(result) {
+            success: function(result)
+            {
+                // Cart Data
                 $('.empty-box').html('');
-                $('.sub-total').html('');
-                $('.total').html('');
-                $('#cart_products').html('');
-                $('.coupon_code').html('');
-                $('.addcoupon').html('');
-                $('.pirce-value').html('');
-                $('.del_charge').html('');
                 $('.empty-box').append(result.html);
+
+                // Sub Total
+                $('.sub-total').html('');
                 $('.sub-total').append(result.subtotal);
-                $('#cart_products').append(result.cart_products);
-                $('.coupon_code').append(result.discount);
-                $('.total').append(result.total);
-                $('.pirce-value').append(result.headertotal);
+
+                // Delivery Charge
+                $('.del_charge').html('');
                 $('.del_charge').append(result.delivery_charge);
-                $('.addcoupon').append(result.change_coupon);
+
+                // Cart Products
+                $('#cart_products').html('');
+                $('#cart_products').append(result.cart_products);
+
+                // Total Amount
+                $('.total').html('');
+                $('.total').append(result.total);
+
+                // Header Total
+                $('.pirce-value').text('');
+                $('.pirce-value').append(result.headertotal);
+
+                // Coupon
+                $('.coupon_code').html('');
+                $('.coupon_code').append(result.couponcode);
 
             }
         });
@@ -950,28 +972,87 @@ if (session()->has('userid')) {
                 'coupon': coupon,
             },
             dataType: 'json',
-            success: function(result) {
-                $('#couponError').text(result.json);
-                $('.coupon_code').html('');
-                $('.total').html('');
-                $('.coupon_code').append(result.couponcode);
-                $('.total').append(result.total);
+            success: function(result)
+            {
+                if(result.errors == 1)
+                {
+                    $('#error').html('');
+                    $('#error').append(result.errors_message);
+                    $('#from_showcoupon').trigger('reset');
+                    setTimeout(() => {
+                        $('#error').html('');
+                    }, 5000);
+                }
+
+                if(result.success == 1)
+                {
+                    $('#success').html('');
+                    $('#success').append(result.success_message);
+
+                    // Coupon Code
+                    $('.coupon_code').html('');
+                    $('.coupon_code').append(result.couponcode);
+
+                    // Total
+                    $('.total').html('');
+                    $('.total').append(result.total);
+
+                    // Header Total
+                    $('.pirce-value').text('');
+                    $('.pirce-value').append(result.headertotal);
+
+                    $('#from_showcoupon').trigger('reset');
+
+                    setTimeout(() => {
+                        $('#success').html('');
+                        $('.myDiv').hide();
+                    }, 2000);
+                }
+
             }
         });
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script> --}}
 <script>
-    var route = "{{ url('searchcouponcode') }}";
-    $('#searchcoupon').typeahead({
-        source: function(query, process) {
-            return $.get(route, {
-                query: query
-            }, function(data) {
-                return process(data);
-            });
-        }
-    });
+
+    // $('#searchcoupon').autocomplete({
+    //     source: function(request, reponse) {
+
+    //         $.ajax({
+    //             url: "{{ url('searchcouponcode') }}",
+    //             data: {
+    //                 coupon: request.term
+    //             },
+    //             dataType: 'json',
+    //             success: function(data) {
+    //                 reponse($.map(data, function(object) {
+    //                     // alert(object.code)
+    //                     return {
+    //                         label: object.code,
+    //                         code: object.code,
+
+    //                     };
+    //                 }));
+    //             }
+    //         });
+    //     },
+
+    //     minLength: 1,
+    //     delay: 500,
+
+    //     select: function(event, ui) {
+    //         $('#searchcoupon').val(ui.item.code);
+    //         //  return false;
+    //     },
+
+    //     messages: {
+    //         noResults: '',
+    //         results: function() {}
+    //     }
+
+    // });
+
 </script>
 
 </html>

@@ -796,6 +796,11 @@ td {
     }
 }
 
+/* Auto Complete */
+.ui-front {
+    z-index: 999;
+}
+
 @media only screen and (max-width:767px) {
     .mob-view {
         display: block;
