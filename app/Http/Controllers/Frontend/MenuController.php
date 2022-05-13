@@ -22,12 +22,21 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $front_store_id = session('front_store_id');
         $currentURL = URL::to("/");
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
-        // $front_store_id =  $current_theme['store_id'];
-        $Coupon=session()->get('currentcoupon');
+        $front_store_id =  $current_theme['store_id'];
+        // $Coupon=session()->get('currentcoupon');
+
+        if(session()->has('currentcoupon'))
+        {
+            $Coupon=session()->get('currentcoupon');
+        }
+        else
+        {
+            $Coupon = Coupon::where('store_id',$front_store_id)->first();
+        }
+
         // print_r($Coupon['name']);exit;
         // $Coupon =Coupon::select('name','code','discount','date_start','date_end','type')->where('store_id',$front_store_id)->first();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
@@ -70,9 +79,15 @@ class MenuController extends Controller
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
 
-        $Coupon=session()->get('currentcoupon');
 
-
+        if(session()->has('currentcoupon'))
+        {
+            $Coupon=session()->get('currentcoupon');
+        }
+        else
+        {
+            $Coupon = Coupon::where('store_id',$front_store_id)->first();
+        }
 
         if(!empty($loopid) || $loopid != '')
         {
