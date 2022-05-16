@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AllUser;
+use App\Models\Store;
 use App\Models\Users;
 use App\Models\UserGroup;
 use Illuminate\Http\Request;
@@ -41,6 +42,7 @@ class AllUserController extends Controller
 
         // Get Users Group
         $data['usersgroup'] = UserGroup::get();
+        $data['stores'] = Store::get();
         return view('admin.users.add',$data);
     }
 
@@ -61,6 +63,7 @@ class AllUserController extends Controller
             'lastname' => 'required',
             'email' => 'required|unique:oc_user',
             'image' => 'required',
+            'store' => 'required',
             'password' => 'min:6|required_with:confirm|same:confirm',
             'confirm' => 'min:6|required_with:password|same:password',
         ]);
@@ -76,6 +79,7 @@ class AllUserController extends Controller
         $data->status = $request['status'];
         $data->salt = genratetoken(9);
         $data->code = '';
+        $data->user_shop = $request->store;
         $data->ip = $_SERVER['REMOTE_ADDR'];
         $data->accessdirectory = isset($request->accessdirectory) ? $request->accessdirectory : '';
         $data->date_added = date('Y-m-d');
@@ -150,6 +154,7 @@ class AllUserController extends Controller
         }
 
         $data['usersgroup'] = UserGroup::get();
+        $data['stores'] = Store::get();
 
         $data['users'] = Users::where('user_id',$id)->first();
         return view('admin.users.edit',$data);
@@ -169,6 +174,7 @@ class AllUserController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required',
+            'store' => 'required',
         ]);
 
         $user_id = $request->id;
@@ -180,6 +186,7 @@ class AllUserController extends Controller
         $data->lastname = $request['lastname'];
         $data->email = $request['email'];
         $data->status = $request['status'];
+        $data->user_shop = $request['store'];
 
         if( (!empty($_POST['password'])) && (!empty($_POST['confirm'])) )
         {

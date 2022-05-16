@@ -29,6 +29,31 @@ function user_details()
     return $user_dt;
 }
 
+function full_copy($source, $target)
+{
+    if ( is_dir( $source ) ) {
+            $d = dir( $source );
+            while ( FALSE !== ( $entry = $d->read() ) )
+            {
+                if ( $entry == '.' || $entry == '..' )
+                {
+                        continue;
+                }
+                $Entry = $source . '/' . $entry;
+                if ( is_dir( $Entry ) )
+                {
+                    @mkdir( $Entry );
+                    // $this->full_copy( $Entry, $target . '/' . $entry );
+                    full_copy( $Entry, $target . '/' . $entry );
+                    continue;
+                }
+                copy( $Entry, $target . '/' . $entry );
+            }
+            $d->close();
+    }else {
+        copy( $source, $target );
+    }
+}
 
 // Get Total Ip Count
 function gettotalip($ip)
@@ -937,7 +962,7 @@ function getCoupon()
     $front_store_id =  $current_theme['store_id'];
 
     $current_date = strtotime(date('Y-m-d'));
-
+    $Coupon = '';
     if(session()->has('currentcoupon'))
     {
         $Coupon=session()->get('currentcoupon');
@@ -1047,6 +1072,9 @@ function getallproduct($id)
     $categorytoproduct = Product_to_category::with(['hasOneProduct','hasOneDescription'])->whereHas('hasOneProduct', function ($query) use ($cat) {
         $query->where('category_id',$cat);
     })->get();
+    // echo '<pre>';
+    // print_r($categorytoproduct);
+    // exit();
     return $categorytoproduct;
 }
 ?>

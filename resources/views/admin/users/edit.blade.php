@@ -141,6 +141,21 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="status">Stores</label>
+                                        <select name="store" id="store" class="form-control {{ ($errors->has('store')) ? 'is-invalid' : '' }}">
+                                            <option value="">Select Your Store</option>
+                                            @foreach ($stores as $store)
+                                                <option value="{{ $store->store_id }}" {{ ($users->user_shop == $store->store_id) ? 'selected' : '' }}>{{ $store->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('store'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('store') }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="status">Status</label>
                                         <select name="status" id="status" class="form-control">
                                             <option value="1" {{ ($users->status == 1) ? 'selected' : '' }}>Enabled</option>

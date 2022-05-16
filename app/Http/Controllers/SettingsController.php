@@ -355,94 +355,97 @@ class SettingsController extends Controller
     {
 
 
-                // save in Store
-                $store = new Store;
-                $store->name = $request['config_name'];
-                $store->url =  $request['config_url'];
-                $store->ssl =  $request['config_ssl'];
-                $store->id_cat_default =  isset($request->id_cat_default) ? $request->id_cat_default : "0";
-                $store->date_create = date('Y-m-d H:i:s');
-                $store->save();
-                // echo '<pre>';
-                // print_r($store->toArray());
-                // exit();
+        // save in Store
+        $store = new Store;
+        $store->name = $request['config_name'];
+        $store->url =  $request['config_url'];
+        $store->ssl =  $request['config_ssl'];
+        $store->id_cat_default =  isset($request->id_cat_default) ? $request->id_cat_default : "0";
+        $store->date_create = date('Y-m-d H:i:s');
+        $store->save();
 
-                $lastinsertid = $store->store_id;
+        $lastinsertid = $store->store_id;
 
-                $data['config_url'] = isset($request->config_url) ? $request->config_url : '';
-                $data['config_secure'] = isset($request->config_secure) ? $request->config_secure : 0;
-                $data['config_ssl'] = isset($request->config_ssl) ? $request->config_ssl : '';
-                $data['config_name'] = isset($request->config_name) ? $request->config_name : '';
-                $data['config_owner'] = isset($request->config_owner) ? $request->config_owner : '';
-                $data['config_address'] = isset($request->config_address) ? $request->config_address : '';
-                $data['config_zone_id'] = isset($request->config_zone_id) ? $request->config_zone_id : '';
-                $data['map_post_code'] = isset($request->map_post_code) ? $request->map_post_code : '';
-                $data['config_country_id'] = isset($request->config_country_id) ? $request->config_country_id : '';
-                $data['map_ifram'] = isset($request->map_ifram) ? $request->map_ifram : '';
-                $data['sitemap_url'] = isset($request->sitemap_url) ? $request->sitemap_url : '';
-                $data['config_telephone'] = isset($request->config_telephone) ? $request->config_telephone : '';
-                $data['config_fax'] = isset($request->config_fax) ? $request->config_fax : '';
-                $data['config_language'] = isset($request->config_language) ? $request->config_language : '';
-                $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
-                $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
-                $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-                if ($request->hasFile('config_logo')) {
+        $data['config_url'] = isset($request->config_url) ? $request->config_url : '';
+        $data['config_secure'] = isset($request->config_secure) ? $request->config_secure : 0;
+        $data['config_ssl'] = isset($request->config_ssl) ? $request->config_ssl : '';
+        $data['config_name'] = isset($request->config_name) ? $request->config_name : '';
+        $data['config_owner'] = isset($request->config_owner) ? $request->config_owner : '';
+        $data['config_address'] = isset($request->config_address) ? $request->config_address : '';
+        $data['config_zone_id'] = isset($request->config_zone_id) ? $request->config_zone_id : '';
+        $data['map_post_code'] = isset($request->map_post_code) ? $request->map_post_code : '';
+        $data['config_country_id'] = isset($request->config_country_id) ? $request->config_country_id : '';
+        $data['map_ifram'] = isset($request->map_ifram) ? $request->map_ifram : '';
+        $data['sitemap_url'] = isset($request->sitemap_url) ? $request->sitemap_url : '';
+        $data['config_telephone'] = isset($request->config_telephone) ? $request->config_telephone : '';
+        $data['config_fax'] = isset($request->config_fax) ? $request->config_fax : '';
+        $data['config_language'] = isset($request->config_language) ? $request->config_language : '';
+        $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
+        $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
+        $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
+        if ($request->hasFile('config_logo')) {
 
-                    $logo_name = time() . '.' . $request->file('config_logo')->getClientOriginalExtension();
-                    $request->file('config_logo')->move(public_path('admin/store_images/logo'), $logo_name);
-                    $data['config_logo'] = 'public/admin/store_images/logo/' . $logo_name;
-                }
+            $logo_name = time() . '.' . $request->file('config_logo')->getClientOriginalExtension();
+            $request->file('config_logo')->move(public_path('admin/store_images/logo'), $logo_name);
+            $data['config_logo'] = 'public/admin/store_images/logo/' . $logo_name;
+        }
 
 
-                if ($request->hasFile('config_icon')) {
-                    $icon_name = time() . '.' . $request->file('config_icon')->getClientOriginalExtension();
-                    $request->file('config_icon')->move(public_path('admin/store_images/icon'), $icon_name);
-                    $data['config_icon'] = 'public/admin/store_images/icon/' . $logo_name;
-                }
+        if ($request->hasFile('config_icon')) {
+            $icon_name = time() . '.' . $request->file('config_icon')->getClientOriginalExtension();
+            $request->file('config_icon')->move(public_path('admin/store_images/icon'), $icon_name);
+            $data['config_icon'] = 'public/admin/store_images/icon/' . $logo_name;
+        }
 
 
-                $data['grecaptcha'] = isset($request->grecaptcha) ? $request->grecaptcha : '';
-                $data['enable_booking_module'] = isset($request->enable_booking_module) ? $request->enable_booking_module : '';
-                $data['file_directory_url'] = isset($request->file_directory_url) ? $request->file_directory_url : '';
-                $data['service_charge_type'] = isset($request->service_charge_type) ? $request->service_charge_type : '';
-                $data['service_charge'] = isset($request->service_charge) ? $request->service_charge : '';
-                $data['config_email'] = isset($request->config_email) ? $request->config_email : '';
-                $data['sms_api_url'] = isset($request->sms_api_url) ? $request->sms_api_url : '';
-                $data['sms_notification_status'] = isset($request->sms_notification_status) ? $request->sms_notification_status : '';
-                $data['sms_notification_time'] = isset($request->sms_notification_time) ? $request->sms_notification_time : '';
-                $data['sms_notification_number'] = isset($request->sms_notification_number) ? $request->sms_notification_number : '';
-                $data['config_account_printer'] = isset($request->config_account_printer) ? $request->config_account_printer : '';
-                $data['config_password_printer'] = isset($request->config_password_printer) ? $request->config_password_printer : '';
-                $data['enable_ajax_checkout'] = isset($request->enable_ajax_checkout) ? $request->enable_ajax_checkout : '';
-                $data['enable_notify_email'] = isset($request->enable_notify_email) ? $request->enable_notify_email : '';
-                $data['enable_res_api'] = isset($request->enable_res_api) ? $request->enable_res_api : '';
-                $data['enable_msg_api'] = isset($request->enable_msg_api) ? $request->enable_msg_api : '';
-                $data['suspend_permanently'] = isset($request->suspend_permanently) ? $request->suspend_permanently : 'no';
-                $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
-                $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
+        $data['grecaptcha'] = isset($request->grecaptcha) ? $request->grecaptcha : '';
+        $data['enable_booking_module'] = isset($request->enable_booking_module) ? $request->enable_booking_module : '';
+        $data['file_directory_url'] = isset($request->file_directory_url) ? $request->file_directory_url : '';
+        $data['service_charge_type'] = isset($request->service_charge_type) ? $request->service_charge_type : '';
+        $data['service_charge'] = isset($request->service_charge) ? $request->service_charge : '';
+        $data['config_email'] = isset($request->config_email) ? $request->config_email : '';
+        $data['sms_api_url'] = isset($request->sms_api_url) ? $request->sms_api_url : '';
+        $data['sms_notification_status'] = isset($request->sms_notification_status) ? $request->sms_notification_status : '';
+        $data['sms_notification_time'] = isset($request->sms_notification_time) ? $request->sms_notification_time : '';
+        $data['sms_notification_number'] = isset($request->sms_notification_number) ? $request->sms_notification_number : '';
+        $data['config_account_printer'] = isset($request->config_account_printer) ? $request->config_account_printer : '';
+        $data['config_password_printer'] = isset($request->config_password_printer) ? $request->config_password_printer : '';
+        $data['enable_ajax_checkout'] = isset($request->enable_ajax_checkout) ? $request->enable_ajax_checkout : '';
+        $data['enable_notify_email'] = isset($request->enable_notify_email) ? $request->enable_notify_email : '';
+        $data['enable_res_api'] = isset($request->enable_res_api) ? $request->enable_res_api : '';
+        $data['enable_msg_api'] = isset($request->enable_msg_api) ? $request->enable_msg_api : '';
+        $data['suspend_permanently'] = isset($request->suspend_permanently) ? $request->suspend_permanently : 'no';
+        $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
+        $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
 
-                if ($request->hasFile('suspend_logo')) {
+        if ($request->hasFile('suspend_logo')) {
 
-                    $suspend_logo_name = time() . '.' . $request->file('suspend_logo')->getClientOriginalExtension();
-                    $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'), $suspend_logo_name);
-                    $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/' . $suspend_logo_name;
-                }
+            $suspend_logo_name = time() . '.' . $request->file('suspend_logo')->getClientOriginalExtension();
+            $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'), $suspend_logo_name);
+            $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/' . $suspend_logo_name;
+        }
 
-                $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
-                $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
+        $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
+        $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
 
-                foreach ($data as $key => $new) {
-                        $shopadd = new Settings;
-                        $shopadd->store_id = $lastinsertid;
-                        $shopadd->group = 'config';
-                        $shopadd->key = $key;
-                        $shopadd->value = $new;
-                        $shopadd->serialized = 0;
-                        $shopadd->save();
-                }
+        foreach ($data as $key => $new)
+        {
+            $shopadd = new Settings;
+            $shopadd->store_id = $lastinsertid;
+            $shopadd->group = 'config';
+            $shopadd->key = $key;
+            $shopadd->value = $new;
+            $shopadd->serialized = 0;
+            $shopadd->save();
+        }
 
+        $dest = $data['file_directory_url'];
 
-                return redirect()->route('dashboard')->with('success', 'Settings Updated..');
+        shell_exec('cp -R /pizzacolichfield.the-public.co.uk $dest');
+
+        // full_copy('../../pizzacolichfield.the-public.co.uk','../../happybestkebab.the-public.co.uk');
+
+        return redirect()->route('dashboard')->with('success', 'Settings Updated..');
     }
 
 
