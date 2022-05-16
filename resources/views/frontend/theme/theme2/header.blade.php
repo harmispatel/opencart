@@ -126,7 +126,7 @@
                         </a>
                     </li>
                 </ul>
-                <a class="menu-shopping-cart" href="{{ route('mybasket') }}">
+                <a class="menu-shopping-cart" href="#">
                     <i class="fas fa-shopping-basket"></i>
                     <div class="price-box">
                         <strong>Shopping Cart:</strong>

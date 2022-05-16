@@ -370,7 +370,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
             </div>
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    @if(count($allproducts) > 0)
+                    {{-- @if(count($allproducts) > 0)
                         @foreach ($allproducts as $categorydet)
                         @php
                             $catimage = $categorydet->hasOneProduct['image'];
@@ -393,7 +393,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                             </div>
                         </div>
                         @endforeach
-                    @endif
+                    @endif --}}
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
