@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Product_to_category;
 use App\Models\Settings;
 use App\Models\ToppingSize;
+use App\Models\Voucher;
 use App\Models\CouponProduct;
 use App\Models\Customer;
 use App\Models\ToppingProductPriceSize;
@@ -155,7 +156,84 @@ class CheckoutController extends Controller
 
     public function voucher(Request $request)
     {
-        print_r($request->voucher);
+        $currentURL = URL::to("/");
+        $current_theme = themeID($currentURL);
+        $current_theme_id = $current_theme['theme_id'];
+        $front_store_id =  $current_theme['store_id'];
+        $delivery_setting = [];
+
+        $voucher= $request->voucher;
+        $vouchers =Voucher::where('code', $voucher)->where('store_id',$front_store_id)->first();
+        if(isset($vouchers->amount)){
+            $amount=$vouchers->amount;
+        }
+
+        if(session()->has('currentcoupon'))
+        {
+            $Coupon=session()->get('currentcoupon');
+        }
+        else
+        {
+            $Coupon = Coupon::where('store_id',$front_store_id)->first();
+        }
+        $Couponcode=Coupon::where('code',$Coupon['code'])->where('store_id',$front_store_id)->first();
+        if(session()->has('userid')){
+            $userid = session()->get('userid');
+        }else
+        {
+            $userid =0;
+        }
+
+        if($userid == 0)
+        {
+            $mycart = $request->session()->get('cart1');
+        }
+        else
+        {
+            $mycart = getuserCart($userid);
+        }
+
+        $subtotal = 0;
+        if(isset($mycart['size'])){
+
+                foreach($mycart['size'] as $key => $cart){
+                    $price = $cart['main_price'] * $cart['quantity'];
+                    $subtotal += $price;
+                }
+            }
+            if(isset($mycart['withoutSize'])){
+
+                foreach($mycart['withoutSize'] as $key => $cart){
+                    $price = $cart['main_price'] * $cart['quantity'];
+                    $subtotal += $price;
+                }
+            }
+            if ($Couponcode->type == 'P') {
+                $couponcode = ($subtotal * $Couponcode->discount) / 100;
+            }
+            if ($Couponcode->type == 'F') {
+                $couponcode = $Couponcode->discount;
+            }
+            $total=$subtotal-$couponcode-$amount;
+
+
+        $html = '';
+        $html1 = '';
+        $success_message ='';
+
+
+
+        $html .='<td><b>Voucher Code('.$vouchers->code.')</b></td><td><span><b>£ - '.$amount.'</b></span></td>';
+        $html1 .='<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ '.$total.' </b></span></td>';
+
+        // if(!empty($amount) || $amount != ''){
+        //     $success_message .= '<span class="text-success">Your Voucher has been Applied...</span>';
+        // }else{
+        //     $success_message .= '<span class="text-danger">Please enter valid Voucher Code</span>';
+        // }
+
+        return response()->json(['voucher'=>$html,'total'=>$html1,'pay'=>$total ,'success_message'=>$success_message]);
+
     }
 
     public function coupon(Request $request)

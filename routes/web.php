@@ -396,9 +396,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 
     // Upload Gallary
-    Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
-        \UniSharp\LaravelFilemanager\Lfm::routes();
-    });
+    // Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+    //     \UniSharp\LaravelFilemanager\Lfm::routes();
+    // });
 });
 
 
