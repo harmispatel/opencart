@@ -710,11 +710,14 @@ span.check_btn:before {
                                           <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
                                           <td><span><b>£ -{{ $couponcode  }}</b></span></td>
                                         </tr>
+                                        <tr class="voucher">
+
+                                        </tr>
                                         <tr>
                                             <td><b>Delivery Charge :</b></td>
                                             <td><span><b id="del_charge">£ {{ $delivery_charge  }}</b></span></td>
                                           </tr>
-                                        <tr>
+                                        <tr class="total">
                                             <td><b>Total to pay:</b></td>
                                             <td><span><b id="total_pay">£ {{ $total }}</b></span></td>
                                         </tr>
@@ -750,10 +753,11 @@ span.check_btn:before {
                                         <div style="display: none;">Enter your gift voucher code here:&nbsp;</div>
                                         <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
                                             <input type="text" name="voucher" value=""  placeholder="Voucher Code" class="w-100">
+
                                             <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
                                             <!-- <input type="hidden" name="voucher" value="voucher"> -->
                                         </div>
-                                        <!-- <p class="text-danger" id="couponError">dwfa</p> -->
+                                        <p class="couponError"></p>
                                     </form>
                                 </div>
                                 <div id="coupon" class="content">
@@ -1295,7 +1299,15 @@ span.check_btn:before {
                 dataType: 'json',
                 success: function(result)
                 {
-                    console.log(result);
+                   $('.voucher').html();
+                   $('.total').html();
+                   $('.couponError').html();
+                   $('#button-payment-method').val();
+                   $('#button-payment-method').val(result.pay);
+                   $('.total').html(result.total);
+                   $('.voucher').html(result.voucher);
+                   $('.couponError').html(result.success_message);
+
                 }
         });
     });
