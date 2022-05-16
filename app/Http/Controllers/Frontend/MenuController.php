@@ -15,6 +15,9 @@ use App\Models\ToppingSize;
 use App\Models\CouponProduct;
 use App\Models\Customer;
 use App\Models\ToppingProductPriceSize;
+use App\Models\ToppingCatOption;
+use App\Models\Topping;
+use App\Models\ToppingOption;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 
@@ -75,6 +78,25 @@ class MenuController extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         $productid = $request->product_id;
+
+        // $cat_id=Product_to_category::where('product_id',$productid)->first();
+        // $toppingType =ToppingCatOption::where('id_category',$cat_id->category_id)->first();
+        // $group = unserialize($toppingType->group);
+        //     unset($group['number_group']);
+
+        //   foreach($group as $value){
+
+        //       $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
+        //         $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
+
+        //         foreach($dropdown as $dropdowns){
+        //             echo "<pre>";
+        //           print_r($dropdowns->name);
+        //         }
+        //   }
+        // // echo "<pre>";
+        // // print_r($dropdown);
+        // exit;
         $sizeid = $request->size_id;
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
@@ -380,29 +402,34 @@ class MenuController extends Controller
         }
 
         $subtotal = 0;
-        foreach($mycart['size'] as $key => $cart){
-            $price = $cart['main_price'] * $cart['quantity'];
-            $subtotal += $price;
-            if ($Couponcode->type == 'P') {
-                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-            }
-            if ($Couponcode->type == 'F') {
-                $couponcode = $Couponcode->discount;
-            }
-            $total=$subtotal-$couponcode;
-        }
+        if(isset($mycart['size'])){
 
-        foreach($mycart['withoutSize'] as $key => $cart){
-            $price = $cart['main_price'] * $cart['quantity'];
-            $subtotal += $price;
-            if ($Couponcode->type == 'P') {
-                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-            }
-            if ($Couponcode->type == 'F') {
-                $couponcode = $Couponcode->discount;
-            }
-            $total=$subtotal-$couponcode;
+                foreach($mycart['size'] as $key => $cart){
+                    $price = $cart['main_price'] * $cart['quantity'];
+                    $subtotal += $price;
+                    if ($Couponcode->type == 'P') {
+                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                    }
+                    if ($Couponcode->type == 'F') {
+                        $couponcode = $Couponcode->discount;
+                    }
+                    $total=$subtotal-$couponcode;
+                }
         }
+       if(isset($mycart['withoutSize'])){
+
+           foreach($mycart['withoutSize'] as $key => $cart){
+               $price = $cart['main_price'] * $cart['quantity'];
+               $subtotal += $price;
+               if ($Couponcode->type == 'P') {
+                   $couponcode = ($subtotal * $Couponcode->discount) / 100;
+               }
+               if ($Couponcode->type == 'F') {
+                   $couponcode = $Couponcode->discount;
+               }
+               $total=$subtotal-$couponcode;
+           }
+       }
         $html3 ='';
         $html4 ='';
         $html3 .= '<label>Coupon('.$Couponcode->code.')</label>
