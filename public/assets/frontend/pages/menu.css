@@ -305,7 +305,7 @@ ul.box-category {
 .options-bt span {
     font-size: 14px;
     font-weight: 600;
-    color: #000 !important;
+    /* color: #000 !important; */
     margin: 0 !important;
     display: flex;
     width: 72px;
@@ -805,7 +805,9 @@ td {
     }
 }
 
+
 /* Auto Complete */
+
 .ui-front {
     z-index: 999;
 }

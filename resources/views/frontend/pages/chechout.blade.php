@@ -633,13 +633,20 @@ span.check_btn:before {
                                                         </tr>
                                                         @php
                                                             $subtotal += $price;
-                                                                if ($Coupon['type'] == 'P') {
+                                                                if (!empty($Coupon)) {
+                                                                    if ($Coupon['type'] == 'P') {
                                                                     $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                                    }
+                                                                    if ($Coupon['type'] == 'F') {
+                                                                        $couponcode = $Coupon['discount'];
+                                                                    }
                                                                 }
-                                                                if ($Coupon['type'] == 'F') {
-                                                                    $couponcode = $Coupon['discount'];
+                                                                if (!empty($Coupon)) {
+                                                                    $total=$subtotal-$couponcode;
                                                                 }
-                                                            $total=$subtotal-$couponcode;
+                                                                else {
+                                                                    $total=$subtotal;
+                                                                }
                                                         @endphp
                                                     @endforeach
                                                 @endif
@@ -705,10 +712,10 @@ span.check_btn:before {
                                         </tr>
                                         <tr class="coupon_code">
                                             @php
-                                                $couponname = isset($Coupon['code']) ?$Coupon['code'] : '';
+                                                $couponname = isset($Coupon['code']) ? $Coupon['code'] : '';
                                             @endphp
-                                          <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
-                                          <td><span><b>£ -{{ $couponcode  }}</b></span></td>
+                                          <td><b>Coupon({{ $couponname }}):</b></td>
+                                          <td><span><b>£ -{{ isset($couponcode) ? $couponcode : '' }}</b></span></td>
                                         </tr>
                                         <tr class="voucher">
 

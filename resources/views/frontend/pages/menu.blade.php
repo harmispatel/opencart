@@ -160,6 +160,43 @@
         </div>
     </sidebar>
 
+    <!-- free item modal -->
+{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
+    Launch demo modal
+  </button> --}}
+
+  <!-- Modal -->
+  <div class="modal fade" id="Freeitem" tabindex="-1" aria-labelledby="FreeitemLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="FreeitemLabel">1/4 Pounder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Accordion Item #1
+                    </button>
+                  </h2>
+                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     <section class="main-innr">
         <div class="container">
             <div class="main-inner-p">
@@ -217,19 +254,16 @@
                                                         <button class="accordion-button"
                                                             id="{{ str_replace(' ', '', $catvalue) }}" type="button"
                                                             data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse{{ $key }}"
+                                                            data-bs-target="#collapse1{{ $key }}"
                                                             aria-expanded="true"
-                                                            aria-controls="collapse{{ $key }}">
+                                                            aria-controls="collapse1{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
 
+                                                    <div id="collapse1{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                     @foreach ($product as $values)
-                                                        <div id="collapse{{ $key }}"
-                                                            class="accordion-collapse collapse show"
-                                                            aria-labelledby="headingOne"
-                                                            data-bs-parent="#accordionExample">
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
                                                                     <div class="row">
@@ -281,35 +315,16 @@
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
-                                                                                                                        class="btn options-btn">
-                                                                                                                        <span
-                                                                                                                            class="sizeprice hide-carttext">£
-                                                                                                                            {{ $setsizeprice }}<i
-                                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span
-                                                                                                                            class="show-carttext sizeprice"
-                                                                                                                            style="display: none;">Added
-                                                                                                                            <i
-                                                                                                                                class="fa fa-check"></i>
-                                                                                                                        </span>
+                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});" class="btn options-btn">
+                                                                                                                        <span class="sizeprice hide-carttext">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a class="btn options-btn"
-                                                                                                                        data-bs-toggle="modal"
-                                                                                                                        data-bs-target="#storeclose">
-                                                                                                                        <span
-                                                                                                                            class="sizeprice hide-carttext">£
-                                                                                                                            {{ $setsizeprice }}<i
-                                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span
-                                                                                                                            class="show-carttext sizeprice"
-                                                                                                                            style="display: none;">Added
-                                                                                                                            <i
-                                                                                                                                class="fa fa-check"></i>
-                                                                                                                        </span>
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @endif
@@ -339,15 +354,9 @@
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});"
-                                                                                                                    class="btn options-btn">
-                                                                                                                    <span
-                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span
-                                                                                                                        class="show-carttext sizeprice"
-                                                                                                                        style="display: none;">Added<i
-                                                                                                                            class="fa fa-check"></i></span>
+                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
@@ -355,13 +364,8 @@
                                                                                                                 <a class="btn options-btn"
                                                                                                                     data-bs-toggle="modal"
                                                                                                                     data-bs-target="#storeclose">
-                                                                                                                    <span
-                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span
-                                                                                                                        class="show-carttext sizeprice"
-                                                                                                                        style="display: none;">Added<i
-                                                                                                                            class="fa fa-check"></i></span>
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @endif
@@ -376,8 +380,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endforeach

@@ -29,7 +29,7 @@ class Cartcontroller extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         $current_date = strtotime(date('Y-m-d'));
-
+        $Coupon = '';
         if(session()->has('currentcoupon'))
         {
             $Coupon=session()->get('currentcoupon');
