@@ -212,8 +212,8 @@ $mycart = session()->get('cart1');
                   </table>
                 </div>
                 <div class="reg-bt d-flex justify-content-between">
-                  <button type="submit" class="btn">Continue</button>
-                  <button type="submit" class="btn">Continue</button>
+                  <button type="button" class="btn">Back</button>
+                  <button type="submit" class="btn">Save</button>
                 </div>
               </form>
             </div>
