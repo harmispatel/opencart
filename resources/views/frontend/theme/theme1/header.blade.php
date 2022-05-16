@@ -14,55 +14,93 @@
   
     $userlogin = session('username');
 
+    $Coupon = getCoupon();
+
     $html = '';
     $headertotal = 0;
+    $delivery_charge = 0;
+    $price = 0;
 
     if(session()->has('userid'))
     {
         $cart = getuserCart(session()->get('userid'));
-        $cart_size = isset($cart['size']) ? count($cart['size']) : 0;
-        $cart_withoutsize = isset($cart['withoutSize']) ? count($cart['withoutSize']) : 0;
-        $cart_products = $cart_size + $cart_withoutsize;
+        $cart_products = 0;
 
         if (isset($cart['size'])) 
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price = isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
-                $headertotal += $price;
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
             }
         }
         if (isset($cart['withoutSize'])) 
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                $price = isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
-                $headertotal += $price;
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
             }
+        }
+
+        if (!empty($Coupon) || $Coupon != '')
+        {
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($price * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode = $Coupon['discount'];
+            }
+            $headertotal += $price - $couponcode + $delivery_charge;
+        }
+        else
+        {
+            $headertotal += $price + $delivery_charge;
         }
     }
     else 
     {
         $cart = session()->get('cart1');
-        $cart_size = isset($cart['size']) ? count($cart['size']) : 0;
-        $cart_withoutsize = isset($cart['withoutSize']) ? count($cart['withoutSize']) : 0;
-        $cart_products = $cart_size + $cart_withoutsize;
+        $cart_products = 0;
 
         if (isset($cart['size'])) 
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price = $mycart['main_price'] * $mycart['quantity'];
-                $headertotal += $price;
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
             }
         }
         if (isset($cart['withoutSize'])) 
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                $price = $mycart['main_price'] * $mycart['quantity'];
-                $headertotal += $price;
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
             }
+        }
+       
+        if (!empty($Coupon) || $Coupon != '')
+        {
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($price * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode = $Coupon['discount'];
+            }
+            $headertotal += $price - $couponcode + $delivery_charge;
+        }
+        else
+        {
+            $headertotal += $price + $delivery_charge;
         }
     }
    

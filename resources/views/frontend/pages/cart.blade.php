@@ -1,19 +1,22 @@
 @php
-$openclose = openclosetime();
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
-$user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
+    $openclose = openclosetime();
+    $template_setting = session('template_settings');
+    $social_site = session('social_site');
+    $store_setting = session('store_settings');
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+    $template_setting = session('template_settings');
+    $user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
 
-if (session()->has('userid')) {
-    $userid = session()->get('userid');
-    $mycart = getuserCart(session()->get('userid'));
-} else {
-    $userid = 0;
-    $mycart = session()->get('cart1');
-}
+    if (session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart(session()->get('userid'));
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
 
 @endphp
 
@@ -69,6 +72,7 @@ if (session()->has('userid')) {
     @endif
 
     <div class="mobile-menu-shadow"></div>
+
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
             href="#slide"><img class="img-fluid" src="./assets/img/logo/logo.svg" /></a>
         <div class="top">
@@ -120,19 +124,14 @@ if (session()->has('userid')) {
                                 <tbody>
                                     @php
                                         $subtotal = 0;
+                                        $delivery_charge = 0;
                                     @endphp
                                     @if (isset($mycart['size']))
                                         @foreach ($mycart['size'] as $key => $cart)
                                             @php
                                                 $price = ($cart['main_price']) * ($cart['quantity']);
-
-                                                if ($Coupon->type == 'P') {
-                                                    $couponcode = ($subtotal * $Coupon->discount) / 100;
-                                                }
-                                                if ($Coupon->type == 'F') {
-                                                    $couponcode = $subtotal - $Coupon->discount;
-                                                }
-                                                $total = $subtotal - $couponcode;
+                                                $subtotal += $price;
+                                                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0;
                                             @endphp
                                             <tr>
                                                 <td>
@@ -164,16 +163,6 @@ if (session()->has('userid')) {
                                                     <b>{{ number_format($price, 2) }}</b>
                                                 </td>
                                             </tr>
-                                            @php
-                                                $subtotal += $price;
-                                                if ($Coupon->type == 'P') {
-                                                    $couponcode = ($subtotal * $Coupon->discount) / 100;
-                                                }
-                                                if ($Coupon->type == 'F') {
-                                                    $couponcode = $subtotal - $Coupon->discount;
-                                                }
-                                                $total = $subtotal - $couponcode;
-                                            @endphp
                                         @endforeach
                                     @endif
 
@@ -181,6 +170,8 @@ if (session()->has('userid')) {
                                         @foreach ($mycart['withoutSize'] as $key => $cart)
                                             @php
                                                 $price = $cart['main_price'] * $cart['quantity'];
+                                                $subtotal += $price;
+                                                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0;
                                             @endphp
                                             <tr>
                                                 <td>
@@ -212,72 +203,29 @@ if (session()->has('userid')) {
                                                     <b>{{ number_format($price, 2) }}</b>
                                                 </td>
                                             </tr>
-                                            @php
-                                                $subtotal += $price;
-                                                if ($Coupon->type == 'P') {
-                                                    $couponcode = ($subtotal * $Coupon->discount) / 100;
-                                                }
-                                                if ($Coupon->type == 'F') {
-                                                    $couponcode = $subtotal - $Coupon->discount;
-                                                }
-                                                $total = $subtotal - $couponcode;
-                                            @endphp
                                         @endforeach
                                     @endif
+                                    @php
+                                        if(!empty($Coupon) || $Coupon != '')
+                                        {
+                                            if ($Coupon['type'] == 'P')
+                                            {
+                                                $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                            }
+                                            if ($Coupon['type'] == 'F')
+                                            {
+                                                $couponcode = $subtotal - $Coupon['discount'];
+                                            }
+                                            $total = $subtotal - $couponcode + $delivery_charge;
+                                        }
+                                        else
+                                        {
+                                            $total = $subtotal + $delivery_charge;
+                                        }
+                                    @endphp
                                 </tbody>
                             </table>
                         </form>
-                    </div>
-                    <div class="coupon-inr">
-                        <div class="coupon-title">
-                            <h2>What would you like to do next?</h2>
-                            <p>Choose if you have a discount code or reward points you want to use or would like to
-                                estimate your delivery cost.</p>
-                        </div>
-                        <div class="coupon-apply">
-                            <div class="accordion" id="accordionPanelsStayOpenExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header accordion-button collapsed"
-                                        id="panelsStayOpen-headingOne" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                        aria-controls="panelsStayOpen-collapseOne">
-                                        Use Coupon Code
-                                    </h2>
-                                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse"
-                                        aria-labelledby="panelsStayOpen-headingOne">
-                                        <div class="accordion-body">
-                                            <form id="coupon">
-                                                Enter your coupon here:&nbsp;
-                                                <input type="text" name="coupon" value="">
-                                                <input type="hidden" name="next" value="coupon">
-                                                &nbsp;
-                                                <input type="submit" value="Apply" class="btn btn-danger">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header accordion-button collapsed"
-                                        id="panelsStayOpen-headingTwo" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
-                                        aria-controls="panelsStayOpen-collapseTwo">
-                                        Use Gift Voucher
-                                    </h2>
-                                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
-                                        aria-labelledby="panelsStayOpen-headingTwo">
-                                        <div class="accordion-body">
-                                            <form id="gift-voucher">
-                                                Enter your gift voucher code here:&nbsp;
-                                                <input type="text" name="voucher" value="">
-                                                <input type="hidden" name="next" value="voucher">
-                                                &nbsp;
-                                                <input type="submit" value="Apply" class="btn btn-danger">
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="basket-total">
                         <table class="table table-responsive">
@@ -287,8 +235,14 @@ if (session()->has('userid')) {
                                     <td><span><b>£{{ $subtotal }}</b></span></td>
                                 </tr>
                                 <tr>
-                                    <td><b>Coupon({{ $Coupon->code }}):</b></td>
-                                    <td><span><b>£-{{ $couponcode }}</b></span></td>
+                                    <td><b>Delivery Charge:</b></td>
+                                    <td><span><b>£{{ $delivery_charge }}</b></span></td>
+                                </tr>
+                                <tr>
+                                    @if(!empty($Coupon) || $Coupon != '')
+                                        <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
+                                        <td><span><b>£-{{ $couponcode }}</b></span></td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td><b>Total to pay:</b></td>
@@ -298,7 +252,7 @@ if (session()->has('userid')) {
                         </table>
                     </div>
                     <div class="basket-bt">
-                        <a href="{{ route('home') }}"> <button class="btn">Continue Shopping</button></a>
+                        <a href="{{ route('menu') }}"> <button class="btn">Continue Shopping</button></a>
                         <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
                     </div>
                 @else
@@ -306,7 +260,7 @@ if (session()->has('userid')) {
                         <h6>Your shopping cart is empty!</h6>
                     </div>
                     <div class="emty-bt">
-                        <a href="{{ route('home') }}"> <button class="btn text-white"
+                        <a href="{{ route('menu') }}"> <button class="btn text-white"
                                 style="background: rgb(250, 146, 146);">Continue Shopping</button></a>
                     </div>
                 @endif
@@ -331,8 +285,6 @@ if (session()->has('userid')) {
     {{-- END JS --}}
 
 </body>
-
-</html>
 
 <script>
     function updatecart(product, sizeprice, uid) {
@@ -385,3 +337,6 @@ if (session()->has('userid')) {
         });
     }
 </script>
+
+</html>
+

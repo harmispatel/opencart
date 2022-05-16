@@ -18,8 +18,7 @@ use App\Models\Product;
 use App\Models\Product_to_category;
 use App\Models\Settings;
 use App\Models\ToppingProductPriceSize;
-use DB;
-use Illuminate\Support\Facades\DB as FacadesDB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class HomeController extends Controller

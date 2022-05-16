@@ -807,8 +807,8 @@ span.check_btn:before {
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4 mt-4">
-                    <div class="backbtn d-flex justify-content-between pay" >
+                 <div class="col-md-4 mt-4">
+                    <div class="backbtn d-flex justify-content-between">
                       <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();"><i class="fa fa-angle-left"></i> Back</button>
                       <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
                       <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
