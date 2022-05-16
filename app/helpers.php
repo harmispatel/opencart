@@ -29,6 +29,31 @@ function user_details()
     return $user_dt;
 }
 
+function full_copy($source, $target)
+{
+    if ( is_dir( $source ) ) {
+            $d = dir( $source );
+            while ( FALSE !== ( $entry = $d->read() ) )
+            {
+                if ( $entry == '.' || $entry == '..' )
+                {
+                        continue;
+                }
+                $Entry = $source . '/' . $entry;
+                if ( is_dir( $Entry ) )
+                {
+                    @mkdir( $Entry );
+                    // $this->full_copy( $Entry, $target . '/' . $entry );
+                    full_copy( $Entry, $target . '/' . $entry );
+                    continue;
+                }
+                copy( $Entry, $target . '/' . $entry );
+            }
+            $d->close();
+    }else {
+        copy( $source, $target );
+    }
+}
 
 // Get Total Ip Count
 function gettotalip($ip)

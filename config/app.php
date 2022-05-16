@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://192.168.1.3/'),
+    'url' => env('APP_URL', 'http://192.168.1.73/'),
     'asset_url' => env('ASSET_URL', null),
     // 'asset_url' => env('ASSET_URL', 'https://www.example.com'),
 
@@ -176,7 +176,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,  
+        App\Providers\RouteServiceProvider::class,
 
     ],
 
