@@ -337,6 +337,9 @@ ul.box-category {
 .accordion-button:after {
     display: none;
 }
+.test .accordion-button:after {
+    display: block !important;
+}
 
 .accordion-button:not(.collapsed) i {
     transform: rotate(-180deg);
@@ -404,8 +407,12 @@ ul.box-category {
     font-weight: 600;
     margin-bottom: 20px;
 }
-
-
+/* free item modal */
+.free-item-modal .accordion-button:not(.collapsed),.accordion-button {background-color: transparent !important;}
+.free-item-modal .accordion-button:after{display: block !important;position: absolute;left: 10px;transition: none !important;top: 50%;transform: translate(0 ,-50%);background-image: url('../../../images/plus.png') !important;}
+.accordion-button span{padding-left: 50px;}
+.accordion-button:not(.collapsed)::after{background-image: url('../../../images/minus.png') !important;height: 9px !important;}
+.free-item-modal .modal-content{min-height: 600px !important;}
 /* innerpage css */
 
 .check-main {

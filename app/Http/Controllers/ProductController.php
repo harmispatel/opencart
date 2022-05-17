@@ -106,14 +106,17 @@ class ProductController extends Controller
 
         if (isset($data->product_id)) {
             $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
-            $group = unserialize($toppingType->group);
-            unset($group['number_group']);
+            // print_r($toppingType);
+            // exit;
+            $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
+             $demo=isset($group) ? $group : '';
+            unset($demo['number_group']);
         }
         $html .= '<th>';
 
         if (isset($data->product_id)) {
 
-            foreach ($group as $key=>$value) {
+            foreach ($demo as $key=>$value) {
 
                 $productvalue=$value['id_group_option'];
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();

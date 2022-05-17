@@ -1,27 +1,24 @@
 @php
-    // Open Close Time
-    $openclose = openclosetime();
+// Open Close Time
+$openclose = openclosetime();
 
-    // Get Template Settings
-    $template_setting = session('template_settings');
-    $social_site = session('social_site');
-    $store_setting = session('store_settings');
-    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-    $template_setting = session('template_settings');
+// Get Template Settings
+$template_setting = session('template_settings');
+$social_site = session('social_site');
+$store_setting = session('store_settings');
+$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+$template_setting = session('template_settings');
 
-    // User Delivery Type
-    $user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
+// User Delivery Type
+$user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
 
-    if (session()->has('userid'))
-    {
-        $userid = session()->get('userid');
-        $mycart = getuserCart($userid);
-    }
-    else
-    {
-        $userid = 0;
-        $mycart = session()->get('cart1');
-    }
+if (session()->has('userid')) {
+    $userid = session()->get('userid');
+    $mycart = getuserCart($userid);
+} else {
+    $userid = 0;
+    $mycart = session()->get('cart1');
+}
 
 @endphp
 
@@ -161,42 +158,52 @@
     </sidebar>
 
     <!-- free item modal -->
-{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
-    Launch demo modal
-  </button> --}}
+    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
+        Launch demo modal
+    </button> --}}
 
-  <!-- Modal -->
-  <div class="modal fade" id="Freeitem" tabindex="-1" aria-labelledby="FreeitemLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="FreeitemLabel">1/4 Pounder</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="accordion" id="accordionExample">
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Accordion Item #1
-                    </button>
-                  </h2>
-                  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+
+
+    <!-- Modal -->
+    <div class="modal fade free-item-modal" id="Freeitem" tabindex="-1" aria-labelledby="FreeitemLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="FreeitemLabel">1/4 Pounder</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapsefree" aria-expanded="true" aria-controls="collapsefree">
+                                    <span>Accordion Item #1</span>
+                                </button>
+                            </h2>
+                            <div id="collapsefree" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                  <select style="width: 200px">
+                                      <option style="display: none" selected>--</option>
+                                  </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="">
+                            <b>Add your special request?</b><br>
+                            <textarea  name="request" rows="5" style="width: 465px"></textarea> <!-- cols="50" -->
+                        </div>
                     </div>
-                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
-
+    {{-- modal end --}}
     <section class="main-innr">
         <div class="container">
             <div class="main-inner-p">
@@ -262,8 +269,10 @@
                                                         </button>
                                                     </h2>
 
-                                                    <div id="collapse1{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                    @foreach ($product as $values)
+                                                    <div id="collapse1{{ $key }}"
+                                                        class="accordion-collapse collapse show"
+                                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                        @foreach ($product as $values)
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
                                                                     <div class="row">
@@ -315,16 +324,30 @@
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});" class="btn options-btn">
-                                                                                                                        <span class="sizeprice hide-carttext">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                        class="btn options-btn">
+                                                                                                                        <span
+                                                                                                                            class="sizeprice hide-carttext">£{{ $setsizeprice }}<i
+                                                                                                                                class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span
+                                                                                                                            class="show-carttext sizeprice"
+                                                                                                                            style="display: none;">Added<i
+                                                                                                                                class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
-                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                    <a class="btn options-btn"
+                                                                                                                        data-bs-toggle="modal"
+                                                                                                                        data-bs-target="#storeclose">
+                                                                                                                        <span
+                                                                                                                            class="sizeprice hide-carttext">£
+                                                                                                                            {{ $setsizeprice }}<i
+                                                                                                                                class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span
+                                                                                                                            class="show-carttext sizeprice"
+                                                                                                                            style="display: none;">Added<i
+                                                                                                                                class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @endif
@@ -354,9 +377,15 @@
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});"
+                                                                                                                    class="btn options-btn">
+                                                                                                                    <span
+                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
+                                                                                                                            class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span
+                                                                                                                        class="show-carttext sizeprice"
+                                                                                                                        style="display: none;">Added<i
+                                                                                                                            class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
@@ -364,8 +393,13 @@
                                                                                                                 <a class="btn options-btn"
                                                                                                                     data-bs-toggle="modal"
                                                                                                                     data-bs-target="#storeclose">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                    <span
+                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
+                                                                                                                            class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span
+                                                                                                                        class="show-carttext sizeprice"
+                                                                                                                        style="display: none;">Added<i
+                                                                                                                            class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @endif
@@ -447,8 +481,7 @@
                                                                 $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
-                                                                {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
                                                             @endphp
@@ -472,8 +505,7 @@
                                                                 $price = $cart['main_price'] * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
-                                                                {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
                                                             @endphp
@@ -495,20 +527,15 @@
                                             </table>
                                         </div>
                                         @php
-                                            if (!empty($Coupon) || $Coupon != '')
-                                            {
-                                                if ($Coupon['type'] == 'P')
-                                                {
+                                            if (!empty($Coupon) || $Coupon != '') {
+                                                if ($Coupon['type'] == 'P') {
                                                     $couponcode = ($subtotal * $Coupon['discount']) / 100;
                                                 }
-                                                if ($Coupon['type'] == 'F')
-                                                {
+                                                if ($Coupon['type'] == 'F') {
                                                     $couponcode = $Coupon['discount'];
                                                 }
                                                 $total = $subtotal - $couponcode + $delivery_charge;
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 $total = $subtotal + $delivery_charge;
                                             }
                                         @endphp
@@ -530,51 +557,63 @@
                                                         <span>£ {{ $delivery_charge }}</span>
                                                     </div>
                                                 </li>
-                                                @if ( (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) )
-                                                        <li class="minicart-list-item">
-                                                            <div class="minicart-list-item-innr coupon_code">
+                                                @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
+                                                    <li class="minicart-list-item">
+                                                        <div class="minicart-list-item-innr coupon_code">
+                                                            @if ($Coupon != '' || !empty($Coupon))
+                                                                <label
+                                                                    id="coupontext">Coupon({{ $Coupon['code'] }})</label>
+                                                                <span>£
+                                                                    -{{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                            @endif
+                                                        </div>
+                                                        <div class="minicart-list-item-innr addcoupon">
+                                                            <label>
                                                                 @if ($Coupon != '' || !empty($Coupon))
-                                                                    <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
-                                                                    <span>£ -{{ isset($couponcode) ? $couponcode : '' }}</span>
+                                                                    <a style="color: #ff0000;font-size:14px;"
+                                                                        onclick="showcoupon();">
+                                                                        Change Coupon Code
+                                                                    </a>
+                                                                @else
+                                                                    <a style="color: #ff0000;font-size:14px;"
+                                                                        onclick="showcoupon();">
+                                                                        Apply New Coupon Code
+                                                                    </a>
                                                                 @endif
-                                                            </div>
-                                                            <div class="minicart-list-item-innr addcoupon">
-                                                                <label>
-                                                                    @if ($Coupon != '' || !empty($Coupon))
-                                                                        <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">
-                                                                            Change Coupon Code
-                                                                        </a>
-                                                                    @else
-                                                                        <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">
-                                                                            Apply New Coupon Code
-                                                                        </a>
-                                                                    @endif
-                                                                </label>
-                                                            </div>
-                                                            <div class="minicart-list-item-innr">
-                                                                <div class="showcoupons">
-                                                                    <form method="POST" id="from_showcoupon">
-                                                                        @csrf
-                                                                        <div class="myDiv" style="display:none;">
-                                                                            <div class="row">
-                                                                                <div class="col-md-8">
-                                                                                    <input style="float:left;padding:5px 2px" type="text" name="coupon" value="" id="searchcoupon" placeholder="Enter your coupon here" class="coupon-val ">
-                                                                                </div>
-                                                                                <div class="col-md-4 text-right">
-                                                                                    <input style="text-transform: uppercase;" type="submit" value="Apply" class="btn btn-danger ">
-                                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                        <div class="minicart-list-item-innr">
+                                                            <div class="showcoupons">
+                                                                <form method="POST" id="from_showcoupon">
+                                                                    @csrf
+                                                                    <div class="myDiv" style="display:none;">
+                                                                        <div class="row">
+                                                                            <div class="col-md-8">
+                                                                                <input
+                                                                                    style="float:left;padding:5px 2px"
+                                                                                    type="text" name="coupon" value=""
+                                                                                    id="searchcoupon"
+                                                                                    placeholder="Enter your coupon here"
+                                                                                    class="coupon-val ">
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-md-12">
-                                                                                    <div id="error"></div>
-                                                                                    <div id="success"></div>
-                                                                                </div>
+                                                                            <div class="col-md-4 text-right">
+                                                                                <input
+                                                                                    style="text-transform: uppercase;"
+                                                                                    type="submit" value="Apply"
+                                                                                    class="btn btn-danger ">
                                                                             </div>
                                                                         </div>
-                                                                    </form>
-                                                                </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div id="error"></div>
+                                                                                <div id="success"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
                                                             </div>
-                                                        </li>
+                                                        </div>
+                                                    </li>
                                                 @else
                                                     <li class="minicart-list-item">
                                                         <div class="minicart-list-item-innr coupon_code">
@@ -794,13 +833,11 @@
 
 </body>
 <script>
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         var status = $('#user_delivery_val').val();
         var coll = $("input[name='delivery_type']:checked").val();
 
-        if(coll == 'collection')
-        {
+        if (coll == 'collection') {
             $('#Modal').modal('hide');
             return false;
         }
@@ -848,8 +885,7 @@
 </script>
 
 <script>
-    function showId(product, sizeprice, uid)
-    {
+    function showId(product, sizeprice, uid) {
         var sizeid = sizeprice;
         var productid = product;
         var userid = uid;
@@ -857,14 +893,10 @@
 
         var coll = $("input[name='delivery_type']:checked").val();
 
-        if (coll == 'collection')
-        {
+        if (coll == 'collection') {
             $('#Modal').modal('hide');
-        }
-        else
-        {
-            if (status == '')
-            {
+        } else {
+            if (status == '') {
                 $('#Modal').modal('show');
                 return false;
             }
@@ -881,8 +913,7 @@
                 'user_id': userid,
             },
             dataType: 'json',
-            success: function(result)
-            {
+            success: function(result) {
                 // Cart Data
                 $('.empty-box').html('');
                 $('.empty-box').append(result.html);
@@ -976,10 +1007,8 @@
                 'coupon': coupon,
             },
             dataType: 'json',
-            success: function(result)
-            {
-                if(result.errors == 1)
-                {
+            success: function(result) {
+                if (result.errors == 1) {
                     $('#error').html('');
                     $('#error').append(result.errors_message);
                     $('#from_showcoupon').trigger('reset');
@@ -988,8 +1017,7 @@
                     }, 5000);
                 }
 
-                if(result.success == 1)
-                {
+                if (result.success == 1) {
                     $('#success').html('');
                     $('#success').append(result.success_message);
 
@@ -1019,7 +1047,6 @@
 </script>
 {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script> --}}
 <script>
-
     // $('#searchcoupon').autocomplete({
     //     source: function(request, reponse) {
 
@@ -1056,7 +1083,6 @@
     //     }
 
     // });
-
 </script>
 
 </html>

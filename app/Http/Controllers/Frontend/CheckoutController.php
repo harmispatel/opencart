@@ -37,8 +37,8 @@ class CheckoutController extends Controller
             'delivery_option',
         ]);
 
-        $get_areas = DeliverySettings::select('area','id_delivery_settings')->where('id_store',$front_store_id)->where('delivery_type','area')->first();
-        $area_explode = explode(',',isset($get_areas->area) ? $get_areas->area : '');
+        $get_areas = DeliverySettings::select('area', 'id_delivery_settings')->where('id_store', $front_store_id)->where('delivery_type', 'area')->first();
+        $area_explode = explode(',', isset($get_areas->area) ? $get_areas->area : '');
         $areas = array_filter($area_explode);
 
         foreach ($key as $row) {
@@ -64,14 +64,12 @@ class CheckoutController extends Controller
         $co_gaptime   = $openclose['collection_gaptime'];
         if (empty($co_gaptime)) {
             $collectiongaptime = 1;
-        }
-        else{
+        } else {
             $collectiongaptime = $co_gaptime;
         }
         if (empty($dile_gaptime)) {
             $deliverygaptime = 1;
-        }
-        else{
+        } else {
             $deliverygaptime = $dile_gaptime;
         }
         date_default_timezone_set('Asia/Kolkata');
@@ -130,21 +128,13 @@ class CheckoutController extends Controller
                 }
             }
         }
-
-        // echo '<pre>';
-        // print_r($dileveryresult);
-        // exit();
-        // $Coupon=session()->get('currentcoupon');
-        if(session()->has('currentcoupon'))
-        {
-            $Coupon=session()->get('currentcoupon');
-        }
-        else
-        {
-            $Coupon = Coupon::where('store_id',$front_store_id)->first();
+        if (session()->has('currentcoupon')) {
+            $Coupon = session()->get('currentcoupon');
+        } else {
+            $Coupon = Coupon::where('store_id', $front_store_id)->first();
         }
         // $Coupon = Coupon::select('name', 'code', 'discount')->where('store_id', $front_store_id)->first();
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult','dileveryresult','areas'));
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult', 'dileveryresult', 'areas'));
     }
 
     // Get Payment & Shipping Address By Customer Address ID
@@ -162,69 +152,70 @@ class CheckoutController extends Controller
         $front_store_id =  $current_theme['store_id'];
         $delivery_setting = [];
 
-        $voucher= $request->voucher;
-        $vouchers =Voucher::where('code', $voucher)->where('store_id',$front_store_id)->first();
-        if(isset($vouchers->amount)){
-            $amount=$vouchers->amount;
+        $voucher = $request->voucher;
+        $vouchers = Voucher::where('code', $voucher)->where('store_id', $front_store_id)->first();
+        if (isset($vouchers->amount)) {
+            $amount = $vouchers->amount;
         }
 
-        if(session()->has('currentcoupon'))
-        {
-            $Coupon=session()->get('currentcoupon');
+        if (session()->has('currentcoupon')) {
+            $Coupon = session()->get('currentcoupon');
+        } else {
+            $Coupon = Coupon::where('store_id', $front_store_id)->first();
         }
-        else
-        {
-            $Coupon = Coupon::where('store_id',$front_store_id)->first();
-        }
-        $Couponcode=Coupon::where('code',$Coupon['code'])->where('store_id',$front_store_id)->first();
-        if(session()->has('userid')){
+        $Couponcode = Coupon::where('code', $Coupon['code'])->where('store_id', $front_store_id)->first();
+        if (session()->has('userid')) {
             $userid = session()->get('userid');
-        }else
-        {
-            $userid =0;
+        } else {
+            $userid = 0;
         }
 
-        if($userid == 0)
-        {
+        if ($userid == 0) {
             $mycart = $request->session()->get('cart1');
-        }
-        else
-        {
+        } else {
             $mycart = getuserCart($userid);
         }
 
         $subtotal = 0;
-        if(isset($mycart['size'])){
+        if (isset($mycart['size'])) {
 
-                foreach($mycart['size'] as $key => $cart){
-                    $price = $cart['main_price'] * $cart['quantity'];
-                    $subtotal += $price;
-                }
+            foreach ($mycart['size'] as $key => $cart) {
+                $price = $cart['main_price'] * $cart['quantity'];
+                $subtotal += $price;
             }
-            if(isset($mycart['withoutSize'])){
+        }
+        if (isset($mycart['withoutSize'])) {
 
-                foreach($mycart['withoutSize'] as $key => $cart){
-                    $price = $cart['main_price'] * $cart['quantity'];
-                    $subtotal += $price;
-                }
+            foreach ($mycart['withoutSize'] as $key => $cart) {
+                $price = $cart['main_price'] * $cart['quantity'];
+                $subtotal += $price;
             }
+        }
+        $delivery_charge = 0;
+        $current_date = strtotime(date('Y-m-d'));
+        $start_date = isset($Coupon['date_start']) ? strtotime($Coupon['date_start']) : '';
+        $end_date = isset($Coupon['date_end']) ? strtotime($Coupon['date_end']) : '';
+
+        //current_date
+        if ($current_date >= $start_date && $current_date < $end_date) {
+
             if ($Couponcode->type == 'P') {
                 $couponcode = ($subtotal * $Couponcode->discount) / 100;
             }
             if ($Couponcode->type == 'F') {
                 $couponcode = $Couponcode->discount;
             }
-            $total=$subtotal-$couponcode-$amount;
-
+            $total = $subtotal - $couponcode - $amount;
+        } else {
+            $total = $subtotal + $delivery_charge - $amount;
+        }
 
         $html = '';
         $html1 = '';
-        $success_message ='';
+        $success_message = '';
 
-
-
-        $html .='<td><b>Voucher Code('.$vouchers->code.')</b></td><td><span><b>£ - '.$amount.'</b></span></td>';
-        $html1 .='<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ '.$total.' </b></span></td>';
+        $html .= '<td><b>Voucher Code(' . $vouchers->code . ')</b></td><td><span><b>£ - ' . $amount . '</b></span></td>';
+        $html1 .= '<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ ' . $total . ' </b></span></td>';
 
         // if(!empty($amount) || $amount != ''){
         //     $success_message .= '<span class="text-success">Your Voucher has been Applied...</span>';
@@ -232,8 +223,7 @@ class CheckoutController extends Controller
         //     $success_message .= '<span class="text-danger">Please enter valid Voucher Code</span>';
         // }
 
-        return response()->json(['voucher'=>$html,'total'=>$html1,'pay'=>$total ,'success_message'=>$success_message]);
-
+        return response()->json(['voucher' => $html, 'total' => $html1, 'pay' => $total, 'success_message' => $success_message]);
     }
 
     public function coupon(Request $request)

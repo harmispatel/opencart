@@ -100,9 +100,9 @@ $userlogin = session('username');
                 <input type="number" class="form-control" value="3" name="timing" id="timing">
             </div>
         </div>
-           @foreach ($customerorders as $order)
+
            <input type="hidden" name="order_id" id="corderid" value="">
-           @endforeach
+
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" value="" class="btn btn-primary">Send</button>
