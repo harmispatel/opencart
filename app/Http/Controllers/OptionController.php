@@ -15,6 +15,12 @@ class OptionController extends Controller
     // Function for Menuoptions View
     function index()
     {
+        // Check User Permission
+        if (check_user_role(58) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.menuoptions.list');
     }
 
@@ -25,6 +31,12 @@ class OptionController extends Controller
     // Function for Add Menu Options View
     function add()
     {
+        // Check User Permission
+        if (check_user_role(57) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -203,7 +215,16 @@ class OptionController extends Controller
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$id_topping'>";
                 $data['name_topping'] = $post->name_topping;
-                $data['action'] = '<a href="'. $edit_url .'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+
+                if(check_user_role(59) == 1)
+                {
+                    $data['action'] = '<a href="'. $edit_url .'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+                }
+                else
+                {
+                    $data['action'] = '-';
+                }
+
                 $data1[] = $data;
             }
         }
@@ -224,6 +245,12 @@ class OptionController extends Controller
     // Function For Delete MenuOptions
     function delete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(60) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if(count($ids) > 0)
@@ -255,6 +282,12 @@ class OptionController extends Controller
     // Function for Edit Menuoption
     function edit($id)
     {
+        // Check User Permission
+        if (check_user_role(59) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 

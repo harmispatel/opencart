@@ -12,6 +12,12 @@ class GallaryController extends Controller
 
     public function gallarysettings()
     {
+        // Check User Permission
+        if (check_user_role(68) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.gallary.gallarysettings');
     }
 

@@ -11,6 +11,12 @@ class FreeItemController extends Controller
     // Function of get Cart Rule By Current Store ID
     public function cartrule()
     {
+        // Check User Permission
+        if (check_user_role(17) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -25,6 +31,12 @@ class FreeItemController extends Controller
     // Function of Add Cart Rule View
     public function addfreerule()
     {
+        // Check User Permission
+        if (check_user_role(17) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -94,6 +106,12 @@ class FreeItemController extends Controller
     // Function of Delete Cart Rule
     public function cartruledelete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(17) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
         if (count($ids) > 0)
         {
@@ -111,6 +129,12 @@ class FreeItemController extends Controller
     // Function of Edit Cart Rule View
     public function editfreerule($id)
     {
+        // Check User Permission
+        if (check_user_role(17) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -133,11 +157,17 @@ class FreeItemController extends Controller
     // Function of Get Free Items By Current Store
     public function freeitems()
     {
+        // Check User Permission
+        if (check_user_role(16) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
         $data = FreeItemadd::where('store_id',$current_store_id)->get();
-        return view('admin.freeitems.freeitemlist',['data'=>$data]);
+        return view('admin.freeitems.freeitemlist',compact('data'));
     }
 
 
@@ -147,6 +177,12 @@ class FreeItemController extends Controller
     // Function of add Free Items view
     public function addfreeitems()
     {
+        // Check User Permission
+        if (check_user_role(16) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.freeitems.additem');
     }
 
@@ -192,6 +228,12 @@ class FreeItemController extends Controller
     // Function of Edit Free Item View
     public function freeitemedit($id)
     {
+        // Check User Permission
+        if (check_user_role(16) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $freeitemedit = FreeItemadd::find($id);
 
         if(empty($freeitemedit))
@@ -238,6 +280,5 @@ class FreeItemController extends Controller
             ]);
         }
     }
-
 
 }

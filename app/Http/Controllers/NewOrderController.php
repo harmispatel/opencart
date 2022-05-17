@@ -10,6 +10,12 @@ class NewOrderController extends Controller
 
     public function index()
     {
+        // Check User Permission
+        if (check_user_role(44) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.neworders.list');
     }
 

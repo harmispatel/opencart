@@ -467,6 +467,13 @@ function get_sub_opt_names($sub_opt_ids)
 }
 
 
+function user_shop_detail($shopID)
+{
+    $store_dt = Store::where('store_id',$shopID)->first();
+    return $store_dt;
+}
+
+
 
 function getZonebyId($zid)
 {
@@ -589,6 +596,31 @@ function check_user_role($action_id)
     {
         return 1;
     }
+}
+
+// Checkuserrole for Menu
+function check_user_role_menu($action_id)
+{
+    $admin = user_details();
+    $uaccess = $admin->user_group_id;
+
+    if($uaccess != 1)
+    {
+        $result = Permission::where('menu_id','=',$action_id)->where('role_id','=',$uaccess)->where('action_id','=',0)->where('subaction_id','=',0)->get();
+
+        if(count($result) > 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        return 1;
+    }
 
 }
 
@@ -657,10 +689,10 @@ function depend_subcat($value1)
 //
 function fetch_mainmenu_submenucolumn($id)
 {
-    $subMenu = SubMenu::where('menu_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl')->get()->toArray();
+    $subMenu = SubMenu::where('menu_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl','parent_id')->get()->toArray();
 
     $arr = array_map(function ($value) {
-        return $value['slugurl'];
+        return $value;
     }, $subMenu);
 
     return $arr;

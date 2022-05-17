@@ -27,6 +27,12 @@ class ProductController extends Controller
 {
     function index()
     {
+         // Check User Permission
+         if (check_user_role(50) != 1)
+         {
+             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+         }
+
         // Current Store ID
         $current_store_id = currentStoreId();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
@@ -38,6 +44,12 @@ class ProductController extends Controller
 
     function bulkproducts()
     {
+        // Check User Permission
+        if (check_user_role(56) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $current_store_id = currentStoreId();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
             $query->where('store_id', $current_store_id);
@@ -106,14 +118,17 @@ class ProductController extends Controller
 
         if (isset($data->product_id)) {
             $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
-            $group = unserialize($toppingType->group);
-            unset($group['number_group']);
+            // print_r($toppingType);
+            // exit;
+            $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
+             $demo=isset($group) ? $group : '';
+            unset($demo['number_group']);
         }
         $html .= '<th>';
 
         if (isset($data->product_id)) {
 
-            foreach ($group as $key=>$value) {
+            foreach ($demo as $key=>$value) {
 
                 $productvalue=$value['id_group_option'];
                 $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
@@ -295,6 +310,12 @@ class ProductController extends Controller
 
     function importproducts()
     {
+        // Check User Permission
+        if (check_user_role(61) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.product.importproducts');
     }
 
@@ -302,7 +323,7 @@ class ProductController extends Controller
     function add()
     {
         // Check User Permission
-        if (check_user_role(59) != 1) {
+        if (check_user_role(49) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -629,6 +650,11 @@ class ProductController extends Controller
     }
     public function deleteproduct(Request $request)
     {
+         // Check User Permission
+         if (check_user_role(52) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
         // print_r($ids);die;
         if (count($ids) > 0) {

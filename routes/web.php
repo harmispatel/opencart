@@ -395,7 +395,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'index'])->name('option');
 
 
-    // Upload Gallary
+    //Upload Gallary
     // Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
     //     \UniSharp\LaravelFilemanager\Lfm::routes();
     // });
@@ -407,7 +407,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
-Route::get('contact', [ContactUsController::class, 'index'])->name('contact');
 Route::post('getid', [MenuController::class, 'getid'])->name('getid');
 Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
@@ -461,3 +460,7 @@ Route::post('registerguestuser', [CustomerAuthController::class, 'registerguestu
 Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
 Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
 Route::get('searchcouponcode', [MenuController::class, 'searchcouponcode'])->name('searchcouponcode');
+
+// Guest User
+Route::get('contact',[ContactUsController::class, 'index'])->name('contact');
+Route::post('contactstore',[ContactUsController::class,'contactstore'])->name('contactstore');

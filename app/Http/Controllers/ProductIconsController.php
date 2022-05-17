@@ -10,6 +10,12 @@ class ProductIconsController extends Controller
 
     public function index()
     {
+        // Check User Permission
+        if(check_user_role(93) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $data['producticons'] = ProductIcons::get();
         return view('admin.producticons.list',$data);
     }
@@ -17,6 +23,12 @@ class ProductIconsController extends Controller
 
     public function add()
     {
+        // Check User Permission
+        if(check_user_role(92) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         return view('admin.producticons.add');
     }
 
@@ -43,6 +55,12 @@ class ProductIconsController extends Controller
     // Function of Delete Product Icons
     public function delete(Request $request)
     {
+        // Check User Permission
+        if(check_user_role(95) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if(count($ids) > 0)
@@ -59,6 +77,12 @@ class ProductIconsController extends Controller
 
     function edit($id)
     {
+        // Check User Permission
+        if(check_user_role(94) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $data['producticon'] = ProductIcons::where('id',$id)->first();
         return view('admin.producticons.edit',$data);
     }

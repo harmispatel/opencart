@@ -56,9 +56,15 @@
                         <div class="container">
                             <h4 class="card-title pt-2" style="font-size: 22px;">Themes</h4>
                             <div class="container" style="text-align: right;">
-                                <button type="submit" form="templateSetting" class="btn btn-success">
-                                    <i class="fa fa-save"></i> UPDATE
-                                </button>
+                                @if(check_user_role(74) == 1)
+                                    <button type="submit" form="templateSetting" class="btn btn-success">
+                                        <i class="fa fa-save"></i> UPDATE
+                                    </button>
+                                @else
+                                    <button class="btn btn-success" disabled>
+                                        <i class="fa fa-save"></i> UPDATE
+                                    </button>
+                                @endif
                             </div>
                             <hr>
                             <div class="row">

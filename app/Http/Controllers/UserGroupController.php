@@ -16,7 +16,7 @@ class UserGroupController extends Controller
     public function index()
     {
         // Check User Permission
-        if(check_user_role(86) != 1)
+        if(check_user_role(101) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -28,7 +28,7 @@ class UserGroupController extends Controller
     public function add()
     {
         // Check User Permission
-        if(check_user_role(87) != 1)
+        if(check_user_role(100) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -56,7 +56,7 @@ class UserGroupController extends Controller
     {
 
         // Check User Permission
-        if(check_user_role(89) != 1)
+        if(check_user_role(103) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -75,7 +75,7 @@ class UserGroupController extends Controller
     function edit($id)
     {
         // Check User Permission
-        if(check_user_role(88) != 1)
+        if(check_user_role(102) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }

@@ -12,6 +12,13 @@ class MessageController extends Controller
     // Function of Message List View
     public function index()
     {
+
+        // Check User Permission
+        if(check_user_role(79) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         return view('admin.messages.list');
     }
 
@@ -74,6 +81,12 @@ class MessageController extends Controller
     // Function of Add Message View
     public function add()
     {
+        // Check User Permission
+        if(check_user_role(78) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         return view('admin.messages.add');
     }
 

@@ -117,8 +117,13 @@
                                             </tr>
 
                                             <tr>
-                                                <td><button type="submit" name="submit" class="btn btn-success"><i
-                                                            class="fa fa-save"></i>Update</button></td>
+                                                <td>
+                                                    @if (check_user_role(69) == 1)
+                                                        <button type="submit" name="submit" class="btn btn-success"><i class="fa fa-save"></i>Update</button>
+                                                    @else
+                                                        <button type="submit" name="submit" class="btn btn-success" disabled><i class="fa fa-save"></i>Update</button>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -141,7 +146,7 @@
 <script>
       $(document).ready(function(){
         var data = $('input[name=gallery_background_options]:checked').val();
-        
+
         if (data == 'transparent') {
             $('#image').hide();
             $('#color').hide();
@@ -155,7 +160,7 @@
       });
     function getgallary() {
         var data1 = $('input[name=gallery_background_options]:checked').val();
-       
+
         var html = '';
         if (data1 == 'transparent') {
             $("#text").html('');
@@ -176,6 +181,6 @@
             $('#image').show();
             $('#color').hide();
         }
-       
+
     }
 </script>

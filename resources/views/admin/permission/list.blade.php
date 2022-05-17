@@ -73,7 +73,11 @@
                                                 <tr style="background: rgb(168, 168, 168);">
                                                     {{-- TD for main Menu List --}}
                                                     <td>
-                                                        <b>{{ $paction->main_menu }} <i class="{{ $paction->icon_class }}"></i></b>
+                                                        <b>{{ $paction->main_menu }} <i class="{{ $paction->icon_class }}"></i> (sidebar)</b>
+                                                        <br>
+                                                        @if ($paction->main_menu == 'Dashboard')
+                                                            <code class="text-white">Note : Dashboard is Required for all Users.</code>
+                                                        @endif
                                                     </td>
                                                     {{-- End TD for main Menu List --}}
 
@@ -99,11 +103,6 @@
 
 
 
-
-
-
-
-
                                                 {{-- All SubMenu Variable --}}
                                                 @php
                                                     $fetchsubmenu = submenu($paction->id);
@@ -124,7 +123,7 @@
                                                         <tr style="background: rgb(214, 214, 214);">
                                                             {{-- TD for Sub Menu List --}}
                                                             <td style="padding-left: 20px;">
-                                                                <b>- {{ $value1->alias }} <i class="{{ $value1->icon_class }}"></i></b>
+                                                                <b>- {{ $value1->alias }} <i class="{{ $value1->icon_class }}"></i> (sidebar items)</b>
                                                             </td>
                                                             {{-- End TD for Sub Menu List --}}
 
