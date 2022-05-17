@@ -17,6 +17,12 @@ class CouponController extends Controller
     //Function of Get Coupons By Current Store
     public function index()
     {
+        // Check User Permission
+        if (check_user_role(63) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -31,6 +37,12 @@ class CouponController extends Controller
     //Function of Add New Coupon View
     public function addcoupon()
     {
+        // Check User Permission
+        if (check_user_role(64) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.coupons.add');
     }
 
@@ -217,6 +229,12 @@ class CouponController extends Controller
     // Function of Edit Coupon
     public function editcoupon($id)
     {
+        // Check User Permission
+        if (check_user_role(15) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $data['coupon'] = Coupon::find($id);
 
         if(empty($data['coupon']))
@@ -237,6 +255,12 @@ class CouponController extends Controller
     // Delete Coupon
     public function coupondelete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(66) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
         if (count($ids) > 0)
         {

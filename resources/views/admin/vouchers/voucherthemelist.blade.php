@@ -52,17 +52,12 @@
                                     Voucher Themes List
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    @if (check_user_role(55) == 1)
-                                        <a href="{{ route('voucherthemeinsert') }}" class="btn btn-sm btn-primary ml-auto">
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                    @endif
-
-                                    @if (check_user_role(57) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    @endif
+                                    <a href="{{ route('voucherthemeinsert') }}" class="btn btn-sm btn-primary ml-auto">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}

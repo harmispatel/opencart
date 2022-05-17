@@ -49,13 +49,13 @@
                                     Orders List
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    @if(check_user_role(71) == 1)
+                                    @if(check_user_role(38) == 1)
                                         <a href="{{ route('ordersinsert') }}" class="btn btn-sm btn-primary ml-auto">
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     @endif
 
-                                    @if(check_user_role(73) == 1)
+                                    @if(check_user_role(41) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected">
                                             <i  class="fa fa-trash"></i>
                                         </a>

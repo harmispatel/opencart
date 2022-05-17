@@ -615,7 +615,7 @@ span.check_btn:before {
                                                             </td>
                                                             <td class="align-middle">
                                                                 <div class="qu-inr">
-                                                                    <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                    <input type="number" name="qty" id="qty_size_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
                                                                     <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
                                                                         <img src="{{ asset('public/images/update.png') }}">
                                                                     </a>
@@ -669,7 +669,7 @@ span.check_btn:before {
                                                             </td>
                                                             <td class="align-middle">
                                                                 <div class="qu-inr">
-                                                                    <input type="number" name="qty" id="qty_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                    <input type="number" name="qty" id="qty_without_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
                                                                     <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
                                                                         <img src="{{ asset('public/images/update.png') }}">
                                                                     </a>
@@ -1243,17 +1243,17 @@ span.check_btn:before {
 
         if(sizeid == 0)
         {
-            var loop_id = $('#qty_'+product).val();
+            var loop_id = $('#qty_without_'+product).val();
         }
         else
         {
-            var loop_id = $('#qty_'+sizeid).val();
+            var loop_id = $('#qty_size_'+sizeid).val();
         }
 
 
         $.ajax({
             type: 'post',
-            url: '{{ route('getid') }}',
+            url: '{{ url("getid") }}',
             data: {
                 "_token": "{{ csrf_token() }}",
                 'size_id': sizeid,

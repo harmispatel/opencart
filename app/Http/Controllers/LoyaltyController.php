@@ -20,6 +20,12 @@ class LoyaltyController extends Controller
 
     public function index()
     {
+        // Check User Permission
+        if (check_user_role(62) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $current_store_id = currentStoreId();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
             $query->where('store_id', $current_store_id);
@@ -51,12 +57,12 @@ class LoyaltyController extends Controller
          } else{
              echo "hello";
          }
-          
-        
+
+
 
         if($rewardtype == 'money'){
             $query = Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
-            $setting_id = isset($query->setting_id) ? $query->setting_id : ''; 
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
             $data['minimum'] =isset($request->money['minimum']) ? $request->money['minimum'] : '';
             $data['collectionaward'] = isset($request->money['collectionaward']) ? $request->money['collectionaward'] : '';
             $data['deliveryaward'] =isset($request->money['deliveryaward']) ? $request->money['deliveryaward'] : '';
@@ -71,7 +77,7 @@ class LoyaltyController extends Controller
             $data['excludecoupons'] =isset($request->money['excludecoupons']) ? $request->money['excludecoupons'] : '';
 
             $moneyserialize = serialize($data);
-            
+
             if ($setting_id) {
                 $social_update = Settings::find($setting_id);
                 $social_update->value = $moneyserialize;
@@ -128,13 +134,13 @@ class LoyaltyController extends Controller
                 $settingpoint->save();
             }
            }
-          
 
-            
-        
 
-            
-        
+
+
+
+
+
 
         return redirect('loyalty');
     }

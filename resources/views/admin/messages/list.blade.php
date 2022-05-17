@@ -40,8 +40,10 @@
                                     Messages List
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    @if (check_user_role(55) == 1)
+                                    @if (check_user_role(78) == 1)
                                         <a href="{{ route('sendmessages') }}" class="btn btn-sm btn-primary ml-auto">Send Message</a>
+                                    @else
+                                        <button class="btn btn-sm btn-primary ml-auto" disabled>Send Message</button>
                                     @endif
                                 </div>
                             </div>

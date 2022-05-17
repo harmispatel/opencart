@@ -49,14 +49,14 @@
                                 </h2>
                                 {{-- <h3>category</h3> --}}
                                 <div class="container" style="text-align: right">
-                                    @if (check_user_role(59) == 1)
+                                    @if (check_user_role(49) == 1)
                                         <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i
-                                                class="fa fa-plus"></i></a>
+                                        class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if (check_user_role(61) == 1)
+                                    @if (check_user_role(52) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
-                                                class="fa fa-trash"></i></a>
+                                        class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
                             </div>

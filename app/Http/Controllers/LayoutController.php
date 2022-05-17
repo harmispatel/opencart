@@ -14,6 +14,13 @@ class LayoutController extends Controller
 
     public function templatesettings()
     {
+
+        // Check User Permission
+        if (check_user_role(73) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -364,11 +371,23 @@ class LayoutController extends Controller
 
     public function slidersettings()
     {
+        // Check User Permission
+        if (check_user_role(75) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.settinglayouts.slider_settings');
     }
 
     public function bannerandblocks()
     {
+        // Check User Permission
+        if (check_user_role(76) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.settinglayouts.banner_and_blocks');
     }
 

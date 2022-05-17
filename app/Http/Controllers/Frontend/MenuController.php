@@ -164,6 +164,7 @@ class MenuController extends Controller
                 else
                 {
                     $cart = getuserCart($userid);
+
                     if($sizeid == 0)
                     {
                         unset($cart['withoutSize'][$productid]);
@@ -186,7 +187,6 @@ class MenuController extends Controller
                 {
                     if($sizeid == 0)
                     {
-                        session()->forget('cart1.withoutSize.'.$productid);
                         for($i=1;$i<=$loopid;$i++)
                         {
                             addtoCart($request, $productid, $sizeid);

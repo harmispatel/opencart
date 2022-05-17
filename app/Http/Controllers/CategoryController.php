@@ -21,7 +21,7 @@ class CategoryController extends Controller
     function index()
     {
         // Check User Permission
-        if (check_user_role(50) != 1)
+        if (check_user_role(45) != 1)
         {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
@@ -133,7 +133,15 @@ class CategoryController extends Controller
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$category_id'>";
                 $data['name'] = $post->hasOneCategory->name;
                 $data['sort_order'] = $post->sort_order;
-                $data['action'] = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+
+                if (check_user_role(47) == 1)
+                {
+                    $data['action'] = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+                }
+                else
+                {
+                    $data['action'] = '-';
+                }
 
                 $data1[] = $data;
 
@@ -241,6 +249,13 @@ class CategoryController extends Controller
     // Function of Bulk Category View
     function bulkcategory()
     {
+
+        // Check User Permission
+        if (check_user_role(54) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -365,7 +380,8 @@ class CategoryController extends Controller
     function newcategory()
     {
         // Check User Permission
-        if (check_user_role(55) != 1) {
+        if (check_user_role(46) != 1)
+        {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -383,7 +399,7 @@ class CategoryController extends Controller
         $current_store_id = currentStoreId();
 
         // Check User Permission
-        if (check_user_role(56) != 1)
+        if (check_user_role(47) != 1)
         {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
@@ -586,6 +602,12 @@ class CategoryController extends Controller
     // Function of Delete Category
     function categorydelete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(48) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if (count($ids) > 0)

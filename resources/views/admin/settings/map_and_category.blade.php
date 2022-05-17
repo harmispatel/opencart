@@ -123,9 +123,15 @@
                                         </h3>
 
                                         <div class="container" style="text-align: right">
-                                            <button type="submit" class="btn btn-sm btn-primary">
-                                                <i class="fa fa-save"></i>
-                                            </button>
+                                            @if (check_user_role(81) == 1)
+                                                <button type="submit" class="btn btn-sm btn-primary">
+                                                    <i class="fa fa-save"></i>
+                                                </button>
+                                            @else
+                                                <button class="btn btn-sm btn-primary" disabled>
+                                                    <i class="fa fa-save"></i>
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
                                 {{-- End Card Header --}}

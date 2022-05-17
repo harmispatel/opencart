@@ -40,11 +40,11 @@
                                 </h3>
 
                                 <div class="container" style="text-align: right">
-                                    @if(check_user_role(87) == 1)
+                                    @if(check_user_role(100) == 1)
                                         <a href="{{ route('addusergroup') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if(check_user_role(89) == 1)
+                                    @if(check_user_role(103) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
@@ -78,12 +78,14 @@
                                                         {{ $usergroup->name }}
                                                     </td>
                                                     <td>
-                                                        @if(check_user_role(88) == 1)
+                                                        @if(check_user_role(102) == 1)
                                                             <a href="{{ route('editusersgroup',$usergroup->user_group_id) }}" class="btn btn-sm btn-primary rounded">
                                                                 <i class="fa fa-edit"></i>
                                                             </a>
                                                         @else
-                                                            -
+                                                            <button class="btn btn-sm btn-primary rounded" disabled>
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
                                                         @endif
                                                     </td>
                                                 </tr>

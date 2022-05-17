@@ -1,3 +1,23 @@
+@php
+    $stores = getStores();
+    if(Session::has('store_id'))
+    {
+    $storeID = Session::get('store_id');
+    }
+    else
+    {
+        $storeID = 0;
+    }
+
+    $user_details = user_details();
+
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +77,6 @@
 {{-- Summernote --}}
 <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
-
 <style>
     .custom-nav > .nav-item > .nav-link {height: 40px !important;}
 </style>
@@ -69,36 +88,34 @@
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item pt-1 pr-3">
-        <a href="{{ route('createstore') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> NEW</a>
-      </li>
-      <li class="nav-item">
-          @php
-              $stores = getStores();
-              if(Session::has('store_id'))
-              {
-                $storeID = Session::get('store_id');
-              }
-              else
-              {
-                  $storeID = 0;
-              }
-          @endphp
-            <select class="form-control" id="SearchStore">
-                @foreach ($stores as $store)
-                    <option value="{{ $store->store_id }}" {{ ($storeID == $store->store_id) ? 'selected' : '' }}>{{ html_entity_decode($store->name) }}</option>
-                @endforeach
-              </select>
-      </li>
-      <li class="nav-item pl-3 pt-2 pr-3">
-        @php
-            $current_store_id = currentStoreId();
-        @endphp
-        <a href="{{ getCurrentStoreURL($current_store_id) }}" target="_blanck" id="visitShop">Visit Shop</a>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        @if ($user_group_id == 1)
+            <li class="nav-item pt-1 pr-3">
+                <a href="{{ route('createstore') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> NEW</a>
+            </li>
+            <li class="nav-item">
+                <select class="form-control" id="SearchStore">
+                    @foreach ($stores as $store)
+                        <option value="{{ $store->store_id }}" {{ ($storeID == $store->store_id) ? 'selected' : '' }}>{{ html_entity_decode($store->name) }}</option>
+                    @endforeach
+                </select>
+            </li>
+            <li class="nav-item pl-3 pt-2 pr-3">
+                @php
+                    $current_store_id = currentStoreId();
+                @endphp
+                <a href="{{ getCurrentStoreURL($current_store_id) }}" target="_blanck" id="visitShop">Visit Shop</a>
+            </li>
+        @else
+            @php
+                $user_shop = user_shop_detail($user_details['user_shop']);
+            @endphp
+            <li class="nav-item pt-1">
+                <h3>{{ $user_shop->name }}</h3>
+            </li>
+        @endif
     </ul>
 
     <ul class="navbar-nav ml-auto">
@@ -342,7 +359,7 @@
                                                             @if($value1->url_id == 1)
                                                                 <a href="{{ route($value1->slugurl,user_details()->user_id) }}" class="nav-link {{ request()->is($value1->slugurl.'/'.user_details()->user_id) ? 'active' : ''}}">
                                                             @else
-                                                                <a href="{{ route($value1->slugurl) }}" class="nav-link {{ request()->is($value1->slugurl) ? 'active' : ''}}">
+                                                                <a href="{{ URL::To($value1->slugurl) }}" class="nav-link {{ request()->is($value1->slugurl) ? 'active' : ''}}">
                                                             @endif
 
                                                             <i class="nav-icon {{ $value1->icon_class }}"></i>

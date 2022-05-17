@@ -15,6 +15,13 @@ class VoucherController extends Controller
     // Function of Get All Gift Vouchers by Current Store
     public function voucherlist()
     {
+
+        // Check User Permission
+        if (check_user_role(14) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -47,6 +54,13 @@ class VoucherController extends Controller
     // Function of Get All Voucher Themes
     public function vouchertheme()
     {
+
+        // Check User Permission
+        if (check_user_role(15) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $data = VoucherThemenames::all();
         return view('admin.vouchers.voucherthemelist',['data'=>$data]);
     }
@@ -58,6 +72,12 @@ class VoucherController extends Controller
     // Function of Gift Voucher Edit View
     public function voucheredit($id)
     {
+        // Check User Permission
+        if (check_user_role(14) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $data['vouchers'] = Voucher::where('voucher_id',"=",$id)->first();
 
         if(empty($data['vouchers']))
@@ -120,6 +140,12 @@ class VoucherController extends Controller
     // Function of Delete Gift Voucher
     public function voucherdelete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(14) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
         if (count($ids) > 0) {
             Voucher::whereIn('voucher_id', $ids)->delete();
@@ -136,6 +162,12 @@ class VoucherController extends Controller
     // Function of Store Gift Vouchers
     public function voucherinsert(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(14) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -181,6 +213,12 @@ class VoucherController extends Controller
     // Function of Insert new Voucher Theme
     public function voucherthemeinsert(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(15) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.vouchers.addvouchertheme');
     }
 
@@ -231,6 +269,12 @@ class VoucherController extends Controller
     // Function of Edit Voucher Themes View
     public function voucherthemeedit($id)
     {
+        // Check User Permission
+        if (check_user_role(15) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $voucherthemenameedit = VoucherThemenames::find($id);
 
         if(empty($voucherthemenameedit))
@@ -296,6 +340,12 @@ class VoucherController extends Controller
     // Function of Delete Voucher Theme
     public function voucherthemedelete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(15) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if (count($ids) > 0)

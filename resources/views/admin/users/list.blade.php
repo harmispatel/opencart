@@ -40,11 +40,11 @@
                                 </h3>
 
                                 <div class="container" style="text-align: right">
-                                    @if(check_user_role(83) == 1)
+                                    @if(check_user_role(96) == 1)
                                         <a href="{{ route('adduser') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if(check_user_role(85) == 1)
+                                    @if(check_user_role(99) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
@@ -96,13 +96,15 @@
                                                         {{ date('d/m/Y',strtotime($user->created_at)) }}
                                                     </td>
                                                     <td>
-                                                        @if(check_user_role(84) == 1)
+                                                        @if(check_user_role(98) == 1)
                                                             <a href="{{ route('edituser',$user->user_id) }}" class="btn btn-sm btn-primary rounded">
-                                                            <i class="fa fa-edit"></i>
+                                                            <i class="fa fa-edit"></i></a>
                                                         @else
-                                                            -
+                                                            <button class="btn btn-sm btn-primary rounded" disabled>
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
                                                         @endif
-                                                        </a>
+
                                                     </td>
                                                 </tr>
                                             @endforeach

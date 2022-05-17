@@ -27,12 +27,14 @@ class OrdersController extends Controller
     // View Order List
     public function index()
     {
+        // Check User Permission
+        if (check_user_role(39) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.order.list');
     }
-
-
-
-
 
     // Function of Get Orders By Current Store
     public function getorders(Request $request)
@@ -82,9 +84,6 @@ class OrdersController extends Controller
                 $query->where('store_id',$current_store_id);
             })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
 
-            // echo '<pre>';
-            // print_r($posts);
-            // exit();
         }
 
         $data = array();
@@ -164,7 +163,15 @@ class OrdersController extends Controller
                     $data['payment_type'] = $post->payment_code;
                 }
 
-                $data['action'] = '<a href="'. $edit_url .'" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
+                if(check_user_role(42) == 1)
+                {
+                    $data['action'] = '<a href="'. $edit_url .'" class="btn btn-sm btn-primary"><i class="fa fa-eye text-white"></i><a>';
+                }
+                else
+                {
+                    $data['action'] = '-';
+                }
+
 
                 $data1[] = $data;
             }
@@ -188,6 +195,12 @@ class OrdersController extends Controller
     // View order
     public function vieworder($id)
     {
+        // Check User Permission
+        if (check_user_role(42) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Get Order Details By Order ID
         $orders = Orders::with(['hasOneOrderStatus','hasOneCustomerGroupDescription','hasOneCountry','hasOneRegion'])->where('order_id', '=', $id)->first();
 
@@ -208,6 +221,12 @@ class OrdersController extends Controller
 
     public function ordersinsert()
     {
+        // Check User Permission
+        if (check_user_role(38) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         // Get All Stores
         $data['stores'] = Store::get();
 
@@ -377,10 +396,13 @@ class OrdersController extends Controller
 
     public function deleteorder(Request $request)
     {
+        // Check User Permission
+        if (check_user_role(41) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request->id;
-        // echo '<pre>';
-        // print_r($request->id);
-        // exit();
         if (count($ids) > 0) {
             Orders::whereIn('order_id', $ids)->delete();
             return response()->json([
