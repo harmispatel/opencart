@@ -47,8 +47,8 @@
           <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
       </a>
         <ul class="authentication-links">
-          <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-          <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
         </ul>
       </div>
     </div>

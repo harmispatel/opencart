@@ -123,7 +123,7 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
             </ul>
             <div class="__btn-group"><a class="btn __purple text-capitalize" href="#"><i
                         class="fas fa-shopping-cart"></i>my cart</a><a class="btn __green text-capitalize"
-                    href="#">login or signup</a></div><a class="open-mobile-menu" href="javascript:void(0)"><span
+                    href="#" data-bs-toggle="modal" data-bs-target="#login">login or signup</a></div><a class="open-mobile-menu" href="javascript:void(0)"><span
                     class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
         </div>
     </div>

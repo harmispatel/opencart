@@ -228,12 +228,12 @@ else
             <div class="__right">
                 <ul class="authentication-links">
                     <li>
-                        <a href="#">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#login">
                             <i class="far fa-user"></i><span>Login</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#login">
                             <i class="fas fa-sign-in-alt"></i><span>Register</span>
                         </a>
                     </li>

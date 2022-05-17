@@ -46,8 +46,8 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
             </div>
             <div class="__right-content">
                 <ul class="authentication-links">
-                    <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-                    <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
+                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
                 </ul><a class="menu-shopping-cart" href="">
                     <div class="number"><i class="fas fa-shopping-basket"></i><span>2</span></div>
                     <div class="price-box"><strong>Shopping Cart:</strong>

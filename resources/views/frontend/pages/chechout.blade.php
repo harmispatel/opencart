@@ -36,6 +36,10 @@
         $customer_addr = session()->get('guest_user_address');
     }
 
+    // echo '<pre>';
+    // print_r(session()->all());
+    // exit();
+
 @endphp
 
 <!doctype html>
@@ -245,10 +249,20 @@ span.check_btn:before {
                               {{ csrf_field() }}
                               <div class="login-details w-100">
                                   <div class="login-details-inr fa fa-envelope w-100">
-                                  <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                                  <input placeholder="Email address" type="text" name="Email" value="{{old('Email')}}" class="w-100 {{ ($errors->has('Email')) ? 'is-invalid' : '' }}">
+                                  @if ($errors->has('Email'))
+                                    <div class="invalid-feedback text-start">
+                                        {{ $errors->first('Email') }}
+                                    </div>
+                                  @endif
                                   </div>
                                   <div class="login-details-inr fa fa-lock w-100">
-                                  <input placeholder="password" type="password" name="password" value="" class="w-100">
+                                  <input placeholder="password" type="password" name="Password" value="{{old('Password')}}" class="w-100 {{ ($errors->has('Password')) ? 'is-invalid' : '' }}">
+                                  @if ($errors->has('Password'))
+                                    <div class="invalid-feedback text-start">
+                                        {{ $errors->first('Password') }}
+                                    </div>
+                                  @endif
                                   </div>
                                   <div class="email-btn">
                                   <button class="btn" id="login">Log in</button>
@@ -329,7 +343,7 @@ span.check_btn:before {
                               <div class="login-details w-100">
                                 <form action="{{ route('customerregister') }}" method="post">
                                     {{ csrf_field() }}
-                                    <div class="login-details-inr fa fa-sort-up w-100">
+                                    <div class="login-details-inr fa fa-sort-up w-100 ">
                                         <select name="gender" class="w-100">
                                             <option value="">Title</option>
                                             <option value="1">Mr.</option>
@@ -341,20 +355,54 @@ span.check_btn:before {
                                         </select>
                                     </div>
                                     <div class="login-details-inr fa fa-user w-100 d-flex">
-                                        <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                        <input placeholder="lastname" type="text" name="lastname" value="" class="w-50">
+                                        <div class="w-50 d-inline-block float-start">
+                                            <input placeholder="firstname" type="text" name="firstname" value="{{ old('firstname') }}" class="w-100 {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}">
+                                            @if ($errors->has('firstname'))
+                                                <div class="invalid-feedback text-start">
+                                                    {{ $errors->first('firstname') }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="w-50 d-inline-block float-start">
+                                            <input placeholder="lastname" type="text" name="lastname" value="{{ old('lastname') }}" class="w-100 {{ ($errors->has('lastname')) ? 'is-invalid' : '' }}">
+                                            @if ($errors->has('lastname'))
+                                                <div class="invalid-feedback text-start">
+                                                    {{ $errors->first('lastname') }}
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                     <div class="login-details-inr fa fa-envelope w-100">
-                                        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                                        <input placeholder="Email address" type="text" name="email" value="{{ old('email') }}" class="w-100 {{ ($errors->has('email')) ? 'is-invalid' : '' }}">
+                                        @if ($errors->has('email'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('email') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-phone-alt w-100">
-                                        <input placeholder="phone number" type="text" name="number" value="" class="w-100">
+                                        <input placeholder="phone number" type="text" name="phone" value="{{ old('phone') }}" class="w-100 {{ ($errors->has('phone')) ? 'is-invalid' : '' }}">
+                                        @if ($errors->has('phone'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('phone') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="password" type="password" name="password" value="" class="w-100">
+                                        <input placeholder="password" type="password" name="password" value="" class="w-100 {{ ($errors->has('password')) ? 'is-invalid' : '' }}">
+                                        @if ($errors->has('password'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('password') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="Confirm Password" type="password" name="confirm" value="" class="w-100">
+                                        <input placeholder="Confirm Password" type="password" name="confirm_password" value="" class="w-100 {{ ($errors->has('confirm_password')) ? 'is-invalid' : '' }}">
+                                        @if ($errors->has('confirm_password'))
+                                        <div class="invalid-feedback text-start">
+                                            {{ $errors->first('confirm_password') }}
+                                        </div>
+                                    @endif
                                     </div>
                                     <div class="email-btn">
                                         <button type="submit" class="btn">Create</button>
@@ -899,6 +947,7 @@ span.check_btn:before {
                 var email = message.responseJSON.errors.email;
                 var phone = message.responseJSON.errors.phone;
 
+
                 // Title
                 if(gender)
                 {
@@ -997,7 +1046,7 @@ span.check_btn:before {
                 if(response.errors == 1)
                 {
                     $('#postcodeerr').text('').show();
-                    $('#postcode').attr('class','form-control is-invalid');
+                    // $('#postcode').attr('class','form-control is-invalid');
                     $('#postcodeerr').text(response.errors_message);
                 }
             },
@@ -1016,7 +1065,7 @@ span.check_btn:before {
                 if(address_1)
                 {
                     $('#address_1err').text('').show();
-                    $('#address_1').attr('class','form-control is-invalid');
+                    // $('#address_1').attr('class','form-control is-invalid');
                     $('#address_1err').text(address_1);
                 }
                 else
@@ -1029,7 +1078,7 @@ span.check_btn:before {
                 if(city)
                 {
                     $('#cityerr').text('').show();
-                    $('#city').attr('class','form-control is-invalid');
+                    // $('#city').attr('class','form-control is-invalid');
                     $('#cityerr').text(city);
                 }
                 else
@@ -1042,7 +1091,7 @@ span.check_btn:before {
                 if(postcode)
                 {
                     $('#postcodeerr').text('').show();
-                    $('#postcode').attr('class','form-control is-invalid');
+                    // $('#postcode').attr('class','form-control is-invalid');
                     $('#postcodeerr').text(postcode);
                 }
                 else
@@ -1055,7 +1104,7 @@ span.check_btn:before {
                 if(phone_no)
                 {
                     $('#phone_noerr').text('').show();
-                    $('#phone_no').attr('class','form-control is-invalid');
+                    // $('#phone_no').attr('class','form-control is-invalid');
                     $('#phone_noerr').text(phone_no);
                 }
                 else
@@ -1068,7 +1117,7 @@ span.check_btn:before {
                 if(area)
                 {
                     $('#areaerr').text('').show();
-                    $('#area').attr('class','form-control is-invalid');
+                    // $('#area').attr('class','form-control is-invalid');
                     $('#areaerr').text(area);
                 }
                 else
