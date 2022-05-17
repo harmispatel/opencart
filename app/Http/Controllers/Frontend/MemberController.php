@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Orders;
 use App\Models\Reviews;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -255,8 +256,8 @@ class MemberController extends Controller
         $html .=         '</div>';
         $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
         $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
-        $html .=             '<a class="btn btn-success mx-2" href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="fa fa-commenting-o" aria-hidden="true"></i>Review</a>';
-        $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fa fa-repeat" aria-hidden="true"></i> Re-Order </a>';
+        $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="fa fa-commenting-o" aria-hidden="true"></i>Review</a>';
+        $html .=             '<a class="btn btn-success" href="cart" class="button"><i class="fa fa-repeat" aria-hidden="true"></i> Re-Order </a>';
         $html .=         '</div>';
         $html .=     '</div>';
         $html .= '</div>';
@@ -266,30 +267,27 @@ class MemberController extends Controller
 
     public function orderreviwe(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'message' => 'required'
+        $this->validate($request,[
+            'reviewtitle' => 'required',
+            'reviewmessage' => 'required',
         ]);
-
-        // echo '<pre>';
-        // print_r($request->all());
-
+        $currentURL = URL::to("/");
+        $current_theme = themeID($currentURL);
+        $current_theme_id = $current_theme['theme_id'];
+        $front_store_id =  $current_theme['store_id'];
+        $userlogin = session('userid');
         $review = new Reviews;
-        $review->customer_id = $request->customer_id;
-        $review->store_id = $request->store_id;
-        $review->order_id = $request->order_id;
-        $review->title = $request->title;
-        $review->message = $request->message;
-        $review->quality = $request->quality;
-        $review->service = $request->service;
+        $review->customer_id =$userlogin;
+        $review->store_id = $front_store_id;
+        $review->order_id = $request->o_id;
+        $review->title = $request->reviewtitle;
+        $review->message = $request->reviewmessage;
+        $review->quality = $request->foodquality;
+        $review->service = $request->customerservice;
         $review->timing = $request->timing;
-        $review->status = $request->status;
+        $review->status =1;
         $review->date_added = date('Y-m-d H:i:s');
-        $review->date_modifid = date('Y-m-d H:i:s');
         $review->save();
-
-        return response()->json([
-            'success' => 1,
-        ]);
+        return response()->json();
     }
 }

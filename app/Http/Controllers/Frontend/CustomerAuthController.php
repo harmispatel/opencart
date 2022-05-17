@@ -114,7 +114,7 @@ class CustomerAuthController extends Controller
         else
         {
             $request->validate([
-                'title' => 'required',
+                // 'title' => 'required',
                 'name' => 'required',
                 'lastname' => 'required',
                 'email' => 'required|email|unique:oc_customer,email',
