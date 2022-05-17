@@ -67,13 +67,13 @@
                                     Coupons List
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    @if (check_user_role(55) == 1)
+                                    @if (check_user_role(64) == 1)
                                         <a href="{{ route('addcoupon') }}" class="btn btn-sm btn-primary ml-auto">
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     @endif
 
-                                    @if (check_user_role(57) == 1)
+                                    @if (check_user_role(66) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected">
                                             <i class="fa fa-trash"></i>
                                         </a>
@@ -149,7 +149,13 @@
                                                     <td>{{ $coupon->date_start }}</td>
                                                     <td>{{ $coupon->date_end }}</td>
                                                     <td>{{ $coupon->status == 1 ? 'Enable' : 'Desable' }}</td>
-                                                    <td> <a class="btn btn-sm btn-primary" href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}"><i class="fa fa-edit"></i></a></td>
+                                                    <td>
+                                                        @if (check_user_role(65) == 1)
+                                                            <a class="btn btn-sm btn-primary" href="{{ url('editcoupon') }}/{{ $coupon->coupon_id }}"><i class="fa fa-edit"></i></a>
+                                                        @else
+                                                            <a class="btn btn-sm btn-primary" disabled><i class="fa fa-edit"></i></a>
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                                 @php $i++ @endphp
                                             @endforeach

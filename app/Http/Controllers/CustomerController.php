@@ -17,10 +17,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
-
     // Function of Get All Customer View
     public function index()
     {
+        // Check User Permission
+        if (check_user_role_menu(6) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
         return view('admin.customers.list');
     }
 
@@ -287,6 +291,11 @@ class CustomerController extends Controller
     // Function of Add New Customer View
     public function add()
     {
+        // Check User Permission
+        if (check_user_role_menu(6) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
 
         $data['customergroups'] = CustomerGroup::with(['hasOneCustomerGroupDescription'])->get();
 
@@ -485,6 +494,12 @@ class CustomerController extends Controller
     // Function of Edit Customer View
     public function edit($id)
     {
+        // Check User Permission
+        if (check_user_role_menu(6) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $data['customergroups'] = CustomerGroup::with(['hasOneCustomerGroupDescription'])->get();
         $data['countries'] = Country::get();
         $data['regions'] = Region::get();
@@ -663,6 +678,12 @@ class CustomerController extends Controller
     // Function of Delete Customer
     public function delete(Request $request)
     {
+        // Check User Permission
+        if (check_user_role_menu(6) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
 
         if(count($ids) > 0)

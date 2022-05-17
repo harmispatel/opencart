@@ -1,5 +1,6 @@
 @include('header')
 
+
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}">
@@ -71,7 +72,11 @@
                         </ol>
                     </div>
                     <div class="container" style="text-align: right; padding:30px">
-                        <button type="submit" form="form" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                        @if (check_user_role(72) == 1)
+                            <button type="submit" form="form" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> UPDATE</button>
+                        @else
+                            <button class="btn btn-sm btn-primary" disabled><i class="fa fa-save"></i> UPDATE</button>
+                        @endif
                     </div>
                     {{-- End Breadcumb --}}
                 </div>
@@ -135,9 +140,15 @@
                         </form>
 
                         <div class="addImage mb-2 mt-2" align="center">
-                            <button type="button" onclick="addGallary();" class="btn btn-primary">
-                                <i class="fa fa-plus-circle"></i>ADD
-                            </button>
+                            @if (check_user_role(70) == 1)
+                                <button type="button" onclick="addGallary();" class="btn btn-primary">
+                                    <i class="fa fa-plus-circle"></i> ADD NEW
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-primary" disabled>
+                                    <i class="fa fa-plus-circle"></i> ADD NEW
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>

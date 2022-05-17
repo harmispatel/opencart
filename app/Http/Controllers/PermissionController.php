@@ -16,7 +16,7 @@ class PermissionController extends Controller
     {
 
         // Check User Permission
-        if(check_user_role(90) != 1)
+        if(check_user_role(104) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }

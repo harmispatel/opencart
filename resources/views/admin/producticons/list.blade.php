@@ -50,11 +50,11 @@
                                 </h3>
 
                                 <div class="container" style="text-align: right">
-                                    @if(check_user_role(101) == 1)
+                                    @if(check_user_role(92) == 1)
                                         <a href="{{ route('addproducticon') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if(check_user_role(103) == 1)
+                                    @if(check_user_role(95) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
@@ -98,9 +98,16 @@
                                                     <td>{{ $picon->icon_url }}</td>
                                                     <td>{{ $picon->icon_sort }}</td>
                                                     <td>
-                                                        <a href="{{ route('editproducticons',$picon->id) }}" class="btn btn-sm btn-primary">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
+                                                        @if(check_user_role(94) == 1)
+                                                            <a href="{{ route('editproducticons',$picon->id) }}" class="btn btn-sm btn-primary">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        @else
+                                                            <button class="btn btn-sm btn-primary" disabled>
+                                                                <i class="fa fa-edit"></i>
+                                                            </button>
+                                                        @endif
+
                                                     </td>
                                                 </tr>
                                             @endforeach

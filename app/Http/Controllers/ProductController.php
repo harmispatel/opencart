@@ -27,6 +27,12 @@ class ProductController extends Controller
 {
     function index()
     {
+         // Check User Permission
+         if (check_user_role(50) != 1)
+         {
+             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+         }
+
         // Current Store ID
         $current_store_id = currentStoreId();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
@@ -38,6 +44,12 @@ class ProductController extends Controller
 
     function bulkproducts()
     {
+        // Check User Permission
+        if (check_user_role(56) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $current_store_id = currentStoreId();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
             $query->where('store_id', $current_store_id);
@@ -298,6 +310,12 @@ class ProductController extends Controller
 
     function importproducts()
     {
+        // Check User Permission
+        if (check_user_role(61) != 1)
+        {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         return view('admin.product.importproducts');
     }
 
@@ -305,7 +323,7 @@ class ProductController extends Controller
     function add()
     {
         // Check User Permission
-        if (check_user_role(59) != 1) {
+        if (check_user_role(49) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -632,6 +650,11 @@ class ProductController extends Controller
     }
     public function deleteproduct(Request $request)
     {
+         // Check User Permission
+         if (check_user_role(52) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
+
         $ids = $request['id'];
         // print_r($ids);die;
         if (count($ids) > 0) {

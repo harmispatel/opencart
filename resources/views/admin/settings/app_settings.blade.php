@@ -67,9 +67,15 @@
                                         SETTINGS
                                     </h3>
                                     <div class="container" style="text-align: right">
-                                        <button type="submit" class="btn btn-sm btn-primary">
-                                            <i class="fa fa-save"></i>
-                                        </button>
+                                        @if (check_user_role(84) == 1)
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                <i class="fa fa-save"></i>
+                                            </button>
+                                        @else
+                                            <button class="btn btn-sm btn-primary" disabled>
+                                                <i class="fa fa-save"></i>
+                                            </button>
+                                        @endif
                                         <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll" aria-expanded="true" aria-controls="coll" onclick="changeAngle()">
                                             <i class="fa" aria-hidden="true"></i>
                                         </button>

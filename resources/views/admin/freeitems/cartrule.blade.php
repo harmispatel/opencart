@@ -49,18 +49,13 @@
                                     Cart Rules List
                                 </h3>
                                 <div class="container" style="text-align: right">
-                                    @if (check_user_role(71) == 1)
-                                        <a href="{{ route('addfreerule') }}"
-                                        class="btn btn-sm btn-primary ml-auto">
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                    @endif
-
-                                    @if (check_user_role(73) == 1)
-                                        <a class="btn btn-sm btn-danger ml-auto deletesellected">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    @endif
+                                    <a href="{{ route('addfreerule') }}"
+                                    class="btn btn-sm btn-primary ml-auto">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-danger ml-auto deletesellected">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
                                 </div>
                             </div>
                             {{-- End Card Header --}}

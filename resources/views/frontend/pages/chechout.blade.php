@@ -1352,16 +1352,19 @@ if (session()->has('userid')) {
         var productid = product;
         var userid = uid;
 
-        if (sizeid == 0) {
-            var loop_id = $('#qty_' + product).val();
-        } else {
-            var loop_id = $('#qty_' + sizeid).val();
+        if(sizeid == 0)
+        {
+            var loop_id = $('#qty_without_'+product).val();
+        }
+        else
+        {
+            var loop_id = $('#qty_size_'+sizeid).val();
         }
 
 
         $.ajax({
             type: 'post',
-            url: '{{ route('getid') }}',
+            url: '{{ url("getid") }}',
             data: {
                 "_token": "{{ csrf_token() }}",
                 'size_id': sizeid,

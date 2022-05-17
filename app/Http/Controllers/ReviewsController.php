@@ -17,7 +17,7 @@ class ReviewsController extends Controller
         $current_store_id = currentStoreId();
 
         // Check User Permission
-        if(check_user_role(78) != 1)
+        if(check_user_role(77) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }

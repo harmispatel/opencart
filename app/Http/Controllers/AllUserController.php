@@ -18,7 +18,7 @@ class AllUserController extends Controller
         $current_store_id = currentStoreId();
 
         // Check User Permission
-        if(check_user_role(82) != 1)
+        if(check_user_role(97) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -35,7 +35,7 @@ class AllUserController extends Controller
     public function add()
     {
         // Check User Permission
-        if(check_user_role(83) != 1)
+        if(check_user_role(96) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -104,7 +104,7 @@ class AllUserController extends Controller
     function deletemultiuser(Request $request)
     {
         // Check User Permission
-        if(check_user_role(85) != 1)
+        if(check_user_role(99) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -142,7 +142,7 @@ class AllUserController extends Controller
     function edit($id)
     {
         // Check User Permission
-        if(check_user_role(84) != 1)
+        if(check_user_role(98) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
@@ -223,7 +223,7 @@ class AllUserController extends Controller
     function userprofile($id)
     {
         // Check User Permission
-        if(check_user_role(91) != 1)
+        if(check_user_role(105) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }

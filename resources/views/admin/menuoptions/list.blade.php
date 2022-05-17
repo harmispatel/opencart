@@ -68,11 +68,11 @@
                                 </div>
 
                                 <div class="col-md-6" style="text-align: right">
-                                    @if(check_user_role(101) == 1)
+                                    @if(check_user_role(57) == 1)
                                         <a href="{{ route('addmenuoptions') }}" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></a>
                                     @endif
 
-                                    @if(check_user_role(103) == 1)
+                                    @if(check_user_role(60) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i class="fa fa-trash"></i></a>
                                     @endif
                                 </div>

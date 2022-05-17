@@ -212,7 +212,9 @@
                                 {{-- Card Footer --}}
                                 <div class="card-footer">
                                     <input type="hidden" value="{{ URL::current() }}" id="urlajax">
-                                    <button id="ybcsubmit" type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> SAVE</button>
+                                    @if (check_user_role(53) == 1)
+                                        <button id="ybcsubmit" type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> SAVE</button>
+                                    @endif
                                 </div>
                                 {{-- End Card Footer --}}
                             </div>

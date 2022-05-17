@@ -48,7 +48,15 @@
                         <div class="card card-primary">
                             <div class="card-header" style="background: #f6f6f6">
                                 <div class="container" style="text-align: right">
-                                    <button type="submit" form="openclosetime" class="btn btn-sm btn-primary ml-auto"><i class="fa fa-save"></i></button>
+                                    @if (check_user_role(86) == 1)
+                                        <button type="submit" form="openclosetime" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-save"></i>
+                                        </button>
+                                    @else
+                                        <button class="btn btn-sm btn-primary" disabled>
+                                            <i class="fa fa-save"></i>
+                                        </button>
+                                    @endif
                                     <a href="{{ route('dashboard') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
                                 </div>
                             </div>

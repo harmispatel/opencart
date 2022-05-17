@@ -60,6 +60,13 @@ class SettingsController extends Controller
 
     public function openclosetime(Request $request)
     {
+
+        // Check User Permission
+        if(check_user_role(85) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $minitunes = array('00', '10', '20', '30', '40', '50');
         $timearray = array();
         $timearray['00:00'] = '00:00';
@@ -115,6 +122,12 @@ class SettingsController extends Controller
 
     public function mapandcategory()
     {
+        // Check User Permission
+        if(check_user_role(80) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -224,6 +237,12 @@ class SettingsController extends Controller
 
     public function updatemapandcategory(Request $request)
     {
+        // Check User Permission
+        if(check_user_role(81) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -451,6 +470,12 @@ class SettingsController extends Controller
 
     public function shopsettings()
     {
+        // Check User Permission
+        if(check_user_role(82) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -516,6 +541,13 @@ class SettingsController extends Controller
 
     public function appsettings()
     {
+
+        // Check User Permission
+        if(check_user_role(83) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -544,6 +576,12 @@ class SettingsController extends Controller
 
     public function updateappsettings(Request $request)
     {
+        // Check User Permission
+        if(check_user_role(84) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -597,6 +635,12 @@ class SettingsController extends Controller
 
     public function deliverycollectionsetting()
     {
+        // Check User Permission
+        if(check_user_role(87) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -726,6 +770,12 @@ class SettingsController extends Controller
 
     public function manageDeliveryCollection(Request $request)
     {
+        // Check User Permission
+        if(check_user_role(88) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $current_store_id = currentStoreId();
         $store_postcode = '';
 
@@ -869,17 +919,35 @@ class SettingsController extends Controller
 
     public function paymentsettings()
     {
+        // Check User Permission
+        if(check_user_role(89) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         return view('admin.settings.payment_settings');
     }
 
 
     public function sociallinks()
     {
+        // Check User Permission
+        if(check_user_role(90) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         return view('admin.settings.social_links_settings');
     }
 
     public function updatesociallinks(Request $request)
     {
+        // Check User Permission
+        if(check_user_role(91) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $current_store_id = currentStoreId();
 
         $data['polianna_facebook_id'] = $request->polianna_facebook_id;
@@ -914,9 +982,12 @@ class SettingsController extends Controller
     // openclosetimeset
     public function openclosetimeset(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
+        // Check User Permission
+        if(check_user_role(86) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $current_store_id = currentStoreId();
 
         $bissinessdays = serialize($request['bussines']);
