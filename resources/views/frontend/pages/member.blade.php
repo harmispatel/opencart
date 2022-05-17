@@ -24,6 +24,7 @@ $userlogin = session('username');
     {{-- CSS --}}
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     {{-- End CSS --}}
 </head>
 
@@ -69,16 +70,22 @@ $userlogin = session('username');
         </div>
         <div class="modal-body mb-3">
             <form id="reviewform" action="{{ route('orderreviwe') }}" method="POST">
-                {{ csrf_field() }}
+                @csrf
+                {{-- {{ csrf_field() }} --}}
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" name="reviewtitle" id="title">
-                <div class="invalid-feedback" id="reviewtitleerr" style="display: none; text-align:left;"></div>
+                <div class="text-danger" id="titleError"></div>
+
+                {{-- <div class="invalid-feedback" id="reviewtitleerr" style="display: none; text-align:left;"></div> --}}
             </div>
             <div class="mb-3">
                 <label for="message" class="form-label">Message</label>
                 <textarea class="form-control" id="message" name="reviewmessage" rows="2"></textarea>
-                <div class="invalid-feedback" id="reviewmessageerr" style="display: none; text-align:left;"></div>
+                <div class="text-danger" id="messageError"></div>
+
+                {{-- <span>@error('reviewmessage'){{$message}}@enderror</span> --}}
+                {{-- <div class="invalid-feedback" id="reviewmessageerr" style="display: none; text-align:left;"></div> --}}
               </div>
             <div class="mb-3">
                 <label for="foodquality" class="form-label">Food Quality</label>
@@ -93,10 +100,14 @@ $userlogin = session('username');
                 <input type="number" class="form-control" value="3" name="timing" id="timing">
             </div>
         </div>
+           @foreach ($customerorders as $order)
+           <input type="hidden" name="order_id" id="corderid" value="">
+           @endforeach
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" form="reviewform" id="sendreview" class="btn btn-primary">Send</button>
+            <button type="submit" value="" class="btn btn-primary">Send</button>
         </div>
+
     </form>
       </div>
     </div>
@@ -392,10 +403,10 @@ $userlogin = session('username');
                                                         <h5 class="card-title">Order ID:</h5>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <h5>#{{ $orders->order_id }}</h5>
+                                                        <h5 style="text-align: left">#{{ $orders->order_id }}</h5>
                                                     </div>
                                                     <div class="col-md-4 bg-warning">
-                                                        <h5>{{$orders->hasOneOrderStatus['name']}}</h5>
+                                                        <h5 style="text-align: center">{{$orders->hasOneOrderStatus['name']}}</h5>
                                                     </div>
                                                 </div><hr>
                                                 <div>
@@ -493,6 +504,7 @@ $userlogin = session('username');
 
     $('.customerorderdetail').on('click', function () {
        var customerorderid = $(this).val();
+       $('#corderid').val(customerorderid);
     //    alert(customerorderid);
        $.ajax({
            type: "POST",
@@ -531,73 +543,39 @@ function printDiv(divId,title) {
 
 
 //  Order Review submite
-    $('#sendreview').on('click', function () {
-        console.log("Click");
-        var form_data = new FormData(document.getElementById('reviewform'));
 
+    $('#reviewform').submit(function(e){
+        e.preventDefault();
+        var  reviewtitle=$("input[name='reviewtitle']").val();
+        var  reviewmessage=$("textarea[name='reviewmessage']").val();
+        var  foodquality=$("input[name='foodquality']").val();
+        var  customerservice=$("input[name='customerservice']").val();
+        var  timing=$("input[name='timing']").val();
+        var  o_id=$("#corderid").val();
         $.ajax({
-            type: "POST",
-            url: "{{ url('orderreviwe') }}",
-            data: form_data,
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (response)
-            {
-                if(response.success == 1)
+                type: 'post',
+                url: '{{ url("orderreviwe") }}',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'reviewtitle': reviewtitle,
+                    'reviewmessage': reviewmessage,
+                    'foodquality': foodquality,
+                    'customerservice': customerservice,
+                    'timing': timing,
+                    'o_id':o_id,
+                },
+                dataType: 'json',
+                success: function(response)
                 {
-                    $('#checkout2').hide();
-                    $('#checkout3').show();
-                }
-
-                if(response.errors == 1)
-                {
-                    $('#postcodeerr').text('').show();
-                    $('#postcode').attr('class','form-control is-invalid');
-                    $('#postcodeerr').text(response.errors_message);
-                }
-            },
-            error : function (message)
-            {
-                if(typeof(message.responseJSON) != "undefined" && message.responseJSON !== null)
-                {
-                    var title   = message.responseJSON.errors.title;
-                    var message = message.responseJSON.errors.message;
-                }
-
-                // Title
-                if(title)
-                {
-                    $('#reviewtitleerr').text('').show();
-                    $('#reviewtitle').attr('class','form-control is-invalid');
-                    $('#reviewtitleerr').text(title);
-                }
-                else
-                {
-                    $('#reviewtitle').text('').hide();
-                    $('#reviewtitleerr').attr('class','form-control');
-                }
-
-                // Message
-                if(message)
-                {
-                    $('#reviewmessageerr').text('').show();
-                    $('#reviewmessage').attr('class','form-control is-invalid');
-                    $('#reviewmessageerr').text(message);
-                }
-                else
-                {
-                    $('#reviewmessageerr').text('').hide();
-                    $('#reviewmessage').attr('class','form-control');
-                }
-
-            }
+                    location.reload();
+                },
+                error: function(response) {
+                $('#titleError').text(response.responseJSON.errors.reviewtitle);
+                $('#messageError').text(response.responseJSON.errors.reviewmessage);
+           }
         });
     });
     // End Order Review submite
-
 </script>
-
 </html>
 
