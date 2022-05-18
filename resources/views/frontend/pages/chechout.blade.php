@@ -222,284 +222,192 @@ if (session()->has('userid')) {
         </div>
     </sidebar>
     @if (empty($userlogin) && empty($guestlogin))
-        <section class="check-main" id="checkout1">
-            <div class="container">
-                <div class="check-inr">
-                    <div class="row" id="Checkout">
-                        <div class="col-md-12">
-                            <div class="check-progress">
-                                <h2>Checkout - step 1/3</h2>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 33%"
-                                        aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+    <section class="check-main" id="checkout1">
+        <div class="container">
+            <div class="check-inr">
+                <div class="row" id="Checkout">
+                    <div class="col-md-12">
+                        <div class="check-progress">
+                            <h2>Checkout - step 1/3</h2>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 33%"
+                                    aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <form action="{{ route('customerlogin') }}" method="POST">
-                              {{ csrf_field() }}
-                              <div class="login-details w-100">
-                                  <div class="login-details-inr fa fa-envelope w-100">
-                                  <input placeholder="Email address" type="text" name="Email" value="{{old('Email')}}" class="w-100 {{ ($errors->has('Email')) ? 'is-invalid' : '' }}">
-                                  @if ($errors->has('Email'))
-                                    <div class="invalid-feedback text-start">
-                                        {{ $errors->first('Email') }}
-                                    </div>
-                                  @endif
-                                  </div>
-                                  <div class="login-details-inr fa fa-lock w-100">
-                                  <input placeholder="password" type="password" name="Password" value="{{old('Password')}}" class="w-100 {{ ($errors->has('Password')) ? 'is-invalid' : '' }}">
-                                  @if ($errors->has('Password'))
-                                    <div class="invalid-feedback text-start">
-                                        {{ $errors->first('Password') }}
-                                    </div>
-                                  @endif
-                                  </div>
-                                  <div class="email-btn">
-                                  <button class="btn" id="login">Log in</button>
-                                  </div>
-                              </div>
-                            </form>
-                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header accordion-button" id="headingtwo" type="button" data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true" aria-controls="collapsetwo">
-                        <span>Guest checkout</span>
-                    </h2>
-                    <div id="collapsetwo" class="accordion-collapse collapse" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        <div class="row justify-content-center">
-                          <div class="col-md-4">
-                            <div class="login-main text-center">
-                                <div class="login-details w-100">
-                                    <form enctype="multipart/form-data" id="guestuser">
-                                        @csrf
-                                        <div class="login-details-inr fa fa-sort-up w-100">
-                                            <select name="title" class="w-100" id="gender">
-                                                <option value="">Title</option>
-                                                <option value="1">Mr.</option>
-                                                <option value="2">Mrs.</option>
-                                                <option value="3">Ms.</option>
-                                                <option value="4">Miss.</option>
-                                                <option value="5">Dr.</option>
-                                                <option value="6">Prof.</option>
-                                            </select>
-                                            <div class="invalid-feedback" id="genderarr" style="display: none; text-align:left;"></div>
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header accordion-button" id="headingOne" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
+                                    aria-controls="collapseOne">
+                                    <span> Log in</span>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show"
+                                    aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-4">
+                                                <div class="login-main text-center">
+                                                    <div class="fb-login ">
+                                                        <a href="" class="btn fb-log-bt">
+                                                            <i class="fab fa-facebook-square"></i> <span>Login with
+                                                                facebook</span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="my-3">
+                                                        <strong>OR</strong>
+                                                    </div>
+                                                    <form action="{{ route('customerlogin') }}" method="POST">
+                                                        {{ csrf_field() }}
+                                                        <div class="login-details w-100">
+                                                            <div class="login-details-inr fa fa-envelope w-100">
+                                                                <input placeholder="Email address" type="text"
+                                                                    name="email" value="" class="w-100">
+                                                            </div>
+                                                            <div class="login-details-inr fa fa-lock w-100">
+                                                                <input placeholder="password" type="password"
+                                                                    name="password" value="" class="w-100">
+                                                            </div>
+                                                            <div class="email-btn">
+                                                                <button class="btn" id="login">Log
+                                                                    in</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header accordion-button" id="headingtwo" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true"
-                                        aria-controls="collapsetwo">
-                                        <span>Guest checkout</span>
-                                    </h2>
-                                    <div id="collapsetwo" class="accordion-collapse collapse"
-                                        aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <div class="row justify-content-center">
-                                                <div class="col-md-4">
-                                                    <div class="login-main text-center">
-                                                        <div class="login-details w-100">
-                                                            <form enctype="multipart/form-data" id="guestuser">
-                                                                @csrf
-                                                                <div class="login-details-inr fa fa-sort-up w-100">
-                                                                    <select name="title" class="w-100"
-                                                                        id="gender">
-                                                                        <option value="">Title</option>
-                                                                        <option value="1">Mr.</option>
-                                                                        <option value="2">Mrs.</option>
-                                                                        <option value="3">Ms.</option>
-                                                                        <option value="4">Miss.</option>
-                                                                        <option value="5">Dr.</option>
-                                                                        <option value="6">Prof.</option>
-                                                                    </select>
-                                                                    <div class="invalid-feedback" id="genderarr"
-                                                                        style="display: none; text-align:left;"></div>
-                                                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header accordion-button" id="headingtwo" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapsetwo" aria-expanded="true"
+                                    aria-controls="collapsetwo">
+                                    <span>Guest checkout</span>
+                                </h2>
+                                <div id="collapsetwo" class="accordion-collapse collapse"
+                                    aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-4">
+                                                <div class="login-main text-center">
+                                                    <div class="login-details w-100">
+                                                        <form enctype="multipart/form-data" id="guestuser">
+                                                            @csrf
+                                                            <div class="login-details-inr fa fa-sort-up w-100">
+                                                                <select name="title" class="w-100"
+                                                                    id="gender">
+                                                                    <option value="">Title</option>
+                                                                    <option value="1">Mr.</option>
+                                                                    <option value="2">Mrs.</option>
+                                                                    <option value="3">Ms.</option>
+                                                                    <option value="4">Miss.</option>
+                                                                    <option value="5">Dr.</option>
+                                                                    <option value="6">Prof.</option>
+                                                                </select>
+                                                                <div class="invalid-feedback" id="genderarr"
+                                                                    style="display: none; text-align:left;"></div>
+                                                            </div>
 
-                                                                <div class="login-details-inr fa fa-user w-100">
-                                                                    <input placeholder="FirstName" type="text"
-                                                                        name="firstname" value="" class="w-100"
-                                                                        id="fname">
-                                                                    <div class="invalid-feedback" id="fnamearr"
-                                                                        style="display: none; text-align:left;"></div>
-                                                                </div>
+                                                            <div class="login-details-inr fa fa-user w-100">
+                                                                <input placeholder="FirstName" type="text"
+                                                                    name="firstname" value="" class="w-100"
+                                                                    id="fname">
+                                                                <div class="invalid-feedback" id="fnamearr"
+                                                                    style="display: none; text-align:left;"></div>
+                                                            </div>
 
-                                                                <div class="login-details-inr fa fa-user w-100">
-                                                                    <input placeholder="lastname" type="text"
-                                                                        name="lastname" value="" class="w-100"
-                                                                        id="lname">
-                                                                    <div class="invalid-feedback" id="lnamearr"
-                                                                        style="display: none; text-align:left;"></div>
-                                                                </div>
+                                                            <div class="login-details-inr fa fa-user w-100">
+                                                                <input placeholder="lastname" type="text"
+                                                                    name="lastname" value="" class="w-100"
+                                                                    id="lname">
+                                                                <div class="invalid-feedback" id="lnamearr"
+                                                                    style="display: none; text-align:left;"></div>
+                                                            </div>
 
-                                                                <div class="login-details-inr fa fa-envelope w-100">
-                                                                    <input placeholder="Email address" type="text"
-                                                                        name="email" value="" class="w-100"
-                                                                        id="email">
-                                                                    <div class="invalid-feedback" id="emailarr"
-                                                                        style="display: none; text-align:left;"></div>
-                                                                </div>
+                                                            <div class="login-details-inr fa fa-envelope w-100">
+                                                                <input placeholder="Email address" type="text"
+                                                                    name="email" value="" class="w-100"
+                                                                    id="email">
+                                                                <div class="invalid-feedback" id="emailarr"
+                                                                    style="display: none; text-align:left;"></div>
+                                                            </div>
 
-                                                                <div class="login-details-inr fa fa-phone-alt w-100">
-                                                                    <input placeholder="phone number" type="text"
-                                                                        name="phone" value="" class="w-100"
-                                                                        id="phone">
-                                                                    <div class="invalid-feedback" id="phonearr"
-                                                                        style="display: none; text-align:left;"></div>
-                                                                </div>
+                                                            <div class="login-details-inr fa fa-phone-alt w-100">
+                                                                <input placeholder="phone number" type="text"
+                                                                    name="phone" value="" class="w-100"
+                                                                    id="phone">
+                                                                <div class="invalid-feedback" id="phonearr"
+                                                                    style="display: none; text-align:left;"></div>
+                                                            </div>
 
-                                                                <div class="email-btn">
-                                                                    <a class="btn"
-                                                                        onclick="guestCheckout();">Checkout</a>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                                            <div class="email-btn">
+                                                                <a class="btn"
+                                                                    onclick="guestCheckout();">Checkout</a>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="accordion-item">
-                    <h2 class="accordion-header accordion-button" id="headingthree" type="button" data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true" aria-controls="collapsethree">
-                    <span>Create an account</span>
-                    </h2>
-                    <div id="collapsethree" class="accordion-collapse collapse" aria-labelledby="headingthree" data-bs-parent="#accordionExample">
-                      <div class="accordion-body">
-                        <div class="row justify-content-center">
-                          <div class="col-md-4">
-                            <div class="login-main text-center">
-                              <div class="login-details w-100">
-                                <form action="{{ route('customerregister') }}" method="post">
-                                    {{ csrf_field() }}
-                                    <div class="login-details-inr fa fa-sort-up w-100 ">
-                                        <select name="gender" class="w-100">
-                                            <option value="">Title</option>
-                                            <option value="1">Mr.</option>
-                                            <option value="2">Mrs.</option>
-                                            <option value="3">Ms.</option>
-                                            <option value="4">Miss.</option>
-                                            <option value="5">Dr.</option>
-                                            <option value="6">Prof.</option>
-                                        </select>
-                                    </div>
-                                    <div class="login-details-inr fa fa-user w-100 d-flex">
-                                        <div class="w-50 d-inline-block float-start">
-                                            <input placeholder="firstname" type="text" name="firstname" value="{{ old('firstname') }}" class="w-100 {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}">
-                                            @if ($errors->has('firstname'))
-                                                <div class="invalid-feedback text-start">
-                                                    {{ $errors->first('firstname') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="w-50 d-inline-block float-start">
-                                            <input placeholder="lastname" type="text" name="lastname" value="{{ old('lastname') }}" class="w-100 {{ ($errors->has('lastname')) ? 'is-invalid' : '' }}">
-                                            @if ($errors->has('lastname'))
-                                                <div class="invalid-feedback text-start">
-                                                    {{ $errors->first('lastname') }}
-                                                </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="login-details-inr fa fa-envelope w-100">
-                                        <input placeholder="Email address" type="text" name="email" value="{{ old('email') }}" class="w-100 {{ ($errors->has('email')) ? 'is-invalid' : '' }}">
-                                        @if ($errors->has('email'))
-                                            <div class="invalid-feedback text-start">
-                                                {{ $errors->first('email') }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="login-details-inr fa fa-phone-alt w-100">
-                                        <input placeholder="phone number" type="text" name="phone" value="{{ old('phone') }}" class="w-100 {{ ($errors->has('phone')) ? 'is-invalid' : '' }}">
-                                        @if ($errors->has('phone'))
-                                            <div class="invalid-feedback text-start">
-                                                {{ $errors->first('phone') }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="password" type="password" name="password" value="" class="w-100 {{ ($errors->has('password')) ? 'is-invalid' : '' }}">
-                                        @if ($errors->has('password'))
-                                            <div class="invalid-feedback text-start">
-                                                {{ $errors->first('password') }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="Confirm Password" type="password" name="confirm_password" value="" class="w-100 {{ ($errors->has('confirm_password')) ? 'is-invalid' : '' }}">
-                                        @if ($errors->has('confirm_password'))
-                                        <div class="invalid-feedback text-start">
-                                            {{ $errors->first('confirm_password') }}
-                                        </div>
-                                    @endif
-                                    </div>
-                                </div>
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header accordion-button" id="headingthree" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true"
-                                        aria-controls="collapsethree">
-                                        <span>Create an account</span>
-                                    </h2>
-                                    <div id="collapsethree" class="accordion-collapse collapse"
-                                        aria-labelledby="headingthree" data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <div class="row justify-content-center">
-                                                <div class="col-md-4">
-                                                    <div class="login-main text-center">
-                                                        <div class="login-details w-100">
-                                                            <form action="{{ route('customerregister') }}"
-                                                                method="post">
-                                                                {{ csrf_field() }}
-                                                                <div class="login-details-inr fa fa-sort-up w-100">
-                                                                    <select name="gender" class="w-100">
-                                                                        <option value="">Title</option>
-                                                                        <option value="1">Mr.</option>
-                                                                        <option value="2">Mrs.</option>
-                                                                        <option value="3">Ms.</option>
-                                                                        <option value="4">Miss.</option>
-                                                                        <option value="5">Dr.</option>
-                                                                        <option value="6">Prof.</option>
-                                                                    </select>
-                                                                </div>
-                                                                <div class="login-details-inr fa fa-user w-100 d-flex">
-                                                                    <input placeholder="Name" type="text" name="name"
-                                                                        value="" class="w-50">
-                                                                    <input placeholder="lastname" type="text"
-                                                                        name="lastname" value="" class="w-50">
-                                                                </div>
-                                                                <div class="login-details-inr fa fa-envelope w-100">
-                                                                    <input placeholder="Email address" type="text"
-                                                                        name="email" value="" class="w-100">
-                                                                </div>
-                                                                <div class="login-details-inr fa fa-phone-alt w-100">
-                                                                    <input placeholder="phone number" type="text"
-                                                                        name="number" value="" class="w-100">
-                                                                </div>
-                                                                <div class="login-details-inr fa fa-lock w-100">
-                                                                    <input placeholder="password" type="password"
-                                                                        name="password" value="" class="w-100">
-                                                                </div>
-                                                                <div class="login-details-inr fa fa-lock w-100">
-                                                                    <input placeholder="Confirm Password"
-                                                                        type="password" name="confirm" value=""
-                                                                        class="w-100">
-                                                                </div>
-                                                                <div class="email-btn">
-                                                                    <button type="submit"
-                                                                        class="btn">Create</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header accordion-button" id="headingthree" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapsethree" aria-expanded="true"
+                                    aria-controls="collapsethree">
+                                    <span>Create an account</span>
+                                </h2>
+                                <div id="collapsethree" class="accordion-collapse collapse"
+                                    aria-labelledby="headingthree" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-4">
+                                                <div class="login-main text-center">
+                                                    <div class="login-details w-100">
+                                                        <form action="{{ route('customerregister') }}"
+                                                            method="post">
+                                                            {{ csrf_field() }}
+                                                            <div class="login-details-inr fa fa-sort-up w-100">
+                                                                <select name="gender" class="w-100">
+                                                                    <option value="">Title</option>
+                                                                    <option value="1">Mr.</option>
+                                                                    <option value="2">Mrs.</option>
+                                                                    <option value="3">Ms.</option>
+                                                                    <option value="4">Miss.</option>
+                                                                    <option value="5">Dr.</option>
+                                                                    <option value="6">Prof.</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="login-details-inr fa fa-user w-100 d-flex">
+                                                                <input placeholder="Name" type="text" name="name"
+                                                                    value="" class="w-50">
+                                                                <input placeholder="lastname" type="text"
+                                                                    name="lastname" value="" class="w-50">
+                                                            </div>
+                                                            <div class="login-details-inr fa fa-envelope w-100">
+                                                                <input placeholder="Email address" type="text"
+                                                                    name="email" value="" class="w-100">
+                                                            </div>
+                                                            <div class="login-details-inr fa fa-phone-alt w-100">
+                                                                <input placeholder="phone number" type="text"
+                                                                    name="number" value="" class="w-100">
+                                                            </div>
+                                                            <div class="login-details-inr fa fa-lock w-100">
+                                                                <input placeholder="password" type="password"
+                                                                    name="password" value="" class="w-100">
+                                                            </div>
+                                                            <div class="login-details-inr fa fa-lock w-100">
+                                                                <input placeholder="Confirm Password"
+                                                                    type="password" name="confirm" value=""
+                                                                    class="w-100">
+                                                            </div>
+                                                            <div class="email-btn">
+                                                                <button type="submit"
+                                                                    class="btn">Create</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -511,7 +419,8 @@ if (session()->has('userid')) {
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     @else
         <section class="check-main" id="checkout2">
             <div class="container">
