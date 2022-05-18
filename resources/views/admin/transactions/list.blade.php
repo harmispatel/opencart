@@ -111,9 +111,9 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-  
+
     $(function() {
-        
+
         $('input[id="daterange"]').daterangepicker({
             opens: 'left'
         }, function(start, end, label) {
@@ -125,7 +125,7 @@ $(document).ready(function () {
                 type: "post",
                 url: "{{ route('daterange') }}",
                 data: {
-                    'start': startdate,		
+                    'start': startdate,
                     'end': enddate,
                 },
                 success: function(response) {
@@ -150,7 +150,7 @@ $(document).ready(function () {
                 error: function(response){
                     $('#message').show();
                 }
-            });	
+            });
         });
     });
 

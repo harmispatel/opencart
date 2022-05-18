@@ -30,6 +30,7 @@
 @endphp
 
 <link rel="stylesheet" href="{{ asset('public/plugins/jquery-ui/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
 
 @if (!empty($theme_id) || $theme_id != '')
     <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/css/bootstrap.min.css')  }}">
@@ -67,12 +68,12 @@
                     <h2>LOG IN</h2>
                     <div id="loginerr"></div>
                     <div class="login-details-inr fa fa-envelope w-100">
-                        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
+                        <input placeholder="Email address" type="text" name="Email" value="" class="w-100">
                         <input type="hidden" name="ajaxlogin" value="1">
                         <div class="invalid-feedback text-start" style="display: none" id="loginemailerr"></div>
                     </div>
                         <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Password" type="password" name="password" value="" class="w-100">
+                        <input placeholder="Password" type="password" name="Password" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="loginpassworderr"></div>
                     </div>
                     <div class="login-modal-last d-flex justify-content-between">
@@ -103,7 +104,7 @@
                     </div>
                     <div class="login-details-inr fa fa-user w-100">
                         <div class="w-50 d-inline-block float-start">
-                            <input placeholder="Name" type="text" id="name" name="name" value="" class="w-100">
+                            <input placeholder="firstame" type="text" id="name" name="firstname" value="" class="w-100">
                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
                         </div>
                         <div class="w-50 d-inline-block float-end">
@@ -125,7 +126,7 @@
                         <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
                     </div>
                     <div class="login-details-inr fa fa-lock w-100">
-                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
+                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirm_password" value="" class="w-100">
                         <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
                     </div>
                     <a form="registerform" id="register" class="btn btn-success">Register</a>

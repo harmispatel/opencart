@@ -397,7 +397,7 @@ class MenuController extends Controller
         $subtotl_html .= '<label>Sub-Total</label><span>£ '.$subtotal.'</span>';
         $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>£ '. $delivery_charge . '</span>';
         $total_html .= '<label><b>Total to pay:</b></label><span>£ '.$total.'</span>';
-        $headertotal += $total;
+        $headertotal += number_format($total,2);
 
         return response()->json([
             'html' => $html,

@@ -65,16 +65,16 @@ class MemberController extends Controller
         if (!empty($userlogin)) {
               // Validation
             $request->validate([
-                'name' => 'required',
+                'firstname' => 'required',
                 'lastname' => 'required',
                 'address_1' => 'required',
                 'city' => 'required',
                 'country' => 'required',
-                'country_region_id' => 'required',
+                'region' => 'required',
             ]);
             $customeraddress = new CustomerAddress;
             $customeraddress->customer_id = $userlogin;
-            $customeraddress->firstname = $request->name;
+            $customeraddress->firstname = $request->firstname;
             $customeraddress->lastname = $request->lastname;
             $customeraddress->company = isset($request->company) ? $request->company : '';
             $customeraddress->company_id = isset($request->company_id) ? $request->company_id : '';
@@ -83,7 +83,7 @@ class MemberController extends Controller
             $customeraddress->city = $request->city;
             $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '0';
             $customeraddress->country_id = $request->country;
-            $customeraddress->zone_id = isset($request->country_region_id) ? $request->country_region_id : '0';
+            $customeraddress->zone_id = isset($request->region) ? $request->region : '0';
             $customeraddress->phone = isset($request->phone) ? $request->phone : '0';
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->save();
@@ -121,8 +121,16 @@ class MemberController extends Controller
         $addressid = $request->address_id;
         if (!empty($addressid))
         {
+            $request->validate([
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'address_1' => 'required',
+                'city' => 'required',
+                'country' => 'required',
+                'region' => 'required',
+            ]);
             $customeraddress = CustomerAddress::find($addressid);
-            $customeraddress->firstname = $request->name;
+            $customeraddress->firstname = $request->firstname;
             $customeraddress->lastname = $request->lastname;
             $customeraddress->company = isset($request->company) ? $request->company : '';
             $customeraddress->company_id = isset($request->company_id) ? $request->company_id : '';
@@ -256,8 +264,8 @@ class MemberController extends Controller
         $html .=         '</div>';
         $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
         $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
-        $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="fa fa-commenting-o" aria-hidden="true"></i>Review</a>';
-        $html .=             '<a class="btn btn-success" href="cart" class="button"><i class="fa fa-repeat" aria-hidden="true"></i> Re-Order </a>';
+        $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="far fa-comment"></i> Review</a>';
+        $html .=             '<a class="btn btn-success" href="cart" class="button"><i class="fas fa-redo-alt"></i> Re-Order </a>';
         $html .=         '</div>';
         $html .=     '</div>';
         $html .= '</div>';
