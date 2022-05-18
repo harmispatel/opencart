@@ -5,6 +5,7 @@ $social_site = session('social_site');
 $store_setting = session('store_settings');
 
 $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+$userlogin = session('username');
 
 @endphp
 <style>
@@ -45,10 +46,35 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                 @endforeach
             </div>
             <div class="__right-content">
-                <ul class="authentication-links">
+                {{-- <ul class="authentication-links">
                     <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
                     <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
-                </ul><a class="menu-shopping-cart" href="">
+                </ul> --}}
+                @if (!empty($userlogin))
+                <ul class="authentication-links">
+                    <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('customerlogout') }}">
+                            {{ csrf_field() }}
+                            <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+                         </form>
+                    </li>
+                </ul>            
+                @else            
+                <ul class="authentication-links">
+                    <li>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                            <i class="far fa-user"></i><span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                            <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                        </a>
+                    </li>
+                </ul>
+                @endif
+                <a class="menu-shopping-cart" href="">
                     <div class="number"><i class="fas fa-shopping-basket"></i><span>2</span></div>
                     <div class="price-box"><strong>Shopping Cart:</strong>
                         <div class="price"><i class="fas fa-dollar-sign"></i><span
@@ -74,9 +100,18 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                     <li class="{{ request()->is('menu') ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{ request()->is('menu') ? 'red' : $template_setting['polianna_navbar_link'] }};">menu</a>
                     </li>
-                    <li class="{{ request()->is('checkout') ? 'active' : '' }}">
+                    {{-- <li class="{{ request()->is('checkout') ? 'active' : '' }}">
                         <a class="text-uppercase" href="#" style="color:{{ request()->is('checkout') ? 'red' : $template_setting['polianna_navbar_link'] }};">check out</a>
-                    </li>
+                    </li> --}}
+                    @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                            <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                        </li>
+                    @else
+                        <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                            <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                        </li>
+                    @endif  
                     <li class="{{ request()->is('contact') ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('contact') }}" style="color:{{ request()->is('contact') ? 'red' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                     </li>

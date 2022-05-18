@@ -11,6 +11,8 @@ $store_setting = isset($store_set) ? $store_set : '';
 
 $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
 
+$userlogin = session('username');
+
 @endphp
 
 <style>
@@ -109,22 +111,47 @@ $store_open_close = isset($template_setting['polianna_open_close_store_permissio
                   <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
                 </li>
                 <li class="{{ (request()->is('member')) ? 'active' : '' }}">
-                  <a class="text-uppercase" href="#" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
+                  <a class="text-uppercase" href="{{ route('member') }}" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
                 </li>
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                   <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                {{-- <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                   <a class="text-uppercase" href="#" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
-                </li>
+                </li> --}}
+                @if (empty($cart['size']) || empty($cart['withoutSize']))
+                    <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                        <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    </li>
+                @else
+                    <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                        <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    </li>
+                @endif  
                 <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                   <a class="text-uppercase" href="#" style="color: {{  (request()->is('contact')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                 </li>
             </ul>
-            <div class="__btn-group"><a class="btn __purple text-capitalize" href="#"><i
-                        class="fas fa-shopping-cart"></i>my cart</a><a class="btn __green text-capitalize"
-                    href="#" data-bs-toggle="modal" data-bs-target="#login">login or signup</a></div><a class="open-mobile-menu" href="javascript:void(0)"><span
-                    class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
+            <div class="__btn-group">
+                <a class="btn __purple text-capitalize" href="#"><i class="fas fa-shopping-cart"></i>my cart</a>
+                
+
+                @if (!empty($userlogin))
+                <ul class="authentication-links">
+                    <li class="d-flex"><p class="m-0"></p>&nbsp;<a href="{{ route('member') }}" style="color: {{isset($template_setting['polianna_navbar_link'])? $template_setting['polianna_navbar_link'] : 'white'}} "> ({{ $userlogin }})</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('customerlogout') }}">
+                            {{ csrf_field() }}
+                            <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt" style="color: {{isset($template_setting['polianna_navbar_link'])? $template_setting['polianna_navbar_link'] : 'white'}} "></i><span style="color: {{isset($template_setting['polianna_navbar_link'])? $template_setting['polianna_navbar_link'] : 'white'}} ">Logout</span></button>
+                         </form>
+                    </li>
+                </ul>            
+                @else
+                    <a class="btn __green text-capitalize" href="#" data-bs-toggle="modal" data-bs-target="#login">login or signup</a>
+                @endif
+                {{-- <a class="btn __green text-capitalize" href="#" data-bs-toggle="modal" data-bs-target="#login">login or signup</a> --}}
+            </div>
+            <a class="open-mobile-menu" href="javascript:void(0)"><span class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
         </div>
     </div>
 </header>

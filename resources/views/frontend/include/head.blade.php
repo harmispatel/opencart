@@ -30,6 +30,7 @@
 @endphp
 
 <link rel="stylesheet" href="{{ asset('public/plugins/jquery-ui/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
 
 @if (!empty($theme_id) || $theme_id != '')
     <link rel="stylesheet" href="{{  asset('public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/css/bootstrap.min.css')  }}">

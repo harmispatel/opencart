@@ -309,7 +309,7 @@
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                @if ($cart == '')
+                @if (empty($cart['size']) || empty($cart['withoutSize']))
                     <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
                     </li>
