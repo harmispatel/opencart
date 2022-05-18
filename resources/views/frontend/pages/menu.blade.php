@@ -18,6 +18,7 @@ if (session()->has('userid')) {
 } else {
     $userid = 0;
     $mycart = session()->get('cart1');
+
 }
 
 @endphp
@@ -157,8 +158,8 @@ if (session()->has('userid')) {
         </div>
     </sidebar>
 
-    <!-- free item modal -->
-    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
+    {{-- <!-- free item modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
         Launch demo modal
     </button> --}}
 
@@ -168,8 +169,8 @@ if (session()->has('userid')) {
     <div class="modal fade free-item-modal" id="Freeitem" tabindex="-1" aria-labelledby="FreeitemLabel"
         aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-content" id="item-modal">
+                {{-- <div class="modal-header">
                     <h5 class="modal-title" id="FreeitemLabel">1/4 Pounder</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -199,7 +200,7 @@ if (session()->has('userid')) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -721,7 +722,7 @@ if (session()->has('userid')) {
                                     @endphp
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value)
-                                            @if (!empty($mycart) || $mycart != '')
+                                            @if (!empty($mycart['size']))
                                                 <a href="{{ route('checkout') }}" class="btn checkbt"
                                                     style="background-color: green; color:white;">Checkout</a>
                                             @else
@@ -941,6 +942,10 @@ if (session()->has('userid')) {
                 // Coupon
                 $('.coupon_code').html('');
                 $('.coupon_code').append(result.couponcode);
+
+                // Modal
+                $('#item-modal').html('');
+                $('#item-modal').append(result.modal);
 
             }
         });
