@@ -207,16 +207,6 @@
                 @endforeach
             @endforeach
 
-            {{-- @if ($store_open_close == 1)
-                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                    <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
-                </div>
-            @else
-                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                    <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
-                </div>
-            @endif --}}
-
             <ul class="social-links">
                 <li>
                     <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
@@ -340,11 +330,3 @@
         </div>
     </div>
 </header>
-
-@php
-    
-// $data = session()->all();
-// echo '<pre>';
-// print_r($data);
-// exit();
-@endphp

@@ -337,6 +337,7 @@ ul.box-category {
 .accordion-button:after {
     display: none;
 }
+
 .test .accordion-button:after {
     display: block !important;
 }
@@ -407,12 +408,39 @@ ul.box-category {
     font-weight: 600;
     margin-bottom: 20px;
 }
+
+
 /* free item modal */
-.free-item-modal .accordion-button:not(.collapsed),.accordion-button {background-color: transparent !important;}
-.free-item-modal .accordion-button:after{display: block !important;position: absolute;left: 10px;transition: none !important;top: 50%;transform: translate(0 ,-50%);background-image: url('../../../images/plus.png') !important;}
-.accordion-button span{padding-left: 50px;}
-.accordion-button:not(.collapsed)::after{background-image: url('../../../images/minus.png') !important;height: 9px !important;}
-.free-item-modal .modal-content{min-height: 600px !important;}
+
+.free-item-modal .accordion-button:not(.collapsed),
+.accordion-button {
+    background-color: transparent !important;
+}
+
+.free-item-modal .accordion-button:after {
+    display: block !important;
+    position: absolute;
+    left: 10px;
+    transition: none !important;
+    top: 50%;
+    transform: translate(0, -50%);
+    background-image: url('../../../images/plus.png') !important;
+}
+
+.accordion-button span {
+    padding-left: 50px;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: url('../../../images/minus.png') !important;
+    height: 9px !important;
+}
+
+.free-item-modal .modal-content {
+    min-height: 600px !important;
+}
+
+
 /* innerpage css */
 
 .check-main {
@@ -790,6 +818,34 @@ td {
     border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
     margin-bottom: 20PX;
+}
+
+
+/* cart item number */
+
+.number span {
+    display: inline-block;
+    min-width: 25px;
+    min-height: 25px;
+    text-align: center;
+    line-height: 25px;
+    color: #4cd790;
+    border-radius: 50%;
+    background-color: white;
+    font-size: 18px;
+    position: absolute;
+    left: 20px;
+    top: -10px;
+}
+
+.number {
+    position: relative;
+}
+
+.productcountitem span {
+    left: 80%;
+    background-color: #008000;
+    color: rgb(255, 255, 255);
 }
 
 @media only screen and (max-width:991px) {

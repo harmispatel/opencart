@@ -1,129 +1,114 @@
 @php
-    $openclose = openclosetime();
-    $template_setting = session('template_settings');
-    $social_site = session('social_site');
-    $store_setting = session('store_settings');
-    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-    $template_setting = session('template_settings');
+   $openclose = openclosetime();
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
 
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
+    
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+  
     $userlogin = session('username');
 
-$Coupon = getCoupon();
+    $Coupon = getCoupon();
 
-$html = '';
-$headertotal = 0;
-$delivery_charge = 0;
-$price = 0;
+    $html = '';
+    $headertotal = 0;
+    $delivery_charge = 0;
+    $price = 0;
 
-if(session()->has('userid'))
-{
-    $cart = getuserCart(session()->get('userid'));
-    $cart_products = 0;
-
-    if (isset($cart['size'])) 
+    if(session()->has('userid'))
     {
-        foreach ($cart['size'] as $mycart) 
+        $cart = getuserCart(session()->get('userid'));
+        $cart_products = 0;
+
+        if (isset($cart['size'])) 
         {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
+            foreach ($cart['size'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
+        }
+        if (isset($cart['withoutSize'])) 
+        {
+            foreach ($cart['withoutSize'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
+        }
+
+        if (!empty($Coupon) || $Coupon != '')
+        {
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($price * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode = $Coupon['discount'];
+            }
+            $headertotal += $price - $couponcode + $delivery_charge;
+        }
+        else
+        {
+            $headertotal += $price + $delivery_charge;
         }
     }
-    if (isset($cart['withoutSize'])) 
+    else 
     {
-        foreach ($cart['withoutSize'] as $mycart) 
-        {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
-        }
-    }
+        $cart = session()->get('cart1');
+        $cart_products = 0;
 
-    if (!empty($Coupon) || $Coupon != '')
-    {
-        if ($Coupon['type'] == 'P')
+        if (isset($cart['size'])) 
         {
-            $couponcode = ($price * $Coupon['discount']) / 100;
+            foreach ($cart['size'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
         }
-        if ($Coupon['type'] == 'F')
+        if (isset($cart['withoutSize'])) 
         {
-            $couponcode = $Coupon['discount'];
+            foreach ($cart['withoutSize'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
         }
-        $headertotal += $price - $couponcode + $delivery_charge;
-    }
-    else
-    {
-        $headertotal += $price + $delivery_charge;
-    }
-}
-else 
-{
-    $cart = session()->get('cart1');
-    $cart_products = 0;
-
-    if (isset($cart['size'])) 
-    {
-        foreach ($cart['size'] as $mycart) 
+       
+        if (!empty($Coupon) || $Coupon != '')
         {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($price * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode = $Coupon['discount'];
+            }
+            $headertotal += $price - $couponcode + $delivery_charge;
         }
-    }
-    if (isset($cart['withoutSize'])) 
-    {
-        foreach ($cart['withoutSize'] as $mycart) 
+        else
         {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
+            $headertotal += $price + $delivery_charge;
         }
     }
    
-    if (!empty($Coupon) || $Coupon != '')
-    {
-        if ($Coupon['type'] == 'P')
-        {
-            $couponcode = ($price * $Coupon['discount']) / 100;
-        }
-        if ($Coupon['type'] == 'F')
-        {
-            $couponcode = $Coupon['discount'];
-        }
-        $headertotal += $price - $couponcode + $delivery_charge;
-    }
-    else
-    {
-        $headertotal += $price + $delivery_charge;
-    }
-}
-
 @endphp
 
 <style>
     .menu li:hover a{
         color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
     }
-
-    .menu-shopping-cart .number span {
-    display: inline-block;
-    min-width: 25px;
-    min-height: 25px;
-    text-align: center;
-    line-height: 25px;
-    color: #4cd790;
-    border-radius: 50%;
-    background-color: white;
-    font-size: 18px;
-    position: absolute;
-    left: 20px;
-    top: -10px;
-}
-
-.number
-{
-    position: relative;
-}
 
 </style>
 
@@ -188,11 +173,11 @@ else
                     $today = date('l');
                     @endphp
                         @if ($today == $value)
-                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @elseif ($firstday == "Every day")
-                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
-                        @endforeach
+                    @endforeach
                 @endforeach
             </div>
         </div>
@@ -272,7 +257,7 @@ else
                 </a> --}}
                 <a class="menu-shopping-cart" href="http://192.168.1.73/ECOMM/cart">
                     <div class="number">
-                        <i class="fas fa-shopping-basket"></i><span id="cart_products">{{ $cart_products }}</span>
+                        <i class="fas fa-shopping-basket"></i><span id="cart_products" class="bg-danger">{{ ($cart_products) }}</span>
                     </div>
                     <div class="price-box">
                         <strong>Shopping Cart</strong>

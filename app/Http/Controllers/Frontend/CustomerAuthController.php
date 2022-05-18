@@ -96,7 +96,8 @@ class CustomerAuthController extends Controller
 
         $address_check = isset($request->address_required) ? $request->address_required : 0;
 
-        if($address_check != 1 || $ajaxregister == 1)
+        // if($address_check != 1 || $ajaxregister == 1)
+        if($ajaxregister == 1)
         {
             // Validation
             $request->validate([
