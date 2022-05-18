@@ -118,9 +118,7 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-    $(document).ready( function () {
-    $('.table').DataTable();
-} );
+
     // Select All Checkbox
     $('#del_all').on('click', function(e) {
         if ($(this).is(':checked', true)) {
@@ -242,7 +240,7 @@
 //         $('#changecatid').val(categoryval);
 
 //         var table = $('.table').DataTable();
-//         table.destroy();
+//
 
 //         getallproduct();
 //     });

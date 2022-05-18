@@ -29,6 +29,7 @@ class CustomerOrder extends Controller
         $delivery_type = session()->get('flag_post_code');
 
         $total = $request->total;
+
         $subtotal = $request->subtotal;
         $delivery_charge = $request->delivery_charge;
         $couponcode = isset($request->couponcode) ? $request->couponcode : 0;

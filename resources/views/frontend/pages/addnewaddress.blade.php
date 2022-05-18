@@ -96,29 +96,11 @@ $mycart = session()->get('cart1');
     </sidebar>
     <section class="register-main">
         <div class="container">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
           <div class="register-inr">
             <div class="register-title">
               <h2>ADDRESS BOOK</h2>
             </div>
             <div class="reg-details">
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
               <form action="{{ route('newaddress') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="reg-details-inr">
@@ -129,32 +111,41 @@ $mycart = session()->get('cart1');
                     <tbody>
                         <tr>
                         <td><span class="required">*</span>First Name :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="name" value=""></td>
-                        @error('name')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <td><input type="text" class="form-control {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}" name="firstname" value="{{ old('firstname') }}">
+                            @if ($errors->has('firstname'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('firstname') }}
+                            </div>
+                            @endif
+                        </td>
                         </tr>
                         <tr>
                         <td><span class="required">*</span>Last Name :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="lastname" value=""></td>
-                        @error('lastname')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <td><input type="text" class="form-control {{ ($errors->has('lastname')) ? 'is-invalid' : '' }}" name="lastname" value="{{ old('lastname') }}">
+                            @if ($errors->has('lastname'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('lastname') }}
+                            </div>
+                            @endif
+                        </td>
                         </tr>
                       <tr>
                         <td>Company :</td>
-                        <td><input type="text" name="company" value=""></td>
+                        <td><input type="text" name="company" value="{{ old('company') }}"></td>
                       </tr>
                       <tr>
                         <td>Company ID :</td>
-                        <td><input type="text" name="company_id" value=""></td>
+                        <td><input type="text" name="company_id" value="{{ old('company_id') }}"></td>
                       </tr>
                       <tr>
                         <td><span class="required">*</span>Address line 1 :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="address_1" value=""></td>
-                        @error('address_1')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <td><input type="text" class="form-control {{ ($errors->has('address_1')) ? 'is-invalid' : '' }}" name="address_1" value="{{old('address_1')}}">
+                            @if ($errors->has('address_1'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('address_1') }}
+                            </div>
+                            @endif
+                        </td>
                       </tr>
                       <tr>
                         <td>Address line 2 :</td>
@@ -162,38 +153,45 @@ $mycart = session()->get('cart1');
                       </tr>
                       <tr>
                         <td><span class="required">*</span>City :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="city" value=""></td>
-                        @error('city')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <td><input type="text" class="form-control {{ ($errors->has('city')) ? 'is-invalid' : '' }}" name="city" value="{{ old('city') }}">
+                            @if ($errors->has('city'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('city') }}
+                                </div>
+                            @endif
+                        </td>
                       </tr>
                       <tr>
                         <td>Post Code :</td>
-                        <td><input type="text" class="@error('title', 'post') is-invalid @enderror" name="postcode" value=""></td>
-                        @error('postcode')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
+                        <td><input type="text" name="postcode" value="{{ old('postcode') }}"></td>
                       </tr>
                       <tr>
-                        <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Country :</td>
+                        <td><span>*</span>Country :</td>
                         <td>
-                          <select name="country" id="country_id" onchange="getstate();">
+                          <select name="country" id="country_id" class="{{ ($errors->has('country')) ? 'is-invalid' : '' }}" onchange="getstate();">
                               <option value="" disabled selected>Select Country</option>
                             @foreach ($countries as $countrie)
                                 <option value="{{ $countrie->country_id }}">{{ $countrie->name }}</option>
                             @endforeach
                           </select>
+                          @if ($errors->has('country'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('country') }}
+                            </div>
+                          @endif
                         </td>
-                        @error('country')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
                       </tr>
                       <tr>
-                        <td><span class="required @error('title', 'post') is-invalid @enderror">*</span>Region / State :</td>
+                        <td><span>*</span>Region / State :</td>
                         <td>
-                          <select class="country_region_id" name="country_region_id">
+                          <select class="country_region_id {{ ($errors->has('region')) ? 'is-invalid' : '' }}" name="region">
                             <option value="" selected disabled>Select Region/State</option>
                           </select>
+                          @if ($errors->has('region'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('region') }}
+                            </div>
+                          @endif
                         </td>
                         @error('state')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -206,6 +204,9 @@ $mycart = session()->get('cart1');
                           <span>Yes</span>
                           <input type="radio" name="default" value="0" checked="checked">
                           <span>No</span>
+                          @if ($errors->has('region'))
+                              <br><small class="text-danger">{{ $errors->first('region') }}</small>
+                        @endif
                         </td>
                       </tr>
                     </tbody>

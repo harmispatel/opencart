@@ -100,9 +100,7 @@ $userlogin = session('username');
                 <input type="number" class="form-control" value="3" name="timing" id="timing">
             </div>
         </div>
-           @foreach ($customerorders as $order)
            <input type="hidden" name="order_id" id="corderid" value="">
-           @endforeach
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" value="" class="btn btn-primary">Send</button>
@@ -197,21 +195,21 @@ $userlogin = session('username');
                       {{ csrf_field() }}
                     <div class="mb-2">
                       <label for="email" class="form-label">Email address:</label>
-                      <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="email">
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                      <input type="email" class="form-control {{ ($errors->has('Email')) ? 'is-invalid' : '' }}" name="Email" value="{{ old('Email') }}" id="email">
+                      @if ($errors->has('Email'))
+                        <div class="invalid-feedback text-start">
+                            {{ $errors->first('Email') }}
+                        </div>
+                    @endif
                     </div>
                     <div class="mb-2">
                       <label for="password" class="form-label">Password:</label>
-                      <input type="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}" name="password" id="password">
-                        @error('password')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                      <input type="password" class="form-control {{ ($errors->has('Password')) ? 'is-invalid' : '' }}" value="{{ old('Password') }}" name="Password" id="password">
+                        @if ($errors->has('Password'))
+                            <div class="invalid-feedback text-start">
+                                {{ $errors->first('Password') }}
+                            </div>
+                        @endif
                     </div>
                     <div class="mb-1">
                       <a href="#">Forgotten Password</a>
@@ -243,7 +241,7 @@ $userlogin = session('username');
                                   <form action="{{ route('customerdetailupdate') }}" method="POST">
                                     {{ csrf_field() }}
                                     <div class="login-details-inr fa fa-sort-up w-100">
-                                        <select name="title" id="title" class="w-100">
+                                        <select name="title" id="title" class="w-100 {{ ($errors->has('title')) ? 'is-invalid' : '' }}">
                                             <option disabled selected>Title</option>
                                             <option value="1" {{ ($customers->gender_id == 1) ? 'selected' : '' }}>Mr.</option>
                                             <option value="2" {{ ($customers->gender_id == 2) ? 'selected' : '' }}>Mrs.</option>
@@ -253,32 +251,67 @@ $userlogin = session('username');
                                             <option value="6" {{ ($customers->gender_id == 6) ? 'selected' : '' }}>Prof.</option>
                                         </select>
                                         <div class="invalid-feedback text-start" style="display: none" id="titleerr"></div>
+                                        @if ($errors->has('title'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('title') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-user w-100">
                                         <div class="w-50 d-inline-block float-start">
-                                            <input placeholder="Name" type="text" id="name" name="name" value="{{ isset($customers->firstname) ? $customers->firstname : '' }}" class="w-100">
+                                            <input placeholder="Name" type="text" id="name" name="firstname" value="{{ isset($customers->firstname) ? $customers->firstname : '' }}" class="w-100 {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}">
                                             <div class="invalid-feedback text-start" style="display: none" id="fnameerr"></div>
+                                            @if ($errors->has('firstname'))
+                                                <div class="invalid-feedback text-start">
+                                                    {{ $errors->first('firstname') }}
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="w-50 d-inline-block float-end">
-                                            <input placeholder="lastname" type="text" id="lastname" name="lastname" value="{{ isset($customers->lastname) ? $customers->lastname : '' }}" class="w-100">
+                                            <input placeholder="lastname" type="text" id="lastname" name="lastname" value="{{ isset($customers->lastname) ? $customers->lastname : '' }}" class="w-100 {{ ($errors->has('lastname')) ? 'is-invalid' : '' }}">
                                             <div class="invalid-feedback text-start" style="display: none" id="lastnameerr"></div>
+                                            @if ($errors->has('lastname'))
+                                                <div class="invalid-feedback text-start">
+                                                    {{ $errors->first('lastname') }}
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="login-details-inr fa fa-envelope w-100">
-                                        <input placeholder="Email address" type="text" id="email" name="email" value="{{ isset($customers->email) ? $customers->email : '' }}" class="w-100">
+                                        <input placeholder="Email address" type="text" id="email" name="email" value="{{ isset($customers->email) ? $customers->email : '' }}" class="w-100 {{ ($errors->has('email')) ? 'is-invalid' : '' }}">
                                         <div class="invalid-feedback text-start" style="display: none" id="emailerr"></div>
+                                        @if ($errors->has('email'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('email') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-phone-alt w-100">
-                                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="{{ isset($customers->telephone) ? $customers->telephone : '' }}" class="w-100">
+                                        <input placeholder="Phone number" type="text" id="phone" name="phone" value="{{ isset($customers->telephone) ? $customers->telephone : '' }}" class="w-100 {{ ($errors->has('phone')) ? 'is-invalid' : '' }}">
                                         <div class="invalid-feedback text-start" style="display: none" id="phoneerr"></div>
+                                        @if ($errors->has('phone'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('phone') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100">
+                                        <input placeholder="Password" type="password" id="password" name="password" value="" class="w-100 {{ ($errors->has('password')) ? 'is-invalid' : '' }}">
                                         <div class="invalid-feedback text-start" style="display: none" id="passworderr"></div>
+                                        @if ($errors->has('password'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('password') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-lock w-100">
-                                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirmpassword" value="" class="w-100">
+                                        <input placeholder="Confirm Password" type="password" id="confirmpassword" name="confirm_password" value="" class="w-100 {{ ($errors->has('confirm_password')) ? 'is-invalid' : '' }}">
                                         <div class="invalid-feedback text-start" style="display: none" id="confirmpassworderr"></div>
+                                        @if ($errors->has('confirm_password'))
+                                            <div class="invalid-feedback text-start">
+                                                {{ $errors->first('confirm_password') }}
+                                            </div>
+                                        @endif
                                     </div>
                                     <button type="submit" class="btn btn-success">Update</button>
                                 </form>

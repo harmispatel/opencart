@@ -1,3 +1,13 @@
+@php
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
+
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '#';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
+@endphp
 <!doctype html>
 <html>
 <style>
@@ -38,76 +48,88 @@
 
     <section class="contact-main">
         <div class="container">
-        <div class="contact-inr">
-        <div class="contact-map">
-        <div class="contact-title">
-            <div class="py-3">
-                <h3>Contact Us</h3>
-                <div id="map" class=""></div>
+            <div class="contact-inr">
+                <div class="contact-map">
+                    <div class="contact-title">
+                        <div class="py-3">
+                            <h3>Contact Us</h3>
+                            <div id="map" class=""></div>
+                        </div>
+                    </div>
+                    <div class="contact-info">
+                        <div class="row">
+                            <div class="col-md-6 contact-info-left">
+                                <div class="map-info">
+                                    <h3>Get Directions</h3>
+                                    <form>
+                                        <div class="login-details-inr fa fa-crosshairs w-100">
+                                            <input placeholder="Enter your location" type="text" name="map" value=""
+                                                class="w-100">
+                                        </div>
+                                        <button class="btn map-bt w-100">GET DIRECTIONS</button>
+                                    </form>
+                                    <div class="shop-location text-center" style="padding: 45px">
+                                        @php
+                                             $name=session('store_settings');
+
+                                        @endphp
+                                        <h2>{{$name['config_name']}}</h2>
+                                        <p>{{ $store_setting['config_address'] }}</p>
+                                        <span><b>Tel : </b>{{  $store_setting['config_telephone'] }}</span>
+                                    </div>
+                                    <div class="contact-logo text-center">
+                                        <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height:100px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="contact-details">
+                                    <h3>Contact us form</h3>
+                                    <form action="{{ route('contactstore') }}" method="post"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="login-details-inr fa fa-envelope w-100">
+                                            <select name="Title" class="w-100"
+                                                style="width: 100%;border-radius:0;">
+                                                <option value="">Title</option>
+                                                <option value="Mr.">Mr.</option>
+                                                <option value="Mrs.">Mrs.</option>
+                                                <option value="Ms.">Ms.</option>
+                                                <option value="Miss.">Miss.</option>
+                                                <option value="Dr.">Dr.</option>
+                                                <option value="Prof.">Prof.</option>
+                                            </select>
+                                        </div>
+                                        <div class="login-details-inr fa fa-user w-100 d-flex">
+                                            <input placeholder="Name" type="text" name="name" value=""
+                                                class="w-50">
+                                            <input placeholder="Surname" type="text" name="surname" value=""
+                                                class="w-50">
+                                        </div>
+                                        <div class="login-details-inr fa fa-envelope w-100">
+                                            <input placeholder="Email address" type="text" name="email" value=""
+                                                class="w-100">
+                                        </div>
+                                        <div class="login-details-inr fa fa-phone-alt w-100">
+                                            <input placeholder="phone number" type="text" name="phone" value=""
+                                                class="w-100">
+                                        </div>
+                                        <div class="login-details-inr fa fa-file-alt w-100">
+                                            <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
+                                                class="w-100 p-2"></textarea>
+                                        </div>
+                                        {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
+                                        <div class="submit-bt">
+                                            <button class="btn sub-bt w-100">SUBMIT</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="contact-info">
-        <div class="row">
-        <div class="col-md-6 contact-info-left">
-        <div class="map-info">
-        <h3>Get Directions</h3>
-        <form>
-        <div class="login-details-inr fa fa-crosshairs w-100">
-        <input placeholder="Enter your location" type="text" name="map" value="" class="w-100">
-        </div>
-        <button class="btn map-bt w-100">GET DIRECTIONS</button>
-        </form>
-        <div class="shop-location text-center">
-        <h2>Demo Pizza &amp; Kebab</h2>
-        <p>abcd <br>EN8 0LG</p>
-        <span><b>Tel : </b> 01291630436</span>
-        <span><b>Tel 2 : </b >01291630436</span>
-        </div>
-        <div class="contact-logo text-center">
-        <img src="./assets/img/logo/logo.svg">
-        </div>
-        </div>
-        </div>
-        <div class="col-md-6">
-        <div class="contact-details">
-        <h3>Contact us form</h3>
-        <form action="" method="post" enctype="multipart/form-data">
-            <div class="login-details-inr fa fa-envelope w-100">
-                <select name="name" class="w-100" placeholder="Title" style="width: 100%;border-radius:0;">
-                    <option value="">Title</option>
-                    <option value="Mr.">Mr.</option>
-                    <option value="Mrs.">Mrs.</option>
-                    <option value="Ms.">Ms.</option>
-                    <option value="Miss.">Miss.</option>
-                    <option value="Dr.">Dr.</option>
-                    <option value="Prof.">Prof.</option>
-                    </select>
-            </div>
-        <div class="login-details-inr fa fa-user w-100 d-flex">
-        <input placeholder="Name" type="text" name="name" value="" class="w-50">
-        <input placeholder="Surname" type="text" name="surname" value="" class="w-50">
-        </div>
-        <div class="login-details-inr fa fa-envelope w-100">
-        <input placeholder="Email address" type="text" name="email" value="" class="w-100">
-        </div>
-        <div class="login-details-inr fa fa-phone-alt w-100">
-        <input placeholder="phone number" type="text" name="email" value="" class="w-100">
-        </div>
-        <div class="login-details-inr fa fa-file-alt w-100">
-        <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false" class="w-100 p-2"></textarea>
-        </div>
-        <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div>
-        <div class="submit-bt">
-        <button class="btn sub-bt w-100">SUBMIT</button>
-        </div>
-        </form>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </section>
+    </section>
 
     @if (!empty($theme_id) || $theme_id != '')
         {{-- Footer --}}

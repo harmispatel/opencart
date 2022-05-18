@@ -14,6 +14,7 @@ use App\Models\Settings;
 use App\Models\ToppingSize;
 use App\Models\CouponProduct;
 use App\Models\Customer;
+use App\Models\ProductDescription;
 use App\Models\ToppingProductPriceSize;
 use App\Models\ToppingCatOption;
 use App\Models\Topping;
@@ -95,25 +96,68 @@ class MenuController extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         $productid = $request->product_id;
+        $pro_name=ProductDescription::where('product_id',$productid)->first();
+        $cat_id=Product_to_category::where('product_id',$productid)->first();
+        $toppingType =ToppingCatOption::where('id_category',$cat_id->category_id)->first();
+        $group = unserialize($toppingType->group);
+        unset($group['number_group']);
 
-        // $cat_id=Product_to_category::where('product_id',$productid)->first();
-        // $toppingType =ToppingCatOption::where('id_category',$cat_id->category_id)->first();
-        // $group = unserialize($toppingType->group);
-        //     unset($group['number_group']);
 
-        //   foreach($group as $value){
 
-        //       $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
-        //         $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
 
-        //         foreach($dropdown as $dropdowns){
-        //             echo "<pre>";
-        //           print_r($dropdowns->name);
+        // //     foreach($dropdown as $dropdowns){
+        //           //         echo "<pre>";
+        //           //       print_r($dropdowns->name);
+        //           //     }
+        //             // echo "<pre>";
+        //             // print_r($top->name_topping);
+
+        //           $top = Topping::where('id_topping',$value['id_group_option'])->first();
+        //           $dropdown = ToppingOption::where('id_group_topping',$top->id_topping)->get();
+        //           echo "<pre>";
+        //           print_r($dropdown);
         //         }
-        //   }
-        // // echo "<pre>";
-        // // print_r($dropdown);
         // exit;
+
+        $modal ='';
+        $modal .='<div class="modal-header">';
+        $modal .='<h5 class="modal-title text-center" id="FreeitemLabel">'.$pro_name->name.'</h5>';
+        $modal .='<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+        $modal .='</div>';
+        $modal .='<div class="modal-body">';
+        $modal .='<div class="accordion" id="accordionExample">';
+        $modal .='<div class="accordion-item">';
+        $modal .='<h2 class="accordion-header" id="headingOne">';
+        foreach($group as $key=>$value){
+            $top = Topping::where('id_topping',$value['id_group_option'])->first();
+            $modal .='<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree'.$key.'" aria-expanded="true" aria-controls="collapsefree"><span>'.$top->name_topping.'</span></button>';
+            $dropdown = ToppingOption::where('id_group_topping',$top->id_topping)->get();
+        $modal .='</h2>';
+
+        $modal .='<div id="collapsefree'.$key.'" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">';
+        $modal .='<div class="accordion-body">';
+        $modal .=' <select style="width: 200px">';
+        foreach($dropdown as $dropdowns){
+        $modal .='<option style="display: none" selected>--</option><option>'.$dropdowns->name.'</option>';
+        }
+        $modal .='</select>';
+        $modal .='</div>';
+        $modal .='</div>';
+        }
+        $modal .='</div>';
+        $modal .='</div>';
+        $modal .='<div class="mt-4">';
+        $modal .='<b>Add your special request?</b><br><textarea  name="request" rows="5" style="width: 465px"></textarea>';
+        $modal .='</div>';
+        $modal .='</div>';
+        $modal .='<div class="modal-footer">';
+        $modal .='<button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>';
+        $modal .='</div>';
+
+
+
+
+
         $sizeid = $request->size_id;
         $userid = $request->user_id;
         $loopid = isset($request->loop_id) ? $request->loop_id : '';
@@ -353,7 +397,7 @@ class MenuController extends Controller
         $subtotl_html .= '<label>Sub-Total</label><span>£ '.$subtotal.'</span>';
         $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>£ '. $delivery_charge . '</span>';
         $total_html .= '<label><b>Total to pay:</b></label><span>£ '.$total.'</span>';
-        $headertotal += $total;
+        $headertotal += number_format($total,2);
 
         return response()->json([
             'html' => $html,
@@ -363,6 +407,7 @@ class MenuController extends Controller
             'headertotal' => $headertotal,
             'total' => $total_html,
             'couponcode' => $coupon_html,
+            'modal' => $modal,
         ]);
     }
 

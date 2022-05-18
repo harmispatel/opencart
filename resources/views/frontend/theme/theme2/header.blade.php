@@ -1,129 +1,114 @@
 @php
-    $openclose = openclosetime();
-    $template_setting = session('template_settings');
-    $social_site = session('social_site');
-    $store_setting = session('store_settings');
-    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-    $template_setting = session('template_settings');
+   $openclose = openclosetime();
+    $temp_set = session('template_settings');
+    $template_setting = isset($temp_set) ? $temp_set : '';
 
+    $social = session('social_site');
+    $social_site = isset($social) ? $social : '';
+
+    $store_set = session('store_settings');
+    $store_setting = isset($store_set) ? $store_set : '';
+    
+    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
+  
     $userlogin = session('username');
 
-$Coupon = getCoupon();
+    $Coupon = getCoupon();
 
-$html = '';
-$headertotal = 0;
-$delivery_charge = 0;
-$price = 0;
+    $html = '';
+    $headertotal = 0;
+    $delivery_charge = 0;
+    $price = 0;
 
-if(session()->has('userid'))
-{
-    $cart = getuserCart(session()->get('userid'));
-    $cart_products = 0;
-
-    if (isset($cart['size'])) 
+    if(session()->has('userid'))
     {
-        foreach ($cart['size'] as $mycart) 
+        $cart = getuserCart(session()->get('userid'));
+        $cart_products = 0;
+
+        if (isset($cart['size'])) 
         {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
+            foreach ($cart['size'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
+        }
+        if (isset($cart['withoutSize'])) 
+        {
+            foreach ($cart['withoutSize'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
+        }
+
+        if (!empty($Coupon) || $Coupon != '')
+        {
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($price * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode = $Coupon['discount'];
+            }
+            $headertotal += $price - $couponcode + $delivery_charge;
+        }
+        else
+        {
+            $headertotal += $price + $delivery_charge;
         }
     }
-    if (isset($cart['withoutSize'])) 
+    else 
     {
-        foreach ($cart['withoutSize'] as $mycart) 
-        {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
-        }
-    }
+        $cart = session()->get('cart1');
+        $cart_products = 0;
 
-    if (!empty($Coupon) || $Coupon != '')
-    {
-        if ($Coupon['type'] == 'P')
+        if (isset($cart['size'])) 
         {
-            $couponcode = ($price * $Coupon['discount']) / 100;
+            foreach ($cart['size'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
         }
-        if ($Coupon['type'] == 'F')
+        if (isset($cart['withoutSize'])) 
         {
-            $couponcode = $Coupon['discount'];
+            foreach ($cart['withoutSize'] as $mycart) 
+            {
+                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                $cart_products += $mycart['quantity'];
+            }
         }
-        $headertotal += $price - $couponcode + $delivery_charge;
-    }
-    else
-    {
-        $headertotal += $price + $delivery_charge;
-    }
-}
-else 
-{
-    $cart = session()->get('cart1');
-    $cart_products = 0;
-
-    if (isset($cart['size'])) 
-    {
-        foreach ($cart['size'] as $mycart) 
+       
+        if (!empty($Coupon) || $Coupon != '')
         {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
+            if ($Coupon['type'] == 'P')
+            {
+                $couponcode = ($price * $Coupon['discount']) / 100;
+            }
+            if ($Coupon['type'] == 'F')
+            {
+                $couponcode = $Coupon['discount'];
+            }
+            $headertotal += $price - $couponcode + $delivery_charge;
         }
-    }
-    if (isset($cart['withoutSize'])) 
-    {
-        foreach ($cart['withoutSize'] as $mycart) 
+        else
         {
-            $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-            $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
-            $cart_products += $mycart['quantity'];
+            $headertotal += $price + $delivery_charge;
         }
     }
    
-    if (!empty($Coupon) || $Coupon != '')
-    {
-        if ($Coupon['type'] == 'P')
-        {
-            $couponcode = ($price * $Coupon['discount']) / 100;
-        }
-        if ($Coupon['type'] == 'F')
-        {
-            $couponcode = $Coupon['discount'];
-        }
-        $headertotal += $price - $couponcode + $delivery_charge;
-    }
-    else
-    {
-        $headertotal += $price + $delivery_charge;
-    }
-}
-
 @endphp
 
 <style>
     .menu li:hover a{
         color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
     }
-
-    .menu-shopping-cart .number span {
-    display: inline-block;
-    min-width: 25px;
-    min-height: 25px;
-    text-align: center;
-    line-height: 25px;
-    color: #4cd790;
-    border-radius: 50%;
-    background-color: white;
-    font-size: 18px;
-    position: absolute;
-    left: 20px;
-    top: -10px;
-}
-
-.number
-{
-    position: relative;
-}
 
 </style>
 
@@ -188,11 +173,11 @@ else
                     $today = date('l');
                     @endphp
                         @if ($today == $value)
-                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @elseif ($firstday == "Every day")
-                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
-                        @endforeach
+                    @endforeach
                 @endforeach
             </div>
         </div>
@@ -204,40 +189,61 @@ else
                     <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
                 </li>
                 <li class="{{ (request()->is('member')) ? 'active' : '' }}">
-                    <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
+                    <a class="text-uppercase" href="{{ route('member') }}" style="color: {{  (request()->is('member')) ? 'white' : $template_setting['polianna_navbar_link'] }};">member</a>
                 </li>
                 <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('menu') }}" style="color: {{  (request()->is('menu')) ? 'white' : $template_setting['polianna_navbar_link'] }};">menu</a>
                 </li>
-                   @php
-                       $mycart =session()->get('cart1'); 
-                   @endphp
-                  @if ($mycart == '')
-                  <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
-                    <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
-                </li>
-                  @else
-                  <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
-                      <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
-                  </li>
-                  @endif  
+                @if (empty($cart['size']) || empty($cart['withoutSize']))
+                    <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                        <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    </li>
+                @else
+                    <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
+                        <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : $template_setting['polianna_navbar_link'] }};">check out</a>
+                    </li>
+                @endif  
                 <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                     <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contactUs')) ? 'white' : $template_setting['polianna_navbar_link'] }};">contact us</a>
                 </li>
             </ul>
             <div class="__right">
-                <ul class="authentication-links">
+                {{-- <ul class="authentication-links">
                     <li>
-                        <a href="#">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#login">
                             <i class="far fa-user"></i><span>Login</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#login">
+                            <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                        </a>
+                    </li>
+                </ul> --}}
+                @if (!empty($userlogin))
+                <ul class="authentication-links">
+                    <li class="d-flex"><p class="m-0 text-white"></p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('customerlogout') }}">
+                            {{ csrf_field() }}
+                            <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt" style="color: {{ isset($template_setting['polianna_navbar_link']) ? $template_setting['polianna_navbar_link'] : 'white'; }}"></i><span style="color: {{ isset($template_setting['polianna_navbar_link']) ? $template_setting['polianna_navbar_link'] : 'white'; }}">Logout</span></button>
+                         </form>
+                    </li>
+                </ul>            
+                @else            
+                <ul class="authentication-links">
+                    <li>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                            <i class="far fa-user"></i><span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#login">
                             <i class="fas fa-sign-in-alt"></i><span>Register</span>
                         </a>
                     </li>
                 </ul>
+                @endif
                 {{-- <a class="menu-shopping-cart" href="{{ route('cart') }}">
                     <div class="number">
                         <i class="fas fa-shopping-basket"></i><span id="cart_products">0</span>
@@ -251,7 +257,7 @@ else
                 </a> --}}
                 <a class="menu-shopping-cart" href="http://192.168.1.73/ECOMM/cart">
                     <div class="number">
-                        <i class="fas fa-shopping-basket"></i><span id="cart_products">{{ $cart_products }}</span>
+                        <i class="fas fa-shopping-basket"></i><span id="cart_products" class="bg-danger">{{ ($cart_products) }}</span>
                     </div>
                     <div class="price-box">
                         <strong>Shopping Cart</strong>
