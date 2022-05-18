@@ -86,11 +86,26 @@
 
         {{-- End Header Section --}}
         @php
+
             $current_store = currentStoreId();
-            $image=getimage($current_store);
-            // echo '<pre>';
-            // print_r($image->image);
-            // exit();
+            $user_details = user_details();
+
+            if(isset($user_details))
+            {
+                $user_group_id = $user_details['user_group_id'];
+            }
+
+            $user_shop_id = $user_details['user_shop'];
+
+            if($user_group_id == 1)
+            {
+                $image=getimage($current_store);
+            }
+            else
+            {
+                $image=getimage($user_shop_id);
+            }
+
         @endphp
         <div class="content">
             <div class="conatiner-fluid">

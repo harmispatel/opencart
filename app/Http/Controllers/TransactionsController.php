@@ -21,11 +21,27 @@ class TransactionsController extends Controller
 
     public function getdaterange(Request $request)
     {
-
         $startdate = $request->start;
         $enddate = $request->end;
         $current_store_id = currentStoreId();
-        $customerorder = CustomerOrder::where('store_id',$current_store_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+
+        $user_details = user_details();
+
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+        if($user_group_id == 1)
+        {
+            $customerorder = CustomerOrder::where('store_id',$current_store_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+        }
+        else
+        {
+            $user_shop_id = $user_details['user_shop'];
+            $customerorder = CustomerOrder::where('store_id',$user_shop_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+        }
+
 
 
         $html = '';
@@ -81,11 +97,9 @@ class TransactionsController extends Controller
                 'commission' => '£'.number_format($commission_tot,2),
                 'totle' => '£'.number_format($totle,2),
             ]);
-        } else {
-            // $html .= '<tr>';
-            // $html .= '<td colspan="7" class="text-center">Transaction Not Avavilable</td>';
-            // $html .= '</tr>';
-
+        }
+        else
+        {
             return response()->json([
                 'status' => 200,
             ]);

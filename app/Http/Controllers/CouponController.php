@@ -23,10 +23,25 @@ class CouponController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
+        if($user_group_id == 1)
+        {
+            $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
+        }
+        else
+        {
+            $data['coupons'] = Coupon::where('store_id',$user_shop_id)->get();
+        }
+
         return view('admin.coupons.list', $data);
     }
 
@@ -53,7 +68,31 @@ class CouponController extends Controller
     // Function of Search Products
     public function products(Request $request)
     {
-        $cat = ProductDescription::select('product_id', 'name')->where("name", "LIKE", '%'.$request->product.'%')->get();
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        if($user_group_id == 1)
+        {
+            $cat = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use ($current_store_id)
+            {
+               $q->where('store_id',$current_store_id);
+            })->where("name", "LIKE", '%'.$request->product.'%')->get();
+        }
+        else
+        {
+            $cat = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use ($user_shop_id)
+            {
+               $q->where('store_id',$user_shop_id);
+            })->where("name", "LIKE", '%'.$request->product.'%')->get();
+        }
+
         return response()->json($cat);
     }
 
@@ -64,7 +103,31 @@ class CouponController extends Controller
     // Function of Search Category
     public function searchcategory(Request $request)
     {
-        $pro = Category::select('category_id', 'name')->where("name", "LIKE", '%'.$request->category.'%')->get();
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        if($user_group_id == 1)
+        {
+            $pro = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use ($current_store_id)
+            {
+               $q->where('store_id',$current_store_id);
+            })->where("name", "LIKE", '%'.$request->category.'%')->get();
+        }
+        else
+        {
+            $pro = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use ($user_shop_id)
+            {
+               $q->where('store_id',$user_shop_id);
+            })->where("name", "LIKE", '%'.$request->category.'%')->get();
+        }
+
         return response()->json($pro);
     }
 
@@ -100,11 +163,23 @@ class CouponController extends Controller
             'coupon_name' => 'required',
         ]);
 
-
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
 
         // Insert New Coupon
         $coupon = new Coupon;
-        $coupon->store_id = $current_store_id;
+        if($user_group_id == 1)
+        {
+            $coupon->store_id = $current_store_id;
+        }
+        else
+        {
+            $coupon->store_id = $user_shop_id;
+        }
         $coupon->apply_shipping = isset($request->apply) ? $request->apply : "0";
         $coupon->name = $request->coupon_name;
         $coupon->code = $request->code;

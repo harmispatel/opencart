@@ -47,10 +47,42 @@ class HomeController extends Controller
         // current store id
         $current_store_id = currentStoreId();
 
-        $customers = Customer::where('store_id',$current_store_id)->count();
-        $product = Product::count();
-        $categories = Category::count();
-        $orders = Orders::where('store_id',$current_store_id)->count();
+        $user_details = user_details();
+
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+        if($user_group_id == 1)
+        {
+            $customers = Customer::where('store_id',$current_store_id)->count();
+            $product = Product::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($current_store_id)
+            {
+                $q->where('store_id',$current_store_id);
+            })->count();
+            $categories = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use($current_store_id)
+            {
+                $q->where('store_id',$current_store_id);
+            })->count();
+            $orders = Orders::where('store_id',$current_store_id)->count();
+        }
+        else
+        {
+            $user_shop_id = $user_details['user_shop'];
+
+            $customers = Customer::where('store_id',$user_shop_id)->count();
+            $product = Product::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($user_shop_id)
+            {
+                $q->where('store_id',$user_shop_id);
+            })->count();
+            $categories = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use($user_shop_id)
+            {
+                $q->where('store_id',$user_shop_id);
+            })->count();
+            $orders = Orders::where('store_id',$user_shop_id)->count();
+        }
+
 
         return view('dashboard',['customers'=>$customers,'orders'=>$orders,'product'=>$product,'categories'=>$categories]);
 
@@ -68,11 +100,11 @@ class HomeController extends Controller
         {
             $request->session()->put('store_id', $storeId);
         }
-        
+
         return response()->json([
             'success' => 1
         ]);
     }
 
-    
+
 }

@@ -194,12 +194,21 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="product">Products</label>
-                                                <input class="form-control" id="product" type="text"
-                                                placeholder="Products">
-                                                <small id="codenamehelp" class="text-muted">
-                                                    Choose specific Products the coupon will apply to. Select no products to apply coupon to entire cart.
-                                                </small>
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <label for="product">Products</label>
+                                                        <input class="form-control" id="product" type="text"
+                                                        placeholder="Products">
+                                                        <small id="codenamehelp" class="text-muted">
+                                                            Choose specific Products the coupon will apply to. Select no products to apply coupon to entire cart.
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div id="loader2" style="margin-top: 35px;display: none;">
+                                                            <img src="{{ asset('public/admin/gif/gif4.gif') }}" width="25">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="form-group">
@@ -210,13 +219,22 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="category">Category</label>
-                                                <input class="form-control" id="category" type="text"
-                                                placeholder="Category">
-                                                <small id="codenamehelp" class="text-muted">
-                                                    Choose specific Category the coupon will apply to. Select no products to apply coupon to entire
-                                                    cart.
-                                                </small>
+                                                <div class="row">
+                                                    <div class="col-md-10">
+                                                        <label for="category">Category</label>
+                                                        <input class="form-control" id="category" type="text"
+                                                        placeholder="Category">
+                                                        <small id="codenamehelp" class="text-muted">
+                                                            Choose specific Category the coupon will apply to. Select no products to apply coupon to entire
+                                                            cart.
+                                                        </small>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <div id="loader1" style="margin-top: 35px;display: none;">
+                                                            <img src="{{ asset('public/admin/gif/gif4.gif') }}" width="25">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="form-group">
@@ -306,8 +324,12 @@
                             product: requete.term
                     },
                     dataType: 'json',
+                    beforeSend:function(){
+                        $('#loader2').show();
+                    },
                     success: function(data)
                     {
+                        $('#loader2').hide();
                         reponse($.map(data, function(object)
                         {
                             return {
@@ -345,8 +367,12 @@
                             category: requete.term
                     },
                     dataType: 'json',
+                    beforeSend:function(){
+                        $('#loader1').show();
+                    },
                     success: function(data)
                     {
+                        $('#loader1').hide();
                         reponse($.map(data, function(object)
                         {
                             return {

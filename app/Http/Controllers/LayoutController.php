@@ -24,6 +24,13 @@ class LayoutController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Current Store Theme ID
         $current_store_theme = themeActive();
 
@@ -76,7 +83,14 @@ class LayoutController extends Controller
 
         foreach($key as $row)
         {
-            $query = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key',$row)->first();
+            if($user_group_id == 1)
+            {
+                $query = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key',$row)->first();
+            }
+            else
+            {
+                $query = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key',$row)->first();
+            }
             $template_settings[$row] = isset($query->value) ? $query->value : '';
         }
 
@@ -89,6 +103,13 @@ class LayoutController extends Controller
 
         // Current Store ID
         $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
 
         // Current Store Theme ID
         $current_store_theme = themeActive();
@@ -106,7 +127,15 @@ class LayoutController extends Controller
         $data['polianna_main_logo_height'] = isset($request->polianna_main_logo_height) ? $request->polianna_main_logo_height : '';
         if($request->hasFile('polianna_main_logo'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_main_logo')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_main_logo')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_main_logo')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -137,7 +166,15 @@ class LayoutController extends Controller
         $data['polianna_slider_3_description'] = isset($request->polianna_slider_3_description) ? $request->polianna_slider_3_description : '';
         if($request->hasFile('polianna_slider_1'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_1')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_1')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_1')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -158,7 +195,15 @@ class LayoutController extends Controller
 
         if($request->hasFile('polianna_slider_2'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_2')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_2')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_2')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -179,7 +224,15 @@ class LayoutController extends Controller
 
         if($request->hasFile('polianna_slider_3'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_3')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_3')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_3')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -209,7 +262,15 @@ class LayoutController extends Controller
         // OPEN CLOSE BANNER
         if($request->hasFile('polianna_open_banner'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_open_banner')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_open_banner')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_open_banner')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -230,7 +291,14 @@ class LayoutController extends Controller
 
         if($request->hasFile('polianna_close_banner'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_close_banner')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_close_banner')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_close_banner')->first();
+            }
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -262,7 +330,15 @@ class LayoutController extends Controller
         $data['polianna_store_description'] = isset($request->polianna_store_description) ? $request->polianna_store_description : '';
         if($request->hasFile('polianna_banner_image'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_banner_image')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_banner_image')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_banner_image')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -289,7 +365,15 @@ class LayoutController extends Controller
         $data['polianna_footer_title_color'] = isset($request->polianna_footer_title_color) ? $request->polianna_footer_title_color : '';
         if($request->hasFile('polianna_footer_logo'))
         {
-            $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_footer_logo')->first();
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_footer_logo')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_footer_logo')->first();
+            }
+
             $old_name = isset($old->value) ? $old->value : '';
 
             if(!empty($old_name) || $old_name != '')
@@ -311,7 +395,15 @@ class LayoutController extends Controller
 
         foreach($data as $key => $new)
         {
-            $query = Settings::where('store_id', $current_store_id)->where('theme_id',$current_store_theme)->where('key', $key)->first();
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('theme_id',$current_store_theme)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('theme_id',$current_store_theme)->where('key', $key)->first();
+            }
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
             if (!empty($setting_id) || $setting_id != '')
             {
@@ -322,7 +414,14 @@ class LayoutController extends Controller
             else
             {
                 $new_template = new Settings();
-                $new_template->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $new_template->store_id = $current_store_id;
+                }
+                else
+                {
+                    $new_template->store_id = $user_shop_id;
+                }
                 $new_template->theme_id = $current_store_theme;
                 $new_template->group = 'polianna';
                 $new_template->key = $key;
@@ -341,10 +440,24 @@ class LayoutController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $theme_id = $id;
         $key = 'theme_id';
 
-        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+        if($user_group_id == 1)
+        {
+            $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+        }
+        else
+        {
+            $setting = Settings::where('store_id',$user_shop_id)->where('key',$key)->first();
+        }
 
         if(!empty($setting) || $setting != '')
         {
@@ -357,7 +470,14 @@ class LayoutController extends Controller
         else
         {
             $active_new = new Settings();
-            $active_new->store_id = $current_store_id;
+            if($user_group_id == 1)
+            {
+                $active_new->store_id = $current_store_id;
+            }
+            else
+            {
+                $active_new->store_id = $user_shop_id;
+            }
             $active_new->group = 'polianna';
             $active_new->key = $key;
             $active_new->value = $theme_id;

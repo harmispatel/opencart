@@ -29,15 +29,31 @@ class MessageController extends Controller
     // Function of Get All Messages by Current Store ID
     public function getmessage(Request $request)
     {
-         // Current Store ID;
-         $current_store_id = currentStoreId();
+        // Current Store ID;
+        $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
 
         if($request->ajax())
         {
             // $data =Message::where('sore_id', $current_store_id)->get();
-            $data = Message::with('hasOneStore')->whereHas('hasOneStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->get();
+            if($user_group_id == 1)
+            {
+                $data = Message::with('hasOneStore')->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                    $query->where('store_id',$current_store_id);
+                })->get();
+            }
+            else
+            {
+                $data = Message::with('hasOneStore')->whereHas('hasOneStore', function ($query) use ($user_shop_id){
+                    $query->where('store_id',$user_shop_id);
+                })->get();
+            }
 
             return DataTables::of($data)->addIndexColumn()
             ->addColumn('message', function($row){
@@ -65,8 +81,23 @@ class MessageController extends Controller
     public function messageinsert(Request $request)
     {
         $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $message = new NotificationMessage;
-        $message->store_id = $current_store_id;
+        if($user_group_id == 1)
+        {
+            $message->store_id = $current_store_id;
+        }
+        else
+        {
+            $message->store_id = $user_shop_id;
+        }
         $message->title = $request->title;
         $message->message = $request->message;
         $message->save();

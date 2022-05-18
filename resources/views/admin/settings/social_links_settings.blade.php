@@ -71,11 +71,31 @@
                                  <div class="card-body">
                                      @php
                                         $current_store = currentStoreId();
-                                        $facebook = getStoreDetails($current_store,'polianna_facebook_id');
-                                        $twitter = getStoreDetails($current_store,'polianna_twitter_username');
-                                        $gplus = getStoreDetails($current_store,'polianna_gplus_id');
-                                        $linkedin = getStoreDetails($current_store,'polianna_linkedin_id');
-                                        $youtube = getStoreDetails($current_store,'polianna_youtube_id');
+
+                                        $user_details = user_details();
+                                        if(isset($user_details))
+                                        {
+                                            $user_group_id = $user_details['user_group_id'];
+                                        }
+                                        $user_shop_id = $user_details['user_shop'];
+
+                                        if($user_group_id == 1)
+                                        {
+                                            $facebook = getStoreDetails($current_store,'polianna_facebook_id');
+                                            $twitter = getStoreDetails($current_store,'polianna_twitter_username');
+                                            $gplus = getStoreDetails($current_store,'polianna_gplus_id');
+                                            $linkedin = getStoreDetails($current_store,'polianna_linkedin_id');
+                                            $youtube = getStoreDetails($current_store,'polianna_youtube_id');
+                                        }
+                                        else
+                                        {
+                                            $facebook = getStoreDetails($user_shop_id,'polianna_facebook_id');
+                                            $twitter = getStoreDetails($user_shop_id,'polianna_twitter_username');
+                                            $gplus = getStoreDetails($user_shop_id,'polianna_gplus_id');
+                                            $linkedin = getStoreDetails($user_shop_id,'polianna_linkedin_id');
+                                            $youtube = getStoreDetails($user_shop_id,'polianna_youtube_id');
+                                        }
+
                                      @endphp
                                     <div class="form-group">
                                         <i class="fab fa-facebook-square pr-2" style="font-size: 20px;"></i>

@@ -8,6 +8,7 @@ use App\Models\ProductDescription;
 use App\Models\Product_to_category;
 use App\Models\ToppingProductPriceSize;
 use App\Models\ToppingSize;
+use App\Models\ProductStore;
 class Product extends Model
 {
     use HasFactory;
@@ -21,7 +22,10 @@ class Product extends Model
     {
         return $this->hasOne(ToppingProductPriceSize::class,'id_product','product_id');
     }
+    public function hasOneProductToStore()
+    {
+        return $this->hasOne(ProductStore::class, 'product_id','product_id');
+    }
 
-   
 
 }

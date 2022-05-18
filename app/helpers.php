@@ -119,9 +119,23 @@ function themeActive()
     // Current Store ID
     $current_store_id = currentStoreId();
 
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+    $user_shop_id = $user_details['user_shop'];
+
     $key = 'theme_id';
 
-    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+    if($user_group_id == 1)
+    {
+        $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+    }
+    else
+    {
+        $setting = Settings::select('value')->where('store_id',$user_shop_id)->where('key',$key)->first();
+    }
 
     $theme_id = isset($setting->value) ? $setting->value : '';
 

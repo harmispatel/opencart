@@ -16,13 +16,27 @@ class ReviewsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Check User Permission
         if(check_user_role(77) != 1)
         {
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
-        $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->where('store_id',$current_store_id)->get();
+        if($user_group_id == 1)
+        {
+            $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->where('store_id',$current_store_id)->get();
+        }
+        else
+        {
+            $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->where('store_id',$user_shop_id)->get();
+        }
 
         return view('admin.reviews.list',$data);
     }

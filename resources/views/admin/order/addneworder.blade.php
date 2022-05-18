@@ -97,21 +97,31 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="store">Store</label>
-                                                            <select class="form-control" name="storename" id="store">
-                                                                <option value="0">Default</option>
+                                                            <select class="form-control {{ ($errors->has('storename')) ? 'is-invalid' : '' }}" name="storename" id="store">
+                                                                <option value="">Default</option>
                                                                 @foreach ($stores as $store)
                                                                     <option value="{{ $store->store_id }}" {{ (old('storename') == $store->store_id) ? 'selected' : '' }}>
                                                                         {{ htmlspecialchars_decode($store->name) }}
                                                                     </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
+                                                                @endforeach
+                                                            </select>
+                                                            @if($errors->has('storename'))
+                                                                <div class="invalid-feedback">
+                                                                    {{ $errors->first('storename') }}
+                                                                </div>
+                                                            @endif
                                                         </div>
-                                                    <div class="col-md-6">
+                                                    </div>
+                                                    <div class="col-md-5">
                                                         <div class="form-group" id="#search">
                                                             <label for="cname">Customer</label>
                                                             <input type="text" id="cname" name="cname" value="{{ old('cname') }}" class="form-control" placeholder="Search & Select Customer">
                                                             <input type="hidden" id="customerid" class="form-control" value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <div id="loader" style="margin-top: 35px;display:none;">
+                                                            <img src="{{ asset('public/admin/gif/gif4.gif') }}" alt="">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -458,8 +468,17 @@
                                                                 <tr>
                                                                     <td>Choose Product</td>
                                                                     <td>
-                                                                        <input type="text" id="productname" name="productname" value="" class="form-control" placeholder="Product name">
-                                                                        <input type="hidden" id="productid" class="form-control" value="">
+                                                                        <div class="row">
+                                                                            <div class="col-md-10">
+                                                                                <input type="text" id="productname" name="productname" value="" class="form-control" placeholder="Product name">
+                                                                                <input type="hidden" id="productid" class="form-control" value="">
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <div id="loader2" style="margin-top: 10px;display:none;">
+                                                                                    <img src="{{ asset('public/admin/gif/gif4.gif') }}" width="25">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -805,8 +824,11 @@
                     term: requete.term
                 },
                 dataType: 'json',
+                beforeSend: function() {
+                    $('#loader').show();
+                },
                 success: function(data) {
-
+                    $('#loader').hide();
                     reponse($.map(data, function(object) {
                         return {
                             customer_id: object.customer_id,
@@ -882,8 +904,11 @@
                     product: requete.term
                 },
                 dataType: 'json',
+                beforeSend: function() {
+                    $('#loader2').show();
+                },
                 success: function(data) {
-
+                    $('#loader2').hide();
                     reponse($.map(data, function(object) {
                         return {
                             // customer_id: object.,

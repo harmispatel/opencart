@@ -184,7 +184,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
     Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
     Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
-
+    Route::get('autocompleteproduct', [OrdersController::class, 'autocompleteproduct'])->name('autocompleteproduct');
+    Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
     // Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
     Route::get('payment_and_shipping_address/{id}', [OrdersController::class, 'payment_and_shipping_address'])->name('payment_and_shipping_address');
 
@@ -197,8 +198,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
 
 
-    Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
-    Route::get('autocompleteproduct', [OrdersController::class, 'autocompleteproduct'])->name('autocompleteproduct');
+
 
 
 

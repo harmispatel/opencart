@@ -25,8 +25,23 @@ class VoucherController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        // Gift Vouchers
-        $data['vouchers'] = Voucher::where('store_id',$current_store_id)->join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        if($user_group_id == 1)
+        {
+            // Gift Vouchers
+            $data['vouchers'] = Voucher::where('store_id',$current_store_id)->join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+        }
+        else
+        {
+            // Gift Vouchers
+            $data['vouchers'] = Voucher::where('store_id',$user_shop_id)->join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+        }
 
         return view('admin.vouchers.voucherlist', $data);
     }
@@ -38,9 +53,6 @@ class VoucherController extends Controller
     // Function of Add New Gift Voucher View
     public function giftvoucher()
     {
-        // Current Store ID
-        $current_store_id = currentStoreId();
-
         // Get Voucher Themes
         $data['themes'] = VoucherThemeDescription::get();
 
@@ -54,14 +66,13 @@ class VoucherController extends Controller
     // Function of Get All Voucher Themes
     public function vouchertheme()
     {
-
         // Check User Permission
         if (check_user_role(15) != 1)
         {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        $data = VoucherThemenames::all();
+        $data = VoucherThemenames::get();
         return view('admin.vouchers.voucherthemelist',['data'=>$data]);
     }
 
@@ -171,6 +182,13 @@ class VoucherController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Validation
         $request->validate([
             'code' => 'required|max:10',
@@ -186,7 +204,14 @@ class VoucherController extends Controller
 
         // Sore New Gift Voucher
         $voucher = new Voucher;
-        $voucher->store_id = $current_store_id;
+        if($user_group_id == 1)
+        {
+            $voucher->store_id = $current_store_id;
+        }
+        else
+        {
+            $voucher->store_id = $user_shop_id;
+        }
         $voucher->on_off = isset($request->onoff) ? $request->onoff : "0";
         $voucher->order_id = isset($request->orderid) ? $request->orderid : "0";
         $voucher->code = $request->code;;

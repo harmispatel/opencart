@@ -60,7 +60,6 @@ class SettingsController extends Controller
 
     public function openclosetime(Request $request)
     {
-
         // Check User Permission
         if(check_user_role(85) != 1)
         {
@@ -78,8 +77,16 @@ class SettingsController extends Controller
         $timearray['23:59'] = '23:59';
         $times = $this->times = $timearray;
 
-        //
+
         $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $key = ([
             'opening_time_collection',
             'opening_time_delivery',
@@ -98,8 +105,16 @@ class SettingsController extends Controller
 
         $open_close = [];
 
-        foreach ($key as $row) {
-            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+        foreach ($key as $row)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+            }
+            else
+            {
+                $query = Settings::select('value')->where('store_id', $user_shop_id)->where('key', $row)->first();
+            }
 
             $open_close[$row] = isset($query->value) ? $query->value : '';
         }
@@ -130,6 +145,13 @@ class SettingsController extends Controller
 
         // Current Store ID
         $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
 
         $language = Language::get();
         $currency = Currency::get();
@@ -181,8 +203,16 @@ class SettingsController extends Controller
 
         $map_category = [];
 
-        foreach ($key as $row) {
-            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+        foreach ($key as $row)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+            }
+            else
+            {
+                $query = Settings::select('value')->where('store_id', $user_shop_id)->where('key', $row)->first();
+            }
 
             $map_category[$row] = isset($query->value) ? $query->value : '';
         }
@@ -246,6 +276,13 @@ class SettingsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $setting_page = $request->setting;
 
         $data['config_url'] = isset($request->config_url) ? $request->config_url : '';
@@ -265,8 +302,16 @@ class SettingsController extends Controller
         $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
         $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
         $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-        if ($request->hasFile('config_logo')) {
-            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_logo')->first();
+        if ($request->hasFile('config_logo'))
+        {
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_logo')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_logo')->first();
+            }
 
             $old_name = isset($old->value) ? $old->value : '';
 
@@ -282,8 +327,16 @@ class SettingsController extends Controller
         }
 
 
-        if ($request->hasFile('config_icon')) {
-            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_icon')->first();
+        if ($request->hasFile('config_icon'))
+        {
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_icon')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_icon')->first();
+            }
 
             $old_name = isset($old->value) ? $old->value : '';
 
@@ -319,8 +372,16 @@ class SettingsController extends Controller
         $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
         $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
 
-        if ($request->hasFile('suspend_logo')) {
-            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'suspend_logo')->first();
+        if ($request->hasFile('suspend_logo'))
+        {
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'suspend_logo')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'suspend_logo')->first();
+            }
 
             $old_name = isset($old->value) ? $old->value : '';
 
@@ -338,8 +399,17 @@ class SettingsController extends Controller
         $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
         $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
 
-        foreach ($data as $key => $new) {
-            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+        foreach ($data as $key => $new)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
             if (!empty($setting_id) || $setting_id != '') {
                 $map_update = Settings::find($setting_id);
@@ -347,7 +417,14 @@ class SettingsController extends Controller
                 $map_update->update();
             } else {
                 $map_add = new Settings();
-                $map_add->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $map_add->store_id = $current_store_id;
+                }
+                else
+                {
+                    $map_add->store_id = $user_shop_id;
+                }
                 $map_add->group = 'config';
                 $map_add->key = $key;
                 $map_add->value = $new;
@@ -357,7 +434,14 @@ class SettingsController extends Controller
         }
 
         // Update in Store
-        $store = Store::find($current_store_id);
+        if($user_group_id == 1)
+        {
+            $store = Store::find($current_store_id);
+        }
+        else
+        {
+            $store = Store::find($user_shop_id);
+        }
         $store->name = $data['config_name'];
         $store->url =  $data['config_url'];
         $store->ssl =  $data['config_ssl'];
@@ -479,6 +563,13 @@ class SettingsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $language = Language::get();
         $currency = Currency::get();
         $countries = Country::get();
@@ -529,8 +620,16 @@ class SettingsController extends Controller
 
         $map_category = [];
 
-        foreach ($key as $row) {
-            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+        foreach ($key as $row)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+            }
+            else
+            {
+                $query = Settings::select('value')->where('store_id', $user_shop_id)->where('key', $row)->first();
+            }
 
             $map_category[$row] = isset($query->value) ? $query->value : '';
         }
@@ -551,6 +650,13 @@ class SettingsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $key = ([
             'android_app_id',
             'apple_app_id',
@@ -566,8 +672,16 @@ class SettingsController extends Controller
 
         $map_category = [];
 
-        foreach ($key as $row) {
-            $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+        foreach ($key as $row)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+            }
+            else
+            {
+                $query = Settings::select('value')->where('store_id', $user_shop_id)->where('key', $row)->first();
+            }
 
             $map_category[$row] = isset($query->value) ? $query->value : '';
         }
@@ -585,13 +699,28 @@ class SettingsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $data['android_app_id'] = isset($request->android_app_id) ? $request->android_app_id : '';
         $data['apple_app_id'] = isset($request->apple_app_id) ? $request->apple_app_id : '';
         $data['app_available'] = isset($request->app_available) ? $request->app_available : '';
         $data['home_bg_color'] = isset($request->home_bg_color) ? $request->home_bg_color : '';
 
-        if ($request->hasFile('menu_background_image')) {
-            $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'menu_background_image')->first();
+        if ($request->hasFile('menu_background_image'))
+        {
+            if($user_group_id == 1)
+            {
+                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'menu_background_image')->first();
+            }
+            else
+            {
+                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'menu_background_image')->first();
+            }
 
             $old_name = isset($old->value) ? $old->value : '';
 
@@ -612,8 +741,17 @@ class SettingsController extends Controller
         $data['polianna_notification_font_color'] = isset($request->polianna_notification_font_color) ? $request->polianna_notification_font_color : '';
         $data['title_image_url'] = isset($request->title_image_url) ? $request->title_image_url : '';
 
-        foreach ($data as $key => $new) {
-            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+        foreach ($data as $key => $new)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
             if (!empty($setting_id) || $setting_id != '') {
@@ -622,7 +760,14 @@ class SettingsController extends Controller
                 $app_setting->update();
             } else {
                 $app_setting = new Settings();
-                $app_setting->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $app_setting->store_id = $current_store_id;
+                }
+                else
+                {
+                    $app_setting->store_id = $user_shop_id;
+                }
                 $app_setting->group = 'config';
                 $app_setting->key = $key;
                 $app_setting->value = $new;
@@ -644,21 +789,49 @@ class SettingsController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        $data['enable_delivery'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'enable_delivery')->first();
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
 
-        $data['delivery_option'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'delivery_option')->first();
+        if($user_group_id == 1)
+        {
+            $data['enable_delivery'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'enable_delivery')->first();
 
-        $data['is_distance_option'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'is_distance_option')->first();
+            $data['delivery_option'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'delivery_option')->first();
 
-        $data['road_mileage_percentage'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'road_mileage_percentage')->first();
+            $data['is_distance_option'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'is_distance_option')->first();
 
-        $data['google_distance_api_key'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'google_distance_api_key')->first();
+            $data['road_mileage_percentage'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'road_mileage_percentage')->first();
 
-        $data['deliverysettings'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'post_codes')->get();
+            $data['google_distance_api_key'] = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'google_distance_api_key')->first();
 
-        $data['deliverydistance'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'distance')->get();
+            $data['deliverysettings'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'post_codes')->get();
 
-        $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'area')->get();
+            $data['deliverydistance'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'distance')->get();
+
+            $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $current_store_id)->where('delivery_type', 'area')->get();
+        }
+        else
+        {
+            $data['enable_delivery'] = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'enable_delivery')->first();
+
+            $data['delivery_option'] = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'delivery_option')->first();
+
+            $data['is_distance_option'] = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'is_distance_option')->first();
+
+            $data['road_mileage_percentage'] = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'road_mileage_percentage')->first();
+
+            $data['google_distance_api_key'] = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'google_distance_api_key')->first();
+
+            $data['deliverysettings'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $user_shop_id)->where('delivery_type', 'post_codes')->get();
+
+            $data['deliverydistance'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $user_shop_id)->where('delivery_type', 'distance')->get();
+
+            $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $user_shop_id)->where('delivery_type', 'area')->get();
+        }
 
         return view('admin.settings.delivery_collection_setting', $data);
     }
@@ -777,6 +950,14 @@ class SettingsController extends Controller
         }
 
         $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $store_postcode = '';
 
         $data['enable_delivery'] = isset($request->enable_delivery) ? $request->enable_delivery : 'delivery';
@@ -787,7 +968,15 @@ class SettingsController extends Controller
 
         foreach ($data as $key => $new)
         {
-            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
             if (!empty($setting_id) || $setting_id != '')
@@ -799,7 +988,14 @@ class SettingsController extends Controller
             else
             {
                 $delivery_add = new Settings;
-                $delivery_add->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $delivery_add->store_id = $current_store_id;
+                }
+                else
+                {
+                    $delivery_add->store_id = $user_shop_id;
+                }
                 $delivery_add->group = 'deliverysetting';
                 $delivery_add->key = $key;
                 $delivery_add->value = isset($new) ? $new : '';
@@ -809,7 +1005,14 @@ class SettingsController extends Controller
 
         }
 
-        $results = DeliverySettings::where('id_store',$current_store_id)->get();
+        if($user_group_id == 1)
+        {
+            $results = DeliverySettings::where('id_store',$current_store_id)->get();
+        }
+        else
+        {
+            $results = DeliverySettings::where('id_store',$user_shop_id)->get();
+        }
 
         foreach($results as $result)
         {
@@ -851,7 +1054,15 @@ class SettingsController extends Controller
                 $sql->update();
 
                 $postcode_key = 'post_codes_'.$id;
-                $qry = Settings::where('store_id',$current_store_id)->where('key',$postcode_key)->first();
+
+                if($user_group_id == 1)
+                {
+                    $qry = Settings::where('store_id',$current_store_id)->where('key',$postcode_key)->first();
+                }
+                else
+                {
+                    $qry = Settings::where('store_id',$user_shop_id)->where('key',$postcode_key)->first();
+                }
 
                 $postcode_setting_id = isset($qry->setting_id) ? $qry->setting_id : '';
 
@@ -864,7 +1075,14 @@ class SettingsController extends Controller
                 else
                 {
                     $postcode_add = new Settings;
-                    $postcode_add->store_id = $current_store_id;
+                    if($user_group_id == 1)
+                    {
+                        $postcode_add->store_id = $current_store_id;
+                    }
+                    else
+                    {
+                        $postcode_add->store_id = $user_shop_id;
+                    }
                     $postcode_add->group = 'config';
                     $postcode_add->key = $postcode_key;
                     $postcode_add->value = trim($data['post_codes_'.$id], ',');
@@ -888,7 +1106,14 @@ class SettingsController extends Controller
 
                 $store_postcode .= ','.(string)trim(str_replace(' ', '',$request['post_codes_'.$result['id_delivery_settings']]), "\,\ ");
 
-                $qry1 = Settings::where('store_id',$current_store_id)->where('key','available_zones')->first();
+                if($user_group_id == 1)
+                {
+                    $qry1 = Settings::where('store_id',$current_store_id)->where('key','available_zones')->first();
+                }
+                else
+                {
+                    $qry1 = Settings::where('store_id',$user_shop_id)->where('key','available_zones')->first();
+                }
 
                 $zone_setting_id = isset($qry1->setting_id) ? $qry1->setting_id : '';
 
@@ -901,7 +1126,14 @@ class SettingsController extends Controller
                 else
                 {
                     $zone_add = new Settings;
-                    $zone_add->store_id = $current_store_id;
+                    if($user_group_id == 1)
+                    {
+                        $zone_add->store_id = $current_store_id;
+                    }
+                    else
+                    {
+                        $zone_add->store_id = $user_shop_id;
+                    }
                     $zone_add->group = 'config';
                     $zone_add->key = 'available_zones';
                     $zone_add->value = trim($store_postcode, ',');
@@ -950,6 +1182,13 @@ class SettingsController extends Controller
 
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $data['polianna_facebook_id'] = $request->polianna_facebook_id;
         $data['polianna_twitter_username'] = $request->polianna_twitter_username;
         $data['polianna_gplus_id'] = $request->polianna_gplus_id;
@@ -958,7 +1197,15 @@ class SettingsController extends Controller
 
         foreach ($data as $key => $new)
         {
-            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
             if (!empty($setting_id) || $setting_id != '') {
@@ -967,7 +1214,14 @@ class SettingsController extends Controller
                 $social_update->update();
             } else {
                 $social_add = new Settings;
-                $social_add->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $social_add->store_id = $current_store_id;
+                }
+                else
+                {
+                    $social_add->store_id = $user_shop_id;
+                }
                 $social_add->group = 'polianna';
                 $social_add->key = $key;
                 $social_add->value = isset($new) ? $new : '';
@@ -990,6 +1244,13 @@ class SettingsController extends Controller
 
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $bissinessdays = serialize($request['bussines']);
         $closingdate = serialize($request['closing_dates']);
         $delivery = serialize($request['delivery']);
@@ -1006,8 +1267,17 @@ class SettingsController extends Controller
         $data['collection_gaptime'] = isset($request->collection_gaptime) ? $request->collection_gaptime : '';
         $data['order_outof_bussiness_time'] = $request->order_outof_bussiness_time;
 
-        foreach ($data as $key => $new) {
-            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+        foreach ($data as $key => $new)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
             if (!empty($setting_id) || $setting_id != '') {
@@ -1016,7 +1286,14 @@ class SettingsController extends Controller
                 $timesetting->update();
             } else {
                 $timesetting = new Settings();
-                $timesetting->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $timesetting->store_id = $current_store_id;
+                }
+                else
+                {
+                    $timesetting->store_id = $user_shop_id;
+                }
                 $timesetting->group = 'timesetting';
                 $timesetting->key = $key;
                 $timesetting->value = $new;
@@ -1175,8 +1452,16 @@ class SettingsController extends Controller
         $data['opening_time_delivery'] = trim($opening_time_delivery);
         $data['opening_time_collection'] = trim($opening_time_collection);
 
-        foreach ($data as $key => $new) {
-            $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+        foreach ($data as $key => $new)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
 
             if (!empty($setting_id) || $setting_id != '') {
@@ -1185,7 +1470,14 @@ class SettingsController extends Controller
                 $timesetting->update();
             } else {
                 $timesetting = new Settings();
-                $timesetting->store_id = $current_store_id;
+                if($user_group_id == 1)
+                {
+                    $timesetting->store_id = $current_store_id;
+                }
+                else
+                {
+                    $timesetting->store_id = $user_shop_id;
+                }
                 $timesetting->group = 'config_time';
                 $timesetting->key = $key;
                 $timesetting->value = $new;

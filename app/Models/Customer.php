@@ -11,7 +11,7 @@ use App\Models\Store;
 
 class Customer extends Model
 {
-    protected $fillable = ['store_id'];
+    // protected $fillable = ['store_id'];
     protected $table = "oc_customer";
     protected $primaryKey = 'customer_id';
     public $timestamps = false;

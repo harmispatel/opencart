@@ -17,10 +17,25 @@ class FreeItemController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        $data['cartrul'] = FreeRule::where('id_store',$current_store_id)->get();
+        if($user_group_id == 1)
+        {
+            $data['cartrul'] = FreeRule::where('id_store',$current_store_id)->get();
+        }
+        else
+        {
+            $data['cartrul'] = FreeRule::where('id_store',$user_shop_id)->get();
+        }
+
         return view('admin.freeitems.cartrule',$data);
     }
 
@@ -37,11 +52,25 @@ class FreeItemController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Current Store ID
         $current_store_id = currentStoreId();
 
         // Get Free Items By Current Store
-        $data['freeitems'] = FreeItemadd::where('store_id',$current_store_id)->get();
+        if($user_group_id == 1)
+        {
+            $data['freeitems'] = FreeItemadd::where('store_id',$current_store_id)->get();
+        }
+        else
+        {
+            $data['freeitems'] = FreeItemadd::where('store_id',$user_shop_id)->get();
+        }
 
         return view('admin.freeitems.addfreerule',$data);
     }
@@ -63,10 +92,24 @@ class FreeItemController extends Controller
             'total_above' => 'required',
         ]);
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Store New Cart Rule
         $cartrule = new FreeRule;
         $cartrule->name_rule = $request->name;
-        $cartrule->id_store = $current_store_id;
+        if($user_group_id == 1)
+        {
+            $cartrule->id_store = $current_store_id;
+        }
+        else
+        {
+            $cartrule->id_store = $user_shop_id;
+        }
         $id_item = implode(":",$request->free_item);
         $cartrule->id_item = $id_item;
         $cartrule->min_total = isset($request->total_above) ? $request->total_above : "";
@@ -138,8 +181,22 @@ class FreeItemController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Get Free Items By Current Store
-        $data['freeitems'] = FreeItemadd::where('store_id',$current_store_id)->get();
+        if($user_group_id == 1)
+        {
+            $data['freeitems'] = FreeItemadd::where('store_id',$current_store_id)->get();
+        }
+        else
+        {
+            $data['freeitems'] = FreeItemadd::where('store_id',$user_shop_id)->get();
+        }
 
         $data['getfreeitem'] = FreeRule::find($id);
         if(empty($data['getfreeitem']))
@@ -166,7 +223,22 @@ class FreeItemController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        $data = FreeItemadd::where('store_id',$current_store_id)->get();
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        if($user_group_id == 1)
+        {
+            $data = FreeItemadd::where('store_id',$current_store_id)->get();
+        }
+        else
+        {
+            $data = FreeItemadd::where('store_id',$user_shop_id)->get();
+        }
+
         return view('admin.freeitems.freeitemlist',compact('data'));
     }
 
@@ -196,6 +268,13 @@ class FreeItemController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         // Validation
         $request->validate([
             'name_item' => 'required',
@@ -203,7 +282,14 @@ class FreeItemController extends Controller
 
         $freeitem = new FreeItemadd;
         $freeitem->name_item = $request->name_item;
-        $freeitem->store_id = $current_store_id;
+        if($user_group_id == 1)
+        {
+            $freeitem->store_id = $current_store_id;
+        }
+        else
+        {
+            $freeitem->store_id = $user_shop_id;
+        }
         $freeitem->save();
 
         return redirect()->route('freeitemlist');
@@ -216,8 +302,24 @@ class FreeItemController extends Controller
 
     public function freeitemlist()
     {
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
         $current_store_id = currentStoreId();
-        $data = FreeItemadd::where('store_id',$current_store_id)->get();
+
+        if($user_group_id == 1)
+        {
+            $data = FreeItemadd::where('store_id',$current_store_id)->get();
+        }
+        else
+        {
+            $data = FreeItemadd::where('store_id',$user_shop_id)->get();
+        }
+
         return view('admin.freeitems.freeitemlist',['data'=>$data]);
     }
 

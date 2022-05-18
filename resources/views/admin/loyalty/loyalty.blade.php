@@ -31,8 +31,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
+                        <h1>Coming Soon..</h1>
                         {{-- Card Start --}}
-                        <div class="card card-body ">
+                        {{-- <div class="card">
                             <form action="{{ route('storeloyalty') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <h1>Loyalty System</h1>
@@ -46,11 +47,11 @@
                                     // $point = getLoyaltyDetails($current_store, 0, $rewardtype);
                                     // echo '<pre>';
                                     // print_r($point);
-                                   
+
                                     // $money = getLoyaltyDetails($current_store, 0, $rewardtype);
                                     // echo '<pre>';
                                     // print_r($money);
-                                    
+
                                 @endphp
                                 <div class="rewardtype">
                                     <div class="radio">
@@ -139,12 +140,12 @@
                                                     <div class="box-categories">
                                                         @php
                                                             $moneycategory = isset($rewardtype['unserializemoney']['category']) ? $rewardtype['unserializemoney']['category'] : '';
-                                                             
+
                                                         @endphp
                                                         <select class="category form-control" name="money[category][]"
                                                         style="width: 300px" multiple="multiple">
                                                             @foreach ($result['category'] as $categorys)
-                                                           
+
                                                                 @if (!empty($moneycategory) || $moneycategory != '')
                                                                     <option value="{{ $categorys->category_id }}"
                                                                         {{ in_array($categorys->category_id, $moneycategory) == $categorys->category_id ? 'selected' : '' }}>
@@ -159,7 +160,7 @@
                                                     <div class="box-products" style="margin-left: 10px">
                                                         @php
                                                             $productcategory = isset($rewardtype['unserializemoney']['product']) ? $rewardtype['unserializemoney']['product'] : '';
-                                                           
+
                                                         @endphp
                                                         <select class="products  form-control" name="money[product][]"
                                                         style="width: 350px" multiple="multiple">
@@ -348,7 +349,7 @@
                                                         @php
                                                             $moneycategory1 = isset($rewardtype['unserializepoint']['category']) ? $rewardtype['unserializepoint']['category'] : '';
 
-                                                            
+
                                                         @endphp
                                                         <select class="category form-control" name="point[category][]"
                                                         style="width: 300px" multiple="multiple">
@@ -368,7 +369,7 @@
                                                     <div class="box-products" style="margin-left: 10px">
                                                         @php
                                                             $productcategory2 = isset($rewardtype['unserializepoint']['product']) ? $rewardtype['unserializepoint']['product'] : '';
-                                                           
+
                                                         @endphp
                                                         <select class="products  form-control" name="point[product][]"
                                                             style="width: 300px" multiple="multiple">
@@ -399,7 +400,7 @@
                                             @php
                                                 $days = isset($rewardtype['unserializepoint']['availibleday']) ? $rewardtype['unserializepoint']['availibleday'] : '';
                                             @endphp
-                                           
+
                                             @if (!empty($days) || $days != '')
                                                 <input type="checkbox" name="point[availibleday][]" value="2"
                                                     id="point_day_2" {{ in_array(2, $days) ? 'checked' : '' }} />
@@ -491,7 +492,7 @@
                                     <input type="submit" name="submit" value="SAVE" class="btn btn-success">
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
                         {{-- End Card --}}
                     </div>
                 </div>

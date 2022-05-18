@@ -52,29 +52,48 @@
                                         <tbody>
                                             @php
                                                 $current_store_id = currentStoreId();
-                                                $enable_gallery_module=getphoto($current_store_id,'enable_gallery_module');
-                                                $enable_home_gallery=getphoto($current_store_id,'enable_home_gallery');
-                                                $gallery_background_options=getphoto($current_store_id,'gallery_background_options');
-                                                $gallery_header_text=getphoto($current_store_id,'gallery_header_text');
-                                                $gallery_header_desc=getphoto($current_store_id,'gallery_header_desc');
-                                                $gallery_background_color=getphoto($current_store_id,'gallery_background_color');
-                                                $gallery_background_image=getphoto($current_store_id,'gallery_background_image');
-                                                // echo '<pre>';
-                                                // print_r($gallery_background_image);
-                                                // exit();
+
+                                                $user_details = user_details();
+
+                                                if(isset($user_details))
+                                                {
+                                                    $user_group_id = $user_details['user_group_id'];
+                                                }
+                                                $user_shop_id = $user_details['user_shop'];
+
+                                                if($user_group_id== 1)
+                                                {
+                                                    $enable_gallery_module=getphoto($current_store_id,'enable_gallery_module');
+                                                    $enable_home_gallery=getphoto($current_store_id,'enable_home_gallery');
+                                                    $gallery_background_options=getphoto($current_store_id,'gallery_background_options');
+                                                    $gallery_header_text=getphoto($current_store_id,'gallery_header_text');
+                                                    $gallery_header_desc=getphoto($current_store_id,'gallery_header_desc');
+                                                    $gallery_background_color=getphoto($current_store_id,'gallery_background_color');
+                                                    $gallery_background_image=getphoto($current_store_id,'gallery_background_image');
+                                                }
+                                                else
+                                                {
+                                                    $enable_gallery_module=getphoto($user_shop_id,'enable_gallery_module');
+                                                    $enable_home_gallery=getphoto($user_shop_id,'enable_home_gallery');
+                                                    $gallery_background_options=getphoto($user_shop_id,'gallery_background_options');
+                                                    $gallery_header_text=getphoto($user_shop_id,'gallery_header_text');
+                                                    $gallery_header_desc=getphoto($user_shop_id,'gallery_header_desc');
+                                                    $gallery_background_color=getphoto($user_shop_id,'gallery_background_color');
+                                                    $gallery_background_image=getphoto($user_shop_id,'gallery_background_image');
+                                                }
                                             @endphp
                                             <tr>
                                                 <td width="250">Gallery Module</td>
                                                 <td>
-                                                    <input type="checkbox" value="1" name="enable_gallery_module" {{ (isset($enable_gallery_module ) == 1) ? 'checked' : '' }}> Enable
-                                                    <input type="checkbox" value="0" name="enable_gallery_module" {{ (isset($enable_gallery_module ) == 0) ? 'checked' : '' }}> Disable
+                                                    <input type="radio" value="1" name="enable_gallery_module" {{ ($enable_gallery_module == 1) ? 'checked' : '' }}> Enable
+                                                    <input type="radio" value="0" name="enable_gallery_module" {{ ($enable_gallery_module  == 0) ? 'checked' : '' }}> Disable
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td width="250">Home Page</td>
                                                 <td>
-                                                    <input type="checkbox" value="1" name="enable_home_gallery" {{ (isset($enable_home_gallery)  == 1) ? 'checked' : ''  }}> Enable
-                                                    <input type="checkbox" value="0" name="enable_home_gallery" {{ (isset($enable_home_gallery)  == 0) ? 'checked' : ''  }}> Disable
+                                                    <input type="radio" value="1" name="enable_home_gallery" {{ ($enable_home_gallery == 1) ? 'checked' : ''  }}> Enable
+                                                    <input type="radio" value="0" name="enable_home_gallery" {{ ($enable_home_gallery == 0) ? 'checked' : ''  }}> Disable
                                                 </td>
                                             </tr>
                                             <tr>

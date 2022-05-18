@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\CustomerGroupDescription;
+use App\Models\OrderCart;
 use App\Models\OrderHistory;
 use App\Models\OrderProduct;
 use App\Models\OrderReturn;
@@ -42,6 +43,13 @@ class OrdersController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
+        $user_details = user_details();
+
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
         $columns = array(
             0 =>'order_id',
             1 =>'order_id',
@@ -50,41 +58,85 @@ class OrdersController extends Controller
             7 => 'date_added',
         );
 
-        // Get Orders
-        $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
-            $query->where('store_id',$current_store_id);
-        })->count();
-
-        $totalFiltered = $totalData;
-        $limit = $request->request->get('length');
-        $start = $request->request->get('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir = $request->input('order.0.dir');
-
-        if(!empty($request->input('search.value')))
+        if($user_group_id == 1)
         {
-            $search = $request->input('search.value');
-
-            $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
-                $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
-            })->whereHas('hasOneStore', function ($query) use ($current_store_id){
+            // Get Orders
+            $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
                 $query->where('store_id',$current_store_id);
-            })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+            })->count();
+
+            $totalFiltered = $totalData;
+            $limit = $request->request->get('length');
+            $start = $request->request->get('start');
+            $order = $columns[$request->input('order.0.column')];
+            $dir = $request->input('order.0.dir');
+
+            if(!empty($request->input('search.value')))
+            {
+                $search = $request->input('search.value');
+
+                $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                    $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                })->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                    $query->where('store_id',$current_store_id);
+                })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
 
-            $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
-                $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
-            })->whereHas('hasOneStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+                $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                    $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                })->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                    $query->where('store_id',$current_store_id);
+                })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+            }
+            else
+            {
+                $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
+                    $query->where('store_id',$current_store_id);
+                })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+
+            }
         }
         else
         {
-            $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+            $user_shop_id = $user_details['user_shop'];
 
+            // Get Orders
+            $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($user_shop_id){
+                $query->where('store_id',$user_shop_id);
+            })->count();
+
+            $totalFiltered = $totalData;
+            $limit = $request->request->get('length');
+            $start = $request->request->get('start');
+            $order = $columns[$request->input('order.0.column')];
+            $dir = $request->input('order.0.dir');
+
+            if(!empty($request->input('search.value')))
+            {
+                $search = $request->input('search.value');
+
+                $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                    $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                })->whereHas('hasOneStore', function ($query) use ($user_shop_id){
+                    $query->where('store_id',$user_shop_id);
+                })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+
+
+                $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                    $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                })->whereHas('hasOneStore', function ($query) use ($user_shop_id){
+                    $query->where('store_id',$user_shop_id);
+                })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+            }
+            else
+            {
+                $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($user_shop_id){
+                    $query->where('store_id',$user_shop_id);
+                })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+
+            }
         }
+
 
         $data = array();
         $data1=array();
@@ -227,8 +279,24 @@ class OrdersController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        // Get All Stores
-        $data['stores'] = Store::get();
+        $user_details = user_details();
+
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+        if($user_group_id == 1)
+        {
+            // Get All Stores
+            $data['stores'] = Store::get();
+        }
+        else
+        {
+            $user_shop_id = $user_details['user_shop'];
+            $data['stores'] = Store::where('store_id',$user_shop_id)->get();
+        }
+
 
         // Get All Customers
         $data['Customers'] = CustomerGroupDescription::get();
@@ -298,6 +366,7 @@ class OrdersController extends Controller
             'shipping_country_id' => 'required',
             'shipping_city' => 'required',
             'shipping_address_1' => 'required',
+            'storename' => 'required',
         ]);
 
         $neworder = new Orders;
@@ -403,12 +472,20 @@ class OrdersController extends Controller
         }
 
         $ids = $request->id;
-        if (count($ids) > 0) {
+
+        if (count($ids) > 0)
+        {
             Orders::whereIn('order_id', $ids)->delete();
-            return response()->json([
-                'success' => 1,
-            ]);
+            OrderCart::whereIn('order_id',$ids)->delete();
+            OrderHistory::whereIn('order_id',$ids)->delete();
+            OrderProduct::whereIn('order_id',$ids)->delete();
+            OrderTotal::whereIn('order_id',$ids)->delete();
         }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
         return view('admin.order.list');
     }
 
@@ -531,14 +608,6 @@ class OrdersController extends Controller
             $html .= '<td class="right">' . number_format($order->total,2)  . '</td>';
             $html .= '</tr>';
         }
-        // @foreach ($ordertotal as $total)
-        // <tbody id="totals">
-        //     <tr>
-        //         <td colspan="4" class="right">{{ $total->code }}</td>
-        //         <td class="right">{{ $total->text }}</td>
-        //     </tr>
-        // </tbody>
-        // @endforeach
 
         return response()->json($html);
     }
@@ -550,7 +619,22 @@ class OrdersController extends Controller
     // Get Customer By Search
     public function autocomplete(Request $request)
     {
-        $res = Customer::where('firstname', 'LIKE', "%{$request->term}%")->orWhere('lastname','LIKE', "%{$request->term}%")->get();
+        $user_details = user_details();
+
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+        if($user_group_id == 1)
+        {
+            $res = Customer::where('firstname', 'LIKE', "%{$request->term}%")->orWhere('lastname','LIKE', "%{$request->term}%")->get();
+        }
+        else
+        {
+            $user_shop_id = $user_details['user_shop'];
+            $res = Customer::where('firstname', 'LIKE', "%{$request->term}%")->where('store_id',$user_shop_id)->get();
+        }
         return response()->json($res);
     }
 
@@ -561,9 +645,25 @@ class OrdersController extends Controller
 
     public function autocompleteproduct(Request $request)
     {
+        $user_details = user_details();
 
-        $pro = ProductDescription::where("name", "LIKE", '%' . $request->product . '%')
-            ->get();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+        if($user_group_id == 1)
+        {
+            $pro = ProductDescription::where("name", "LIKE", "%{$request->product}%")->get();
+        }
+        else
+        {
+            $user_shop_id = $user_details['user_shop'];
+            $pro = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($user_shop_id)
+            {
+                $q->where('store_id',$user_shop_id);
+            })->where("name", "LIKE", "%{$request->product}%")->get();
+        }
 
         return response()->json($pro);
     }
