@@ -96,8 +96,7 @@ class CustomerAuthController extends Controller
 
         $address_check = isset($request->address_required) ? $request->address_required : 0;
 
-        // if($address_check != 1 || $ajaxregister == 1)
-        if($ajaxregister == 1)
+        if($address_check != 1 || $ajaxregister == 1)
         {
             // Validation
             $request->validate([
@@ -110,7 +109,7 @@ class CustomerAuthController extends Controller
                 'confirm_password' => 'min:6|required_with:password|same:password',
             ]);
         }
-        else
+        elseif($address_check == 1)
         {
             $request->validate([
                 'firstname' => 'required',
@@ -124,6 +123,18 @@ class CustomerAuthController extends Controller
                 'password' => 'min:6|required_with:confirm_password|same:confirm_password',
                 'confirm_password' => 'min:6|required_with:password|same:password',
                 'newsletter' => 'required',
+            ]);
+        }
+        else
+        {
+            $request->validate([
+                'title' => 'required',
+                'firstname' => 'required',
+                'lastname' => 'required',
+                'email' => 'required|email|unique:oc_customer,email',
+                'phone' => 'required|min:10',
+                'password' => 'min:6|required_with:confirm_password|same:confirm_password',
+                'confirm_password' => 'min:6|required_with:password|same:password',
             ]);
         }
 
@@ -146,7 +157,7 @@ class CustomerAuthController extends Controller
         $customer->approved = isset($request->approved) ? $request->approved : 1;
         $customer->token = isset($request->token) ? $request->token : '';
         $customer->date_added = date('Y-m-d');
-        $customer->gender_id = isset($request->gender_id) ? $request->gender_id : 1;
+        $customer->gender_id = isset($request->title) ? $request->title : 1;
         $customer->save();
 
 
