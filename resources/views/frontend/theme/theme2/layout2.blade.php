@@ -454,7 +454,7 @@
     <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
         <div class="container"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/opening-hours-top-divider.svg') }}" />
             <h3 class="title text-uppercase">opening hours</h3>
-            <div class="_divider"></div><a href="tel:03254769875">TEL: 03254769875</a>
+            <div class="_divider"></div><a href="tel:{{ $store_setting['config_telephone'] }}">TEL: {{ $store_setting['config_telephone'] }}</a>
             <h3 class="title text-uppercase __divider">hours</h3>
             @php
                 $openday =$openclose['openday'];

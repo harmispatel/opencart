@@ -179,7 +179,7 @@ class MemberController extends Controller
         $html .=                     '</div>';
         $html .=                 '</div>';
         $html .=             '</div>';
-        $html .=             '<div class="orderinfo-date d-flex justify-content-between">';
+        $html .=             '<div class="orderinfo-date" style="display: flex; justify-content:space-between">';
         $html .=                 '<span> <b class="order-dates">Date:</b>'. date('d/m/Y',strtotime($customerorders->date_added)) .'</span>';
         $html .=                 '<span> <b class="order-id">Order ID:</b>'. $customerorders->order_id .'</span></b>';
         $html .=             '</div>';
@@ -225,7 +225,7 @@ class MemberController extends Controller
         $html .=                     '</tbody>';
         $html .=                 '</table>';
         $html .=             '</div>';
-        $html .=             '<div class="delivery-to d-flex justify-content-center" style="width: 100%;">';
+        $html .=             '<div class="delivery-to d-flex justify-content-center" style="width: 100%; display: flex; justify-content:center">';
         $html .=                 '<table class="list" style="width: 80%;margin: 20px 0">';
         $html .=                     '<tbody>';
         $html .=                         '<tr>';
