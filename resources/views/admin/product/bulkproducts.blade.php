@@ -35,7 +35,8 @@
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
-                                <h2 class="card-title pt-2 m-0" style="color: black">
+                                <h2 class="card-title pt-2 m-0" style="color: black ;display: flex;
+                                align-items: baseline;">
                                     <i class="fa fa-cog fw"></i>&nbsp;&nbsp;
                                     category &nbsp;&nbsp;&nbsp;&nbsp;
                                     <select name="category" id="categorys" style="width: 70%">
@@ -59,7 +60,7 @@
                                 </div>
                             </div>
                             {{-- End Card Header --}}
-                            
+
                             {{-- Card Body --}}
                             <div class="card-body">
                                 <form action="{{ route('storebulkproduct') }}" method="POST" enctype="multipart/form-data" id="bulkP">

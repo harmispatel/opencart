@@ -336,7 +336,7 @@
                         error : function (message)
                         {
                             var cust_title = message.responseJSON.errors.title;
-                            var name = message.responseJSON.errors.name;
+                            var name = message.responseJSON.errors.firstname;
                             var lastname = message.responseJSON.errors.lastname;
                             var e_mail = message.responseJSON.errors.email;
                             var phone_no = message.responseJSON.errors.phone;
@@ -361,7 +361,7 @@
                             if(name)
                             {
                                 $('#fnameerr').text('').show();
-                                $('#name').attr('class','form-control is-invalid');
+                                $('#firstname').attr('class','form-control is-invalid');
                                 $('#fnameerr').text(name);
                             }
                             else
@@ -468,8 +468,8 @@
 
                     },
                     error : function (message) {
-                        var e_mail = message.responseJSON.errors.email;
-                        var pass = message.responseJSON.errors.password;
+                        var e_mail = message.responseJSON.errors.Email;
+                        var pass = message.responseJSON.errors.Password;
 
                     // Email
                     if(e_mail)

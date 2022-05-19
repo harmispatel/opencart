@@ -908,7 +908,8 @@ function storereview()
     $review_limit_setting = Settings::select('value')->where('store_id',$front_store_id)->where('theme_id',$current_theme_id)->where('key','polianna_recent_review_count')->first();
     $review_limit = isset($review_limit_setting['value']) ? $review_limit_setting['value'] : 1;
 
-    $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest('store_review_id')->take($review_limit)->get();
+    $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->orderBy('store_review_id','DESC')->take($review_limit)->get();
+    // $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest('store_review_id')->take($review_limit)->get();
 
     return $data;
 }

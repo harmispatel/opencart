@@ -10,6 +10,25 @@
         $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
     @endphp
 
+<style>
+.grid-header {
+  text-align: center;
+}
+
+.grid {
+  margin: 1rem auto;
+  &-item {
+    width: 250px;
+    height: auto;
+    margin-bottom: 10px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+</style>
     <div class="mobile-menu-shadow"></div>
     <sidebar class="mobile-menu">
         <a class="close far fa-times-circle" href="#"></a>
@@ -345,6 +364,7 @@
                         </div> --}}
                         @foreach ($review['reviews'] as $item)
                             <div class="swiper-slide">
+                                <div class="message-text"><strong>{{ $item->title }}</strong></div>
                                 <div class="message-text">
                                     {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong> --}}
                                     <p>{{ $item->message }}</p>
@@ -416,21 +436,62 @@
         </div>
         <div class="container-fluid wow animate__fadeInUp mb-3" data-wow-duration="1s">
 
-            <div class="row mb-3">
+            <div class="row">
                 @if(count($photos) > 0)
-                    <div class="grid" style="height: auto;">
-                        @foreach ($photos as $photo)
-                            <div class="grid-item">
-                                @if(!empty($photo->image))
-                                    <img src="{{ $photo->image }}">
-                                @else
-                                    <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
-                                @endif
+                
+                    @foreach ($photos as $key => $photo)
+                    {{-- @php
+                        echo '<pre>';
+                        echo $key;
+                        echo " ";
+                        print_r($photo->toArray());                        
+                    @endphp --}}
+                        {{-- <div class="grid-item">
+                            @if(!empty($photo->image))
+                                <img src="{{ $photo->image }}">
+                            @else
+                                <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
+                            @endif
+                        </div> --}}
+                        {{-- <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="box single">
+                                <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="box couple">
+                                        <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="box couple">
+                                        <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
+                                </div>
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
+                        </div> --}}
+
+                            
+                        {{-- <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="box single">
+                                <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
+                            </div> --}}
+                            <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="row">
+                                    {{-- <div class="col-12">
+                                        <div class="box couple">
+                                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
+                                        </div> --}}
+                                    <div class="col-12">
+                                        <div class="box couple">
+                                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                    @endforeach
                 @else
-                    <div class="grid">
+                    {{-- <div class="grid">
                         <div class="grid-item">
                             <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/0.png') }}" alt="">
                         </div>
@@ -446,6 +507,41 @@
                         <div class="grid-item">
                             <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}" alt="">
                         </div>
+                    </div> --}}
+                    
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="box single">
+                                <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/6.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/6.jpg')}}" /></div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="box couple">
+                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/1.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/1.jpg')}}" /></div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="box couple">
+                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/2.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/2.jpg')}}" /></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="box single">
+                                <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/3.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/3.jpg')}}" /></div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-3">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="box couple">
+                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/4.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/4.jpg')}}" /></div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="box couple">
+                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/5.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/5.jpg')}}" /></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>
@@ -454,7 +550,7 @@
     <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
         <div class="container"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/opening-hours-top-divider.svg') }}" />
             <h3 class="title text-uppercase">opening hours</h3>
-            <div class="_divider"></div><a href="tel:03254769875">TEL: 03254769875</a>
+            <div class="_divider"></div><a href="tel:{{ $store_setting['config_telephone'] }}">TEL: {{ $store_setting['config_telephone'] }}</a>
             <h3 class="title text-uppercase __divider">hours</h3>
             @php
                 $openday =$openclose['openday'];
@@ -486,3 +582,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.js"></script>
     <script src="{{ asset('public/assets/js/gallary.js') }}"></script>
 
+<script>
+    var colWidth = $(".grid-item").width();
+
+window.onresize = function(){
+  var colWidth = $(".grid-item").width();
+}
+console.log(colWidth);
+
+var $grid = $(".grid").masonry({
+  // options
+  itemSelector: ".grid-item",
+  columnWidth: ".grid-item",
+  // percentPosition: true,
+  gutter: 10,
+  fitWidth: true
+});
+
+$grid.imagesLoaded().progress(function() {
+  $grid.masonry("layout");
+});
+
+</script>

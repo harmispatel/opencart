@@ -255,7 +255,7 @@
                         </div>
                     </div>
                 </a> --}}
-                <a class="menu-shopping-cart" href="http://192.168.1.73/ECOMM/cart">
+                <a class="menu-shopping-cart" href="{{ route('cart') }}">
                     <div class="number">
                         <i class="fas fa-shopping-basket"></i><span id="cart_products" class="bg-danger">{{ ($cart_products) }}</span>
                     </div>

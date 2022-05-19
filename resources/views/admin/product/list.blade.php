@@ -35,28 +35,27 @@
                         <div class="card">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #f6f6f6">
-                                <h2 class="card-title pt-2 m-0" style="color: black">
+                                <h2 class="card-title pt-2 m-0" style="color: black ;display: flex;
+                                align-items: baseline;">
                                     <i class="fa fa-cog fw"></i>&nbsp;&nbsp;
                                     category &nbsp;&nbsp;&nbsp;&nbsp;
                                     <select name="category" id="categorys" style="width: 70%">
-
                                         @foreach ($category as $categorys)
                                             <option value="{{ $categorys->category_id }}">{{ $categorys->name }}
                                             </option>
                                         @endforeach
-
                                     </select>
                                 </h2>
                                 {{-- <h3>category</h3> --}}
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(49) == 1)
                                         <a href="{{ route('addproduct') }}" class="btn btn-sm btn-success ml-auto"><i
-                                        class="fa fa-plus"></i></a>
+                                                class="fa fa-plus"></i></a>
                                     @endif
 
                                     @if (check_user_role(52) == 1)
                                         <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected"><i
-                                        class="fa fa-trash"></i></a>
+                                                class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
                             </div>
@@ -66,7 +65,7 @@
                             <div class="card-body">
                                 <input type="hidden" name="catid" id="changecatid">
                                 {{-- Table Start --}}
-                                <table class="table table-bordered">
+                                <table class="table table-bordered " id="data-table">
                                     {{-- Alert Message div --}}
                                     @if (Session::has('success'))
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert"
@@ -81,20 +80,24 @@
                                     {{-- End Alert Message div --}}
 
                                     {{-- Table Head --}}
-                                    <thead class="text-center">
-                                        {{-- <th>
-                                            <input type="checkbox" name="checkall" id="del_all">
-                                        </th>
-                                        <th id="image">Image</th>
-                                        <th id="name">Product Name</th>
-                                        <th id="price">Price</th>
-                                        <th id="status">Status</th>
-                                        <th id="sort_order">Sort Order</th>
-                                        <th id="action">Action</th> --}}
-                                    </thead>
-                                        {{-- End Table Head --}}
+                                    <thead class="text-center header">
 
-                                        {{-- Table Body --}}
+                                            <th>
+                                                <input type="checkbox" name="checkall" id="del_all">
+                                            </th>
+                                            <th id="image">Image</th>
+                                            <th id="name">Product Name</th>
+                                            <th id="price">Price</th>
+                                            <th id="status">Status</th>
+                                            <th id="sort_order">Sort Order</th>
+                                            <th id="action">Action</th>
+
+
+
+                                    </thead>
+                                    {{-- End Table Head --}}
+
+                                    {{-- Table Body --}}
                                     <tbody class="text-center cat-list">
 
                                     </tbody>
@@ -118,13 +121,12 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-
     // Select All Checkbox
     $('#del_all').on('click', function(e) {
         if ($(this).is(':checked', true)) {
-            $("#del_all").prop('checked', true);
+            $(".del_all").prop('checked', true);
         } else {
-            $("#del_all").prop('checked', false);
+            $(".del_all").prop('checked', false);
         }
     });
     // End Select All Checkbox
@@ -133,7 +135,8 @@
     // Delete User
     $('.deletesellected').click(function() {
 
-        var checkValues = $('#del_all:checked').map(function() {
+        var checkValues = $('.del_all:checked').map(function()
+        {
             return $(this).val();
         }).get();
 
@@ -182,103 +185,185 @@
 </script>
 
 <script>
-    $(document).ready(function() {
-            var catval = $('#categorys :selected').val();
-             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "{{ route('getproductbycategory') }}",
-                dataType: "json",
-                data: {
-                    category_id: catval
-                },
-                success: function(result) {
-                    $('.table').html('');
-                    $('.table').html(result);
-                }
+    // $(document).ready(function() {
+    //         var catval = $('#categorys :selected').val();
+    //          $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         });
+    //         $.ajax({
+    //             type: "post",
+    //             url: "{{ route('getproductbycategory') }}",
+    //             dataType: "json",
+    //             data: {
+    //                 category_id: catval
+    //             },
+    //             success: function(result) {
+    //                 $('#data-table').html('');
+    //                 $('#data-table').html(result);
+    //             }
 
-            });
+    //         });
 
-            $('#categorys').change(function() {
-                var categoryval = this.value;
+    //         $('#categorys').change(function() {
+    //             var categoryval = this.value;
 
-                // var categoryval = $('#categorys :selected').val();
+    //             // var categoryval = $('#categorys :selected').val();
 
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+    //             $.ajaxSetup({
+    //                 headers: {
+    //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //                 }
+    //             });
 
 
-                $.ajax({
-                    type: "post",
-                    url: "{{ route('getproductbycategory') }}",
-                    dataType: "json",
-                    data: {
-                        category_id: categoryval
-                    },
-                    success: function(result) {
-                        $('.table').html('');
-                        $('.table').html(result);
-                    }
+    //             $.ajax({
+    //                 type: "post",
+    //                 url: "{{ route('getproductbycategory') }}",
+    //                 dataType: "json",
+    //                 data: {
+    //                     category_id: categoryval
+    //                 },
+    //                 success: function(result) {
+    //                     $('#data-table').html('');
+    //                     $('#data-table').html(result);
+    //                 }
 
-                });
-            });
-    });
+    //             });
+    //         });
+    // });
 </script>
 
 <script>
+    $(document).ready(function() {
+        var catval = $('#categorys :selected').val();
+        var table =  $('#data-table').DataTable();
+          table.destroy();
+        var table = $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            "scrollY": true,
+            "ajax": {
+                "url": "{{ route('getproduct') }}",
+                "dataType": "json",
+                "type": "POST",
+                "data": {
+                    _token: "{{ csrf_token() }}",
+                    cat_id: catval,
+                    // category_id:categoryval,
+                },
+            //     "success": function(res){
 
-//     $('#categorys').change(function () {
+            //       $('.header').html();
+            //       $('.header').append(res.header);
+            //       $('.cat-list').html();
+            //     //   $('.cat-list').append(res.table);
+            //    },
+            },
+            columns: [{
+                    "data": "checkbox",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "image",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "name",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "price",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "status",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "sort_order",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "action",
+                    "orderable": false,
+                    "bSortable": true
+                },
+            ]
+        });
 
-//         var categoryval = this.value;
-//         $('#changecatid').val(categoryval);
+    });
 
-//         var table = $('.table').DataTable();
-//
+    $('#categorys').change(function() {
 
-//         getallproduct();
-//     });
+        var table =  $('#data-table').DataTable();
+          table.destroy();
+        var categoryval = this.value;
+        var table = $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            "scrollY": true,
+            "ajax": {
+                "url": "{{ route('getproduct') }}",
+                "dataType": "json",
+                "type": "POST",
+                "data": {
+                    _token: "{{ csrf_token() }}",
+                    cat_id: categoryval,
+                    // category_id:categoryval,
+                },
+            //     "success": function(res){
 
-// $(document).ready(function()
-// {
-//     getallproduct();
+            //       $('.header').html();
+            //       $('.header').append(res.header);
+            //       $('.cat-list').html();
+            //     //   $('.cat-list').append(res.table);
+            //    },
+            },
+            columns: [{
+                    "data": "checkbox",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "image",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "name",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "price",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "status",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "sort_order",
+                    "orderable": false,
+                    "bSortable": true
+                },
+                {
+                    "data": "action",
+                    "orderable": false,
+                    "bSortable": true
+                },
+            ]
+        });
 
-// });
-// function getallproduct() {
-//     var catval = $('#categorys :selected').val();
-//     // alert(catval)
-
-//     var table = $('.table').DataTable({
-//         processing: true,
-//         serverSide: true,
-//         "scrollY": true,
-//         "ajax": {
-//             "url": "{{ route('getproduct') }}",
-//             "dataType": "json",
-//             "type": "POST",
-//             "data": {
-//                 _token: "{{ csrf_token() }}",
-//                 cat_id :catval,
-//                 // category_id:categoryval,
-//             },
-//         },
-//         columns: [
-//             {"data" : "checkbox", "orderable":false, "bSortable": true},
-//             {"data" : "image", "orderable":false, "bSortable": true},
-//             {"data" : "name", "orderable":false, "bSortable": true},
-//             {"data" : "price", "orderable":false, "bSortable": true},
-//             {"data" : "status", "orderable":false, "bSortable": true},
-//             {"data" : "sort_order", "orderable":false, "bSortable": true},
-//             {"data" : "action", "orderable":false, "bSortable": true},
-//         ]
-//     });
-
-// }
-
+    });
 </script>
