@@ -47,7 +47,7 @@ $userlogin = session('username');
 
   <!-- Order Receipt Modal -->
   <div class="modal fade" id="orderreceipt" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreceiptLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="orderreceiptLabel">Modal title</h5>
@@ -62,7 +62,7 @@ $userlogin = session('username');
 
   <!-- Order review Modal -->
   <div class="modal fade" id="orderreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreviewLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="orderreviewLabel">Modal title</h5>
@@ -438,10 +438,8 @@ $userlogin = session('username');
                                                     <div class="col-md-4">
                                                         <h5 style="text-align: left">#{{ $orders->order_id }}</h5>
                                                     </div>
-                                                    <div class="col-md-4 bg-warning">
-                                                        <h5 style="text-align: center">{{$orders->hasOneOrderStatus['name']}}</h5>
-                                                    </div>
                                                 </div><hr>
+                                                <h5 class="orderstatus" style="text-align: center">{{$orders->hasOneOrderStatus['name']}}</h5>
                                                 <div>
                                                     <table class="table p-0">
                                                         <tr>
@@ -466,6 +464,10 @@ $userlogin = session('username');
                                                             <td>0</td>
                                                         </tr>
                                                     </table>
+                                                    <div class="d-flex justify-content-around">
+                                                        <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order </a>
+                                                        <button type="button" class="btn btn-sm customerorderdetail" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="card-footer">

@@ -491,6 +491,7 @@
                 <div class="swiper-wrapper">
                     @foreach ($review['reviews'] as $item)
                         <div class="swiper-slide" style="min-height: 14rem;">
+                            <strong>{{ $item->title }}</strong>
                             <strong>{{ isset($item->hasOneCustomer['firstname']) ? $item->hasOneCustomer['firstname'] : '' }} {{ isset($item->hasOneCustomer['lastname']) ? $item->hasOneCustomer['lastname'] : '' }}</strong>
                             <p>{{ $item->message }}</p>
                             {{-- <span>UX Designer</span> --}}
