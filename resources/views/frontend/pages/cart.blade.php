@@ -147,11 +147,10 @@
                                                             value="{{ $cart['quantity'] }}"
                                                             style="max-width: 65px!important;">
                                                         <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})"
-                                                            class="px-2">
+                                                            class="px-2" style="cursor: pointer">
                                                             <img src="{{ asset('public/images/update.png') }}">
                                                         </a>
-                                                        <a
-                                                            onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
+                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" style="cursor: pointer">
                                                             <i class="fas fa-times"></i>
                                                         </a>
                                                     </div>
@@ -187,11 +186,10 @@
                                                             value="{{ $cart['quantity'] }}"
                                                             style="max-width: 65px!important;">
                                                         <a onclick="updatecart({{ $key }},0,{{ $userid }})"
-                                                            class="px-2">
+                                                        class="px-2" style="cursor: pointer">
                                                             <img src="{{ asset('public/images/update.png') }}">
                                                         </a>
-                                                        <a
-                                                            onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
+                                                        <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer">
                                                             <i class="fas fa-times"></i>
                                                         </a>
                                                     </div>
@@ -310,7 +308,20 @@
                 'user_id': userid,
             },
             dataType: 'json',
-            success: function(result) {
+            success: function(result)
+            {
+                if(result.required_1 == 1)
+                {
+                    alert('Please Enter the valid Number of Quantity');
+                    location.reload();
+                }
+
+                if(result.max_limit == 1)
+                {
+                    alert('Sorry, You can\'t Order More Then 50 Quantity of This Product');
+                    location.reload();
+                }
+
                 location.reload();
             }
         });

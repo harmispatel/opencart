@@ -316,6 +316,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('voucherinsert', [VoucherController::class, 'voucherinsert'])->name('voucherinsert');
     Route::get('voucherlist', [VoucherController::class, 'voucherlist'])->name('voucherlist');
     Route::get('voucheredit/{id}', [VoucherController::class, 'voucheredit'])->name('voucheredit');
+    Route::get('sendvouchercode/{id}', [VoucherController::class, 'sendvouchercode'])->name('sendvouchercode');
     Route::post('voucherdelete', [VoucherController::class, 'voucherdelete'])->name('voucherdelete');
     Route::post('voucherupdate', [VoucherController::class, 'voucherupdate'])->name('voucherupdate');
     Route::get('voucherthemeinsert', [VoucherController::class, 'voucherthemeinsert'])->name('voucherthemeinsert');
@@ -396,9 +397,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
 
     //Upload Gallary
-    // Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
-    //     \UniSharp\LaravelFilemanager\Lfm::routes();
-    // });
+    Route::group(['prefix' => 'uploadgallary','as'=>'uploadgallary','middleware' => ['web']], function (){
+        \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
 });
 
 

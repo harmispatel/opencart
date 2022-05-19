@@ -106,7 +106,41 @@ class VoucherController extends Controller
     }
 
 
+    public function sendvouchercode($id)
+    {
+        $voucher_id = $id;
+        // $data = [
+        //     'from' => 'robinrobin9976@gmail.com',
+        //     'to'    => 'hasankaradiya1626@gmail.com',
+        //     'Fname'    => 'hasan',
+        //     'Lname'    => 'karadiya',
+        //     'Email'    => 'hasankaradiya990@gmail.com',
+        //     'Phone'    => '6355271486',
+        // ];
 
+        // \Mail::send('admin.mail_fromat.voucher_mail', ['data' => $data],
+        //     function ($message) use ($data)
+        //     {
+        //         $message->from($data['from'])->to($data['to'])->subject('Some body wrote to you online');
+        //     });
+
+        // $email = 'hasankaradiya1626@gmail.com';
+        // $name = 'Hasan Karadiya';
+        // $uname = 'robinrobin9976@gmail.com';
+        // $message = 'hii';
+        // $subject = 'Voucher';
+        // if(isset($uname))
+        // {
+        //     $from = $uname;
+
+        //         \Mail::send('admin.mail_fromat.voucher_mail', ['body' => $message], function ($m) use ($email,$subject,$name, $from) {
+        //             $m->from($from, 'Checkout');
+        //             $m->to($email, $name)->subject($subject);
+        //         });
+
+        // }
+        return view('admin.mail_fromat.voucher_mail');
+    }
 
 
     //Function of Update Gift Vouchers

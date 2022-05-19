@@ -119,40 +119,41 @@ class MenuController extends Controller
         //         }
         // exit;
 
-        $modal ='';
-        $modal .='<div class="modal-header">';
-        $modal .='<h5 class="modal-title text-center" id="FreeitemLabel">'.$pro_name->name.'</h5>';
-        $modal .='<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-        $modal .='</div>';
-        $modal .='<div class="modal-body">';
-        $modal .='<div class="accordion" id="accordionExample">';
-        $modal .='<div class="accordion-item">';
-        $modal .='<h2 class="accordion-header" id="headingOne">';
-        foreach($group as $key=>$value){
-            $top = Topping::where('id_topping',$value['id_group_option'])->first();
-            $modal .='<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree'.$key.'" aria-expanded="true" aria-controls="collapsefree"><span>'.$top->name_topping.'</span></button>';
-            $dropdown = ToppingOption::where('id_group_topping',$top->id_topping)->get();
-        $modal .='</h2>';
+        // $modal ='';
+        // $modal .='<div class="modal-header">';
+        // $modal .='<h5 class="modal-title text-center" id="FreeitemLabel">'.$pro_name->name.'</h5>';
+        // $modal .='<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+        // $modal .='</div>';
+        // $modal .='<div class="modal-body">';
+        // $modal .='<div class="accordion" id="accordionExample">';
+        // $modal .='<div class="accordion-item">';
+        // $modal .='<h2 class="accordion-header" id="headingOne">';
+        // foreach($group as $key=>$value)
+        // {
+        //     $top = Topping::where('id_topping',$value['id_group_option'])->first();
+        //     $modal .='<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree'.$key.'" aria-expanded="true" aria-controls="collapsefree"><span>'.$top->name_topping.'</span></button>';
+        //     $dropdown = ToppingOption::where('id_group_topping',$top->id_topping)->get();
+        // $modal .='</h2>';
 
-        $modal .='<div id="collapsefree'.$key.'" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">';
-        $modal .='<div class="accordion-body">';
-        $modal .=' <select style="width: 200px">';
-        foreach($dropdown as $dropdowns){
-        $modal .='<option style="display: none" selected>--</option><option>'.$dropdowns->name.'</option>';
-        }
-        $modal .='</select>';
-        $modal .='</div>';
-        $modal .='</div>';
-        }
-        $modal .='</div>';
-        $modal .='</div>';
-        $modal .='<div class="mt-4">';
-        $modal .='<b>Add your special request?</b><br><textarea  name="request" rows="5" style="width: 465px"></textarea>';
-        $modal .='</div>';
-        $modal .='</div>';
-        $modal .='<div class="modal-footer">';
-        $modal .='<button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>';
-        $modal .='</div>';
+        // $modal .='<div id="collapsefree'.$key.'" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">';
+        // $modal .='<div class="accordion-body">';
+        // $modal .=' <select style="width: 200px">';
+        // foreach($dropdown as $dropdowns){
+        // $modal .='<option style="display: none" selected>--</option><option>'.$dropdowns->name.'</option>';
+        // }
+        // $modal .='</select>';
+        // $modal .='</div>';
+        // $modal .='</div>';
+        // }
+        // $modal .='</div>';
+        // $modal .='</div>';
+        // $modal .='<div class="mt-4">';
+        // $modal .='<b>Add your special request?</b><br><textarea  name="request" rows="5" style="width: 465px"></textarea>';
+        // $modal .='</div>';
+        // $modal .='</div>';
+        // $modal .='<div class="modal-footer">';
+        // $modal .='<button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>';
+        // $modal .='</div>';
 
 
 
@@ -194,89 +195,72 @@ class MenuController extends Controller
         {
             if($loopid <= 0)
             {
-                if($userid == 0)
-                {
-                    if($sizeid == 0)
-                    {
-                        session()->forget('cart1.withoutSize.'.$productid);
-                    }
-                    else
-                    {
-                        session()->forget('cart1.size.'.$sizeid);
-                    }
-                }
-                else
-                {
-                    $cart = getuserCart($userid);
-
-                    if($sizeid == 0)
-                    {
-                        unset($cart['withoutSize'][$productid]);
-                    }
-                    else
-                    {
-                        unset($cart['size'][$sizeid]);
-                    }
-                    $serial = serialize($cart);
-                    $base64 = base64_encode($serial);
-                    $user_id = $userid;
-                    $user = Customer::find($user_id);
-                    $user->cart = $base64;
-                    $user->update();
-                }
+                return response()->json([
+                    'required_1' => 1,
+                ]);
             }
             else
             {
-                if($userid == 0)
+                if($loopid <= 50)
                 {
-                    if($sizeid == 0)
+                    if($userid == 0)
                     {
-                        for($i=1;$i<=$loopid;$i++)
+                        if($sizeid == 0)
                         {
-                            addtoCart($request, $productid, $sizeid);
+                            session()->forget('cart1.withoutSize.'.$productid);
+                            for($i=1;$i<=$loopid;$i++)
+                            {
+                                addtoCart($request, $productid, $sizeid);
+                            }
+                        }
+                        else
+                        {
+                            session()->forget('cart1.size.'.$sizeid);
+                            for($i=1;$i<=$loopid;$i++)
+                            {
+                                addtoCart($request, $productid, $sizeid);
+                            }
                         }
                     }
                     else
                     {
-                        session()->forget('cart1.size.'.$sizeid);
-                        for($i=1;$i<=$loopid;$i++)
+                        $cart = getuserCart($userid);
+                        if($sizeid == 0)
                         {
-                            addtoCart($request, $productid, $sizeid);
+                            unset($cart['withoutSize'][$productid]);
+                            $serial = serialize($cart);
+                            $base64 = base64_encode($serial);
+                            $user = Customer::find($userid);
+                            $user->cart = $base64;
+                            $user->update();
+                            for($i=1;$i<=$loopid;$i++)
+                            {
+                                $newcart = getuserCart($userid);
+                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
+                            }
+                        }
+                        else
+                        {
+                            unset($cart['size'][$sizeid]);
+                            unset($cart['withoutSize'][$productid]);
+                            $serial = serialize($cart);
+                            $base64 = base64_encode($serial);
+                            $user = Customer::find($userid);
+                            $user->cart = $base64;
+                            $user->update();
+                            for($i=1;$i<=$loopid;$i++)
+                            {
+                                $newcart = getuserCart($userid);
+                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    $cart = getuserCart($userid);
-                    if($sizeid == 0)
-                    {
-                        unset($cart['withoutSize'][$productid]);
-                        $serial = serialize($cart);
-                        $base64 = base64_encode($serial);
-                        $user = Customer::find($userid);
-                        $user->cart = $base64;
-                        $user->update();
-                        for($i=1;$i<=$loopid;$i++)
-                        {
-                            $newcart = getuserCart($userid);
-                            addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
-                        }
-                    }
-                    else
-                    {
-                        unset($cart['size'][$sizeid]);
-                        unset($cart['withoutSize'][$productid]);
-                        $serial = serialize($cart);
-                        $base64 = base64_encode($serial);
-                        $user = Customer::find($userid);
-                        $user->cart = $base64;
-                        $user->update();
-                        for($i=1;$i<=$loopid;$i++)
-                        {
-                            $newcart = getuserCart($userid);
-                            addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
-                        }
-                    }
+                    return response()->json([
+                        'max_limit' => 1,
+                    ]);
                 }
             }
         }
@@ -397,7 +381,7 @@ class MenuController extends Controller
         $subtotl_html .= '<label>Sub-Total</label><span>£ '.$subtotal.'</span>';
         $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>£ '. $delivery_charge . '</span>';
         $total_html .= '<label><b>Total to pay:</b></label><span>£ '.$total.'</span>';
-        $headertotal += number_format($total,2);
+        $headertotal += $total;
 
         return response()->json([
             'html' => $html,
@@ -407,7 +391,7 @@ class MenuController extends Controller
             'headertotal' => $headertotal,
             'total' => $total_html,
             'couponcode' => $coupon_html,
-            'modal' => $modal,
+            // 'modal' => $modal,
         ]);
     }
 

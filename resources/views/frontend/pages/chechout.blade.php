@@ -691,7 +691,7 @@ if (session()->has('userid')) {
                                     aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         <div class="row justify-content-center">
-                                            <div class="col-md-6">
+                                            <div class="col-md-8">
                                                 <div class="login-main text-center">
                                                     <div class="login-details w-100">
                                                         @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
@@ -720,7 +720,8 @@ if (session()->has('userid')) {
                                                                                 @foreach ($mycart['size'] as $key => $cart)
                                                                                     @php
                                                                                         $price = (isset($cart['main_price']) ? $cart['main_price'] : 0) * $cart['quantity'];
-                                                                                        if (isset($cart['del_price']) && !empty($cart['del_price'])) {
+                                                                                        if (isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                                        {
                                                                                             $delivery_charge += $cart['del_price'];
                                                                                         }
                                                                                     @endphp
@@ -736,20 +737,13 @@ if (session()->has('userid')) {
                                                                                         <td class="align-middle">
                                                                                             <div
                                                                                                 class="qu-inr">
-                                                                                                <input type="number"
-                                                                                                    name="qty"
-                                                                                                    id="qty_{{ $key }}"
-                                                                                                    value="{{ $cart['quantity'] }}"
-                                                                                                    style="max-width: 65px!important;">
-                                                                                                <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})"
-                                                                                                    class="px-2">
-                                                                                                    <img
-                                                                                                        src="{{ asset('public/images/update.png') }}">
+                                                                                                <input type="number" name="qty" id="qty_size_{{ $key }}"
+                                                                                                value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                                                <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
+                                                                                                    <img src="{{ asset('public/images/update.png') }}">
                                                                                                 </a>
-                                                                                                <a
-                                                                                                    onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
-                                                                                                    <i
-                                                                                                        class="fas fa-times"></i>
+                                                                                                <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
+                                                                                                    <i class="fas fa-times"></i>
                                                                                                 </a>
                                                                                             </div>
                                                                                         </td>
@@ -784,7 +778,7 @@ if (session()->has('userid')) {
                                                                             @if (isset($mycart['withoutSize']))
                                                                                 @foreach ($mycart['withoutSize'] as $key => $cart)
                                                                                     @php
-                                                                                        $price = isset($cart['main_price']) ? $cart['main_price'] : 0 * $cart['quantity'];
+                                                                                        $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
                                                                                         if (isset($cart['del_price']) && !empty($cart['del_price'])) {
                                                                                             $delivery_charge += $cart['del_price'];
                                                                                         }
@@ -800,20 +794,12 @@ if (session()->has('userid')) {
                                                                                         <td class="align-middle">
                                                                                             <div
                                                                                                 class="qu-inr">
-                                                                                                <input type="number"
-                                                                                                    name="qty"
-                                                                                                    id="qty_{{ $key }}"
-                                                                                                    value="{{ $cart['quantity'] }}"
-                                                                                                    style="max-width: 65px!important;">
-                                                                                                <a onclick="updatecart({{ $key }},0,{{ $userid }})"
-                                                                                                    class="px-2">
-                                                                                                    <img
-                                                                                                        src="{{ asset('public/images/update.png') }}">
+                                                                                                <input type="number" name="qty" id="qty_without_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                                                <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
+                                                                                                    <img src="{{ asset('public/images/update.png') }}">
                                                                                                 </a>
-                                                                                                <a
-                                                                                                    onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
-                                                                                                    <i
-                                                                                                        class="fas fa-times"></i>
+                                                                                                <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
+                                                                                                    <i class="fas fa-times"></i>
                                                                                                 </a>
                                                                                             </div>
                                                                                         </td>
@@ -826,18 +812,20 @@ if (session()->has('userid')) {
                                                                                     </tr>
                                                                                     @php
                                                                                         $subtotal += $price;
-
-                                                                                        if ($current_date >= $start_date && $current_date < $end_date) {
-                                                                                            if (!empty($Coupon) || $Coupon != '') {
-                                                                                                if ($Coupon['type'] == 'P') {
-                                                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                                                                                }
-                                                                                                if ($Coupon['type'] == 'F') {
-                                                                                                    $couponcode = $Coupon['discount'];
-                                                                                                }
-                                                                                                $total = $subtotal - $couponcode + $delivery_charge;
-                                                                                            } else {
+                                                                                        if (!empty($Coupon) || $Coupon != '')
+                                                                                        {
+                                                                                            if ($Coupon['type'] == 'P')
+                                                                                            {
+                                                                                                $couponcode = ($subtotal * $Coupon['discount']) / 100;
                                                                                             }
+                                                                                            if ($Coupon['type'] == 'F')
+                                                                                            {
+                                                                                                $couponcode = $Coupon['discount'];
+                                                                                            }
+                                                                                            $total = $subtotal - $couponcode + $delivery_charge;
+                                                                                        }
+                                                                                        else
+                                                                                        {
                                                                                             $total = $subtotal + $delivery_charge;
                                                                                         }
 
@@ -853,26 +841,16 @@ if (session()->has('userid')) {
                                                                     <tbody>
                                                                         <tr>
                                                                             <td><b>Sub-Total:</b></td>
-                                                                            <td><span><b>£
-                                                                                        {{ $subtotal }}</b></span>
+                                                                            <td><span><b>£ {{ $subtotal }}</b></span></td>
+                                                                        </tr>
+                                                                        <tr class="coupon_code">
+                                                                            <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
+                                                                            <td>
+                                                                                <span>
+                                                                                    <b>£ -{{ isset($couponcode) ? $couponcode : 0 }}</b>
+                                                                                </span>
                                                                             </td>
                                                                         </tr>
-                                                                        @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
-                                                                            @if (!empty($Coupon) || $Coupon != '')
-                                                                                @if ($current_date >= $start_date && $current_date < $end_date)
-                                                                                    <tr class="coupon_code">
-                                                                                        @php
-                                                                                            $couponname = isset($Coupon['code']) ? $Coupon['code'] : '';
-                                                                                        @endphp
-                                                                                        <td><b>Coupon({{ $couponname }}):</b>
-                                                                                        </td>
-                                                                                        <td><span><b>£
-                                                                                                    -{{ isset($couponcode) ? $couponcode : '' }}</b></span>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @endif
-                                                                        @endif
                                                                         <tr class="voucher">
 
                                                                         </tr>
@@ -930,7 +908,8 @@ if (session()->has('userid')) {
                                                                     value="Apply" class="ms-2 btn btn-danger">
                                                                 <!-- <input type="hidden" name="voucher" value="voucher"> -->
                                                             </div>
-                                                            <p class="couponError"></p>
+                                                            <p class="text-danger" id="voucherError" style="text-align: left"></p>
+                                                            <p class="text-success" id="voucherSuccess" style="text-align: left"></p>
                                                         </form>
                                                     </div>
                                                     <div id="coupon" class="content">
@@ -946,7 +925,8 @@ if (session()->has('userid')) {
                                                                 <input style="text-transform: uppercase;" type="submit"
                                                                     value="Apply" class="ms-2 btn btn-danger">
                                                             </div>
-                                                            <p class="text-danger" id="couponError"></p>
+                                                            <p class="text-danger" id="couponError" style="text-align: left"></p>
+                                                            <p class="text-success" id="couponSuccess" style="text-align: left"></p>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -1389,7 +1369,20 @@ if (session()->has('userid')) {
                 'user_id': userid,
             },
             dataType: 'json',
-            success: function(result) {
+            success: function(result)
+            {
+                if(result.required_1 == 1)
+                {
+                    alert('Please Enter the valid Number of Quantity');
+                    location.reload();
+                }
+
+                if(result.max_limit == 1)
+                {
+                    alert('Sorry, You can\'t Order More Then 50 Quantity of This Product');
+                    location.reload();
+                }
+
                 location.reload();
             }
         });
@@ -1422,22 +1415,33 @@ if (session()->has('userid')) {
 
         $.ajax({
             type: 'post',
-            url: '{{ url('voucher') }}',
+            url: '{{ url("voucher") }}',
             data: {
                 "_token": "{{ csrf_token() }}",
                 'voucher': voucher,
             },
             dataType: 'json',
-            success: function(result) {
-                $('.voucher').html();
-                $('.total').html();
-                $('.couponError').html();
-                $('#button-payment-method').val();
-                $('#button-payment-method').val(result.pay);
-                $('.total').html(result.total);
-                $('.voucher').html(result.voucher);
-                $('.couponError').html(result.success_message);
+            success: function(result)
+            {
+                if(result.errors == 1)
+                {
+                    $('#voucherSuccess').html('');
+                    $('#voucherError').html('');
+                    $('#voucherError').append(result.errors_message);
+                }
 
+                if(result.success == 1)
+                {
+                    $('#voucherError').html('');
+                    $('#voucherSuccess').html('');
+                    $('#voucherSuccess').append(result.success_message);
+                    $('.voucher').html('');
+                    $('.voucher').append(result.voucher);
+                    $('.total').html('');
+                    $('.total').append(result.total);
+                    $('.pirce-value').text('');
+                    $('.pirce-value').append(result.total);
+                }
             }
         });
     });
@@ -1448,16 +1452,34 @@ if (session()->has('userid')) {
 
         $.ajax({
             type: 'post',
-            url: '{{ url('getcoupon') }}',
+            url: '{{ url("getcoupon") }}',
             data: {
                 "_token": "{{ csrf_token() }}",
                 'coupon': coupon,
             },
             dataType: 'json',
-            success: function(result) {
-                // $('.coupon_code').html();
-                // $('.coupon_code').append(result.coupon_code);
-                $('#couponError').text(result.json);
+            success: function(result)
+            {
+                if(result.success == 1)
+                {
+                    console.log(result)
+                    $('#couponError').html('');
+                    $('#couponSuccess').html('');
+                    $('#couponSuccess').append(result.success_message);
+                    $('.coupon_code').html('');
+                    $('.coupon_code').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.couponcode+'</b></td>');
+                    $('.total').html('');
+                    $('.total').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
+                    $('.pirce-value').text('');
+                    $('.pirce-value').append(result.headertotal);
+                }
+
+                if(result.errors == 1)
+                {
+                    $('#couponSuccess').html('');
+                    $('#couponError').html('');
+                    $('#couponError').append(result.errors_message);
+                }
             }
         });
     });
