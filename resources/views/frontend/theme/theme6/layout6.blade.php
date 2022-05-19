@@ -363,7 +363,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     <a class="text-uppercase" href="" data-filter="{{$product}}">{{ strtolower($category->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
                     @php
                         $allproducts = getallproduct($product);
-                        echo $product;
+                        // echo $product;
                     @endphp
                     @endforeach
                 @endif

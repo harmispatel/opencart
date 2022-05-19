@@ -334,6 +334,10 @@
             @foreach ($review['reviews'] as $item)
                 <div class="swiper-slide">
                     <div class="message-text">
+                        <strong>{{isset($item->title) ? $item->title : '' }}</strong>
+                        {{-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad <br>minim veniam, quis nostrud exercitation 0</p> --}}
+                    </div>
+                    <div class="message-text">
                         {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 1</strong> --}}
                         <p>{{ $item->message }}</p>
                     </div>

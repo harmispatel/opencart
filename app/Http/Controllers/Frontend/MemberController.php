@@ -188,16 +188,16 @@ class MemberController extends Controller
         $html .=                 '<thead>';
         $html .=                     '<tr>';
         $html .=                         '<th>Qty</th>';
-        $html .=                         '<th>Item</th>';
-        $html .=                         '<th>Total</th>';
+        $html .=                         '<th style="text-align:left;">Item</th>';
+        $html .=                         '<th style="text-align:right;">Total</th>';
         $html .=                     '</tr>';
         $html .=                 '</thead>';
         $html .=                 '<tbody>';
                     foreach ($customerorders['hasManyOrderProduct'] as $value) {
                         $html .= '<tr>';
-                        $html .=     '<td style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">'. $value->quantity .'x</td>';
-                        $html .=     '<td style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;"><span class="name-parent">'. $value->name .'</span><br><div class="topping_text"><span class="bg" style="display:block"></span></div></td>';
-                        $html .=     '<td style="border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">£'. number_format($value->total,2) .'</td>';
+                        $html .=     '<td style="text-align:center; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">'. $value->quantity .'x</td>';
+                        $html .=     '<td style="text-align:left; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;"><span class="name-parent">'. $value->name .'</span><br><div class="topping_text"><span class="bg" style="display:block"></span></div></td>';
+                        $html .=     '<td style="text-align:right; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">£'. number_format($value->total,2) .'</td>';
                         $html .= '</tr>';
                     }
         $html .=                 '</tbody>';
@@ -264,8 +264,8 @@ class MemberController extends Controller
         $html .=         '</div>';
         $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
         $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
-        $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" data-idorder="805682" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="far fa-comment"></i> Review</a>';
-        $html .=             '<a class="btn btn-success" href="cart" class="button"><i class="fas fa-redo-alt"></i> Re-Order </a>';
+        $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" class="button action-write-review" value="'.$customerorders->order_id.'" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="far fa-comment"></i> Review</a>';
+        $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order </a>';
         $html .=         '</div>';
         $html .=     '</div>';
         $html .= '</div>';

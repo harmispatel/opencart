@@ -338,7 +338,7 @@
                                                                     <td>{{ $ohistory->date_added }}</td>
                                                                     <td>{{ $ohistory->comment }}</td>
                                                                     <td>{{ $ohistory->oneOrderHistoryStatus->name }}</td>
-                                                                    <td>{{ $ohistory->notify }}</td>
+                                                                    <td>{{ ($ohistory->notify == 1) ? "Yes" : 'No' }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

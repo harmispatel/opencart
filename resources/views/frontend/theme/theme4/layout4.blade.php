@@ -297,6 +297,7 @@ $online_order_permission = isset($template_setting['polianna_online_order_permis
                     </div> --}}
                     @foreach ($review['reviews'] as $item)
                         <div class="swiper-slide">
+                            <div class="message-text"><strong>{{ $item->title }}</strong></div>
                             <div class="message-text">
                                 <p>{{ $item->message }}</p>
                             </div>

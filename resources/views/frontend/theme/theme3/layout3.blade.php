@@ -261,6 +261,7 @@
                     </div> --}}
                     @foreach ($review['reviews'] as $item)
                         <div class="swiper-slide">
+                            <div class="message-text"><strong>{{ $item->title }}</strong></div>
                             <div class="message-text">
                                 {{-- <strong>THAT’S AN AWESOME RESTAURANT & FOOD 0</strong> --}}
                                 <p>{{ $item->message }}</p>
