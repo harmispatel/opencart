@@ -139,50 +139,6 @@
     {
         color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
     }
-
-    .login-details-inr 
-    {
-        display: inline-block;
-        position: relative;
-        margin-bottom: 10px;
-    }
-    
-    .login-details-inr::before 
-    {
-        border-left: 1px solid #ccc;
-        color: #ccc;
-        float: none;
-        font-size: 16px;
-        height: 22px;
-        line-height: 22px;
-        margin: 0;
-        padding-left: 5px;
-        padding-right: 25px;
-        pointer-events: none;
-        position: absolute;
-        right: 0;
-        text-align: center;
-        top: 9px;
-        width: 22px;
-    }
-
-    .login-details-inr input
-    {
-        padding: 10px;
-    }
-
-    .login-details-inr 
-    {
-        padding: 10px;
-        appearance: none !important;
-        background: none;
-    }
-
-    .modal-login h2, .new-account-modal h2
-    {
-        font-size: 18px;
-    }
-
 </style>
 <!-- End Custom CSS -->
 
