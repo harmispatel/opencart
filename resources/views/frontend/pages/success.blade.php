@@ -1,21 +1,53 @@
 @php
-$openclose = openclosetime();
 
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // // Get Current Theme ID & Store ID
 
-$user_delivery_type = session()->has('user_delivery_type') ? session('user_delivery_type') : '';
+    // Get Store Settings & Theme Settings & Other
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    //End Get Store Settings & Theme Settings & Other
 
-$mycart = session()->get('cart1');
+    // Template Settings
+    $template_setting = $store_theme_settings['template_settings'];
+    // End Template Settings
+
+    // Social Site Settings
+    $social_site = $store_theme_settings['social_settings'];
+    // End Social Site Settings
+
+    // Store Settings
+    $store_setting = $store_theme_settings['store_settings'];
+    // End Store Settings
+
+    // Get Open-Close Time
+    $openclose = openclosetime();
+    // End Open-Close Time
+
+    // User Delivery Type (Collection/Delivery)
+    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // End User Delivery Type
+
+    // Get Customer Cart
+    if (session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart(session()->get('userid'));
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
+    // End Get Customer Cart
 
 @endphp
 
 <!doctype html>
 <html>
-
 <head>
     {{-- CSS --}}
     @include('frontend.include.head')
@@ -25,60 +57,17 @@ $mycart = session()->get('cart1');
 
 <body>
 
-    {{-- User Delivery --}}
-    <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $user_delivery_type }}">
-    {{-- End User Delivery --}}
 
-    @php
-        if (session()->has('theme_id')) {
-            $theme_id = session()->get('theme_id');
-        } else {
-            $theme_id = 1;
-        }
-
-        $social = session('social_site');
-        $social_site = isset($social) ? $social : '#';
-    @endphp
-
+    <!-- Header -->
     @if (!empty($theme_id) || $theme_id != '')
-        {{-- Header --}}
         @include('frontend.theme.theme' . $theme_id . '.header')
-        {{-- End Header --}}
     @else
-        {{-- Header --}}
         @include('frontend.theme.theme1.header')
-        {{-- End Header --}}
     @endif
+    <!-- End Header -->
 
-    <div class="mobile-menu-shadow"></div>
-    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
-            href="#slide"><img class="img-fluid" src="./assets/img/logo/logo.svg" /></a>
-        <div class="top">
-            <ul class="menu">
-                <li class="active"><a class="text-uppercase" href="#">home</a></li>
-                <li><a class="text-uppercase" href="#">member</a></li>
-                <li><a class="text-uppercase" href="#">menu</a></li>
-                <li><a class="text-uppercase" href="#">check out</a></li>
-                <li><a class="text-uppercase" href="#">contact us</a></li>
-            </ul>
-        </div>
-        <div class="center">
-            <ul class="authentication-links">
-                <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-                <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
-            </ul>
-        </div>
-        <div class="bottom">
-            <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
-            </div>
-            <ul class="social-links">
-                <li><a class="fab fa-facebook" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-twitter" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-pinterest-p" href="#" target="_blank"></a></li>
-                <li><a class="fab fa-instagram" href="#" target="_blank"></a></li>
-            </ul>
-        </div>
-    </sidebar>
+
+    <!-- Success Section -->
     <section class="basket-main">
         <div class="container">
             <div class="basket-inr">
@@ -108,26 +97,34 @@ $mycart = session()->get('cart1');
                 </div>
             </div>
     </section>
+    <!-- End Success Section -->
+
+
+    <!-- Footer -->
     @if (!empty($theme_id) || $theme_id != '')
-        {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
-        {{-- End Footer --}}
     @else
-        {{-- Footer --}}
         @include('frontend.theme.theme1.footer')
-        {{-- End Footer --}}
     @endif
+    <!-- End Footer -->
+
 
     {{-- JS --}}
     @include('frontend.include.script')
-    {{-- END JS --}}
+    {{-- End JS --}}
+
+
+    <!-- Custom JS -->
+    <script type="text/javascript" >
+        function preventBack()
+        {
+            window.history.forward();
+        }
+        setTimeout("preventBack()", 0);
+        window.onunload=function(){null};
+     </script>
+    <!-- End Custom JS -->
+
 
 </body>
-
 </html>
-
-<script type="text/javascript" >
-    function preventBack(){window.history.forward();}
-     setTimeout("preventBack()", 0);
-     window.onunload=function(){null};
- </script>

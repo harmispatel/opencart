@@ -1,14 +1,40 @@
 @php
-    $temp_set = session('template_settings');
-    $template_setting = isset($temp_set) ? $temp_set : '';
+    
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // // Get Current Theme ID & Store ID
 
-    $social = session('social_site');
-    $social_site = isset($social) ? $social : '#';
+    // Get Store Settings & Theme Settings & Other
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    //End Get Store Settings & Theme Settings & Other
 
-    $store_set = session('store_settings');
-    $store_setting = isset($store_set) ? $store_set : '';
+    // Template Settings
+    $template_setting = $store_theme_settings['template_settings'];
+    // End Template Settings
+
+    // Social Site Settings
+    $social_site = $store_theme_settings['social_settings'];
+    // End Social Site Settings
+
+    // Store Settings
+    $store_setting = $store_theme_settings['store_settings'];
+    // End Store Settings
+
+    // Get Open-Close Time
+    $openclose = openclosetime();
+    // End Open-Close Time
+
+    // User Delivery Type (Collection/Delivery)
+    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // End User Delivery Type
+
 @endphp
 
+
+<!-- Custom CSS -->
 <style>
     footer .info-group
     {
@@ -25,8 +51,10 @@
         color: <?php echo $template_setting['polianna_footer_text_color']; ?> !important;
     }
 </style>
+<!-- End Custom CSS -->
 
-{{-- Footer --}}
+
+<!-- Footer -->
 <footer class="footer wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container info-group wow animate__fadeInUp" data-wow-duration="1s">
         <div class="row">
@@ -68,6 +96,6 @@
         <p>Copyright © 2021 Star Kebab Tenterden</p>
     </div>
 </footer>
-{{-- End Footer --}}
+<!-- End Footer -->
 
 <a id="go-up" href="javascript:void(0)"><i class="fas fa-angle-up"></i></a>

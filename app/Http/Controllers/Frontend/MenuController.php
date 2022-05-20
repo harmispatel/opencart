@@ -87,7 +87,7 @@ class MenuController extends Controller
         return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas'=>$areas,'Coupon'=>$Coupon]);
     }
 
-    public function getid(Request $request)
+    public function addToCart(Request $request)
     {
 
         $currentURL = URL::to("/");

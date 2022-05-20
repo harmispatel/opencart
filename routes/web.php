@@ -408,7 +408,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
-Route::post('getid', [MenuController::class, 'getid'])->name('getid');
+Route::post('getid', [MenuController::class, 'addToCart'])->name('getid');
 Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
 Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
 Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');

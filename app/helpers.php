@@ -144,6 +144,10 @@ function themeActive()
 }
 
 
+
+
+
+// Get Template Settings & Social Site Settings & Store Settings
 function storeThemeSettings($theme_id,$store_id)
 {
     // Template Settings
@@ -186,25 +190,14 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_footer_title_color',
         'polianna_footer_logo',
     ]);
-
     $template_settings = [];
-
     foreach($key as $row)
     {
         $query = Settings::select('value')->where('store_id',$store_id)->where('theme_id',$theme_id)->where('key',$row)->first();
         $template_settings[$row] = isset($query->value) ? $query->value : '';
     }
-
-    if(session()->has('template_settings'))
-    {
-        session()->forget('template_settings');
-        session()->put('template_settings',$template_settings);
-    }
-    else
-    {
-        session()->put('template_settings', $template_settings);
-    }
     // End Template Settings
+
 
     // Social Site
     $social_key = ([
@@ -214,23 +207,11 @@ function storeThemeSettings($theme_id,$store_id)
         'polianna_linkedin_id',
         'polianna_youtube_id',
     ]);
-
     $social_settings = [];
-
     foreach($social_key as $row)
     {
         $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
         $social_settings[$row] = isset($query->value) ? $query->value : '';
-    }
-
-    if(session()->has('social_site'))
-    {
-        session()->forget('social_site');
-        session()->put('social_site',$social_settings);
-    }
-    else
-    {
-        session()->put('social_site', $social_settings);
     }
     // End Social Site
 
@@ -246,33 +227,35 @@ function storeThemeSettings($theme_id,$store_id)
         'config_email',
         'config_meta_description',
     ]);
-
     $store_settings = [];
-
     foreach($store_key as $row)
     {
         $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
         $store_settings[$row] = isset($query->value) ? $query->value : '';
     }
 
-    if(session()->has('store_settings'))
-    {
-        session()->forget('store_settings');
-        session()->put('store_settings',$store_settings);
-    }
-    else
-    {
-        session()->put('store_settings', $store_settings);
-    }
-    // End Store Settings
+    $new = ([
+        'template_settings' => $template_settings,
+        'social_settings' => $social_settings,
+        'store_settings' => $store_settings,
+    ]);
+
+    return $new;
 
 }
+// End Get Template Settings & Social Site Settings & Store Settings
+
 
 function public_url()
 {
     return asset('');
 }
 
+
+
+
+
+// Get Theme ID & Store ID
 function themeID($url)
 {
     $slash = substr($url, -1);
@@ -293,32 +276,39 @@ function themeID($url)
     $setting = Settings::select('value')->where('store_id',$store_id)->where('key',$key)->first();
     $theme_id = isset($setting->value) ? $setting->value : '';
 
-	if(session()->has('front_store_id'))
-    {
-        session()->forget('front_store_id');
-        session()->put('front_store_id',$store_id);
-    }
-    else
-    {
-        session()->put('front_store_id', $store_id);
-    }
+	// if(session()->has('front_store_id'))
+    // {
+    //     session()->forget('front_store_id');
+    //     session()->put('front_store_id',$store_id);
+    // }
+    // else
+    // {
+    //     session()->put('front_store_id', $store_id);
+    // }
 
-    if(session()->has('theme_id'))
-    {
-        session()->forget('theme_id');
-        session()->put('theme_id', $theme_id);
-    }
-    else
-    {
-        session()->put('theme_id', $theme_id);
-    }
+    // if(session()->has('theme_id'))
+    // {
+    //     session()->forget('theme_id');
+    //     session()->put('theme_id', $theme_id);
+    // }
+    // else
+    // {
+    //     session()->put('theme_id', $theme_id);
+    // }
+
     $new = ([
         'theme_id' => $theme_id,
         'store_id' => $store_id,
     ]);
+
     return $new;
 
 }
+// End Get Theme ID & Store ID
+
+
+
+
 
 function getproductcount($demo){
 	$productcount=Product_to_category::where('category_id',$demo)->count();
@@ -717,6 +707,13 @@ function fetch_mainmenu_submenucolumn($id)
 
 function openclosetime()
 {
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // Get Current Theme ID & Store ID
+
     $days = array(
         '0' => "Every day",
         '1' => 'Monday',
@@ -775,7 +772,8 @@ function openclosetime()
     $minitunes = array('00', '10', '20', '30', '40', '50');
     $timearray = array();
     $timearray['00:00'] = '00:00';
-    for ($i = 0; $i <= 23; $i++) {
+    for ($i = 0; $i <= 23; $i++)
+    {
         foreach ($minitunes as $phut) {
             $timearray[$i . ':' . $phut] = $i . ':' . $phut;
         }
@@ -783,10 +781,11 @@ function openclosetime()
     $timearray['23:59'] = '23:59';
     $times = $times = $timearray;
 
-    $open_close = [];
-    $front_store_id = session('front_store_id');
 
-    foreach ($key as $row) {
+    $open_close = [];
+
+    foreach ($key as $row)
+    {
         $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
 
         $open_close[$row] = isset($query->value) ? $query->value : '';
@@ -897,13 +896,18 @@ function openclosetime()
 
     $data['collection_gaptime'] = $open_close['collection_gaptime'];
     $data['delivery_gaptime'] = $open_close['delivery_gaptime'];
+
     return $data;
 }
 
 function storereview()
 {
-    $front_store_id = session('front_store_id');
-    $current_theme_id = session('theme_id');
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // Get Current Theme ID & Store ID
 
     $review_limit_setting = Settings::select('value')->where('store_id',$front_store_id)->where('theme_id',$current_theme_id)->where('key','polianna_recent_review_count')->first();
     $review_limit = isset($review_limit_setting['value']) ? $review_limit_setting['value'] : 1;

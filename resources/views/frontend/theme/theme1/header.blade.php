@@ -1,26 +1,51 @@
 
 @php
-    $openclose = openclosetime();
-    $temp_set = session('template_settings');
-    $template_setting = isset($temp_set) ? $temp_set : '';
-
-    $social = session('social_site');
-    $social_site = isset($social) ? $social : '';
-
-    $store_set = session('store_settings');
-    $store_setting = isset($store_set) ? $store_set : '';
     
-    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-  
-    $userlogin = session('username');
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // // Get Current Theme ID & Store ID
 
+    // Get Store Settings & Theme Settings & Other
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    //End Get Store Settings & Theme Settings & Other
+
+    // Template Settings
+    $template_setting = $store_theme_settings['template_settings'];
+    // End Template Settings
+
+    // Social Site Settings
+    $social_site = $store_theme_settings['social_settings'];
+    // End Social Site Settings
+
+    // Store Settings
+    $store_setting = $store_theme_settings['store_settings'];
+    // End Store Settings
+
+    // Get Open-Close Time
+    $openclose = openclosetime();
+    // End Open-Close Time
+
+    // User Delivery Type (Collection/Delivery)
+    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // End User Delivery Type
+  
+    // User Details
+    $userlogin = session('username');
+    // End User Details
+
+    // Get Coupon
     $Coupon = getCoupon();
+    // End Get Coupon
 
     $html = '';
     $headertotal = 0;
     $delivery_charge = 0;
     $price = 0;
 
+    // Cart Details
     if(session()->has('userid'))
     {
         $cart = getuserCart(session()->get('userid'));
@@ -103,20 +128,27 @@
             $headertotal += $price + $delivery_charge;
         }
     }
+    // End Cart Details
    
 @endphp
 
+
+<!-- Custom CSS -->
 <style>
-    .menu li:hover a{
+    .menu li:hover a
+    {
         color: <?php echo $template_setting['polianna_navbar_link_hover'] ?>!important;
     }
 
-    .login-details-inr {
-    display: inline-block;
-    position: relative;
-    margin-bottom: 10px;
+    .login-details-inr 
+    {
+        display: inline-block;
+        position: relative;
+        margin-bottom: 10px;
     }
-    .login-details-inr::before {
+    
+    .login-details-inr::before 
+    {
         border-left: 1px solid #ccc;
         color: #ccc;
         float: none;
@@ -133,32 +165,33 @@
         top: 9px;
         width: 22px;
     }
-    .login-details-inr input{
+
+    .login-details-inr input
+    {
         padding: 10px;
     }
-    .login-details-inr select{
+
+    .login-details-inr 
+    {
         padding: 10px;
         appearance: none !important;
         background: none;
     }
-    .modal-login h2, .new-account-modal h2{
+
+    .modal-login h2, .new-account-modal h2
+    {
         font-size: 18px;
     }
-    /* .modal-login .btn,.new-account-modal .btn{
-        background-color: #4ED58C;
-        color: #fff;
-    } */
-
 
 </style>
+<!-- End Custom CSS -->
 
-{{-- Header Start --}}
+<!-- Header -->
 <header class="header">
     <div class="container">
         <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
             <div class="working-time">
                 <strong class="text-uppercase">Working Time:</strong>
-                {{-- <span>{{ $openclose['fromtime'] }} - {{ $openclose['totime'] }}</span> --}}
                 @php
                     $openday =$openclose['openday'];
                     $fromtime = $openclose['fromtime'];
@@ -180,7 +213,6 @@
                     @endforeach
                 @endforeach
             </div>
-
             @foreach ($openday as $key => $item)
                 @foreach ($item as $value)
                     @php
@@ -188,9 +220,7 @@
                         $lasttime = strtotime($totime[$key]);
                         $today = time();
                         $currentday = date('l');
-
                     @endphp
-
                     @if ($today >= $firsttime && $today <= $lasttime)
                         @if ($currentday == $value)
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
@@ -224,67 +254,33 @@
                     <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
                 </li>
             </ul>
+
             @if (!empty($userlogin))
-            <ul class="authentication-links">
-                <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
-                <li>
-                    <form method="POST" action="{{ route('customerlogout') }}">
-                        {{ csrf_field() }}
-                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
-                     </form>
-                </li>
-            </ul>            
+                <ul class="authentication-links">
+                    <li class="d-flex"><p class="m-0">You are Logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ strtoupper($userlogin) }})</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('customerlogout') }}">
+                            {{ csrf_field() }}
+                            <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+                        </form>
+                    </li>
+                </ul>            
             @else            
-            <ul class="authentication-links">
-                <li>
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                        <i class="far fa-user"></i><span>Login</span>
-                    </a>
-                </li>
-                <li>
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
-                    </a>
-                </li>
-            </ul>
+                <ul class="authentication-links">
+                    <li>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                            <i class="far fa-user"></i><span>Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                            <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                        </a>
+                    </li>
+                </ul>
             @endif
-            {{-- @guest
-            @if (Route::has('customerlogin'))
-
-                <li>
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                        <i class="far fa-user"></i><span>{{ __('Login') }}</span>
-                    </a>
-                </li>
-                
-            @endif
-
-            @if (Route::has('register'))
-
-                <li>
-                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                        <i class="fas fa-sign-in-alt"></i><span>{{ __('Register') }}</span>
-                    </a>
-                </li>
-            @endif
-        @else
-        <li class="nav-item dropdown">
-            <a type="button">
-                {{ Auth::user()->firstname }}
-            </a>
-
-                <a class="dropdown-item" href="{{ route('customerlogout') }}"
-                   onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
-                </a>
-
-                <form id="logout-form" action="{{ route('customerlogout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-        </li>
-    @endguest --}}
         </div>
+        
         <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="background: {{ $template_setting['polianna_navbar_background'] }};">
             <a class="logo" href="{{ route('home') }}">
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
@@ -330,3 +326,4 @@
         </div>
     </div>
 </header>
+<!-- End Header -->

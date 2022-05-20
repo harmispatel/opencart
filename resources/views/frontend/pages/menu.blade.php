@@ -1,81 +1,92 @@
 @php
-// Open Close Time
-$openclose = openclosetime();
 
-// Get Template Settings
-$template_setting = session('template_settings');
-$social_site = session('social_site');
-$store_setting = session('store_settings');
-$store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-$template_setting = session('template_settings');
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // Get Current Theme ID & Store ID
 
-// User Delivery Type
-$user_delivery_type = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // Get Store Settings & Theme Settings & Other
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    //End Get Store Settings & Theme Settings & Other
 
-if (session()->has('userid')) {
-    $userid = session()->get('userid');
-    $mycart = getuserCart($userid);
-} else {
-    $userid = 0;
-    $mycart = session()->get('cart1');
+    // Template Settings
+    $template_setting = $store_theme_settings['template_settings'];
+    // End Template Settings
 
-}
+    // Social Site Settings
+    $social_site = $store_theme_settings['social_settings'];
+    // End Social Site Settings
+
+    // Store Settings
+    $store_setting = $store_theme_settings['store_settings'];
+    // End Store Settings
+
+    // Get Open-Close Time
+    $openclose = openclosetime();
+    // End Open-Close Time
+
+    // User Delivery Type (Collection/Delivery)
+    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // End User Delivery Type
+
+    // Get Customer Cart
+    if (session()->has('userid'))
+    {
+        $userid = session()->get('userid');
+        $mycart = getuserCart(session()->get('userid'));
+    }
+    else
+    {
+        $userid = 0;
+        $mycart = session()->get('cart1');
+    }
+    // End Get Customer Cart
 
 @endphp
 
+
 <!doctype html>
 <html>
-
 <head>
-    {{-- CSS --}}
+    <!-- CSS -->
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
-    {{-- End CSS --}}
+    <!-- End CSS -->
 </head>
-
 <body>
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="storeclose" tabindex="-1" aria-labelledby="storecloseLabel" aria-hidden="true">
+    <!-- Store Open Close Message Modal -->
+    <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered w-25">
             <div class="modal-content">
                 <div class="modal-body p-5 text-danger">
                     Sorry we are close now!
-                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close float-end" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>
     </div>
-    {{-- End Model --}}
+    <!-- End Store Open Close Message Modal -->
 
-    {{-- User Delivery --}}
-    <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $user_delivery_type }}">
-    {{-- End User Delivery --}}
 
-    @php
-        if (session()->has('theme_id')) {
-            $theme_id = session()->get('theme_id');
-        } else {
-            $theme_id = 1;
-        }
+    <!-- User Delivery Type -->
+    <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $userdeliverytype }}">
+    <!-- End User Delivery Type -->
 
-        $social = session('social_site');
-        $social_site = isset($social) ? $social : '#';
-    @endphp
 
+    <!-- Header -->
     @if (!empty($theme_id) || $theme_id != '')
-        {{-- Header --}}
         @include('frontend.theme.theme' . $theme_id . '.header')
-        {{-- End Header --}}
     @else
-        {{-- Header --}}
         @include('frontend.theme.theme1.header')
-        {{-- End Header --}}
     @endif
+    <!-- End Header -->
 
 
+    <!-- Mobile View -->
     <sidebar class="mobile-menu">
         <a class="close far fa-times-circle" href="#"></a>
         <a class="logo" href="#slide">
@@ -157,15 +168,14 @@ if (session()->has('userid')) {
             </ul>
         </div>
     </sidebar>
+    <!-- End Mobile View -->
 
-    {{-- <!-- free item modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
+
+    <!-- Free Item Modal -->
+    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
         Launch demo modal
     </button> --}}
 
-
-
-    <!-- Modal -->
     <div class="modal fade free-item-modal" id="Freeitem" tabindex="-1" aria-labelledby="FreeitemLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -204,7 +214,10 @@ if (session()->has('userid')) {
             </div>
         </div>
     </div>
-    {{-- modal end --}}
+    <!-- End Free Item Modal -->
+
+
+    <!-- Main Section -->
     <section class="main-innr">
         <div class="container">
             <div class="main-inner-p">
@@ -235,8 +248,7 @@ if (session()->has('userid')) {
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="cate-part wow animate__fadeInUp cate-part-select-box"
-                                    data-wow-duration="1s">
+                                <div class="cate-part wow animate__fadeInUp cate-part-select-box" data-wow-duration="1s">
                                     <select class="form-control">
                                         <option>Show All Categories</option>
                                         @foreach ($data['category'] as $category)
@@ -251,7 +263,6 @@ if (session()->has('userid')) {
                                         @foreach ($data['category'] as $key => $value)
                                             @php
                                                 $cat_id = $value->category_id;
-                                                $front_store_id = session('front_store_id');
                                                 $product = getproduct($front_store_id, $cat_id);
 
                                                 $catvalue = strtolower($value->name);
@@ -269,10 +280,7 @@ if (session()->has('userid')) {
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
-
-                                                    <div id="collapse1{{ $key }}"
-                                                        class="accordion-collapse collapse show"
-                                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                    <div id="collapse1{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                         @foreach ($product as $values)
                                                             <div class="accordion-body">
                                                                 <div class="acc-body-inr">
@@ -288,9 +296,7 @@ if (session()->has('userid')) {
                                                                                 <p>
                                                                                     {{ strip_tags($prodesc) }}
                                                                                 </p>
-                                                                                <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}"
-                                                                                    width="80" height="80"
-                                                                                    class="mt-2 mb-2">
+                                                                                <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}" width="80" height="80" class="mt-2 mb-2">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-5">
@@ -306,14 +312,11 @@ if (session()->has('userid')) {
                                                                                             $setsizeprice = $size->price;
                                                                                         @endphp
                                                                                         <div class="options-bt">
-                                                                                            <div
-                                                                                                class="row align-items-center">
-                                                                                                <div
-                                                                                                    class="col-md-3">
+                                                                                            <div class="row align-items-center">
+                                                                                                <div class="col-md-3">
                                                                                                     <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
                                                                                                 </div>
-                                                                                                <div
-                                                                                                    class="col-md-9">
+                                                                                                <div class="col-md-9">
                                                                                                     @foreach ($openday as $key => $item)
                                                                                                         @foreach ($item as $value)
                                                                                                             @php
@@ -325,30 +328,16 @@ if (session()->has('userid')) {
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
-                                                                                                                        class="btn options-btn">
-                                                                                                                        <span
-                                                                                                                            class="sizeprice hide-carttext">£{{ $setsizeprice }}<i
-                                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span
-                                                                                                                            class="show-carttext sizeprice"
-                                                                                                                            style="display: none;">Added<i
-                                                                                                                                class="fa fa-check"></i></span>
+                                                                                                                    <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});" class="btn options-btn">
+                                                                                                                        <span class="sizeprice hide-carttext">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a class="btn options-btn"
-                                                                                                                        data-bs-toggle="modal"
-                                                                                                                        data-bs-target="#storeclose">
-                                                                                                                        <span
-                                                                                                                            class="sizeprice hide-carttext">£
-                                                                                                                            {{ $setsizeprice }}<i
-                                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span
-                                                                                                                            class="show-carttext sizeprice"
-                                                                                                                            style="display: none;">Added<i
-                                                                                                                                class="fa fa-check"></i></span>
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @endif
@@ -360,8 +349,7 @@ if (session()->has('userid')) {
                                                                                     @endforeach
                                                                                 @else
                                                                                     <div class="options-bt">
-                                                                                        <div
-                                                                                            class="row align-items-center">
+                                                                                        <div class="row align-items-center">
                                                                                             <div class="col-md-3">
                                                                                                 <span>price</span>
                                                                                             </div>
@@ -378,29 +366,16 @@ if (session()->has('userid')) {
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});"
-                                                                                                                    class="btn options-btn">
-                                                                                                                    <span
-                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span
-                                                                                                                        class="show-carttext sizeprice"
-                                                                                                                        style="display: none;">Added<i
-                                                                                                                            class="fa fa-check"></i></span>
+                                                                                                                <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a class="btn options-btn"
-                                                                                                                    data-bs-toggle="modal"
-                                                                                                                    data-bs-target="#storeclose">
-                                                                                                                    <span
-                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span
-                                                                                                                        class="show-carttext sizeprice"
-                                                                                                                        style="display: none;">Added<i
-                                                                                                                            class="fa fa-check"></i></span>
+                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @endif
@@ -425,21 +400,16 @@ if (session()->has('userid')) {
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-5 col-lg-4">
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
-
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
-
                                         $firsttime = strtotime($fromtime[$key]);
                                         $lasttime = strtotime($totime[$key]);
                                         $today = time();
                                         $currentday = date('l');
-
                                     @endphp
-
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value)
                                             <div class="alert p-1 text-center" style="background: green;">
@@ -456,11 +426,9 @@ if (session()->has('userid')) {
                                     @endif
                                 @endforeach
                             @endforeach
-                            {{-- </div> --}}
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
-                                    <span class="tg-icon" id="tg-icon"><i
-                                            class="fas fa-angle-double-up"></i></span>
+                                    <span class="tg-icon" id="tg-icon"><i class="fas fa-angle-double-up"></i></span>
                                     <div class="mob-basket">0 X ITEMS | TOTAL: £0.00</div>
                                 </div>
                                 <div class="minicart" id="minicart">
@@ -482,15 +450,14 @@ if (session()->has('userid')) {
                                                                 $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})"
-                                                                        class="fa fa-times-circle text-danger"
-                                                                        style="cursor: pointer"></i>
+                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
@@ -499,22 +466,20 @@ if (session()->has('userid')) {
                                                             </tr>
                                                         @endforeach
                                                     @endif
-
                                                     @if (isset($mycart['withoutSize']))
                                                         @foreach ($mycart['withoutSize'] as $cart)
                                                             @php
                                                                 $price = $cart['main_price'] * $cart['quantity'];
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price'])) {
+                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                {
                                                                     $delivery_charge += $cart['del_price'];
                                                                 }
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i class="fa fa-times-circle text-danger"
-                                                                        onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})"
-                                                                        style="cursor: pointer"></i>
+                                                                    <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
@@ -528,15 +493,20 @@ if (session()->has('userid')) {
                                             </table>
                                         </div>
                                         @php
-                                            if (!empty($Coupon) || $Coupon != '') {
-                                                if ($Coupon['type'] == 'P') {
+                                            if (!empty($Coupon) || $Coupon != '')
+                                            {
+                                                if ($Coupon['type'] == 'P')
+                                                {
                                                     $couponcode = ($subtotal * $Coupon['discount']) / 100;
                                                 }
-                                                if ($Coupon['type'] == 'F') {
+                                                if ($Coupon['type'] == 'F')
+                                                {
                                                     $couponcode = $Coupon['discount'];
                                                 }
                                                 $total = $subtotal - $couponcode + $delivery_charge;
-                                            } else {
+                                            }
+                                            else
+                                            {
                                                 $total = $subtotal + $delivery_charge;
                                             }
                                         @endphp
@@ -590,18 +560,10 @@ if (session()->has('userid')) {
                                                                     <div class="myDiv" style="display:none;">
                                                                         <div class="row">
                                                                             <div class="col-md-8">
-                                                                                <input
-                                                                                    style="float:left;padding:5px 2px"
-                                                                                    type="text" name="coupon" value=""
-                                                                                    id="searchcoupon"
-                                                                                    placeholder="Enter your coupon here"
-                                                                                    class="coupon-val ">
+                                                                                <input style="float:left;padding:5px 2px" type="text" name="coupon" value="" id="searchcoupon" placeholder="Enter your coupon here" class="coupon-val ">
                                                                             </div>
                                                                             <div class="col-md-4 text-right">
-                                                                                <input
-                                                                                    style="text-transform: uppercase;"
-                                                                                    type="submit" value="Apply"
-                                                                                    class="btn btn-danger ">
+                                                                                <input style="text-transform: uppercase;" type="submit" value="Apply" class="btn btn-danger ">
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
@@ -641,7 +603,7 @@ if (session()->has('userid')) {
                                                     @else
                                                         <input class="form-check-input" type="radio"
                                                             name="delivery_type" id="collection" value="collection"
-                                                            {{ $user_delivery_type == 'collection' ? 'checked' : '' }}>
+                                                            {{ $userdeliverytype == 'collection' ? 'checked' : '' }}>
                                                     @endif
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
@@ -677,7 +639,7 @@ if (session()->has('userid')) {
                                                 <div class="form-check m-auto">
                                                     <input class="form-check-input" type="radio" name="delivery_type"
                                                         id="delivery"
-                                                        {{ $user_delivery_type == 'delivery' ? 'checked' : '' }}>
+                                                        {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -753,8 +715,10 @@ if (session()->has('userid')) {
             </div>
         </div>
     </section>
+    <!-- End Main Section -->
 
-    <!-- Modal -->
+
+    <!-- Delivery Type Modal -->
     <div class="modal fade csmodal" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -773,7 +737,10 @@ if (session()->has('userid')) {
             </div>
         </div>
     </div>
+    <!-- End Delivery Type Modal -->
 
+
+    <!-- Delivery Type Modal -->
     <div class="modal fade csmodal" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -811,226 +778,119 @@ if (session()->has('userid')) {
                         @if ($delivery_setting['enable_delivery'] != 'collection')
                             <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
                         @endif
-                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
-                            back</button>
+                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <!-- End Delivery Type Modal -->
+
+
+    <!-- Footer -->
     @if (!empty($theme_id) || $theme_id != '')
-        {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
-        {{-- End Footer --}}
     @else
-        {{-- Footer --}}
         @include('frontend.theme.theme1.footer')
-        {{-- End Footer --}}
     @endif
+    <!-- End Footer -->
 
-    {{-- JS --}}
+    <!-- JS -->
     @include('frontend.include.script')
-    {{-- END JS --}}
+    <!-- End JS -->
 
-</body>
-<script>
-    $(document).ready(function() {
-        var status = $('#user_delivery_val').val();
-        var coll = $("input[name='delivery_type']:checked").val();
 
-        if (coll == 'collection') {
-            $('#Modal').modal('hide');
-            return false;
-        }
+    <!-- Custom JS -->
+    <script type="text/javascript">
 
-        if (status == '') {
-            $('#Modal').modal('show');
-        }
+        // Document Script
+        $(document).ready(function()
+        {
+            var status = $('#user_delivery_val').val();
+            var coll = $("input[name='delivery_type']:checked").val();
 
-    });
-
-    function showmodal() {
-
-        $('#Modal').modal('show');
-        $('#pricemodel').modal('hide');
-    }
-
-    function showmodalproduct() {
-        $('#Modal').modal('show');
-    }
-</script>
-
-<script type="text/javascript">
-    $("#mob-view").click(function() {
-        TestsFunction();
-        myFunction();
-    });
-
-    function TestsFunction() {
-        var T = document.getElementById("minicart"),
-            displayValue = "";
-        if (T.style.display == "")
-            displayValue = "block";
-
-        T.style.display = displayValue;
-        myFunction();
-    }
-
-    function myFunction() {
-        if ($("#minicart").is(":visible")) {
-            $("#tg-icon").html('<i class="fas fa-angle-double-down"></i>');
-        } else {
-            $("#tg-icon").html('<i class="fas fa-angle-double-up"></i>');
-        }
-    }
-</script>
-
-<script>
-    function showId(product, sizeprice, uid) {
-        var sizeid = sizeprice;
-        var productid = product;
-        var userid = uid;
-        var status = $('#user_delivery_val').val();
-
-        var coll = $("input[name='delivery_type']:checked").val();
-
-        if (coll == 'collection') {
-            $('#Modal').modal('hide');
-        } else {
-            if (status == '') {
-                $('#Modal').modal('show');
+            if (coll == 'collection')
+            {
+                $('#Modal').modal('hide');
                 return false;
             }
+
+            if (status == '')
+            {
+                $('#Modal').modal('show');
+            }
+        });
+        // End Document Script
+
+
+        // Show Modal
+        function showmodal()
+        {
+            $('#Modal').modal('show');
+            $('#pricemodel').modal('hide');
         }
+        // End Show Modal
 
 
-        $.ajax({
-            type: 'post',
-            url: '{{ route('getid') }}',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                'size_id': sizeid,
-                'product_id': productid,
-                'user_id': userid,
-            },
-            dataType: 'json',
-            success: function(result) {
-                // Cart Data
-                $('.empty-box').html('');
-                $('.empty-box').append(result.html);
+        // Show Modal Product
+        function showmodalproduct()
+        {
+            $('#Modal').modal('show');
+        }
+        // End Show Modal
 
-                // Sub Total
-                $('.sub-total').html('');
-                $('.sub-total').append(result.subtotal);
 
-                // Delivery Charge
-                $('.del_charge').html('');
-                $('.del_charge').append(result.delivery_charge);
+        // Add to Cart
+        function addToCart(product, sizeprice, uid)
+        {
+            var sizeid = sizeprice;
+            var productid = product;
+            var userid = uid;
+            var status = $('#user_delivery_val').val();
+            var coll = $("input[name='delivery_type']:checked").val();
 
-                // Cart Products
-                $('#cart_products').html('');
-                $('#cart_products').append(result.cart_products);
-
-                // Total Amount
-                $('.total').html('');
-                $('.total').append(result.total);
-
-                // Header Total
-                $('.pirce-value').text('');
-                $('.pirce-value').append(result.headertotal);
-
-                // Coupon
-                $('.coupon_code').html('');
-                $('.coupon_code').append(result.couponcode);
-
-                // Modal
-                $('#item-modal').html('');
-                $('#item-modal').append(result.modal);
-
+            if (coll == 'collection')
+            {
+                $('#Modal').modal('hide');
             }
-        });
-    }
-
-    $('#collection').on('click', function() {
-        var d_type = $(this).val();
-
-        $.ajax({
-            type: "POST",
-            url: "{{ url('setDeliveyType') }}",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                'd_type': d_type,
-            },
-            dataType: "json",
-            success: function(response) {
-                location.reload();
-            }
-        });
-
-    });
-
-    $('#delivery').on('click', function() {
-        $('#Modal').modal('show');
-    });
-
-    function deletecartproduct(prod_id, size_id, uid) {
-        var sizeid = size_id;
-        var productid = prod_id;
-        var userid = uid;
-
-        $.ajax({
-            type: 'post',
-            url: '{{ url('deletecartproduct') }}',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                'size_id': sizeid,
-                'product_id': productid,
-                'user_id': userid,
-            },
-            dataType: 'json',
-            success: function(result) {
-                location.reload();
-            }
-        });
-    }
-
-    // $(".showcoupons").hide();
-    function showcoupon() {
-
-        $('.myDiv').toggle();
-    }
-
-    $('#from_showcoupon').submit(function(e) {
-        e.preventDefault();
-        var coupon = $("input[name='coupon']").val();
-
-        $.ajax({
-            type: 'post',
-            url: '{{ url('getcoupon') }}',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                'coupon': coupon,
-            },
-            dataType: 'json',
-            success: function(result) {
-                if (result.errors == 1) {
-                    $('#error').html('');
-                    $('#error').append(result.errors_message);
-                    $('#from_showcoupon').trigger('reset');
-                    setTimeout(() => {
-                        $('#error').html('');
-                    }, 5000);
+            else
+            {
+                if (status == '')
+                {
+                    $('#Modal').modal('show');
+                    return false;
                 }
+            }
 
-                if (result.success == 1) {
-                    $('#success').html('');
-                    $('#success').append(result.success_message);
+            $.ajax({
+                type: 'post',
+                url: '{{ route("getid") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'size_id': sizeid,
+                    'product_id': productid,
+                    'user_id': userid,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    // Cart Data
+                    $('.empty-box').html('');
+                    $('.empty-box').append(result.html);
 
-                    // Coupon Code
-                    $('.coupon_code').html('');
-                    $('.coupon_code').append(result.couponcode);
+                    // Sub Total
+                    $('.sub-total').html('');
+                    $('.sub-total').append(result.subtotal);
 
-                    // Total
+                    // Delivery Charge
+                    $('.del_charge').html('');
+                    $('.del_charge').append(result.delivery_charge);
+
+                    // Cart Products
+                    $('#cart_products').html('');
+                    $('#cart_products').append(result.cart_products);
+
+                    // Total Amount
                     $('.total').html('');
                     $('.total').append(result.total);
 
@@ -1038,56 +898,169 @@ if (session()->has('userid')) {
                     $('.pirce-value').text('');
                     $('.pirce-value').append(result.headertotal);
 
-                    $('#from_showcoupon').trigger('reset');
+                    // Coupon
+                    $('.coupon_code').html('');
+                    $('.coupon_code').append(result.couponcode);
 
-                    setTimeout(() => {
-                        $('#success').html('');
-                        $('.myDiv').hide();
-                    }, 2000);
+                    // Modal
+                    $('#item-modal').html('');
+                    $('#item-modal').append(result.modal);
                 }
+            });
+        }
+        // End Add to Cart
 
-            }
+
+        // Collection Button
+        $('#collection').on('click', function()
+        {
+            var d_type = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: "{{ url('setDeliveyType') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'd_type': d_type,
+                },
+                dataType: "json",
+                success: function(response) {
+                    location.reload();
+                }
+            });
         });
-    });
-</script>
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script> --}}
-<script>
-    // $('#searchcoupon').autocomplete({
-    //     source: function(request, reponse) {
+        // End Collection Button
 
-    //         $.ajax({
-    //             url: "{{ url('searchcouponcode') }}",
-    //             data: {
-    //                 coupon: request.term
-    //             },
-    //             dataType: 'json',
-    //             success: function(data) {
-    //                 reponse($.map(data, function(object) {
-    //                     // alert(object.code)
-    //                     return {
-    //                         label: object.code,
-    //                         code: object.code,
 
-    //                     };
-    //                 }));
-    //             }
-    //         });
-    //     },
+        // Delivery Button
+        $('#delivery').on('click', function()
+        {
+            $('#Modal').modal('show');
+        });
+        // End Delivery Button
 
-    //     minLength: 1,
-    //     delay: 500,
 
-    //     select: function(event, ui) {
-    //         $('#searchcoupon').val(ui.item.code);
-    //         //  return false;
-    //     },
+        // Delete Cart Product
+        function deletecartproduct(prod_id, size_id, uid)
+        {
+            var sizeid = size_id;
+            var productid = prod_id;
+            var userid = uid;
 
-    //     messages: {
-    //         noResults: '',
-    //         results: function() {}
-    //     }
+            $.ajax({
+                type: 'post',
+                url: '{{ url('deletecartproduct') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'size_id': sizeid,
+                    'product_id': productid,
+                    'user_id': userid,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    location.reload();
+                }
+            });
+        }
+        // End Delete Cart Product
 
-    // });
-</script>
 
+        // Show & Hide Coupon Toggle
+        function showcoupon()
+        {
+            $('.myDiv').toggle();
+        }
+        // End Show & Hide Coupon Toggle
+
+
+        // Apply Coupon
+        $('#from_showcoupon').submit(function(e)
+        {
+            e.preventDefault();
+            var coupon = $("input[name='coupon']").val();
+
+            $.ajax({
+                type: 'post',
+                url: '{{ url('getcoupon') }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'coupon': coupon,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    if (result.errors == 1)
+                    {
+                        $('#error').html('');
+                        $('#error').append(result.errors_message);
+                        $('#from_showcoupon').trigger('reset');
+                        setTimeout(() => {
+                            $('#error').html('');
+                        }, 5000);
+                    }
+
+                    if (result.success == 1)
+                    {
+                        $('#success').html('');
+                        $('#success').append(result.success_message);
+
+                        // Coupon Code
+                        $('.coupon_code').html('');
+                        $('.coupon_code').append(result.couponcode);
+
+                        // Total
+                        $('.total').html('');
+                        $('.total').append(result.total);
+
+                        // Header Total
+                        $('.pirce-value').text('');
+                        $('.pirce-value').append(result.headertotal);
+
+                        $('#from_showcoupon').trigger('reset');
+
+                        setTimeout(() => {
+                            $('#success').html('');
+                            $('.myDiv').hide();
+                        }, 2000);
+                    }
+                }
+            });
+        });
+        // End Apply Coupon
+
+
+        // Mobile View
+        $("#mob-view").click(function()
+        {
+            TestsFunction();
+            myFunction();
+        });
+        // End Mobile View
+
+        function TestsFunction()
+        {
+            var T = document.getElementById("minicart"),
+                displayValue = "";
+            if (T.style.display == "")
+                displayValue = "block";
+
+            T.style.display = displayValue;
+            myFunction();
+        }
+
+        function myFunction()
+        {
+            if ($("#minicart").is(":visible")) {
+                $("#tg-icon").html('<i class="fas fa-angle-double-down"></i>');
+            } else {
+                $("#tg-icon").html('<i class="fas fa-angle-double-up"></i>');
+            }
+        }
+
+
+    </script>
+    <!-- End Custom JS -->
+
+
+</body>
 </html>

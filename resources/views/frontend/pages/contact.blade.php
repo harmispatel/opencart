@@ -1,51 +1,66 @@
 @php
-    $temp_set = session('template_settings');
-    $template_setting = isset($temp_set) ? $temp_set : '';
 
-    $social = session('social_site');
-    $social_site = isset($social) ? $social : '#';
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // // Get Current Theme ID & Store ID
 
-    $store_set = session('store_settings');
-    $store_setting = isset($store_set) ? $store_set : '';
+    // Get Store Settings & Theme Settings & Other
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    //End Get Store Settings & Theme Settings & Other
+
+    // Template Settings
+    $template_setting = $store_theme_settings['template_settings'];
+    // End Template Settings
+
+    // Social Site Settings
+    $social_site = $store_theme_settings['social_settings'];
+    // End Social Site Settings
+
+    // Store Settings
+    $store_setting = $store_theme_settings['store_settings'];
+    // End Store Settings
+
+    // Get Open-Close Time
+    $openclose = openclosetime();
+    // End Open-Close Time
+
 @endphp
+
+
 <!doctype html>
 <html>
-<style>
-    #map {
-        width: 100%;
-        height: 400px;
-    }
-
-</style>
-
 <head>
-    {{-- CSS --}}
+    <!-- CSS -->
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
-    {{-- End CSS --}}
-</head>
+    <!-- End CSS -->
 
+    <!-- Custom CSS -->
+    <style>
+        #map
+        {
+            width: 100%;
+            height: 400px;
+        }
+
+    </style>
+    <!-- End Custom CSS -->
+</head>
 <body>
 
-    @php
-        if (session()->has('theme_id')) {
-            $theme_id = session()->get('theme_id');
-        } else {
-            $theme_id = 1;
-        }
-    @endphp
-
+    <!-- Header -->
     @if (!empty($theme_id) || $theme_id != '')
-        {{-- Header --}}
         @include('frontend.theme.theme' . $theme_id . '.header')
-        {{-- End Header --}}
     @else
-        {{-- Header --}}
         @include('frontend.theme.theme1.header')
-        {{-- End Header --}}
     @endif
+    <!-- End Header -->
 
 
+    <!-- Contact Section -->
     <section class="contact-main">
         <div class="container">
             <div class="contact-inr">
@@ -63,17 +78,12 @@
                                     <h3>Get Directions</h3>
                                     <form>
                                         <div class="login-details-inr fa fa-crosshairs w-100">
-                                            <input placeholder="Enter your location" type="text" name="map" value=""
-                                                class="w-100">
+                                            <input placeholder="Enter your location" type="text" name="map" value="" class="w-100">
                                         </div>
                                         <button class="btn map-bt w-100">GET DIRECTIONS</button>
                                     </form>
                                     <div class="shop-location text-center" style="padding: 45px">
-                                        @php
-                                             $name=session('store_settings');
-
-                                        @endphp
-                                        <h2>{{$name['config_name']}}</h2>
+                                        <h2>{{$store_setting['config_name']}}</h2>
                                         <p>{{ $store_setting['config_address'] }}</p>
                                         <span><b>Tel : </b>{{  $store_setting['config_telephone'] }}</span>
                                     </div>
@@ -85,12 +95,10 @@
                             <div class="col-md-6">
                                 <div class="contact-details">
                                     <h3>Contact us form</h3>
-                                    <form action="{{ route('contactstore') }}" method="post"
-                                        enctype="multipart/form-data">
+                                    <form action="{{ route('contactstore') }}" method="post" enctype="multipart/form-data">
                                         @csrf
                                         <div class="login-details-inr fa fa-envelope w-100">
-                                            <select name="Title" class="w-100"
-                                                style="width: 100%;border-radius:0;">
+                                            <select name="Title" class="w-100" style="width: 100%;border-radius:0;">
                                                 <option value="">Title</option>
                                                 <option value="Mr.">Mr.</option>
                                                 <option value="Mrs.">Mrs.</option>
@@ -101,24 +109,18 @@
                                             </select>
                                         </div>
                                         <div class="login-details-inr fa fa-user w-100 d-flex">
-                                            <input placeholder="Name" type="text" name="name" value=""
-                                                class="w-50">
-                                            <input placeholder="Surname" type="text" name="surname" value=""
-                                                class="w-50">
+                                            <input placeholder="Name" type="text" name="name" value="" class="w-50">
+                                            <input placeholder="Surname" type="text" name="surname" value="" class="w-50">
                                         </div>
                                         <div class="login-details-inr fa fa-envelope w-100">
-                                            <input placeholder="Email address" type="text" name="email" value=""
-                                                class="w-100">
+                                            <input placeholder="Email address" type="text" name="email" value="" class="w-100">
                                         </div>
                                         <div class="login-details-inr fa fa-phone-alt w-100">
-                                            <input placeholder="phone number" type="text" name="phone" value=""
-                                                class="w-100">
+                                            <input placeholder="phone number" type="text" name="phone" value="" class="w-100">
                                         </div>
                                         <div class="login-details-inr fa fa-file-alt w-100">
-                                            <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
-                                                class="w-100 p-2"></textarea>
+                                            <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false" class="w-100 p-2"></textarea>
                                         </div>
-                                        {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
                                         <div class="submit-bt">
                                             <button class="btn sub-bt w-100">SUBMIT</button>
                                         </div>
@@ -130,24 +132,31 @@
                 </div>
             </div>
     </section>
+    <!-- End Contact Section -->
 
+
+    <!-- Footer -->
     @if (!empty($theme_id) || $theme_id != '')
-        {{-- Footer --}}
         @include('frontend.theme.theme' . $theme_id . '.footer')
-        {{-- End Footer --}}
     @else
-        {{-- Footer --}}
         @include('frontend.theme.theme1.footer')
-        {{-- End Footer --}}
     @endif
+    <!-- End Footer -->
+
 
     {{-- JS --}}
     @include('frontend.include.script')
-    {{-- END JS --}}
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" async defer></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    {{-- End JS --}}
 
 
-    <script>
-        function initMap() {
+    <!-- Custom JS -->
+    <script type="text/javascript">
+
+        // For Gmap
+        function initMap()
+        {
             var myLatLng = {
                 lat: 22.3038945,
                 lng: 57.149606
@@ -171,9 +180,12 @@
                 document.getElementById('lon-span').innerHTML = latLng.lng();
             });
         }
+        // End For Gmap
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" async defer></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <!-- End Custom JS -->
+
+
 </body>
 
 </html>
