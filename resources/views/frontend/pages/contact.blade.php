@@ -99,84 +99,14 @@
                                     <span><b>Tel : </b>{{  $store_setting['config_telephone'] }}</span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="contact-details">
-                                    <h3>Contact us form</h3>
-                                    <form action="{{ route('contactstore') }}" method="post"
-                                        enctype="multipart/form-data" id="form">
-                                        @csrf
-                                        <div class="login-details-inr fa fa-envelope w-100">
-                                            <select name="title" class="w-100"
-                                                style="width: 100%;border-radius:0;">
-                                                <option value="">Title</option>
-                                                <option value="Mr.">Mr.</option>
-                                                <option value="Mrs.">Mrs.</option>
-                                                <option value="Ms.">Ms.</option>
-                                                <option value="Miss.">Miss.</option>
-                                                <option value="Dr.">Dr.</option>
-                                                <option value="Prof.">Prof.</option>
-                                            </select>
-                                            @if ($errors->has('title'))
-                                            <div class="alert-danger">
-                                                {{ $errors->first('title') }}
-                                            </div>
-                                            @endif
-                                        </div>
-                                        <div class="login-details-inr fa fa-user w-100 d-flex">
-                                            <input placeholder="Name" type="text" name="name" value="" class="w-50">
-                                            @if ($errors->has('name'))
-                                            <div class="alert-danger">
-                                                {{ $errors->first('name') }}
-                                            </div>
-                                            @endif
-                                            <input placeholder="Surname" type="text" name="surname" value=""class="w-50">
-                                            @if ($errors->has('surname'))
-                                            <div class="alert-danger">
-                                                {{ $errors->first('surname') }}
-                                            </div>
-                                            @endif
-                                        </div>
-                                        <div class="login-details-inr fa fa-envelope w-100">
-                                            <input placeholder="Email address" type="text" name="email" value=""
-                                                class="w-100">
-                                                @if ($errors->has('email'))
-                                                <div class="alert-danger">
-                                                    {{ $errors->first('email') }}
-                                                </div>
-                                                @endif
-                                        </div>
-                                        <div class="login-details-inr fa fa-phone-alt w-100">
-                                            <input placeholder="phone number" type="text" name="phone" value=""
-                                                class="w-100">
-                                                @if ($errors->has('phone'))
-                                                <div class="alert-danger">
-                                                    {{ $errors->first('phone') }}
-                                                </div>
-                                                @endif
-                                        </div>
-                                        <div class="login-details-inr fa fa-file-alt w-100">
-                                            <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
-                                                class="w-100 p-2"></textarea>
-                                                @if ($errors->has('enquiry'))
-                                                <div class="alert-danger">
-                                                    {{ $errors->first('enquiry') }}
-                                                </div>
-                                                @endif
-                                        </div>
-                                        {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
-                                        <div class="submit-bt">
-                                            <button type="submit" class="btn sub-bt w-100" >SUBMIT</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="col-md-6">
                             <div class="contact-details">
                                 <h3>Contact us form</h3>
                                 <form action="{{ route('contactstore') }}" method="post"
-                                    enctype="multipart/form-data">
-                                    @csrf
+                                        enctype="multipart/form-data" id="form">
+                                        @csrf
                                     <div class="login-details-inr fa fa-envelope w-100">
                                         <select name="Title" class="w-100"
                                             style="width: 100%;border-radius:0;">
@@ -188,29 +118,60 @@
                                             <option value="Dr.">Dr.</option>
                                             <option value="Prof.">Prof.</option>
                                         </select>
+                                        @if ($errors->has('title'))
+                                        <div class="alert-danger">
+                                            {{ $errors->first('title') }}
+                                        </div>
+                                        @endif
                                     </div>
                                     <div class="login-details-inr fa fa-user w-100 d-flex">
                                         <input placeholder="Name" type="text" name="name" value=""
                                             class="w-50">
+                                            @if ($errors->has('name'))
+                                            <div class="alert-danger">
+                                                {{ $errors->first('name') }}
+                                            </div>
+                                            @endif
                                         <input placeholder="Surname" type="text" name="surname" value=""
                                             class="w-50">
+                                            @if ($errors->has('surname'))
+                                            <div class="alert-danger">
+                                                {{ $errors->first('surname') }}
+                                            </div>
+                                            @endif
                                     </div>
                                     <div class="login-details-inr fa fa-envelope w-100">
                                         <input placeholder="Email address" type="text" name="email" value=""
                                             class="w-100">
+                                            @if ($errors->has('email'))
+                                                <div class="alert-danger">
+                                                    {{ $errors->first('email') }}
+                                                </div>
+                                                @endif
                                     </div>
                                     <div class="login-details-inr fa fa-phone-alt w-100">
                                         <input placeholder="phone number" type="text" name="phone" value=""
                                             class="w-100">
+                                            @if ($errors->has('phone'))
+                                            <div class="alert-danger">
+                                                {{ $errors->first('phone') }}
+                                            </div>
+                                            @endif
                                     </div>
                                     <div class="login-details-inr fa fa-file-alt w-100">
                                         <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
                                             class="w-100 p-2"></textarea>
                                     </div>
-                                    {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
-                                    <div class="submit-bt">
-                                        <button class="btn sub-bt w-100">SUBMIT</button>
-                                    </div>
+                                    @if ($errors->has('enquiry'))
+                                                <div class="alert-danger">
+                                                    {{ $errors->first('enquiry') }}
+                                                </div>
+                                                @endif
+                                        </div>
+                                        {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
+                                        <div class="submit-bt">
+                                            <button type="submit" class="btn sub-bt w-100" >SUBMIT</button>
+                                        </div>
                                 </form>
                             </div>
                         </div>
@@ -262,6 +223,6 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" async defer></script>
     <script src="https://www.google.com/recaptcha/api.js"></script> --}}
-</body>
+    </body>
 
 </html>
