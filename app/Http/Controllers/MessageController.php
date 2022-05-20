@@ -98,8 +98,8 @@ class MessageController extends Controller
         {
             $message->store_id = $user_shop_id;
         }
-        $message->title = $request->title;
-        $message->message = $request->message;
+        $message->title = isset($request->title) ? $request->title : '';
+        $message->message =isset($request->message) ? $request->message : '' ;
         $message->save();
 
         return redirect()->route('messages');

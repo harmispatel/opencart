@@ -129,30 +129,21 @@ class CheckoutController extends Controller
             }
         }
 
-        if(session()->has('currentcoupon'))
-        {
-            $Coupon=session()->get('currentcoupon');
-        }
-        else
-        {
-            $get_coupon = Coupon::where('store_id',$front_store_id)->first();
+        if (session()->has('currentcoupon')) {
+            $Coupon = session()->get('currentcoupon');
+        } else {
+            $get_coupon = Coupon::where('store_id', $front_store_id)->first();
 
-            if(!empty($get_coupon) || $get_coupon != '')
-            {
+            if (!empty($get_coupon) || $get_coupon != '') {
                 $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
                 $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
 
-                if($current_date >= $start_date && $current_date < $end_date)
-                {
+                if ($current_date >= $start_date && $current_date < $end_date) {
                     $Coupon = $get_coupon;
-                }
-                else
-                {
+                } else {
                     $Coupon = '';
                 }
-
             }
-
         }
 
         return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult', 'dileveryresult', 'areas'));
@@ -180,40 +171,30 @@ class CheckoutController extends Controller
         $current_date = strtotime(date('Y-m-d'));
 
         // Get Cart
-        if (session()->has('userid'))
-        {
+        if (session()->has('userid')) {
             $userid = session()->get('userid');
-        }
-        else
-        {
+        } else {
             $userid = 0;
         }
 
-        if ($userid == 0)
-        {
+        if ($userid == 0) {
             $mycart = $request->session()->get('cart1');
-        }
-        else
-        {
+        } else {
             $mycart = getuserCart($userid);
         }
 
 
         // Vouchers
-        $get_voucher = Voucher::where('code', $voucher)->where('status',1)->where('store_id', $front_store_id)->first();
+        $get_voucher = Voucher::where('code', $voucher)->where('status', 1)->where('store_id', $front_store_id)->first();
 
-        if(!empty($get_voucher) || $get_voucher != '')
-        {
+        if (!empty($get_voucher) || $get_voucher != '') {
             $voucher = $get_voucher->toArray();
             session()->put('currentvoucher', $voucher);
             session()->save();
 
             $voucheramount = isset($voucher['amount']) ? $voucher['amount'] : 0;
             $vouchercode = isset($voucher['code']) ? $voucher['code'] : '';
-
-        }
-        else
-        {
+        } else {
             $error_msg = '';
             $error_msg .= '<span class="text-danger">Please enter valid Voucher Code</span>';
             return response()->json([
@@ -224,25 +205,18 @@ class CheckoutController extends Controller
         // End Voucher
 
         // Coupon
-        if(session()->has('currentcoupon'))
-        {
-            $Coupon=session()->get('currentcoupon');
-        }
-        else
-        {
-            $get_coupon = Coupon::where('store_id',$front_store_id)->first();
+        if (session()->has('currentcoupon')) {
+            $Coupon = session()->get('currentcoupon');
+        } else {
+            $get_coupon = Coupon::where('store_id', $front_store_id)->first();
 
-            if(!empty($get_coupon) || $get_coupon != '')
-            {
+            if (!empty($get_coupon) || $get_coupon != '') {
                 $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
                 $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
 
-                if($current_date >= $start_date && $current_date < $end_date)
-                {
+                if ($current_date >= $start_date && $current_date < $end_date) {
                     $Coupon = $get_coupon;
-                }
-                else
-                {
+                } else {
                     $Coupon = '';
                 }
             }
@@ -250,31 +224,24 @@ class CheckoutController extends Controller
         // End Coupon
 
         // Coupon Condition
-        if(!empty($Coupon))
-        {
+        if (!empty($Coupon)) {
             $Couponcode = Coupon::where('code', $Coupon['code'])->where('store_id', $front_store_id)->first();
-        }
-        else
-        {
+        } else {
             $Couponcode = '';
         }
 
 
         $subtotal = 0;
 
-        if (isset($mycart['size']))
-        {
-            foreach ($mycart['size'] as $key => $cart)
-            {
+        if (isset($mycart['size'])) {
+            foreach ($mycart['size'] as $key => $cart) {
                 $price = $cart['main_price'] * $cart['quantity'];
                 $subtotal += $price;
             }
         }
 
-        if (isset($mycart['withoutSize']))
-        {
-            foreach ($mycart['withoutSize'] as $key => $cart)
-            {
+        if (isset($mycart['withoutSize'])) {
+            foreach ($mycart['withoutSize'] as $key => $cart) {
                 $price = $cart['main_price'] * $cart['quantity'];
                 $subtotal += $price;
             }
@@ -282,20 +249,15 @@ class CheckoutController extends Controller
 
         $delivery_charge = 0;
 
-        if (!empty($Coupon))
-        {
-            if ($Couponcode->type == 'P')
-            {
+        if (!empty($Coupon)) {
+            if ($Couponcode->type == 'P') {
                 $coupondiscount = ($subtotal * $Couponcode->discount) / 100;
             }
-            if ($Couponcode->type == 'F')
-            {
+            if ($Couponcode->type == 'F') {
                 $coupondiscount = $Couponcode->discount;
             }
             $couponamount = $coupondiscount;
-        }
-        else
-        {
+        } else {
             $couponamount = 0;
         }
 
@@ -305,8 +267,8 @@ class CheckoutController extends Controller
         $html1 = '';
         $success_message = '<span class="text-success">Voucher has been Applied Successfully..</span>';
 
-        $html .= '<td><b>Voucher Code('.$vouchercode.')</b></td><td><span><b>£ -'.$voucheramount.'</b></span></td>';
-        $html1 .= '<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ '.$total.'</b></span></td>';
+        $html .= '<td><b>Voucher Code(' . $vouchercode . ')</b></td><td><span><b>£ -' . $voucheramount . '</b></span></td>';
+        $html1 .= '<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ ' . $total . '</b></span></td>';
 
         return response()->json([
             'success' => 1,

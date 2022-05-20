@@ -37,37 +37,29 @@ class CustomerOrder extends Controller
 
 
         // Store Details
-        $store = Store::where('store_id',$front_store_id)->first();
+        $store = Store::where('store_id', $front_store_id)->first();
         // End Store Details
 
-        if(session()->has('userid'))
-        {
+        if (session()->has('userid')) {
             $user_id = session()->get('userid');
-        }
-        else
-        {
+        } else {
             $user_id = 0;
         }
 
         // Customer Details
-        if($user_id != 0)
-        {
-            $customer = Customer::where('customer_id',$user_id)->first();
+        if ($user_id != 0) {
+            $customer = Customer::where('customer_id', $user_id)->first();
 
             $cust_address_id = isset($customer->address_id) ? $customer->address_id : '';
 
-            $customer_def_address = CustomerAddress::where('address_id',$cust_address_id)->first();
-
+            $customer_def_address = CustomerAddress::where('address_id', $cust_address_id)->first();
         }
         // End Customer Details
 
         // Get Time Method
-        if(session()->has('time_method'))
-        {
+        if (session()->has('time_method')) {
             $time_method = session()->get('time_method');
-        }
-        else
-        {
+        } else {
             $time_method = 'ASAP';
         }
         // End Time Method
@@ -75,18 +67,17 @@ class CustomerOrder extends Controller
         $payment_method = $request->p_method;
 
         // Check Delivery Type
-        if($delivery_type == 'collection')  // Collection
+        if ($delivery_type == 'collection')  // Collection
         {
             // Check Payment Method
-            if($payment_method == 3) //Cash On Delivery
+            if ($payment_method == 3) //Cash On Delivery
             {
                 // Check User Type
-                if($user_id == 0) //Guest User
+                if ($user_id == 0) //Guest User
                 {
                     $guest_user = session()->get('guest_user');
 
-                    if(!empty($guest_user))
-                    {
+                    if (!empty($guest_user)) {
                         $guestUserCart = session()->get('cart1');
 
                         // Guest Order
@@ -160,12 +151,9 @@ class CustomerOrder extends Controller
 
 
                         // Guest Order Product
-                        if(isset($guestUserCart))
-                        {
-                            if(isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0)
-                            {
-                                foreach($guestUserCart['withoutSize'] as $key => $cart)
-                                {
+                        if (isset($guestUserCart)) {
+                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
+                                foreach ($guestUserCart['withoutSize'] as $key => $cart) {
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
@@ -183,10 +171,8 @@ class CustomerOrder extends Controller
                                 }
                             }
 
-                            if(isset($guestUserCart['size']) && count($guestUserCart['size']) > 0)
-                            {
-                                foreach($guestUserCart['size'] as $key=> $cart)
-                                {
+                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
+                                foreach ($guestUserCart['size'] as $key => $cart) {
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
@@ -237,14 +223,13 @@ class CustomerOrder extends Controller
                         $gorderdelivery->save();
 
                         // Coupon Code
-                        if($couponcode != 0)
-                        {
+                        if ($couponcode != 0) {
                             $gordercoupon = new OrderTotal;
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
-                            $gordercoupon->title = 'Coupon('.$couponname.')';
-                            $gordercoupon->text = '£ -'.$couponcode;
-                            $gordercoupon->value = '-'.$couponcode;
+                            $gordercoupon->title = 'Coupon(' . $couponname . ')';
+                            $gordercoupon->text = '£ -' . $couponcode;
+                            $gordercoupon->value = '-' . $couponcode;
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
                         }
@@ -254,7 +239,7 @@ class CustomerOrder extends Controller
                         $gordersubtotal->order_id = $gorder->order_id;
                         $gordersubtotal->code = 'sub_total';
                         $gordersubtotal->title = 'Sub-Total';
-                        $gordersubtotal->text = '£ '.$subtotal;
+                        $gordersubtotal->text = '£ ' . $subtotal;
                         $gordersubtotal->value = $subtotal;
                         $gordersubtotal->sort_order = 0;
                         $gordersubtotal->save();
@@ -264,7 +249,7 @@ class CustomerOrder extends Controller
                         $gordertotal->order_id = $gorder->order_id;
                         $gordertotal->code = 'total';
                         $gordertotal->title = 'Total to Pay';
-                        $gordertotal->text = '£ '.$total;
+                        $gordertotal->text = '£ ' . $total;
                         $gordertotal->value = $total;
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
@@ -272,16 +257,14 @@ class CustomerOrder extends Controller
                         session()->forget('cart1');
                         session()->forget('guest_user');
 
-                        $new_url = $currentURL.'/success';
+                        $new_url = $currentURL . '/success';
 
                         return response()->json([
                             'success' => 1,
                             'success_url' => $new_url,
                         ]);
-
                     }
-                }
-                else // Customer
+                } else // Customer
                 {
                     $usercart = getuserCart($user_id);
 
@@ -358,12 +341,9 @@ class CustomerOrder extends Controller
 
 
                     // Order Product
-                    if(isset($usercart))
-                    {
-                        if(isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0)
-                        {
-                            foreach($usercart['withoutSize'] as $key => $cart)
-                            {
+                    if (isset($usercart)) {
+                        if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
+                            foreach ($usercart['withoutSize'] as $key => $cart) {
                                 $order_product = new OrderProduct;
                                 $order_product->order_id = $last_order_id;
                                 $order_product->product_id = $cart['product_id'];
@@ -381,10 +361,8 @@ class CustomerOrder extends Controller
                             }
                         }
 
-                        if(isset($usercart['size']) && count($usercart['size']) > 0)
-                        {
-                            foreach($usercart['size'] as $key=> $cart)
-                            {
+                        if (isset($usercart['size']) && count($usercart['size']) > 0) {
+                            foreach ($usercart['size'] as $key => $cart) {
                                 $order_product = new OrderProduct;
                                 $order_product->order_id = $last_order_id;
                                 $order_product->product_id = $cart['product_id'];
@@ -435,14 +413,13 @@ class CustomerOrder extends Controller
                     $orderdelivery->save();
 
                     // Coupon Code
-                    if($couponcode != 0)
-                    {
+                    if ($couponcode != 0) {
                         $ordercoupon = new OrderTotal;
                         $ordercoupon->order_id = $order->order_id;
                         $ordercoupon->code = 'coupon';
-                        $ordercoupon->title = 'Coupon('.$couponname.')';
-                        $ordercoupon->text = '£ -'.$couponcode;
-                        $ordercoupon->value = '-'.$couponcode;
+                        $ordercoupon->title = 'Coupon(' . $couponname . ')';
+                        $ordercoupon->text = '£ -' . $couponcode;
+                        $ordercoupon->value = '-' . $couponcode;
                         $ordercoupon->sort_order = 0;
                         $ordercoupon->save();
                     }
@@ -452,7 +429,7 @@ class CustomerOrder extends Controller
                     $ordersubtotal->order_id = $order->order_id;
                     $ordersubtotal->code = 'sub_total';
                     $ordersubtotal->title = 'Sub-Total';
-                    $ordersubtotal->text = '£ '.$subtotal;
+                    $ordersubtotal->text = '£ ' . $subtotal;
                     $ordersubtotal->value = $subtotal;
                     $ordersubtotal->sort_order = 0;
                     $ordersubtotal->save();
@@ -462,12 +439,12 @@ class CustomerOrder extends Controller
                     $ordertotal->order_id = $order->order_id;
                     $ordertotal->code = 'total';
                     $ordertotal->title = 'Total to Pay';
-                    $ordertotal->text = '£ '.$total;
+                    $ordertotal->text = '£ ' . $total;
                     $ordertotal->value = $total;
                     $ordertotal->sort_order = 0;
                     $ordertotal->save();
 
-                    $new_url = $currentURL.'/success';
+                    $new_url = $currentURL . '/success';
 
                     return response()->json([
                         'success' => 1,
@@ -477,19 +454,18 @@ class CustomerOrder extends Controller
             }
         }
 
-        if($delivery_type == 'delivery') // Delivery
+        if ($delivery_type == 'delivery') // Delivery
         {
             // Check Payment Method
-            if($payment_method == 3) //Cash On Delivery
+            if ($payment_method == 3) //Cash On Delivery
             {
                 // Check User Type
-                if($user_id == 0) //Guest User
+                if ($user_id == 0) //Guest User
                 {
                     $guest_user = session()->get('guest_user');
                     $guest_user_address = session()->get('guest_user_address');
 
-                    if(!empty($guest_user))
-                    {
+                    if (!empty($guest_user)) {
                         $guestUserCart = session()->get('cart1');
 
                         // Guest Order
@@ -562,12 +538,9 @@ class CustomerOrder extends Controller
                         $gorder->save();
 
                         // Guest Order Product
-                        if(isset($guestUserCart))
-                        {
-                            if(isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0)
-                            {
-                                foreach($guestUserCart['withoutSize'] as $key => $cart)
-                                {
+                        if (isset($guestUserCart)) {
+                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
+                                foreach ($guestUserCart['withoutSize'] as $key => $cart) {
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
@@ -585,10 +558,8 @@ class CustomerOrder extends Controller
                                 }
                             }
 
-                            if(isset($guestUserCart['size']) && count($guestUserCart['size']) > 0)
-                            {
-                                foreach($guestUserCart['size'] as $key=> $cart)
-                                {
+                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
+                                foreach ($guestUserCart['size'] as $key => $cart) {
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
@@ -632,20 +603,19 @@ class CustomerOrder extends Controller
                         $gorderdelivery->order_id = $gorder->order_id;
                         $gorderdelivery->code = 'delivery';
                         $gorderdelivery->title = 'Delivery';
-                        $gorderdelivery->text = '£ '.$delivery_charge;
+                        $gorderdelivery->text = '£ ' . $delivery_charge;
                         $gorderdelivery->value = $delivery_charge;
                         $gorderdelivery->sort_order = 0;
                         $gorderdelivery->save();
 
                         // Coupon Code
-                        if($couponcode != 0)
-                        {
+                        if ($couponcode != 0) {
                             $gordercoupon = new OrderTotal;
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
-                            $gordercoupon->title = 'Coupon('.$couponname.')';
-                            $gordercoupon->text = '£ -'.$couponcode;
-                            $gordercoupon->value = '-'.$couponcode;
+                            $gordercoupon->title = 'Coupon(' . $couponname . ')';
+                            $gordercoupon->text = '£ -' . $couponcode;
+                            $gordercoupon->value = '-' . $couponcode;
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
                         }
@@ -655,7 +625,7 @@ class CustomerOrder extends Controller
                         $gordersubtotal->order_id = $gorder->order_id;
                         $gordersubtotal->code = 'sub_total';
                         $gordersubtotal->title = 'Sub-Total';
-                        $gordersubtotal->text = '£ '.$subtotal;
+                        $gordersubtotal->text = '£ ' . $subtotal;
                         $gordersubtotal->value = $subtotal;
                         $gordersubtotal->sort_order = 0;
                         $gordersubtotal->save();
@@ -665,7 +635,7 @@ class CustomerOrder extends Controller
                         $gordertotal->order_id = $gorder->order_id;
                         $gordertotal->code = 'total';
                         $gordertotal->title = 'Total to Pay';
-                        $gordertotal->text = '£ '.$total;
+                        $gordertotal->text = '£ ' . $total;
                         $gordertotal->value = $total;
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
@@ -674,21 +644,18 @@ class CustomerOrder extends Controller
                         session()->forget('guest_user');
                         session()->forget('guest_user_address');
 
-                        $new_url = $currentURL.'/success';
+                        $new_url = $currentURL . '/success';
 
                         return response()->json([
                             'success' => 1,
                             'success_url' => $new_url,
                         ]);
-
                     }
-                }
-                else //Customer
+                } else //Customer
                 {
                     $usercart = getuserCart($user_id);
 
-                    if(!empty($usercart))
-                    {
+                    if (!empty($usercart)) {
                         // New Order
                         $order = new Orders;
                         $order->invoice_no = 0;
@@ -759,12 +726,9 @@ class CustomerOrder extends Controller
                         $order->save();
 
                         // Order Product
-                        if(isset($usercart))
-                        {
-                            if(isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0)
-                            {
-                                foreach($usercart['withoutSize'] as $key => $cart)
-                                {
+                        if (isset($usercart)) {
+                            if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
+                                foreach ($usercart['withoutSize'] as $key => $cart) {
                                     $order_product = new OrderProduct;
                                     $order_product->order_id = $order->order_id;
                                     $order_product->product_id = $cart['product_id'];
@@ -782,10 +746,8 @@ class CustomerOrder extends Controller
                                 }
                             }
 
-                            if(isset($usercart['size']) && count($usercart['size']) > 0)
-                            {
-                                foreach($usercart['size'] as $key=> $cart)
-                                {
+                            if (isset($usercart['size']) && count($usercart['size']) > 0) {
+                                foreach ($usercart['size'] as $key => $cart) {
                                     $order_product = new OrderProduct;
                                     $order_product->order_id = $order->order_id;
                                     $order_product->product_id = $cart['product_id'];
@@ -830,20 +792,19 @@ class CustomerOrder extends Controller
                         $orderdelivery->order_id = $order->order_id;
                         $orderdelivery->code = 'delivery';
                         $orderdelivery->title = 'Delivery';
-                        $orderdelivery->text = '£ '.$delivery_charge;
+                        $orderdelivery->text = '£ ' . $delivery_charge;
                         $orderdelivery->value = $delivery_charge;
                         $orderdelivery->sort_order = 0;
                         $orderdelivery->save();
 
                         // Coupon Code
-                        if($couponcode != 0)
-                        {
+                        if ($couponcode != 0) {
                             $ordercoupon = new OrderTotal;
                             $ordercoupon->order_id = $order->order_id;
                             $ordercoupon->code = 'coupon';
-                            $ordercoupon->title = 'Coupon('.$couponname.')';
-                            $ordercoupon->text = '£ -'.$couponcode;
-                            $ordercoupon->value = '-'.$couponcode;
+                            $ordercoupon->title = 'Coupon(' . $couponname . ')';
+                            $ordercoupon->text = '£ -' . $couponcode;
+                            $ordercoupon->value = '-' . $couponcode;
                             $ordercoupon->sort_order = 0;
                             $ordercoupon->save();
                         }
@@ -853,7 +814,7 @@ class CustomerOrder extends Controller
                         $ordersubtotal->order_id = $order->order_id;
                         $ordersubtotal->code = 'sub_total';
                         $ordersubtotal->title = 'Sub-Total';
-                        $ordersubtotal->text = '£ '.$subtotal;
+                        $ordersubtotal->text = '£ ' . $subtotal;
                         $ordersubtotal->value = $subtotal;
                         $ordersubtotal->sort_order = 0;
                         $ordersubtotal->save();
@@ -863,23 +824,21 @@ class CustomerOrder extends Controller
                         $ordertotal->order_id = $order->order_id;
                         $ordertotal->code = 'total';
                         $ordertotal->title = 'Total to Pay';
-                        $ordertotal->text = '£ '.$total;
+                        $ordertotal->text = '£ ' . $total;
                         $ordertotal->value = $total;
                         $ordertotal->sort_order = 0;
                         $ordertotal->save();
 
-                        $new_url = $currentURL.'/success';
+                        $new_url = $currentURL . '/success';
 
                         return response()->json([
                             'success' => 1,
                             'success_url' => $new_url,
                         ]);
-
                     }
                 }
             }
         }
-
     }
 
     public function customerdeliveryaddress(Request $request)
@@ -892,12 +851,9 @@ class CustomerOrder extends Controller
 
         $delivery_type = session()->get('flag_post_code');
 
-        if(session()->has('userid'))
-        {
+        if (session()->has('userid')) {
             $user_id = session()->get('userid');
-        }
-        else
-        {
+        } else {
             $user_id = 0;
         }
 
@@ -913,26 +869,20 @@ class CustomerOrder extends Controller
 
         $address = $request->address;
 
-        if(!empty($time_method))
-        {
-            session()->put('time_method',$time_method);
-        }
-        else
-        {
-            session()->put('time_method','ASAP');
+        if (!empty($time_method)) {
+            session()->put('time_method', $time_method);
+        } else {
+            session()->put('time_method', 'ASAP');
         }
 
-        if($request->has('city'))
-        {
+        if ($request->has('city')) {
             $request->validate([
                 'city' => 'required',
                 'address_1' => 'required',
                 'postcode' => 'required',
                 'phone_no' => 'required',
             ]);
-        }
-        else
-        {
+        } else {
             $request->validate([
                 'address_1' => 'required',
                 'postcode' => 'required',
@@ -940,17 +890,14 @@ class CustomerOrder extends Controller
             ]);
         }
 
-        if($request->has('area'))
-        {
+        if ($request->has('area')) {
             $request->validate([
                 'area' => 'required',
                 'address_1' => 'required',
                 'postcode' => 'required',
                 'phone_no' => 'required',
             ]);
-        }
-        else
-        {
+        } else {
             $request->validate([
                 'address_1' => 'required',
                 'postcode' => 'required',
@@ -959,34 +906,28 @@ class CustomerOrder extends Controller
         }
 
 
-        $zone_by_store = Settings::select('key','value')->where('store_id',$front_store_id)->where('key','available_zones')->first();
+        $zone_by_store = Settings::select('key', 'value')->where('store_id', $front_store_id)->where('key', 'available_zones')->first();
         $available_zones = isset($zone_by_store->value) ? $zone_by_store->value : '';
 
-        if(empty($available_zones) || $available_zones == '')
-        {
-           return response()->json([
-               'errors' => 1,
-               'errors_message' => 'Sorry We Don\'t Deliver to Your Area.',
-           ]);
-        }
-        else
-        {
-            $explode = explode(',',$available_zones);
-            $old_postcode = str_replace(' ','',$postcode);
-            $check_code = in_array($old_postcode,$explode) ? 1 : 0;
+        if (empty($available_zones) || $available_zones == '') {
+            return response()->json([
+                'errors' => 1,
+                'errors_message' => 'Sorry We Don\'t Deliver to Your Area.',
+            ]);
+        } else {
+            $explode = explode(',', $available_zones);
+            $old_postcode = str_replace(' ', '', $postcode);
+            $check_code = in_array($old_postcode, $explode) ? 1 : 0;
 
-            if($check_code == 0)
-            {
+            if ($check_code == 0) {
                 return response()->json([
                     'errors' => 1,
                     'errors_message' => 'Sorry We Don\'t Deliver to Your Area.',
                 ]);
             }
-
         }
 
-        if($user_id == 0)
-        {
+        if ($user_id == 0) {
             $data['address_1'] = $address_1;
             $data['address_2'] = $address_2;
             $data['city'] = $city;
@@ -994,12 +935,9 @@ class CustomerOrder extends Controller
             $data['postcode'] = $postcode;
             $data['phone_no'] = $phone_no;
             $data['additional_directions'] = $additional_directions;
-            session()->put('guest_user_address',$data);
-        }
-        else
-        {
-            if($address == 0)
-            {
+            session()->put('guest_user_address', $data);
+        } else {
+            if ($address == 0) {
                 $customer_new_address = new CustomerAddress;
                 $customer_new_address->customer_id = $user_id;
                 $customer_new_address->firstname = '';
@@ -1021,9 +959,7 @@ class CustomerOrder extends Controller
                 $customer_update = Customer::find($user_id);
                 $customer_update->address_id = $customer_new_address->address_id;
                 $customer_update->update();
-            }
-            else
-            {
+            } else {
                 $edit_customer_address = CustomerAddress::find($address);
                 $edit_customer_address->address_1 = $address_1;
                 $edit_customer_address->address_2 = $address_2;
@@ -1035,14 +971,11 @@ class CustomerOrder extends Controller
                 $customer_update = Customer::find($user_id);
                 $customer_update->address_id = $address;
                 $customer_update->update();
-
             }
         }
 
         return response()->json([
             'success' => 1,
         ]);
-
     }
-
 }
