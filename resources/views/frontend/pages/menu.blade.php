@@ -322,7 +322,7 @@
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                 @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                    <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
                                                                                                                         class="btn options-btn">
                                                                                                                         <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
