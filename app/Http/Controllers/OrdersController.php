@@ -187,7 +187,7 @@ class OrdersController extends Controller
                     $data['status'] = '-';
                 }
 
-                $data['total'] = number_format($post->total,2);
+                $data['total'] = "£". number_format($post->total,2);
                 $data['date_added'] = date('Y-m-d',strtotime($post->date_added));
 
                 if ($post->payment_code == "worldpayhp")

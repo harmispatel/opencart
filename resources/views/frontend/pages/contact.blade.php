@@ -7,13 +7,30 @@
 
     $store_set = session('store_settings');
     $store_setting = isset($store_set) ? $store_set : '';
+    // echo '<pre>';
+    // print_r(session()->all());
+    // exit();
 @endphp
 <!doctype html>
 <html>
 <style>
-    #map {
+    /* #map {
         width: 100%;
         height: 400px;
+    } */
+
+    .map-responsive{
+        overflow:hidden;
+        padding-bottom:50%;
+        position:relative;
+        height:0;
+    }
+    .map-responsive iframe{
+        left:0;
+        top:0;
+        /* height:100%; */
+        width:100%;
+        position:absolute;
     }
 
 </style>
@@ -53,77 +70,80 @@
                     <div class="contact-title">
                         <div class="py-3">
                             <h3>Contact Us</h3>
-                            <div id="map" class=""></div>
                         </div>
                     </div>
-                    <div class="contact-info">
-                        <div class="row">
-                            <div class="col-md-6 contact-info-left">
-                                <div class="map-info">
-                                    <h3>Get Directions</h3>
-                                    <form>
-                                        <div class="login-details-inr fa fa-crosshairs w-100">
-                                            <input placeholder="Enter your location" type="text" name="map" value=""
-                                                class="w-100">
-                                        </div>
-                                        <button class="btn map-bt w-100">GET DIRECTIONS</button>
-                                    </form>
-                                    <div class="shop-location text-center" style="padding: 45px">
-                                        @php
-                                             $name=session('store_settings');
+                        <div class="map-responsive">
+                       {{-- <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Eiffel+Tower+Paris+France" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe> --}}
+                       <iframe src="{{ $store_setting['map_ifram'] }}" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="contact-info">
+                    <div class="row">
+                        <div class="col-md-6 contact-info-left">
+                            <div class="map-info">
+                                <h3>Get Directions</h3>
+                                <form>
+                                    <div class="login-details-inr fa fa-crosshairs w-100">
+                                        <input placeholder="Enter your location" type="text" name="map" value=""
+                                            class="w-100">
+                                    </div>
+                                    <button class="btn map-bt w-100">GET DIRECTIONS</button>
+                                </form>
+                                <div class="shop-location text-center" style="padding: 45px">
+                                    @php
+                                         $name=session('store_settings');
 
-                                        @endphp
-                                        <h2>{{$name['config_name']}}</h2>
-                                        <p>{{ $store_setting['config_address'] }}</p>
-                                        <span><b>Tel : </b>{{  $store_setting['config_telephone'] }}</span>
-                                    </div>
-                                    <div class="contact-logo text-center">
-                                        <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height:100px;"/>
-                                    </div>
+                                    @endphp
+                                    <h2>{{$name['config_name']}}</h2>
+                                    <p>{{ $store_setting['config_address'] }}</p>
+                                    <span><b>Tel : </b>{{  $store_setting['config_telephone'] }}</span>
+                                </div>
+                                <div class="contact-logo text-center">
+                                    <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height:100px;"/>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="contact-details">
-                                    <h3>Contact us form</h3>
-                                    <form action="{{ route('contactstore') }}" method="post"
-                                        enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="login-details-inr fa fa-envelope w-100">
-                                            <select name="Title" class="w-100"
-                                                style="width: 100%;border-radius:0;">
-                                                <option value="">Title</option>
-                                                <option value="Mr.">Mr.</option>
-                                                <option value="Mrs.">Mrs.</option>
-                                                <option value="Ms.">Ms.</option>
-                                                <option value="Miss.">Miss.</option>
-                                                <option value="Dr.">Dr.</option>
-                                                <option value="Prof.">Prof.</option>
-                                            </select>
-                                        </div>
-                                        <div class="login-details-inr fa fa-user w-100 d-flex">
-                                            <input placeholder="Name" type="text" name="name" value=""
-                                                class="w-50">
-                                            <input placeholder="Surname" type="text" name="surname" value=""
-                                                class="w-50">
-                                        </div>
-                                        <div class="login-details-inr fa fa-envelope w-100">
-                                            <input placeholder="Email address" type="text" name="email" value=""
-                                                class="w-100">
-                                        </div>
-                                        <div class="login-details-inr fa fa-phone-alt w-100">
-                                            <input placeholder="phone number" type="text" name="phone" value=""
-                                                class="w-100">
-                                        </div>
-                                        <div class="login-details-inr fa fa-file-alt w-100">
-                                            <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
-                                                class="w-100 p-2"></textarea>
-                                        </div>
-                                        {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
-                                        <div class="submit-bt">
-                                            <button class="btn sub-bt w-100">SUBMIT</button>
-                                        </div>
-                                    </form>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="contact-details">
+                                <h3>Contact us form</h3>
+                                <form action="{{ route('contactstore') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="login-details-inr fa fa-envelope w-100">
+                                        <select name="Title" class="w-100"
+                                            style="width: 100%;border-radius:0;">
+                                            <option value="">Title</option>
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Mrs.">Mrs.</option>
+                                            <option value="Ms.">Ms.</option>
+                                            <option value="Miss.">Miss.</option>
+                                            <option value="Dr.">Dr.</option>
+                                            <option value="Prof.">Prof.</option>
+                                        </select>
+                                    </div>
+                                    <div class="login-details-inr fa fa-user w-100 d-flex">
+                                        <input placeholder="Name" type="text" name="name" value=""
+                                            class="w-50">
+                                        <input placeholder="Surname" type="text" name="surname" value=""
+                                            class="w-50">
+                                    </div>
+                                    <div class="login-details-inr fa fa-envelope w-100">
+                                        <input placeholder="Email address" type="text" name="email" value=""
+                                            class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-phone-alt w-100">
+                                        <input placeholder="phone number" type="text" name="phone" value=""
+                                            class="w-100">
+                                    </div>
+                                    <div class="login-details-inr fa fa-file-alt w-100">
+                                        <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
+                                            class="w-100 p-2"></textarea>
+                                    </div>
+                                    {{-- <div class="g-recaptcha login-details-inr" data-sitekey="your_site_key"></div> --}}
+                                    <div class="submit-bt">
+                                        <button class="btn sub-bt w-100">SUBMIT</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -146,7 +166,7 @@
     {{-- END JS --}}
 
 
-    <script>
+    {{-- <script>
         function initMap() {
             var myLatLng = {
                 lat: 22.3038945,
@@ -173,7 +193,7 @@
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" async defer></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script> --}}
 </body>
 
 </html>

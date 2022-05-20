@@ -148,9 +148,12 @@
                                                                 <th>Telephone</th>
                                                                 <td>{{ isset($orders->telephone) ? $orders->telephone : "" }}</td>
                                                             </tr>
+                                                            @php
+                                                                $ordertotle = number_format($orders->total,2);
+                                                            @endphp
                                                             <tr>
                                                                 <th>Total</th>
-                                                                <td>{{ isset($orders->total) ? $orders->total : "" }}</td>
+                                                                <td>£{{ isset($ordertotle) ? $ordertotle : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Order Status</th>
@@ -289,8 +292,8 @@
                                                                     </td>
                                                                     <td>{{ $order->model  }}</td>
                                                                     <td>{{ $order->quantity  }}</td>
-                                                                    <td>{{ number_format($order->price,2)  }}</td>
-                                                                    <td>{{ number_format($order->total,2)  }}</td>
+                                                                    <td>£{{ number_format($order->price,2)  }}</td>
+                                                                    <td>£{{ number_format($order->total,2)  }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

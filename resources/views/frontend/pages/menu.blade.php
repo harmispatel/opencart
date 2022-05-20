@@ -130,7 +130,7 @@ if (session()->has('userid')) {
                             $lastday = $item[$t];
                             $today = date('l');
                         @endphp
-                        @if ($today == $value)
+                        @if ($today == $value || $firstday == "Every day")
                             <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
                     @endforeach
@@ -253,18 +253,12 @@ if (session()->has('userid')) {
                                                 $cat_id = $value->category_id;
                                                 $front_store_id = session('front_store_id');
                                                 $product = getproduct($front_store_id, $cat_id);
-
                                                 $catvalue = strtolower($value->name);
                                             @endphp
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button"
-                                                            id="{{ str_replace(' ', '', $catvalue) }}" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse1{{ $key }}"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapse1{{ $key }}">
+                                                        <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
@@ -288,9 +282,7 @@ if (session()->has('userid')) {
                                                                                 <p>
                                                                                     {{ strip_tags($prodesc) }}
                                                                                 </p>
-                                                                                <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}"
-                                                                                    width="80" height="80"
-                                                                                    class="mt-2 mb-2">
+                                                                                <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}" width="80" height="80" class="mt-2 mb-2">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-5">
@@ -309,11 +301,11 @@ if (session()->has('userid')) {
                                                                                             <div
                                                                                                 class="row align-items-center">
                                                                                                 <div
-                                                                                                    class="col-md-3">
+                                                                                                    class="col-md-5">
                                                                                                     <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
                                                                                                 </div>
                                                                                                 <div
-                                                                                                    class="col-md-9">
+                                                                                                    class="col-md-7">
                                                                                                     @foreach ($openday as $key => $item)
                                                                                                         @foreach ($item as $value)
                                                                                                             @php
@@ -324,31 +316,18 @@ if (session()->has('userid')) {
                                                                                                                 $currentday = date('l');
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                                @if ($currentday == $value)
+                                                                                                                @if ($currentday == $value || $firstday == "Every day")
                                                                                                                     <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
                                                                                                                         class="btn options-btn">
-                                                                                                                        <span
-                                                                                                                            class="sizeprice hide-carttext">£{{ $setsizeprice }}<i
-                                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span
-                                                                                                                            class="show-carttext sizeprice"
-                                                                                                                            style="display: none;">Added<i
-                                                                                                                                class="fa fa-check"></i></span>
+                                                                                                                        <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
                                                                                                                 @if ($currentday == $value)
-                                                                                                                    <a class="btn options-btn"
-                                                                                                                        data-bs-toggle="modal"
-                                                                                                                        data-bs-target="#storeclose">
-                                                                                                                        <span
-                                                                                                                            class="sizeprice hide-carttext">£
-                                                                                                                            {{ $setsizeprice }}<i
-                                                                                                                                class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span
-                                                                                                                            class="show-carttext sizeprice"
-                                                                                                                            style="display: none;">Added<i
-                                                                                                                                class="fa fa-check"></i></span>
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @endif
@@ -362,10 +341,10 @@ if (session()->has('userid')) {
                                                                                     <div class="options-bt">
                                                                                         <div
                                                                                             class="row align-items-center">
-                                                                                            <div class="col-md-3">
+                                                                                            <div class="col-md-5">
                                                                                                 <span>price</span>
                                                                                             </div>
-                                                                                            <div class="col-md-9">
+                                                                                            <div class="col-md-7">
                                                                                                 @foreach ($openday as $key => $item)
                                                                                                     @foreach ($item as $value)
                                                                                                         @php
@@ -377,30 +356,17 @@ if (session()->has('userid')) {
                                                                                                         @endphp
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                            @if ($currentday == $value)
-                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});"
-                                                                                                                    class="btn options-btn">
-                                                                                                                    <span
-                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span
-                                                                                                                        class="show-carttext sizeprice"
-                                                                                                                        style="display: none;">Added<i
-                                                                                                                            class="fa fa-check"></i></span>
+                                                                                                            @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                <a onclick="showId({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                    <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a class="btn options-btn"
-                                                                                                                    data-bs-toggle="modal"
-                                                                                                                    data-bs-target="#storeclose">
-                                                                                                                    <span
-                                                                                                                        class="sizeprice hide-carttext">£{{ $setprice }}<i
-                                                                                                                            class="fa fa-shopping-basket"></i></span>
-                                                                                                                    <span
-                                                                                                                        class="show-carttext sizeprice"
-                                                                                                                        style="display: none;">Added<i
-                                                                                                                            class="fa fa-check"></i></span>
+                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                    <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @endif
@@ -432,16 +398,14 @@ if (session()->has('userid')) {
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
-
                                         $firsttime = strtotime($fromtime[$key]);
                                         $lasttime = strtotime($totime[$key]);
                                         $today = time();
                                         $currentday = date('l');
-
                                     @endphp
 
                                     @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value)
+                                        @if ($currentday == $value || $firstday == "Every day")
                                             <div class="alert p-1 text-center" style="background: green;">
                                                 <h2 class="p-1 text-white mb-0">We are open now!</h2>
                                             </div>
@@ -488,9 +452,7 @@ if (session()->has('userid')) {
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})"
-                                                                        class="fa fa-times-circle text-danger"
-                                                                        style="cursor: pointer"></i>
+                                                                    <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
@@ -512,9 +474,7 @@ if (session()->has('userid')) {
                                                             @endphp
                                                             <tr>
                                                                 <td>
-                                                                    <i class="fa fa-times-circle text-danger"
-                                                                        onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})"
-                                                                        style="cursor: pointer"></i>
+                                                                    <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
@@ -721,7 +681,7 @@ if (session()->has('userid')) {
                                         $currentday = date('l');
                                     @endphp
                                     @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value)
+                                        @if ($currentday == $value || $firstday == "Every day")
                                             @if (!empty($mycart['size']))
                                                 <a href="{{ route('checkout') }}" class="btn checkbt"
                                                     style="background-color: green; color:white;">Checkout</a>
@@ -730,8 +690,7 @@ if (session()->has('userid')) {
                                                     style="background-color: green; color:white;">Checkout</a>
                                             @endif
                                             <div class="closed-now">
-                                                <span class="closing-text" style="color: green !important;">We are
-                                                    open now!</span>
+                                                <span class="closing-text" style="color: green !important;">We are open now!</span>
                                             </div>
                                         @endif
                                     @else

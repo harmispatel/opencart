@@ -89,15 +89,15 @@ $userlogin = session('username');
               </div>
             <div class="mb-3">
                 <label for="foodquality" class="form-label">Food Quality</label>
-                <input type="number" class="form-control" value="3" name="foodquality" id="foodquality">
+                <input type="number" class="form-control" value="3" min="1" max="5" name="foodquality" id="foodquality">
             </div>
             <div class="mb-3">
                 <label for="customerservice" class="form-label">Customer service</label>
-                <input type="number" class="form-control" value="3" name="customerservice" id="customerservice">
+                <input type="number" class="form-control" value="3" min="1" max="5" name="customerservice" id="customerservice">
             </div>
             <div class="mb-3">
                 <label for="timing" class="form-label">Timing</label>
-                <input type="number" class="form-control" value="3" name="timing" id="timing">
+                <input type="number" class="form-control" value="3" min="1" max="5" name="timing" id="timing">
             </div>
         </div>
            <input type="hidden" name="order_id" id="corderid" value="">

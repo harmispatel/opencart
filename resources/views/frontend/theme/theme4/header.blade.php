@@ -135,11 +135,11 @@
                     $lasttime = strtotime($totime[$key]);
                     $today = time();
                     $currentday = date('l');
-
+                    $firstday = $item[0];
                     @endphp
 
                     @if ($today >= $firsttime && $today <= $lasttime)
-                        @if ($currentday == $value)
+                        @if ($currentday == $value || $firstday == "Every day")
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                                 <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}"
                                     style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;" />
@@ -180,7 +180,7 @@
                     $lastday = $item[$t];
                     $today = date('l');
                     @endphp
-                        @if ($today == $value)
+                        @if ($today == $value || $firstday == "Every day")
                         <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @elseif ($firstday == "Every day")
                         <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
