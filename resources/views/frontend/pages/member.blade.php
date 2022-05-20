@@ -61,46 +61,53 @@
     <!-- Customer Review Modal -->
     <div class="modal fade" id="orderreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreviewLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderreviewLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="orderreviewLabel">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mb-3">
+                <form id="reviewform" action="{{ route('orderreviwe') }}" method="POST">
+                    @csrf
+                    {{-- {{ csrf_field() }} --}}
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" name="reviewtitle" id="title">
+                    <div class="text-danger" id="titleError"></div>
+
+                    {{-- <div class="invalid-feedback" id="reviewtitleerr" style="display: none; text-align:left;"></div> --}}
                 </div>
-                <div class="modal-body mb-3">
-                    <form id="reviewform" action="{{ route('orderreviwe') }}" method="POST">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" name="reviewtitle" id="title">
-                            <div class="text-danger" id="titleError"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" name="reviewmessage" rows="2"></textarea>
-                            <div class="text-danger" id="messageError"></div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="foodquality" class="form-label">Food Quality</label>
-                            <input type="number" class="form-control" value="3" name="foodquality" id="foodquality">
-                        </div>
-                        <div class="mb-3">
-                            <label for="customerservice" class="form-label">Customer service</label>
-                            <input type="number" class="form-control" value="3" name="customerservice" id="customerservice">
-                        </div>
-                        <div class="mb-3">
-                            <label for="timing" class="form-label">Timing</label>
-                            <input type="number" class="form-control" value="3" name="timing" id="timing">
-                        </div>
-                        <input type="hidden" name="order_id" id="corderid" value="">
-                    </form>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea class="form-control" id="message" name="reviewmessage" rows="2"></textarea>
+                    <div class="text-danger" id="messageError"></div>
+
+                    {{-- <span>@error('reviewmessage'){{$message}}@enderror</span> --}}
+                    {{-- <div class="invalid-feedback" id="reviewmessageerr" style="display: none; text-align:left;"></div> --}}
+                  </div>
+                <div class="mb-3">
+                    <label for="foodquality" class="form-label">Food Quality</label>
+                    <input type="number" class="form-control" value="3" min="1" max="5" name="foodquality" id="foodquality">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" value="" class="btn btn-primary">Send</button>
+                <div class="mb-3">
+                    <label for="customerservice" class="form-label">Customer service</label>
+                    <input type="number" class="form-control" value="3" min="1" max="5" name="customerservice" id="customerservice">
+                </div>
+                <div class="mb-3">
+                    <label for="timing" class="form-label">Timing</label>
+                    <input type="number" class="form-control" value="3" min="1" max="5" name="timing" id="timing">
                 </div>
             </div>
+               <input type="hidden" name="order_id" id="corderid" value="">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" value="" class="btn btn-primary">Send</button>
+            </div>
+
+        </form>
+          </div>
         </div>
-    </div>
+      </div>
     <!-- End Customer Review Modal -->
 
 

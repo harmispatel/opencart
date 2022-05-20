@@ -1,5 +1,8 @@
 @php
    $openclose = openclosetime();
+//    echo '<pre>';
+//    print_r($openclose);
+//    exit();
     $temp_set = session('template_settings');
     $template_setting = isset($temp_set) ? $temp_set : '';
 
@@ -125,7 +128,7 @@
             @foreach ($openday as $key => $item)
             @foreach ($item as $value)
                 @php
-
+                    $firstday = $item[0];
                     $firsttime = strtotime($fromtime[$key]);
                     $lasttime = strtotime($totime[$key]);
                     $today = time();
@@ -134,7 +137,7 @@
                 @endphp
 
                 @if ($today >= $firsttime && $today <= $lasttime)
-                    @if ($currentday == $value)
+                    @if ($currentday == $value || $firstday == "Every day")
                         <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                             <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
                         </div>

@@ -141,7 +141,7 @@
                             $lastday = $item[$t];
                             $today = date('l');
                         @endphp
-                        @if ($today == $value)
+                        @if ($today == $value || $firstday == "Every day")
                             <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                         @endif
                     @endforeach
@@ -264,18 +264,12 @@
                                             @php
                                                 $cat_id = $value->category_id;
                                                 $product = getproduct($front_store_id, $cat_id);
-
                                                 $catvalue = strtolower($value->name);
                                             @endphp
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button"
-                                                            id="{{ str_replace(' ', '', $catvalue) }}" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapse1{{ $key }}"
-                                                            aria-expanded="true"
-                                                            aria-controls="collapse1{{ $key }}">
+                                                        <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
                                                             <span>{{ $value->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
@@ -327,10 +321,11 @@
                                                                                                                 $currentday = date('l');
                                                                                                             @endphp
                                                                                                             @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                                @if ($currentday == $value)
-                                                                                                                    <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});" class="btn options-btn">
-                                                                                                                        <span class="sizeprice hide-carttext">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                    <a onclick="showId({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                        class="btn options-btn">
+                                                                                                                        <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
@@ -353,7 +348,7 @@
                                                                                             <div class="col-md-3">
                                                                                                 <span>price</span>
                                                                                             </div>
-                                                                                            <div class="col-md-9">
+                                                                                            <div class="col-md-7">
                                                                                                 @foreach ($openday as $key => $item)
                                                                                                     @foreach ($item as $value)
                                                                                                         @php
@@ -411,7 +406,7 @@
                                         $currentday = date('l');
                                     @endphp
                                     @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value)
+                                        @if ($currentday == $value || $firstday == "Every day")
                                             <div class="alert p-1 text-center" style="background: green;">
                                                 <h2 class="p-1 text-white mb-0">We are open now!</h2>
                                             </div>
@@ -683,7 +678,7 @@
                                         $currentday = date('l');
                                     @endphp
                                     @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value)
+                                        @if ($currentday == $value || $firstday == "Every day")
                                             @if (!empty($mycart['size']))
                                                 <a href="{{ route('checkout') }}" class="btn checkbt"
                                                     style="background-color: green; color:white;">Checkout</a>
@@ -692,8 +687,7 @@
                                                     style="background-color: green; color:white;">Checkout</a>
                                             @endif
                                             <div class="closed-now">
-                                                <span class="closing-text" style="color: green !important;">We are
-                                                    open now!</span>
+                                                <span class="closing-text" style="color: green !important;">We are open now!</span>
                                             </div>
                                         @endif
                                     @else

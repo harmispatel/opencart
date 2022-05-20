@@ -20,30 +20,24 @@ class CustomerAuthController extends Controller
 
         $ajaxlogin = $request->ajaxlogin;
 
-         $email = $request->Email;
-         $pass = md5($request->Password);
-         $emailexist = Customer::where('email', '=', $email)->exists();
+        $email = $request->Email;
+        $pass = md5($request->Password);
+        $emailexist = Customer::where('email', '=', $email)->exists();
 
-        $customername = Customer::select('customer_id','firstname','password')->where('email', '=', $email)->first();
+        $customername = Customer::select('customer_id', 'firstname', 'password')->where('email', '=', $email)->first();
 
-         if (($emailexist == 1) && ($pass == $customername->password))
-         {
+        if (($emailexist == 1) && ($pass == $customername->password)) {
             session()->put('username', $customername->firstname);
             session()->put('userid', $customername->customer_id);
 
-            if(session()->has('userid'))
-            {
-                if(session()->has('cart1'))
-                {
+            if (session()->has('userid')) {
+                if (session()->has('cart1')) {
                     $usercart = getuserCart(session()->get('userid'));
 
-                    if(isset($usecart) || !empty($usercart))
-                    {
+                    if (isset($usecart) || !empty($usercart)) {
                         $session_array = session()->get('cart1');
-                        $merge_cart = array_push($usercart,$session_array);
-                    }
-                    else
-                    {
+                        $merge_cart = array_push($usercart, $session_array);
+                    } else {
                         $cart = session()->get('cart1');
                         $serial = serialize($cart);
                         $base64 = base64_encode($serial);
@@ -53,36 +47,25 @@ class CustomerAuthController extends Controller
                         $user->update();
                         session()->forget('cart1');
                     }
-
                 }
             }
 
-            if ($ajaxlogin == 1)
-            {
+            if ($ajaxlogin == 1) {
                 return response()->json([
                     'status' => 1,
                 ]);
-            }
-            else
-            {
+            } else {
                 return redirect()->back();
             }
-         }
-         else
-         {
-             if ($ajaxlogin == 1)
-             {
+        } else {
+            if ($ajaxlogin == 1) {
                 return response()->json([
                     'status' => 0,
                 ]);
-             }
-             else
-             {
+            } else {
                 return redirect()->back();
-             }
-         }
-
-
+            }
+        }
     }
 
     public function customerregister(Request $request)
@@ -97,8 +80,7 @@ class CustomerAuthController extends Controller
         $address_check = isset($request->address_required) ? $request->address_required : 0;
 
         // if($address_check != 1 || $ajaxregister == 1)
-        if($ajaxregister == 1)
-        {
+        if ($ajaxregister == 1) {
             // Validation
             $request->validate([
                 'title' => 'required',
@@ -109,9 +91,7 @@ class CustomerAuthController extends Controller
                 'password' => 'min:6|required_with:confirm_password|same:confirm_password',
                 'confirm_password' => 'min:6|required_with:password|same:password',
             ]);
-        }
-        elseif($address_check == 1)
-        {
+        } elseif ($address_check == 1) {
             $request->validate([
                 'firstname' => 'required',
                 'lastname' => 'required',
@@ -125,9 +105,7 @@ class CustomerAuthController extends Controller
                 'confirm_password' => 'min:6|required_with:password|same:password',
                 'newsletter' => 'required',
             ]);
-        }
-        else
-        {
+        } else {
             $request->validate([
                 'title' => 'required',
                 'firstname' => 'required',
@@ -168,11 +146,10 @@ class CustomerAuthController extends Controller
 
 
         session()->put('username', $customer->firstname);
-        session()->put('userid',$lastInsertedID);
+        session()->put('userid', $lastInsertedID);
 
         // Customer Address
-        if($address_check == 1)
-        {
+        if ($address_check == 1) {
             $customeraddress = new CustomerAddress;
             $customeraddress->customer_id = $lastInsertedID;
             $customeraddress->firstname = isset($request->firstname) ? $request->firstname : '';
@@ -193,10 +170,8 @@ class CustomerAuthController extends Controller
         }
 
 
-        if(session()->has('userid'))
-        {
-            if(session()->has('cart1'))
-            {
+        if (session()->has('userid')) {
+            if (session()->has('cart1')) {
                 $cart = session()->get('cart1');
                 $serial = serialize($cart);
                 $base64 = base64_encode($serial);
@@ -208,17 +183,13 @@ class CustomerAuthController extends Controller
             }
         }
 
-        if ($ajaxregister == 1)
-        {
+        if ($ajaxregister == 1) {
             return response()->json([
                 'status' => 1,
             ]);
-        }
-        else
-        {
+        } else {
             return redirect()->route('member');
         }
-
     }
 
     public function customerlogout()
@@ -246,17 +217,15 @@ class CustomerAuthController extends Controller
         ]);
 
         $email = $request->email;
-        $check_unique = Customer::where('customer_id','!=',$customerid)->where('email',$email)->first();
+        $check_unique = Customer::where('customer_id', '!=', $customerid)->where('email', $email)->first();
 
-        if(!empty($check_unique) || $check_unique != '')
-        {
+        if (!empty($check_unique) || $check_unique != '') {
             $request->validate([
                 'email' => 'required|email|unique:oc_customer,email',
             ]);
         }
 
-        if(!empty($request->password) && !empty($request->confirm_password))
-        {
+        if (!empty($request->password) && !empty($request->confirm_password)) {
             $request->validate([
                 'password' => 'min:6|required_with:confirm_password|same:confirm_password',
                 'confirm_password' => 'min:6|required_with:password|same:password',
@@ -276,7 +245,6 @@ class CustomerAuthController extends Controller
         $customer->update();
 
         return redirect()->route('member');
-
     }
 
 
@@ -296,12 +264,10 @@ class CustomerAuthController extends Controller
         $data['email'] = isset($request->email) ? $request->email : '';
         $data['phone'] = isset($request->phone) ? $request->phone : '';
 
-        session()->put('guest_user',$data);
+        session()->put('guest_user', $data);
 
         return response()->json([
             'success' => 1,
         ]);
-
     }
-
 }
