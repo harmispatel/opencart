@@ -99,7 +99,7 @@ class MenuController extends Controller
         $pro_name=ProductDescription::where('product_id',$productid)->first();
         $cat_id=Product_to_category::where('product_id',$productid)->first();
         $toppingType =ToppingCatOption::where('id_category',$cat_id->category_id)->first();
-        $group = unserialize($toppingType->group);
+        $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
         unset($group['number_group']);
 
 
