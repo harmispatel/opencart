@@ -158,18 +158,23 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Website Address:</label>
-                                                        <input type="text" class="form-control" id="config_url" name="config_url">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_url')) ? 'is-invalid' : '' }}" id="config_url" name="config_url" value="{{ old('config_url') }}">
                                                         <code class="text-muted">
                                                             Include the full URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/. <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
                                                         </code>
+                                                        @if ($errors->has('config_url'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('config_url') }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Use SSL</label>
                                                         <div class="form-control">
-                                                            <input type="radio" name="config_secure" value="1">
+                                                            <input type="radio" name="config_secure" value="1" {{(old('config_secure') == 1) ? 'checked' : ''}}>
                                                             <label class="form-check-label">Yes</label>
-                                                            <input type="radio" name="config_secure" value="0">
+                                                            <input type="radio" name="config_secure" value="0" {{(old('config_secure') == 0) ? 'checked' : ''}}>
                                                             <label class="form-check-label">No</label>
                                                         </div>
                                                         <code class="text-muted">
@@ -179,38 +184,45 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>SSL URL</label>
-                                                        <input type="text" class="form-control" id="config_ssl" name="config_ssl">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_ssl')) ? 'is-invalid' : '' }}" id="config_ssl" name="config_ssl"  >
                                                         <code class="text-muted">
                                                             SSL URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/ <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
                                                         </code>
+                                                        @if ($errors->has('config_ssl'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_ssl') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Shop Name</label>
-                                                        <input type="text" class="form-control" id="config_name" name="config_name" >
+                                                        <input type="text" class="form-control {{ ($errors->has('config_name')) ? 'is-invalid' : '' }}" id="config_name" name="config_name" value="{{ old('config_name') }}">
+                                                        @if ($errors->has('config_name'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_name') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Shop Owner Name</label>
-                                                        <input type="text" class="form-control" id="config_owner" name="config_owner">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_owner')) ? 'is-invalid' : '' }}" id="config_owner" name="config_owner" value="{{ old('config_owner') }}">
+                                                        @if ($errors->has('config_owner'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_owner') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Address</label>
-                                                        <textarea class="form-control" id="config_address" name="config_address" rows="3"></textarea>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="form-group">
-                                                        <input type="hidden" name="zone_id" id="zone_id">
-                                                        <label>Region</label>
-                                                        <select class="form-control" id="config_zone_id" name="config_zone_id">
-
-                                                        </select>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="form-group">
-                                                        <label>Post code</label>
-                                                        <input type="text" class="form-control" id="map_post_code" name="map_post_code">
+                                                        <textarea class="form-control {{ ($errors->has('config_address')) ? 'is-invalid' : '' }}" id="config_address" name="config_address" rows="3">{{ old('config_address') }}</textarea>
+                                                        @if ($errors->has('config_address'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_address') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -221,61 +233,100 @@
                                                                 <option value="{{ $country->country_id }}">{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>
+                                                        @if ($errors->has('config_country_id'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_country_id') }}
+                                                        </div>
+                                                    @endif
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="zone_id" id="zone_id">
+                                                        <label>Region</label>
+                                                        <select class="form-control {{ ($errors->has('config_url')) ? 'is-invalid' : '' }}" id="config_zone_id" name="config_zone_id"></select>
+                                                        @if ($errors->has('zone_id'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('zone_id') }}
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <hr>
+                                                    <div class="form-group">
+                                                        <label>Post code</label>
+                                                        <input type="text" class="form-control {{ ($errors->has('map_post_code')) ? 'is-invalid' : '' }}" id="map_post_code" name="map_post_code" value="{{ old('map_post_code') }}">
+                                                        @if ($errors->has('map_post_code'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('map_post_code') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Google Maps</label>
-                                                        <input type="text" class="form-control" id="map_ifram" name="map_ifram">
+                                                        <input type="text" class="form-control" id="map_ifram" name="map_ifram" value="{{ old('map_ifram') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Google Sitemap URL</label>
-                                                        <input type="text" class="form-control" id="sitemap_url" name="sitemap_url">
+                                                        <input type="text" class="form-control" id="sitemap_url" name="sitemap_url" value="{{ old('sitema_url') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Telephone 1</label>
-                                                        <input type="text" class="form-control" id="config_telephone" name="config_telephone">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_telephone')) ? 'is-invalid' : '' }}" id="config_telephone" name="config_telephone" value="{{ old('config_telephone') }}">
+                                                        @if ($errors->has('config_telephone'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_telephone') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Telephone 2</label>
-                                                        <input type="text" class="form-control" id="config_fax" name="config_fax">
+                                                        <input type="text" class="form-control" id="config_fax" name="config_fax" value="{{ old('config_fax') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Language</label>
                                                         <select class="form-control" id="config_language" name="config_language">
-                                                                <option >123</option>
+                                                            @foreach ($language as $lang)
+                                                                <option value="{{ $lang->code }}">{{ $lang->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Currency</label>
                                                         <select class="form-control" id="config_currency" name="config_currency">
-                                                            <option >123</option>
-
+                                                            @foreach ($currency as $curr)
+                                                                <option value="{{ $curr->code }}">{{ $curr->title }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Title</label>
-                                                        <input type="text" class="form-control" id="config_title" name="config_title">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_title')) ? 'is-invalid' : '' }}" id="config_title" name="config_title" value="{{ old('config_title') }}">
+                                                        @if ($errors->has('config_title'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_title') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Meta Tag Description</label>
-                                                        <textarea class="form-control" id="config_meta_description" name="config_meta_description" rows="3"></textarea>
+                                                        <textarea class="form-control" id="config_meta_description" name="config_meta_description" rows="3">{{ old('config_mata_description') }}</textarea>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Logo</label>
-                                                        <input type="file" class="form-control p-1" name="config_logo" id="config_logo">
+                                                        <input type="file" class="form-control p-1" name="config_logo" id="config_logo" value="{{ old('config_logo') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Icon</label>
-                                                        <input type="file" class="form-control p-1" name="config_icon" id="config_icon">
+                                                        <input type="file" class="form-control p-1" name="config_icon" id="config_icon" value="{{ old('config_icon') }}">
                                                         <code class="text-muted">
                                                             The icon should be a PNG that is 16px x 16px.
                                                         </code><br>
@@ -284,8 +335,8 @@
                                                     <div class="form-group">
                                                         <label>Google ReCaptcha</label>
                                                         <select class="form-control" id="grecaptcha" name="grecaptcha">
-                                                            <option value="1">Enable</option>
-                                                            <option value="0">Disable</option>
+                                                            <option value="1" {{(old('grecapcha') == 1) ? 'checked': ''}}>Enable</option>
+                                                            <option value="0" {{(old('grecapcha') == 0) ? 'checked': ''}}>Disable</option>
                                                         </select>
                                                     </div>
                                                     <hr>
@@ -302,7 +353,12 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>File Directory URL</label>
-                                                        <input type="text" class="form-control" id="file_directory_url" name="file_directory_url">
+                                                        <input type="text" class="form-control {{ ($errors->has('file_directory_url')) ? 'is-invalid' : '' }}" id="file_directory_url" name="file_directory_url" value="{{ old('file_directory_url') }}">
+                                                        @if ($errors->has('file_directory_url'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('file_directory_url') }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -324,13 +380,18 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> E-Mail</label>
-                                                        <input type="text" class="form-control" id="config_email" name="config_email">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_email')) ? 'is-invalid' : '' }}" id="config_email" name="config_email" value="{{ old('config_ssl') }}">
+                                                        @if ($errors->has('config_email'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('config_email') }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <hr>
                                                     <h4 class="text-warning" style="border-bottom: dotted black 1px">SMS NOTTIFICATION</h4>
                                                     <div class="form-group">
                                                         <label>SMS API URL</label>
-                                                        <input type="text" class="form-control" id="sms_api_url" name="sms_api_url">
+                                                        <input type="text" class="form-control" id="sms_api_url" name="sms_api_url" value="{{ old('sms_api_url') }}"                  >
                                                         <code class="text-muted">[PhoneNumber] = Notification Number [SenderId] : Order Id [Store Message] = Message Content</code>
                                                     </div>
                                                     <hr>
@@ -347,13 +408,13 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>SMS Notification Time [MIN]</label>
-                                                        <input class="form-control" type="number" id="sms_notification_time" name="sms_notification_time"/>
+                                                        <input class="form-control" type="number" id="sms_notification_time" name="sms_notification_time" value="{{ old('sms_notification_time') }}">
                                                         <code class="text-muted">0 for instant SMS Order Notification</code>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Notification Number</label>
-                                                        <input class="form-control" type="number" id="sms_notification_number" name="sms_notification_number"/>
+                                                        <input class="form-control" type="number" id="sms_notification_number" name="sms_notification_number" value="{{ old('sms_notification_number') }}">
                                                     </div>
                                                     <hr><br>
                                                     <h4 class="text-warning" style="border-bottom: dotted black 1px">PRINTER CONFIG</h4>
@@ -363,12 +424,12 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Account</label>
-                                                        <input class="form-control" type="text" id="config_account_printer" name="config_account_printer">
+                                                        <input class="form-control" type="text" id="config_account_printer" name="config_account_printer" value="{{ old('config_account_printer') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Password</label>
-                                                        <input class="form-control" type="text" id="config_password_printer" name="config_password_printer">
+                                                        <input class="form-control" type="text" id="config_password_printer" name="config_password_printer" value="{{ old('config_password_printer') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -455,7 +516,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label>Suspend Permanently</label><br>
-                                                        <input type="checkbox" name="suspend_permanently" id="suspend_permanently" value="yes">
+                                                        <input type="checkbox" name="suspend_permanently" id="suspend_permanently" value="yes" >
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -472,22 +533,22 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Suspend for Time</label>
-                                                        <input class="form-control" type="date" id="suspend_time" name="suspend_time"/>
+                                                        <input class="form-control" type="date" id="suspend_time" name="suspend_time" value="{{ old('suspend_time') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Icon</label>
-                                                        <input type="file" class="form-control p-1" id="suspend_logo" name="suspend_logo">
+                                                        <input type="file" class="form-control p-1" id="suspend_logo" name="suspend_logo" value="{{ old('suspend_logo') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Title</label>
-                                                        <input class="form-control" type="text" id="suspend_title" name="suspend_title"/>
+                                                        <input class="form-control" type="text" id="suspend_title" name="suspend_title" value="{{ old('suspend_title') }}">
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Description</label>
-                                                        <textarea class="form-control" id="suspend_description" name="suspend_description" rows="3"></textarea>
+                                                        <textarea class="form-control" id="suspend_description" name="suspend_description" rows="3">{{ old('suspend_description') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>

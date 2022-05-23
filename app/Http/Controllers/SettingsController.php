@@ -131,8 +131,10 @@ class SettingsController extends Controller
 
     public function createstore()
     {
+        $language = Language::get();
+        $currency = Currency::get();
         $countries = Country::get();
-        return view('admin.settings.create_store',compact('countries'));
+        return view('admin.settings.create_store',compact('countries','language','currency'));
     }
 
     public function mapandcategory()
@@ -456,6 +458,22 @@ class SettingsController extends Controller
 
     public function savestoredata(Request $request)
     {
+
+        $request->validate([
+            'config_url' => 'required',
+            'config_ssl' => 'required',
+            'config_name' => 'required',
+            'config_owner' => 'required',
+            'config_address' => 'required',
+            'map_post_code' => 'required',
+            'config_country_id' => 'required',
+            'config_zone_id' => 'required',
+            'config_zone_id' => 'required',
+            'config_telephone' => 'required',
+            'config_title' => 'required',
+            'file_directory_url' => 'required',
+            'config_email' => 'required|email',
+        ]);
 
 
         // save in Store
