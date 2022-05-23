@@ -81,7 +81,7 @@ class MemberController extends Controller
             $customeraddress->city = $request->city;
             $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '0';
             $customeraddress->country_id = $request->country;
-            $customeraddress->zone_id = isset($request->region) ? $request->region : '0';
+            $customeraddress->zone_id = $request->region;
             $customeraddress->phone = isset($request->phone) ? $request->phone : '0';
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->save();
@@ -134,7 +134,7 @@ class MemberController extends Controller
             $customeraddress->city = $request->city;
             $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '0';
             $customeraddress->country_id = $request->country;
-            $customeraddress->zone_id = $request->country_region_id;
+            $customeraddress->zone_id = $request->region;
             $customeraddress->phone = isset($request->phone) ? $request->phone : '0';
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->update();
