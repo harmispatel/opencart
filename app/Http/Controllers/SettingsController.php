@@ -468,7 +468,6 @@ class SettingsController extends Controller
             'map_post_code' => 'required',
             'config_country_id' => 'required',
             'config_zone_id' => 'required',
-            'config_zone_id' => 'required',
             'config_telephone' => 'required',
             'config_title' => 'required',
             'file_directory_url' => 'required',

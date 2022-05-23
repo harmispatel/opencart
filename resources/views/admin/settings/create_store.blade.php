@@ -227,26 +227,26 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Country</label>
-                                                        <select class="form-control" id="country_id" name="config_country_id" onchange="getstate()">
-                                                            <option disabled selected>Select Counrty</option>
+                                                        <select class="form-control {{ ($errors->has('config_country_id')) ? 'is-invalid' : '' }}" id="country_id" name="config_country_id" onchange="getstate()">
+                                                            <option value="">Select Counrty</option>
                                                             @foreach ($countries as $country)
                                                                 <option value="{{ $country->country_id }}">{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         @if ($errors->has('config_country_id'))
-                                                        <div class="invalid-feedback">
-                                                            {{ $errors->first('config_country_id') }}
-                                                        </div>
-                                                    @endif
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('config_country_id') }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <input type="hidden" name="zone_id" id="zone_id">
                                                         <label>Region</label>
                                                         <select class="form-control {{ ($errors->has('config_url')) ? 'is-invalid' : '' }}" id="config_zone_id" name="config_zone_id"></select>
-                                                        @if ($errors->has('zone_id'))
+                                                        @if ($errors->has('config_zone_id'))
                                                             <div class="invalid-feedback">
-                                                                {{ $errors->first('zone_id') }}
+                                                                {{ $errors->first('config_zone_id') }}
                                                             </div>
                                                         @endif
                                                     </div>
