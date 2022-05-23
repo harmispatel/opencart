@@ -246,15 +246,18 @@
                                                     <div class="form-group">
                                                         <label>Language</label>
                                                         <select class="form-control" id="config_language" name="config_language">
-                                                                <option >123</option>
+                                                            @foreach ($language as $lang)
+                                                                <option value="{{ $lang->code }}">{{ $lang->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Currency</label>
                                                         <select class="form-control" id="config_currency" name="config_currency">
-                                                            <option >123</option>
-
+                                                            @foreach ($currency as $curr)
+                                                                <option value="{{ $curr->code }}">{{ $curr->title }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <hr>
