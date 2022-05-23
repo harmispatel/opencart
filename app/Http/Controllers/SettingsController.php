@@ -542,11 +542,9 @@ class SettingsController extends Controller
             $shopadd->save();
         }
 
-        $dest = $data['file_directory_url'];
+        $dest = 'home/thepublic/public_html/'.$data['file_directory_url'];
 
-        shell_exec('cp -R /pizzacolichfield.the-public.co.uk $dest');
-
-        // full_copy('../../pizzacolichfield.the-public.co.uk','../../happybestkebab.the-public.co.uk');
+        shell_exec("cp -R /home/thepublic/public_html/pizzacolichfield/. /$dest");
 
         return redirect()->route('dashboard')->with('success', 'Settings Updated..');
     }
