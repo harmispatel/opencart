@@ -4,22 +4,12 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
-use App\Models\Category;
-use App\Models\CategorytoStore;
 use App\Models\Coupon;
 use App\Models\DeliverySettings;
-use App\Models\Product;
-use App\Models\Product_to_category;
 use App\Models\Settings;
-use App\Models\ToppingSize;
 use App\Models\Voucher;
-use App\Models\CouponProduct;
-use App\Models\Customer;
-use App\Models\ToppingProductPriceSize;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
-use LDAP\Result;
 
 class CheckoutController extends Controller
 {
@@ -72,7 +62,6 @@ class CheckoutController extends Controller
         } else {
             $deliverygaptime = $dile_gaptime;
         }
-        date_default_timezone_set('Asia/Kolkata');
 
         $manghour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
         $mangminus = array('00', '15', '30', '45');
@@ -267,8 +256,8 @@ class CheckoutController extends Controller
         $html1 = '';
         $success_message = '<span class="text-success">Voucher has been Applied Successfully..</span>';
 
-        $html .= '<td><b>Voucher Code(' . $vouchercode . ')</b></td><td><span><b>£ -' . $voucheramount . '</b></span></td>';
-        $html1 .= '<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ ' . $total . '</b></span></td>';
+        $html .= '<td><b>Voucher Code(' . $vouchercode . ')</b></td><td><span><b>£ -' . number_format($voucheramount,2) . '</b></span></td>';
+        $html1 .= '<td><b>Total to pay:</b></td><td><span><b id="total_pay">£ ' . number_format($total,2) . '</b></span></td>';
 
         return response()->json([
             'success' => 1,

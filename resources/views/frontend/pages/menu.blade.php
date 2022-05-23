@@ -621,9 +621,8 @@
                                                                     $lastday = $item[$t];
                                                                     $today = date('l');
                                                                 @endphp
-                                                                @if ($today == $value)
-                                                                    <span>Starts at -
-                                                                        <b>{{ $collectionfrom[$key] }}</b></span>
+                                                                @if ($today == $value || $firstday == "Every day")
+                                                                    <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
                                                                 @endif
                                                             @endforeach
                                                         @endforeach
@@ -641,7 +640,6 @@
                                                     @php
                                                         $deliverydays = $openclose['deliverydays'];
                                                         $deliveryfrom = $openclose['deliveryfrom'];
-
                                                         $delivery_same_bussiness = isset($openclose['delivery_same_bussiness']) ? $openclose['delivery_same_bussiness'] : '';
                                                     @endphp
                                                     @if ($delivery_same_bussiness == 1)
@@ -656,7 +654,7 @@
                                                                     $lastday = $item[$t];
                                                                     $today = date('l');
                                                                 @endphp
-                                                                @if ($today == $value)
+                                                                @if ($today == $value || $firstday == "Every day")
                                                                     <span>Starts at -
                                                                         <b>{{ $deliveryfrom[$key] }}</b></span>
                                                                 @endif

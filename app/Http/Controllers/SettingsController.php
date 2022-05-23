@@ -134,6 +134,11 @@ class SettingsController extends Controller
         $language = Language::get();
         $currency = Currency::get();
         $countries = Country::get();
+<<<<<<< HEAD
+=======
+        $language = Language::get();
+        $currency = Currency::get();
+>>>>>>> 05e83814b031353ca7f0dcc14dde5fc2f7bbf1d9
         return view('admin.settings.create_store',compact('countries','language','currency'));
     }
 

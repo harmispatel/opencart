@@ -79,10 +79,10 @@ class MemberController extends Controller
             $customeraddress->address_1 = $request->address_1;
             $customeraddress->address_2 = isset($request->address_2) ? $request->address_2 : '';
             $customeraddress->city = $request->city;
-            $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '0';
+            $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '';
             $customeraddress->country_id = $request->country;
             $customeraddress->zone_id = $request->region;
-            $customeraddress->phone = isset($request->phone) ? $request->phone : '0';
+            $customeraddress->phone = isset($request->phone) ? $request->phone : '';
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->save();
 
@@ -132,10 +132,10 @@ class MemberController extends Controller
             $customeraddress->address_1 = $request->address_1;
             $customeraddress->address_2 = isset($request->address_2) ? $request->address_2 : '';
             $customeraddress->city = $request->city;
-            $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '0';
+            $customeraddress->postcode = isset($request->postcode) ? $request->postcode : '';
             $customeraddress->country_id = $request->country;
             $customeraddress->zone_id = $request->region;
-            $customeraddress->phone = isset($request->phone) ? $request->phone : '0';
+            $customeraddress->phone = isset($request->phone) ? $request->phone : '';
             $customeraddress->billing = isset($request->billing) ? $request->billing : '0';
             $customeraddress->update();
 
@@ -187,7 +187,7 @@ class MemberController extends Controller
         $html .=                 '<span> <b class="order-dates">Date:</b>' . date('d/m/Y', strtotime($customerorders->date_added)) . '</span>';
         $html .=                 '<span> <b class="order-id">Order ID:</b>' . $customerorders->order_id . '</span></b>';
         $html .=             '</div>';
-        $html .=             '<h3 class="order-delivery" style="border-bottom: 2px solid #777777;  color: #777777;  float: left;  font-size: 30px;  font-weight: bold;  padding-bottom: 10px;  text-align: center;  text-transform: uppercase;  width: 100%;">delivery</h3>';
+        $html .=             '<h3 class="order-delivery" style="border-bottom: 2px solid #777777;  color: #777777;  float: left;  font-size: 30px;  font-weight: bold;  padding-bottom: 10px;  text-align: center;  text-transform: uppercase;  width: 100%;">' . $customerorders->flag_post_code . '</h3>';
         $html .=             '<table class="list list-item" style="float: left;width:100%;margin: 0;">';
         $html .=                 '<thead>';
         $html .=                     '<tr>';
