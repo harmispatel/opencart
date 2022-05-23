@@ -1,19 +1,43 @@
 @php
-    $openclose = openclosetime();
-    $temp_set = session('template_settings');
-    $template_setting = isset($temp_set) ? $temp_set : '';
-
-    $social = session('social_site');
-    $social_site = isset($social) ? $social : '';
-
-    $store_set = session('store_settings');
-    $store_setting = isset($store_set) ? $store_set : '';
     
-    $store_open_close = isset($template_setting['polianna_open_close_store_permission']) ? $template_setting['polianna_open_close_store_permission'] : 0;
-  
-    $userlogin = session('username');
+    // Get Current Theme ID & Store ID
+    $currentURL = URL::to("/");
+    $current_theme_id = themeID($currentURL);
+    $theme_id = $current_theme_id['theme_id'];
+    $front_store_id =  $current_theme_id['store_id'];
+    // // Get Current Theme ID & Store ID
 
+    // Get Store Settings & Theme Settings & Other
+    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    //End Get Store Settings & Theme Settings & Other
+
+    // Template Settings
+    $template_setting = $store_theme_settings['template_settings'];
+    // End Template Settings
+
+    // Social Site Settings
+    $social_site = $store_theme_settings['social_settings'];
+    // End Social Site Settings
+
+    // Store Settings
+    $store_setting = $store_theme_settings['store_settings'];
+    // End Store Settings
+
+    // Get Open-Close Time
+    $openclose = openclosetime();
+    // End Open-Close Time
+
+    // User Delivery Type (Collection/Delivery)
+    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // End User Delivery Type
+  
+    // User Details
+    $userlogin = session('username');
+    // End User Details
+
+    // Get Coupon
     $Coupon = getCoupon();
+    // End Get Coupon
 
     $html = '';
     $headertotal = 0;
