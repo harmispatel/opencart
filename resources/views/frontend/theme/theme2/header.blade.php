@@ -105,7 +105,7 @@
             $headertotal += $price + $delivery_charge;
         }
     }
-   
+      
 @endphp
 
 <style>
