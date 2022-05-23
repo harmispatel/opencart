@@ -210,7 +210,6 @@
                                                         <input type="hidden" name="zone_id" id="zone_id" value="{{ $map_category['config_zone_id'] }}">
                                                         <label>Region</label>
                                                         <select class="form-control" id="config_zone_id" name="config_zone_id">
-
                                                         </select>
                                                     </div>
                                                     <hr>

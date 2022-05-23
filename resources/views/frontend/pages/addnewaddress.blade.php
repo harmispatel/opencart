@@ -16,7 +16,7 @@
     // End Template Settings
 
     // Social Site Settings
-    $social_site = $store_theme_settings['social_site'];
+    $social_site = $store_theme_settings['social_settings'];
     // End Social Site Settings
 
     // Store Settings

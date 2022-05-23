@@ -103,11 +103,7 @@
                                     <button class="btn map-bt w-100">GET DIRECTIONS</button>
                                 </form>
                                 <div class="shop-location text-center" style="padding: 45px">
-                                    @php
-                                         $name=session('store_settings');
-
-                                    @endphp
-                                    <h2>{{$name['config_name']}}</h2>
+                                    <h2>{{$store_setting['config_name']}}</h2>
                                     <p>{{ $store_setting['config_address'] }}</p>
                                     <span><b>Tel : </b>{{  $store_setting['config_telephone'] }}</span>
                                 </div>

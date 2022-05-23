@@ -131,8 +131,10 @@ class SettingsController extends Controller
 
     public function createstore()
     {
+        $language = Language::get();
+        $currency = Currency::get();
         $countries = Country::get();
-        return view('admin.settings.create_store',compact('countries'));
+        return view('admin.settings.create_store',compact('countries','language','currency'));
     }
 
     public function mapandcategory()
@@ -457,6 +459,22 @@ class SettingsController extends Controller
     public function savestoredata(Request $request)
     {
 
+        $request->validate([
+            'config_url' => 'required',
+            'config_ssl' => 'required',
+            'config_name' => 'required',
+            'config_owner' => 'required',
+            'config_address' => 'required',
+            'map_post_code' => 'required',
+            'config_country_id' => 'required',
+            'config_zone_id' => 'required',
+            'config_zone_id' => 'required',
+            'config_telephone' => 'required',
+            'config_title' => 'required',
+            'file_directory_url' => 'required',
+            'config_email' => 'required|email',
+        ]);
+
 
         // save in Store
         $store = new Store;
@@ -542,11 +560,9 @@ class SettingsController extends Controller
             $shopadd->save();
         }
 
-        $dest = $data['file_directory_url'];
+        $dest = 'home/thepublic/public_html/'.$data['file_directory_url'];
 
-        shell_exec('cp -R /pizzacolichfield.the-public.co.uk $dest');
-
-        // full_copy('../../pizzacolichfield.the-public.co.uk','../../happybestkebab.the-public.co.uk');
+        shell_exec("cp -R /home/thepublic/public_html/pizzacolichfield/. /$dest");
 
         return redirect()->route('dashboard')->with('success', 'Settings Updated..');
     }
