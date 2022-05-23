@@ -48,7 +48,6 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="orderreceiptLabel">Modal title</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mb-3" id="customerordermodal">
@@ -63,7 +62,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="orderreviewLabel">Modal title</h5>
+              <h5 class="modal-title" id="orderreviewLabel">WRITE REVIEW</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body mb-3">
@@ -421,7 +420,7 @@
                                                                                                 </tr>
                                                                                             </table>
                                                                                             <div class="d-flex justify-content-around">
-                                                                                                <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order </a>
+                                                                                                <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a>
                                                                                                 <button type="button" class="btn btn-sm customerorderdetail" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
                                                                                             </div>
                                                                                         </div>

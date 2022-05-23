@@ -154,13 +154,24 @@ class MemberController extends Controller
     public function getcustomerorderdetail(Request $request)
     {
         $cusromerOrderId = $request->customerorderid;
-        // $customers = Customer::where('customer_id',$cusromerOrderId)->first();
-        // $customeraddress = CustomerAddress::with(['hasOneRegion','hasOneCountry'])->where('customer_id',$cusromerOrderId)->get();
         $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus', 'hasManyOrderTotal'])->where('order_id', $cusromerOrderId)->first();
-        // echo '<pre>';
-        // print_r($customerorders->toArray());
-        // exit();
-        $store_setting = session('store_settings');
+
+        // Get Current Theme ID & Store ID
+        $currentURL = URL::to("/");
+        $current_theme_id = themeID($currentURL);
+        $theme_id = $current_theme_id['theme_id'];
+        $front_store_id =  $current_theme_id['store_id'];
+        // Get Current Theme ID & Store ID
+
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+        //End Get Store Settings & Theme Settings & Other
+
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
+
+
         $html = '';
         $html .= '<div id="wrapper">';
         $html .=     '<div id="content" style="text-align: center;">';
@@ -258,7 +269,7 @@ class MemberController extends Controller
         $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
         $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
         $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" class="button action-write-review" value="' . $customerorders->order_id . '" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="far fa-comment"></i> Review</a>';
-        $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order </a>';
+        $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a>';
         $html .=         '</div>';
         $html .=     '</div>';
         $html .= '</div>';
