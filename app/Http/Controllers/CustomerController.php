@@ -49,15 +49,11 @@ class CustomerController extends Controller
 
             if($user_group_id == 1)
             {
-                $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($current_store_id){
-                    $query->where('store_id',$current_store_id);
-                })->get();
+                $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->where('store_id',$current_store_id)->get();
             }
             else
             {
-                $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->whereHas('hasOneStore', function ($query) use ($user_shop_id){
-                    $query->where('store_id',$user_shop_id);
-                })->get();
+                $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->where('store_id',$user_shop_id)->get();
             }
 
             return DataTables::of($data)
@@ -65,7 +61,10 @@ class CustomerController extends Controller
             ->addColumn('action', function($row){
 
                 $edit_url = route('editcustomer',$row->customer_id);
-                $btn = '<div class="btn-group"><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a><button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="dropdown-header">Login into Store</li><li class="text-center"><a href="'.$row->hasOneStore->ssl.'/account/login" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li></ul></div>';
+
+                $menu_redirect_url = isset($row->hasOneStore->ssl) ? $row->hasOneStore->ssl : '#';
+
+                $btn = '<div class="btn-group"><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a><button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="dropdown-header">Login into Store</li><li class="text-center"><a href="#/account/login" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li></ul></div>';
 
                 return $btn;
             })

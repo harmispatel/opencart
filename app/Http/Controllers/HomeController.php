@@ -48,28 +48,37 @@ class HomeController extends Controller
         $current_store_id = currentStoreId();
 
         $user_details = user_details();
-
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
         }
+        $user_shop_id = $user_details['user_shop'];
 
         if($user_group_id == 1)
         {
-            $customers = Customer::where('store_id',$current_store_id)->count();
-            $product = Product::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($current_store_id)
+            if($current_store_id == 0)
             {
-                $q->where('store_id',$current_store_id);
-            })->count();
-            $categories = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use($current_store_id)
+                $customers = Customer::count();
+                $product = Product::count();
+                $categories = Category::count();
+                $orders = Orders::count();
+            }
+            else
             {
-                $q->where('store_id',$current_store_id);
-            })->count();
-            $orders = Orders::where('store_id',$current_store_id)->count();
+                $customers = Customer::where('store_id',$current_store_id)->count();
+                $product = Product::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($current_store_id)
+                {
+                    $q->where('store_id',$current_store_id);
+                })->count();
+                $categories = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use($current_store_id)
+                {
+                    $q->where('store_id',$current_store_id);
+                })->count();
+                $orders = Orders::where('store_id',$current_store_id)->count();
+            }
         }
         else
         {
-            $user_shop_id = $user_details['user_shop'];
 
             $customers = Customer::where('store_id',$user_shop_id)->count();
             $product = Product::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($user_shop_id)

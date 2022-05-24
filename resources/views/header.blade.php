@@ -97,6 +97,7 @@
             </li>
             <li class="nav-item">
                 <select class="form-control" id="SearchStore">
+                        <option value="0">Store Front</option>
                     @foreach ($stores as $store)
                         <option value="{{ $store->store_id }}" {{ ($storeID == $store->store_id) ? 'selected' : '' }}>{{ html_entity_decode($store->name) }}</option>
                     @endforeach
