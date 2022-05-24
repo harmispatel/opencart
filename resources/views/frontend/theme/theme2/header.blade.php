@@ -164,7 +164,7 @@
                         </div>
                     @endif
                 @else
-                    @if ($currentday == $value)
+                    @if ($currentday == $value || $firstday == "Every day")
                         <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                             <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
                         </div>
