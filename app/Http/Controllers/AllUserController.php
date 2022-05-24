@@ -80,7 +80,7 @@ class AllUserController extends Controller
         $data->salt = genratetoken(9);
         $data->code = '';
         $data->user_shop = $request->store;
-        $data->ip = $_SERVER['REMOTE_ADDR'];
+        $data->ip = $request->ip();
         $data->accessdirectory = isset($request->accessdirectory) ? $request->accessdirectory : '';
         $data->date_added = date('Y-m-d');
 

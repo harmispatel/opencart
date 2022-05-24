@@ -441,7 +441,7 @@ class CustomerController extends Controller
         $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
         $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
         $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : '';
-        $customer->ip =  $_SERVER['REMOTE_ADDR'];
+        $customer->ip =  $request->ip();
         $customer->status = isset($request->status) ? $request->status : 1;
         $customer->approved = isset($request->approved) ? $request->approved : 1;
         $customer->token = isset($request->token) ? $request->token : '';
@@ -454,7 +454,7 @@ class CustomerController extends Controller
         // Store Customer IP
         $customer_ip = new CustomerIP;
         $customer_ip->customer_id = $customer->customer_id;
-        $customer_ip->ip = $_SERVER['REMOTE_ADDR'];
+        $customer_ip->ip = $request->ip();
         $customer_ip->date_added = date('Y-m-d');
         $customer_ip->save();
 
@@ -601,7 +601,7 @@ class CustomerController extends Controller
 
 
         // Customer IP
-        $cip = $_SERVER['REMOTE_ADDR'];
+        $cip = $request->ip();
         $customer_ip = CustomerIP::where('customer_id',$customer_id)->where('ip',$cip)->first();
 
         if(empty($customer_ip) || $customer_ip == '')

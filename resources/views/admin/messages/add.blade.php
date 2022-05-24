@@ -65,11 +65,21 @@
                                 {{ csrf_field() }}
                                 <div class="form-group">
                                     <label for="title">Title</label>
-                                    <input type="text" name="title" class="form-control" id="title">
+                                    <input type="text" name="title" class="form-control {{ ($errors->has('title')) ? 'is-invalid' : '' }}" id="title">
+                                    @if ($errors->has('title'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('title') }}
+                                    </div>
+                                @endif
                                   </div>
                                 <div class="form-group">
                                     <label for="message">Message</label>
-                                    <textarea class="form-control" name="message" id="message" rows="3"></textarea>
+                                    <textarea class="form-control {{ ($errors->has('message')) ? 'is-invalid' : '' }}" name="message" id="message" rows="3"></textarea>
+                                    @if ($errors->has('message'))
+                                    <div class="invalid-feedback">
+                                        {{ $errors->first('message') }}
+                                    </div>
+                                @endif
                                   </div>
                                </form>
                             </div>

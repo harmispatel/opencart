@@ -26,7 +26,7 @@ class ReservationController extends Controller
         $reservations->message = isset($request->message) ? $request->message :'';
 
         $reservations->created_date = date("Y-m-d h:i:s");
-        $reservations->ip =  $_SERVER['REMOTE_ADDR'];
+        $reservations->ip =  $request->ip();
         $reservations->save();
         return redirect()->route('home');
     }

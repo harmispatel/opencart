@@ -135,7 +135,7 @@ class CustomerOrder extends Controller
                         $gorder->currency_id = 1;
                         $gorder->currency_code = "GBP";
                         $gorder->currency_value = "1.00000000";
-                        $gorder->ip = $_SERVER['REMOTE_ADDR'];
+                        $gorder->ip = $request->ip();
                         $gorder->forwarded_ip = '';
                         $gorder->user_agent = '';
                         $gorder->accept_language = '';
@@ -523,7 +523,7 @@ class CustomerOrder extends Controller
                         $gorder->currency_id = 1;
                         $gorder->currency_code = "GBP";
                         $gorder->currency_value = "1.00000000";
-                        $gorder->ip = $_SERVER['REMOTE_ADDR'];
+                        $gorder->ip = $request->ip();
                         $gorder->forwarded_ip = '';
                         $gorder->user_agent = '';
                         $gorder->accept_language = '';
