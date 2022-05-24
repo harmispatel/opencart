@@ -360,14 +360,14 @@
                                                                                                         @endphp
 
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                            @if ($currentday == $value)
+                                                                                                            @if ($currentday == $value || $firstday == "Every day")
                                                                                                                 <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
                                                                                                                     <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
                                                                                                         @else
-                                                                                                            @if ($currentday == $value)
+                                                                                                            @if ($currentday == $value || $firstday == "Every day")
                                                                                                                 <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                     <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
