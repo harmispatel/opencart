@@ -34,9 +34,14 @@ class ProductController extends Controller
 
         // Current Store ID
         $current_store_id = currentStoreId();
-        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
-            $query->where('store_id', $current_store_id);
-        })->get();
+        if($current_store_id == 0){
+            $category = Category::with(['hasOneCategoryToStore'])->get();
+        }else{
+
+            $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+                $query->where('store_id', $current_store_id);
+            })->get();
+        }
         return view('admin.product.list', ['category' => $category]);
     }
 
@@ -126,54 +131,55 @@ class ProductController extends Controller
         $html .= '<th>';
 
         if (isset($data->product_id)) {
+             if($demo != ''){
+                 foreach ($demo as $key=>$value) {
 
-            foreach ($demo as $key=>$value) {
-
-                $productvalue=$value['id_group_option'];
-                $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
-                $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
-                $html .= '<h3>' . $top->name_topping . '</h3>
-                <div style="margin-bottom: 10px;">
-                <input type="radio" class="typetopping_'.$lastid.'_'.$key.'" name="product[' .$lastid .'][typetopping]['.$productvalue.']" value="select" onclick="radiocheck('.$lastid.','.$key.');"';
-                ($top->typetopping == "select") ? $html .= ' checked' : '';
-                $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="product[' .$lastid .'][typetopping]['.$productvalue.']" class="typetopping_'.$lastid.'_'.$key.'" value="checkbox" onclick="radiocheck('.$lastid.','.$key.');"';
-                ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
-                $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div style="margin-bottom: 10px;"><input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="1"';
-                ($top->enable == 1) ? $html .= ' checked' : '';
-                $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="0"';
-                ($top->enable == 0) ? $html .= 'checked' : '';
-                $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div class="form-floating">
-                    <label for="rename" class="form-label">Rename to</label>
-                    <input type="text" name="product['.$lastid.'][renamegroup]['.$productvalue.']" class="form-control">
-                </div>';
-                    $html .='<div id="checkbox_'.$lastid.'_'.$key.'" style="display:none">';
-                    $html .='<lable>Default selected</lable>';
-                    $html .='<table>';
-                    $html .='<tbody>';
-                    $html .='<tr>';
-                    foreach($dropdown as $dropdowns){
-                    $html .='<td><input type="checkbox" value="'.$dropdowns->name.'" name="product['.$lastid.'][product_topping_checkbox]['.$productvalue.']" ></td>';
-                    $html .='<td>'.$dropdowns->name.'</td>';
-                    $html .='</tr>';
-                    }
-                    $html .='</tbody>';
-                    $html .='</table>';
-                    $html .='</div>';
-                    $html .='<div id="select_'.$lastid.'_'.$key.'" style="display:none">';
-                    $html .='<lable>Default selected</lable>';
-                    $html .='<select  class="form-control" name="product['.$lastid.'][product_topping_select]['.$productvalue.']">';
-                    foreach($dropdown as $dropdowns){
-                        $html .='<option>'.$dropdowns->name.'</option>';
-                    }
-                    $html .='</select>';
-                    $html .='</div>';
-            }
+                     $productvalue=$value['id_group_option'];
+                     $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
+                     $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
+                     $html .= '<h3>' . $top->name_topping . '</h3>
+                     <div style="margin-bottom: 10px;">
+                     <input type="radio" class="typetopping_'.$lastid.'_'.$key.'" name="product[' .$lastid .'][typetopping]['.$productvalue.']" value="select" onclick="radiocheck('.$lastid.','.$key.');"';
+                     ($top->typetopping == "select") ? $html .= ' checked' : '';
+                     $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
+                     <input type="radio" name="product[' .$lastid .'][typetopping]['.$productvalue.']" class="typetopping_'.$lastid.'_'.$key.'" value="checkbox" onclick="radiocheck('.$lastid.','.$key.');"';
+                     ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
+                     $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+                     </div>
+                     <div style="margin-bottom: 10px;"><input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="1"';
+                     ($top->enable == 1) ? $html .= ' checked' : '';
+                     $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
+                         <input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="0"';
+                     ($top->enable == 0) ? $html .= 'checked' : '';
+                     $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
+                     </div>
+                     <div class="form-floating">
+                         <label for="rename" class="form-label">Rename to</label>
+                         <input type="text" name="product['.$lastid.'][renamegroup]['.$productvalue.']" class="form-control">
+                     </div>';
+                         $html .='<div id="checkbox_'.$lastid.'_'.$key.'" style="display:none">';
+                         $html .='<lable>Default selected</lable>';
+                         $html .='<table>';
+                         $html .='<tbody>';
+                         $html .='<tr>';
+                         foreach($dropdown as $dropdowns){
+                         $html .='<td><input type="checkbox" value="'.$dropdowns->name.'" name="product['.$lastid.'][product_topping_checkbox]['.$productvalue.']" ></td>';
+                         $html .='<td>'.$dropdowns->name.'</td>';
+                         $html .='</tr>';
+                         }
+                         $html .='</tbody>';
+                         $html .='</table>';
+                         $html .='</div>';
+                         $html .='<div id="select_'.$lastid.'_'.$key.'" style="display:none">';
+                         $html .='<lable>Default selected</lable>';
+                         $html .='<select  class="form-control" name="product['.$lastid.'][product_topping_select]['.$productvalue.']">';
+                         foreach($dropdown as $dropdowns){
+                             $html .='<option>'.$dropdowns->name.'</option>';
+                         }
+                         $html .='</select>';
+                         $html .='</div>';
+                 }
+             }
 
         } else {
             $html .= 'No Topping';
@@ -335,9 +341,13 @@ class ProductController extends Controller
         $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
         $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
         $current_store_id = currentStoreId();
-        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
-            $query->where('store_id', $current_store_id);
-        })->get();
+        if($current_store_id == 0){
+            $category= Category::with(['hasOneCategoryToStore'])->get();
+        }else{
+            $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+                $query->where('store_id', $current_store_id);
+            })->get();
+        }
         $product_icon = ProductIcons::select('*')->get();
         $result['manufacturer'] = $manufacturer;
         $result['category'] = $category;

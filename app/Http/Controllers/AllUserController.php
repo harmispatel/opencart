@@ -23,7 +23,12 @@ class AllUserController extends Controller
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
-        $data['users'] = Users::where('user_shop',$current_store_id)->get();
+        if ($current_store_id == 0) {
+            $data['users'] = Users::get();
+        } else {
+            $data['users'] = Users::where('user_shop',$current_store_id)->get();
+        }
+
         return view('admin.users.list',$data);
     }
 

@@ -144,7 +144,8 @@
 
 
     function getallCustomers(){
-
+        var table = $('.table').DataTable();
+       table.destroy();
         var table = $('.table').DataTable({
         processing: true,
         serverSide: true,

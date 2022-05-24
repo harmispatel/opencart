@@ -60,33 +60,65 @@ class OrdersController extends Controller
 
         if($user_group_id == 1)
         {
-            // Get Orders
-            $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$current_store_id)->count();
+            if($current_store_id == 0){
+                $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->count();
 
-            $totalFiltered = $totalData;
-            $limit = $request->request->get('length');
-            $start = $request->request->get('start');
-            $order = $columns[$request->input('order.0.column')];
-            $dir = $request->input('order.0.dir');
+                $totalFiltered = $totalData;
+                $limit = $request->request->get('length');
+                $start = $request->request->get('start');
+                $order = $columns[$request->input('order.0.column')];
+                $dir = $request->input('order.0.dir');
 
-            if(!empty($request->input('search.value')))
-            {
-                $search = $request->input('search.value');
+                if(!empty($request->input('search.value')))
+                {
+                    $search = $request->input('search.value');
 
-                $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
-                    $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
-                })->where('store_id',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+                    $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                        $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                    })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
 
-                $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
-                    $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
-                })->where('store_id',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+                    $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                        $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                    })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+                }
+                else
+                {
+                    $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+
+                }
             }
             else
             {
-                $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$current_store_id)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+                $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$current_store_id)->count();
 
+                $totalFiltered = $totalData;
+                $limit = $request->request->get('length');
+                $start = $request->request->get('start');
+                $order = $columns[$request->input('order.0.column')];
+                $dir = $request->input('order.0.dir');
+
+                if(!empty($request->input('search.value')))
+                {
+                    $search = $request->input('search.value');
+
+                    $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                        $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                    })->where('store_id',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+
+
+                    $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                        $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
+                    })->where('store_id',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+                }
+                else
+                {
+                    $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$current_store_id)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+
+                }
             }
+            // Get Orders
+
         }
         else
         {

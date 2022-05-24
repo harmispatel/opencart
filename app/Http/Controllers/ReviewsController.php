@@ -31,7 +31,13 @@ class ReviewsController extends Controller
 
         if($user_group_id == 1)
         {
-            $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->where('store_id',$current_store_id)->get();
+             if($user_group_id == 0){
+                $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->get();
+
+             }else{
+
+                 $data['reviews'] = Reviews::with(['hasOneCustomer','hasOneOrder'])->where('store_id',$current_store_id)->get();
+             }
         }
         else
         {

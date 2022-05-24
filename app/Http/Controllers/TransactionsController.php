@@ -34,7 +34,12 @@ class TransactionsController extends Controller
 
         if($user_group_id == 1)
         {
-            $customerorder = CustomerOrder::where('store_id',$current_store_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+            if ($current_store_id == 0) {
+                $customerorder = CustomerOrder::with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+            }
+            else {
+                $customerorder = CustomerOrder::where('store_id',$current_store_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
+            }
         }
         else
         {

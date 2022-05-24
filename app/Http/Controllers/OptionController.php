@@ -232,8 +232,9 @@ class OptionController extends Controller
 
         if($user_group_id == 1)
         {
-            // Get Total Toppings Count
-            $totalData = Topping::where('store_topping',$current_store_id)->count();
+
+            if($current_store_id == 0){
+                $totalData = Topping::count();
 
             $totalFiltered = $totalData;
             $limit = $request->request->get('length');
@@ -246,14 +247,39 @@ class OptionController extends Controller
             {
                 $search = $request->input('search.value');
 
-                $posts = Topping::where('store_topping',$current_store_id)->where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+                $posts = Topping::where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
-                $totalFiltered = Topping::where('store_topping',$current_store_id)->where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+                $totalFiltered = Topping::where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->count();
             }
             else
             {
-                $posts = Topping::where('store_topping','=',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+                $posts = Topping::offset($start)->orderBy($order,$dir)->limit($limit)->get();
             }
+            }else{
+                $totalData = Topping::where('store_topping',$current_store_id)->count();
+
+                $totalFiltered = $totalData;
+                $limit = $request->request->get('length');
+                $start = $request->request->get('start');
+                $order = $columns[$request->input('order.0.column')];
+                $dir = $request->input('order.0.dir');
+
+                // Search & Sort
+                if(!empty($request->input('search.value')))
+                {
+                    $search = $request->input('search.value');
+
+                    $posts = Topping::where('store_topping',$current_store_id)->where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+
+                    $totalFiltered = Topping::where('store_topping',$current_store_id)->where('name_topping','LIKE',"%{$search}%")->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+                }
+                else
+                {
+                    $posts = Topping::where('store_topping','=',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
+                }
+            }
+            // Get Total Toppings Count
+
         }
         else
         {
