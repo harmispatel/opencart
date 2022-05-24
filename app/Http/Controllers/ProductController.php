@@ -34,9 +34,14 @@ class ProductController extends Controller
 
         // Current Store ID
         $current_store_id = currentStoreId();
-        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
-            $query->where('store_id', $current_store_id);
-        })->get();
+        if($current_store_id == 0){
+            $category = Category::with(['hasOneCategoryToStore'])->get();
+        }else{
+
+            $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+                $query->where('store_id', $current_store_id);
+            })->get();
+        }
         return view('admin.product.list', ['category' => $category]);
     }
 
@@ -336,9 +341,13 @@ class ProductController extends Controller
         $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
         $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
         $current_store_id = currentStoreId();
-        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
-            $query->where('store_id', $current_store_id);
-        })->get();
+        if($current_store_id == 0){
+            $category= Category::with(['hasOneCategoryToStore'])->get();
+        }else{
+            $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
+                $query->where('store_id', $current_store_id);
+            })->get();
+        }
         $product_icon = ProductIcons::select('*')->get();
         $result['manufacturer'] = $manufacturer;
         $result['category'] = $category;

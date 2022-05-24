@@ -49,7 +49,13 @@ class CustomerController extends Controller
 
             if($user_group_id == 1)
             {
-                $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->where('store_id',$current_store_id)->get();
+                 if($user_group_id == 0){
+                    $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->get();
+
+                 }else{
+
+                     $data = Customer::with(['hasOneCustomerGroupDescription','hasOneStore'])->where('store_id',$current_store_id)->get();
+                 }
             }
             else
             {

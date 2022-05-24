@@ -15,7 +15,7 @@ class CouponController extends Controller
 {
 
     //Function of Get Coupons By Current Store
-    public function index()
+    public function  index()
     {
         // Check User Permission
         if (check_user_role(63) != 1)
@@ -35,7 +35,13 @@ class CouponController extends Controller
 
         if($user_group_id == 1)
         {
-            $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
+             if($user_group_id == 0){
+
+                $data['coupons'] = Coupon::get();
+             }else{
+
+                 $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
+             }
         }
         else
         {
