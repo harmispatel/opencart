@@ -53,80 +53,151 @@ class CategoryController extends Controller
 
         if($user_group_id == 1)
         {
-            // Get Total Categories
-            $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                $query->where('store_id',$current_store_id);
-            })->count();
+            if ($current_store_id == 0) {
+                // Get Total Categories
+                $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->count();
 
-            $totalFiltered = $totalData;
-            $limit = $request->request->get('length');
-            $start = $request->request->get('start');
-            $order = $columns[$request->input('order.0.column')];
-            $dir = $request->input('order.0.dir');
+                $totalFiltered = $totalData;
+                $limit = $request->request->get('length');
+                $start = $request->request->get('start');
+                $order = $columns[$request->input('order.0.column')];
+                $dir = $request->input('order.0.dir');
 
-            if(!empty($request->input('search.value')))
-            {
-                $search = $request->input('search.value');
-
-                $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                    $query->where('sort_order','LIKE',"%{$search}%")
-                    ->orwhereHas('hasOneCategory', function ($query) use ($search){
-                        $query->where('name','LIKE',"%{$search}%");
-                    });
-                })
-                ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                    $query->where('store_id',$current_store_id);
-                });
-
-                if($order == 'name')
+                if(!empty($request->input('search.value')))
                 {
-                    if($dir == 'asc')
+                    $search = $request->input('search.value');
+
+                    $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
+                        $query->where('sort_order','LIKE',"%{$search}%")
+                        ->orwhereHas('hasOneCategory', function ($query) use ($search){
+                            $query->where('name','LIKE',"%{$search}%");
+                        });
+                    });
+
+                    if($order == 'name')
                     {
-                        $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        if($dir == 'asc')
+                        {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
+                        else
+                        {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
                     }
                     else
                     {
-                        $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        $posts= $posts->orderBy($order, $dir);
                     }
+                    $posts = $posts->offset($start)->limit($limit)->get();
+
+                    $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
+                        $query->where('sort_order','LIKE',"%{$search}%");
+                    })
+
+                    ->offset($start)->limit($limit)->count();
+
                 }
                 else
                 {
-                    $posts= $posts->orderBy($order, $dir);
+                    $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->offset($start)->limit($limit);
+
+                    if($order == 'name')
+                    {
+                        if($dir == 'asc')
+                        {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
+                        else
+                        {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
+                    }
+                    else
+                    {
+                        $posts= $posts->orderBy($order, $dir);
+                    }
+                    $posts = $posts->offset($start)->limit($limit)->get();
                 }
-                $posts = $posts->offset($start)->limit($limit)->get();
-
-                $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                    $query->where('sort_order','LIKE',"%{$search}%");
-                })
-
-                ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                    $query->where('store_id',$current_store_id);
-                })->offset($start)->limit($limit)->count();
 
             }
             else
             {
-                $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])
-                ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                // Get Total Categories
+                $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
                     $query->where('store_id',$current_store_id);
-                })->offset($start)->limit($limit);
+                })->count();
 
-                if($order == 'name')
+                $totalFiltered = $totalData;
+                $limit = $request->request->get('length');
+                $start = $request->request->get('start');
+                $order = $columns[$request->input('order.0.column')];
+                $dir = $request->input('order.0.dir');
+
+                if(!empty($request->input('search.value')))
                 {
-                    if($dir == 'asc')
+                    $search = $request->input('search.value');
+
+                    $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
+                        $query->where('sort_order','LIKE',"%{$search}%")
+                        ->orwhereHas('hasOneCategory', function ($query) use ($search){
+                            $query->where('name','LIKE',"%{$search}%");
+                        });
+                    })
+                    ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                        $query->where('store_id',$current_store_id);
+                    });
+
+                    if($order == 'name')
                     {
-                        $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        if($dir == 'asc')
+                        {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
+                        else
+                        {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
                     }
                     else
                     {
-                        $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        $posts= $posts->orderBy($order, $dir);
                     }
+                    $posts = $posts->offset($start)->limit($limit)->get();
+
+                    $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
+                        $query->where('sort_order','LIKE',"%{$search}%");
+                    })
+
+                    ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                        $query->where('store_id',$current_store_id);
+                    })->offset($start)->limit($limit)->count();
+
                 }
                 else
                 {
-                    $posts= $posts->orderBy($order, $dir);
+                    $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])
+                    ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
+                        $query->where('store_id',$current_store_id);
+                    })->offset($start)->limit($limit);
+
+                    if($order == 'name')
+                    {
+                        if($dir == 'asc')
+                        {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
+                        else
+                        {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                        }
+                    }
+                    else
+                    {
+                        $posts= $posts->orderBy($order, $dir);
+                    }
+                    $posts = $posts->offset($start)->limit($limit)->get();
                 }
-                $posts = $posts->offset($start)->limit($limit)->get();
             }
         }
         else
@@ -221,7 +292,7 @@ class CategoryController extends Controller
                 $edit_url = route('categoryedit', $category_id);
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$category_id'>";
-                $data['name'] = $post->hasOneCategory->name;
+                $data['name'] = isset($post->hasOneCategory->name) ? $post->hasOneCategory->name : '';
                 $data['sort_order'] = $post->sort_order;
 
                 if (check_user_role(47) == 1)
