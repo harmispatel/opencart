@@ -35,7 +35,12 @@ class VoucherController extends Controller
         if($user_group_id == 1)
         {
             // Gift Vouchers
-            $data['vouchers'] = Voucher::where('store_id',$current_store_id)->join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+            if ($current_store_id == 0) {
+                $data['vouchers'] = Voucher::join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+            }
+            else {
+                $data['vouchers'] = Voucher::where('store_id',$current_store_id)->join('oc_voucher_theme_description','oc_voucher.voucher_theme_id', 'oc_voucher_theme_description.voucher_theme_id')->get();
+            }
         }
         else
         {

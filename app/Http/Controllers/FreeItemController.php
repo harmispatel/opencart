@@ -29,7 +29,13 @@ class FreeItemController extends Controller
 
         if($user_group_id == 1)
         {
-            $data['cartrul'] = FreeRule::where('id_store',$current_store_id)->get();
+            if ($current_store_id == 0) {
+                $data['cartrul'] = FreeRule::get();
+            }
+            else {
+                $data['cartrul'] = FreeRule::where('id_store',$current_store_id)->get();
+            }
+
         }
         else
         {
@@ -232,7 +238,12 @@ class FreeItemController extends Controller
 
         if($user_group_id == 1)
         {
-            $data = FreeItemadd::where('store_id',$current_store_id)->get();
+            if ($current_store_id == 0) {
+                $data = FreeItemadd::get();
+            }
+            else {
+                $data = FreeItemadd::where('store_id',$current_store_id)->get();
+            }
         }
         else
         {

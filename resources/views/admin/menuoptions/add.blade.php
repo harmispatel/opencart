@@ -210,17 +210,24 @@
     function addoption()
     {
         var add_number = $('input[name="addNumber"]').val();
-        for (i = 0; i < add_number; i++)
+        if (add_number > 10)
         {
-            number_option++;
-            var html = '<tr class="option_' + number_option +
-                '"><td class="align-middle"><input type="text" value="" name="optiontopping['+number_option+'][name]" class="form-control" placeholder="Item Name" /></td>';
-            html += '<td class="align-middle"><input type="text" value="" name="optiontopping['+number_option+'][price_main]" class="form-control" placeholder="Price" /></td>';
-            html += '<td class="align-middle"><input type="text" value="" class="form-control" name="optiontopping['+number_option+'][order]" placeholder="Sort Order" /></td>';
-            html += '<td><select name="optiontopping['+number_option+'][sub_option][]" multiple="multiple" class="form-control">@foreach($suboptions as $suboption)<option value="{{ $suboption->id_topping }}">{{ $suboption->name_topping }}</option>@endforeach</select></td>';
-            html += '<td class="align-middle"><a onclick="$(\'.option_' + number_option +
-                '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
-            $('#listTopping').append(html);
+            alert(`You can't Add more then 10 items at a time`);
+        }
+        else
+        {
+            for (i = 0; i < add_number; i++)
+            {
+                number_option++;
+                var html = '<tr class="option_' + number_option +
+                    '"><td class="align-middle"><input type="text" value="" name="optiontopping['+number_option+'][name]" class="form-control" placeholder="Item Name" /></td>';
+                html += '<td class="align-middle"><input type="text" value="" name="optiontopping['+number_option+'][price_main]" class="form-control" placeholder="Price" /></td>';
+                html += '<td class="align-middle"><input type="text" value="" class="form-control" name="optiontopping['+number_option+'][order]" placeholder="Sort Order" /></td>';
+                html += '<td><select name="optiontopping['+number_option+'][sub_option][]" multiple="multiple" class="form-control">@foreach($suboptions as $suboption)<option value="{{ $suboption->id_topping }}">{{ $suboption->name_topping }}</option>@endforeach</select></td>';
+                html += '<td class="align-middle"><a onclick="$(\'.option_' + number_option +
+                    '\').remove()" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+                $('#listTopping').append(html);
+            }
         }
     }
 

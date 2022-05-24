@@ -336,7 +336,13 @@ function getsize($product_id)
 
 function getimage($current_store)
 {
-    $image=PhotoGallry::where('store_id',$current_store)->orderBy('image_id','ASC')->get();
+    if ($current_store == 0)
+    {
+        $image=PhotoGallry::orderBy('image_id','ASC')->get();
+    }
+    else {
+        $image=PhotoGallry::where('store_id',$current_store)->orderBy('image_id','ASC')->get();
+    }
     return $image;
 }
 
