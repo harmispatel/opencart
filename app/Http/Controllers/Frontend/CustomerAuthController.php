@@ -131,7 +131,7 @@ class CustomerAuthController extends Controller
         $customer->newsletter = isset($request->newsletter) ? $request->newsletter : 0;
         $customer->address_id = isset($request->address_id) ? $request->address_id : 0;
         $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : 1;
-        $customer->ip =  $_SERVER['REMOTE_ADDR'];
+        $customer->ip =  $request->ip();
         $customer->status = isset($request->status) ? $request->status : 1;
         $customer->approved = isset($request->approved) ? $request->approved : 1;
         $customer->token = isset($request->token) ? $request->token : '';
@@ -240,7 +240,7 @@ class CustomerAuthController extends Controller
         $customer->telephone = isset($request->phone) ? $request->phone : '';
         $customer->password = md5($request->password);
         $customer->customer_group_id = isset($request->customer_group_id) ? $request->customer_group_id : 1;
-        $customer->ip =  $_SERVER['REMOTE_ADDR'];
+        $customer->ip =  $request->ip();
         $customer->gender_id = isset($request->title) ? $request->title : 1;
         $customer->update();
 
