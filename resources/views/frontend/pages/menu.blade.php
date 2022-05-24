@@ -329,8 +329,8 @@
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             @else
-                                                                                                                @if ($currentday == $value)
-                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                         <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
@@ -368,7 +368,7 @@
                                                                                                             @endif
                                                                                                         @else
                                                                                                             @if ($currentday == $value)
-                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#storeclose">
+                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                     <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
@@ -679,6 +679,7 @@
                                         @if ($currentday == $value || $firstday == "Every day")
                                             @if (!empty($mycart['size']))
                                                 <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                                                @break
                                             @else
                                                 <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
                                                 <div class="closed-now">
