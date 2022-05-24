@@ -404,6 +404,7 @@
                                         $lasttime = strtotime($totime[$key]);
                                         $today = time();
                                         $currentday = date('l');
+                                        $firstday = $item[0];
                                     @endphp
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
@@ -412,7 +413,7 @@
                                             </div>
                                         @endif
                                     @else
-                                        @if ($currentday == $value)
+                                        @if ($currentday == $value || $firstday == "Every day")
                                             <div class="close-shop">
                                                 <h2>Sorry we are closed now!</h2>
                                                 <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
@@ -643,8 +644,7 @@
                                                         $delivery_same_bussiness = isset($openclose['delivery_same_bussiness']) ? $openclose['delivery_same_bussiness'] : '';
                                                     @endphp
                                                     @if ($delivery_same_bussiness == 1)
-                                                        <span>{{ $openclose['delivery_gaptime'] ? $openclose['delivery_gaptime'] : 'Select' }}
-                                                            Min</b></span>
+                                                        <span>{{ $openclose['delivery_gaptime'] ? $openclose['delivery_gaptime'] : 'Select' }} Min</b></span>
                                                     @else
                                                         @foreach ($deliverydays as $key => $item)
                                                             @foreach ($item as $value)
@@ -678,21 +678,19 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             @if (!empty($mycart['size']))
-                                                <a href="{{ route('checkout') }}" class="btn checkbt"
-                                                    style="background-color: green; color:white;">Checkout</a>
+                                                <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
                                             @else
-                                                <a href="{{ route('cart') }}" class="btn checkbt"
-                                                    style="background-color: green; color:white;">Checkout</a>
+                                                <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                                                <div class="closed-now">
+                                                    <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                                </div>
+                                                @break
                                             @endif
-                                            <div class="closed-now">
-                                                <span class="closing-text" style="color: green !important;">We are open now!</span>
-                                            </div>
                                         @endif
                                     @else
-                                        @if ($currentday == $value)
+                                        @if ($currentday == $value || $firstday == "Every day")
                                             <div class="closed-now">
-                                                <button class="btn w-100 checkbt" disabled
-                                                    style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                                <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
                                                 <div class="closed-now">
                                                     <span class="closing-text">We are closed now!</span>
                                                 </div>

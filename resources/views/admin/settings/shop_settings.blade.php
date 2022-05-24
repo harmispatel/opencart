@@ -164,10 +164,15 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Website Address:</label>
-                                                        <input type="text" class="form-control" id="config_url" name="config_url" value="{{ $map_category['config_url'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_url')) ? 'is-invalid' : '' }}" id="config_url" name="config_url" value="{{ $map_category['config_url'] }}">
                                                         <code class="text-muted">
                                                             Include the full URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/. <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
                                                         </code>
+                                                        @if ($errors->has('config_url'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_url') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -185,47 +190,80 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>SSL URL</label>
-                                                        <input type="text" class="form-control" id="config_ssl" name="config_ssl" value="{{ $map_category['config_ssl'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_ssl')) ? 'is-invalid' : '' }}" id="config_ssl" name="config_ssl" value="{{ $map_category['config_ssl'] }}">
                                                         <code class="text-muted">
                                                             SSL URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/ <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
                                                         </code>
+                                                        @if ($errors->has('config_ssl'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_ssl') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Shop Name</label>
-                                                        <input type="text" class="form-control" id="config_name" name="config_name" value="{{ $map_category['config_name'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_name')) ? 'is-invalid' : '' }}" id="config_name" name="config_name" value="{{ $map_category['config_name'] }}">
+                                                        @if ($errors->has('config_name'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_name') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Shop Owner Name</label>
-                                                        <input type="text" class="form-control" id="config_owner" name="config_owner" value="{{ $map_category['config_owner'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_owner')) ? 'is-invalid' : '' }}" id="config_owner" name="config_owner" value="{{ $map_category['config_owner'] }}">
+                                                        @if ($errors->has('config_owner'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_owner') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Address</label>
-                                                        <textarea class="form-control" id="config_address" name="config_address" rows="3">{{ $map_category['config_address'] }}</textarea>
+                                                        <textarea class="form-control {{ ($errors->has('config_address')) ? 'is-invalid' : '' }}" id="config_address" name="config_address" rows="3">{{ $map_category['config_address'] }}</textarea>
+                                                        @if ($errors->has('config_address'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_address') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <input type="hidden" name="zone_id" id="zone_id" value="{{ $map_category['config_zone_id'] }}">
                                                         <label>Region</label>
-                                                        <select class="form-control" id="config_zone_id" name="config_zone_id">
-
-                                                        </select>
+                                                        <select class="form-control {{ ($errors->has('config_zone_id')) ? 'is-invalid' : '' }}" id="config_zone_id" name="config_zone_id"></select>
+                                                        @if ($errors->has('config_zone_id'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_zone_id') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Post code</label>
-                                                        <input type="text" class="form-control" id="map_post_code" name="map_post_code" value="{{ $map_category['map_post_code'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('map_post_code')) ? 'is-invalid' : '' }}" id="map_post_code" name="map_post_code" value="{{ $map_category['map_post_code'] }}">
+                                                        @if ($errors->has('map_post_code'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('map_post_code') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Country</label>
-                                                        <select class="form-control" id="config_country_id" name="config_country_id" onchange="region()">
+                                                        <select class="form-control {{ ($errors->has('config_country_id')) ? 'is-invalid' : '' }}" id="config_country_id" name="config_country_id" onchange="region()">
                                                             @foreach ($countries as $country)
                                                                 <option value="{{ $country->country_id }}" {{ ($map_category['config_country_id'] == $country->country_id) ? 'selected' : '' }}>{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>
+                                                        @if ($errors->has('config_country_id'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_country_id') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -268,7 +306,12 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> Title</label>
-                                                        <input type="text" class="form-control" id="config_title" name="config_title" value="{{ $map_category['config_title'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_title')) ? 'is-invalid' : '' }}" id="config_title" name="config_title" value="{{ $map_category['config_title'] }}">
+                                                        @if ($errors->has('config_title'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_title') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -320,7 +363,15 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>File Directory URL</label>
-                                                        <input type="text" class="form-control" id="file_directory_url" name="file_directory_url" value="{{ $map_category['file_directory_url'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('file_directory_url')) ? 'is-invalid' : '' }}" id="file_directory_url" name="file_directory_url" value="{{ $map_category['file_directory_url'] }}">
+                                                        <code class="text-muted">
+                                                            Put folder name Example: Test1
+                                                        </code>
+                                                        @if ($errors->has('file_directory_url'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('file_directory_url') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -342,7 +393,12 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label><span class="text-danger">*</span> E-Mail</label>
-                                                        <input type="text" class="form-control" id="config_email" name="config_email" value="{{ $map_category['config_email'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('config_email')) ? 'is-invalid' : '' }}" id="config_email" name="config_email" value="{{ $map_category['config_email'] }}">
+                                                        @if ($errors->has('config_email'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('config_email') }}
+                                                        </div>
+                                                    @endif
                                                     </div>
                                                     <hr>
                                                     <h4 class="text-warning" style="border-bottom: dotted black 1px">SMS NOTTIFICATION</h4>
