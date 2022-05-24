@@ -440,7 +440,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
+          var table =  $('#table').DataTable();
+          table.destroy();
             var table = $('#table').DataTable({
                     "serverSide": true,
                     "processing": true,

@@ -139,7 +139,7 @@
         {
             return $(this).val();
         }).get();
-          alert(checkValues)
+
         if (checkValues != '') {
             swal({
                     title: "Are you sure You want to Delete It ?",

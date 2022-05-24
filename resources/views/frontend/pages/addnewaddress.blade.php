@@ -136,7 +136,7 @@
                                         <td><input type="text" name="postcode" value="{{ old('postcode') }}"></td>
                                     </tr>
                                     <tr>
-                                        <td><span>*</span>Country :</td>
+                                        <td><span  class="required">*</span>Country :</td>
                                         <td>
                                             <select name="country" id="country_id" class="{{ ($errors->has('country')) ? 'is-invalid' : '' }}" onchange="getstate();">
                                                 <option value="" disabled selected>Select Country</option>
@@ -152,7 +152,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><span>*</span>Region / State :</td>
+                                        <td><span  class="required">*</span>Region / State :</td>
                                         <td>
                                             <select class="country_region_id {{ ($errors->has('region')) ? 'is-invalid' : '' }}" name="region">
                                                 <option value="" selected disabled>Select Region/State</option>
