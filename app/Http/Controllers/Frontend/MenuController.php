@@ -363,7 +363,7 @@ class MenuController extends Controller
             {
                 $couponcode =  $Coupon['discount'];
             }
-            $coupon_html .= '<label>Coupon('.$Coupon['code'].')</label><span>£ -' .$couponcode. '</span>';
+            $coupon_html .= '<label>Coupon('.$Coupon['code'].')</label><span>£ -' .number_format($couponcode,2). '</span>';
             // Main Total
             $total=$subtotal-$couponcode+$delivery_charge;
         }
@@ -388,7 +388,7 @@ class MenuController extends Controller
             'subtotal' => $subtotl_html,
             'delivery_charge' =>$deliverycharge_html,
             'cart_products' => $cart_products,
-            'headertotal' => $headertotal,
+            'headertotal' => number_format($headertotal,2),
             'total' => $total_html,
             'couponcode' => $coupon_html,
             // 'modal' => $modal,

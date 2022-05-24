@@ -117,62 +117,61 @@
                                         enctype="multipart/form-data" id="form">
                                         @csrf
                                     <div class="login-details-inr fa fa-envelope w-100">
-                                        <select name="Title" class="w-100"
+                                        <select name="title" class="w-100"
                                             style="width: 100%;border-radius:0;">
                                             <option value="">Title</option>
-                                            <option value="Mr.">Mr.</option>
-                                            <option value="Mrs.">Mrs.</option>
-                                            <option value="Ms.">Ms.</option>
-                                            <option value="Miss.">Miss.</option>
-                                            <option value="Dr.">Dr.</option>
-                                            <option value="Prof.">Prof.</option>
+                                            <option value="Mr">Mr.</option>
+                                            <option value="Mrs">Mrs.</option>
+                                            <option value="Ms">Ms.</option>
+                                            <option value="Miss">Miss.</option>
+                                            <option value="Dr">Dr.</option>
+                                            <option value="Prof">Prof.</option>
                                         </select>
                                         @if ($errors->has('title'))
-                                        <div class="alert-danger">
+                                        <div class="text-danger">
                                             {{ $errors->first('title') }}
                                         </div>
                                         @endif
                                     </div>
                                     <div class="login-details-inr fa fa-user w-100 d-flex">
-                                        <input placeholder="Name" type="text" name="name" value=""
+                                        <input placeholder="Name" type="text" name="name" value="{{ old('name') }}"
                                             class="w-50">
                                             @if ($errors->has('name'))
-                                            <div class="alert-danger">
+                                            <div class="text-danger">
                                                 {{ $errors->first('name') }}
                                             </div>
                                             @endif
-                                        <input placeholder="Surname" type="text" name="surname" value=""
+                                        <input placeholder="Surname" type="text" name="surname" value="{{ old('surname') }}"
                                             class="w-50">
                                             @if ($errors->has('surname'))
-                                            <div class="alert-danger">
+                                            <div class="text-danger">
                                                 {{ $errors->first('surname') }}
                                             </div>
                                             @endif
                                     </div>
                                     <div class="login-details-inr fa fa-envelope w-100">
-                                        <input placeholder="Email address" type="text" name="email" value=""
+                                        <input placeholder="Email address" type="text" name="email" value="{{ old('email') }}"
                                             class="w-100">
                                             @if ($errors->has('email'))
-                                                <div class="alert-danger">
+                                                <div class="text-danger">
                                                     {{ $errors->first('email') }}
                                                 </div>
                                                 @endif
                                     </div>
                                     <div class="login-details-inr fa fa-phone-alt w-100">
-                                        <input placeholder="phone number" type="text" name="phone" value=""
+                                        <input placeholder="phone number" type="text" name="phone" value="{{ old('phone') }}"
                                             class="w-100">
                                             @if ($errors->has('phone'))
-                                            <div class="alert-danger">
+                                            <div class="text-danger">
                                                 {{ $errors->first('phone') }}
                                             </div>
                                             @endif
                                     </div>
                                     <div class="login-details-inr fa fa-file-alt w-100">
-                                        <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false"
-                                            class="w-100 p-2"></textarea>
+                                        <textarea name="enquiry" placeholder="Your enquiry" cols="40" rows="7" spellcheck="false" class="w-100 p-2">{{ old('enquiry') }}</textarea>
                                     </div>
                                     @if ($errors->has('enquiry'))
-                                                <div class="alert-danger">
+                                                <div class="text-danger">
                                                     {{ $errors->first('enquiry') }}
                                                 </div>
                                                 @endif

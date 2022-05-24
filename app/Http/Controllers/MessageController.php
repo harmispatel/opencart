@@ -80,6 +80,11 @@ class MessageController extends Controller
     // Function of Store Messages
     public function messageinsert(Request $request)
     {
+        $request->validate([
+            'title' => 'required',
+            'message' => 'required',
+        ]);
+
         $current_store_id = currentStoreId();
 
         $user_details = user_details();
