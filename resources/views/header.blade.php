@@ -107,7 +107,11 @@
                 @php
                     $current_store_id = currentStoreId();
                 @endphp
-                <a href="{{ getCurrentStoreURL($current_store_id) }}" target="_blanck" id="visitShop">Visit Shop</a>
+                @if ($current_store_id == 0)
+                    <a href="https://the-public.co.uk/devfood/" target="_blanck" id="visitShop">Visit Shop</a>
+                @else
+                    <a href="{{ getCurrentStoreURL($current_store_id) }}" target="_blanck" id="visitShop">Visit Shop</a>
+                @endif
             </li>
         @else
             @php

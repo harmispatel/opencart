@@ -79,7 +79,6 @@ class HomeController extends Controller
         }
         else
         {
-
             $customers = Customer::where('store_id',$user_shop_id)->count();
             $product = Product::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use($user_shop_id)
             {
