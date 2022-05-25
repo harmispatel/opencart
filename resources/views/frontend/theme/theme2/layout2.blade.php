@@ -514,18 +514,39 @@
                             <div class="box single">
                                 <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
                             </div> --}}
-                            <div class="col-sm-12 col-md-6 col-lg-3">
-                                <div class="row">
+
+                            {{-- <div class="col-sm-12 col-md-6 col-lg-3">
+                                <div class="row"> --}}
                                     {{-- <div class="col-12">
                                         <div class="box couple">
                                             <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
                                         </div> --}}
-                                    <div class="col-12">
+                                    {{-- <div class="col-12">
                                         <div class="box couple">
                                             <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
+
+
+
+                   <div class="grid">
+                        <div class="grid-item">
+                            <img src="{{ $photo->image }}" alt="">
+                        </div>
+                        {{-- <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/1.png') }}" alt="">
+                        </div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/2.png') }}" alt="">
+                        </div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/3.png') }}" alt="">
+                        </div>
+                        <div class="grid-item">
+                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}" alt="">
+                        </div> --}}
+                    </div>
                     @endforeach
                 @else
                     {{-- <div class="grid">
