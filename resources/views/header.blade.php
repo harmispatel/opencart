@@ -71,9 +71,7 @@
   <!-- Sweet alert -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css" integrity="sha512-g9k+CnZOpfd3BjCvr9L6M9F1u42RbYxtiurifk4KmqTNTyZRnKixRgZl6SzPESunaaCnyelHhKicHWcQUwALYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- Select Box -->
-  {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/> --}}
-  {{-- @import url(); --}}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
 {{-- Summernote --}}
 <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
@@ -81,15 +79,6 @@
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.0/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.5.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
-<link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/cropper.min.css') }}">
-<link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/dropzone.min.css') }}">
-<link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
-<link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
-{{-- End Gallary Style --}}
 
 <style>
     .custom-nav > .nav-item > .nav-link {height: 40px !important;}

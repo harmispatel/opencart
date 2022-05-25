@@ -1,13 +1,8 @@
 @include('header')
 
 
-<link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
-
 <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.0/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.5.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/cropper.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/dropzone.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
@@ -122,7 +117,7 @@
                                 @if (isset($image))
                                     @foreach ($image as $images)
                                         <div class="demo_{{ $loop->iteration }} col-md-3 mt-3">
-                                            <div class="image" style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;">
+                                            <div class="image w-100" style="position: relative;display:inline-block;border: 2px solid black;overflow:hidden;">
 
                                                 <a onclick="$('.demo_{{ $loop->iteration }}').remove();" class="removeImg m-1">
                                                     <i class="fa fa-times" data-id="{{ $images->image_id }}"></i>
@@ -132,7 +127,7 @@
 
                                                 <div class="imageOverlay">
                                                     @if (!empty($images->image))
-                                                        <img class="w-100" src="{{ $images->image }}" id="thumb{{ $loop->iteration }}"/>
+                                                        <img class="w-100" src="{{ $images->image }}" id="thumb{{ $loop->iteration }}" style="height: 250px;"/>
                                                     @else
                                                         <img class="w-100" src="{{ asset('public/admin/no_image.jpg') }}" id="thumb{{ $loop->iteration }}" />
                                                     @endif
@@ -374,11 +369,6 @@
 
 @include('footer')
 
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.3/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.0/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.js"></script>
 <script src="{{ asset('public/vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
 <script src="{{ asset('public/vendor/laravel-filemanager/js/dropzone.min.js') }}"></script>
 <script>
