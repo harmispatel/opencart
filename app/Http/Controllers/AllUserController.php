@@ -18,18 +18,17 @@ class AllUserController extends Controller
         $current_store_id = currentStoreId();
 
         // Check User Permission
-        if(check_user_role(97) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        if (check_user_role(97) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         if ($current_store_id == 0) {
             $data['users'] = Users::get();
         } else {
-            $data['users'] = Users::where('user_shop',$current_store_id)->get();
+            $data['users'] = Users::where('user_shop', $current_store_id)->get();
         }
 
-        return view('admin.users.list',$data);
+        return view('admin.users.list', $data);
     }
 
 
@@ -40,15 +39,14 @@ class AllUserController extends Controller
     public function add()
     {
         // Check User Permission
-        if(check_user_role(96) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        if (check_user_role(96) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         // Get Users Group
         $data['usersgroup'] = UserGroup::get();
         $data['stores'] = Store::get();
-        return view('admin.users.add',$data);
+        return view('admin.users.add', $data);
     }
 
 
@@ -89,16 +87,14 @@ class AllUserController extends Controller
         $data->accessdirectory = isset($request->accessdirectory) ? $request->accessdirectory : '';
         $data->date_added = date('Y-m-d');
 
-        if($request->hasFile('image'))
-        {
-            $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/users/'),$imageName);
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/users/'), $imageName);
             $data->image = $imageName;
         }
 
         $data->save();
-        return redirect()->route('users')->with('success','Users created successfully!');
-
+        return redirect()->route('users')->with('success', 'Users created successfully!');
     }
 
 
@@ -109,30 +105,25 @@ class AllUserController extends Controller
     function deletemultiuser(Request $request)
     {
         // Check User Permission
-        if(check_user_role(99) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        if (check_user_role(99) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         $ids = $request['id'];
 
-        if(count($ids) > 0)
-        {
+        if (count($ids) > 0) {
 
-            foreach($ids as $id)
-            {
-                $user = Users::where('user_id',$id)->first();
+            foreach ($ids as $id) {
+                $user = Users::where('user_id', $id)->first();
 
                 $image = $user->image;
 
-                if(file_exists('public/admin/users/'.$image))
-                {
-                    unlink('public/admin/users/'.$image);
+                if (file_exists('public/admin/users/' . $image)) {
+                    unlink('public/admin/users/' . $image);
                 }
-
             }
 
-            Users::whereIn('user_id',$ids)->delete();
+            Users::whereIn('user_id', $ids)->delete();
             return response()->json([
                 'success' => 1,
             ]);
@@ -147,22 +138,20 @@ class AllUserController extends Controller
     function edit($id)
     {
         // Check User Permission
-        if(check_user_role(98) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        if (check_user_role(98) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        $user = Users::where('user_id',$id)->first();
-        if(empty($user))
-        {
+        $user = Users::where('user_id', $id)->first();
+        if (empty($user)) {
             return redirect()->route('users');
         }
 
         $data['usersgroup'] = UserGroup::get();
         $data['stores'] = Store::get();
 
-        $data['users'] = Users::where('user_id',$id)->first();
-        return view('admin.users.edit',$data);
+        $data['users'] = Users::where('user_id', $id)->first();
+        return view('admin.users.edit', $data);
     }
 
 
@@ -193,8 +182,7 @@ class AllUserController extends Controller
         $data->status = $request['status'];
         $data->user_shop = $request['store'];
 
-        if( (!empty($_POST['password'])) && (!empty($_POST['confirm'])) )
-        {
+        if ((!empty($_POST['password'])) && (!empty($_POST['confirm']))) {
             $request->validate([
                 'password' => 'min:6|required_with:confirm|same:confirm',
                 'confirm' => 'min:6|required_with:password|same:password',
@@ -203,21 +191,18 @@ class AllUserController extends Controller
             $data->password = bcrypt($request['password']);
         }
 
-        if($request->hasFile('image'))
-        {
-            if(!empty($old_img))
-            {
-                unlink('public/admin/users/'.$old_img);
+        if ($request->hasFile('image')) {
+            if (!empty($old_img)) {
+                unlink('public/admin/users/' . $old_img);
             }
 
-            $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/users/'),$imageName);
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/users/'), $imageName);
             $data->image = $imageName;
         }
 
         $data->update();
-        return redirect()->route('users')->with('success','Users Updated successfully!');
-
+        return redirect()->route('users')->with('success', 'Users Updated successfully!');
     }
 
 
@@ -228,19 +213,17 @@ class AllUserController extends Controller
     function userprofile($id)
     {
         // Check User Permission
-        if(check_user_role(105) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        if (check_user_role(105) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        $user = Users::where('user_id',$id)->first();
-        if(empty($user))
-        {
+        $user = Users::where('user_id', $id)->first();
+        if (empty($user)) {
             return redirect()->route('dashboard');
         }
 
         $data['users'] = $user;
-        return view('admin.users.profile_view',$data);
+        return view('admin.users.profile_view', $data);
     }
 
 
@@ -268,8 +251,7 @@ class AllUserController extends Controller
         $data->lastname = $request['lastname'];
         $data->email = $request['email'];
 
-        if( (!empty($_POST['password'])) && (!empty($_POST['confirm'])) )
-        {
+        if ((!empty($_POST['password'])) && (!empty($_POST['confirm']))) {
             $request->validate([
                 'password' => 'min:6|required_with:confirm|same:confirm',
                 'confirm' => 'min:6|required_with:password|same:password',
@@ -278,25 +260,19 @@ class AllUserController extends Controller
             $data->password = bcrypt($request['password']);
         }
 
-        if($request->hasFile('image'))
-        {
-            if(!empty($old_img))
-            {
-                if(file_exists('public/admin/users/'.$old_img))
-                {
-                    unlink('public/admin/users/'.$old_img);
+        if ($request->hasFile('image')) {
+            if (!empty($old_img)) {
+                if (file_exists('public/admin/users/' . $old_img)) {
+                    unlink('public/admin/users/' . $old_img);
                 }
             }
 
-            $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/users/'),$imageName);
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/users/'), $imageName);
             $data->image = $imageName;
         }
 
         $data->update();
-        return redirect()->route('dashboard')->with('success','Your Profile has been Updated.');
-
+        return redirect()->route('dashboard')->with('success', 'Your Profile has been Updated.');
     }
-
-
 }
