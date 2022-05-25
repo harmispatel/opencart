@@ -50,11 +50,13 @@
                                 {{-- <h3>category</h3> --}}
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(59) == 1)
-                                            <button type="submit" form="bulkP" class="btn btn-sm btn-success ml-auto"><i class="fa fa-plus"></i></button>
+                                        <button type="submit" form="bulkP" class="btn btn-sm btn-success ml-auto"><i
+                                                class="fa fa-plus"></i></button>
                                     @endif
 
                                     @if (check_user_role(61) == 1)
-                                        <a href="{{ route('products') }}" class="btn btn-sm btn-danger ml-1 deletesellected"><i
+                                        <a href="{{ route('products') }}"
+                                            class="btn btn-sm btn-danger ml-1 deletesellected"><i
                                                 class="fa fa-trash"></i></a>
                                     @endif
                                 </div>
@@ -63,10 +65,11 @@
 
                             {{-- Card Body --}}
                             <div class="card-body">
-                                <form action="{{ route('storebulkproduct') }}" method="POST" enctype="multipart/form-data" id="bulkP">
+                                <form action="{{ route('storebulkproduct') }}" method="POST"
+                                    enctype="multipart/form-data" id="bulkP">
                                     @csrf
 
-                                     <input type="hidden"  name="category" id="demo" value="">
+                                    <input type="hidden" name="category" id="demo" value="">
                                     {{-- Table Start --}}
                                     <div class="table-responsive">
                                         <table border="2">
@@ -77,9 +80,8 @@
                                                 <tr class="">
                                                     <td colspan="6">
                                                         <div align="right">
-                                                            <button type="button"
-                                                                style="margin-left: 20px" onclick="addMoreProduct();"
-                                                                class="btn btn-primary ">
+                                                            <button type="button" style="margin-left: 20px"
+                                                                onclick="addMoreProduct();" class="btn btn-primary ">
                                                                 <i class="fa fa-plus-circle"></i>
                                                             </button>
                                                         </div>
@@ -224,4 +226,3 @@
         }
     }
 </script>
-
