@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://192.168.1.73/'),
+    'url' => env('APP_URL', 'http://192.168.1.3/'),
     'asset_url' => env('ASSET_URL', null),
     // 'asset_url' => env('ASSET_URL', 'https://www.example.com'),
 
