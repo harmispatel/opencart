@@ -538,8 +538,10 @@
 
        var image_url = $('#thumb'+image_id).attr('src');
 
+       var new_url = String(image_url).replace('/thumbs','');
+
        $('#image_'+image_id).val('');
-       $('#image_'+image_id).val(image_url);
+       $('#image_'+image_id).val(new_url);
 
     });
 
