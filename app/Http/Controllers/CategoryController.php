@@ -21,8 +21,7 @@ class CategoryController extends Controller
     function index()
     {
         // Check User Permission
-        if (check_user_role(45) != 1)
-        {
+        if (check_user_role(45) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
         return view('admin.category.CategoryList');
@@ -39,23 +38,21 @@ class CategoryController extends Controller
         $current_store_id = currentStoreId();
 
         $columns = array(
-            0 =>'category_id',
-            1 =>'name',
-            2 =>'sort_order',
+            0 => 'category_id',
+            1 => 'name',
+            2 => 'sort_order',
         );
 
         $user_details = user_details();
 
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
 
-        if($user_group_id == 1)
-        {
+        if ($user_group_id == 1) {
             if ($current_store_id == 0) {
                 // Get Total Categories
-                $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->count();
+                $totalData = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->count();
 
                 $totalFiltered = $totalData;
                 $limit = $request->request->get('length');
@@ -63,69 +60,50 @@ class CategoryController extends Controller
                 $order = $columns[$request->input('order.0.column')];
                 $dir = $request->input('order.0.dir');
 
-                if(!empty($request->input('search.value')))
-                {
+                if (!empty($request->input('search.value'))) {
                     $search = $request->input('search.value');
 
-                    $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                        $query->where('sort_order','LIKE',"%{$search}%")
-                        ->orwhereHas('hasOneCategory', function ($query) use ($search){
-                            $query->where('name','LIKE',"%{$search}%");
-                        });
+                    $posts =  CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
+                        $query->where('sort_order', 'LIKE', "%{$search}%")
+                            ->orwhereHas('hasOneCategory', function ($query) use ($search) {
+                                $query->where('name', 'LIKE', "%{$search}%");
+                            });
                     });
 
-                    if($order == 'name')
-                    {
-                        if($dir == 'asc')
-                        {
-                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                    if ($order == 'name') {
+                        if ($dir == 'asc') {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
+                        } else {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
                         }
-                        else
-                        {
-                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
-                        }
-                    }
-                    else
-                    {
-                        $posts= $posts->orderBy($order, $dir);
+                    } else {
+                        $posts = $posts->orderBy($order, $dir);
                     }
                     $posts = $posts->offset($start)->limit($limit)->get();
 
-                    $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                        $query->where('sort_order','LIKE',"%{$search}%");
+                    $totalFiltered = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
+                        $query->where('sort_order', 'LIKE', "%{$search}%");
                     })
 
-                    ->offset($start)->limit($limit)->count();
+                        ->offset($start)->limit($limit)->count();
+                } else {
+                    $posts = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->offset($start)->limit($limit);
 
-                }
-                else
-                {
-                    $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->offset($start)->limit($limit);
-
-                    if($order == 'name')
-                    {
-                        if($dir == 'asc')
-                        {
-                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                    if ($order == 'name') {
+                        if ($dir == 'asc') {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
+                        } else {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
                         }
-                        else
-                        {
-                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
-                        }
-                    }
-                    else
-                    {
-                        $posts= $posts->orderBy($order, $dir);
+                    } else {
+                        $posts = $posts->orderBy($order, $dir);
                     }
                     $posts = $posts->offset($start)->limit($limit)->get();
                 }
-
-            }
-            else
-            {
+            } else {
                 // Get Total Categories
-                $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                    $query->where('store_id',$current_store_id);
+                $totalData = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id) {
+                    $query->where('store_id', $current_store_id);
                 })->count();
 
                 $totalFiltered = $totalData;
@@ -134,79 +112,61 @@ class CategoryController extends Controller
                 $order = $columns[$request->input('order.0.column')];
                 $dir = $request->input('order.0.dir');
 
-                if(!empty($request->input('search.value')))
-                {
+                if (!empty($request->input('search.value'))) {
                     $search = $request->input('search.value');
 
-                    $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                        $query->where('sort_order','LIKE',"%{$search}%")
-                        ->orwhereHas('hasOneCategory', function ($query) use ($search){
-                            $query->where('name','LIKE',"%{$search}%");
-                        });
+                    $posts =  CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
+                        $query->where('sort_order', 'LIKE', "%{$search}%")
+                            ->orwhereHas('hasOneCategory', function ($query) use ($search) {
+                                $query->where('name', 'LIKE', "%{$search}%");
+                            });
                     })
-                    ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                        $query->where('store_id',$current_store_id);
-                    });
+                        ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id) {
+                            $query->where('store_id', $current_store_id);
+                        });
 
-                    if($order == 'name')
-                    {
-                        if($dir == 'asc')
-                        {
-                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                    if ($order == 'name') {
+                        if ($dir == 'asc') {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
+                        } else {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
                         }
-                        else
-                        {
-                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
-                        }
-                    }
-                    else
-                    {
-                        $posts= $posts->orderBy($order, $dir);
+                    } else {
+                        $posts = $posts->orderBy($order, $dir);
                     }
                     $posts = $posts->offset($start)->limit($limit)->get();
 
-                    $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                        $query->where('sort_order','LIKE',"%{$search}%");
+                    $totalFiltered = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
+                        $query->where('sort_order', 'LIKE', "%{$search}%");
                     })
 
-                    ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                        $query->where('store_id',$current_store_id);
-                    })->offset($start)->limit($limit)->count();
+                        ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id) {
+                            $query->where('store_id', $current_store_id);
+                        })->offset($start)->limit($limit)->count();
+                } else {
+                    $posts = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])
+                        ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id) {
+                            $query->where('store_id', $current_store_id);
+                        })->offset($start)->limit($limit);
 
-                }
-                else
-                {
-                    $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])
-                    ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id){
-                        $query->where('store_id',$current_store_id);
-                    })->offset($start)->limit($limit);
-
-                    if($order == 'name')
-                    {
-                        if($dir == 'asc')
-                        {
-                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                    if ($order == 'name') {
+                        if ($dir == 'asc') {
+                            $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
+                        } else {
+                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
                         }
-                        else
-                        {
-                            $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
-                        }
-                    }
-                    else
-                    {
-                        $posts= $posts->orderBy($order, $dir);
+                    } else {
+                        $posts = $posts->orderBy($order, $dir);
                     }
                     $posts = $posts->offset($start)->limit($limit)->get();
                 }
             }
-        }
-        else
-        {
+        } else {
             $user_shop_id = $user_details['user_shop'];
 
             // Get Total Categories
-            $totalData = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id){
-                $query->where('store_id',$user_shop_id);
+            $totalData = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id) {
+                $query->where('store_id', $user_shop_id);
             })->count();
 
             $totalFiltered = $totalData;
@@ -215,79 +175,61 @@ class CategoryController extends Controller
             $order = $columns[$request->input('order.0.column')];
             $dir = $request->input('order.0.dir');
 
-            if(!empty($request->input('search.value')))
-            {
+            if (!empty($request->input('search.value'))) {
                 $search = $request->input('search.value');
 
-                $posts =  CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                    $query->where('sort_order','LIKE',"%{$search}%")
-                    ->orwhereHas('hasOneCategory', function ($query) use ($search){
-                        $query->where('name','LIKE',"%{$search}%");
-                    });
+                $posts =  CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
+                    $query->where('sort_order', 'LIKE', "%{$search}%")
+                        ->orwhereHas('hasOneCategory', function ($query) use ($search) {
+                            $query->where('name', 'LIKE', "%{$search}%");
+                        });
                 })
-                ->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id){
-                    $query->where('store_id',$user_shop_id);
-                });
+                    ->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id) {
+                        $query->where('store_id', $user_shop_id);
+                    });
 
-                if($order == 'name')
-                {
-                    if($dir == 'asc')
-                    {
-                        $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                if ($order == 'name') {
+                    if ($dir == 'asc') {
+                        $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
+                    } else {
+                        $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
                     }
-                    else
-                    {
-                        $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
-                    }
-                }
-                else
-                {
-                    $posts= $posts->orderBy($order, $dir);
+                } else {
+                    $posts = $posts->orderBy($order, $dir);
                 }
                 $posts = $posts->offset($start)->limit($limit)->get();
 
-                $totalFiltered = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])->where(function ($query) use ($search){
-                    $query->where('sort_order','LIKE',"%{$search}%");
+                $totalFiltered = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
+                    $query->where('sort_order', 'LIKE', "%{$search}%");
                 })
 
-                ->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id){
-                    $query->where('store_id',$user_shop_id);
-                })->offset($start)->limit($limit)->count();
+                    ->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id) {
+                        $query->where('store_id', $user_shop_id);
+                    })->offset($start)->limit($limit)->count();
+            } else {
+                $posts = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])
+                    ->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id) {
+                        $query->where('store_id', $user_shop_id);
+                    })->offset($start)->limit($limit);
 
-            }
-            else
-            {
-                $posts = CategoryDetail::with(['hasOneCategory','hasManyCategoryStore'])
-                ->whereHas('hasManyCategoryStore', function ($query) use ($user_shop_id){
-                    $query->where('store_id',$user_shop_id);
-                })->offset($start)->limit($limit);
-
-                if($order == 'name')
-                {
-                    if($dir == 'asc')
-                    {
-                        $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
+                if ($order == 'name') {
+                    if ($dir == 'asc') {
+                        $posts = $posts->orderBy(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
+                    } else {
+                        $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id', 'oc_category.category_id'));
                     }
-                    else
-                    {
-                        $posts = $posts->orderByDesc(Category::select($order)->whereColumn('oc_category_description.category_id','oc_category.category_id'));
-                    }
-                }
-                else
-                {
-                    $posts= $posts->orderBy($order, $dir);
+                } else {
+                    $posts = $posts->orderBy($order, $dir);
                 }
                 $posts = $posts->offset($start)->limit($limit)->get();
             }
         }
 
         $data = array();
-        $data1=array();
+        $data1 = array();
 
-        if($posts)
-        {
-            foreach ($posts as $post)
-            {
+        if ($posts) {
+            foreach ($posts as $post) {
                 $category_id = $post->category_id;
                 $edit_url = route('categoryedit', $category_id);
 
@@ -295,17 +237,13 @@ class CategoryController extends Controller
                 $data['name'] = isset($post->hasOneCategory->name) ? $post->hasOneCategory->name : '';
                 $data['sort_order'] = $post->sort_order;
 
-                if (check_user_role(47) == 1)
-                {
-                    $data['action'] = '<a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
-                }
-                else
-                {
+                if (check_user_role(47) == 1) {
+                    $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit text-white"></i><a>';
+                } else {
                     $data['action'] = '-';
                 }
 
                 $data1[] = $data;
-
             }
         }
 
@@ -317,7 +255,6 @@ class CategoryController extends Controller
         );
 
         echo json_encode($json_data);
-
     }
 
 
@@ -332,8 +269,7 @@ class CategoryController extends Controller
 
         $user_details = user_details();
 
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
@@ -347,28 +283,24 @@ class CategoryController extends Controller
         $catdetail = new CategoryDetail;
 
         // Insert Category Image
-        if ($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/category'), $imgname);
-            $categoryurl = $currentURL.'/public/admin/category/';
-            $catdetail->image = $categoryurl.$imgname;
+            $categoryurl = $currentURL . '/public/admin/category/';
+            $catdetail->image = $categoryurl . $imgname;
         }
 
         // Insert Banner Image
         if ($request->hasFile('banner')) {
             $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
             $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-            $bannerurl = $currentURL.'/public/admin/category/banner/';
-            $catdetail->img_banner = $bannerurl.$bannerimgname;
+            $bannerurl = $currentURL . '/public/admin/category/banner/';
+            $catdetail->img_banner = $bannerurl . $bannerimgname;
         }
         $days = isset($request->availibleday) ? $request->availibleday : 0;
-        if ($days != 0)
-        {
+        if ($days != 0) {
             $availibleday = implode(",", $days);
-        }
-        else
-        {
+        } else {
             $availibleday = "";
         }
 
@@ -394,12 +326,9 @@ class CategoryController extends Controller
         // Insert Into Category to Store
         $cat_to_store = new CategorytoStore;
         $cat_to_store->category_id = $lastid;
-        if($user_group_id == 1)
-        {
+        if ($user_group_id == 1) {
             $cat_to_store->store_id = $current_store_id;
-        }
-        else
-        {
+        } else {
             $cat_to_store->store_id = $user_shop_id;
         }
         $cat_to_store->save();
@@ -410,14 +339,14 @@ class CategoryController extends Controller
         $cat->language_id = '1';
         $cat->name = $request->category;
         $cat->description = isset($request->description) ? $request->description : "";
-        $replaceslug = str_replace(' ','-',$request->category);
+        $replaceslug = str_replace(' ', '-', $request->category);
         $slug = strtolower($replaceslug);
         $cat->slug = $slug;
         $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
         $cat->save();
 
-        return redirect()->route('category')->with('success','Category has been Inserted Successfully');
+        return redirect()->route('category')->with('success', 'Category has been Inserted Successfully');
     }
 
 
@@ -429,8 +358,7 @@ class CategoryController extends Controller
     {
 
         // Check User Permission
-        if (check_user_role(54) != 1)
-        {
+        if (check_user_role(54) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -438,24 +366,20 @@ class CategoryController extends Controller
         $current_store_id = currentStoreId();
 
         $user_details = user_details();
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
 
         // Get Options Group By Current Store
-        if($user_group_id == 1)
-        {
-            $data['optiongroups'] = Topping::where('store_topping',$current_store_id)->get();
-        }
-        else
-        {
-            $data['optiongroups'] = Topping::where('store_topping',$user_shop_id)->get();
+        if ($user_group_id == 1) {
+            $data['optiongroups'] = Topping::where('store_topping', $current_store_id)->get();
+        } else {
+            $data['optiongroups'] = Topping::where('store_topping', $user_shop_id)->get();
         }
 
 
-        return view('admin.category.bulkcategory',$data);
+        return view('admin.category.bulkcategory', $data);
     }
 
 
@@ -469,14 +393,12 @@ class CategoryController extends Controller
         $current_store_id = currentStoreId();
 
         $user_details = user_details();
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
 
-        foreach($request->category as $key => $cat)
-        {
+        foreach ($request->category as $key => $cat) {
             $name = isset($cat['name']) ? $cat['name'] : '';
             $description = isset($cat['description']) ? $cat['description'] : '';
             $enable_size = $cat['enable_size'];
@@ -492,8 +414,7 @@ class CategoryController extends Controller
             $catdetail = new CategoryDetail;
 
             // Insert Category Image
-            if (!empty($image) || $image != '')
-            {
+            if (!empty($image) || $image != '') {
                 $imgname = time() . "." . $image->getClientOriginalExtension();
                 $image->move(public_path('admin/category'), $imgname);
                 $catdetail->image = $imgname;
@@ -518,7 +439,7 @@ class CategoryController extends Controller
             $cat->language_id = '1';
             $cat->name = $name;
             $cat->description = $description;
-            $replaceslug = str_replace(' ','-',$name);
+            $replaceslug = str_replace(' ', '-', $name);
             $slug = strtolower($replaceslug);
             $cat->slug = $slug;
             $cat->meta_description = isset($request->metadesc) ? $request->metadesc : "";
@@ -535,25 +456,19 @@ class CategoryController extends Controller
             // Insert Into Category to Store
             $cat_to_store = new CategorytoStore;
             $cat_to_store->category_id = $lastid;
-            if($user_group_id == 1)
-            {
+            if ($user_group_id == 1) {
                 $cat_to_store->store_id = $current_store_id;
-            }
-            else
-            {
+            } else {
                 $cat_to_store->store_id = $user_shop_id;
             }
             $cat_to_store->save();
 
             // Insert Category Size
-            if(!empty($size) || $size != '')
-            {
-                foreach($size as $key=> $val)
-                {
+            if (!empty($size) || $size != '') {
+                foreach ($size as $key => $val) {
                     $sizename = $val;
                     $sort_order = $short_order[$key];
-                    if(!empty($sizename) || $sizename != '')
-                    {
+                    if (!empty($sizename) || $sizename != '') {
                         $topp_size = new ToppingSize;
                         $topp_size->id_category = $lastid;
                         $topp_size->size = isset($sizename) ? $sizename : '';
@@ -564,8 +479,7 @@ class CategoryController extends Controller
             }
 
             // Insert Category Topping Option
-            if(!empty($group) || $group != '')
-            {
+            if (!empty($group) || $group != '') {
                 $toppingCatOption = new ToppingCatOption;
                 $toppingCatOption->id_category = $lastid;
                 $toppingCatOption->enable_size = $enable_size;
@@ -575,9 +489,8 @@ class CategoryController extends Controller
                 $toppingCatOption->group = serialize($group);
                 $toppingCatOption->save();
             }
-
         }
-        return redirect()->route('category')->with('success','Category has been Inserted Successfully');
+        return redirect()->route('category')->with('success', 'Category has been Inserted Successfully');
     }
 
 
@@ -588,8 +501,7 @@ class CategoryController extends Controller
     function newcategory()
     {
         // Check User Permission
-        if (check_user_role(46) != 1)
-        {
+        if (check_user_role(46) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -607,41 +519,36 @@ class CategoryController extends Controller
         $current_store_id = currentStoreId();
 
         // Check User Permission
-        if (check_user_role(47) != 1)
-        {
+        if (check_user_role(47) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         $user_details = user_details();
 
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
 
         // Get Category Top Option
-        $topcatoption = ToppingCatOption::where('id_category',$id)->first();
+        $topcatoption = ToppingCatOption::where('id_category', $id)->first();
 
         // Get Topping Size
-        $toppingsizes = ToppingSize::where('id_category',$id)->get();
+        $toppingsizes = ToppingSize::where('id_category', $id)->get();
 
         // Get Category Layout
         $category_layout = CategoryLayout::select('layout_id', 'name')->get();
 
         //Get Toppings By Current Store
-        if($user_group_id == 1)
-        {
-            $optiongroups = Topping::where('store_topping',$current_store_id)->get();
-        }
-        else
-        {
-            $optiongroups = Topping::where('store_topping',$user_shop_id)->get();
+        if ($user_group_id == 1) {
+            $optiongroups = Topping::where('store_topping', $current_store_id)->get();
+        } else {
+            $optiongroups = Topping::where('store_topping', $user_shop_id)->get();
         }
 
         // Get Single Category Description
-        $data = CategoryDetail::with('hasOneCategory')->whereHas('hasOneCategory', function ($query) use ($id){
-            $query->where('category_id',$id);
+        $data = CategoryDetail::with('hasOneCategory')->whereHas('hasOneCategory', function ($query) use ($id) {
+            $query->where('category_id', $id);
         })->first();
 
         return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout, 'optiongroups' => $optiongroups, 'topcatoption' => $topcatoption, 'toppingsizes' => $toppingsizes]);
@@ -664,46 +571,37 @@ class CategoryController extends Controller
         $catdetail = CategoryDetail::find($request->id);
 
         // update Category Image
-        if ($request->hasFile('image'))
-        {
+        if ($request->hasFile('image')) {
             $image = isset($catdetail['image']) ? $catdetail['image'] : '';
-            if(!empty($image) || $image != '')
-            {
-                if(file_exists('public/admin/category/'.$image))
-                {
-                    unlink('public/admin/category/'.$image);
+            if (!empty($image) || $image != '') {
+                if (file_exists('public/admin/category/' . $image)) {
+                    unlink('public/admin/category/' . $image);
                 }
             }
-            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/category/'), $imgname);
-            $categoryurl = $currentURL.'/public/admin/category/';
-            $catdetail->image = $categoryurl.$imgname;
+            $categoryurl = $currentURL . '/public/admin/category/';
+            $catdetail->image = $categoryurl . $imgname;
         }
 
         // Insert Banner Image
-        if ($request->hasFile('banner'))
-        {
+        if ($request->hasFile('banner')) {
             $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
-            if(!empty($banner) || $banner != '')
-            {
-                if(file_exists('public/admin/category/banner/'.$banner))
-                {
-                    unlink('public/admin/category/banner/'.$banner);
+            if (!empty($banner) || $banner != '') {
+                if (file_exists('public/admin/category/banner/' . $banner)) {
+                    unlink('public/admin/category/banner/' . $banner);
                 }
             }
-            $bannerimgname = time().".". $request->file('banner')->getClientOriginalExtension();
+            $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
             $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-            $bannerurl = $currentURL.'/public/admin/category/banner/';
-            $catdetail->img_banner = $bannerurl.$bannerimgname;
+            $bannerurl = $currentURL . '/public/admin/category/banner/';
+            $catdetail->img_banner = $bannerurl . $bannerimgname;
         }
 
         $days = isset($request->availibleday) ? $request->availibleday : 0;
-        if ($days != 0)
-        {
+        if ($days != 0) {
             $availibleday = implode(",", $days);
-        }
-        else
-        {
+        } else {
             $availibleday = "";
         }
 
@@ -721,7 +619,7 @@ class CategoryController extends Controller
         $cat = Category::find($request->id);
         $cat->language_id = '1';
         $cat->name = $request->category;
-        $replaceslug = str_replace(' ','-',$request->category);
+        $replaceslug = str_replace(' ', '-', $request->category);
         $slug = strtolower($replaceslug);
         $cat->slug = $slug;
         $cat->description = isset($request->description) ? $request->description : "";
@@ -733,25 +631,19 @@ class CategoryController extends Controller
         // Add Size & Update Size
         $size = isset($request->size) ? $request->size : '';
 
-        if(!empty($size) || $size != '')
-        {
-            foreach($size as $val)
-            {
+        if (!empty($size) || $size != '') {
+            foreach ($size as $val) {
                 $sizename = $val['sizename'];
                 $sort_order = $val['short_order'];
                 $size_id = isset($val['size_id']) ? $val['size_id'] : '';
 
-                if( (!empty($size_id)) || ($size_id != ''))
-                {
+                if ((!empty($size_id)) || ($size_id != '')) {
                     $update_topp_size = ToppingSize::find($size_id);
                     $update_topp_size->size = isset($sizename) ? $sizename : '-';
                     $update_topp_size->short_order = isset($sort_order) ? $sort_order : 0;
                     $update_topp_size->update();
-                }
-                else
-                {
-                    if(!empty($sizename) || $sizename != '')
-                    {
+                } else {
+                    if (!empty($sizename) || $sizename != '') {
                         $topp_size = new ToppingSize;
                         $topp_size->id_category = $request->id;
                         $topp_size->size = isset($sizename) ? $sizename : '';
@@ -759,20 +651,18 @@ class CategoryController extends Controller
                         $topp_size->save();
                     }
                 }
-
             }
         }
 
         // Check Have a Topping Category Option ?
-        $top_cat_option = ToppingCatOption::where('id_category',$request->id)->first();
+        $top_cat_option = ToppingCatOption::where('id_category', $request->id)->first();
 
         // Serialize Topping Option
         $group = isset($request->group) ? serialize($request->group) : '';
 
 
         // Insert & Update Topping Cat Option
-        if($top_cat_option == '' || empty($top_cat_option))
-        {
+        if ($top_cat_option == '' || empty($top_cat_option)) {
             $toppingCatOption = new ToppingCatOption;
             $toppingCatOption->id_category = $request->id;
             $toppingCatOption->enable_size = $request->sizeval;
@@ -781,9 +671,7 @@ class CategoryController extends Controller
             $toppingCatOption->character = $request->numbercharacter;
             $toppingCatOption->group = $group;
             $toppingCatOption->save();
-        }
-        else
-        {
+        } else {
             $toppingCatOptionupdate = ToppingCatOption::find($request->top_cat_option_id);
             $toppingCatOptionupdate->enable_size = $request->sizeval;
             $toppingCatOptionupdate->enable_option = $request->options;
@@ -793,12 +681,11 @@ class CategoryController extends Controller
             $toppingCatOptionupdate->update();
         }
 
-        if($request->has('save_and_stay'))
-        {
-            return redirect()->route('categoryedit',$request->id)->with('success','Category has been updated Successfully.');
+        if ($request->has('save_and_stay')) {
+            return redirect()->route('categoryedit', $request->id)->with('success', 'Category has been updated Successfully.');
         }
 
-        return redirect()->route('category')->with('success','Category has been updated Successfully.');
+        return redirect()->route('category')->with('success', 'Category has been updated Successfully.');
     }
 
 
@@ -811,7 +698,7 @@ class CategoryController extends Controller
         $size_id = $request->size_id;
 
         // Delete Topping Option
-        ToppingSize::where('id_size',$size_id)->delete();
+        ToppingSize::where('id_size', $size_id)->delete();
 
         return response()->json([
             'success' => 1,
@@ -826,63 +713,53 @@ class CategoryController extends Controller
     function categorydelete(Request $request)
     {
         // Check User Permission
-        if (check_user_role(48) != 1)
-        {
+        if (check_user_role(48) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         $ids = $request['id'];
 
-        if (count($ids) > 0)
-        {
+        if (count($ids) > 0) {
             // Delete Category Image & Banner Image
-            foreach($ids as $id)
-            {
-                $category = CategoryDetail::where('category_id',$id)->first();
+            foreach ($ids as $id) {
+                $category = CategoryDetail::where('category_id', $id)->first();
                 $image = isset($category['image']) ? $category['image'] : '';
                 $banner = isset($category['img_banner']) ? $category['img_banner'] : '';
-                if(!empty($image) || $image != '')
-                {
-                    if(file_exists('public/admin/category/'.$image))
-                    {
-                        unlink('public/admin/category/'.$image);
+                if (!empty($image) || $image != '') {
+                    if (file_exists('public/admin/category/' . $image)) {
+                        unlink('public/admin/category/' . $image);
                     }
                 }
-                if(!empty($banner) || $banner != '')
-                {
-                    if(file_exists('public/admin/category/banner/'.$banner))
-                    {
-                        unlink('public/admin/category/banner/'.$banner);
+                if (!empty($banner) || $banner != '') {
+                    if (file_exists('public/admin/category/banner/' . $banner)) {
+                        unlink('public/admin/category/banner/' . $banner);
                     }
                 }
             }
 
             // Delete Category Size
-            foreach($ids as $id)
-            {
-                ToppingSize::where('id_category',$id)->delete();
+            foreach ($ids as $id) {
+                ToppingSize::where('id_category', $id)->delete();
             }
 
-             // Delete Category
-             Category::whereIn('category_id', $ids)->delete();
+            // Delete Category
+            Category::whereIn('category_id', $ids)->delete();
 
-             // Delete Category Description
-             CategoryDetail::whereIn('category_id', $ids)->delete();
+            // Delete Category Description
+            CategoryDetail::whereIn('category_id', $ids)->delete();
 
             //  Delete Topping Options
-            ToppingCatOption::whereIn('id_category',$ids)->delete();
+            ToppingCatOption::whereIn('id_category', $ids)->delete();
 
             // Delete Category to Store
-            CategorytoStore::whereIn('category_id',$ids)->delete();
+            CategorytoStore::whereIn('category_id', $ids)->delete();
 
             // Delete Category to Path
-            CategoryPath::whereIn('category_id',$ids)->delete();
+            CategoryPath::whereIn('category_id', $ids)->delete();
 
             return response()->json([
                 'success' => 1,
             ]);
         }
     }
-
-
 }

@@ -129,6 +129,7 @@ class VoucherController extends Controller
         //         $message->from($data['from'])->to($data['to'])->subject('Some body wrote to you online');
         //     });
 
+        // // second method
         // $email = 'hasankaradiya1626@gmail.com';
         // $name = 'Hasan Karadiya';
         // $uname = 'robinrobin9976@gmail.com';

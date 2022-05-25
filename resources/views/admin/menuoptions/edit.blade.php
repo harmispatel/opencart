@@ -444,7 +444,7 @@
 
         html += '<td class="align-middle"><select name="order_type"><option value="*">*</option><option value="delivery">Delivery</option><option value="collection">Collection</option></select><input type="hidden" name="top_id" value="{{ $topping->id_topping }}"></td>';
 
-        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ $category->hasOneCategoryDescription->category_id }}">{{ $category->hasOneCategoryDescription->cname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
 

@@ -18,14 +18,12 @@ class CouponController extends Controller
     public function  index()
     {
         // Check User Permission
-        if (check_user_role(63) != 1)
-        {
+        if (check_user_role(63) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         $user_details = user_details();
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
@@ -33,50 +31,38 @@ class CouponController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        if($user_group_id == 1)
-        {
-             if($user_group_id == 0){
+        if ($user_group_id == 1) {
+            if ($user_group_id == 0) {
 
                 $data['coupons'] = Coupon::get();
-             }else{
+            } else {
 
-                 $data['coupons'] = Coupon::where('store_id',$current_store_id)->get();
-             }
-        }
-        else
-        {
-            $data['coupons'] = Coupon::where('store_id',$user_shop_id)->get();
+                $data['coupons'] = Coupon::where('store_id', $current_store_id)->get();
+            }
+        } else {
+            $data['coupons'] = Coupon::where('store_id', $user_shop_id)->get();
         }
 
         return view('admin.coupons.list', $data);
     }
 
 
-
-
-
     //Function of Add New Coupon View
     public function addcoupon()
     {
         // Check User Permission
-        if (check_user_role(64) != 1)
-        {
+        if (check_user_role(64) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         return view('admin.coupons.add');
     }
 
-
-
-
-
     // Function of Search Products
     public function products(Request $request)
     {
         $user_details = user_details();
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
@@ -84,34 +70,24 @@ class CouponController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        if($user_group_id == 1)
-        {
-            $cat = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use ($current_store_id)
-            {
-               $q->where('store_id',$current_store_id);
-            })->where("name", "LIKE", '%'.$request->product.'%')->get();
-        }
-        else
-        {
-            $cat = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore',function($q) use ($user_shop_id)
-            {
-               $q->where('store_id',$user_shop_id);
-            })->where("name", "LIKE", '%'.$request->product.'%')->get();
+        if ($user_group_id == 1) {
+            $cat = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($q) use ($current_store_id) {
+                $q->where('store_id', $current_store_id);
+            })->where("name", "LIKE", '%' . $request->product . '%')->get();
+        } else {
+            $cat = ProductDescription::with(['hasOneProductToStore'])->whereHas('hasOneProductToStore', function ($q) use ($user_shop_id) {
+                $q->where('store_id', $user_shop_id);
+            })->where("name", "LIKE", '%' . $request->product . '%')->get();
         }
 
         return response()->json($cat);
     }
 
-
-
-
-
     // Function of Search Category
     public function searchcategory(Request $request)
     {
         $user_details = user_details();
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
@@ -119,43 +95,31 @@ class CouponController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
 
-        if($user_group_id == 1)
-        {
-            $pro = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use ($current_store_id)
-            {
-               $q->where('store_id',$current_store_id);
-            })->where("name", "LIKE", '%'.$request->category.'%')->get();
-        }
-        else
-        {
-            $pro = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore',function($q) use ($user_shop_id)
-            {
-               $q->where('store_id',$user_shop_id);
-            })->where("name", "LIKE", '%'.$request->category.'%')->get();
+        if ($user_group_id == 1) {
+            $pro = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($q) use ($current_store_id) {
+                $q->where('store_id', $current_store_id);
+            })->where("name", "LIKE", '%' . $request->category . '%')->get();
+        } else {
+            $pro = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($q) use ($user_shop_id) {
+                $q->where('store_id', $user_shop_id);
+            })->where("name", "LIKE", '%' . $request->category . '%')->get();
         }
 
         return response()->json($pro);
     }
 
 
-
-
-
     // Function of Update Coupon Code Status
     public function updonoff(Request $request)
     {
         $couponid = $request->dataid;
-        $onoff = Coupon::find( $couponid);
+        $onoff = Coupon::find($couponid);
         $onoff->on_off = $request->onoff;
         $onoff->update();
         return response()->json([
-            "success"=>"update status"
+            "success" => "update status"
         ]);
     }
-
-
-
-
 
     // Function of Store New Coupon
     public function insertcoupon(Request $request)
@@ -170,20 +134,16 @@ class CouponController extends Controller
         ]);
 
         $user_details = user_details();
-        if(isset($user_details))
-        {
+        if (isset($user_details)) {
             $user_group_id = $user_details['user_group_id'];
         }
         $user_shop_id = $user_details['user_shop'];
 
         // Insert New Coupon
         $coupon = new Coupon;
-        if($user_group_id == 1)
-        {
+        if ($user_group_id == 1) {
             $coupon->store_id = $current_store_id;
-        }
-        else
-        {
+        } else {
             $coupon->store_id = $user_shop_id;
         }
         $coupon->apply_shipping = isset($request->apply) ? $request->apply : "0";
@@ -206,10 +166,8 @@ class CouponController extends Controller
 
         // Store Coupon Category
         $category = $request->catid;
-        if (!empty($category))
-        {
-            foreach ($category as $value)
-            {
+        if (!empty($category)) {
+            foreach ($category as $value) {
                 $couponcat = new CouponCategory;
                 $couponcat->coupon_id = $couponid;
                 $couponcat->category_id = $value;
@@ -219,10 +177,8 @@ class CouponController extends Controller
 
         // Store Coupon Product
         $product = $request->proid;
-        if (!empty($product))
-        {
-            foreach ($product as $value)
-            {
+        if (!empty($product)) {
+            foreach ($product as $value) {
                 $couponpro = new CouponProduct;
                 $couponpro->coupon_id = $couponid;
                 $couponpro->product_id = $value;
@@ -231,10 +187,6 @@ class CouponController extends Controller
         }
         return redirect()->route('coupons')->with('success', "Coupon Insert Successfully.");
     }
-
-
-
-
 
     // Function of Update Coupon
     public function couponupdate(Request $request)
@@ -273,10 +225,8 @@ class CouponController extends Controller
         CouponCategory::where('coupon_id', $couponid)->delete();
 
         // New Coupon Category
-        if (!empty($categoryadd))
-        {
-            foreach ($categoryadd as $value)
-            {
+        if (!empty($categoryadd)) {
+            foreach ($categoryadd as $value) {
                 $couponcat = new CouponCategory;
                 $couponcat->coupon_id = $request->couponid;
                 $couponcat->category_id = $value;
@@ -290,10 +240,8 @@ class CouponController extends Controller
         CouponProduct::where('coupon_id', $couponid)->delete();
 
         // New Coupon Product
-        if (!empty($productadd))
-        {
-            foreach ($productadd as $value)
-            {
+        if (!empty($productadd)) {
+            foreach ($productadd as $value) {
                 $couponpro = new CouponProduct;
                 $couponpro->coupon_id = $request->couponid;
                 $couponpro->product_id = $value;
@@ -303,23 +251,17 @@ class CouponController extends Controller
         return redirect()->route('coupons')->with('success', "Coupon Update Successfully.");
     }
 
-
-
-
-
     // Function of Edit Coupon
     public function editcoupon($id)
     {
         // Check User Permission
-        if (check_user_role(15) != 1)
-        {
+        if (check_user_role(15) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         $data['coupon'] = Coupon::find($id);
 
-        if(empty($data['coupon']))
-        {
+        if (empty($data['coupon'])) {
             return redirect()->route('coupons');
         }
 
@@ -337,14 +279,12 @@ class CouponController extends Controller
     public function coupondelete(Request $request)
     {
         // Check User Permission
-        if (check_user_role(66) != 1)
-        {
+        if (check_user_role(66) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
         $ids = $request['id'];
-        if (count($ids) > 0)
-        {
+        if (count($ids) > 0) {
             // Delete Coupon
             Coupon::whereIn('coupon_id', $ids)->delete();
 
@@ -355,7 +295,7 @@ class CouponController extends Controller
             CouponProduct::whereIn('coupon_id', $ids)->delete();
 
             // Delete Coupon History
-            CouponHistory::whereIn('coupon_id',$ids)->delete();
+            CouponHistory::whereIn('coupon_id', $ids)->delete();
 
             return response()->json([
                 'success' => 1,
@@ -363,30 +303,25 @@ class CouponController extends Controller
         }
     }
 
-
-
-
-
     // Get All Coupons History
     public function getallcouponhistory(Request $request)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             $couponid = $request->couponid;
-            $data = CouponHistory::select('oc_coupon_history.*','oc_order.firstname','oc_order.lastname')->join('oc_order','oc_coupon_history.order_id','=','oc_order.order_id')->where('coupon_id', $couponid)->get();
+            $data = CouponHistory::select('oc_coupon_history.*', 'oc_order.firstname', 'oc_order.lastname')->join('oc_order', 'oc_coupon_history.order_id', '=', 'oc_order.order_id')->where('coupon_id', $couponid)->get();
 
             return Datatables::of($data)->addIndexColumn()
-            ->addColumn('date_added', function ($row) {
-                $date_added = date('d-m-Y', strtotime($row->date_added));
-                return $date_added;
-            })
-            ->addColumn('customer_name', function($row){
-                $cname = $row->firstname.' '.$row->lastname;
+                ->addColumn('date_added', function ($row) {
+                    $date_added = date('d-m-Y', strtotime($row->date_added));
+                    return $date_added;
+                })
+                ->addColumn('customer_name', function ($row) {
+                    $cname = $row->firstname . ' ' . $row->lastname;
 
-                return $cname;
-            })
-            ->rawColumns(['date_added'])
-            ->make(true);
+                    return $cname;
+                })
+                ->rawColumns(['date_added'])
+                ->make(true);
         }
     }
 }

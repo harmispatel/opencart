@@ -11,10 +11,6 @@
 <!-- ./wrapper -->
 
 
-{{-- Bootstrap js --}}
-<!-- Latest compiled and minified JavaScript -->
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> --}}
-
 <!-- jQuery -->
 <script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -38,6 +34,8 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.min.js"
 integrity="sha512-+q01aE1/3DSt/pNwhpoMKxjkWyRTpXPA7xceLKlhmJMADbLJL020BuGSTCExgwe+fD7bvX2HiVGS1suMf2056A=="
 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<!-- Select -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 
 <!-- Datatable -->
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -45,10 +43,6 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {{-- Summernote --}}
 <script src="{{ asset('public/plugins/summernote/summernote.min.js') }}"></script>
-
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
-
 
 <script>
     $('#summernote').summernote({
