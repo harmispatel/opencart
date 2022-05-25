@@ -2,8 +2,6 @@
 @include('header')
 {{-- End Header --}}
 
-<link rel="stylesheet" href="sweetalert2.min.css">
-
 {{-- Section of Edit Category --}}
 <section>
     <div class="content-wrapper">
@@ -384,8 +382,6 @@
 {{-- Footer --}}
 @include('footer')
 {{-- End Footer --}}
-
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 {{-- SCRIPT --}}
 <script type="text/javascript">
