@@ -343,13 +343,13 @@
                                                                             <label>Open/Close Store</label>
                                                                         </th>
                                                                         <td>
-                                                                            <div class="form-control">
+                                                                            {{-- <div class="form-control">
                                                                                 <label for="polianna_open_close_store_permission1">Open</label>
                                                                                 <input type="radio" name="polianna_open_close_store_permission" id="polianna_open_close_store_permission1" value="1" {{ ($template_settings['polianna_open_close_store_permission'] == 1) ? 'checked' : '' }}>
                                                                                 <label for="polianna_open_close_store_permission2" class="ml-2">Closed</label>
                                                                                 <input type="radio" name="polianna_open_close_store_permission" id="polianna_open_close_store_permission2" value="0" {{ ($template_settings['polianna_open_close_store_permission'] == 0) ? 'checked' : '' }}>
                                                                             </div>
-                                                                            <hr>
+                                                                            <hr> --}}
                                                                             <div class="form-group">
                                                                                 <label>Open Banner</label>
                                                                                 <input type="file" name="polianna_open_banner" class="form-control p-1">
@@ -423,7 +423,7 @@
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <table class="table table-bordered table-striped">
-                                                                    <tr>
+                                                                    {{-- <tr>
                                                                         <th width="250" class="align-middle">
                                                                             <label>Store Fonts</label>
                                                                         </th>
@@ -437,7 +437,7 @@
                                                                                 @endforeach
                                                                             </select>
                                                                         </td>
-                                                                    </tr>
+                                                                    </tr> --}}
                                                                     <tr>
                                                                         <th width="250" class="align-middle">
                                                                             <label>Popular Food Limit</label>

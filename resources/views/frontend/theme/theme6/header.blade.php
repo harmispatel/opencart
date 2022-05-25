@@ -226,9 +226,8 @@
                             <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }} </strong>
                         @elseif ($firstday == "Every day")
                             <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                            @elseif ($value == "")
+                        @elseif ($value == "")
                             <strong>Close</strong>
-
                         @endif
                     @endforeach
                 @endforeach
@@ -255,7 +254,7 @@
                         </div>
                     @endif
                 @else
-                    @if ($currentday == $value)
+                    @if ($currentday == $value || $firstday == "Every day")
                         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s">
                             <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}"/>
                         </div>
