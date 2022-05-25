@@ -202,7 +202,7 @@
                                                                 </th>
                                                                 <td>
                                                                     <input class="form-control" type="color"
-                                                                    name="group_title_color" value="{{ $topping->group_title_color }}">
+                                                                    name="group_title_color" value="#{{ $topping->group_title_color }}">
                                                                 </td>
                                                             </tr>
                                                             <tr>
