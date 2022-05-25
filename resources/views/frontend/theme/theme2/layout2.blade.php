@@ -3,67 +3,122 @@
     @php
        
        // Get Current Theme ID & Store ID
-    $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
-    $front_store_id =  $current_theme_id['store_id'];
-    // // Get Current Theme ID & Store ID
+        $currentURL = URL::to("/");
+        $current_theme_id = themeID($currentURL);
+        $theme_id = $current_theme_id['theme_id'];
+        $front_store_id =  $current_theme_id['store_id'];
+        // // Get Current Theme ID & Store ID
 
-    // Get Store Settings & Theme Settings & Other
-    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
-    //End Get Store Settings & Theme Settings & Other
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+        //End Get Store Settings & Theme Settings & Other
 
-    // Template Settings
-    $template_setting = $store_theme_settings['template_settings'];
-    // End Template Settings
+        // Template Settings
+        $template_setting = $store_theme_settings['template_settings'];
+        // End Template Settings
 
-    // Social Site Settings
-    $social_site = $store_theme_settings['social_settings'];
-    // End Social Site Settings
+        // Social Site Settings
+        $social_site = $store_theme_settings['social_settings'];
+        // End Social Site Settings
 
-    // Store Settings
-    $store_setting = $store_theme_settings['store_settings'];
-    // End Store Settings
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
 
-    // Get Open-Close Time
-    $openclose = openclosetime();
-    // End Open-Close Time
+        // Get Open-Close Time
+        $openclose = openclosetime();
+        // End Open-Close Time
 
-    // User Delivery Type (Collection/Delivery)
-    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
-    // End User Delivery Type
+        // User Delivery Type (Collection/Delivery)
+        $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+        // End User Delivery Type
 
-    // Slider Permission
-    $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
-    // End Slider Permission
+        // Slider Permission
+        $slider_permission = isset($template_setting['polianna_slider_permission']) ? $template_setting['polianna_slider_permission'] : 0;
+        // End Slider Permission
 
-    // Online Order Permission
-    $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
-    // End Online Order Permission
+        // Online Order Permission
+        $online_order_permission = isset($template_setting['polianna_online_order_permission']) ? $template_setting['polianna_online_order_permission'] : 0;
+        // End Online Order Permission
 
-    // Stores Reviews
-    $review = storereview();
-    // End Stores Reviews
+        // Stores Reviews
+        $review = storereview();
+        // End Stores Reviews
 
     @endphp
 
 <style>
-.grid-header {
-  text-align: center;
-}
 
-.grid {
-  margin: 1rem auto;
-  &-item {
-    width: 250px;
-    height: auto;
-    margin-bottom: 10px;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
+        .masonry { /* Masonry container */
+            -webkit-column-count: 4;
+            -moz-column-count:4;
+            column-count: 4;
+            -webkit-column-gap: 1em;
+            -moz-column-gap: 1em;
+            column-gap: 1em;
+            margin: 1.5em;
+            padding: 0;
+        }
+
+        .masonry { /* Masonry container */
+            -webkit-column-count: 4;
+            -moz-column-count:4;
+            column-count: 4;
+            -webkit-column-gap: 1em;
+            -moz-column-gap: 1em;
+            column-gap: 1em;
+            margin: 1.5em;
+            padding: 0;
+            -moz-column-gap: 1.5em;
+            -webkit-column-gap: 1.5em;
+            column-gap: 1.5em;
+            font-size: .85em;
+        }
+
+        .item {
+            display: inline-block;
+            background: #fff;
+            padding: 1em;
+            margin: 0 0 1.5em;
+            width: 100%;
+            -webkit-transition:1s ease all;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-shadow: 2px 2px 4px 0 #ccc;
+        }
+        
+        .item img{max-width:100%; height: auto;}
+
+        @media only screen and (max-width: 320px) {
+            .masonry {
+                -moz-column-count: 1;
+                -webkit-column-count: 1;
+                column-count: 1;
+            }
+        }
+
+        @media only screen and (min-width: 321px) and (max-width: 768px){
+            .masonry {
+                -moz-column-count: 2;
+                -webkit-column-count: 2;
+                column-count: 2;
+            }
+        }
+        @media only screen and (min-width: 769px) and (max-width: 1200px){
+            .masonry {
+                -moz-column-count: 3;
+                -webkit-column-count: 3;
+                column-count: 3;
+            }
+        }
+        @media only screen and (min-width: 1201px) {
+            .masonry {
+                -moz-column-count: 4;
+                -webkit-column-count: 4;
+                column-count: 4;
+            }
+        }
 
 </style>
     <div class="mobile-menu-shadow"></div>
@@ -475,45 +530,11 @@
 
             <div class="row">
                 @if(count($photos) > 0)
-                
-                    @foreach ($photos as $key => $photo)
-                    {{-- @php
-                        echo '<pre>';
-                        echo $key;
-                        echo " ";
-                        print_r($photo->toArray());                        
-                    @endphp --}}
-                        {{-- <div class="grid-item">
-                            @if(!empty($photo->image))
-                                <img src="{{ $photo->image }}">
-                            @else
-                                <img src="{{ asset('public/frontend/other/no-image.jpg') }}">
-                            @endif
-                        </div> --}}
-                        {{-- <div class="row">
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="box single">
-                                <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="box couple">
-                                        <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="box couple">
-                                        <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
-                                </div>
+                    <div class="masonry">
+                        @foreach ($photos as $key => $photo)
+                            <div class="item">
+                                    <img src="{{ $photo->image }}" alt="">
                             </div>
-                        </div>
-                        </div> --}}
-
-                            
-                        {{-- <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="box single">
-                                <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
-                            </div> --}}
 
                             {{-- <div class="col-sm-12 col-md-6 col-lg-3">
                                 <div class="row"> --}}
@@ -524,83 +545,13 @@
                                     {{-- <div class="col-12">
                                         <div class="box couple">
                                             <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ $photo->image }}" /></div>
-                                    </div>
+                                        </div>
                                 </div>
                             </div> --}}
-
-
-
-                   <div class="grid">
-                        <div class="grid-item">
-                            <img src="{{ $photo->image }}" alt="">
-                        </div>
-                        {{-- <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/1.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/2.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/3.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}" alt="">
-                        </div> --}}
+                        @endforeach
                     </div>
-                    @endforeach
                 @else
-                    {{-- <div class="grid">
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/0.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/1.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/2.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/3.png') }}" alt="">
-                        </div>
-                        <div class="grid-item">
-                            <img src="{{ asset('public/assets/theme2/demo-data/photo-gallery/4.png') }}" alt="">
-                        </div>
-                    </div> --}}
-                    
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="box single">
-                                <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/6.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/6.jpg')}}" /></div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="box couple">
-                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/1.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/1.jpg')}}" /></div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="box couple">
-                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/2.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/2.jpg')}}" /></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="box single">
-                                <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/3.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/3.jpg')}}" /></div>
-                        </div>
-                        <div class="col-sm-12 col-md-6 col-lg-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="box couple">
-                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/4.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/4.jpg')}}" /></div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="box couple">
-                                        <a class="fas fa-search-plus" href="{{ asset('public/assets/demo-data/photo-gallery/5.jpg')}}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/demo-data/photo-gallery/5.jpg')}}" /></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h1>Image Not Found</h1>
                 @endif
             </div>
         </div>
@@ -635,30 +586,3 @@
             <div class="__time"><span>SUN</span><span>9.30AM-11PM</span></div><img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/opening-hours-bottom-divider.svg') }}" /> --}}
         </div>
     </section>
-
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.js"></script>
-    <script src="{{ asset('public/assets/js/gallary.js') }}"></script>
-
-<script>
-    var colWidth = $(".grid-item").width();
-
-window.onresize = function(){
-  var colWidth = $(".grid-item").width();
-}
-console.log(colWidth);
-
-var $grid = $(".grid").masonry({
-  // options
-  itemSelector: ".grid-item",
-  columnWidth: ".grid-item",
-  // percentPosition: true,
-  gutter: 10,
-  fitWidth: true
-});
-
-$grid.imagesLoaded().progress(function() {
-  $grid.masonry("layout");
-});
-
-</script>
