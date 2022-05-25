@@ -660,9 +660,9 @@ class ProductController extends Controller
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
                 $data['product_id'] = $product_id;
-                $data['image'] = $post->image;
+                $data['image'] = $post->hasOneProduct['image'];
                 if (!empty($data['image'])) {
-                    $image_path = asset('public/admin/product/' . $data['image']);
+                    $image_path = $data['image'];
                     $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
                 } else {
                     $image_path = asset('public/admin/product/no_image.jpg');
@@ -811,11 +811,27 @@ class ProductController extends Controller
             $days = implode(',', $day);
         }
         $product->availibleday = isset($days) ? $days : '';
-        if ($request->hasFile('image')) {
-            $Image = $request->file('image');
-            $filename = time() . '.' . $Image->getClientOriginalExtension();
-            $Image->move(public_path('admin/product/'), $filename);
-            $product->image = $filename;
+        // if ($request->hasFile('image')) {
+        //     $Image = $request->file('image');
+        //     $filename = time() . '.' . $Image->getClientOriginalExtension();
+        //     $Image->move(public_path('admin/product/'), $filename);
+        //     $product->image = $filename;
+        // }
+        $currentURL = public_url();
+        if ($request->hasFile('image'))
+        {
+            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+            if(!empty($image) || $image != '')
+            {
+                if(file_exists('public/admin/product/'.$image))
+                {
+                    unlink('public/admin/product/'.$image);
+                }
+            }
+            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/product/'), $imgname);
+            $producturl = $currentURL.'/public/admin/product/';
+            $product->image = $producturl.$imgname;
         }
         $product->update();
 
@@ -871,15 +887,15 @@ class ProductController extends Controller
                 $toppingProductPriceSize->update();
             }
         } else {
-            foreach ($mainprice as $key => $mainprices) {
-                $toppingProductPriceSize = new ToppingProductPriceSize;
-                $toppingProductPriceSize->id_size = $id_size[$key];
-                $toppingProductPriceSize->id_product = $product_id;
-                $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                $toppingProductPriceSize->save();
-            }
+            // foreach ($mainprice as $key => $mainprices) {
+            //     $toppingProductPriceSize = new ToppingProductPriceSize;
+            //     $toppingProductPriceSize->id_size = $id_size[$key];
+            //     $toppingProductPriceSize->id_product = $product_id;
+            //     $toppingProductPriceSize->price = $mainprices;
+            //     $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+            //     $toppingProductPriceSize->collection_price = $collectionprice[$key];
+            //     $toppingProductPriceSize->save();
+            // }
         }
 
 
