@@ -367,10 +367,10 @@
                                                                                                                     </a>
                                                                                                                     @break
                                                                                                             @else
-                                                                                                            <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                            {{-- <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                 <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
                                                                                                                 <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                            </a>
+                                                                                                            </a> --}}
                                                                                                             @endif
                                                                                                         @endforeach
                                                                                                     @endforeach
@@ -417,10 +417,10 @@
                                                                                                                 </a>
                                                                                                             {{-- @endif --}}
                                                                                                         @else
-                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                        {{-- <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                             <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                        </a>
+                                                                                                        </a> --}}
                                                                                                         @endif
 
                                                                                                     @endforeach
@@ -478,11 +478,10 @@
                                         {{-- @endif --}}
                                         @break
                                     @else
-                                        <div class="close-shop">
+                                        {{-- <div class="close-shop">
                                             <h2 class="m-0">We are close now!</h2>
-                                            {{-- <span>We are close now</span> --}}
                                         </div>
-                                        @break
+                                        @break --}}
                                     @endif
                                 @endforeach
                             @endforeach
