@@ -109,8 +109,7 @@
                 <div class="swiper-slide"
                     style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
                     <div class="container">
-                        <div class="slide-logo"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
+                        <div class="slide-logo"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
                         <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
                         <p>
                             {{ $template_setting['polianna_slider_1_description'] }}
@@ -120,6 +119,9 @@
                 <div class="swiper-slide"
                     style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
                     <div class="container">
+                        
+                        <div class="slide-logo"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
+
                         <h2 class="__title">{{ $template_setting['polianna_slider_2_title'] }}</h2>
                         <p>
                             {{ $template_setting['polianna_slider_2_description'] }}
@@ -389,10 +391,11 @@
                     @php
                         $product = $category->category_id;
                     @endphp
-                    <a class="text-uppercase" href="" data-filter="{{$product}}">{{ strtolower($category->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
+                    <a class="text-uppercase"  data-filter="{{$product}}">{{ strtolower($category->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
                     @php
+                         
                         $allproducts = getallproduct($product);
-                        // echo $product;
+                        // echo $allproducts;
                     @endphp
                     @endforeach
                 @endif
@@ -403,6 +406,8 @@
                         @foreach ($allproducts as $categorydet)
                         @php
                             $catimage = $categorydet->hasOneProduct['image'];
+                            // print_r($catimage);
+                            // exit;
                             $catname = $categorydet->hasOneDescription['name'];
                             $catdesc = $categorydet->hasOneDescription['description'];
                         @endphp
@@ -509,3 +514,10 @@
         </div>
     </div>
 </section>
+
+{{-- <script>
+    function getId(product){
+        alert(product)
+
+    }
+</script> --}}

@@ -121,9 +121,7 @@
                                                 <select name="product_icons[]" id="product_icon" class="form-control"
                                                     multiple required>
                                                     @foreach ($result['product_icon'] as $productIcon)
-                                                        <option value="{{ $productIcon->id }}"
-                                                            {{ in_array($productIcon->id, $array) == $productIcon->id ? 'selected' : '' }}>
-                                                            {{ $productIcon->icon_name }}</option>
+                                                        <option value="{{ $productIcon->id }}" {{ in_array($productIcon->id, $array) == $productIcon->id ? 'selected' : '' }}>{{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -84,17 +84,30 @@
             <div class="col-md-12 col-lg-7 position-relative">
                 <div class="__circle">
                     <div class="__thumbs-item"><a href="#"
-                            style="background-image: url({{ asset('public/assets/theme4/demo-data/home-slide/0.jpg') }})"
+                            style="background-image: url({{ $template_setting['polianna_slider_1'] }})"
                             data-index="0"></a><a href="#"
-                            style="background-image: url({{ asset('public/assets/theme4/demo-data/home-slide/1.jpg') }})"
+                            style="background-image: url({{ $template_setting['polianna_slider_2'] }})"
                             data-index="1"></a><a href="#"
-                            style="background-image: url({{ asset('public/assets/theme4/demo-data/home-slide/2.jpg') }})"
+                            style="background-image: url({{ $template_setting['polianna_slider_3'] }})"
                             data-index="2"></a></div>
                 </div>
                 <div class="__circle"></div>
                 <div class="__circle"></div>
                 <div class="swiper">
+                    @if ($slider_permission == 1)
                     <div class="swiper-wrapper">
+
+                        <div class="swiper-slide"><img class="img-fluid"
+                                src="{{ $template_setting['polianna_slider_1'] }}" /></div>
+                        <div class="swiper-slide"><img class="img-fluid"
+                                src="{{ $template_setting['polianna_slider_2'] }}" /></div>
+                        <div class="swiper-slide"><img class="img-fluid"
+                                src="{{ $template_setting['polianna_slider_3'] }}" /></div>
+                    </div>
+                    @else
+                        
+                    <div class="swiper-wrapper">
+
                         <div class="swiper-slide"><img class="img-fluid"
                                 src="{{ asset('public/assets/theme4/demo-data/slider.jpg') }}" /></div>
                         <div class="swiper-slide"><img class="img-fluid"
@@ -102,6 +115,7 @@
                         <div class="swiper-slide"><img class="img-fluid"
                                 src="{{ asset('public/assets/theme4/demo-data/slider.jpg') }}" /></div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="col-md-12 col-lg-5">

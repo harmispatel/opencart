@@ -333,7 +333,7 @@
                                                         <label>Icon</label>
                                                         <input type="file" class="form-control p-1" name="config_icon" id="config_icon">
                                                         <code class="text-muted">
-                                                            The icon should be a PNG that is 16px x 16px.
+                                                            The icon should be  that is 16px x 16px.
                                                         </code><br>
                                                         @if(!empty($map_category['config_icon']) || $map_category['config_icon'] != '')
                                                             <img src="{{ $map_category['config_icon'] }}" width="60">
