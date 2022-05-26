@@ -455,20 +455,20 @@
                             @if (!empty($openday))
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                    @endphp
+                                @php
+                                    $firsttime = strtotime($fromtime[$key]);
+                                    $lasttime = strtotime($totime[$key]);
+                                    $today = time();
+                                    $currentday = date('l');
+                                    $firstday = $item[0];
+                                @endphp
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="alert p-1 text-center" style="background: green;">
                                                 <h2 class="p-1 text-white mb-0">We are open now!</h2>
                                             </div>
+                                            @break
                                         @endif
-                                        @break
                                     @elseif ($currentday == $value || $firstday == "Every day")
                                         {{-- @if ($currentday == $value || $firstday == "Every day") --}}
                                             <div class="close-shop">
@@ -479,7 +479,7 @@
                                         @break
                                     @else
                                         <div class="close-shop">
-                                            <h2>Sorry we are closed now!</h2>
+                                            <h2 class="m-0">We are close now!</h2>
                                             {{-- <span>We are close now</span> --}}
                                         </div>
                                         @break
@@ -738,40 +738,34 @@
                                 </div>
                             </div>
                             @if (!empty($openday))
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                    @endphp
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            @if (!empty($mycart['size']))
-                                                <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                                @break
-                                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                            $firstday = $item[0];
+                                        @endphp
+
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
                                                 <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
                                                 <div class="closed-now">
                                                     <span class="closing-text" style="color: green !important;">We are open now!</span>
                                                 </div>
                                                 @break
                                             @endif
-                                        @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
+                                        @elseif ($currentday == $value || $firstday == "Every day")
                                             <div class="closed-now">
                                                 <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
                                                 <div class="closed-now">
                                                     <span class="closing-text">We are closed now!</span>
                                                 </div>
                                             </div>
-                                            @break
                                         @endif
-                                    @endif
+                                    @endforeach
                                 @endforeach
-                            @endforeach
                             @else
                                 <div class="closed-now">
                                     <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
