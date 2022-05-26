@@ -53,16 +53,16 @@
     <div class="top">
         <ul class="menu">
             <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
-            <li><a class="text-uppercase" href="#">member</a></li>
+            <li><a class="text-uppercase" href="{{ route('member') }}">member</a></li>
             <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-            <li><a class="text-uppercase" href="#">check out</a></li>
+            <li><a class="text-uppercase" href="{{ route('checkout') }}">check out</a></li>
             <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
         </ul>
     </div>
     <div class="center">
         <ul class="authentication-links">
-            <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-            <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
         </ul>
     </div>
     <div class="bottom">
@@ -109,8 +109,7 @@
                 <div class="swiper-slide"
                     style="background-image: url('{{ $template_setting['polianna_slider_1'] }}')">
                     <div class="container">
-                        <div class="slide-logo"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
+                        <div class="slide-logo"><img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" /></div>
                         <h2 class="__title">{{ $template_setting['polianna_slider_1_title'] }}</h2>
                         <p>
                             {{ $template_setting['polianna_slider_1_description'] }}

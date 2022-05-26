@@ -54,9 +54,9 @@
       <div class="container">
         <ul class="__menu">
           <li><a class="text-uppercase foot_link" href="{{ route('home') }}">home</a></li>
-          <li><a class="text-uppercase foot_link" href="#">member</a></li>
+          <li><a class="text-uppercase foot_link" href="{{ route('member') }}">member</a></li>
           <li><a class="text-uppercase foot_link" href="{{ route('menu') }}">menu</a></li>
-          <li><a class="text-uppercase foot_link" href="#">check out</a></li>
+          <li><a class="text-uppercase foot_link" href="{{ route('checkout') }}">check out</a></li>
           <li><a class="text-uppercase foot_link" href="{{ route('contact') }}">contact us</a></li>
         </ul>
         <div class="__social-links">

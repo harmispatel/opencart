@@ -56,16 +56,16 @@
     <div class="top">
         <ul class="menu">
             <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
-            <li><a class="text-uppercase" href="#">member</a></li>
+            <li><a class="text-uppercase" href="{{ route('member')}}">member</a></li>
             <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-            <li><a class="text-uppercase" href="#">check out</a></li>
+            <li><a class="text-uppercase" href="{{ route('checkout')}}">check out</a></li>
             <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
         </ul>
     </div>
     <div class="center">
         <ul class="authentication-links">
-            <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
-            <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
         </ul>
     </div>
     <div class="bottom">

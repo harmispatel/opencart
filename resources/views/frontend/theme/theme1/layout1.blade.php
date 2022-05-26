@@ -206,13 +206,13 @@
                     @if (!empty($template_setting['polianna_store_description']))
                         {!! $template_setting['polianna_store_description'] !!}
                     @else
-                        <h3 class="section-title color-green">Welcome to <br> Star Kebab &amp; Pizza</h3>
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>dolore eu fugiat nulla pariatur.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br>commodo consequat.<br>Duis aute irure dolor in reprehenderit in voluptate velit esse dolore eu fugiat nulla pariatur.</p>
+                        <h3 class="section-title color-green">Content Not Available</h3>
                     @endif
                 </div>
+                @if (!empty($template_setting['polianna_store_description']))
                 <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
                 <a style="display: none;" class="btn mt-2 btn-green text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
+                @endif
             </div>
             <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="img-box">

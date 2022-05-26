@@ -148,6 +148,35 @@
 
 </head>
 <body>
+    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
+        href="#slide"><img class="img-fluid"
+            src="{{ asset('public/assets/theme5/img/logo/black-logo.svg') }}" /></a>
+    <div class="top">
+        <ul class="menu">
+            <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
+            <li><a class="text-uppercase" href="{{ route('member')}}">member</a></li>
+            <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
+            <li><a class="text-uppercase" href="{{ route('checkout')}}">check out</a></li>
+            <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
+        </ul>
+    </div>
+    <div class="center">
+        <ul class="authentication-links">
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+        </ul>
+    </div>
+    <div class="bottom">
+        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+        </div>
+        <ul class="social-links">
+            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
+        </ul>
+    </div>
+</sidebar>
 
     <!-- Header -->
     @if (!empty($theme_id) || $theme_id != '')
