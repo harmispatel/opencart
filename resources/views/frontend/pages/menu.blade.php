@@ -57,6 +57,36 @@
 </head>
 <body>
 
+    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
+        href="#slide"><img class="img-fluid"
+            src="{{ asset('public/assets/theme5/img/logo/black-logo.svg') }}" /></a>
+    <div class="top">
+        <ul class="menu">
+            <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
+            <li><a class="text-uppercase" href="{{ route('member')}}">member</a></li>
+            <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
+            <li><a class="text-uppercase" href="{{ route('checkout')}}">check out</a></li>
+            <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
+        </ul>
+    </div>
+    <div class="center">
+        <ul class="authentication-links">
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
+            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+        </ul>
+    </div>
+    <div class="bottom">
+        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
+        </div>
+        <ul class="social-links">
+            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
+            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
+        </ul>
+    </div>
+</sidebar>
+
 
     <!-- Store Open Close Message Modal -->
     <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
@@ -290,7 +320,7 @@
                                                                                 <p>
                                                                                     {{ strip_tags($prodesc) }}
                                                                                 </p>
-                                                                                <img src="{{ asset('public/admin/product/' . $values->hasOneProduct['image']) }}" width="80" height="80" class="mt-2 mb-2">
+                                                                                <img src="{{ $values->hasOneProduct['image'] }}" width="80" height="80" class="mt-2 mb-2">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-5">
@@ -311,6 +341,7 @@
                                                                                                     <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
                                                                                                 </div>
                                                                                                 <div class="col-md-9">
+                                                                                                    @if (!empty($openday))
                                                                                                     @foreach ($openday as $key => $item)
                                                                                                         @foreach ($item as $value)
                                                                                                             @php
@@ -327,17 +358,28 @@
                                                                                                                         <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
+                                                                                                                    @break
                                                                                                                 @endif
-                                                                                                            @else
-                                                                                                                @if ($currentday == $value || $firstday == "Every day")
+                                                                                                            @elseif ($currentday == $value || $firstday == "Every day")
                                                                                                                     <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                        <span class="sizeprice hide-carttext">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
-                                                                                                                @endif
+                                                                                                                    @break
+                                                                                                            @else
+                                                                                                            <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                            </a>
                                                                                                             @endif
                                                                                                         @endforeach
                                                                                                     @endforeach
+                                                                                                    @else
+                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                            <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
+                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                        </a>
+                                                                                                    @endif
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -349,6 +391,7 @@
                                                                                                 <span>price</span>
                                                                                             </div>
                                                                                             <div class="col-md-7">
+                                                                                                @if (!empty($openday))
                                                                                                 @foreach ($openday as $key => $item)
                                                                                                     @foreach ($item as $value)
                                                                                                         @php
@@ -362,20 +405,32 @@
                                                                                                         @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                             @if ($currentday == $value || $firstday == "Every day")
                                                                                                                 <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
                                                                                                             @endif
-                                                                                                        @else
-                                                                                                            @if ($currentday == $value || $firstday == "Every day")
+                                                                                                        @elseif ($currentday == $value || $firstday == "Every day")
+                                                                                                            {{-- @if ($currentday == $value || $firstday == "Every day") --}}
                                                                                                                 <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                    <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                 </a>
-                                                                                                            @endif
+                                                                                                            {{-- @endif --}}
+                                                                                                        @else
+                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                            <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
+                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                        </a>
                                                                                                         @endif
+
                                                                                                     @endforeach
                                                                                                 @endforeach
+                                                                                                @else
+                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                        {{-- <span class="sizeprice hide-carttext">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span> --}}
+                                                                                                        <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
+                                                                                                    </a>
+                                                                                                @endif
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -397,6 +452,7 @@
                     </div>
                     <div class="col-md-5 col-lg-4">
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
+                            @if (!empty($openday))
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
@@ -412,16 +468,30 @@
                                                 <h2 class="p-1 text-white mb-0">We are open now!</h2>
                                             </div>
                                         @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
+                                        @break
+                                    @elseif ($currentday == $value || $firstday == "Every day")
+                                        {{-- @if ($currentday == $value || $firstday == "Every day") --}}
                                             <div class="close-shop">
                                                 <h2>Sorry we are closed now!</h2>
                                                 <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
                                             </div>
-                                        @endif
+                                        {{-- @endif --}}
+                                        @break
+                                    @else
+                                        <div class="close-shop">
+                                            <h2>Sorry we are closed now!</h2>
+                                            {{-- <span>We are close now</span> --}}
+                                        </div>
+                                        @break
                                     @endif
                                 @endforeach
                             @endforeach
+                            @else
+                                <div class="close-shop">
+                                    <h2>Sorry we are closed now!</h2>
+                                    <span>We are close now</span>
+                                </div>
+                            @endif
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
                                     <span class="tg-icon" id="tg-icon"><i class="fas fa-angle-double-up"></i></span>
@@ -667,6 +737,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @if (!empty($openday))
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
@@ -696,10 +767,19 @@
                                                     <span class="closing-text">We are closed now!</span>
                                                 </div>
                                             </div>
+                                            @break
                                         @endif
                                     @endif
                                 @endforeach
                             @endforeach
+                            @else
+                                <div class="closed-now">
+                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                    <div class="closed-now">
+                                        <span class="closing-text">We are closed now!</span>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
