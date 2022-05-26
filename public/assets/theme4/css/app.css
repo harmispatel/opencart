@@ -6,8 +6,7 @@
 .header-v4 .header-bottom .menu li a,
 .header-v4 .header-top .working-time span,
 .header-v4 .header-top .working-time strong,
-.mobile-menu .menu li a,
-* {
+.mobile-menu .menu li a {
     font-weight: 400;
     font-family: "Open Sans", sans-serif;
 }
@@ -1218,7 +1217,7 @@ ul {
 }
 
 .opening-hours-v4 .__time .__time-item strong {
-    font-size: 25px !important;
+    font-size: 42px;
     background-color: #4CD790;
     color: #fff;
     border-radius: 12px;
@@ -1235,7 +1234,7 @@ ul {
 }
 
 .opening-hours-v4 .__time .__time-item span {
-    font-size: 25px !important;
+    font-size: 52px;
 }
 
 .opening-hours-v4 .__time .__time-item span:nth-child(1) {
@@ -1251,35 +1250,80 @@ ul {
     padding-bottom: 45px;
 }
 
-/* New CSS */
-.srch-input {
+.footer-v4 .footer-top .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    border-bottom: 1px solid rgba(251, 251, 251, 0.18);
+}
+
+.footer-v4 .footer-top .__social-links {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.footer-v4 .footer-top .__social-links a {
+    width: initial;
+    margin-right: 20px;
+    font-size: 20px;
+    color: #fff;
+    transition: 0.33s;
+}
+
+.footer-v4 .footer-top .__social-links a:hover {
+    color: #4CD790;
+}
+
+.footer-v4 .footer-top .__social-links a:nth-last-of-type(1) {
+    margin-right: 0;
+}
+
+.footer-v4 .footer-top .__menu {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-bottom: 0;
+}
+
+.footer-v4 .footer-top .__menu li {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
     position: relative;
-    margin: 12px 0 14px;
 }
 
-.postcode-input-error {
-    border: 3px solid red !important
+.footer-v4 .footer-top .__menu li:hover a,
+.footer-v4 .footer-top .__menu li.active a {
+    color: #4CD790;
 }
 
-.postcode-error {
-    font-size: 16px !important;
-    color: red !important;
-    float: left !important;
-    margin-left: 7% !important;
-    padding: 0 !important;
-    font-family: arial !important;
-    font-weight: 700 !important
+.footer-v4 .footer-top .__menu li a {
+    display: block;
+    font-size: 15px;
+    color: #fff;
+    transition: 0.33s;
 }
 
-.wrap_row {
-    border-bottom: 1px dashed red;
-    float: left;
-    width: 96%;
-  }
-
-  .input-xlarge {
-    float: left;
-    width: 100%;
+.footer-v4 .f-logo {
+    margin: 45px auto 0 auto;
+    display: block;
+    text-align: center;
 }
+
+.footer-v4 .footer-bottom {
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4CD790;
+}
+
+.footer-v4 .footer-bottom p {
+    margin-bottom: 0;
+    color: #fff;
+}
+
 
 /*# sourceMappingURL=app.css.map */

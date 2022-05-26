@@ -852,7 +852,7 @@ class ProductController extends Controller
 
         if (!empty($type_topping) || $type_topping != '') {
             $toppingtype = ProductToppingType::find($product_id);
-            $toppingtype->typetopping = $type_topping;
+            $toppingtype->typetopping = isset($type_topping) ? $type_topping : '' ;
             $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
             $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
             $toppingtype->choose = isset($request->choose) ? $request->choose : '';
