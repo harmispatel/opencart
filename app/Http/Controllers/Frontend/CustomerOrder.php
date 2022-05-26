@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\OrderCart;
