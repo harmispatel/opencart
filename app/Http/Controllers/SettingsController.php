@@ -269,6 +269,12 @@ class SettingsController extends Controller
 
     public function updatemapandcategory(Request $request)
     {
+        // Check User Permission
+        if(check_user_role(81) != 1)
+        {
+            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
+        }
+
         $request->validate([
             'config_url' => 'required',
             'config_ssl' => 'required',
@@ -284,11 +290,6 @@ class SettingsController extends Controller
             'config_email' => 'required|email',
         ]);
 
-        // Check User Permission
-        if(check_user_role(81) != 1)
-        {
-            return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
-        }
 
         // Current Store ID
         $current_store_id = currentStoreId();

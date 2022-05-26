@@ -1,7 +1,3 @@
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Star Kebab & Pizza</title>
-
 @php
 
     // Get Current Theme ID & Store ID
@@ -15,7 +11,15 @@
     $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
     //End Get Store Settings & Theme Settings
 
+    // Store Settings
+    $store_settings = $store_theme_settings['store_settings']
+    // End Store Settings
+
 @endphp
+
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>{{ $store_settings['config_title'] }}</title>
 
 {{-- Style Sheet Links --}}
 <link rel="stylesheet" href="{{ asset('public/plugins/jquery-ui/jquery-ui.min.css') }}">
