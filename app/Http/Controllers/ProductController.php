@@ -26,17 +26,16 @@ class ProductController extends Controller
 {
     function index()
     {
-         // Check User Permission
-         if (check_user_role(50) != 1)
-         {
-             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
-         }
+        // Check User Permission
+        if (check_user_role(50) != 1) {
+            return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
+        }
 
         // Current Store ID
         $current_store_id = currentStoreId();
-        if($current_store_id == 0){
+        if ($current_store_id == 0) {
             $category = Category::with(['hasOneCategoryToStore'])->get();
-        }else{
+        } else {
 
             $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
                 $query->where('store_id', $current_store_id);
@@ -49,8 +48,7 @@ class ProductController extends Controller
     function bulkproducts()
     {
         // Check User Permission
-        if (check_user_role(56) != 1)
-        {
+        if (check_user_role(56) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -114,7 +112,7 @@ class ProductController extends Controller
 
         if (isset($data->product_id)) {
             foreach ($sizes as $key => $size) {
-                $html .= '<td style="vertical-align: middle;"><input type="text" name="product['.$lastid.'][price_size]['. $size->id_size.']" class="form-control"></td>';
+                $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][price_size][' . $size->id_size . ']" class="form-control"></td>';
             }
         }
 
@@ -125,62 +123,61 @@ class ProductController extends Controller
             // print_r($toppingType);
             // exit;
             $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
-             $demo=isset($group) ? $group : '';
+            $demo = isset($group) ? $group : '';
             unset($demo['number_group']);
         }
         $html .= '<th>';
 
         if (isset($data->product_id)) {
-             if($demo != ''){
-                 foreach ($demo as $key=>$value) {
+            if ($demo != '') {
+                foreach ($demo as $key => $value) {
 
-                     $productvalue=$value['id_group_option'];
-                     $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
-                     $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
-                     $html .= '<h3>' . $top->name_topping . '</h3>
+                    $productvalue = $value['id_group_option'];
+                    $top = Topping::select('oc_topping.*', 'ptd.typetopping')->join('oc_product_topping_type as ptd', 'ptd.id_group_topping', '=', 'id_topping')->where('id_topping', $value['id_group_option'])->first();
+                    $dropdown = ToppingOption::where('id_group_topping', $top->id_topping)->get();
+                    $html .= '<h3>' . $top->name_topping . '</h3>
                      <div style="margin-bottom: 10px;">
-                     <input type="radio" class="typetopping_'.$lastid.'_'.$key.'" name="product[' .$lastid .'][typetopping]['.$productvalue.']" value="select" onclick="radiocheck('.$lastid.','.$key.');"';
-                     ($top->typetopping == "select") ? $html .= ' checked' : '';
-                     $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
-                     <input type="radio" name="product[' .$lastid .'][typetopping]['.$productvalue.']" class="typetopping_'.$lastid.'_'.$key.'" value="checkbox" onclick="radiocheck('.$lastid.','.$key.');"';
-                     ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
-                     $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
+                     <input type="radio" class="typetopping_' . $lastid . '_' . $key . '" name="product[' . $lastid . '][typetopping][' . $productvalue . ']" value="select" onclick="radiocheck(' . $lastid . ',' . $key . ');"';
+                    ($top->typetopping == "select") ? $html .= ' checked' : '';
+                    $html .= '> Select&nbsp;&nbsp;&nbsp;&nbsp;
+                     <input type="radio" name="product[' . $lastid . '][typetopping][' . $productvalue . ']" class="typetopping_' . $lastid . '_' . $key . '" value="checkbox" onclick="radiocheck(' . $lastid . ',' . $key . ');"';
+                    ($top->typetopping == "checkbox") ? $html .= 'checked' : '';
+                    $html .= '> Checkbox&nbsp;&nbsp;&nbsp;&nbsp;
                      </div>
-                     <div style="margin-bottom: 10px;"><input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="1"';
-                     ($top->enable == 1) ? $html .= ' checked' : '';
-                     $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
-                         <input type="radio" name="product[' .$lastid .'][enable]['.$productvalue.']" value="0"';
-                     ($top->enable == 0) ? $html .= 'checked' : '';
-                     $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
+                     <div style="margin-bottom: 10px;"><input type="radio" name="product[' . $lastid . '][enable][' . $productvalue . ']" value="1"';
+                    ($top->enable == 1) ? $html .= ' checked' : '';
+                    $html .= '>Enable&nbsp;&nbsp;&nbsp;&nbsp;
+                         <input type="radio" name="product[' . $lastid . '][enable][' . $productvalue . ']" value="0"';
+                    ($top->enable == 0) ? $html .= 'checked' : '';
+                    $html .= '>Disable&nbsp;&nbsp;&nbsp;&nbsp;
                      </div>
                      <div class="form-floating">
                          <label for="rename" class="form-label">Rename to</label>
-                         <input type="text" name="product['.$lastid.'][renamegroup]['.$productvalue.']" class="form-control">
+                         <input type="text" name="product[' . $lastid . '][renamegroup][' . $productvalue . ']" class="form-control">
                      </div>';
-                         $html .='<div id="checkbox_'.$lastid.'_'.$key.'" style="display:none">';
-                         $html .='<lable>Default selected</lable>';
-                         $html .='<table>';
-                         $html .='<tbody>';
-                         $html .='<tr>';
-                         foreach($dropdown as $dropdowns){
-                         $html .='<td><input type="checkbox" value="'.$dropdowns->name.'" name="product['.$lastid.'][product_topping_checkbox]['.$productvalue.']" ></td>';
-                         $html .='<td>'.$dropdowns->name.'</td>';
-                         $html .='</tr>';
-                         }
-                         $html .='</tbody>';
-                         $html .='</table>';
-                         $html .='</div>';
-                         $html .='<div id="select_'.$lastid.'_'.$key.'" style="display:none">';
-                         $html .='<lable>Default selected</lable>';
-                         $html .='<select  class="form-control" name="product['.$lastid.'][product_topping_select]['.$productvalue.']">';
-                         foreach($dropdown as $dropdowns){
-                             $html .='<option>'.$dropdowns->name.'</option>';
-                         }
-                         $html .='</select>';
-                         $html .='</div>';
-                 }
-             }
-
+                    $html .= '<div id="checkbox_' . $lastid . '_' . $key . '" style="display:none">';
+                    $html .= '<lable>Default selected</lable>';
+                    $html .= '<table>';
+                    $html .= '<tbody>';
+                    $html .= '<tr>';
+                    foreach ($dropdown as $dropdowns) {
+                        $html .= '<td><input type="checkbox" value="' . $dropdowns->name . '" name="product[' . $lastid . '][product_topping_checkbox][' . $productvalue . ']" ></td>';
+                        $html .= '<td>' . $dropdowns->name . '</td>';
+                        $html .= '</tr>';
+                    }
+                    $html .= '</tbody>';
+                    $html .= '</table>';
+                    $html .= '</div>';
+                    $html .= '<div id="select_' . $lastid . '_' . $key . '" style="display:none">';
+                    $html .= '<lable>Default selected</lable>';
+                    $html .= '<select  class="form-control" name="product[' . $lastid . '][product_topping_select][' . $productvalue . ']">';
+                    foreach ($dropdown as $dropdowns) {
+                        $html .= '<option>' . $dropdowns->name . '</option>';
+                    }
+                    $html .= '</select>';
+                    $html .= '</div>';
+                }
+            }
         } else {
             $html .= 'No Topping';
         }
@@ -201,16 +198,16 @@ class ProductController extends Controller
 
         $current_store_id = currentStoreId();
 
-        foreach($request->product as $key => $prod){
+        foreach ($request->product as $key => $prod) {
 
             $name = isset($prod['name']) ? $prod['name'] : '';
             $description = isset($prod['description']) ? $prod['description'] : '';
             $price = isset($prod['price']) ? $prod['price'] : '';
             $image = isset($prod['image']) ? $prod['image'] : '';
             $price_size = isset($prod['price_size']) ? $prod['price_size'] : '';
-            $toppingtype= isset($prod['typetopping']) ? $prod['typetopping'] : '';
-            $enable= isset($prod['enable']) ? $prod['enable'] : '';
-            $renamegroup= isset($prod['renamegroup']) ? $prod['renamegroup'] : '';
+            $toppingtype = isset($prod['typetopping']) ? $prod['typetopping'] : '';
+            $enable = isset($prod['enable']) ? $prod['enable'] : '';
+            $renamegroup = isset($prod['renamegroup']) ? $prod['renamegroup'] : '';
 
 
             $product = new Product();
@@ -243,8 +240,7 @@ class ProductController extends Controller
             // $day = $request['day'];
             // $days = implode(',', $day);
             $product->availibleday = isset($request->days) ? $request->days : 0;
-            if (!empty($image) || $image != '')
-            {
+            if (!empty($image) || $image != '') {
                 $imgname = time() . "." . $image->getClientOriginalExtension();
                 $image->move(public_path('admin/product'), $imgname);
                 $product->image = $imgname;
@@ -263,7 +259,7 @@ class ProductController extends Controller
 
             $productstore = new ProductStore();
             $productstore->product_id = $product->product_id;
-            $productstore->store_id =$current_store_id;
+            $productstore->store_id = $current_store_id;
             $productstore->save();
 
             $product_category = new Product_to_category();
@@ -271,42 +267,39 @@ class ProductController extends Controller
             $product_category->category_id = isset($request->category) ? $request->category : 0;
             $product_category->save();
 
-              if(!empty($toppingtype) || $toppingtype != ''){
-                foreach($toppingtype as $key=>$value){
+            if (!empty($toppingtype) || $toppingtype != '') {
+                foreach ($toppingtype as $key => $value) {
 
                     $producttoppingtype = new ProductToppingType();
-                    $producttoppingtype->id_product=$product->product_id;
-                    $producttoppingtype->id_group_topping=isset($request->id_group_topping) ? $request->id_group_topping : "";
-                    $producttoppingtype->typetopping=$toppingtype[$key];
-                    $producttoppingtype->min_check=isset($request->min_check) ? $request->min_check : 0;
-                    $producttoppingtype->max_check=isset($request->max_check) ? $request->max_check : 0;
-                    $producttoppingtype->choose=isset($request->choose) ? $request->choose : 0;
-                    $producttoppingtype->enable=$enable[$key];
-                    $producttoppingtype->renamegroup=$renamegroup[$key];
-                    $producttoppingtype->topping_sort_order=isset($request->topping_sort_order) ? $request->topping_sort_order : 0;
+                    $producttoppingtype->id_product = $product->product_id;
+                    $producttoppingtype->id_group_topping = isset($request->id_group_topping) ? $request->id_group_topping : "";
+                    $producttoppingtype->typetopping = $toppingtype[$key];
+                    $producttoppingtype->min_check = isset($request->min_check) ? $request->min_check : 0;
+                    $producttoppingtype->max_check = isset($request->max_check) ? $request->max_check : 0;
+                    $producttoppingtype->choose = isset($request->choose) ? $request->choose : 0;
+                    $producttoppingtype->enable = $enable[$key];
+                    $producttoppingtype->renamegroup = $renamegroup[$key];
+                    $producttoppingtype->topping_sort_order = isset($request->topping_sort_order) ? $request->topping_sort_order : 0;
                     $producttoppingtype->save();
-              }
-              }
-
-              if(!empty($price_size) || $price_size != ''){
-                foreach($price_size as $key=>$price_sizes){
-                    $query = ToppingProductPriceSize::max('id_product_price_size');
-                    $lastidsize=$query+1;
-                    $toppingProductPriceSize = new ToppingProductPriceSize;
-                    $toppingProductPriceSize->id_product_price_size= $lastidsize;
-                    $toppingProductPriceSize->price =$price_sizes;
-                    $toppingProductPriceSize->id_size =$key;
-                    $toppingProductPriceSize->id_product =$product->product_id;
-                    $toppingProductPriceSize->delivery_price ='';
-                    $toppingProductPriceSize->collection_price ='';
-                    $toppingProductPriceSize->save();
                 }
             }
 
-
+            if (!empty($price_size) || $price_size != '') {
+                foreach ($price_size as $key => $price_sizes) {
+                    $query = ToppingProductPriceSize::max('id_product_price_size');
+                    $lastidsize = $query + 1;
+                    $toppingProductPriceSize = new ToppingProductPriceSize;
+                    $toppingProductPriceSize->id_product_price_size = $lastidsize;
+                    $toppingProductPriceSize->price = $price_sizes;
+                    $toppingProductPriceSize->id_size = $key;
+                    $toppingProductPriceSize->id_product = $product->product_id;
+                    $toppingProductPriceSize->delivery_price = '';
+                    $toppingProductPriceSize->collection_price = '';
+                    $toppingProductPriceSize->save();
+                }
+            }
         }
         return redirect()->route('products');
-
     }
 
 
@@ -316,8 +309,7 @@ class ProductController extends Controller
     function importproducts()
     {
         // Check User Permission
-        if (check_user_role(61) != 1)
-        {
+        if (check_user_role(61) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -341,9 +333,9 @@ class ProductController extends Controller
         $lenght_class = DB::table('oc_length_class_description')->select('*')->get();
         $weight_class = DB::table('oc_weight_class_description')->select('*')->get();
         $current_store_id = currentStoreId();
-        if($current_store_id == 0){
-            $category= Category::with(['hasOneCategoryToStore'])->get();
-        }else{
+        if ($current_store_id == 0) {
+            $category = Category::with(['hasOneCategoryToStore'])->get();
+        } else {
             $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
                 $query->where('store_id', $current_store_id);
             })->get();
@@ -529,16 +521,16 @@ class ProductController extends Controller
 
     public function getproduct(Request $request)
     {
-        $category_id=$request->cat_id;
+        $category_id = $request->cat_id;
 
         $current_store_id = currentStoreId();
         $columns = array(
-            0 =>'product_id',
-            3 =>'name',
+            0 => 'product_id',
+            3 => 'name',
         );
 
         // Get data
-        $totledata = ProductDescription::with(['hasOneProduct','hasOneProductToStore','hasOnecategorytostore'])->whereHas('hasOnecategorytostore', function ($query) use ($category_id) {
+        $totledata = ProductDescription::with(['hasOneProduct', 'hasOneProductToStore', 'hasOnecategorytostore'])->whereHas('hasOnecategorytostore', function ($query) use ($category_id) {
             $query->where('category_id', $category_id);
         })->count();
 
@@ -553,27 +545,27 @@ class ProductController extends Controller
         if (!empty($request->input('search.value'))) {
             $search = $request->input('search.value');
 
-            $posts =  ProductDescription::with(['hasOneProduct','hasOneProductToStore','hasOnecategorytostore'])->where(function ($query) use ($search) {
+            $posts =  ProductDescription::with(['hasOneProduct', 'hasOneProductToStore', 'hasOnecategorytostore'])->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%");
-                })
+            })
                 ->whereHas('hasOnecategorytostore', function ($query) use ($category_id) {
                     $query->where('category_id', $category_id);
-            })->offset($start)->orderBy($order, $dir)->limit($limit)->get();
+                })->offset($start)->orderBy($order, $dir)->limit($limit)->get();
             // print_r($posts);
 
-            $totalFiltered = ProductDescription::with(['hasOneStore','hasOneProductToStore','hasOnecategorytostore'])->where(function ($query) use ($search){
-                $query->where('name','LIKE',"%{$search}%");
+            $totalFiltered = ProductDescription::with(['hasOneStore', 'hasOneProductToStore', 'hasOnecategorytostore'])->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%");
             })->whereHas('hasOnecategorytostore', function ($query) use ($category_id) {
                 $query->where('category_id', $category_id);
-            })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
+            })->offset($start)->orderBy($order, $dir)->limit($limit)->count();
         } else {
 
-            $posts = ProductDescription::with(['hasOneProduct','hasOneProductToStore','hasOnecategorytostore'])->orwhereHas('hasOnecategorytostore', function ($query) use ($category_id) {
+            $posts = ProductDescription::with(['hasOneProduct', 'hasOneProductToStore', 'hasOnecategorytostore'])->orwhereHas('hasOnecategorytostore', function ($query) use ($category_id) {
                 $query->where('category_id', $category_id);
-            })->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+            })->offset($start)->limit($limit)->orderBy($order, $dir)->get();
 
-        //  print($posts);
-        //  exit;
+            //  print($posts);
+            //  exit;
 
         }
 
@@ -603,7 +595,7 @@ class ProductController extends Controller
         // $table .='<td>';
         // $table .='</tr>';
 
-        if($posts) {
+        if ($posts) {
             foreach ($posts as $post) {
                 // echo "<pre>";
                 // print_r($post->hasOneProduct->product_id);
@@ -660,9 +652,9 @@ class ProductController extends Controller
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
                 $data['product_id'] = $product_id;
-                $data['image'] = $post->image;
+                $data['image'] = $post->hasOneProduct['image'];
                 if (!empty($data['image'])) {
-                    $image_path = asset('public/admin/product/' . $data['image']);
+                    $image_path = $data['image'];
                     $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
                 } else {
                     $image_path = asset('public/admin/product/no_image.jpg');
@@ -674,7 +666,7 @@ class ProductController extends Controller
                 $data['status'] = $post->hasOneProduct->status;
 
                 if ($status == 0) {
-                    $data['status'] ='<td>Enabled</td>';
+                    $data['status'] = '<td>Enabled</td>';
                 } else {
                     $data['status'] = '<td>Disabled</td>';
                 }
@@ -698,7 +690,6 @@ class ProductController extends Controller
         );
 
         echo json_encode($json_data);
-
     }
 
 
@@ -729,8 +720,8 @@ class ProductController extends Controller
     }
     public function deleteproduct(Request $request)
     {
-         // Check User Permission
-         if (check_user_role(52) != 1) {
+        // Check User Permission
+        if (check_user_role(52) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
@@ -811,11 +802,27 @@ class ProductController extends Controller
             $days = implode(',', $day);
         }
         $product->availibleday = isset($days) ? $days : '';
-        if ($request->hasFile('image')) {
-            $Image = $request->file('image');
-            $filename = time() . '.' . $Image->getClientOriginalExtension();
-            $Image->move(public_path('admin/product/'), $filename);
-            $product->image = $filename;
+        // if ($request->hasFile('image')) {
+        //     $Image = $request->file('image');
+        //     $filename = time() . '.' . $Image->getClientOriginalExtension();
+        //     $Image->move(public_path('admin/product/'), $filename);
+        //     $product->image = $filename;
+        // }
+        $currentURL = public_url();
+        if ($request->hasFile('image'))
+        {
+            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+            if(!empty($image) || $image != '')
+            {
+                if(file_exists('public/admin/product/'.$image))
+                {
+                    unlink('public/admin/product/'.$image);
+                }
+            }
+            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/product/'), $imgname);
+            $producturl = $currentURL.'/public/admin/product/';
+            $product->image = $producturl.$imgname;
         }
         $product->update();
 
@@ -857,7 +864,7 @@ class ProductController extends Controller
 
         $mainprice = isset($request->mainprices) ? $request->mainprices : "";
         $mainprice = $request->mainprices;
-        $collectionprice =isset($request->collectionprices) ? $request->collectionprices : "";
+        $collectionprice = isset($request->collectionprices) ? $request->collectionprices : "";
         $deliveryprice = isset($request->deliveryprices) ? $request->deliveryprices : "";
         $price_size_id = $request->id_product_price_size;
         $id_size = $request->id_size;
@@ -871,19 +878,18 @@ class ProductController extends Controller
                 $toppingProductPriceSize->update();
             }
         } else {
-            foreach ($mainprice as $key => $mainprices) {
-                $toppingProductPriceSize = new ToppingProductPriceSize;
-                $toppingProductPriceSize->id_size = $id_size[$key];
-                $toppingProductPriceSize->id_product = $product_id;
-                $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                $toppingProductPriceSize->save();
-            }
+            // foreach ($mainprice as $key => $mainprices) {
+            //     $toppingProductPriceSize = new ToppingProductPriceSize;
+            //     $toppingProductPriceSize->id_size = $id_size[$key];
+            //     $toppingProductPriceSize->id_product = $product_id;
+            //     $toppingProductPriceSize->price = $mainprices;
+            //     $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+            //     $toppingProductPriceSize->collection_price = $collectionprice[$key];
+            //     $toppingProductPriceSize->save();
+            // }
         }
 
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");
     }
 }
-

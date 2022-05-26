@@ -38,7 +38,7 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fas fa-pencil-alt"></i>
-                                    Add Product 
+                                    Add Product
                                 </h3>
                                 <div class="container" style="text-align: right;">
                                     <button type="submit" form="catform" class="btn btn-sm btn-primary"><i
@@ -98,10 +98,13 @@
 
 
                                             <div class="mb-3">
-                                                <label for="product" class="form-label"><span class="text-danger">*</span>Product Name</label>
-                                                <input type="text" class="form-control {{ ($errors->has('product')) ? 'is-invalid' : '' }}" value="{{ old('product') }}" name="product" id="product"
+                                                <label for="product" class="form-label"><span
+                                                        class="text-danger">*</span>Product Name</label>
+                                                <input type="text"
+                                                    class="form-control {{ $errors->has('product') ? 'is-invalid' : '' }}"
+                                                    value="{{ old('product') }}" name="product" id="product"
                                                     placeholder="Product Name">
-                                                    @if($errors->has('product'))
+                                                @if ($errors->has('product'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('product') }}
                                                     </div>
@@ -109,19 +112,21 @@
                                             </div>
 
                                             <div class="mb-3">
-                                                <label for="category" class="form-label"><span class="text-danger">*</span>Product Icon</label>
-                                                <select name="product_icons[]"  id="product_icon" class="form-control {{ ($errors->has('product_icons')) ? 'is-invalid' : '' }}"
+                                                <label for="category" class="form-label"><span
+                                                        class="text-danger">*</span>Product Icon</label>
+                                                <select name="product_icons[]" id="product_icon"
+                                                    class="form-control {{ $errors->has('product_icons') ? 'is-invalid' : '' }}"
                                                     multiple>
                                                     @foreach ($result['product_icon'] as $productIcon)
                                                         <option value="{{ $productIcon->id }}">
                                                             {{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>
-                                                @if($errors->has('product_icons'))
-                                                <div class="invalid-feedback">
-                                                    {{ $errors->first('product_icons') }}
-                                                </div>
-                                            @endif
+                                                @if ($errors->has('product_icons'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('product_icons') }}
+                                                    </div>
+                                                @endif
                                             </div>
 
                                             <div class="mb-3">
@@ -148,7 +153,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Order Type</label>
                                                 <div>
-                                                    <input type="radio" name="order_type[]" value="both"  checked> Both
+                                                    <input type="radio" name="order_type[]" value="both" checked> Both
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                     <input type="radio" name="order_type[]" value="delivery"> Delivery
                                                     Only &nbsp;&nbsp;&nbsp;&nbsp;
@@ -160,8 +165,8 @@
 
                                             <div class="form-floating">
                                                 <label for="summernote" class="form-label">Description</label>
-                                                <textarea class="form-control" placeholder="Leave a comment here"
-                                                    name="description" id="summernote" style="height: 200px">{{ old('description') }}</textarea>
+                                                <textarea class="form-control" placeholder="Leave a comment here" name="description" id="summernote"
+                                                    style="height: 200px">{{ old('description') }}</textarea>
                                             </div>
 
                                             <div class="class=mb-3">
@@ -201,9 +206,9 @@
                                         {{-- end Option --}}
 
 
-                                         </div>
-                                 </div> 
-                                        {{-- End Card Body --}}
+                                    </div>
+                                </div>
+                                {{-- End Card Body --}}
                             </form>
                             {{-- Form End --}}
                         </div>
