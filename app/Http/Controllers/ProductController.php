@@ -770,8 +770,8 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $product_id = $request->product_id;
-        $product = Product::find($product_id);
 
+        $product = Product::find($product_id);
         $product->model = isset($request->model) ? $request->model : "";
         $product->model = $request->model;
         $product->sku = isset($request->sku) ? $request->sku : "";
@@ -798,16 +798,12 @@ class ProductController extends Controller
         $order_type = $request['order_type'];
         $product->order_type = isset($order_type) ? $order_type : 0;
         $day = $request['day'];
-        if (!empty($day)) {
+        if (!empty($day))
+        {
             $days = implode(',', $day);
         }
         $product->availibleday = isset($days) ? $days : '';
-        // if ($request->hasFile('image')) {
-        //     $Image = $request->file('image');
-        //     $filename = time() . '.' . $Image->getClientOriginalExtension();
-        //     $Image->move(public_path('admin/product/'), $filename);
-        //     $product->image = $filename;
-        // }
+
         $currentURL = public_url();
         if ($request->hasFile('image'))
         {
@@ -827,7 +823,6 @@ class ProductController extends Controller
         $product->update();
 
         $product_description = ProductDescription::find($product_id);
-
         $product_description->language_id = 1;
         $product_description->name = isset($request->product) ? $request->product : 0;
         $product_description->description = isset($request->description) ? $request->description : '';
@@ -836,21 +831,14 @@ class ProductController extends Controller
         $product_description->tag = isset($request->tag) ? $request->tag : '';
         $product_description->update();
 
-        // $reward = Reward::find($product_id);
-        // $reward->customer_group_id = 1;
-        // $reward->points = 0;
-        // $reward->update();
-
         $product_category = Product_to_category::find($product_id);
         $product_category->category_id = isset($request->category) ? $request->category : 0;
         $product_category->update();
 
-        // $productstore =ProductStore::find($product_id);
-        // $productstore->store_id =isset($request->store_id) ? $request->store_id : 0;
-        // $productstore->update();
         $type_topping = isset($request->typetopping) ? $request->typetopping : '';
 
-        if (!empty($type_topping) || $type_topping != '') {
+        if (!empty($type_topping) || $type_topping != '')
+        {
             $toppingtype = ProductToppingType::find($product_id);
             $toppingtype->typetopping =  $type_topping;
             $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
@@ -868,27 +856,34 @@ class ProductController extends Controller
         $deliveryprice = isset($request->deliveryprices) ? $request->deliveryprices : "";
         $price_size_id = $request->id_product_price_size;
         $id_size = $request->id_size;
-        if (!empty($price_size_id)) {
-            foreach ($mainprice as $key => $mainprices) {
-                $where = $price_size_id[$key];
-                $toppingProductPriceSize = ToppingProductPriceSize::find($where);
-                $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                $toppingProductPriceSize->update();
+
+        if(!empty($id_size) || $id_size != '')
+        {
+            if (!empty($price_size_id))
+            {
+                foreach ($mainprice as $key => $mainprices)
+                {
+                    $where = $price_size_id[$key];
+                    $toppingProductPriceSize = ToppingProductPriceSize::find($where);
+                    $toppingProductPriceSize->price = $mainprices;
+                    $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+                    $toppingProductPriceSize->collection_price = $collectionprice[$key];
+                    $toppingProductPriceSize->update();
+                }
             }
-        } else {
-            foreach ($mainprice as $key => $mainprices) {
-                $toppingProductPriceSize = new ToppingProductPriceSize;
-                $toppingProductPriceSize->id_size = $id_size[$key];
-                $toppingProductPriceSize->id_product = $product_id;
-                $toppingProductPriceSize->price = $mainprices;
-                $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                $toppingProductPriceSize->save();
+            else
+            {
+                foreach ($mainprice as $key => $mainprices) {
+                    $toppingProductPriceSize = new ToppingProductPriceSize;
+                    $toppingProductPriceSize->id_size = $id_size[$key];
+                    $toppingProductPriceSize->id_product = $product_id;
+                    $toppingProductPriceSize->price = $mainprices;
+                    $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+                    $toppingProductPriceSize->collection_price = $collectionprice[$key];
+                    $toppingProductPriceSize->save();
+                }
             }
         }
-
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");
     }

@@ -225,6 +225,7 @@ function storeThemeSettings($theme_id,$store_id)
         'sitemap_url',
         'config_telephone',
         'config_email',
+        'config_title',
         'config_meta_description',
     ]);
     $store_settings = [];

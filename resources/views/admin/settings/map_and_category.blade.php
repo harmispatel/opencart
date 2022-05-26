@@ -309,10 +309,10 @@
                                                         <label><span class="text-danger">*</span> Title</label>
                                                         <input type="text" class="form-control {{ ($errors->has('config_title')) ? 'is-invalid' : '' }}" id="config_title" name="config_title" value="{{ $map_category['config_title'] }}">
                                                         @if ($errors->has('config_title'))
-                                                        <div class="invalid-feedback">
-                                                            {{ $errors->first('config_title') }}
-                                                        </div>
-                                                    @endif
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('config_title') }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
@@ -364,7 +364,12 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>File Directory URL</label>
-                                                        <input type="text" class="form-control" id="file_directory_url" name="file_directory_url" value="{{ $map_category['file_directory_url'] }}">
+                                                        <input type="text" class="form-control {{ ($errors->has('file_directory_url')) ? 'is-invalid' : '' }}" id="file_directory_url" name="file_directory_url" value="{{ $map_category['file_directory_url'] }}">
+                                                        @if ($errors->has('file_directory_url'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('file_directory_url') }}
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
