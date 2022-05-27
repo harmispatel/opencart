@@ -553,15 +553,22 @@
         </div>
     </div>
 </section>
+@if ($store_setting['enable_gallery_module'] == 1)
 <div class="photo-gallery-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-lg-3 offset-lg-1">
                 <div class="default-title-v5"><strong
                         class="sub-title color-red text-uppercase color-orange">gallery</strong>
-                    <h3 class="title text-capitalize mb-5">Our gallery in the restaurant and you can see them.</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit,
-                        maiores praesentium qui</p>
+                        @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
+                        <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+                    @else
+                        <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
+                    @endif
+        
+                    @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
+                        <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+                    @endif
                 </div>
                 <div class="user-comments-v5-swiper-info">
                     <div class="number-of-slide"><span class="__text">Number of slide</span>
@@ -629,6 +636,7 @@
         </div>
     </div>
 </div>
+@endif
 <section class="reservation-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <form class="container" method="POST" action="{{ route('reservation') }}">
         {{ csrf_field() }}

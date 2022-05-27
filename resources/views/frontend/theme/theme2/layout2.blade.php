@@ -518,12 +518,19 @@
         </div>
     </section>
 
+    @if($store_setting['enable_gallery_module'] == 1)
     <section class="photo-gallery-v2 pt-75 wow animate__fadeInUp" data-wow-duration="1s">
         <div class="container">
             <div class="default-title-v2 text-center">
-                <h3 class="title text-capitalize"><span>photo &nbsp;</span>gallery</h3>
-                <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>
-                    dolore eu fugiat nulla pariatur.</p>
+                @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
+                <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+            @else
+                <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
+            @endif
+
+            @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
+                <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+            @endif
             </div>
         </div>
         <div class="container-fluid wow animate__fadeInUp mb-3" data-wow-duration="1s">
@@ -556,6 +563,7 @@
             </div>
         </div>
     </section>
+    @endif
     <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
         <div class="container"><img class="img-fluid" src="{{ asset('public/assets/theme2/img/icon/opening-hours-top-divider.svg') }}" />
             <h3 class="title text-uppercase">opening hours</h3>

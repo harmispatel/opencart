@@ -238,9 +238,18 @@
         </div>
     </form>
 </section>
+@if ($store_setting['enable_gallery_module'] == 1)
 <section class="photo-gallery-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
-    <div class="default-title-v6"><strong class="sub-title color-orange text-uppercase">gallery</strong>
-        <h3 class="title text-uppercase">OUR RESTAURANT AND THE FOOD THEY SERVE THEIR GUESTS</h3>
+    <div class="default-title-v6">
+        @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
+        <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+    @else
+        <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
+    @endif
+
+    @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
+        <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+    @endif
     </div>
     <div class="container-fluid">
         <div class="row">
@@ -293,6 +302,7 @@
         </div>
     </div>
 </section>
+@endif
 <section class="popular-foods-v6 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="default-title-v6"><strong class="sub-title color-orange text-uppercase">Popular Foods</strong>
         <h3 class="title text-uppercase">CHECK OUT OUR MENU AND SELECT SOMETHING FOR EVERYONE</h3>
