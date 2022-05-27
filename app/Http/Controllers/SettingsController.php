@@ -1334,7 +1334,7 @@ class SettingsController extends Controller
         }
 
 
-        /** time bussiness */
+        // time bussiness
         $opening_time_bussiness = $opening_time_delivery = $opening_time_collection = '';
         $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
 
@@ -1347,25 +1347,25 @@ class SettingsController extends Controller
                             case 0:
                                 $Everyday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 2:
+                            case 1:
                                 $Monday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 3:
+                            case 2:
                                 $Tuesday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 4:
+                            case 3:
                                 $Wednesday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 5:
+                            case 4:
                                 $Thursday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 6:
+                            case 5:
                                 $Friday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 7:
+                            case 6:
                                 $Saturday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
-                            case 8:
+                            case 7:
                                 $Sunday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
                                 break;
                         }
@@ -1392,25 +1392,25 @@ class SettingsController extends Controller
                             case 0:
                                 $Everyday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 2:
+                            case 1:
                                 $Monday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 3:
+                            case 2:
                                 $Tuesday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 4:
+                            case 3:
                                 $Wednesday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 5:
+                            case 4:
                                 $Thursday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 6:
+                            case 5:
                                 $Friday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 7:
+                            case 6:
                                 $Saturday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
-                            case 8:
+                            case 7:
                                 $Sunday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
                                 break;
                         }
@@ -1425,7 +1425,7 @@ class SettingsController extends Controller
             if (count($Saturday) || count($Everyday)) $opening_time_delivery .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
             if (count($Sunday) || count($Everyday)) $opening_time_delivery .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
         }
-        /** time collection */
+        //time collection
         $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
         if (isset($timesetting['collection_same_bussiness']) && $timesetting['collection_same_bussiness'] == 1) {
             $opening_time_collection = $opening_time_bussiness;
@@ -1437,25 +1437,25 @@ class SettingsController extends Controller
                             case 0:
                                 $Everyday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 2:
+                            case 1:
                                 $Monday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 3:
+                            case 2:
                                 $Tuesday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 4:
+                            case 3:
                                 $Wednesday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 5:
+                            case 4:
                                 $Thursday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 6:
+                            case 5:
                                 $Friday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 7:
+                            case 6:
                                 $Saturday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
-                            case 8:
+                            case 7:
                                 $Sunday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
                                 break;
                         }
@@ -1472,7 +1472,7 @@ class SettingsController extends Controller
         }
 
 
-        /***Closing Dates***/
+        //Closing Dates
         if (isset($timesetting['closing_dates'])) {
             $closing_dates = implode(',', array_filter($timesetting['closing_dates']));
             $data['business_closing_dates'] = trim($closing_dates);

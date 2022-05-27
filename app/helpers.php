@@ -807,7 +807,7 @@ function openclosetime()
     $times = $times;
 
     // echo '<pre>';
-    // print_r($collection);
+    // print_r($open_close);
     // exit();
 
     // bussines Time
@@ -903,6 +903,7 @@ function openclosetime()
 
     $data['collection_gaptime'] = $open_close['collection_gaptime'];
     $data['delivery_gaptime'] = $open_close['delivery_gaptime'];
+    $data['close_date'] = $open_close['business_closing_dates'];
 
     return $data;
 }
