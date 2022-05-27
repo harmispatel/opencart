@@ -120,8 +120,6 @@ class ProductController extends Controller
 
         if (isset($data->product_id)) {
             $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
-            // print_r($toppingType);
-            // exit;
             $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
             $demo = isset($group) ? $group : '';
             unset($demo['number_group']);
@@ -399,11 +397,21 @@ class ProductController extends Controller
             $days = implode(',', $day);
             $product->availibleday = isset($days) ? $days : 0;
         }
-        if ($request->hasFile('image')) {
-            $Image = $request->file('image');
-            $filename = time() . '.' . $Image->getClientOriginalExtension();
-            $Image->move(public_path('admin/product/'), $filename);
-            $product->image = $filename;
+        $currentURL = public_url();
+        if ($request->hasFile('image'))
+        {
+            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+            if(!empty($image) || $image != '')
+            {
+                if(file_exists('public/admin/product/'.$image))
+                {
+                    unlink('public/admin/product/'.$image);
+                }
+            }
+            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('admin/product/'), $imgname);
+            $producturl = $currentURL.'public/admin/product/';
+            $product->image = $producturl.$imgname;
         }
         $product->save();
 
@@ -564,8 +572,6 @@ class ProductController extends Controller
                 $query->where('category_id', $category_id);
             })->offset($start)->limit($limit)->orderBy($order, $dir)->get();
 
-            //  print($posts);
-            //  exit;
 
         }
 
@@ -675,8 +681,7 @@ class ProductController extends Controller
                 $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
                 $data1[] = $data;
-                // print_r($product_id);
-                // exit();
+
             }
         }
 
@@ -817,7 +822,7 @@ class ProductController extends Controller
             }
             $imgname = time().".". $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('admin/product/'), $imgname);
-            $producturl = $currentURL.'/public/admin/product/';
+            $producturl = $currentURL.'public/admin/product/';
             $product->image = $producturl.$imgname;
         }
         $product->update();
@@ -835,7 +840,7 @@ class ProductController extends Controller
         $product_category->category_id = isset($request->category) ? $request->category : 0;
         $product_category->update();
 
-        $type_topping = isset($request->typetopping) ? $request->typetopping : '';
+        $type_topping = isset($request->typetopping) ? $request->typetopping : 0;
 
         if (!empty($type_topping) || $type_topping != '')
         {
