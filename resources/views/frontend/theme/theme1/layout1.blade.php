@@ -434,45 +434,54 @@
 
 
 <!-- Galary Section -->
-<section class="photo-gallery pt-110 pb-110">
-    <div class="container wow animate__fadeInUp" data-wow-duration="1s">
-        <h3 class="section-title color-green divider-white text-capitalize">photo gallery</h3>
-        <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
-    </div>
-    <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
-        <div class="row">
-            @if(isset($photos))
-                @foreach ($photos as $photo)
-                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div class="box">
-                        <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="{{ $photo->image }}"/>
-                    </div>
-                </div>
-                @endforeach
+@if ($store_setting['enable_gallery_module'] == 1)
+    <section class="photo-gallery pt-110 pb-110">
+        <div class="container wow animate__fadeInUp" data-wow-duration="1s">
+            @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
+                <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
             @else
-                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div class="box">
-                        <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div class="box">
-                        <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                    <div class="box">
-                        <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
-                    </div>
-                </div>
+                <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
+            @endif
+
+            @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
+                <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
             @endif
         </div>
-    </div>
-</section>
+        <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
+            <div class="row">
+                @if(isset($photos))
+                    @foreach ($photos as $photo)
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="{{ $photo->image }}"/>
+                        </div>
+                    </div>
+                    @endforeach
+                @else
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                        <div class="box">
+                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
+                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </section>
+@endif
 <!-- End Galary Section -->
 
 

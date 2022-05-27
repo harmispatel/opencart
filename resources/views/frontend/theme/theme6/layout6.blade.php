@@ -383,53 +383,51 @@
         <h3 class="title text-capitalize">CHECK OUT OUR MENU AND SELECT SOMETHING FOR EVERYONE</h3>
     </div>
     <div class="container">
-        <div class="popular-categories-v6-swiper">
-            <div class="__btn-list">
-                <a class="text-uppercase active" href="" data-filter="all">all</a>
+        <div class="">
+            <ul class="__btn-list nav nav-tabs" id="myTab" role="tablist">
                 @if(count($best_categories) > 0)
                     @foreach ($best_categories as $category)
-                    @php
-                        $product = $category->category_id;
-                    @endphp
-                    <a class="text-uppercase"  data-filter="{{$product}}">{{ strtolower($category->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
-                    @php
-                         
-                        $allproducts = getallproduct($product);
-                        // echo $allproducts;
-                    @endphp
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link {{ ($loop->iteration == 1) ? 'active' : '' }}" id="prod-tab{{ $loop->iteration }}" href="#prod{{ $loop->iteration }}"data-bs-toggle="tab" role="tab" aria-controls="prod{{ $loop->iteration }}" aria-selected="false">{{ strtolower($category->hasOneCategoryDetails->hasOneCategory['name']) }}</a>
+                        </li>
                     @endforeach
                 @endif
-            </div>
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    {{-- @if(count($allproducts) > 0)
-                        @foreach ($allproducts as $categorydet)
-                        @php
-                            $catimage = $categorydet->hasOneProduct['image'];
-                            // print_r($catimage);
-                            // exit;
-                            $catname = $categorydet->hasOneDescription['name'];
-                            $catdesc = $categorydet->hasOneDescription['description'];
-                        @endphp
-                        <div class="swiper-slide" data-slide-filter="{{$categorydet->category_id}}">
-                            <div class="item">
-                                <div class="img">
-                                    @if (!empty($catimage))
-                                        <img class="img-fluid" src="{{ asset('public/admin/product/'.$catimage) }}" />
-                                    @else
-                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
-                                    @endif
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                @foreach ($best_categories as $category)
+                    @php
+                        $cat_id = $category->category_id;
+                        $allproducts = getallproduct($cat_id);
+                    @endphp
+                    <div class="tab-pane fade show {{ ($loop->iteration == 1) ? 'active' : '' }}" id="prod{{ $loop->iteration }}" role="tabpanel" aria-labelledby="prod-tab{{ $loop->iteration }}">
+                        <div class="popular-categories-v6-swiper">
+                            <div class="swiper">
+                                <div class="swiper-wrapper">
+                                    @foreach ($allproducts as $product)
+                                        <div class="swiper-slide">
+                                            <div class="item">
+                                                <div class="img">
+                                                    @if (!empty($product->hasOneProduct['image']))
+                                                        <img class="img-fluid" src="{{ $product->hasOneProduct['image']; }}" />
+                                                    @else
+                                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                                    @endif
+                                                </div>
+                                                <div class="text-content">
+                                                    <strong class="text-capitalize">
+                                                        {{ html_entity_decode($product->hasOneDescription['name']) }}
+                                                    </strong>
+                                                </div>
+                                                <p>@php echo html_entity_decode($product->hasOneDescription['description']) @endphp</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="text-content">
-                                    <strong class="text-capitalize">{{ html_entity_decode($catname) }}</strong>
-                                    <p>@php echo html_entity_decode($catdesc) @endphp</p>
-                                </div>
+                                <div class="swiper-pagination"></div>
                             </div>
                         </div>
-                        @endforeach
-                    @endif --}}
-                </div>
-                <div class="swiper-pagination"></div>
+                    </div>           
+                @endforeach
             </div>
         </div>
     </div>
