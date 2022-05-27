@@ -227,6 +227,11 @@ function storeThemeSettings($theme_id,$store_id)
         'config_email',
         'config_title',
         'config_meta_description',
+        'enable_gallery_module',
+        'enable_home_gallery',
+        'gallery_background_options',
+        'gallery_header_text',
+        'gallery_header_desc',
     ]);
     $store_settings = [];
     foreach($store_key as $row)
@@ -1130,7 +1135,7 @@ function getallproduct($id)
     $cat=$id;
     $categorytoproduct = Product_to_category::with(['hasOneProduct','hasOneDescription'])->whereHas('hasOneProduct', function ($query) use ($cat) {
         $query->where('category_id',$cat);
-    })->get();
+    })->limit(10)->get();
     // echo '<pre>';
     // print_r($categorytoproduct);
     // exit();

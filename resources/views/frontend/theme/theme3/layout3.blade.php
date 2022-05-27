@@ -316,12 +316,19 @@
         </div>
     </div>
 </section>
+@if ($store_setting['enable_gallery_module'] == 1)
 <div class="photo-gallery-v3 pt-75 pb-75">
     <div class="container">
         <div class="default-title-v3 text-center">
-            <h3 class="title text-capitalize color-red">photo gallery</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit, maiores
-                praesentium qui</p>
+            @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
+                <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+            @else
+                <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
+            @endif
+
+            @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
+                <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+            @endif
         </div>
     </div>
     <div class="container-fluid">
@@ -366,6 +373,7 @@
         </div>
     </div>
 </div>
+@endif()
 <section class="reservation-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <form class="container" method="POST" action="{{ route('reservation') }}">
         {{ csrf_field() }}
