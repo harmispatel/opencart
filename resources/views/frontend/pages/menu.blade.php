@@ -709,7 +709,7 @@
                                                                     <span>Close</span>
                                                                 @else
                                                                     @if ($today == $value || $firstday == "Every day")
-                                                                        <span>Close</span>
+                                                                    <span>Starts at - <b>{{ $deliveryfrom[$key] }}</b></span>
                                                                     @endif
                                                                 @endif
                                                             @endforeach

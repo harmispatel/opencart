@@ -162,6 +162,9 @@ class MenuController extends Controller
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
 
             if (!empty($get_coupon) || $get_coupon != '') {
+                // $start_date = strtotime($get_coupon->date_start);
+                // $end_date = strtotime($get_coupon->date_end);
+
                 $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
                 $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
 
