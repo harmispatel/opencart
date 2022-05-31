@@ -97,7 +97,7 @@
                                 </select>
                             @else
                                 <input type="text" id="search_input1" placeholder="AB10 1BW"/>
-                                <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                             @endif
                            </div>
                             <div class="enter_postcode">
@@ -316,19 +316,12 @@
         </div>
     </div>
 </section>
-@if ($store_setting['enable_gallery_module'] == 1)
 <div class="photo-gallery-v3 pt-75 pb-75">
     <div class="container">
         <div class="default-title-v3 text-center">
-            @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
-                <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
-            @else
-                <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
-            @endif
-
-            @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
-                <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
-            @endif
+            <h3 class="title text-capitalize color-red">photo gallery</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit, maiores
+                praesentium qui</p>
         </div>
     </div>
     <div class="container-fluid">
@@ -373,7 +366,6 @@
         </div>
     </div>
 </div>
-@endif()
 <section class="reservation-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <form class="container" method="POST" action="{{ route('reservation') }}">
         {{ csrf_field() }}

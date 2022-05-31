@@ -159,7 +159,7 @@
                         </select>
                     @else
                         <input id="search_input1" placeholder="AB10 1BW" type="text"/>
-                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                     @endif
                 </div>
                 <div class="enter_postcode">
@@ -473,7 +473,7 @@
     </div>
     <div class="__info">
         <div class="__container"><img class="img-fluid mb-3"
-                src="{{ asset('public/assets/theme6/img/icon/time-clock.svg') }}" />
+                src="{{ get_css_url().'public/assets/theme6/img/icon/time-clock.svg' }}" />
             <div class="__divider"></div><strong class="__time-title">OPEN NOW</strong>
             <div class="__divider"></div>
             @php

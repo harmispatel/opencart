@@ -257,6 +257,11 @@ function public_url()
     return asset('');
 }
 
+function get_css_url()
+{
+    return 'https://the-public.co.uk/devfood/';
+}
+
 
 
 

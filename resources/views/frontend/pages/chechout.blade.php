@@ -70,7 +70,7 @@
 <head>
     <!-- CSS -->
     @include('frontend.include.head')
-    <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
+    <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
     <!-- End CSS -->
 
     <!-- Custom CSS -->
@@ -148,35 +148,6 @@
 
 </head>
 <body>
-    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
-        href="#slide"><img class="img-fluid"
-            src="{{ asset('public/assets/theme5/img/logo/black-logo.svg') }}" /></a>
-    <div class="top">
-        <ul class="menu">
-            <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
-            <li><a class="text-uppercase" href="{{ route('member')}}">member</a></li>
-            <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-            <li><a class="text-uppercase" href="{{ route('checkout')}}">check out</a></li>
-            <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
-        </ul>
-    </div>
-    <div class="center">
-        <ul class="authentication-links">
-            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
-            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
-        </ul>
-    </div>
-    <div class="bottom">
-        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
-        </div>
-        <ul class="social-links">
-            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
-        </ul>
-    </div>
-</sidebar>
 
     <!-- Header -->
     @if (!empty($theme_id) || $theme_id != '')
@@ -650,7 +621,7 @@
                                                                                     @endphp
                                                                                     <tr>
                                                                                         <td>
-                                                                                            <img src="{{ asset('public/admin/product/' . $cart['image']) }}"
+                                                                                            <img src="{{ $cart['image'] }}"
                                                                                                 width="80" height="80">
                                                                                         </td>
                                                                                         <td class="align-middle">
@@ -663,7 +634,7 @@
                                                                                                 <input type="number" name="qty" id="qty_size_{{ $key }}"
                                                                                                 value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
                                                                                                 <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
-                                                                                                    <img src="{{ asset('public/images/update.png') }}">
+                                                                                                    <img src="{{ get_css_url().'public/images/update.png' }}">
                                                                                                 </a>
                                                                                                 <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})">
                                                                                                     <i class="fas fa-times"></i>
@@ -708,7 +679,7 @@
                                                                                     @endphp
                                                                                     <tr>
                                                                                         <td>
-                                                                                            <img src="{{ asset('public/admin/product/' . $cart['image']) }}"
+                                                                                            <img src="{{ $cart['image'] }}"
                                                                                                 width="80" height="80">
                                                                                         </td>
                                                                                         <td class="align-middle">
@@ -719,7 +690,7 @@
                                                                                                 class="qu-inr">
                                                                                                 <input type="number" name="qty" id="qty_without_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
                                                                                                 <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2">
-                                                                                                    <img src="{{ asset('public/images/update.png') }}">
+                                                                                                    <img src="{{ get_css_url().'public/images/update.png' }}">
                                                                                                 </a>
                                                                                                 <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})">
                                                                                                     <i class="fas fa-times"></i>
@@ -856,15 +827,15 @@
                                             <div class="login-main text-center">
                                                 <div class="login-details w-100">
                                                     {{-- <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{asset('public/frontend/other/checkout-payment-card.png')}}">
+                                                        <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/checkout-payment-card.png'}}">
                                                     </div>
                                                     <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{asset('public/frontend/other/paypal.png')}}">
+                                                        <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/paypal.png'}}">
                                                     </div> --}}
                                                     <div class="payment-class myfoodbasketpayments_gateway">
                                                         <input type="radio" name="payment_method" value="3" id="cod" class="text-bold change_color pay_btn">
                                                         <span class="check_btn"></span>
-                                                        <img src="{{ asset('public/frontend/other/cash.png') }}">
+                                                        <img src="{{ get_css_url().'public/frontend/other/cash.png' }}">
                                                         <label class="ybc_cod" for="cod">Cash on Delivery </label>
                                                     </div>
                                                 </div>

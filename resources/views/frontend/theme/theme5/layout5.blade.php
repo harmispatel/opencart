@@ -56,16 +56,16 @@
     <div class="top">
         <ul class="menu">
             <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
-            <li><a class="text-uppercase" href="{{ route('member')}}">member</a></li>
+            <li><a class="text-uppercase" href="#">member</a></li>
             <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-            <li><a class="text-uppercase" href="{{ route('checkout')}}">check out</a></li>
+            <li><a class="text-uppercase" href="#">check out</a></li>
             <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
         </ul>
     </div>
     <div class="center">
         <ul class="authentication-links">
-            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
-            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
+            <li><a href="#"><i class="far fa-user"></i><span>Login</span></a></li>
+            <li><a href="#"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
         </ul>
     </div>
     <div class="bottom">
@@ -99,7 +99,7 @@
                                         </select>
                                     @else
                                         <input id="search_input1" placeholder="AB10 1BW" type="text"/>
-                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                     @endif
                                 </div>
                                 <div class="enter_postcode">
@@ -134,17 +134,17 @@
                     @else
                         <div class="swiper-wrapper">
                             <div class="swiper-slide"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/slider.png') }}" /></div>
+                                    src="{{ get_css_url().'public/assets/theme5/demo-data/slider.png' }}" /></div>
                         </div>
                     @endif
                     <div class="happy-customers"><strong class="text-uppercase">our happy customers</strong>
                         <div class="__img-list">
                             <div class="__img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/girl.jpeg') }}" /></div>
+                                    src="{{ get_css_url().'public/assets/theme5/demo-data/girl.jpeg' }}" /></div>
                             <div class="__img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/girl.jpeg') }}" /></div>
+                                    src="{{ get_css_url().'public/assets/theme5/demo-data/girl.jpeg' }}" /></div>
                             <div class="__img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/girl.jpeg') }}" /></div>
+                                    src="{{ get_css_url().'public/assets/theme5/demo-data/girl.jpeg' }}" /></div>
                             <div class="__count">8+</div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/0.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -168,7 +168,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/1.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -178,7 +178,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/2.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -188,7 +188,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/0.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -198,7 +198,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/1.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -208,7 +208,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/2.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -218,7 +218,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/0.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -228,7 +228,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/1.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -238,7 +238,7 @@
                 <div class="swiper-slide">
                     <div class="swiper-slide-item">
                         <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" /></div>
+                                src="{{ get_css_url().'public/assets/theme5/demo-data/best-categories/2.jpg' }}" /></div>
                         <div class="__text-content">
                             <h4 class="text-uppercase">waldorf salad with</h4><strong class="text-uppercase">category
                                 name</strong>
@@ -258,7 +258,7 @@
                 @if ($template_setting['polianna_banner_image'])
                     <img class="img-fluid" src="{{ $template_setting['polianna_banner_image'] }}" /></div>
                 @else
-                    <img class="img-fluid" height="541" width="457" src="{{ asset('public/assets/demo-data/popular-foods/1.jpg')}}" /></div>
+                    <img class="img-fluid" height="541" width="457" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg'}}" /></div>
                 @endif
             <div class="col-sm-12 col-md-6">
                 <div style="height: 300px; overflow: hidden;" id="shopDescription">
@@ -553,22 +553,15 @@
         </div>
     </div>
 </section>
-@if ($store_setting['enable_gallery_module'] == 1)
 <div class="photo-gallery-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 col-lg-3 offset-lg-1">
                 <div class="default-title-v5"><strong
                         class="sub-title color-red text-uppercase color-orange">gallery</strong>
-                        @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
-                        <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
-                    @else
-                        <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
-                    @endif
-        
-                    @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
-                        <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
-                    @endif
+                    <h3 class="title text-capitalize mb-5">Our gallery in the restaurant and you can see them.</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit,
+                        maiores praesentium qui</p>
                 </div>
                 <div class="user-comments-v5-swiper-info">
                     <div class="number-of-slide"><span class="__text">Number of slide</span>
@@ -636,7 +629,6 @@
         </div>
     </div>
 </div>
-@endif
 <section class="reservation-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <form class="container" method="POST" action="{{ route('reservation') }}">
         {{ csrf_field() }}
@@ -692,7 +684,7 @@
     </div>
     <div class="__info">
         <div class="__container"><img class="img-fluid mb-3"
-                src="{{ asset('public/assets/theme5/img/icon/time-top-flower.svg') }}" /><strong
+                src="{{ get_css_url().'public/assets/theme5/img/icon/time-top-flower.svg' }}" /><strong
                 class="__time-title">OPEN NOW</strong>
             {{-- <div class="__time"><strong>{{ $openclose['days1'] }}-<br>{{ $openclose['days2'] }}</strong>
                 <div class="__time-box">

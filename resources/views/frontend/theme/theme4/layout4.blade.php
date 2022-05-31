@@ -137,7 +137,7 @@
                                         </select>
                                     @else
                                         <input type="text" id="search_input1" placeholder="AB10 1BW">
-                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                     @endif
                                 </div>
                                 <div class="enter_postcode">
@@ -322,7 +322,7 @@
     <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
         <div class="default-title-v4 text-center mb-0"><strong class="sub-title color-green">Reviews</strong>
             <h3 class="title">Recent Web Reviews</h3><img class="img-fluid"
-                src="{{ asset('public/assets/theme4/img/icon/commit-icon.svg') }}" />
+                src="{{ get_css_url().'public/assets/theme4/img/icon/commit-icon.svg' }}" />
         </div>
         <div class="user-comments-v4-swiper position-relative">
             <div class="swiper">
