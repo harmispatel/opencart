@@ -52,7 +52,7 @@
 <head>
     {{-- CSS --}}
     @include('frontend.include.head')
-    <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
+    <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
     {{-- End CSS --}}
 </head>
 <body>

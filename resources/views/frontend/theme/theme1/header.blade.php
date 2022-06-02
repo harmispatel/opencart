@@ -152,6 +152,13 @@
                     $openday =$openclose['openday'];
                     $fromtime = $openclose['fromtime'];
                     $totime = $openclose['totime'];
+                    $closedate = $openclose['close_date'];
+                    $closedates = explode(',',$closedate);
+                    $date_close1 = array();
+                    foreach ($closedates as $value) {
+                        $date_close = strtotime($value);
+                        $date_close1[] = $date_close;
+                    }
                 @endphp
                 @foreach ($openday as $key => $item)
                     @foreach ($item as $value)
@@ -160,11 +167,16 @@
                             $firstday = $item[0];
                             $lastday = $item[$t];
                             $today = date('l');
+                            $currentdate = strtotime(date("Y-m-d"));
                         @endphp
-                        @if ($today == $value || $firstday == "Every day")
-                            &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                        @elseif ($firstday == "Every day")
-                            &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                        @if (in_array($currentdate,$date_close1))
+                            &nbsp;<strong>Close</strong>
+                        @else
+                            @if ($today == $value || $firstday == "Every day")
+                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            @elseif ($firstday == "Every day")
+                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                            @endif
                         @endif
                     @endforeach
                 @endforeach
@@ -177,18 +189,25 @@
                         $today = time();
                         $currentday = date('l');
                         $firstday = $item[0];
+                        $currentdate = strtotime(date("Y-m-d"));
                     @endphp
-                    @if ($today >= $firsttime && $today <= $lasttime)
-                        @if ($currentday == $value || $firstday == "Every day")
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
-                            </div>
-                        @endif
+                    @if (in_array($currentdate,$date_close1))
+                        <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                            <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                        </div>
                     @else
-                        @if ($currentday == $value || $firstday == "Every day")
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
-                            </div>
+                        @if ($today >= $firsttime && $today <= $lasttime)
+                            @if ($currentday == $value || $firstday == "Every day")
+                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                    <img class="img-fluid" src="{{ $template_setting['polianna_open_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                                </div>
+                            @endif
+                        @else
+                            @if ($currentday == $value || $firstday == "Every day")
+                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                    <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
+                                </div>
+                            @endif
                         @endif
                     @endif
                 @endforeach

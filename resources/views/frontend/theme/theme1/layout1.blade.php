@@ -3,7 +3,6 @@
 <!-- End CSS -->
 
 @php
-    
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
     $current_theme_id = themeID($currentURL);
@@ -170,7 +169,7 @@
                         </select>
                     @else
                         <input id="search_input1" placeholder="AB10 1BW" type="text"/>
-                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                     @endif
                 </div>
                 <div class="enter_postcode">
@@ -206,13 +205,13 @@
                     @if (!empty($template_setting['polianna_store_description']))
                         {!! $template_setting['polianna_store_description'] !!}
                     @else
-                        <h3 class="section-title color-green">Content Not Available</h3>
+                        <h3 class="section-title color-green">Welcome to <br> Star Kebab &amp; Pizza</h3>
+                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>dolore eu fugiat nulla pariatur.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br>commodo consequat.<br>Duis aute irure dolor in reprehenderit in voluptate velit esse dolore eu fugiat nulla pariatur.</p>
                     @endif
                 </div>
-                @if (!empty($template_setting['polianna_store_description']))
                 <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
                 <a style="display: none;" class="btn mt-2 btn-green text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
-                @endif
             </div>
             <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
                 <div class="img-box">
@@ -251,40 +250,15 @@
                                     @if (isset($categorydet->hasOneCategoryDetails['image']))
                                         <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
                                     @else
-                                        <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                        <img class="img-fluid" src="{{ get_css_url().'public/admin/product/no_image.jpg' }}">
                                     @endif
                                 </div>
                                 <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
                             </a>
                         @endforeach
                     @else
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/0.jpg') }}"/>
-                            </div>
-                            <strong>Breakfast Chef 0</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 0</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/1.jpg') }}"/>
-                            </div>
-                            <strong>Breakfast Chef 1</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 1</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/2.jpg') }}"/>
-                            </div>
-                            <strong>Breakfast Chef 2</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="img">
-                                <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/best-categories/3.jpg') }}"/>
-                            </div>
-                            <strong>Breakfast Chef 3</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur 3</p>
+                        <a class="swiper-slide">
+                            <h3>Category Not Available</h3>
                         </a>
                     @endif
                 </div>
@@ -311,7 +285,7 @@
                                         @if (isset($food->hasOneProduct['image']))
                                             <img class="img-fluid" src="{{$food->hasOneProduct['image'] }}">
                                         @else
-                                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
+                                            <img class="img-fluid" src="{{ get_css_url().'public/admin/product/no_image.jpg' }}">
                                         @endif
                                     </div>
                                     <strong>{{ isset($food->hasOneProduct->hasOneProductDescription['name']) ? $food->hasOneProduct->hasOneProductDescription['name'] : '' }}</strong>
@@ -332,23 +306,8 @@
                             </a>
                         @endforeach
                     @else
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 1</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 1</p>
-                            </div>
-                        </a>
-                        <a class="swiper-slide" href="#">
-                            <div class="box">
-                                <div class="img">
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme1/demo-data/popular-foods/1.jpg') }}"/>
-                                </div>
-                                <strong>DEMO CAT 2</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur 2</p>
-                            </div>
+                        <a class="swiper-slide">
+                            <h3>Foods NOt Available</h3>
                         </a>
                     @endif
                 </div>
@@ -434,62 +393,53 @@
 
 
 <!-- Galary Section -->
-@if ($store_setting['enable_gallery_module'] == 1)
-    <section class="photo-gallery pt-110 pb-110">
-        <div class="container wow animate__fadeInUp" data-wow-duration="1s">
-            @if(!empty($store_setting['gallery_header_text']) || $store_setting['gallery_header_text'] != '')
-                <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+<section class="photo-gallery pt-110 pb-110">
+    <div class="container wow animate__fadeInUp" data-wow-duration="1s">
+        <h3 class="section-title color-green divider-white text-capitalize">photo gallery</h3>
+        <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+    </div>
+    <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
+        <div class="row">
+            @if(isset($photos))
+                @foreach ($photos as $photo)
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="box">
+                        <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="{{ $photo->image }}"/>
+                    </div>
+                </div>
+                @endforeach
             @else
-                <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
-            @endif
-
-            @if (!empty($store_setting['gallery_header_desc']) || $store_setting['gallery_header_desc'] != '')
-                <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="box">
+                        <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="box">
+                        <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="box">
+                        <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
+                        <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
+                    </div>
+                </div>
             @endif
         </div>
-        <div class="container-fluid wow animate__fadeInUp" data-wow-duration="1s">
-            <div class="row">
-                @if(isset($photos))
-                    @foreach ($photos as $photo)
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="{{ $photo->image }}" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="{{ $photo->image }}"/>
-                        </div>
-                    </div>
-                    @endforeach
-                @else
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/1.jpg" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/1.jpg"/>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/2.jpg" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/2.jpg"/>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        <div class="box">
-                            <a class="fas fa-search-plus" href="./assets/theme1/demo-data/photo-gallery/3.jpg" data-fancybox="photoGallery"></a>
-                            <img class="img-fluid" src="./assets/theme1/demo-data/photo-gallery/3.jpg"/>
-                        </div>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </section>
-@endif
+    </div>
+</section>
 <!-- End Galary Section -->
 
 
 <!-- Time Section -->
-<section class="opening-hours pt-110 wow animate__fadeInUp" data-wow-duration="1s" style="background-image: url({{ asset('public/assets/theme1/img/bg/opening-hours-bg.jpg')}}">
+<section class="opening-hours pt-110 wow animate__fadeInUp" data-wow-duration="1s" style="background-image: url({{ get_css_url().'public/assets/theme1/img/bg/opening-hours-bg.jpg'}}">
     <div class="container text-center">
         <h3 class="title">Visit us</h3>
-        <h3 class="sub-title">Opening Hours</h3><img class="img-fluid" src="{{ asset('public/assets/theme1/img/icon/opening-hours.svg') }}"/>
+        <h3 class="sub-title">Opening Hours</h3><img class="img-fluid" src="{{ get_css_url().'public/assets/theme1/img/icon/opening-hours.svg' }}"/>
         @php
             $openday =$openclose['openday'];
             $fromtime = $openclose['fromtime'];
