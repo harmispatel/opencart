@@ -190,33 +190,7 @@
                 @endforeach
             @else
                 <div class="col-6 col-md-4 col-lg-2">
-                    <div class="item">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/best-categories/2.svg') }}" />
-                        </div>
-                            <strong class="text-capitalize">chicken</strong>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme3/demo-data/best-categories/3.svg') }}" /></div><strong
-                            class="text-capitalize">cake</strong>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme3/demo-data/best-categories/4.svg') }}" /></div><strong
-                            class="text-capitalize">noodle</strong>
-                    </div>
-                </div>
-                <div class="col-6 col-md-4 col-lg-2">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme3/demo-data/best-categories/5.svg') }}" /></div><strong
-                            class="text-capitalize">drink</strong>
-                    </div>
+                    <h3>Category Not Available</h3>
                 </div>
             @endif
         </div>
@@ -263,17 +237,7 @@
                 @endforeach
             @else
                 <div class="col-12 col-md-6 col-lg-4">
-                    <div class="item">
-                        <div class="img">
-                            <img class="img-fluid" src="{{ asset('public/admin/product/no_image.jpg') }}">
-                        </div>
-                        <div class="text-content">
-                            <strong class="text-capitalize">
-                                Demo Food
-                            </strong>
-                            <p>This is demo food.</p>
-                        </div>
-                    </div>
+                   <h3>Popular Foods Not Available</h3>
                 </div>
             @endif
         </div>
@@ -343,24 +307,7 @@
                 @endforeach
             @else
                 <div class="col-12 col-md-6 col-lg-3">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/1.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/2.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/3.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col-12 col-md-6 col-lg-3">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a><img class="img-fluid" src="{{ asset('public/assets/theme3/demo-data/photo-gallery/4.jpg') }}" />
-                    </div>
+                    <h3>Photo Gallery Not Available</h3>
                 </div>
             @endif
         </div>

@@ -221,23 +221,9 @@
             </div>
             @endforeach
             @endif
-            {{-- <div class="col-12 col-sm-6 col-lg-3">
-                <div class="item">
-                    <div class="img"><img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/best-categories/2.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">Eggs Chopies</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur</p>
-                    </div>
-                </div>
-            </div>
             <div class="col-12 col-sm-6 col-lg-3">
-                <div class="item">
-                    <div class="img"><img class="img-fluid"
-                            src="{{ asset('public/assets/theme4/demo-data/best-categories/3.jpg') }}" /></div>
-                    <div class="text-content"><strong class="text-capitalize">Buna Kirchi</strong>
-                        <p>Lorem ipsum dolor sit amet, consectetur</p>
-                    </div>
-                </div>
-            </div> --}}
+                <h3>Categories Not Availabel</h3>
+            </div>
         </div>
     </div>
 </section>
@@ -279,40 +265,7 @@
                 @endforeach
             @else
                 <div class="col-12 col-md-6">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme4/demo-data/popular-foods/1.jpg') }}" /></div>
-                        <div class="text-content"><strong class="text-capitalize">appetizers</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
+                    <h3>Foods Not Available</h3>
                 </div>
             @endif
         </div>
@@ -388,24 +341,7 @@
                 @endforeach
             @else
                 <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/0.jpg') }}" data-fancybox="photoGallery"></a>
-                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/0.jpg') }}" />
-                </div>
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a>
-                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/1.jpg') }}" />
-                </div>
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a>
-                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/2.jpg') }}" />
-                </div>
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a>
-                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/3.jpg') }}" />
-                </div>
-                <div class="item">
-                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme4/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a>
-                    <img class="img-fluid" src="{{ asset('public/assets/theme4/demo-data/photo-gallery/4.jpg') }}" />
+                    <h3>Gallary Not Available</h3>
                 </div>
             @endif
         </div>

@@ -320,108 +320,11 @@
                     </div>
                     @endforeach
                     @endif
-                    {{-- <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img">
-                                <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content">
-                                <strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                                <a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="swiper-slide">
                         <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
+                            <h3>Categoty Not Available</h3>
                         </div>
                     </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/1.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Fruits Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="item">
-                            <div class="img"><img class="img-fluid"
-                                    src="{{ asset('public/assets/theme5/demo-data/best-categories/2.jpg') }}" />
-                            </div>
-                            <div class="text-content"><strong class="text-capitalize">Soft mix Salad</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
             <div class="best-categories-v5-swiper-control">
@@ -479,24 +382,7 @@
                     @endforeach
                 @else
                 <div class="swiper-slide">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                        </div>
-                        <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="item">
-                        <div class="img"><img class="img-fluid"
-                                src="{{ asset('public/assets/theme5/demo-data/best-categories/0.jpg') }}" />
-                        </div>
-                        <div class="text-content"><strong class="text-capitalize">Fresh Salad</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a href="">Read more</a>
-                        </div>
-                    </div>
+                    <h3>Food Not Available</h3>
                 </div>
                 @endif
                 </div>
@@ -589,34 +475,7 @@
                             @endforeach
                         @else
                             <div class="swiper-slide">
-                                <div class="item">
-                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" data-fancybox="photoGallery"></a>
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/0.jpg') }}" />
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="item">
-                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" data-fancybox="photoGallery"></a>
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/1.jpg') }}" />
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="item">
-                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" data-fancybox="photoGallery"></a>
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/2.jpg') }}" />
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="item">
-                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" data-fancybox="photoGallery"></a>
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/3.jpg') }}" />
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="item">
-                                    <a class="fas fa-search-plus" href="{{ asset('public/assets/theme5/demo-data/photo-gallery/4.jpg') }}" data-fancybox="photoGallery"></a>
-                                    <img class="img-fluid" src="{{ asset('public/assets/theme5/demo-data/photo-gallery/4.jpg') }}" />
-                                </div>
+                                <h3>Gallery Not Available</h3>
                             </div>
                         @endif
                     </div>
