@@ -120,7 +120,7 @@
                     style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
                     <div class="container">
                         
-                        <div class="slide-logo"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
+                        <div class="slide-logo"><img class="img-fluid" src="{{ get_css_url().'public/assets/theme6/img/logo/slider-logo.svg' }}" /></div>
 
                         <h2 class="__title">{{ $template_setting['polianna_slider_2_title'] }}</h2>
                         <p>

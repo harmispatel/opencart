@@ -205,7 +205,7 @@
                             </table>
                         </div>
                         <div class="reg-bt d-flex justify-content-between">
-                            <button type="button" class="btn">Back</button>
+                            <a href="{{ route('member') }}" type="button" class="btn">Back</a>
                             <button type="submit" class="btn">Save</button>
                         </div>
                     </form>

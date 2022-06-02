@@ -221,9 +221,7 @@
             </div>
             @endforeach
             @endif
-            <div class="col-12 col-sm-6 col-lg-3">
-                <h3>Categories Not Availabel</h3>
-            </div>
+                <h3>Categories Not Available</h3>
         </div>
     </div>
 </section>
