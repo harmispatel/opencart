@@ -100,6 +100,23 @@ class LayoutController extends Controller
 
     function updateTemplateSetting(Request $request)
     {
+        $rules = [
+            'polianna_main_logo' => 'max:1024',
+            'polianna_slider_1' => 'max:1024',
+            'polianna_slider_2' => 'max:1024',
+            'polianna_slider_3' => 'max:1024',
+            'polianna_open_banner' => 'max:1024',
+            'polianna_close_banner' => 'max:1024',
+            'polianna_banner_image' => 'max:1024',
+            'polianna_footer_logo' => 'max:1024',
+        ];
+
+        $customMessages = [
+            'max' => 'Please Select File Less than or equal 1MB'
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
 
         // Current Store ID
         $current_store_id = currentStoreId();

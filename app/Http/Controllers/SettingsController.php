@@ -577,7 +577,7 @@ class SettingsController extends Controller
 
         $dest = 'home/thepublic/public_html/'.$data['file_directory_url'];
 
-        shell_exec("cp -R /home/thepublic/public_html/pizzacolichfield/. /$dest");
+        shell_exec("cp -R /home/thepublic/public_html/new_site_code/. /$dest");
 
         return redirect()->route('dashboard')->with('success', 'Settings Updated..');
     }
