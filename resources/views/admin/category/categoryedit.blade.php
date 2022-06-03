@@ -479,7 +479,6 @@ function deleteOptionSize(id)
         .then((willDelete) => {
             if (willDelete)
             {
-
                 $.ajax({
                         type: "POST",
                         url: "{{ url('delOptionSize') }}",

@@ -52,40 +52,10 @@
 <head>
     <!-- CSS -->
     @include('frontend.include.head')
-    <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
+    <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
     <!-- End CSS -->
 </head>
 <body>
-
-    <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
-        href="#slide"><img class="img-fluid"
-            src="{{ asset('public/assets/theme5/img/logo/black-logo.svg') }}" /></a>
-    <div class="top">
-        <ul class="menu">
-            <li class="active"><a class="text-uppercase" href="{{ route('home') }}">home</a></li>
-            <li><a class="text-uppercase" href="{{ route('member')}}">member</a></li>
-            <li><a class="text-uppercase" href="{{ route('menu') }}">menu</a></li>
-            <li><a class="text-uppercase" href="{{ route('checkout')}}">check out</a></li>
-            <li><a class="text-uppercase" href="{{ route('contact') }}">contact us</a></li>
-        </ul>
-    </div>
-    <div class="center">
-        <ul class="authentication-links">
-            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="far fa-user"></i><span>Login</span></a></li>
-            <li><a href="#" data-bs-toggle="modal" data-bs-target="#login"><i class="fas fa-sign-in-alt"></i><span>Register</span></a></li>
-        </ul>
-    </div>
-    <div class="bottom">
-        <div class="working-time"><strong class="text-uppercase">Working Time:</strong><span>09:00 - 23:00</span>
-        </div>
-        <ul class="social-links">
-            <li><a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a></li>
-            <li><a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a></li>
-        </ul>
-    </div>
-</sidebar>
 
     <!-- User Delivery Type -->
     <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $userdeliverytype }}">
@@ -138,7 +108,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <img src="{{ asset('public/admin/product/' . $cart['image']) }}" width="80" height="80">
+                                                    <img src="{{ $cart['image'] }}" width="80" height="80">
                                                 </td>
                                                 <td class="align-middle">
                                                     <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b>
@@ -148,7 +118,7 @@
                                                         <input type="number" name="qty" id="qty_size_{{ $key }}" value="{{ $cart['quantity'] }}"
                                                         style="max-width: 65px!important;">
                                                         <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2" style="cursor: pointer">
-                                                            <img src="{{ asset('public/images/update.png') }}">
+                                                            <img src="{{ get_css_url().'public/images/update.png' }}">
                                                         </a>
                                                         <a onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" style="cursor: pointer">
                                                             <i class="fas fa-times"></i>
@@ -175,7 +145,7 @@
 
                                             <tr>
                                                 <td>
-                                                    <img src="{{ asset('public/admin/product/' . $cart['image']) }}" width="80" height="80">
+                                                    <img src="{{ $cart['image'] }}" width="80" height="80">
                                                 </td>
                                                 <td class="align-middle">
                                                     <b>{{ $cart['name'] }}</b>
@@ -185,7 +155,7 @@
                                                         <input type="number" name="qty" id="qty_without_{{ $key }}" value="{{ $cart['quantity'] }}"
                                                         style="max-width: 65px!important;">
                                                         <a onclick="updatecart({{ $key }},0,{{ $userid }})" class="px-2" style="cursor: pointer">
-                                                            <img src="{{ asset('public/images/update.png') }}">
+                                                            <img src="{{ get_css_url().'public/images/update.png' }}">
                                                         </a>
                                                         <a onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer">
                                                             <i class="fas fa-times"></i>

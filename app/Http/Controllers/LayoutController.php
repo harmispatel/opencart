@@ -165,7 +165,7 @@ class LayoutController extends Controller
 
             $polianna_main_logo_url = $currentURL.'/public/frontend/navbar/';
 
-            $polianna_main_logo = genratetoken(6).$request->file('polianna_main_logo')->getClientOriginalExtension();
+            $polianna_main_logo = genratetoken(6).'.'.$request->file('polianna_main_logo')->getClientOriginalExtension();
             $request->file('polianna_main_logo')->move(public_path('frontend/navbar'),$polianna_main_logo);
             // $data['polianna_main_logo'] = 'public/frontend/navbar/'.$polianna_main_logo;
             $data['polianna_main_logo'] = $polianna_main_logo_url.$polianna_main_logo;
@@ -403,7 +403,7 @@ class LayoutController extends Controller
 
             $polianna_footer_logo_url = $currentURL.'/public/frontend/footer/';
 
-            $polianna_footer_logo =genratetoken(6).$request->file('polianna_footer_logo')->getClientOriginalExtension();
+            $polianna_footer_logo =genratetoken(6).'.'.$request->file('polianna_footer_logo')->getClientOriginalExtension();
             $request->file('polianna_footer_logo')->move(public_path('frontend/footer'),$polianna_footer_logo);
             // $data['polianna_footer_logo'] = 'public/frontend/footer/'.$polianna_footer_logo;
             $data['polianna_footer_logo'] = $polianna_footer_logo_url.$polianna_footer_logo;

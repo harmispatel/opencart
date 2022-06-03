@@ -553,6 +553,11 @@ class SettingsController extends Controller
         $data['suspend_permanently'] = isset($request->suspend_permanently) ? $request->suspend_permanently : 'no';
         $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
         $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
+        $data['bussines'] = 'a:3:{s:3:"day";a:1:{i:0;a:1:{i:0;s:1:"0";}}s:4:"from";a:1:{i:0;s:4:"0:00";}s:2:"to";a:1:{i:0;s:5:"23:50";}}';
+        $data['theme_id'] = 1;
+        $data['enable_delivery'] = 'both';
+        $data['delivery_option'] = 'post_codes';
+
 
         if ($request->hasFile('suspend_logo')) {
 
@@ -568,16 +573,27 @@ class SettingsController extends Controller
         {
             $shopadd = new Settings;
             $shopadd->store_id = $lastinsertid;
-            $shopadd->group = 'config';
+            if ($key == 'bussines') {
+                $shopadd->group = 'timesetting';
+            }
+            elseif ($key == 'theme_id') {
+                $shopadd->group = 'polianna';
+            }
+            elseif ($key == 'enable_delivery' || $key == 'delivery_option') {
+                $shopadd->group = 'deliverysetting';
+            }
+            else {
+                $shopadd->group = 'config';
+            }
             $shopadd->key = $key;
             $shopadd->value = $new;
             $shopadd->serialized = 0;
             $shopadd->save();
         }
 
-        $dest = 'home/thepublic/public_html/'.$data['file_directory_url'];
+        $dest = 'home/thepublic/public_html/App-Myfood/sites/'.$data['file_directory_url'];
 
-        shell_exec("cp -R /home/thepublic/public_html/new_site_code/. /$dest");
+        shell_exec("cp -R /home/thepublic/public_html/App-Myfood/myfoodbasket/newsite/. /$dest");
 
         return redirect()->route('dashboard')->with('success', 'Settings Updated..');
     }

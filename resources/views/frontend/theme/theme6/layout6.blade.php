@@ -120,7 +120,7 @@
                     style="background-image: url('{{ $template_setting['polianna_slider_2'] }}')">
                     <div class="container">
                         
-                        <div class="slide-logo"><img class="img-fluid" src="{{ asset('public/assets/theme6/img/logo/slider-logo.svg') }}" /></div>
+                        <div class="slide-logo"><img class="img-fluid" src="{{ get_css_url().'public/assets/theme6/img/logo/slider-logo.svg' }}" /></div>
 
                         <h2 class="__title">{{ $template_setting['polianna_slider_2_title'] }}</h2>
                         <p>
@@ -159,7 +159,7 @@
                         </select>
                     @else
                         <input id="search_input1" placeholder="AB10 1BW" type="text"/>
-                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                     @endif
                 </div>
                 <div class="enter_postcode">
@@ -269,34 +269,7 @@
                 @endforeach
             @else
                 <div class="col">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 1.jpg') }}" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 1.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 3.jpg') }}" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 3.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 4.jpg') }}" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 4.jpg') }}" />
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="item">
-                        <a class="fas fa-search-plus" href="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg') }}" data-fancybox="photoGallery"></a>
-                        <img class="img-fluid" src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 5.jpg') }}" />
-                    </div>
+                    <h3>Gallary Not Available</h3>
                 </div>
             @endif
         </div>
@@ -341,48 +314,7 @@
                 @endforeach
             @else
                 <div class="col-12 col-sm-12 col-md-6">
-                    <div class="item">
-                        <div class="img">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" />
-                        </div>
-                        <div class="text-content"><strong class="text-capitalize">Alvarado</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-6">
-                    <div class="item">
-                        <div class="img">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" />
-                        </div>
-                        <div class="text-content"><strong class="text-capitalize">Alvarado</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-6">
-                    <div class="item">
-                        <div class="img">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" />
-                        </div>
-                        <div class="text-content"><strong class="text-capitalize">Alvarado</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-6">
-                    <div class="item">
-                        <div class="img">
-                            <img class="img-fluid"
-                                src="{{ asset('public/assets/theme6/demo-data/photo-gallery/placehold 2.jpg') }}" />
-                        </div>
-                        <div class="text-content"><strong class="text-capitalize">Alvarado</strong>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        </div>
-                    </div>
+                    <h3>Foods Not Available</h3>
                 </div>
             @endif
         </div>
@@ -473,7 +405,7 @@
     </div>
     <div class="__info">
         <div class="__container"><img class="img-fluid mb-3"
-                src="{{ asset('public/assets/theme6/img/icon/time-clock.svg') }}" />
+                src="{{ get_css_url().'public/assets/theme6/img/icon/time-clock.svg' }}" />
             <div class="__divider"></div><strong class="__time-title">OPEN NOW</strong>
             <div class="__divider"></div>
             @php

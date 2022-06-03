@@ -52,7 +52,7 @@
 <head>
     <!-- CSS -->
     @include('frontend.include.head')
-    <link rel="stylesheet" href="{{ asset('public/assets/frontend/pages/menu.css') }}">
+    <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
     <!-- End CSS -->
 </head>
 <body>
@@ -709,7 +709,7 @@
                                                                     <span>Close</span>
                                                                 @else
                                                                     @if ($today == $value || $firstday == "Every day")
-                                                                        <span>Close</span>
+                                                                       <span>Starts at - <b>{{ $deliveryfrom[$key] }}</b></span>
                                                                     @endif
                                                                 @endif
                                                             @endforeach
@@ -818,7 +818,7 @@
                                         </select>
                                     @else
                                         <input id="search_input1" placeholder="AB10 1BW" type="text" />
-                                        <img id="loading_icon1" src="{{ asset('public/admin/gif/gif4.gif') }}"
+                                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}"
                                             style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                     @endif
                                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
