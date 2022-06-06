@@ -446,6 +446,7 @@ Route::post('orderreviwe',[MemberController::class , 'orderreviwe'])->name('orde
 // Order
 Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
 Route::post('customerdeliveryaddress', [CustomerOrder::class, 'customerdeliveryaddress'])->name('customerdeliveryaddress');
+Route::post('checkorderstatus', [CustomerOrder::class, 'checkorderstatus'])->name('checkorderstatus');
 
 // customer
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');

@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
 use App\Models\Option;
+use App\Models\Orders;
 use App\Models\Region;
 use App\Models\Settings;
 use App\Models\Store;
@@ -260,11 +261,16 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.116/opencart/';
+    return 'http://192.168.1.73/ECOMM/';
 }
 
 
-
+function checkOrderStatus($order_id)
+{
+    $order_dt = Orders::where('order_id',$order_id)->first();
+    $status_id = isset($order_dt->order_status_id) ? $order_dt->order_status_id : '';
+    return $status_id;
+}
 
 
 // Get Theme ID & Store ID

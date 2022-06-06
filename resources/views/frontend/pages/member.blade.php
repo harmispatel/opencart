@@ -423,7 +423,19 @@
                                                                                                 <h5 style="text-align: left">#{{ $orders->order_id }}</h5>
                                                                                             </div>
                                                                                         </div><hr>
-                                                                                        <h5 class="orderstatus" style="text-align: center">{{$orders->hasOneOrderStatus['name']}}</h5>
+                                                                                        <h5 class="orderstatus" style="text-align: center;background:@if($orders->hasOneOrderStatus['name'] == 'Complete')
+                                                                                            #28a745;color:white;
+                                                                                        @elseif ($orders->hasOneOrderStatus['name'] == 'Charge Back')
+                                                                                            #343a40;color:white;
+                                                                                        @elseif ($orders->hasOneOrderStatus['name'] == 'Refunded')
+                                                                                            #007bff;color:white;
+                                                                                        @elseif ($orders->hasOneOrderStatus['name'] == 'Rejected')
+                                                                                            #dc3545;color:white;
+                                                                                        @elseif ($orders->hasOneOrderStatus['name'] == 'Accepted')
+                                                                                            #17a2b8;color:white;
+                                                                                        @else
+                                                                                            #ffc107;color:white;
+                                                                                         @endif">{{$orders->hasOneOrderStatus['name']}}</h5>
                                                                                         <div>
                                                                                             <table class="table p-0">
                                                                                                 <tr>

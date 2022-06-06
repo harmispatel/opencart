@@ -33,14 +33,17 @@
 
         {{-- List Section Start --}}
         <section class="content">
-            @if(Session::has('success'))
-            <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                {{ Session::get('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div id="errors">
+
             </div>
-        @endif
+            @if(Session::has('success'))
+                <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                    {{ Session::get('success') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -49,6 +52,9 @@
                             <div class="card-header" style="background: #f6f6f6">
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(86) == 1)
+                                        {{-- <a onclick="updateOpenClose()" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-save"></i>
+                                        </a> --}}
                                         <button type="submit" form="openclosetime" class="btn btn-sm btn-primary">
                                             <i class="fa fa-save"></i>
                                         </button>
@@ -66,44 +72,48 @@
                                     <h1 class="text-center">Opening Closing Times</h1>
                                     <h4 class="text-success" style="border-bottom: 1px dotted black">BUSSINESS HOURS</h4>
                                     <div class="col-sm-12" id="bussinestime">
-                                        @php $key_bussines = 0; @endphp
-                                            @if(isset($bussines['day']) && count($bussines['day']))
-                                                @foreach($bussines['day'] as $keyday => $daytime)
-                                                    <div id="bussines_{{ $key_bussines }}" class="bussines col-sm-12">
-                                                        <div class="d-flex justify-content-between">
-                                                            <div class="form-group col-sm-6">
-                                                                <select class="selectday form-control" name="bussines[day][{{ $key_bussines }}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
-                                                                    @foreach($days as $key => $day)
-                                                                        <option @if(in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
+                                        @php
+                                            $key_bussines = 0;
+                                        @endphp
+
+                                        @if(isset($bussines['day']) && count($bussines['day']))
+                                            @foreach($bussines['day'] as $keyday => $daytime)
+                                                <div id="bussines_{{ $key_bussines }}" class="bussines col-sm-12">
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="form-group col-sm-6">
+                                                            <select class="selectday form-control" name="bussines[day][{{ $key_bussines }}][]" class="form-control" style="width: 100% !importent;" id="buss-hours" multiple>
+                                                                @foreach($days as $key => $day)
+                                                                    <option @if(in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <div class="form-group">
+                                                                <select class="selectday form-control" name="bussines[from][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
+                                                                    @foreach($times as $key => $time)
+                                                                        <option @if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div class="d-flex">
-                                                                <div class="form-group">
-                                                                    <select class="selectday form-control" name="bussines[from][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
-                                                                        @foreach($times as $key => $time)
-                                                                            <option @if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group px-3">
-                                                                    <select class="selectday form-control" name="bussines[to][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
-                                                                        @foreach($times as $key => $time)
-                                                                        <option @if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {{'selected' }}  @endif value="{{ $key }}">{{ $time }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <span class="btn btn-default" onclick="$('#bussines_{{ $key_bussines }}').remove();">X</span>
-                                                                </div>
+                                                            <div class="form-group px-3">
+                                                                <select class="selectday form-control" name="bussines[to][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
+                                                                    @foreach($times as $key => $time)
+                                                                    <option @if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {{'selected' }}  @endif value="{{ $key }}">{{ $time }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <span class="btn btn-default" onclick="$('#bussines_{{ $key_bussines }}').remove();">X</span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    @php $key_bussines++; @endphp
-                                                @endforeach
-                                            @endif
+                                                </div>
+                                                @php $key_bussines++; @endphp
+                                            @endforeach
+                                        @endif
+
                                         <div class="col-sm-12">
-                                            <span class="btn btn-primary addtime" rel="bussines">+Add another set of hours</span>
+                                            <button class="btn btn-primary addtime buss-hours" rel="bussines">+Add another set of hours</button>
                                         </div>
                                     </div>
                                         <!-- end bussinestime -->
@@ -157,7 +167,7 @@
                                                         <div id="delivery_{{ $key_delivery }}" class="delivery col-sm-12">
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="form-group col-sm-6">
-                                                                    <select class="selectday" name="delivery[day][{{ $key_delivery}}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
+                                                                    <select class="selectday" id="del-hours" name="delivery[day][{{ $key_delivery}}]" class="form-control" style="width: 100% !importent;" multiple>
                                                                         @foreach($days as $key => $day)
                                                                         <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key}}">{{$day}}</option>
                                                                         @endforeach
@@ -188,7 +198,7 @@
                                                     @endforeach
                                                 @endif
                                                 <div class="col-sm-12">
-                                                    <span class="btn btn-primary addtime" rel="delivery">+Add another set of hours</span>
+                                                    <button class="btn btn-primary addtime del-hours" rel="delivery">+Add another set of hours</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -218,7 +228,7 @@
                                                     <div id="collection_{{ $key_collection }}" class="collection col-sm-12">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="form-group col-sm-6">
-                                                                <select class="selectday" name="collection[day][{{ $key_collection }}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
+                                                                <select class="selectday" name="collection[day][{{ $key_collection }}][]" class="form-control" id="coll-hours" style="width: 100% !importent;" multiple>
                                                                     @foreach($days as $key => $day)
                                                                     <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
                                                                     @endforeach
@@ -249,7 +259,7 @@
                                                 @endforeach
                                             @endif
                                             <div class="col-sm-12">
-                                                <span class="btn btn-primary addtime" rel="collection">+Add another set of hours</span>
+                                                <button class="btn btn-primary addtime coll-hours" rel="collection">+Add another set of hours</button>
                                             </div>
                                         </div>
                                     </div>
@@ -286,14 +296,84 @@
 <script type="text/javascript">
     // $('.multipalselect').siblings().addClass('js-example-basic-multiple');
     $('.selectday').select2();
-    $(document).ready(function(){
+
+    // Buss Hours
+    // $('#buss-hours').on('change',function()
+    // {
+    //     var bus_hours = $('#buss-hours :selected').val();
+    //     if(bus_hours == 0)
+    //     {
+    //         $('.buss-hours').attr('disabled',true);
+    //     }
+    //     else
+    //     {
+    //         $('.buss-hours').removeAttr('disabled');
+    //     }
+    // });
+    // End Buss Hours
+
+    // Del Hours
+    // $('#del-hours').on('change',function()
+    // {
+    //     var bus_hours = $('#del-hours :selected').val();
+    //     if(bus_hours == 0)
+    //     {
+    //         $('.del-hours').attr('disabled',true);
+    //     }
+    //     else
+    //     {
+    //         $('.del-hours').removeAttr('disabled');
+    //     }
+    // });
+    // End Del Hours
+
+    // Coll Hours
+    // $('#coll-hours').on('change',function()
+    // {
+    //     var bus_hours = $('#coll-hours :selected').val();
+    //     if(bus_hours == 0)
+    //     {
+    //         $('.coll-hours').attr('disabled',true);
+    //     }
+    //     else
+    //     {
+    //         $('.coll-hours').removeAttr('disabled');
+    //     }
+    // });
+    // End Coll Hours
+
+    $('document').ready(function()
+    {
+
+        // var bus_hours = $('#buss-hours :selected').val();
+        // var del_hours = $('#del-hours :selected').val();
+        // var coll_hours = $('#coll-hours :selected').val();
+
+        // if(bus_hours == 0)
+        // {
+        //     $('.buss-hours').attr('disabled',true);
+        // }
+
+        // if(del_hours == 0)
+        // {
+        //     $('.del-hours').attr('disabled',true);
+        // }
+
+        // if(coll_hours == 0)
+        // {
+        //     $('.coll-hours').attr('disabled',true);
+        // }
+
        var number_bussines = {{ $key_bussines }};
        var number_delivery = {{ $key_delivery }};
        var number_collection = {{ $key_collection }};
 
        var number = 0;
-       $('.addtime').click(function(){
+       $('.addtime').click(function(e){
+            e.preventDefault();
+
             var addtime = $(this);
+
             switch(addtime.attr('rel'))
             {
                 case 'bussines': number = number_bussines;break;
@@ -301,14 +381,13 @@
                 case 'collection': number = number_collection;break;
             }
             $.ajax({
-                // url: '{{ route("daytime") }}/&number=' + number + '&type=' + addtime.attr('rel'),
                 url: '{{ route("daytime") }}',
         		type: "get",
         		dataType: 'json',
                 data: {
                     'number': number,
                     'type': addtime.attr('rel'),
-                    '_token': '{{ csrf_token() }}'
+                    '_token': '{{ csrf_token() }}',
                 },
         		success: function(response) {
                     // console.log(response.html);
@@ -332,6 +411,34 @@
     });
 
 
+    // Update Open Close Time
+    // function updateOpenClose()
+    // {
+    //     $('#errors').html('');
 
+    //     var form_data = new FormData(document.getElementById('openclosetime'));
+
+    //     $.ajax({
+    //             url: '{{ route("openclosetimeset") }}',
+    //     		type: "post",
+    //     		dataType: 'json',
+    //             data: form_data,
+    //             contentType: false,
+    //             cache: false,
+    //             processData: false,
+    //     		success: function(response) {
+    //                 if(response.everyday_error == 1)
+    //                 {
+    //                     $('#errors').append('<div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">'+response.everyday_error_msg+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+    //                 }
+
+    //                 if(response.success == 1)
+    //                 {
+    //                     $('#errors').html('');
+    //                     $('#errors').append('<div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">'+response.success_msg+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+    //                 }
+    //     		},
+    //         });
+    // }
 
 </script>

@@ -1540,6 +1540,8 @@ class SettingsController extends Controller
         $number = $request->number;
         $type = $request->type;
 
+        $pre_drop = $request->pre_drop;
+
         $days = $this->days;
 
         $minitunes = array('00', '10', '20', '30', '40', '50');
@@ -1557,7 +1559,7 @@ class SettingsController extends Controller
         $html .= '<div class="col-sm-12" id="' . $type . '_' . $number . '">';
         $html .= '<div class="d-flex justify-content-between">';
         $html .= '<div class="form-group col-sm-6">';
-        $html .= '<select class="selectday form-control" name="' . $type . '[day][' . $number . '][]" class="form-control" multiple="multiple">';
+        $html .= '<select class="selectday form-control" name="' . $type . '[day][' . $number . '][]" class="form-control" multiple>';
         foreach ($days as $key => $day) {
             $html .= '<option value="' . $key . '">' . $day . '</option>';
         }

@@ -38,7 +38,14 @@ class HomeController extends Controller
 
     function adminLogin()
     {
-        return view('admin.login');
+        if(session()->has('password_hash_web'))
+        {
+            return redirect()->route('dashboard');
+        }
+        else
+        {
+            return view('admin.login');
+        }
     }
 
 
