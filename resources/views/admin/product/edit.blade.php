@@ -30,6 +30,14 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
@@ -105,9 +113,14 @@
                                             <div class="mb-3">
                                                 <label for="product" class="form-label"><span
                                                         class="text-danger">*</span>Product Name</label>
-                                                <input type="text" class="form-control" name="product" id="product"
+                                                <input type="text" class="form-control {{ $errors->has('product') ? 'is-invalid' : '' }}" name="product" id="product"
                                                     placeholder="Product Name"
-                                                    value="{{ isset($productname) ? $productname : '' }}" required>
+                                                    value="{{ isset($productname) ? $productname : '' }}">
+                                                @if ($errors->has('product'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('product') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             <hr>
                                             <div class="mb-3">
@@ -118,12 +131,17 @@
                                                     $array = explode(',', $pro_icon);
 
                                                 @endphp
-                                                <select name="product_icons[]" id="product_icon" class="form-control"
-                                                    multiple required>
+                                                <select name="product_icons[]" id="product_icon" class="form-control {{ $errors->has('product_icons') ? 'is-invalid' : '' }}"
+                                                    multiple>
                                                     @foreach ($result['product_icon'] as $productIcon)
                                                         <option value="{{ $productIcon->id }}" {{ in_array($productIcon->id, $array) == $productIcon->id ? 'selected' : '' }}>{{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>
+                                                @if ($errors->has('product_icons'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('product_icons') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             <hr>
                                             <div class="mb-3">
