@@ -749,6 +749,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
+
         $product = Product::select('*')->join('oc_product_description', 'oc_product.product_id', '=', 'oc_product_description.product_id')->leftjoin('oc_product_to_category', 'oc_product.product_id', '=', 'oc_product_to_category.product_id')->where('oc_product.product_id', $id)->first();
 
         $prod_id = isset($product->category_id) ? $product->category_id : '';
@@ -774,6 +775,12 @@ class ProductController extends Controller
 
     public function update(Request $request)
     {
+
+        $request->validate([
+            'product' => 'required',
+            'product_icons' => 'required',
+        ]);
+
         $product_id = $request->product_id;
 
         $product = Product::find($product_id);

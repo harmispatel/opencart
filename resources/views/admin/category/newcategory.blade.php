@@ -32,6 +32,14 @@
         {{-- Insert Data Section --}}
         <section class="content">
             <div class="conatiner-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}
@@ -61,7 +69,7 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="category" class="form-label">Category Name</label>
+                                        <label for="category" class="form-label">* Category Name</label>
                                         <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ old('category') }}">
                                         @if ($errors->has('category'))
                                             <div class="invalid-feedback">{{ $errors->first('category') }}</div>
