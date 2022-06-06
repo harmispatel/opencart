@@ -551,7 +551,7 @@ class CategoryController extends Controller
             $query->where('category_id', $id);
         })->first();
 
-        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout, 'optiongroups' => $optiongroups, 'topcatoption' => $topcatoption, 'toppingsizes' => $toppingsizes]);
+        return view('admin.category.categoryedit', ['data' => $data, 'category_layout' => $category_layout, 'optiongroups' => $optiongroups, 'topcatoption' => $topcatoption, 'toppingsizes' => $toppingsizes])->with('error', "Sorry you haven't Access.");
     }
 
 

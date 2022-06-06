@@ -38,6 +38,14 @@
         {{-- Edit Section --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}
@@ -71,7 +79,7 @@
 
                                         <input type="hidden" name="id" value="{{ $data->category_id }}">
                                         <input type="hidden" name="top_cat_option_id" value="{{ isset($topcatoption->id) ? $topcatoption->id : '' }}">
-                                        <label for="category" class="form-label">Category Name</label>
+                                        <label for="category" class="form-label">* Category Name</label>
                                         <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->hasOneCategory->name }}">
                                         @if ($errors->has('category'))
                                             <div class="invalid-feedback">{{ $errors->first('category') }}</div>
