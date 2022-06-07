@@ -127,7 +127,7 @@
                             @if ($order_status == 2)
                                 <div class="row">
                                     <div class="col-md-12 text-center">
-                                        <img src="{{ asset('public/admin/gif/gif3.gif') }}" alt="">
+                                        <img src="{{ get_css_url().'public/admin/gif/gif3.gif' }}" alt="">
                                     </div>
                                 </div>
                             @endif
@@ -190,11 +190,7 @@
 
         var order_status = $('#order_status').val();
 
-        if(order_status == 7 || order_status == 11 || order_status == 1 || order_status == 5)
-        {
-
-        }
-        else
+        if(order_status == 2)
         {
             setInterval(() => {
                 $.ajax({

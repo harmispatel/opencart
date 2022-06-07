@@ -162,9 +162,6 @@ class MenuController extends Controller
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
 
             if (!empty($get_coupon) || $get_coupon != '') {
-                // $start_date = strtotime($get_coupon->date_start);
-                // $end_date = strtotime($get_coupon->date_end);
-
                 $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
                 $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
 
@@ -173,6 +170,9 @@ class MenuController extends Controller
                 } else {
                     $Coupon = '';
                 }
+            }
+            else {
+                $Coupon = '';
             }
         }
 
@@ -481,7 +481,32 @@ class MenuController extends Controller
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
-        $Coupon = Coupon::where('store_id', $front_store_id)->first();
+        // $Coupon = Coupon::where('store_id', $front_store_id)->first();
+
+        $current_date = strtotime(date('Y-m-d'));
+
+        if (session()->has('currentcoupon')) {
+            $Coupon = session()->get('currentcoupon');
+        } else {
+            $get_coupon = Coupon::where('store_id', $front_store_id)->first();
+
+            if (!empty($get_coupon) || $get_coupon != '') {
+                // $start_date = strtotime($get_coupon->date_start);
+                // $end_date = strtotime($get_coupon->date_end);
+
+                $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
+                $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
+
+                if ($current_date >= $start_date && $current_date < $end_date) {
+                    $Coupon = $get_coupon;
+                } else {
+                    $Coupon = '';
+                }
+            }
+            else {
+                $Coupon = '';
+            }
+        }
 
         $d_type = $request->d_type;
 
@@ -649,12 +674,17 @@ class MenuController extends Controller
             }
         }
 
-        if ($Coupon->type == 'P') {
+        if (!empty($Coupon) || $Coupon != '')
+        {
+            if ($Coupon->type == 'P') {
             $coupontotal = ($sub_total * $Coupon->discount) / 100;
+            }
+            if ($Coupon->type == 'F') {
+                $coupontotal = $sub_total - $Coupon->discount;
+            }
         }
-        if ($Coupon->type == 'F') {
-            $coupontotal = $sub_total - $Coupon->discount;
-        }
+
+
 
         $total_pay = $sub_total - $coupontotal;
 

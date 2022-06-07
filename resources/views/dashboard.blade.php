@@ -125,10 +125,11 @@
                                     <div class="dash-inr-right">
                                         <div class="dash-inr-title">
                                             <h4>STORE SALES REPORTS</h4>
-                                            <select name="" id="getSalesReport">
+                                            <img src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" width="15" style="display: none;" id="sales-loader">
+                                            <select name="" id="range" onchange="getSalesReport(this.value)">
                                                 <option value="day">Today</option>
-                                                <option value="Yesterday">Yesterday</option>
-                                                <option value="This Week" selected>This Week</option>
+                                                <option value="yesterday">Yesterday</option>
+                                                <option value="week" selected>This Week</option>
                                                 <option value="month">This Month</option>
                                                 <option value="year">This Year</option>
                                                 <option value="lastweek">Last Week</option>
@@ -137,33 +138,9 @@
                                                 <option value="alltime">All Time</option>
                                             </select>
                                         </div>
-                                        <div class="dash-sales">
-                                            <h5> A Dev - A.K. Spices </h5>
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Total Sales</td>
-                                                        <td>£9.10</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Total Orders</td>
-                                                        <td>2</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Total Cash Order Amount</td>
-                                                        <td>£9.10</td>
-                                                    </tr>
+                                        <div id="sales-reprt" style="height: 300px;
+                                        overflow-y: scroll;">
 
-                                                    <tr>
-                                                        <td>Total Card Order Amount</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>No. of Customers</td>
-                                                        <td>1</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -259,10 +236,11 @@
                                     <div class="dash-inr-left">
                                         <div class="dash-inr-title">
                                             <h4>TOP 10 CUSTOMER'S</h4>
-                                            <select name="" id="">
+                                            <img src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" width="15" style="display: none;" id="top10-loader">
+                                            <select name="top10" id="top10" onchange="getTopTen(this.value)">
                                                 <option value="day">Today</option>
-                                                <option value="Yesterday">Yesterday</option>
-                                                <option value="This Week" selected>This Week</option>
+                                                <option value="yesterday">Yesterday</option>
+                                                <option value="week" selected>This Week</option>
                                                 <option value="month">This Month</option>
                                                 <option value="year">This Year</option>
                                                 <option value="lastweek">Last Week</option>
@@ -271,23 +249,8 @@
                                                 <option value="alltime">All Time</option>
                                             </select>
                                         </div>
-                                        <div class="">
-                                            <table class="table">
-                                                <thead>
-                                                    <th>Customer</th>
-                                                    <th>Total Sales</th>
-                                                    <th>Total Cash Order Amount </th>
-                                                    <th>Total Card Order Amount </th>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Guest User's </td>
-                                                        <td>£7,388,280.45 </td>
-                                                        <td>£2,912,965.22 </td>
-                                                        <td>£4,475,315.23 </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div id="top-ten-cus">
+
                                         </div>
                                     </div>
                                 </div>
@@ -337,21 +300,84 @@
 
 @include('footer')
 
-<script>
-   $('#getSalesReport').change(function (e) {
-        e.preventDefault();
-        var SalesReport = this.value;
+<script type="text/javascript">
+
+    $('document').ready(function(){
+        var range = $('#range :selected').val();
+
+        $("#sales-reprt").html('');
 
         $.ajax({
             type: "post",
             url: "{{ route('getSalesReport') }}",
             data: {
-                SalesReport :SalesReport,
+                SalesReport : range,
             },
-            success: function (response) {
-                console.log(response);
+            beforeSend: function() {
+                $('#sales-loader').show();
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                if(response.success == 1)
+                {
+                    $('#sales-loader').hide();
+                    $("#sales-reprt").append(response.html);
+                }
             }
         });
-
     });
+
+
+    // Get Sales Report
+    function getSalesReport(range)
+    {
+        $("#sales-reprt").html('');
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('getSalesReport') }}",
+            data: {
+                SalesReport : range,
+            },
+            beforeSend: function() {
+                $('#sales-loader').show();
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                if(response.success == 1)
+                {
+                    $('#sales-loader').hide();
+                    $("#sales-reprt").append(response.html);
+                }
+            }
+        });
+    }
+    // End Get Sales Report
+
+    // Get Top 10
+    function getTopTen(range)
+    {
+        $("#top-ten-cus").html('');
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('getTopTenCustomer') }}",
+            data: {
+                'range' : range,
+            },
+            beforeSend: function() {
+                $('#top10-loader').show();
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                $('#top10-loader').hide();
+                $("#top-ten-cus").append(response.html);
+            }
+        });
+    }
+    // End Get Top 10
+
 </script>

@@ -76,6 +76,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Dashboard
     Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
     Route::post('getSalesReport', [HomeController::class, 'getSalesReport'])->name('getSalesReport');
+    Route::post('getTopTenCustomer', [HomeController::class, 'getTopTenCustomer'])->name('getTopTenCustomer');
     Route::post('setStore', [HomeController::class, 'setStore'])->name('setStore');
 
 
