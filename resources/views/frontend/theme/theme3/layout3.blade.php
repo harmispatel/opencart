@@ -366,7 +366,7 @@
     <div class="container">
         <div class="default-title-v3 text-center">
             <h3 class="title text-capitalize">opening hours</h3>
-            <p>Open 7 Days a Week</p>
+            {{-- <p>Open 7 Days a Week</p> --}}
         </div>
 
         @php
