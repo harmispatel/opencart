@@ -1243,7 +1243,6 @@
                 {
                     if (response.success == 1)
                     {
-                        alert('success');
                         var new_url = response.success_url;
                         window.location = new_url;
                     }

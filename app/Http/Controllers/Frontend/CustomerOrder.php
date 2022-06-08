@@ -17,6 +17,62 @@ use Illuminate\Support\Facades\URL;
 
 class CustomerOrder extends Controller
 {
+
+    function checkorderstatus(Request $request)
+    {
+        if(session()->has('last_order_id'))
+        {
+            $order_id = session()->get('last_order_id');
+        }
+        else
+        {
+            $order_id = 0;
+        }
+
+        $order_dt = Orders::where('order_id',$order_id)->first();
+
+        $status_id = isset($order_dt->order_status_id) ? $order_dt->order_status_id : '';
+
+        if(!empty($status_id))
+        {
+            if($status_id == 15)
+            {
+                return response([
+                    'success' => 1,
+                ]);
+            }
+
+            if($status_id == 7)
+            {
+                return response([
+                    'success' => 1,
+                ]);
+            }
+
+            if($status_id == 11)
+            {
+                return response([
+                    'success' => 1,
+                ]);
+            }
+
+            if($status_id == 1)
+            {
+                return response([
+                    'success' => 1,
+                ]);
+            }
+
+            if($status_id == 5)
+            {
+                return response([
+                    'success' => 1,
+                ]);
+            }
+        }
+
+    }
+
     function confirmorder(Request $request)
     {
 
@@ -125,7 +181,7 @@ class CustomerOrder extends Controller
                         $gorder->shipping_code = '';
                         $gorder->comment = '';
                         $gorder->total = $total;
-                        $gorder->order_status_id = 5; //Complete
+                        $gorder->order_status_id = 2; //Processing
                         $gorder->message = '';
                         $gorder->accepted_time = '';
                         $gorder->affiliate_id = 0;
@@ -148,6 +204,7 @@ class CustomerOrder extends Controller
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+                        session()->put('last_order_id',$gorder->order_id);
 
                         // Guest Order Product
                         if (isset($guestUserCart)) {
@@ -205,7 +262,7 @@ class CustomerOrder extends Controller
                         // Guest Order History
                         $gorderhistory = new OrderHistory;
                         $gorderhistory->order_id = $gorder->order_id;
-                        $gorderhistory->order_status_id = 5; //Complete
+                        $gorderhistory->order_status_id = 2; //Processing
                         $gorderhistory->notify = 1;
                         $gorderhistory->comment = '';
                         $gorderhistory->date_added = date('Y-m-d h:i:s');
@@ -313,7 +370,7 @@ class CustomerOrder extends Controller
                     $order->shipping_code = '';
                     $order->comment = '';
                     $order->total = $total;
-                    $order->order_status_id = 5; //Complete
+                    $order->order_status_id = 2; //Processing
                     $order->message = '';
                     $order->accepted_time = '';
                     $order->affiliate_id = 0;
@@ -338,6 +395,7 @@ class CustomerOrder extends Controller
 
                     $last_order_id = $order->order_id;
 
+                    session()->put('last_order_id',$order->order_id);
 
                     // Order Product
                     if (isset($usercart)) {
@@ -395,7 +453,7 @@ class CustomerOrder extends Controller
                     // Order History
                     $orderhistory = new OrderHistory;
                     $orderhistory->order_id = $order->order_id;
-                    $orderhistory->order_status_id = 5; //Complete
+                    $orderhistory->order_status_id = 2; //Processing
                     $orderhistory->notify = 1;
                     $orderhistory->comment = '';
                     $orderhistory->date_added = date('Y-m-d h:i:s');
@@ -513,7 +571,7 @@ class CustomerOrder extends Controller
                         $gorder->shipping_code = '';
                         $gorder->comment = '';
                         $gorder->total = $total;
-                        $gorder->order_status_id = 5; //Complete
+                        $gorder->order_status_id = 2; //Processing
                         $gorder->message = '';
                         $gorder->accepted_time = '';
                         $gorder->affiliate_id = 0;
@@ -535,6 +593,8 @@ class CustomerOrder extends Controller
                         $gorder->clear_history = 0;
                         $gorder->is_delete = 0;
                         $gorder->save();
+
+                        session()->put('last_order_id',$gorder->order_id);
 
                         // Guest Order Product
                         if (isset($guestUserCart)) {
@@ -591,7 +651,7 @@ class CustomerOrder extends Controller
                         // Guest Order History
                         $gorderhistory = new OrderHistory;
                         $gorderhistory->order_id = $gorder->order_id;
-                        $gorderhistory->order_status_id = 5; //Complete
+                        $gorderhistory->order_status_id = 2; //Processing
                         $gorderhistory->notify = 1;
                         $gorderhistory->comment = '';
                         $gorderhistory->date_added = date('Y-m-d h:i:s');
@@ -701,7 +761,7 @@ class CustomerOrder extends Controller
                         $order->shipping_code = '';
                         $order->comment = '';
                         $order->total = $total;
-                        $order->order_status_id = 5; //Complete
+                        $order->order_status_id = 2; //Processing
                         $order->message = '';
                         $order->accepted_time = '';
                         $order->affiliate_id = 0;
@@ -723,6 +783,8 @@ class CustomerOrder extends Controller
                         $order->clear_history = 0;
                         $order->is_delete = 0;
                         $order->save();
+
+                        session()->put('last_order_id',$order->order_id);
 
                         // Order Product
                         if (isset($usercart)) {
@@ -780,7 +842,7 @@ class CustomerOrder extends Controller
                         // Order History
                         $orderhistory = new OrderHistory;
                         $orderhistory->order_id = $order->order_id;
-                        $orderhistory->order_status_id = 5; //Complete
+                        $orderhistory->order_status_id = 2; //Processing
                         $orderhistory->notify = 1;
                         $orderhistory->comment = '';
                         $orderhistory->date_added = date('Y-m-d h:i:s');

@@ -38,7 +38,14 @@ class HomeController extends Controller
 
     function adminLogin()
     {
-        return view('admin.login');
+        if(session()->has('password_hash_web'))
+        {
+            return redirect()->route('dashboard');
+        }
+        else
+        {
+            return view('admin.login');
+        }
     }
 
 
@@ -100,80 +107,173 @@ class HomeController extends Controller
 
     }
 
-     public function getSalesReport(Request $request){
+     public function getSalesReport(Request $request)
+     {
+        $range = 'year';
+        $html = '';
 
-        $sales_reports=$request->SalesReport;
-        $current_store_id = currentStoreId();
+		if(isset($request->SalesReport))
+        {
+			$range = $request->SalesReport;
+		}
 
-        switch ($sales_reports) {
-            case 'day':
-                $startDate = date('Y-m-d 00:00:00');
-				$endDate = date('Y-m-d 23:59:59');
-                $data=Orders::where('store_id',$current_store_id)->where('date_added','<=',$startDate)->get();
-                print($data);
-                break;
-            case 'Yesterday':
-                echo "Yesterday";
-                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
-				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days"));
-                $data=Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->get();
-                print($data);
-                break;
-            case 'This Week':
-                echo "This Week";
-                break;
-            case 'month':
-                echo 'month';
-                $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
-				$lastDate_this_month  = date('Y-m-t 23:59:59');
-                $data=Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->get();
-                print($data);
-                break;
+        $top_10 = getTopTenSales($range);
 
-            case 'year':
-                echo 'year';
-                // $this_year_ini =date('Y-m-d', strtotime('first day of january this year'));
-				// $this_year_end =date('Y-m-d', strtotime('last day of December this year'));
+        if(count($top_10) > 0)
+        {
+            foreach($top_10 as $store)
+            {
+                $total_sale = isset($store->total_sale) ? $store->total_sale : 0;
+                $order_count = isset($store->order_count) ? $store->order_count : 0;
+                $cod_total = isset($store->cod_total) ? $store->cod_total : 0;
+                $card_total = isset($store->card_total) ? $store->card_total : 0;
+                $customer_count = isset($store->customer_count) ? $store->customer_count : 0;
 
-				// $this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
-				// $this_year_end = $this_year_end->format('Y-m-d 23:59:59');
-                break;
+                $html .= '<div class="dash-sales">';
+                $html .= '<table class="table">';
+                $html .= '<h6 class="mb-2"><b>'.$store->store_name.'</b></h6>';
+                $html .= '<tr><td><b>Total Sales : </b></td><td class="align-middle">£ '.number_format($total_sale,2).'</td></tr>';
+                $html .= '<tr><td><b>Total Orders : </b></td><td class="align-middle">'.$order_count.'</td></tr>';
+                $html .= '<tr><td><b>Total Cash Order Amount : </b></td><td class="align-middle">£ '.number_format($cod_total,2).'</td></tr>';
+                $html .= '<tr><td><b>Total Card Order Amount : </b></td><td class="align-middle">£ '.number_format($card_total,2).'</td></tr>';
+                $html .= '<tr><td><b>No. of Customers : </b></td><td class="align-middle">'.$customer_count.'</td></tr>';
+                $html .= '</table>';
+                $html .= '</div>';
+            }
 
-            case 'lastweek':
-                echo 'lastweek';
-                $previous_week = strtotime("-1 week +1 day");
-
-				$start_week = strtotime("last monday midnight",$previous_week);
-				$end_week = strtotime("next sunday",$start_week);
-
-				$lst_monday = date("Y-m-d",$start_week);
-				$lst_sunday = date("Y-m-d",$end_week);
-                $data=Orders::where('store_id',$current_store_id)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->get();
-                print($data);
-                break;
-
-            case 'lastmonth':
-                echo 'lastmonth';
-                // $month_ini = new DateTime("first day of last month");
-				// $month_end = new DateTime("last day of last month");
-				// $lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
-				// $lst_month_end = $month_end->format('Y-m-d 23:59:59');
-                break;
-            case 'lastyear':
-                echo 'lastyear';
-                // $year_ini = new DateTime('first day of January last year');
-				// $year_end = new DateTime('last day of December last year');
-
-				// $lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
-				// $lst_year_end = $year_end->format('Y-m-d 23:59:59');
-                break;
-            case 'alltime':
-                echo "alltime";
-            break;
-            default:
-                echo 0;
-                break;
+            return response()->json([
+                'success' => 1,
+                'html'=>$html,
+            ]);
         }
+        else
+        {
+            $html .= '<div class="text-center"><h6>Records Not Found !</h6></div>';
+            return response()->json([
+                'success' => 1,
+                'html'=>$html,
+            ]);
+        }
+
+     }
+
+     function getTopTenCustomer(Request $request)
+     {
+        $range = 'year';
+        $html = '';
+
+        if(isset($request->range))
+        {
+			$range = $request->range;
+		}
+
+        $top_10_customers = getTop10Customers($range);
+
+        $html .= '<table class="table">';
+        $html .= '<thead>';
+        $html .= '<tr><th>Customer</th><th>Total Sales</th><th>Total Cash Order Amount</th><th>Total Card Order Amount</th></tr>';
+        $html .= '</thead>';
+        $html .= '<tbody>';
+
+        if(count($top_10_customers) > 0)
+        {
+            foreach($top_10_customers as $store)
+            {
+                $total_sale = isset($store->total_sale) ? $store->total_sale : 0;
+                $cod_total = isset($store->cod_total) ? $store->cod_total : 0;
+                $card_total = isset($store->card_total) ? $store->card_total : 0;
+                $cust_name = $store->firstname.' '.$store->lastname;
+
+
+                if($store->customer_id == '0')
+                {
+                    $cust_name = "Guest User's";
+                }
+
+                $html .= '<tr>';
+                $html .= '<td>'.$cust_name.'</td>';
+                $html .= '<td>£ '.number_format($total_sale,2).'</td>';
+                $html .= '<td>£ '.number_format($cod_total,2).'</td>';
+                $html .= '<td>£ '.number_format($card_total,2).'</td>';
+                $html .= '</tr>';
+
+            }
+        }
+        else
+        {
+            $html .= '<tr>';
+            $html .= '<td colspan="4" class="text-center">Customer Not Found !</td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody>';
+        $html .= '</table>';
+
+        return response()->json([
+            'success' => 1,
+            'html'=>$html,
+        ]);
+
+     }
+
+     function getGeneralTotal(Request $request)
+     {
+        $range = 'year';
+        $html = '';
+
+        if(isset($request->range))
+        {
+			$range = $request->range;
+		}
+
+        $general_totals = getGeneralTotals($range);
+
+        if(!empty($general_totals))
+        {
+            $ttl_qty = $general_totals['cash_count'] + $general_totals['pp_express_count'] + $general_totals['worldpayhp_count'] +$general_totals['mfb_count'] + $general_totals['ccod_count'];
+
+            $ttl_amnt = $general_totals['cash_total'] + $general_totals['pp_express_total'] + $general_totals['worldpayhp_total'] +$general_totals['mfb_total'] + $general_totals['ccod_total'];
+
+            $html .= '<table class="table">';
+            $html .= '<tr><td><b>Cash Total</b></td><td>'.$general_totals['cash_count'].'</td><td>£ '.number_format($general_totals['cash_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Paypal Total</b></td><td>'.$general_totals['pp_express_count'].'</td><td>£ '.number_format($general_totals['pp_express_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Worldpay Total</b></td><td>'.$general_totals['worldpayhp_count'].'</td><td>£ '.number_format($general_totals['worldpayhp_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>MFB Pay Total</b></td><td>'.$general_totals['mfb_count'].'</td><td>£ '.number_format($general_totals['mfb_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Card on Delivery</b></td><td>'.$general_totals['ccod_count'].'</td><td>£ '.number_format($general_totals['ccod_total'],2).'</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Totals</b></td><td>'.$ttl_qty.'</td><td>£ '.number_format($ttl_amnt,2).'</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Rejected Orders</b></td><td>'.$general_totals['rejct_count'].'</td><td>£ '.number_format($general_totals['rejct_total'],2).'</td></tr>';
+            $html .= '</table>';
+
+        }
+        else
+        {
+            $html .= '<table class="table">';
+            $html .= '<tr><td><b>Cash Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Paypal Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Worldpay Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>MFB Pay Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Card on Delivery</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Totals</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Rejected Orders</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '</table>';
+        }
+
+        return response()->json([
+            'success' => 1,
+            'html'=>$html,
+        ]);
 
      }
 

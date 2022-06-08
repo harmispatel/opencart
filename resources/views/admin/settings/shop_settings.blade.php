@@ -107,6 +107,14 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Warning: Please check the form carefully for errors!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
@@ -189,7 +197,7 @@
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
-                                                        <label>SSL URL</label>
+                                                        <label><span class="text-danger">*</span>SSL URL</label>
                                                         <input type="text" class="form-control {{ ($errors->has('config_ssl')) ? 'is-invalid' : '' }}" id="config_ssl" name="config_ssl" value="{{ $map_category['config_ssl'] }}">
                                                         <code class="text-muted">
                                                             SSL URL to your store. Make sure to add '/' at the end. Example: http://www.yourdomain.com/path/ <br> Don't use directories to create a new store. You should always point another domain or sub domain to your hosting.
@@ -321,7 +329,13 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Logo</label>
-                                                        <input type="file" class="form-control p-1" name="config_logo" id="config_logo">
+                                                        {{-- <input type="file" class="form-control p-1" name="config_logo" id="config_logo"> --}}
+                                                        <input class="form-control p-1   {{ $errors->has('config_logo') ? 'is-invalid' : '' }}" name="config_logo" id="config_logo" type="file">
+                                                        @if ($errors->has('config_logo'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('config_logo') }}
+                                                            </div>
+                                                        @endif
                                                         @if(!empty($map_category['config_logo']) || $map_category['config_logo'] != '')
                                                             <img src="{{ $map_category['config_logo'] }}" width="60">
                                                         @else
@@ -331,7 +345,13 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Icon</label>
-                                                        <input type="file" class="form-control p-1" name="config_icon" id="config_icon">
+                                                        {{-- <input type="file" class="form-control p-1" name="config_icon" id="config_icon"> --}}
+                                                        <input class="form-control p-1   {{ $errors->has('config_icon') ? 'is-invalid' : '' }}" name="config_icon" id="config_icon" type="file">
+                                                        @if ($errors->has('config_icon'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('config_icon') }}
+                                                            </div>
+                                                        @endif
                                                         <code class="text-muted">
                                                             The icon should be  that is 16px x 16px.
                                                         </code><br>
@@ -554,7 +574,13 @@
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Icon</label>
-                                                        <input type="file" class="form-control p-1" id="suspend_logo" name="suspend_logo">
+                                                        {{-- <input type="file" class="form-control p-1" id="suspend_logo" name="suspend_logo"> --}}
+                                                        <input class="form-control p-1   {{ $errors->has('suspend_logo') ? 'is-invalid' : '' }}" name="suspend_logo" id="suspend_logo" type="file">
+                                                        @if ($errors->has('suspend_logo'))
+                                                            <div class="invalid-feedback">
+                                                                {{ $errors->first('suspend_logo') }}
+                                                            </div>
+                                                        @endif
                                                         @if(!empty($map_category['suspend_logo']) || $map_category['suspend_logo'] != '')
                                                             <img src="{{ $map_category['suspend_logo'] }}" width="60">
                                                         @else

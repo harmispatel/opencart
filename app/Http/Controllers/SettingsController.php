@@ -139,6 +139,9 @@ class SettingsController extends Controller
 
     public function mapandcategory()
     {
+
+
+
         // Check User Permission
         if(check_user_role(80) != 1)
         {
@@ -281,6 +284,7 @@ class SettingsController extends Controller
             'config_name' => 'required',
             'config_owner' => 'required',
             'config_address' => 'required',
+            'config_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'map_post_code' => 'required',
             'config_country_id' => 'required',
             'config_zone_id' => 'required',
@@ -288,6 +292,8 @@ class SettingsController extends Controller
             'config_title' => 'required',
             'file_directory_url' => 'required',
             'config_email' => 'required|email',
+            'config_icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'suspend_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
@@ -481,6 +487,8 @@ class SettingsController extends Controller
             'config_name' => 'required',
             'config_owner' => 'required',
             'config_address' => 'required',
+            'config_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'config_icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'map_post_code' => 'required',
             'config_country_id' => 'required',
             'config_zone_id' => 'required',
@@ -488,6 +496,7 @@ class SettingsController extends Controller
             'config_title' => 'required',
             'file_directory_url' => 'required',
             'config_email' => 'required|email',
+            'suspend_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
@@ -1540,6 +1549,8 @@ class SettingsController extends Controller
         $number = $request->number;
         $type = $request->type;
 
+        $pre_drop = $request->pre_drop;
+
         $days = $this->days;
 
         $minitunes = array('00', '10', '20', '30', '40', '50');
@@ -1557,7 +1568,7 @@ class SettingsController extends Controller
         $html .= '<div class="col-sm-12" id="' . $type . '_' . $number . '">';
         $html .= '<div class="d-flex justify-content-between">';
         $html .= '<div class="form-group col-sm-6">';
-        $html .= '<select class="selectday form-control" name="' . $type . '[day][' . $number . '][]" class="form-control" multiple="multiple">';
+        $html .= '<select class="selectday form-control" name="' . $type . '[day][' . $number . '][]" class="form-control" multiple>';
         foreach ($days as $key => $day) {
             $html .= '<option value="' . $key . '">' . $day . '</option>';
         }

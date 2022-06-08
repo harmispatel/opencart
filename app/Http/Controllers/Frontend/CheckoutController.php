@@ -129,9 +129,15 @@ class CheckoutController extends Controller
 
                 if ($current_date >= $start_date && $current_date < $end_date) {
                     $Coupon = $get_coupon;
-                } else {
+                }
+                else
+                {
                     $Coupon = '';
                 }
+            }
+            else
+            {
+                $Coupon = '';
             }
         }
 

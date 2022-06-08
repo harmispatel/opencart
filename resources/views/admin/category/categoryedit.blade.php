@@ -79,7 +79,7 @@
 
                                         <input type="hidden" name="id" value="{{ $data->category_id }}">
                                         <input type="hidden" name="top_cat_option_id" value="{{ isset($topcatoption->id) ? $topcatoption->id : '' }}">
-                                        <label for="category" class="form-label">* Category Name</label>
+                                        <label for="category" class="form-label"><span class="text-danger">*</span> Name</label>
                                         <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->hasOneCategory->name }}">
                                         @if ($errors->has('category'))
                                             <div class="invalid-feedback">{{ $errors->first('category') }}</div>
@@ -345,7 +345,12 @@
 
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        <input type="file" name="image" style="padding:3px;" id="image" class="form-control">
+                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="image" id="image" type="file">
+                                        @if ($errors->has('image'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('image') }}
+                                            </div>
+                                        @endif
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->image))
                                                 <img src="{{ $data->image }}" alt="Not Found" width="60">
@@ -357,7 +362,12 @@
 
                                     <div class="form-group">
                                         <label for="banner">Banner</label>
-                                        <input type="file" name="banner" style="padding:3px;" id="banner" class="form-control">
+                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="banner" id="banner" type="file">
+                                        @if ($errors->has('banner'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('banner') }}
+                                            </div>
+                                        @endif
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->img_banner))
                                                 <img src="{{ $data->img_banner }}" alt="Not Found" width="60">
