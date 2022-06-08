@@ -9,6 +9,7 @@
         {{-- Header Section --}}
         <section class="content-header">
             <div class="container-fluid">
+
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Free Items</h1>
@@ -30,6 +31,14 @@
         {{-- Add Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Warning: Please check the form carefully for errors!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}

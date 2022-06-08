@@ -363,6 +363,7 @@ class ProductController extends Controller
         $request->validate([
             'product' => 'required',
             'product_icons' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $product = new Product();
@@ -779,6 +780,7 @@ class ProductController extends Controller
         $request->validate([
             'product' => 'required',
             'product_icons' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         $product_id = $request->product_id;

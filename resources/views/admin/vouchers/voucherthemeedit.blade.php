@@ -30,13 +30,22 @@
         {{-- Edit Data Section --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}
                         <div class="card">
                             {{-- Form --}}
-                            <form action="{{ route('voucherthemeupdate') }}"  id="voucherform" method="POST" enctype="multipart/form-data">
-                            {{ @csrf_field() }}
+                            <form action="{{ route('voucherthemeupdate') }}" id="voucherform" method="POST"
+                                enctype="multipart/form-data">
+                                {{ @csrf_field() }}
 
                                 {{-- Card Header --}}
                                 <div class="card-header">
@@ -58,11 +67,15 @@
                                 {{-- Card Body --}}
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <input type="hidden"  name="id" value="{{$voucherthemenameedit->voucher_theme_id }}">
+                                        <input type="hidden" name="id"
+                                            value="{{ $voucherthemenameedit->voucher_theme_id }}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="name"><span class="text-danger">*</span> Voucher Theme Name</label>
-                                        <input class="form-control {{ ($errors->has('name')) ? 'is-invalid' :'' }}" name="name" id="name" value="{{ $voucherthemenameedit->name }}" type="text">
+                                        <label for="name"><span class="text-danger">*</span> Voucher Theme
+                                            Name</label>
+                                        <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                            name="name" id="name" value="{{ $voucherthemenameedit->name }}"
+                                            type="text">
                                         @if ($errors->has('name'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('name') }}
@@ -74,8 +87,9 @@
                                         <input class="form-control p-1" name="image" id="image" type="file">
                                     </div>
                                     <div class="form-group">
-                                        @if(!empty($vouchertheme->image) || $vouchertheme->image != '')
-                                            <img src="{{ asset('public/admin/voucherthemes/'.$vouchertheme->image) }}" width="60">
+                                        @if (!empty($vouchertheme->image) || $vouchertheme->image != '')
+                                            <img src="{{ asset('public/admin/voucherthemes/' . $vouchertheme->image) }}"
+                                                width="60">
                                         @endif
                                     </div>
                                 </div>

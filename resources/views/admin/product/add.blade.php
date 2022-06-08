@@ -34,7 +34,7 @@
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Warning: Please check the form carefully for errors!</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                 @endif
@@ -192,7 +192,15 @@
 
                                             <div class="form-group">
                                                 <label for="image" class="form-label">Image</label>
-                                                <input type="file" name="image" id="image" class="form-control">
+                                                {{-- <input type="file" name="image" id="image" class="form-control"> --}}
+                                                <input
+                                                    class="form-control p-1   {{ $errors->has('image') ? 'is-invalid' : '' }}"
+                                                    name="image" id="image" type="file">
+                                                @if ($errors->has('image'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('image') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                         {{-- end Genral --}}

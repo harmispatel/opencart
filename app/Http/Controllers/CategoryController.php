@@ -277,6 +277,9 @@ class CategoryController extends Controller
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
         ]);
 
         // Insert Category Details
@@ -564,6 +567,8 @@ class CategoryController extends Controller
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $currentURL = public_url();

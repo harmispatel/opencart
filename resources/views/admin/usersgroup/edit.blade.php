@@ -29,13 +29,22 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
                         <div class="card card-primary">
                             {{-- Card Header --}}
                             <div class="card-header d-flex justify-content-between
-                            p-2" style="background: #f6f6f6">
+                            p-2"
+                                style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fas fa-pencil-alt"></i>
                                     Edit Users Group
@@ -44,15 +53,18 @@
                             {{-- End Card Header --}}
 
                             {{-- Form Strat --}}
-                            <form action="{{ route('updateusersgroup') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('updateusersgroup') }}" method="POST"
+                                enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Body --}}
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="usergroupname">User Group Name</label>
                                         <input type="hidden" name="id" value="{{ $usergroup->user_group_id }}">
-                                        <input type="text" name="usergroupName" id="usergroupName" class="form-control {{ ($errors->has('usergroupName')) ? 'is-invalid' : '' }}" value="{{ $usergroup->name }}">
-                                        @if($errors->has('usergroupName'))
+                                        <input type="text" name="usergroupName" id="usergroupName"
+                                            class="form-control {{ $errors->has('usergroupName') ? 'is-invalid' : '' }}"
+                                            value="{{ $usergroup->name }}">
+                                        @if ($errors->has('usergroupName'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('usergroupName') }}
                                             </div>
@@ -64,8 +76,10 @@
                                 {{-- Start Card Footer --}}
                                 <div class="card-footer">
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"> Update</i></button>
-                                        <a href="{{ route('usersgroup') }}" class="btn btn-danger"><i class="fa fa-arrow-left"> Back</i></a>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save">
+                                                Update</i></button>
+                                        <a href="{{ route('usersgroup') }}" class="btn btn-danger"><i
+                                                class="fa fa-arrow-left"> Back</i></a>
                                     </div>
                                 </div>
                                 {{-- End Card Footer --}}
@@ -92,6 +106,4 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script type="text/javascript">
-
-</script>
+<script type="text/javascript"></script>

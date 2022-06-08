@@ -34,7 +34,7 @@
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Warning: Please check the form carefully for errors!</strong>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                 @endif
@@ -113,8 +113,9 @@
                                             <div class="mb-3">
                                                 <label for="product" class="form-label"><span
                                                         class="text-danger">*</span>Product Name</label>
-                                                <input type="text" class="form-control {{ $errors->has('product') ? 'is-invalid' : '' }}" name="product" id="product"
-                                                    placeholder="Product Name"
+                                                <input type="text"
+                                                    class="form-control {{ $errors->has('product') ? 'is-invalid' : '' }}"
+                                                    name="product" id="product" placeholder="Product Name"
                                                     value="{{ isset($productname) ? $productname : '' }}">
                                                 @if ($errors->has('product'))
                                                     <div class="invalid-feedback">
@@ -131,10 +132,13 @@
                                                     $array = explode(',', $pro_icon);
 
                                                 @endphp
-                                                <select name="product_icons[]" id="product_icon" class="form-control {{ $errors->has('product_icons') ? 'is-invalid' : '' }}"
+                                                <select name="product_icons[]" id="product_icon"
+                                                    class="form-control {{ $errors->has('product_icons') ? 'is-invalid' : '' }}"
                                                     multiple>
                                                     @foreach ($result['product_icon'] as $productIcon)
-                                                        <option value="{{ $productIcon->id }}" {{ in_array($productIcon->id, $array) == $productIcon->id ? 'selected' : '' }}>{{ $productIcon->icon_name }}</option>
+                                                        <option value="{{ $productIcon->id }}"
+                                                            {{ in_array($productIcon->id, $array) == $productIcon->id ? 'selected' : '' }}>
+                                                            {{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>
                                                 @if ($errors->has('product_icons'))
@@ -200,8 +204,7 @@
                                                 @php
                                                     $productdescription = html_entity_decode($product->description);
                                                 @endphp
-                                                <textarea class="form-control" name="description" id="summernote"
-                                                    style="height: 200px">{{ isset($productdescription) ? $productdescription : '' }}</textarea>
+                                                <textarea class="form-control" name="description" id="summernote" style="height: 200px">{{ isset($productdescription) ? $productdescription : '' }}</textarea>
                                             </div>
                                             <hr>
                                             <div class="class=mb-3">
@@ -277,7 +280,14 @@
 
                                             <div class="form-group">
                                                 <label for="image" class="form-label">Image</label>
-                                                <input type="file" name="image" id="image" class="form-control">
+                                                <input
+                                                    class="form-control p-1   {{ $errors->has('image') ? 'is-invalid' : '' }}"
+                                                    name="image" id="image" type="file">
+                                                @if ($errors->has('image'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('image') }}
+                                                    </div>
+                                                @endif
                                                 @php
                                                     $p_image = isset($product->image) ? $product->image : '';
                                                 @endphp
@@ -348,7 +358,8 @@
                                                     <option
                                                         value="{{ isset($product->status) ? $product->status : '' }}"
                                                         style="display: none">
-                                                        {{ isset($product->status) ? $product->status : '' }}</option>
+                                                        {{ isset($product->status) ? $product->status : '' }}
+                                                    </option>
                                                     <option value="1">Enabled</option>
                                                     <option value="0">Deabled</option>
                                                 </select>
