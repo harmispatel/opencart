@@ -24,8 +24,24 @@
         <section class="content-header">
             <div class="container-fluid">
                 @if(Session::has('success'))
-                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                        {{ Session::get('success') }}
+                    <div class="alert alert-success d-flex del-alert alert-dismissible" id="alert" role="alert">
+                        <i class="fa fa-check-circle mt-1"></i>
+                        <div class="ml-2">
+                            {{ Session::get('success') }}
+                        </div>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @if($errors->any())
+                    <div class="alert alert-danger d-flex  del-alert alert-dismissible" id="alert" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                        <div class="ml-2">
+                            Errors : Please Check Form Carefully !!
+                        </div>
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -156,7 +172,12 @@
                                                                             <label>Logo</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="file" name="polianna_main_logo" class="form-control p-1">
+                                                                            <input type="file" name="polianna_main_logo" class="form-control p-1 {{ ($errors->has('polianna_main_logo')) ? 'is-invalid' : '' }}">
+                                                                            @if ($errors->has('polianna_main_logo'))
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $errors->first('polianna_main_logo') }}
+                                                                                </div>
+                                                                            @endif
                                                                             @if (!empty($template_settings['polianna_main_logo']))
                                                                                 <img src="{{ $template_settings['polianna_main_logo'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
                                                                             @else
@@ -233,7 +254,12 @@
                                                                         </th>
                                                                         <td>
                                                                             <label>Image</label>
-                                                                            <input type="file" name="polianna_slider_1" class="form-control p-1">
+                                                                            <input type="file" name="polianna_slider_1" class="form-control p-1 {{ ($errors->has('polianna_slider_1')) ? 'is-invalid' : '' }}">
+                                                                            @if ($errors->has('polianna_slider_1'))
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $errors->first('polianna_slider_1') }}
+                                                                                </div>
+                                                                            @endif
                                                                             @if (!empty($template_settings['polianna_slider_1']))
                                                                                 <img src="{{ $template_settings['polianna_slider_1'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
                                                                             @else
@@ -252,7 +278,12 @@
                                                                             <label>Slider 2</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="file" name="polianna_slider_2" class="form-control p-1">
+                                                                            <input type="file" name="polianna_slider_2" class="form-control p-1 {{ ($errors->has('polianna_slider_2')) ? 'is-invalid' : '' }}">
+                                                                            @if ($errors->has('polianna_slider_2'))
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $errors->first('polianna_slider_2') }}
+                                                                                </div>
+                                                                            @endif
                                                                             @if (!empty($template_settings['polianna_slider_2']))
                                                                                 <img src="{{ $template_settings['polianna_slider_2'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
                                                                             @else
@@ -272,7 +303,12 @@
                                                                         </th>
                                                                         <td>
                                                                             <label>Image</label>
-                                                                            <input type="file" name="polianna_slider_3" class="form-control p-1">
+                                                                            <input type="file" name="polianna_slider_3" class="form-control p-1 {{ ($errors->has('polianna_slider_3')) ? 'is-invalid' : '' }}">
+                                                                            @if ($errors->has('polianna_slider_3'))
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $errors->first('polianna_slider_3') }}
+                                                                                </div>
+                                                                            @endif
                                                                             @if (!empty($template_settings['polianna_slider_3']))
                                                                                 <img src="{{ $template_settings['polianna_slider_3'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
                                                                             @else
@@ -352,7 +388,12 @@
                                                                             <hr> --}}
                                                                             <div class="form-group">
                                                                                 <label>Open Banner</label>
-                                                                                <input type="file" name="polianna_open_banner" class="form-control p-1">
+                                                                                <input type="file" name="polianna_open_banner" class="form-control p-1 {{ ($errors->has('polianna_open_banner')) ? 'is-invalid' : '' }}">
+                                                                                @if ($errors->has('polianna_open_banner'))
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $errors->first('polianna_open_banner') }}
+                                                                                    </div>
+                                                                                @endif
                                                                                 @if (!empty($template_settings['polianna_open_banner']))
                                                                                     <img src="{{ $template_settings['polianna_open_banner'] }}" width="80" class="mt-2" style="border: 1px solid black;">
                                                                                 @else
@@ -362,7 +403,12 @@
                                                                             <hr>
                                                                             <div class="form-group">
                                                                                 <label>Close Banner</label>
-                                                                                <input type="file" name="polianna_close_banner" class="form-control p-1">
+                                                                                <input type="file" name="polianna_close_banner" class="form-control p-1 {{ ($errors->has('polianna_close_banner')) ? 'is-invalid' : '' }}">
+                                                                                @if ($errors->has('polianna_close_banner'))
+                                                                                    <div class="invalid-feedback">
+                                                                                        {{ $errors->first('polianna_close_banner') }}
+                                                                                    </div>
+                                                                                @endif
                                                                                 @if (!empty($template_settings['polianna_close_banner']))
                                                                                     <img src="{{ $template_settings['polianna_close_banner'] }}" width="80" class="mt-2" style="border: 1px solid black;">
                                                                                 @else
@@ -475,7 +521,12 @@
                                                                             <label>Banner Image</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="file" name="polianna_banner_image" class="form-control p-1">
+                                                                            <input type="file" name="polianna_banner_image" class="form-control p-1 {{ ($errors->has('polianna_banner_image')) ? 'is-invalid' : '' }}">
+                                                                            @if ($errors->has('polianna_banner_image'))
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $errors->first('polianna_banner_image') }}
+                                                                                </div>
+                                                                            @endif
                                                                             @if (!empty($template_settings['polianna_banner_image']))
                                                                                 <img src="{{ $template_settings['polianna_banner_image'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
                                                                             @else
@@ -551,7 +602,12 @@
                                                                             <label>Footer Logo</label>
                                                                         </th>
                                                                         <td>
-                                                                            <input type="file" name="polianna_footer_logo" class="form-control p-1">
+                                                                            <input type="file" name="polianna_footer_logo" class="form-control p-1 {{ ($errors->has('polianna_footer_logo')) ? 'is-invalid' : '' }}">
+                                                                            @if ($errors->has('polianna_footer_logo'))
+                                                                                <div class="invalid-feedback">
+                                                                                    {{ $errors->first('polianna_footer_logo') }}
+                                                                                </div>
+                                                                            @endif
                                                                             @if (!empty($template_settings['polianna_footer_logo']))
                                                                                 <img src="{{ $template_settings['polianna_footer_logo'] }}" width="100" height="100" class="mt-2" style="border: 1px solid black;">
                                                                             @else

@@ -97,12 +97,6 @@
         </div>
     </div>
 
-</body>
-</html>
-
-
-
-
 <script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
@@ -127,3 +121,7 @@
 <!-- Datatable -->
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+</body>
+</html>
+

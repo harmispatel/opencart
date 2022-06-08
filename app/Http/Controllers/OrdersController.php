@@ -457,6 +457,10 @@ class OrdersController extends Controller
         $orderhisins->date_added = date("Y-m-d h:i:s");
         $orderhisins->save();
 
+        $order = Orders::find($request->order_id);
+        $order->order_status_id = $request->order_status_id;
+        $order->update();
+
         $html = '';
 
          // Get Total Order History By Order ID

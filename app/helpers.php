@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
 use App\Models\Option;
+use App\Models\Orders;
 use App\Models\Region;
 use App\Models\Settings;
 use App\Models\Store;
@@ -29,31 +30,31 @@ function user_details()
     return $user_dt;
 }
 
-function full_copy($source, $target)
-{
-    if ( is_dir( $source ) ) {
-            $d = dir( $source );
-            while ( FALSE !== ( $entry = $d->read() ) )
-            {
-                if ( $entry == '.' || $entry == '..' )
-                {
-                        continue;
-                }
-                $Entry = $source . '/' . $entry;
-                if ( is_dir( $Entry ) )
-                {
-                    @mkdir( $Entry );
-                    // $this->full_copy( $Entry, $target . '/' . $entry );
-                    full_copy( $Entry, $target . '/' . $entry );
-                    continue;
-                }
-                copy( $Entry, $target . '/' . $entry );
-            }
-            $d->close();
-    }else {
-        copy( $source, $target );
-    }
-}
+// function full_copy($source, $target)
+// {
+//     if ( is_dir( $source ) ) {
+//             $d = dir( $source );
+//             while ( FALSE !== ( $entry = $d->read() ) )
+//             {
+//                 if ( $entry == '.' || $entry == '..' )
+//                 {
+//                         continue;
+//                 }
+//                 $Entry = $source . '/' . $entry;
+//                 if ( is_dir( $Entry ) )
+//                 {
+//                     @mkdir( $Entry );
+//                     // $this->full_copy( $Entry, $target . '/' . $entry );
+//                     full_copy( $Entry, $target . '/' . $entry );
+//                     continue;
+//                 }
+//                 copy( $Entry, $target . '/' . $entry );
+//             }
+//             $d->close();
+//     }else {
+//         copy( $source, $target );
+//     }
+// }
 
 // Get Total Ip Count
 function gettotalip($ip)
@@ -260,11 +261,1017 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.116/opencart/';
+    return 'http://192.168.1.73/ECOMM/';
 }
 
 
+function getTopTenSales($range)
+{
+    $current_store_id = currentStoreId();
 
+    $user_details = user_details();
+
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+    $user_shop_id = $user_details['user_shop'];
+
+    if($user_group_id == 1)
+    {
+        if($current_store_id == 0)
+        {
+            if($range == 'alltime')
+            {
+                $query = Orders::where('order_status_id','=',15)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'day')
+            {
+                $startDate = date('Y-m-d 00:00:00');
+				$endDate = date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'yesterday')
+            {
+                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'week')
+            {
+				$monday =  strtotime("monday this week");
+				$sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+				$this_week_sd = date("Y-m-d",$monday);
+				$this_week_ed = date("Y-m-d",$sunday);
+
+				$startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+				$endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'month')
+            {
+				$startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+				$lastDate_this_month  = date('Y-m-t 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'year')
+            {
+				$this_year_ini = new DateTime('first day of January this year');
+				$this_year_end = new DateTime('last day of December this year');
+
+				$this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+				$this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'lastweek')
+            {
+				$previous_week = strtotime("-1 week +1 day");
+
+				$start_week = strtotime("last monday midnight",$previous_week);
+				$end_week = strtotime("next sunday",$start_week);
+
+				$lst_monday = date("Y-m-d",$start_week);
+				$lst_sunday = date("Y-m-d",$end_week);
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'lastmonth')
+            {
+				$month_ini = new DateTime("first day of last month");
+				$month_end = new DateTime("last day of last month");
+				$lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+				$lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'lastyear')
+            {
+				$year_ini = new DateTime('first day of January last year');
+				$year_end = new DateTime('last day of December last year');
+
+				$lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+				$lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+        }
+        else
+        {
+            if($range == 'alltime')
+            {
+                $query = Orders::where('order_status_id','=',15)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'day')
+            {
+                $startDate = date('Y-m-d 00:00:00');
+				$endDate = date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'yesterday')
+            {
+                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'week')
+            {
+				$monday =  strtotime("monday this week");
+				$sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+				$this_week_sd = date("Y-m-d",$monday);
+				$this_week_ed = date("Y-m-d",$sunday);
+
+				$startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+				$endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'month')
+            {
+				$startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+				$lastDate_this_month  = date('Y-m-t 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'year')
+            {
+				$this_year_ini = new DateTime('first day of January this year');
+				$this_year_end = new DateTime('last day of December this year');
+
+				$this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+				$this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'lastweek')
+            {
+				$previous_week = strtotime("-1 week +1 day");
+
+				$start_week = strtotime("last monday midnight",$previous_week);
+				$end_week = strtotime("next sunday",$start_week);
+
+				$lst_monday = date("Y-m-d",$start_week);
+				$lst_sunday = date("Y-m-d",$end_week);
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'lastmonth')
+            {
+				$month_ini = new DateTime("first day of last month");
+				$month_end = new DateTime("last day of last month");
+				$lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+				$lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'lastyear')
+            {
+				$year_ini = new DateTime('first day of January last year');
+				$year_end = new DateTime('last day of December last year');
+
+				$lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+				$lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->where('store_id',$current_store_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+        }
+    }
+    else
+    {
+        if($range == 'alltime')
+        {
+            $query = Orders::where('order_status_id','=',15)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'day')
+        {
+            $startDate = date('Y-m-d 00:00:00');
+            $endDate = date('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'yesterday')
+        {
+            $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+            $endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'week')
+        {
+            $monday =  strtotime("monday this week");
+            $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+            $this_week_sd = date("Y-m-d",$monday);
+            $this_week_ed = date("Y-m-d",$sunday);
+
+            $startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+            $endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'month')
+        {
+            $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+            $lastDate_this_month  = date('Y-m-t 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'year')
+        {
+            $this_year_ini = new DateTime('first day of January this year');
+            $this_year_end = new DateTime('last day of December this year');
+
+            $this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+            $this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'lastweek')
+        {
+            $previous_week = strtotime("-1 week +1 day");
+
+            $start_week = strtotime("last monday midnight",$previous_week);
+            $end_week = strtotime("next sunday",$start_week);
+
+            $lst_monday = date("Y-m-d",$start_week);
+            $lst_sunday = date("Y-m-d",$end_week);
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'lastmonth')
+        {
+            $month_ini = new DateTime("first day of last month");
+            $month_end = new DateTime("last day of last month");
+            $lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+            $lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'lastyear')
+        {
+            $year_ini = new DateTime('first day of January last year');
+            $year_end = new DateTime('last day of December last year');
+
+            $lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+            $lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->where('store_id',$user_shop_id)->selectRaw("oc_order.store_id,oc_order.store_name AS store_name, SUM(CASE WHEN order_status_id = '15' THEN total ELSE null END) AS total_sale, count(*) AS order_count, count(DISTINCT customer_id) AS customer_count, SUM(CASE WHEN payment_code = 'cod' THEN total ELSE null END) AS cod_total, SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE null END) AS card_total")->groupBy('store_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+    }
+
+
+}
+
+function getTop10Customers($range)
+{
+    $current_store_id = currentStoreId();
+
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+    $user_shop_id = $user_details['user_shop'];
+
+    if($user_group_id == 1)
+    {
+        if($current_store_id == 0)
+        {
+            if($range == 'alltime')
+            {
+                $query = Orders::where('order_status_id','=',15)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'day')
+            {
+                $startDate = date('Y-m-d 00:00:00');
+				$endDate = date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'yesterday')
+            {
+                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'week')
+            {
+                $monday = strtotime("monday this week");
+
+				$sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+				$this_week_sd = date("Y-m-d",$monday);
+				$this_week_ed = date("Y-m-d",$sunday);
+
+				$startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+				$endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<',$endDate)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'month')
+            {
+                $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+				$lastDate_this_month  = date('Y-m-t 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'year')
+            {
+                $this_year_ini = new DateTime('first day of January this year');
+				$this_year_end = new DateTime('last day of December this year');
+
+				$this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+				$this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'lastweek')
+            {
+                $previous_week = strtotime("-1 week +1 day");
+
+				$start_week = strtotime("last monday midnight",$previous_week);
+				$end_week = strtotime("next sunday",$start_week);
+
+				$lst_monday = date("Y-m-d 00:00:00",$start_week);
+				$lst_sunday = date("Y-m-d 23:59:59",$end_week);
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'lastmonth')
+            {
+                $month_ini = new DateTime("first day of last month");
+				$month_end = new DateTime("last day of last month");
+				$lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+				$lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'lastyear')
+            {
+                $year_ini = new DateTime('first day of January last year');
+				$year_end = new DateTime('last day of December last year');
+
+				$lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+				$lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+        }
+        else
+        {
+            if($range == 'alltime')
+            {
+                $query = Orders::where('order_status_id','=',15)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'day')
+            {
+                $startDate = date('Y-m-d 00:00:00');
+				$endDate = date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+                return $query;
+            }
+
+            elseif($range == 'yesterday')
+            {
+                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'week')
+            {
+                $monday = strtotime("monday this week");
+
+				$sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+				$this_week_sd = date("Y-m-d",$monday);
+				$this_week_ed = date("Y-m-d",$sunday);
+
+				$startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+				$endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<',$endDate)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'month')
+            {
+                $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+				$lastDate_this_month  = date('Y-m-t 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'year')
+            {
+                $this_year_ini = new DateTime('first day of January this year');
+				$this_year_end = new DateTime('last day of December this year');
+
+				$this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+				$this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'lastweek')
+            {
+                $previous_week = strtotime("-1 week +1 day");
+
+				$start_week = strtotime("last monday midnight",$previous_week);
+				$end_week = strtotime("next sunday",$start_week);
+
+				$lst_monday = date("Y-m-d 00:00:00",$start_week);
+				$lst_sunday = date("Y-m-d 23:59:59",$end_week);
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'lastmonth')
+            {
+                $month_ini = new DateTime("first day of last month");
+				$month_end = new DateTime("last day of last month");
+				$lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+				$lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+
+            elseif($range == 'lastyear')
+            {
+                $year_ini = new DateTime('first day of January last year');
+				$year_end = new DateTime('last day of December last year');
+
+				$lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+				$lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->where('store_id',$current_store_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+                return $query;
+            }
+        }
+    }
+    else
+    {
+        if($range == 'alltime')
+        {
+            $query = Orders::where('order_status_id','=',15)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'day')
+        {
+            $startDate = date('Y-m-d 00:00:00');
+            $endDate = date('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+
+            return $query;
+        }
+
+        elseif($range == 'yesterday')
+        {
+            $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+            $endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'week')
+        {
+            $monday = strtotime("monday this week");
+
+            $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+            $this_week_sd = date("Y-m-d",$monday);
+            $this_week_ed = date("Y-m-d",$sunday);
+
+            $startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+            $endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('date_added','<',$endDate)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'month')
+        {
+            $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+            $lastDate_this_month  = date('Y-m-t 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'year')
+        {
+            $this_year_ini = new DateTime('first day of January this year');
+            $this_year_end = new DateTime('last day of December this year');
+
+            $this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+            $this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'lastweek')
+        {
+            $previous_week = strtotime("-1 week +1 day");
+
+            $start_week = strtotime("last monday midnight",$previous_week);
+            $end_week = strtotime("next sunday",$start_week);
+
+            $lst_monday = date("Y-m-d 00:00:00",$start_week);
+            $lst_sunday = date("Y-m-d 23:59:59",$end_week);
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'lastmonth')
+        {
+            $month_ini = new DateTime("first day of last month");
+            $month_end = new DateTime("last day of last month");
+            $lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+            $lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+
+        elseif($range == 'lastyear')
+        {
+            $year_ini = new DateTime('first day of January last year');
+            $year_end = new DateTime('last day of December last year');
+
+            $lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+            $lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->where('store_id',$user_shop_id)->selectRaw("count(DISTINCT customer_id) AS CustomerCount, customer_id,SUM(CASE WHEN order_status_id = '15' THEN total ELSE 0 END) AS total_sale,SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cod_total,SUM(CASE WHEN payment_code != 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS card_total,firstname,lastname")->groupBy('customer_id')->orderBy('total_sale','DESC')->limit(10)->get();
+            return $query;
+        }
+    }
+
+}
+
+
+function getGeneralTotals($range)
+{
+    $current_store_id = currentStoreId();
+
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+    $user_shop_id = $user_details['user_shop'];
+
+    if($user_group_id == 1)
+    {
+        if($current_store_id == 0)
+        {
+            if($range == 'alltime')
+            {
+                $query = Orders::selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'day')
+            {
+                $startDate = date('Y-m-d 00:00:00');
+				$endDate = date('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$startDate)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'yesterday')
+            {
+                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'week')
+            {
+                $monday = $monday1 = strtotime("monday this week");
+				$sunday = strtotime(date("Y-m-d",$monday1)." +6 days");
+				$this_week_sd = date("Y-m-d",$monday1);
+				$this_week_ed = date("Y-m-d",$sunday);
+
+				$startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+				$endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+                $query = Orders::where('date_added','>=',$startDate)->where('date_added','<',$endDate)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'month')
+            {
+                $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+				$lastDate_this_month  = date('Y-m-t 23:59:59');
+
+                $query = Orders::where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'year')
+            {
+                $this_year_ini = new DateTime('first day of January this year');
+				$this_year_end = new DateTime('last day of December this year');
+
+				$this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+				$this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'lastweek')
+            {
+                $previous_week = strtotime("-1 week +1 day");
+
+				$start_week = strtotime("last monday midnight",$previous_week);
+				$end_week = strtotime("next sunday",$start_week);
+
+				$lst_monday = date("Y-m-d",$start_week);
+				$lst_sunday = date("Y-m-d",$end_week);
+
+                $query = Orders::where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'lastmonth')
+            {
+                $month_ini = new DateTime("first day of last month");
+				$month_end = new DateTime("last day of last month");
+				$lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+				$lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'lastyear')
+            {
+                $year_ini = new DateTime('first day of January last year');
+				$year_end = new DateTime('last day of December last year');
+
+				$lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+				$lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+        }
+        else
+        {
+            if($range == 'alltime')
+            {
+                $query = Orders::where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'day')
+            {
+                $startDate = date('Y-m-d 00:00:00');
+				$endDate = date('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$startDate)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'yesterday')
+            {
+                $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+				$endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'week')
+            {
+                $monday = $monday1 = strtotime("monday this week");
+				$sunday = strtotime(date("Y-m-d",$monday1)." +6 days");
+				$this_week_sd = date("Y-m-d",$monday1);
+				$this_week_ed = date("Y-m-d",$sunday);
+
+				$startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+				$endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+                $query = Orders::where('date_added','>=',$startDate)->where('date_added','<',$endDate)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'month')
+            {
+                $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+				$lastDate_this_month  = date('Y-m-t 23:59:59');
+
+                $query = Orders::where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'year')
+            {
+                $this_year_ini = new DateTime('first day of January this year');
+				$this_year_end = new DateTime('last day of December this year');
+
+				$this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+				$this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'lastweek')
+            {
+                $previous_week = strtotime("-1 week +1 day");
+
+				$start_week = strtotime("last monday midnight",$previous_week);
+				$end_week = strtotime("next sunday",$start_week);
+
+				$lst_monday = date("Y-m-d",$start_week);
+				$lst_sunday = date("Y-m-d",$end_week);
+
+                $query = Orders::where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'lastmonth')
+            {
+                $month_ini = new DateTime("first day of last month");
+				$month_end = new DateTime("last day of last month");
+				$lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+				$lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+
+            if($range == 'lastyear')
+            {
+                $year_ini = new DateTime('first day of January last year');
+				$year_end = new DateTime('last day of December last year');
+
+				$lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+				$lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+                $query = Orders::where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->where('store_id',$current_store_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+                return $query;
+            }
+        }
+    }
+    else
+    {
+        if($range == 'alltime')
+        {
+            $query = Orders::where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'day')
+        {
+            $startDate = date('Y-m-d 00:00:00');
+            $endDate = date('Y-m-d 23:59:59');
+
+            $query = Orders::where('date_added','>=',$startDate)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'yesterday')
+        {
+            $startDate = date('Y-m-d 00:00:00',strtotime("-1 days")); //date('Y-m-d 00:00:00');
+            $endDate   = date('Y-m-d 23:59:59',strtotime("-1 days")); //date('Y-m-d 23:59:59');
+
+            $query = Orders::where('date_added','>=',$startDate)->where('date_added','<=',$endDate)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'week')
+        {
+            $monday = $monday1 = strtotime("monday this week");
+            $sunday = strtotime(date("Y-m-d",$monday1)." +6 days");
+            $this_week_sd = date("Y-m-d",$monday1);
+            $this_week_ed = date("Y-m-d",$sunday);
+
+            $startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+            $endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+            $query = Orders::where('date_added','>=',$startDate)->where('date_added','<',$endDate)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'month')
+        {
+            $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+            $lastDate_this_month  = date('Y-m-t 23:59:59');
+
+            $query = Orders::where('date_added','>=',$startDate_this_month)->where('date_added','<=',$lastDate_this_month)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'year')
+        {
+            $this_year_ini = new DateTime('first day of January this year');
+            $this_year_end = new DateTime('last day of December this year');
+
+            $this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+            $this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('date_added','>=',$this_year_strt)->where('date_added','<=',$this_year_end)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'lastweek')
+        {
+            $previous_week = strtotime("-1 week +1 day");
+
+            $start_week = strtotime("last monday midnight",$previous_week);
+            $end_week = strtotime("next sunday",$start_week);
+
+            $lst_monday = date("Y-m-d",$start_week);
+            $lst_sunday = date("Y-m-d",$end_week);
+
+            $query = Orders::where('date_added','>=',$lst_monday)->where('date_added','<=',$lst_sunday)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'lastmonth')
+        {
+            $month_ini = new DateTime("first day of last month");
+            $month_end = new DateTime("last day of last month");
+            $lst_month_strt = $month_ini->format('Y-m-d 00:00:00');
+            $lst_month_end = $month_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('date_added','>=',$lst_month_strt)->where('date_added','<=',$lst_month_end)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+
+        if($range == 'lastyear')
+        {
+            $year_ini = new DateTime('first day of January last year');
+            $year_end = new DateTime('last day of December last year');
+
+            $lst_year_strt = $year_ini->format('Y-m-d 00:00:00');
+            $lst_year_end = $year_end->format('Y-m-d 23:59:59');
+
+            $query = Orders::where('date_added','>=',$lst_year_strt)->where('date_added','<=',$lst_year_end)->where('store_id',$user_shop_id)->selectRaw("SUM(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN total ELSE 0 END) AS cash_total, COUNT(CASE WHEN payment_code = 'cod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS cash_count, SUM(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN total ELSE 0 END) AS worldpayhp_total, COUNT(CASE WHEN payment_code = 'worldpayhp' AND order_status_id = '15' THEN order_id ELSE NULL END) AS worldpayhp_count, SUM(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN total ELSE 0 END) AS pp_express_total, COUNT(CASE WHEN payment_code = 'pp_express' AND order_status_id = '15' THEN order_id ELSE NULL END) AS pp_express_count, SUM(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN total ELSE 0 END) AS ccod_total, COUNT(CASE WHEN payment_code = 'ccod' AND order_status_id = '15' THEN order_id ELSE NULL END) AS ccod_count, SUM(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN total ELSE 0 END) AS mfb_total, COUNT(CASE WHEN payment_code = 'myfoodbasketpayments_gateway' AND order_status_id = '15' THEN order_id ELSE NULL END) AS mfb_count, SUM(CASE WHEN order_status_id = '7' THEN total ELSE 0 END) AS rejct_total, COUNT(CASE WHEN order_status_id = '7' THEN order_id ELSE NULL END) AS rejct_count")->first();
+
+            return $query;
+        }
+    }
+}
+
+
+function checkOrderStatus($order_id)
+{
+    $order_dt = Orders::where('order_id',$order_id)->first();
+    $status_id = isset($order_dt->order_status_id) ? $order_dt->order_status_id : '';
+    return $status_id;
+}
 
 
 // Get Theme ID & Store ID

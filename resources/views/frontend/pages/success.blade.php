@@ -44,6 +44,12 @@
     }
     // End Get Customer Cart
 
+    // Order ID
+    $order_id = session()->get('last_order_id');
+
+    // Get Order Status
+    $order_status = checkOrderStatus($order_id);
+
 @endphp
 
 <!doctype html>
@@ -56,6 +62,7 @@
 </head>
 
 <body>
+    <input type="hidden" name="order_status" id="order_status" value="{{ $order_status }}">
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
         href="#slide"><img class="img-fluid"
             src="{{ asset('public/assets/theme5/img/logo/black-logo.svg') }}" /></a>
@@ -104,21 +111,58 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <h1>THANK YOU FOR YOUR ORDER</h1>
+
+                            {{-- Processing --}}
+                            @if ($order_status == 2)
+                                <p>Please wait while we confirm your order.</p>
+                            @endif
+
+                            {{-- Rejected --}}
+                            @if ($order_status == 7 || $order_status == 11 || $order_status == 1 || $order_status == 5)
+                                <h4>Order Rejected Because : </h4>
+                            @endif
                             <hr>
-                            <div class="row">
-                                <div class="col-md-6 m-auto">
-                                    <table class="table table-striped">
-                                        <tr>
-                                            <th>YOUR ORDER ID</th>
-                                            <th>:</th>
-                                            <td>12345678910</td>
-                                        </tr>
-                                    </table>
+
+                            {{-- Processing --}}
+                            @if ($order_status == 2)
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <img src="{{ get_css_url().'public/admin/gif/gif3.gif' }}" alt="">
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
+
+                            {{-- Accepted --}}
+                            @if($order_status == 15)
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <h3 class="text-success">
+                                            <i class="fa fa-check-circle"></i> ORDER ACCEPTED.
+                                        </h3>
+                                        <p>We have received your order, and start preparing your order.</p>
+                                        <p>For more information about your order you can call us on {{ $store_setting['config_telephone'] }}</p>
+                                        <p>Your Order No. is : {{ $order_id }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Rejected --}}
+                            @if($order_status == 7 || $order_status == 11 || $order_status == 1 || $order_status == 5)
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <h3 class="text-danger">
+                                            <i class="fa fa-times-circle"></i> ORDER REJECTED.
+                                        </h3>
+                                        <p>We are Sorry but your order has been rejected by the restaurant. Your Order will not be delivered!</p>
+                                        <p>For more information about your order you can call us on {{ $store_setting['config_telephone'] }}</p>
+                                        <p>Your Order No. is : {{ $order_id }}</p>
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <a href="{{ route('home') }}">Return to Home</a>
+                                    {{-- <a href="{{ route('home') }}">Return to Home</a> --}}
                                 </div>
                             </div>
                         </div>
@@ -127,7 +171,6 @@
             </div>
     </section>
     <!-- End Success Section -->
-
 
     <!-- Footer -->
     @if (!empty($theme_id) || $theme_id != '')
@@ -142,17 +185,34 @@
     @include('frontend.include.script')
     {{-- End JS --}}
 
+    {{-- CUSTOM SCRIPT --}}
+    <script type="text/javascript">
 
-    <!-- Custom JS -->
-    <script type="text/javascript" >
-        function preventBack()
+        var order_status = $('#order_status').val();
+
+        if(order_status == 2)
         {
-            window.history.forward();
+            setInterval(() => {
+                $.ajax({
+                    type: "post",
+                    url: "{{ url('checkorderstatus') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if(response.success == 1)
+                        {
+                            // clearInterval();
+                            location.reload();
+                        }
+                    }
+                });
+            }, 5000);
         }
-        setTimeout("preventBack()", 0);
-        window.onunload=function(){null};
-     </script>
-    <!-- End Custom JS -->
+
+    </script>
+    {{-- END CUSTOM SCRIPT --}}
 
 
 </body>

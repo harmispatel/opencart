@@ -76,6 +76,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Dashboard
     Route::get('dashboard', [HomeController::class, 'adminHome'])->name('dashboard');
     Route::post('getSalesReport', [HomeController::class, 'getSalesReport'])->name('getSalesReport');
+    Route::post('getTopTenCustomer', [HomeController::class, 'getTopTenCustomer'])->name('getTopTenCustomer');
+    Route::post('getGeneralTotal', [HomeController::class, 'getGeneralTotal'])->name('getGeneralTotal');
     Route::post('setStore', [HomeController::class, 'setStore'])->name('setStore');
 
 
@@ -446,6 +448,7 @@ Route::post('orderreviwe',[MemberController::class , 'orderreviwe'])->name('orde
 // Order
 Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
 Route::post('customerdeliveryaddress', [CustomerOrder::class, 'customerdeliveryaddress'])->name('customerdeliveryaddress');
+Route::post('checkorderstatus', [CustomerOrder::class, 'checkorderstatus'])->name('checkorderstatus');
 
 // customer
 Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
