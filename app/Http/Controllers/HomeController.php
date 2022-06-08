@@ -169,14 +169,14 @@ class HomeController extends Controller
 
         $top_10_customers = getTop10Customers($range);
 
+        $html .= '<table class="table">';
+        $html .= '<thead>';
+        $html .= '<tr><th>Customer</th><th>Total Sales</th><th>Total Cash Order Amount</th><th>Total Card Order Amount</th></tr>';
+        $html .= '</thead>';
+        $html .= '<tbody>';
+
         if(count($top_10_customers) > 0)
         {
-            $html .= '<table class="table">';
-            $html .= '<thead>';
-            $html .= '<tr><th>Customer</th><th>Total Sales</th><th>Total Cash Order Amount</th><th>Total Card Order Amount</th></tr>';
-            $html .= '</thead>';
-            $html .= '<tbody>';
-
             foreach($top_10_customers as $store)
             {
                 $total_sale = isset($store->total_sale) ? $store->total_sale : 0;
@@ -184,7 +184,8 @@ class HomeController extends Controller
                 $card_total = isset($store->card_total) ? $store->card_total : 0;
                 $cust_name = $store->firstname.' '.$store->lastname;
 
-                if($store->customer_id == 0)
+
+                if($store->customer_id == '0')
                 {
                     $cust_name = "Guest User's";
                 }
@@ -197,24 +198,82 @@ class HomeController extends Controller
                 $html .= '</tr>';
 
             }
+        }
+        else
+        {
+            $html .= '<tr>';
+            $html .= '<td colspan="4" class="text-center">Customer Not Found !</td>';
+            $html .= '</tr>';
+        }
 
-            $html .= '</tbody>';
+        $html .= '</tbody>';
+        $html .= '</table>';
+
+        return response()->json([
+            'success' => 1,
+            'html'=>$html,
+        ]);
+
+     }
+
+     function getGeneralTotal(Request $request)
+     {
+        $range = 'year';
+        $html = '';
+
+        if(isset($request->range))
+        {
+			$range = $request->range;
+		}
+
+        $general_totals = getGeneralTotals($range);
+
+        if(!empty($general_totals))
+        {
+            $ttl_qty = $general_totals['cash_count'] + $general_totals['pp_express_count'] + $general_totals['worldpayhp_count'] +$general_totals['mfb_count'] + $general_totals['ccod_count'];
+
+            $ttl_amnt = $general_totals['cash_total'] + $general_totals['pp_express_total'] + $general_totals['worldpayhp_total'] +$general_totals['mfb_total'] + $general_totals['ccod_total'];
+
+            $html .= '<table class="table">';
+            $html .= '<tr><td><b>Cash Total</b></td><td>'.$general_totals['cash_count'].'</td><td>£ '.number_format($general_totals['cash_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Paypal Total</b></td><td>'.$general_totals['pp_express_count'].'</td><td>£ '.number_format($general_totals['pp_express_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Worldpay Total</b></td><td>'.$general_totals['worldpayhp_count'].'</td><td>£ '.number_format($general_totals['worldpayhp_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>MFB Pay Total</b></td><td>'.$general_totals['mfb_count'].'</td><td>£ '.number_format($general_totals['mfb_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Card on Delivery</b></td><td>'.$general_totals['ccod_count'].'</td><td>£ '.number_format($general_totals['ccod_total'],2).'</td></tr>';
             $html .= '</table>';
 
-            return response()->json([
-                'success' => 1,
-                'html'=>$html,
-            ]);
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Totals</b></td><td>'.$ttl_qty.'</td><td>£ '.number_format($ttl_amnt,2).'</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Rejected Orders</b></td><td>'.$general_totals['rejct_count'].'</td><td>£ '.number_format($general_totals['rejct_total'],2).'</td></tr>';
+            $html .= '</table>';
 
         }
         else
         {
-            $html .= '<div class="text-center"><h6>Records Not Found !</h6></div>';
-            return response()->json([
-                'success' => 1,
-                'html'=>$html,
-            ]);
+            $html .= '<table class="table">';
+            $html .= '<tr><td><b>Cash Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Paypal Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Worldpay Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>MFB Pay Total</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Card on Delivery</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Totals</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '</table>';
+
+            $html .= '<table class="table mt-3">';
+            $html .= '<tr><td><b>Rejected Orders</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '</table>';
         }
+
+        return response()->json([
+            'success' => 1,
+            'html'=>$html,
+        ]);
 
      }
 

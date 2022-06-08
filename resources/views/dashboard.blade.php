@@ -148,10 +148,11 @@
                                     <div class="dash-inr-left">
                                         <div class="dash-inr-title">
                                             <h4>GENERAL TOTAL</h4>
-                                            <select name="" id="">
+                                            <img src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" width="15" style="display: none;" id="genral-loader">
+                                            <select name="gen-total" id="gen-total" onchange="getGeneralTotal(this.value)">
                                                 <option value="day">Today</option>
-                                                <option value="Yesterday">Yesterday</option>
-                                                <option value="This Week" selected>This Week</option>
+                                                <option value="yesterday">Yesterday</option>
+                                                <option value="week" selected>This Week</option>
                                                 <option value="month">This Month</option>
                                                 <option value="year">This Year</option>
                                                 <option value="lastweek">Last Week</option>
@@ -160,58 +161,8 @@
                                                 <option value="alltime">All Time</option>
                                             </select>
                                         </div>
-                                        <div class="dash-sales">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Cash Total</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Paypal Total</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Worldpay Total</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>MFB Pay Total</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Card on Delivery</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="dash-sales">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Totals</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="dash-sales">
-                                            <table class="table">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Rejected Orders</td>
-                                                        <td>0</td>
-                                                        <td>£0.00</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="dash-sales" id="gen-total-reprt">
+
                                         </div>
                                     </div>
                                 </div>
@@ -249,7 +200,8 @@
                                                 <option value="alltime">All Time</option>
                                             </select>
                                         </div>
-                                        <div id="top-ten-cus">
+                                        <div id="top-ten-cus" style="height: 300px;
+                                        overflow-y: scroll;">
 
                                         </div>
                                     </div>
@@ -302,10 +254,13 @@
 
 <script type="text/javascript">
 
-    $('document').ready(function(){
+    // Document Ready
+    $('document').ready(function()
+    {
+        // Get Top Sales
         var range = $('#range :selected').val();
-
         $("#sales-reprt").html('');
+        $('#range').attr("disabled",true);
 
         $.ajax({
             type: "post",
@@ -322,17 +277,73 @@
                 if(response.success == 1)
                 {
                     $('#sales-loader').hide();
+                    $("#sales-reprt").html('');
+                    $('#range').removeAttr("disabled");
                     $("#sales-reprt").append(response.html);
                 }
             }
         });
+        // End Get Top Sales
+
+        // Get Top Customer
+        var cust_range = $('#range :selected').val();
+        $("#top-ten-cus").html('');
+        $('#top10').attr("disabled",true);
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('getTopTenCustomer') }}",
+            data: {
+                'range' : cust_range,
+            },
+            beforeSend: function() {
+                $('#top10-loader').show();
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                $("#top-ten-cus").html('');
+                $('#top10').removeAttr("disabled");
+                $('#top10-loader').hide();
+                $("#top-ten-cus").append(response.html);
+            }
+        });
+        // End Get Top Customer
+
+        // General
+        var general_range = $('#range :selected').val();
+        $("#gen-total-reprt").html('');
+        $('#gen-total').attr("disabled",true);
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('getGeneralTotal') }}",
+            data: {
+                'range' : general_range,
+            },
+            beforeSend: function() {
+                $('#genral-loader').show();
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                $("#gen-total-reprt").html('');
+                $('#gen-total').removeAttr("disabled");
+                $('#genral-loader').hide();
+                $("#gen-total-reprt").append(response.html);
+            }
+        });
+        // End General
+
     });
+    // End Document Ready
 
 
     // Get Sales Report
     function getSalesReport(range)
     {
         $("#sales-reprt").html('');
+        $('#range').attr("disabled",true);
 
         $.ajax({
             type: "post",
@@ -348,7 +359,9 @@
             {
                 if(response.success == 1)
                 {
+                    $("#sales-reprt").html('');
                     $('#sales-loader').hide();
+                    $('#range').removeAttr("disabled");
                     $("#sales-reprt").append(response.html);
                 }
             }
@@ -360,6 +373,7 @@
     function getTopTen(range)
     {
         $("#top-ten-cus").html('');
+        $('#top10').attr("disabled",true);
 
         $.ajax({
             type: "post",
@@ -373,11 +387,40 @@
             dataType: "json",
             success: function(response)
             {
+                $("#top-ten-cus").html('');
+                $('#top10').removeAttr("disabled");
                 $('#top10-loader').hide();
                 $("#top-ten-cus").append(response.html);
             }
         });
     }
     // End Get Top 10
+
+    // Get General Total
+    function getGeneralTotal(range)
+    {
+        $("#gen-total-reprt").html('');
+        $('#gen-total').attr("disabled",true);
+
+        $.ajax({
+            type: "post",
+            url: "{{ route('getGeneralTotal') }}",
+            data: {
+                'range' : range,
+            },
+            beforeSend: function() {
+                $('#genral-loader').show();
+            },
+            dataType: "json",
+            success: function(response)
+            {
+                $("#gen-total-reprt").html('');
+                $('#gen-total').removeAttr("disabled");
+                $('#genral-loader').hide();
+                $("#gen-total-reprt").append(response.html);
+            }
+        });
+    }
+    // End Get General Total
 
 </script>
