@@ -30,13 +30,21 @@
         {{-- Edit Data Section --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}
                         <div class="card">
                             {{-- Form --}}
                             <form action="{{ route('voucherupdate') }}" id="voucherform" method="POST">
-                            {{ @csrf_field() }}
+                                {{ @csrf_field() }}
 
                                 {{-- Card Header --}}
                                 <div class="card-header">
@@ -59,20 +67,26 @@
                                 <div class="card-body">
                                     {{-- Tabs Link --}}
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-General-tab" data-toggle="tab" href="#nav-General" role="tab" aria-controls="nav-General" aria-selected="true">General</a>
-                                        <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab" href="#nav-history" role="tab" aria-controls="nav-history" aria-selected="false">history</a>
+                                        <a class="nav-item nav-link active" id="nav-General-tab" data-toggle="tab"
+                                            href="#nav-General" role="tab" aria-controls="nav-General"
+                                            aria-selected="true">General</a>
+                                        <a class="nav-item nav-link" id="nav-history-tab" data-toggle="tab"
+                                            href="#nav-history" role="tab" aria-controls="nav-history"
+                                            aria-selected="false">history</a>
                                     </div>
                                     {{-- End Tabs Link --}}
 
                                     {{-- Tabs Content --}}
                                     <div class="tab-content" id="nav-tabContent">
                                         {{-- General Tab --}}
-                                        <div class="tab-pane fade show active" id="nav-General" role="tabpanel" aria-labelledby="nav-General-tab">
+                                        <div class="tab-pane fade show active" id="nav-General" role="tabpanel"
+                                            aria-labelledby="nav-General-tab">
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
 
                                                     <div class="form-group">
-                                                        <input type="hidden" name="voucherid" value="{{ $vouchers->voucher_id }}">
+                                                        <input type="hidden" name="voucherid"
+                                                            value="{{ $vouchers->voucher_id }}">
                                                     </div>
 
                                                     <div class="form-group">
@@ -80,7 +94,10 @@
                                                             <span class="text-danger">*</span>
                                                             Code
                                                         </label>
-                                                        <input type="text" class="form-control {{ ($errors->has('code')) ? 'is-invalid' :'' }}" maxlength="10" name="code" id="code" value="{{ $vouchers->code }}" placeholder="Code">
+                                                        <input type="text"
+                                                            class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}"
+                                                            maxlength="10" name="code" id="code"
+                                                            value="{{ $vouchers->code }}" placeholder="Code">
                                                         @if ($errors->has('code'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('code') }}
@@ -98,15 +115,23 @@
                                                         </label>
                                                         <div class="form-control">
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="apply" id="delivery" value="1" {{ $vouchers->apply_shipping == 1 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="delivery">Delivery</label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="apply" id="delivery" value="1"
+                                                                    {{ $vouchers->apply_shipping == 1 ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="delivery">Delivery</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="apply" id="collection" value="2" {{ $vouchers->apply_shipping == 2 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="collection">Collection</label>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="apply" id="collection" value="2"
+                                                                    {{ $vouchers->apply_shipping == 2 ? 'checked' : '' }}>
+                                                                <label class="form-check-label"
+                                                                    for="collection">Collection</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="apply" id="both" value="3" {{ $vouchers->apply_shipping == 3 ? 'checked' : '' }}>
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="apply" id="both" value="3"
+                                                                    {{ $vouchers->apply_shipping == 3 ? 'checked' : '' }}>
                                                                 <label class="form-check-label" for="both">Both</label>
                                                             </div>
                                                         </div>
@@ -117,7 +142,11 @@
                                                             <span class="text-danger">*</span>
                                                             From Name
                                                         </label>
-                                                        <input class="form-control {{ ($errors->has('formname')) ? 'is-invalid' : '' }}" name="formname" id="formname" type="text" value="{{ $vouchers->from_name }}" placeholder="Form name">
+                                                        <input
+                                                            class="form-control {{ $errors->has('formname') ? 'is-invalid' : '' }}"
+                                                            name="formname" id="formname" type="text"
+                                                            value="{{ $vouchers->from_name }}"
+                                                            placeholder="Form name">
                                                         @if ($errors->has('formname'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('formname') }}
@@ -130,7 +159,11 @@
                                                             <span class="text-danger">*</span>
                                                             From E-Mail
                                                         </label>
-                                                        <input class="form-control {{ ($errors->has('email')) ? 'is-invalid' : '' }}" name="email" id="email" value="{{ $vouchers->from_email }}" type="email" placeholder="Email">
+                                                        <input
+                                                            class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
+                                                            name="email" id="email"
+                                                            value="{{ $vouchers->from_email }}" type="email"
+                                                            placeholder="Email">
                                                         @if ($errors->has('email'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('email') }}
@@ -143,8 +176,11 @@
                                                             <span class="text-danger">*</span>
                                                             To Name
                                                         </label>
-                                                        <input class="form-control {{ ($errors->has('name')) ? 'is-invalid' : '' }}" name="name" id="name" value="{{ $vouchers->to_name }}" type="text" placeholder="Telehone">
-                                                        @if($errors->has('name'))
+                                                        <input
+                                                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                                                            name="name" id="name" value="{{ $vouchers->to_name }}"
+                                                            type="text" placeholder="Telehone">
+                                                        @if ($errors->has('name'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('name') }}
                                                             </div>
@@ -156,8 +192,12 @@
                                                             <span class="text-danger">*</span>
                                                             To E-Mail
                                                         </label>
-                                                        <input class="form-control {{ ($errors->has('toemail')) ? 'is-invalid' : '' }}" name="toemail" id="toemail" value="{{ $vouchers->to_email }}" type="text" placeholder="Email">
-                                                        @if($errors->has('toemail'))
+                                                        <input
+                                                            class="form-control {{ $errors->has('toemail') ? 'is-invalid' : '' }}"
+                                                            name="toemail" id="toemail"
+                                                            value="{{ $vouchers->to_email }}" type="text"
+                                                            placeholder="Email">
+                                                        @if ($errors->has('toemail'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('toemail') }}
                                                             </div>
@@ -168,7 +208,9 @@
                                                         <label for="theme">Themes</label>
                                                         <select class="form-control" id="theme" name="theme">
                                                             @foreach ($themes as $theme)
-                                                                <option value="{{ $theme->voucher_theme_id }}" {{ $theme->voucher_theme_id == $vouchers->voucher_theme_id ? 'selected' : '' }}>{{ $theme->name }}</option>
+                                                                <option value="{{ $theme->voucher_theme_id }}"
+                                                                    {{ $theme->voucher_theme_id == $vouchers->voucher_theme_id ? 'selected' : '' }}>
+                                                                    {{ $theme->name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -183,7 +225,10 @@
                                                             <span class="text-danger">*</span>
                                                             Amount
                                                         </label>
-                                                        <input class="form-control {{  ($errors->has('amount')) ? 'is-invalid' : '' }}" name="amount" value="{{ $vouchers->amount }}" type="text" placeholder="Ammout">
+                                                        <input
+                                                            class="form-control {{ $errors->has('amount') ? 'is-invalid' : '' }}"
+                                                            name="amount" value="{{ $vouchers->amount }}" type="text"
+                                                            placeholder="Ammout">
                                                         @if ($errors->has('amount'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('amount') }}
@@ -194,9 +239,13 @@
                                                     <div class="form-group">
                                                         <label for="status">Status:</label>
                                                         <select class="form-control" id="status" name="status">
-                                                            <option value="1" {{ $vouchers->status == 1 ? 'selected' : '' }}>Enable</option>
-                                                            <option value="0" {{ $vouchers->status == 0 ? 'selected' : '' }}>Disable</option>
-                                                          </select>
+                                                            <option value="1"
+                                                                {{ $vouchers->status == 1 ? 'selected' : '' }}>Enable
+                                                            </option>
+                                                            <option value="0"
+                                                                {{ $vouchers->status == 0 ? 'selected' : '' }}>
+                                                                Disable</option>
+                                                        </select>
                                                     </div>
 
                                                 </div>
@@ -205,28 +254,30 @@
                                         {{-- End General Tab --}}
 
                                         {{-- Voucher History Tab --}}
-                                        <div class="tab-pane fade" id="nav-history" role="tabpanel" aria-labelledby="nav-history-tab">
+                                        <div class="tab-pane fade" id="nav-history" role="tabpanel"
+                                            aria-labelledby="nav-history-tab">
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
                                                     <table class="table table-bordered table-striped" id="myTable">
                                                         <thead class="bg-dark">
                                                             <tr class="text-center">
-                                                              <th scope="col">Order id</th>
-                                                              <th scope="col">Customer</th>
-                                                              <th scope="col">Amount</th>
-                                                              <th scope="col">Date Added</th>
+                                                                <th scope="col">Order id</th>
+                                                                <th scope="col">Customer</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Date Added</th>
                                                             </tr>
-                                                          </thead>
-                                                          <tbody>
-                                                              @foreach ($history as $value)
-                                                              <tr class="text-center">
-                                                                <th scope="row">{{ $value->order_id }}</th>
-                                                                <td>{{ $value->voucher_history_id }}</td>
-                                                                <td>{{ $value->amount }}</td>
-                                                                <td>{{ date("d-m-Y",strtotime($value->date_added)) }}</td>
-                                                              </tr>
-                                                              @endforeach
-                                                          </tbody>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($history as $value)
+                                                                <tr class="text-center">
+                                                                    <th scope="row">{{ $value->order_id }}</th>
+                                                                    <td>{{ $value->voucher_history_id }}</td>
+                                                                    <td>{{ $value->amount }}</td>
+                                                                    <td>{{ date('d-m-Y', strtotime($value->date_added)) }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -256,10 +307,8 @@
 
 {{-- SCRIPT --}}
 <script type="text/javascript">
-    $(document).ready( function ()
-    {
+    $(document).ready(function() {
         $('#myTable').DataTable();
-    } );
+    });
 </script>
 {{-- END SCRIPT --}}
-

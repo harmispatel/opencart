@@ -33,12 +33,21 @@
         {{-- Edit Section --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}
                         <div class="card card-primary">
                             {{-- Form --}}
-                            <form method="POST" action="{{ route('updateproducticons') }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('updateproducticons') }}"
+                                enctype="multipart/form-data">
                                 {{ @csrf_field() }}
 
                                 {{-- Card Header --}}
@@ -48,8 +57,10 @@
                                         EDIT
                                     </h3>
                                     <div class="container" style="text-align: right">
-                                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i></button>
-                                        <a href="{{ route('producticons') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
+                                        <button type="submit" class="btn btn-sm btn-primary"><i
+                                                class="fa fa-save"></i></button>
+                                        <a href="{{ route('producticons') }}" class="btn btn-sm btn-danger"><i
+                                                class="fa fa-arrow-left"></i></a>
                                     </div>
                                 </div>
                                 {{-- End Card Header --}}
@@ -61,8 +72,10 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="icon_name"><span class="text-danger">*</span> Icon Name</label>
-                                        <input type="text" name="icon_name" id="icon_name" class="form-control {{ ($errors->has('icon_name')) ? 'is-invalid' : '' }}" value="{{ $producticon->icon_name }}">
-                                        @if($errors->has('icon_name'))
+                                        <input type="text" name="icon_name" id="icon_name"
+                                            class="form-control {{ $errors->has('icon_name') ? 'is-invalid' : '' }}"
+                                            value="{{ $producticon->icon_name }}">
+                                        @if ($errors->has('icon_name'))
                                             <span class="invalid-feedback">
                                                 {{ $errors->first('icon_name') }}
                                             </span>
@@ -70,12 +83,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="icon_url"><span class="text-danger">*</span> Icon URL</label>
-                                        <input type="text" name="icon_url" id="icon_url" class="form-control {{ ($errors->has('icon_url')) ? 'is-invalid' : '' }}" value="{{ $producticon->icon_url }}" placeholder="Icon URL">
-                                        @if($errors->has('icon_url'))
-                                        <span class="invalid-feedback">
-                                            {{ $errors->first('icon_url') }}
-                                        </span>
-                                    @endif
+                                        <input type="text" name="icon_url" id="icon_url"
+                                            class="form-control {{ $errors->has('icon_url') ? 'is-invalid' : '' }}"
+                                            value="{{ $producticon->icon_url }}" placeholder="Icon URL">
+                                        @if ($errors->has('icon_url'))
+                                            <span class="invalid-feedback">
+                                                {{ $errors->first('icon_url') }}
+                                            </span>
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         <label for="description">Alt Description</label>
@@ -83,7 +98,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="sort_order">Sort Order</label>
-                                        <input type="number" name="sort_order" id="sort_order" class="form-control" value="{{ $producticon->icon_sort }}" placeholder="Sort Order">
+                                        <input type="number" name="sort_order" id="sort_order" class="form-control"
+                                            value="{{ $producticon->icon_sort }}" placeholder="Sort Order">
                                     </div>
                                 </div>
                                 {{-- End Card Body --}}
@@ -106,4 +122,3 @@
 {{-- End Footer --}}
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-

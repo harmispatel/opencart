@@ -139,6 +139,9 @@ class SettingsController extends Controller
 
     public function mapandcategory()
     {
+
+
+
         // Check User Permission
         if(check_user_role(80) != 1)
         {
@@ -281,6 +284,7 @@ class SettingsController extends Controller
             'config_name' => 'required',
             'config_owner' => 'required',
             'config_address' => 'required',
+            'config_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'map_post_code' => 'required',
             'config_country_id' => 'required',
             'config_zone_id' => 'required',
@@ -288,6 +292,8 @@ class SettingsController extends Controller
             'config_title' => 'required',
             'file_directory_url' => 'required',
             'config_email' => 'required|email',
+            'config_icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'suspend_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
@@ -481,6 +487,8 @@ class SettingsController extends Controller
             'config_name' => 'required',
             'config_owner' => 'required',
             'config_address' => 'required',
+            'config_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'config_icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'map_post_code' => 'required',
             'config_country_id' => 'required',
             'config_zone_id' => 'required',
@@ -488,6 +496,7 @@ class SettingsController extends Controller
             'config_title' => 'required',
             'file_directory_url' => 'required',
             'config_email' => 'required|email',
+            'suspend_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 

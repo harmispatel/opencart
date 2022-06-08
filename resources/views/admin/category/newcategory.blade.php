@@ -108,12 +108,24 @@
 
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        <input type="file" name="image" style="padding:3px;" id="image" class="form-control">
+                                        {{-- <input type="file" name="image" style="padding:3px;" id="image" class="form-control"> --}}
+                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="image" id="image" type="file">
+                                                @if ($errors->has('image'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('image') }}
+                                                    </div>
+                                                @endif
                                     </div>
 
                                     <div class="form-group">
                                         <label for="banner">Banner</label>
-                                        <input type="file" name="banner" style="padding:3px;" id="banner" class="form-control">
+                                        {{-- <input type="file" name="banner" style="padding:3px;" id="banner" class="form-control"> --}}
+                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="banner" id="banner" type="file">
+                                        @if ($errors->has('banner'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('banner') }}
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div class="form-group">

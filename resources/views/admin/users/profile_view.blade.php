@@ -28,6 +28,14 @@
         {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
+                @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Warning: Please check the form carefully for errors!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
@@ -106,7 +114,13 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="image">Image</label>
-                                                <input type="file" name="image" style="padding:3px;" id="image" class="form-control">
+                                                {{-- <input type="file" name="image" style="padding:3px;" id="image" class="form-control"> --}}
+                                                <input type="file" name="image" style="padding:3px;" id="image" class="form-control {{ ($errors->has('image')) ? 'is-invalid' : '' }}" value="{{ old('image') }}">
+                                        @if($errors->has('image'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('image') }}
+                                            </div>
+                                        @endif
                                             </div>
                                         </div>
 
