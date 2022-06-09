@@ -78,7 +78,7 @@
                                             <tbody id="productAdd">
                                             <tfoot>
                                                 <tr class="">
-                                                    <td colspan="6">
+                                                    <td colspan="9">
                                                         <div align="right">
                                                             <button type="button" style="margin-left: 20px"
                                                                 onclick="addMoreProduct();" class="btn btn-primary ">

@@ -539,7 +539,7 @@
 <section class="opening-hours-v5 pt-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="default-title-v5 text-center"><strong class="sub-title color-orange text-capitalize">opening
             hourse</strong>
-        <h3 class="title text-capitalize">open 7 days a week</h3>
+        {{-- <h3 class="title text-capitalize">open 7 days a week</h3> --}}
     </div>
     <div class="__info">
         <div class="__container"><img class="img-fluid mb-3"
