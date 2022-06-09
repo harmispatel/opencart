@@ -157,6 +157,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+
+            @if (Session::has('success'))
+                <div class="alert alert-sm alert-success alert-dismissible fade show" role="alert">
+                    <strong>Success</strong> {{ Session::get('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (Session::has('error'))
+                <div class="alert alert-sm alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Warning!</strong> {{ Session::get('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             @if (empty($userlogin))
                 <div class="member-inr">
                     <div class="member-title">
@@ -196,7 +211,7 @@
                                         @endif
                                     </div>
                                     <div class="mb-1">
-                                        <a href="#">Forgotten Password</a>
+                                        <a href="{{  route('forgotten') }}">Forgotten Password</a>
                                     </div>
                                     <div class="mb-1">
                                         <button type="submit" class="btn log-bt">Login</button>

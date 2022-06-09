@@ -194,6 +194,7 @@ class ProductController extends Controller
     function storebulkproduct(Request $request)
     {
 
+
         $current_store_id = currentStoreId();
 
         foreach ($request->product as $key => $prod) {

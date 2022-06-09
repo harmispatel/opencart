@@ -12,6 +12,8 @@ use App\Models\CustomerHistory;
 use App\Models\CustomerIP;
 use App\Models\CustomerReward;
 use App\Models\CustomerTransaction;
+use App\Models\ResetPassword;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -29,8 +31,67 @@ class CustomerController extends Controller
     }
 
 
+    function forgotten()
+    {
+        return view('frontend.pages.forgotten_password');
+    }
 
+    function sendforgorpasslink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:oc_customer,email',
+        ]);
 
+        $email = $request->email;
+
+        $token = genratetoken(64);
+
+        $insert = new ResetPassword;
+        $insert->email = $email;
+        $insert->token = $token;
+        $insert->created_at =  Carbon::now();
+        $insert->save();
+
+        \Mail::send('admin.mail_format.resetPassword', ['token' => $token],
+        function ($message) use ($request)
+        {
+            $message->from('hasankaradiya1626@gmail.com');
+            $message->to($request->email);
+            $message->subject('Reset Password');
+        });
+
+        return redirect()->route('member')->with('success', 'Password Reset Link has been sent Successfully..');
+    }
+
+    function showResetPasswordForm($token)
+    {
+        return view('admin.forgetPasswordLink', ['token' => $token]);
+    }
+
+    function submitResetPasswordForm(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:oc_customer',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+
+        $updatePassword = ResetPassword::where([
+                                'email' => $request->email,
+                                'token' => $request->token
+                              ])->first();
+
+          if(!$updatePassword){
+              return back()->with('error', 'Link Expired !');
+          }
+
+          $customer = Customer::where('email', $request->email)->update(['password' => md5($request->password)]);
+
+          $delete_token = ResetPassword::where(['email'=> $request->email])->delete();
+
+          return redirect()->route('member')->with('success', 'Your password has been changed!');
+
+    }
 
     //Get All Customers by Current Store
     function getcustomers(Request $request)

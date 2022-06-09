@@ -14,7 +14,7 @@ class CustomerAuthController extends Controller
     {
 
         $request->validate([
-            'Email' => 'required|email',
+            'Email' => 'required|email|exists:oc_customer,email',
             'Password' => 'required',
         ]);
 
@@ -25,6 +25,14 @@ class CustomerAuthController extends Controller
         $emailexist = Customer::where('email', '=', $email)->exists();
 
         $customername = Customer::select('customer_id', 'firstname', 'password')->where('email', '=', $email)->first();
+
+        if(empty($ajaxlogin))
+        {
+            if($pass != $customername->password)
+            {
+                return redirect()->route('member')->with('error',"No match for E-Mail Address and/or Password");
+            }
+        }
 
         if (($emailexist == 1) && ($pass == $customername->password)) {
             session()->put('username', $customername->firstname);
