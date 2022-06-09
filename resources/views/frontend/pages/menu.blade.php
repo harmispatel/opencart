@@ -353,6 +353,12 @@
                                                                                                                             <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a>
+                                                                                                                    @break
+                                                                                                                    {{-- @elseif ($currentday != $value || $firstday != "Every day")
+                                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                            <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                        </a> --}}
                                                                                                                     @endif
                                                                                                                 @endif
                                                                                                             @endif
@@ -403,6 +409,12 @@
                                                                                                                         <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                     </a>
+                                                                                                                @break
+                                                                                                                {{-- @elseif ($currentday != $value || $firstday != "Every day")
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                        <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                    </a> --}}
                                                                                                                 @endif
                                                                                                             @endif
                                                                                                         @endif
@@ -448,6 +460,7 @@
                                         <div class="close-shop">
                                             <h2 class="m-0">Sorry we are closed now!</h2>
                                         </div>
+                                        @break
                                     @else
                                         @if ($today >= $firsttime && $today <= $lasttime)
                                             @if ($currentday == $value || $firstday == "Every day")
@@ -461,6 +474,7 @@
                                                     <h2>Sorry we are closed now!</h2>
                                                     <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
                                                 </div>
+                                                @break
                                             @endif
                                         @endif
                                     @endif
@@ -754,6 +768,14 @@
                                             @endif
                                         @else
                                             @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="closed-now">
+                                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                                    <div class="closed-now">
+                                                        <span class="closing-text">We are closed now!</span>
+                                                    </div>
+                                                </div>
+                                            @break
+                                            @elseif ($currentday != $value || $firstday != "Every day")
                                                 <div class="closed-now">
                                                     <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
                                                     <div class="closed-now">

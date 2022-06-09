@@ -33,17 +33,14 @@
 
         {{-- List Section Start --}}
         <section class="content">
-            <div id="errors">
-
-            </div>
             @if(Session::has('success'))
-                <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                    {{ Session::get('success') }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
+            <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                {{ Session::get('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -51,18 +48,7 @@
                         <div class="card card-primary">
                             <div class="card-header" style="background: #f6f6f6">
                                 <div class="container" style="text-align: right">
-                                    @if (check_user_role(86) == 1)
-                                        {{-- <a onclick="updateOpenClose()" class="btn btn-sm btn-primary">
-                                            <i class="fa fa-save"></i>
-                                        </a> --}}
-                                        <button type="submit" form="openclosetime" class="btn btn-sm btn-primary">
-                                            <i class="fa fa-save"></i>
-                                        </button>
-                                    @else
-                                        <button class="btn btn-sm btn-primary" disabled>
-                                            <i class="fa fa-save"></i>
-                                        </button>
-                                    @endif
+                                    <button type="submit" form="openclosetime" class="btn btn-sm btn-primary ml-auto"><i class="fa fa-save"></i></button>
                                     <a href="{{ route('dashboard') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
                                 </div>
                             </div>
@@ -72,48 +58,44 @@
                                     <h1 class="text-center">Opening Closing Times</h1>
                                     <h4 class="text-success" style="border-bottom: 1px dotted black">BUSSINESS HOURS</h4>
                                     <div class="col-sm-12" id="bussinestime">
-                                        @php
-                                            $key_bussines = 0;
-                                        @endphp
-
-                                        @if(isset($bussines['day']) && count($bussines['day']))
-                                            @foreach($bussines['day'] as $keyday => $daytime)
-                                                <div id="bussines_{{ $key_bussines }}" class="bussines col-sm-12">
-                                                    <div class="d-flex justify-content-between">
-                                                        <div class="form-group col-sm-6">
-                                                            <select class="selectday form-control" name="bussines[day][{{ $key_bussines }}][]" class="form-control" style="width: 100% !importent;" id="buss-hours" multiple>
-                                                                @foreach($days as $key => $day)
-                                                                    <option @if(in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="d-flex">
-                                                            <div class="form-group">
-                                                                <select class="selectday form-control" name="bussines[from][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
-                                                                    @foreach($times as $key => $time)
-                                                                        <option @if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
+                                        @php $key_bussines = 0; @endphp
+                                            @if(isset($bussines['day']) && count($bussines['day']))
+                                                @foreach($bussines['day'] as $keyday => $daytime)
+                                                    <div id="bussines_{{ $key_bussines }}" class="bussines col-sm-12">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="form-group col-sm-6">
+                                                                <select class="selectday form-control" name="bussines[day][{{ $key_bussines }}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
+                                                                    @foreach($days as $key => $day)
+                                                                        <option @if(in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
-                                                            <div class="form-group px-3">
-                                                                <select class="selectday form-control" name="bussines[to][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
-                                                                    @foreach($times as $key => $time)
-                                                                    <option @if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {{'selected' }}  @endif value="{{ $key }}">{{ $time }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <span class="btn btn-default" onclick="$('#bussines_{{ $key_bussines }}').remove();">X</span>
+                                                            <div class="d-flex">
+                                                                <div class="form-group">
+                                                                    <select class="selectday form-control" name="bussines[from][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
+                                                                        @foreach($times as $key => $time)
+                                                                            <option @if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group px-3">
+                                                                    <select class="selectday form-control" name="bussines[to][{{ $key_bussines }}]" class="form-control" style="width: 100% !importent;">
+                                                                        @foreach($times as $key => $time)
+                                                                        <option @if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {{'selected' }}  @endif value="{{ $key }}">{{ $time }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <span class="btn btn-default" onclick="$('#bussines_{{ $key_bussines }}').remove();">X</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                @php $key_bussines++; @endphp
-                                            @endforeach
-                                        @endif
-
+                                                    @php $key_bussines++; @endphp
+                                                @endforeach
+                                            @endif
                                         <div class="col-sm-12">
-                                            <button class="btn btn-primary addtime buss-hours" rel="bussines">+Add another set of hours</button>
+                                            <span class="btn btn-primary addtime" rel="bussines">+Add another set of hours</span>
                                         </div>
                                     </div>
                                         <!-- end bussinestime -->
@@ -167,7 +149,7 @@
                                                         <div id="delivery_{{ $key_delivery }}" class="delivery col-sm-12">
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="form-group col-sm-6">
-                                                                    <select class="selectday" id="del-hours" name="delivery[day][{{ $key_delivery}}]" class="form-control" style="width: 100% !importent;" multiple>
+                                                                    <select class="selectday" name="delivery[day][{{ $key_delivery}}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
                                                                         @foreach($days as $key => $day)
                                                                         <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key}}">{{$day}}</option>
                                                                         @endforeach
@@ -198,7 +180,7 @@
                                                     @endforeach
                                                 @endif
                                                 <div class="col-sm-12">
-                                                    <button class="btn btn-primary addtime del-hours" rel="delivery">+Add another set of hours</button>
+                                                    <span class="btn btn-primary addtime" rel="delivery">+Add another set of hours</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -228,7 +210,7 @@
                                                     <div id="collection_{{ $key_collection }}" class="collection col-sm-12">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="form-group col-sm-6">
-                                                                <select class="selectday" name="collection[day][{{ $key_collection }}][]" class="form-control" id="coll-hours" style="width: 100% !importent;" multiple>
+                                                                <select class="selectday" name="collection[day][{{ $key_collection }}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
                                                                     @foreach($days as $key => $day)
                                                                     <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key }}">{{ $day }}</option>
                                                                     @endforeach
@@ -259,7 +241,7 @@
                                                 @endforeach
                                             @endif
                                             <div class="col-sm-12">
-                                                <button class="btn btn-primary addtime coll-hours" rel="collection">+Add another set of hours</button>
+                                                <span class="btn btn-primary addtime" rel="collection">+Add another set of hours</span>
                                             </div>
                                         </div>
                                     </div>
@@ -342,8 +324,8 @@
     // });
     // End Coll Hours
 
-    $('document').ready(function()
-    {
+
+    $(document).ready(function(){
 
         // var bus_hours = $('#buss-hours :selected').val();
         // var del_hours = $('#del-hours :selected').val();
@@ -369,11 +351,8 @@
        var number_collection = {{ $key_collection }};
 
        var number = 0;
-       $('.addtime').click(function(e){
-            e.preventDefault();
-
+       $('.addtime').click(function(){
             var addtime = $(this);
-
             switch(addtime.attr('rel'))
             {
                 case 'bussines': number = number_bussines;break;
@@ -381,13 +360,14 @@
                 case 'collection': number = number_collection;break;
             }
             $.ajax({
+                // url: '{{ route("daytime") }}/&number=' + number + '&type=' + addtime.attr('rel'),
                 url: '{{ route("daytime") }}',
         		type: "get",
         		dataType: 'json',
                 data: {
                     'number': number,
                     'type': addtime.attr('rel'),
-                    '_token': '{{ csrf_token() }}',
+                    '_token': '{{ csrf_token() }}'
                 },
         		success: function(response) {
                     // console.log(response.html);
@@ -410,8 +390,7 @@
         })
     });
 
-
-    // Update Open Close Time
+        // Update Open Close Time
     // function updateOpenClose()
     // {
     //     $('#errors').html('');
@@ -440,5 +419,7 @@
     //     		},
     //         });
     // }
+
+
 
 </script>
