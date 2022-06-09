@@ -69,6 +69,10 @@ Route::get('admin', [HomeController::class, 'adminLogin'])->name('admin');
 Route::get('login', [HomeController::class, 'adminLogin'])->name('login');
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+Route::get('forgotten', [CustomerController::class, 'forgotten'])->name('forgotten');
+Route::post('sendforgorpasslink', [CustomerController::class, 'sendforgorpasslink'])->name('sendforgorpasslink');
+Route::get('reset-password/{token}', [CustomerController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [CustomerController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
 // Group
 Route::group(['middleware' => 'AuthUser'], function () {
