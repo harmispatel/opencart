@@ -323,51 +323,38 @@
                                                                                                     <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
                                                                                                 </div>
                                                                                                 <div class="col-md-7">
-                                                                                                    @if (!empty($openday))
-                                                                                                    @foreach ($openday as $key => $item)
-                                                                                                        @foreach ($item as $value)
-                                                                                                            @php
-                                                                                                                $firsttime = strtotime($fromtime[$key]);
-                                                                                                                $lasttime = strtotime($totime[$key]);
-                                                                                                                $today = time();
-                                                                                                                $date = date('Y-m-d');
-                                                                                                                $currentday = date('l');
-                                                                                                                $currentdate = strtotime(date("Y-m-d"));
-                                                                                                            @endphp
-                                                                                                            @if (in_array($currentdate,$date_close1))
-                                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                    <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                </a>
-                                                                                                            @else
-                                                                                                                @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                                    @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                        <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
-                                                                                                                            class="btn options-btn">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                        </a>
-                                                                                                                    @endif
-                                                                                                                @else
-                                                                                                                    @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                        </a>
-                                                                                                                    @break
-                                                                                                                    {{-- @elseif ($currentday != $value || $firstday != "Every day")
-                                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                        </a> --}}
-                                                                                                                    @endif
-                                                                                                                @endif
-                                                                                                            @endif
-                                                                                                        @endforeach
-                                                                                                    @endforeach
-                                                                                                    @else
+                                                                                                    @if (in_array($currentdate,$date_close1) )
                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                             <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
                                                                                                         </a>
+                                                                                                    @else
+                                                                                                        @foreach ($openday as $key => $item)
+                                                                                                            @foreach ($item as $value)
+                                                                                                                @php
+                                                                                                                    $firsttime = strtotime($fromtime[$key]);
+                                                                                                                    $lasttime = strtotime($totime[$key]);
+                                                                                                                    $today = time();
+                                                                                                                    $date = date('Y-m-d');
+                                                                                                                    $currentday = date('l');
+                                                                                                                @endphp
+                                                                                                                    @if ($today >= $firsttime && $today <= $lasttime)
+                                                                                                                        @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                            <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                                class="btn options-btn">
+                                                                                                                                <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @endif
+                                                                                                                    @else
+                                                                                                                        @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                            <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                                <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @endif
+                                                                                                                    @endif
+                                                                                                            @endforeach
+                                                                                                        @endforeach
                                                                                                     @endif
                                                                                                 </div>
                                                                                             </div>
@@ -380,50 +367,44 @@
                                                                                                 <span>price</span>
                                                                                             </div>
                                                                                             <div class="col-md-7">
-                                                                                                @if (!empty($openday))
-                                                                                                @foreach ($openday as $key => $item)
-                                                                                                    @foreach ($item as $value)
-                                                                                                        @php
-                                                                                                            $firsttime = strtotime($fromtime[$key]);
-                                                                                                            $lasttime = strtotime($totime[$key]);
-                                                                                                            $today = time();
-                                                                                                            $currentday = date('l');
-                                                                                                            $setprice = $values->hasOneProduct['price'];
-                                                                                                            $currentdate = strtotime(date("Y-m-d"));
-                                                                                                        @endphp
-                                                                                                        @if (in_array($currentdate,$date_close1))
-                                                                                                            <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
-                                                                                                            </a>
-                                                                                                        @else
-                                                                                                            @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                                @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                    <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                        <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                    </a>
-                                                                                                                @endif
-                                                                                                            @else
-                                                                                                                @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                        <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                    </a>
-                                                                                                                @break
-                                                                                                                {{-- @elseif ($currentday != $value || $firstday != "Every day")
-                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                        <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                    </a> --}}
-                                                                                                                @endif
-                                                                                                            @endif
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                @endforeach
+                                                                                                @if (in_array($currentdate,$date_close1))
+                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                        <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
+                                                                                                    </a>
                                                                                                 @else
-                                                                                                <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                    <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
-                                                                                                </a>
+                                                                                                    @foreach ($openday as $key => $item)
+                                                                                                        @foreach ($item as $value)
+                                                                                                            @php
+                                                                                                                $firsttime = strtotime($fromtime[$key]);
+                                                                                                                $lasttime = strtotime($totime[$key]);
+                                                                                                                $today = time();
+                                                                                                                $currentday = date('l');
+                                                                                                                $setprice = $values->hasOneProduct['price'];
+                                                                                                                $currentdate = strtotime(date("Y-m-d"));
+                                                                                                            @endphp
+                                                                                                                @if ($today >= $firsttime && $today <= $lasttime)
+                                                                                                                    @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                        </a>
+                                                                                                                    @endif
+                                                                                                                @else
+                                                                                                                    @if ($currentday == $value || $firstday == "Every day")
+                                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                        </a>
+                                                                                                                    @break
+                                                                                                                    {{-- @elseif ($currentday != $value || $firstday != "Every day")
+                                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                        </a> --}}
+                                                                                                                    @endif
+                                                                                                                @endif
+                                                                                                        @endforeach
+                                                                                                    @endforeach
                                                                                                 @endif
                                                                                             </div>
                                                                                         </div>
@@ -446,22 +427,21 @@
                     </div>
                     <div class="col-md-5 col-lg-4">
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                    @if (in_array($currentdate,$date_close1))
-                                        <div class="close-shop">
-                                            <h2 class="m-0">Sorry we are closed now!</h2>
-                                        </div>
-                                        @break
-                                    @else
+                            @if (in_array($currentdate,$date_close1))
+                            <div class="close-shop">
+                                <h2 class="m-0">Sorry we are closed now!</h2>
+                            </div>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                            $firstday = $item[0];
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
                                         @if ($today >= $firsttime && $today <= $lasttime)
                                             @if ($currentday == $value || $firstday == "Every day")
                                                 <div class="alert p-1 text-center" style="background: green;">
@@ -477,9 +457,9 @@
                                                 @break
                                             @endif
                                         @endif
-                                    @endif
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                            @endif
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
                                     <span class="tg-icon" id="tg-icon"><i class="fas fa-angle-double-up"></i></span>
@@ -735,58 +715,52 @@
                                     </div>
                                 </div>
                             </div>
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                    @if (in_array($currentdate,$date_close1))
-                                        <div class="closed-now">
-                                            <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
-                                            <div class="closed-now">
-                                                <span class="closing-text">We are closed now!</span>
-                                            </div>
-                                        </div>
-                                    @else
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                @if (!empty($mycart['size']))
-                                                    <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                                    {{-- @break --}}
-                                                @else
-                                                    <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                            @if (in_array($currentdate,$date_close1))
+                                <div class="closed-now">
+                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                    <div class="closed-now">
+                                        <span class="closing-text">We are closed now!</span>
+                                    </div>
+                                </div>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                            $firstday = $item[0];
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+                                            @if ($today >= $firsttime && $today <= $lasttime)
+                                                @if ($currentday == $value || $firstday == "Every day")
+                                                    @if (!empty($mycart['size']))
+                                                        <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                                                        {{-- @break --}}
+                                                    @else
+                                                        <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                                                        <div class="closed-now">
+                                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                                        </div>
+                                                        {{-- @break --}}
+                                                    @endif
+                                                @endif
+                                                @break
+                                            @else
+                                                @if ($currentday == $value || $firstday == "Every day")
                                                     <div class="closed-now">
-                                                        <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                                        <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                                        <div class="closed-now">
+                                                            <span class="closing-text">We are closed now!</span>
+                                                        </div>
                                                     </div>
-                                                    {{-- @break --}}
+                                                @break
                                                 @endif
                                             @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="closed-now">
-                                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
-                                                    <div class="closed-now">
-                                                        <span class="closing-text">We are closed now!</span>
-                                                    </div>
-                                                </div>
-                                            @break
-                                            @elseif ($currentday != $value || $firstday != "Every day")
-                                                <div class="closed-now">
-                                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
-                                                    <div class="closed-now">
-                                                        <span class="closing-text">We are closed now!</span>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        @endif
-                                    @endif
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>

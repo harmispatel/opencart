@@ -147,6 +147,7 @@
             $fromtime = $openclose['fromtime'];
             $totime = $openclose['totime'];
             $closedate = $openclose['close_date'];
+            $currentdate = strtotime(date("Y-m-d"));
             $closedates = explode(',',$closedate);
             $date_close1 = array();
             foreach ($closedates as $value) {
@@ -154,11 +155,12 @@
                 $date_close1[] = $date_close;
             }
             @endphp
+
+        @if (in_array($currentdate,$date_close1))
+            <strong>Close</strong>
+        @else
             @foreach ($openday as $key => $item)
                 @foreach ($item as $value)
-      @php
-
-        @endphp
                 @php
                 $t = count($item)-1;
                 $firstday = $item[0];
@@ -166,15 +168,12 @@
                 $today = date('l');
                 $currentdate = strtotime(date("Y-m-d"));
                 @endphp
-                @if (in_array($currentdate,$date_close1))
-                    <strong>Close</strong>
-                @else
                     @if ($today == $value || $firstday == "Every day")
                         <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                     @endif
-                @endif
                 @endforeach
             @endforeach
+        @endif
         </div>
 
         <a class="logo" href="{{ route('home') }}">
@@ -223,7 +222,6 @@
                             $today = time();
                             $currentday = date('l');
                             $firstday = $item[0];
-                            $currentdate = strtotime(date("Y-m-d"));
                         @endphp
                         @if (in_array($currentdate,$date_close1))
                             <img class="img-fluid" src="{{ $template_setting['polianna_close_banner'] }}" style="width: {{ $template_setting['polianna_open_close_banner_width'] }}px; height: {{ $template_setting['polianna_open_close_banner_height'] }}px;"/>
