@@ -1,3 +1,7 @@
+<!--
+    * This is ADMIN LOGIN FORM VIEW
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,42 +11,29 @@
     <title>ADMIN : LOGIN</title>
 
     <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/fontawesome-free/css/all.min.css') }}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/jqvmap/jqvmap.min.css') }}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('public/dist/css/adminlte.min.css') }}">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{ asset('public/plugins/daterangepicker/daterangepicker.css') }}">
-  <!-- DataTable -->
-  <link href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <link href="//cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css" rel="stylesheet">
-  <!-- Sweet alert -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css" integrity="sha512-g9k+CnZOpfd3BjCvr9L6M9F1u42RbYxtiurifk4KmqTNTyZRnKixRgZl6SzPESunaaCnyelHhKicHWcQUwALYQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Select Box -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('public/plugins/fontawesome-free/css/all.min.css') }}">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="{{ asset('public/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('public/dist/css/adminlte.min.css') }}">
 
 </head>
 <body>
-
 
     <div class="container mt-5">
         <div class="row">
             {{-- Login Section Start --}}
             <div class="login-box m-auto">
                 <div class="login-logo">
-                    <a href=""><b>Manager</b></a>
+                    <a href=""><b>MANAGER</b></a>
                 </div>
                 <!-- /.login-logo -->
                 <div class="card">
@@ -84,7 +75,7 @@
                             @endif
 
                             <div class="input-group mt-3">
-                                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                <button type="submit" class="btn btn-primary btn-block">Sign In </button>
                             </div>
                         </form>
                     </div>
@@ -95,30 +86,19 @@
         </div>
     </div>
 
-<script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="{{ asset('public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<!-- Bootstrap 4 -->
-<script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<!-- daterangepicker -->
-<script src="{{ asset('public/plugins/moment/moment.min.js') }}"></script>
-<script src="{{ asset('public/plugins/daterangepicker/daterangepicker.js') }}"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="{{ asset('public/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-<!-- overlayScrollbars -->
-<script src="{{ asset('public/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset('public/dist/js/adminlte.js') }}"></script>
-<!-- Sweet Alert -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.js" integrity="sha512-2N36vOIIxkP6F+ZuYOIOyiNupgE6uLgNEduYUrKtvrtbgRiqfpc1Mu0f7blAyLx67Y2uwDspjgesfQcOXQ8gdQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.min.js" integrity="sha512-+q01aE1/3DSt/pNwhpoMKxjkWyRTpXPA7xceLKlhmJMADbLJL020BuGSTCExgwe+fD7bvX2HiVGS1suMf2056A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- Select -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+    <script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
 
-<!-- Datatable -->
-<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{{ asset('public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('public/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+
+    <!-- AdminLTE App -->
+    <script src="{{ asset('public/dist/js/adminlte.js') }}"></script>
 
 </body>
 </html>

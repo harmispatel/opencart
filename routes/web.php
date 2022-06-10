@@ -56,25 +56,21 @@ use App\Http\Controllers\Frontend\ReservationController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-
-
+// ADMIN AUTH ROUTES
 Auth::routes();
-
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('admin', [HomeController::class, 'adminLogin'])->name('admin');
 Route::get('login', [HomeController::class, 'adminLogin'])->name('login');
-// Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+
+// CUSTOMER RESET PASSWORD
 Route::get('forgotten', [CustomerController::class, 'forgotten'])->name('forgotten');
 Route::post('sendforgorpasslink', [CustomerController::class, 'sendforgorpasslink'])->name('sendforgorpasslink');
 Route::get('reset-password/{token}', [CustomerController::class, 'showResetPasswordForm'])->name('reset.password.get');
 Route::post('reset-password', [CustomerController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
-// Group
+
+// GROUP ADMIN PANEL ROUTES
 Route::group(['middleware' => 'AuthUser'], function () {
 
     // Dashboard

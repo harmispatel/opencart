@@ -1718,7 +1718,31 @@ function depend_subcat($value1)
 //
 function fetch_mainmenu_submenucolumn($id)
 {
-    $subMenu = SubMenu::where('menu_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl','parent_id')->get()->toArray();
+    $subMenu = SubMenu::where('menu_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl','parent_id','id','menu_id')->get()->toArray();
+
+    $arr = array_map(function ($value) {
+        return $value;
+    }, $subMenu);
+
+    return $arr;
+
+}
+
+function fetch_submenuof_submenu($id)
+{
+    $subMenu = SubMenu::where('parent_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl','parent_id')->get()->toArray();
+
+    $arr = array_map(function ($value) {
+        return $value;
+    }, $subMenu);
+
+    return $arr;
+
+}
+
+function fetch_subof_sub($id)
+{
+    $subMenu = SubMenu::where('parent_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->where('slugurl','!=','')->select('slugurl','parent_id')->get()->toArray();
 
     $arr = array_map(function ($value) {
         return $value;

@@ -93,6 +93,8 @@ class CustomerOrder extends Controller
 
         // Store Details
         $store = Store::where('store_id', $front_store_id)->first();
+        $data['store_mail'] = getStoreDetails($front_store_id,'config_email');
+        $data['store_name'] = getStoreDetails($front_store_id,'config_name');
         // End Store Details
 
         if (session()->has('userid')) {

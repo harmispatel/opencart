@@ -461,6 +461,36 @@ class OrdersController extends Controller
         $order->order_status_id = $request->order_status_id;
         $order->update();
 
+        if($orderhisins->notify == 1)
+        {
+            $data['cust_mail'] = $order->email;
+            $data['cust_name'] = $order->firstname.' '.$order->lastname;
+            $data['order_id'] = $order->order_id;
+            $data['pay_method'] = $order->payment_method;
+            $data['store_name'] = $order->store_name;
+
+            $status = OrderStatus::select('name')->where('order_status_id',$request->order_status_id)->first();
+            $logo = Settings::where('key','polianna_main_logo')->where('store_id',$order->store_id)->first();
+            $store_mail = Settings::where('key','config_email')->where('store_id',$order->store_id)->first();
+            $store_addr = Settings::where('key','config_address')->where('store_id',$order->store_id)->first();
+            $store_tele = Settings::where('key','config_telephone')->where('store_id',$order->store_id)->first();
+
+            $data['status_code'] = isset($status->name) ? $status->name : '';
+            $data['store_logo'] = isset($logo->value) ? $logo->value : '';
+            $data['storeMail'] = isset($store_mail->value) ? $store_mail->value : '';
+            $data['storeAddr'] = isset($store_addr->value) ? $store_addr->value : '';
+            $data['storePhone'] = isset($store_tele->value) ? $store_tele->value : '';
+
+            \Mail::send('admin.mail_format.orderstatus', ['data' => $data],
+            function ($message) use ($data)
+            {
+                $message->from('hasankaradiya1626@gmail.com');
+                $message->to($data['cust_mail']);
+                $message->subject('Order Status');
+            });
+
+        }
+
         $html = '';
 
          // Get Total Order History By Order ID

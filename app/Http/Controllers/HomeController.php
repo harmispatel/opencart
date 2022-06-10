@@ -14,21 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         return view('admin.login');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+
+
+
 
     public function index()
     {
@@ -36,6 +30,10 @@ class HomeController extends Controller
     }
 
 
+
+
+
+    // Function for ADMIN LOGIN
     function adminLogin()
     {
         if(session()->has('password_hash_web'))
@@ -49,16 +47,17 @@ class HomeController extends Controller
     }
 
 
+
+
+
+    // Function for ADMIN DASHBOARD
     public function adminHome(Request $request)
     {
-        // current store id
+        // Admin Current Store ID
         $current_store_id = currentStoreId();
 
-
-
-
+        // ADMIN USER DETAILS
         $user_details = user_details();
-
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
@@ -101,7 +100,6 @@ class HomeController extends Controller
             })->count();
             $orders = Orders::where('store_id',$user_shop_id)->count();
         }
-
 
         return view('dashboard',['customers'=>$customers,'orders'=>$orders,'product'=>$product,'categories'=>$categories]);
 

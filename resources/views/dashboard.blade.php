@@ -1,123 +1,43 @@
+<!--
+    * THIS IS ADMIN DASHBOARD PAGE
+-->
+
+
+
+<!-- HEADER SECTION -->
 @include('header')
+<!-- END HEADER SECTION -->
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Dashboard</h1>
-                </div><!-- /.col -->
+                </div>
+                <!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        {{-- <li class="breadcrumb-item active">Dashboard</li> --}}
+                        <li class="breadcrumb-item active">Dashboard</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
 
-    <!-- Main content -->
-    {{-- <section class="content">
-      <div class="container-fluid">
-        @if (Session::has('success'))
-        <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
-                {{ Session::get('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-       @endif
-
-       @if (Session::has('error'))
-        <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
-                {{ Session::get('error') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-       @endif
-        <!-- Small boxes (Stat box) -->
-        <div class="row">
-
-            <!-- col start -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>{{ (isset($customers)) ? $customers : 0 }}</h3>
-                    <p>Customers</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <a href="{{ route('customers') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
-
-            <!-- col start -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>{{ (isset($categories)) ? $categories : 0 }}</h3>
-                    <p>Categories</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-list-alt"></i>
-                </div>
-                <a href="{{ route('category') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
-
-            <!-- col start -->
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                <div class="inner">
-                    <h3>{{ (isset($orders)) ? $orders : 0 }}</h3>
-                    <p>Orders</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-shopping-cart"></i>
-                </div>
-                <a href="{{ route('orders') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
-
-          <!-- col start -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-primary">
-              <div class="inner">
-                <h3>{{ (isset($product)) ? $product : 0 }}</h3>
-                <p>Product</p>
-              </div>
-              <div class="icon">
-                <i class="fab fa-product-hunt"></i>
-              </div>
-              <a href="{{ route('products') }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </section> --}}
-    <!-- /.content -->
-
-    <!--new dashboard-->
+    <!-- SECTION 1 -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    {{-- Card Start --}}
+                    <!--  CARD -->
                     <div class="card">
                         <div class="dash-main">
                             <div class="row">
@@ -139,9 +59,7 @@
                                             </select>
                                         </div>
                                         <div id="sales-reprt" style="height: 300px;
-                                        overflow-y: scroll;">
-
-                                        </div>
+                                        overflow-y: scroll;"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -169,17 +87,19 @@
                             </div>
                         </div>
                     </div>
-                    {{-- End Card --}}
+                    <!-- END CARD -->
                 </div>
             </div>
         </div>
     </section>
+    <!-- END SECTION 1 -->
 
+    <!-- SECTION 2 -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    {{-- Card Start --}}
+                    <!-- CARD -->
                     <div class="card">
                         <div class="dash-main">
                             <div class="row">
@@ -201,57 +121,27 @@
                                             </select>
                                         </div>
                                         <div id="top-ten-cus" style="height: 300px;
-                                        overflow-y: scroll;">
-
-                                        </div>
+                                        overflow-y: scroll;"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{-- End Card --}}
+                    <!-- END CARD -->
                 </div>
             </div>
         </div>
     </section>
-    <!-- end new dasboard-->
-
-    <hr>
-
-    <!-- Categories Section Start -->
-    {{-- <section class="content">
-        <div class="container mt-5">
-          <div class="row mt-2">
-            {{-- @foreach ($categories as $category)
-            <div class="col-lg-3 col-6 pb-3">
-              <div class="card h-100">
-                <div class="card-body">
-                    <img src="{{ asset('Images/CategoryImages/'.$category->image) }}" alt="Not-Found" class="w-100 h-100">
-                </div>
-                <div class="card-footer text-center pt-1 pb-1">
-                  <h5><a href="{{ route('listByCat',$category->id) }}">{{ $category->name }}</a></h5>
-                </div>
-              </div>
-            </div>
-            @endforeach --}}
-</div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            {{-- {{ $categories->links() }} --}}
-        </div>
-    </div>
-</div>
-</section> --}}
-
-<!-- End Categories Section -->
-
+    <!-- END SECTION 2 -->
 </div>
 <!-- /.content-wrapper -->
 
+<!-- FOOTER SECTION -->
 @include('footer')
+<!-- END FOOTER SECTION -->
 
+
+<!-- CUSTOM SCRIPT -->
 <script type="text/javascript">
 
     // Document Ready
@@ -424,3 +314,5 @@
     // End Get General Total
 
 </script>
+<!-- END CUSTOM SCRIPT -->
+

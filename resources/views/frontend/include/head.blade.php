@@ -71,7 +71,7 @@
                             <div class="invalid-feedback text-start" style="display: none" id="loginpassworderr"></div>
                         </div>
                         <div class="login-modal-last d-flex justify-content-between">
-                            <a href="">Forgotten Password?</a>
+                            <a href="{{ route('forgotten') }}">Forgotten Password?</a>
                             <div class="check-modal">
                                 <label for="remember">Remember Me</label>
                                 <input type="checkbox" id="remember">
