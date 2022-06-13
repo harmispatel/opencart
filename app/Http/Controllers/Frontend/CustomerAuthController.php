@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\URL;
 
 class CustomerAuthController extends Controller
 {
+
+    // Function For Customer Login
     public function customerlogin(Request $request)
     {
 
@@ -76,6 +78,10 @@ class CustomerAuthController extends Controller
         }
     }
 
+
+
+
+    // Function For Customer Registration
     public function customerregister(Request $request)
     {
         $currentURL = URL::to("/");
@@ -200,12 +206,20 @@ class CustomerAuthController extends Controller
         }
     }
 
+
+
+
+    // Function For Customer logOut
     public function customerlogout()
     {
         session()->flush();
         return redirect()->route('home');
     }
 
+
+
+
+    //  Function For Customer Detail Update
     public function customerdetailupdate(Request $request)
     {
         $customerid = session('userid');
@@ -256,6 +270,10 @@ class CustomerAuthController extends Controller
     }
 
 
+
+
+
+    // // Function For Registration Guest Users
     public function registerguestuser(Request $request)
     {
         $request->validate([
@@ -278,4 +296,5 @@ class CustomerAuthController extends Controller
             'success' => 1,
         ]);
     }
+
 }

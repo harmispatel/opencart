@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\URL;
 
 class ContactUsController extends Controller
 {
+    // Show ContactUS Page
     public function index()
     {
-        //  echo "<pre>";
-        //  print_r(session()->all());
-        //  exit;
         return view('frontend.pages.contact');
     }
 
+
+
+    // Insert ContactUS
     public function contactstore(Request $request)
     {
 
@@ -51,4 +52,8 @@ class ContactUsController extends Controller
 
         return redirect()->route('contact');
     }
+
+
+
+
 }

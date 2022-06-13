@@ -505,6 +505,9 @@ class LayoutController extends Controller
 
     }
 
+
+
+     // Function of Slider Setting
     public function slidersettings()
     {
         // Check User Permission
@@ -516,6 +519,9 @@ class LayoutController extends Controller
         return view('admin.settinglayouts.slider_settings');
     }
 
+
+
+    // Function of Banner And Blocks
     public function bannerandblocks()
     {
         // Check User Permission

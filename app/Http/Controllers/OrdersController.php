@@ -699,4 +699,7 @@ class OrdersController extends Controller
         $address = CustomerAddress::where('address_id', '=', $id)->first();
         return response()->json($address);
     }
+
+
+
 }

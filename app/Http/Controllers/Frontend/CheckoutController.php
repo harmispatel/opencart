@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
+
+    // Function For Checkout
     public function checkout()
     {
         $current_date = strtotime(date('Y-m-d'));
@@ -144,6 +146,8 @@ class CheckoutController extends Controller
         return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'collectionresult', 'dileveryresult', 'areas'));
     }
 
+
+
     // Get Payment & Shipping Address By Customer Address ID
     public function getcustomeraddress($id)
     {
@@ -151,6 +155,10 @@ class CheckoutController extends Controller
         return response()->json($address);
     }
 
+
+
+
+    // function For Get Voucher Code
     public function voucher(Request $request)
     {
         $currentURL = URL::to("/");
@@ -273,6 +281,10 @@ class CheckoutController extends Controller
         ]);
     }
 
+
+
+
+    // function For Get Coupon Code
     public function coupon(Request $request)
     {
         $Coupon = $request->coupon;
@@ -286,4 +298,7 @@ class CheckoutController extends Controller
         }
         return response()->json(['json' => $json]);
     }
+
+
+
 }

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\URL;
 class CustomerOrder extends Controller
 {
 
+    // Function For CheckOrder Status
     function checkorderstatus(Request $request)
     {
         if(session()->has('last_order_id'))
@@ -73,6 +74,10 @@ class CustomerOrder extends Controller
 
     }
 
+
+
+
+    // Function For  Confirm Order
     function confirmorder(Request $request)
     {
 
@@ -904,6 +909,10 @@ class CustomerOrder extends Controller
         }
     }
 
+
+
+
+    // Function For  Customer Delivery Adderss
     public function customerdeliveryaddress(Request $request)
     {
 
@@ -1041,4 +1050,5 @@ class CustomerOrder extends Controller
             'success' => 1,
         ]);
     }
+
 }

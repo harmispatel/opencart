@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 class Cartcontroller extends Controller
 {
+    // Function For Cart
     public function cart(Request $request)
     {
 
