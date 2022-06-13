@@ -22,7 +22,7 @@ class TransactionsController extends Controller
     public function getdaterange(Request $request)
     {
         $startdate = $request->start;
-        $enddate = $request->end;
+    $enddate = $request->end;
         $current_store_id = currentStoreId();
 
         $user_details = user_details();

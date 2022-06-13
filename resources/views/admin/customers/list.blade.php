@@ -1,4 +1,14 @@
+<!--
+    THIS IS CUSTOMER LIST PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All Customer List & Storewise Display Customer
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -142,7 +152,7 @@
 
     });
 
-
+    // Get All customer
     function getallCustomers(){
         var table = $('.table').DataTable();
        table.destroy();
