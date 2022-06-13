@@ -1,20 +1,37 @@
-{{-- Header --}}
+<!--
+    THIS IS ADD NEW ORDER PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    addneworder.blade.php
+    it is used for add new order from admin.
+    There are 6 Tabs in This Page Like
+    ----------------------------------------
+    - Customer Details
+    - Payment Details
+    - Shipping Details
+    - Products
+    - Vouchers
+    - Totals
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header -->
 @include('header')
-{{-- End Header --}}
+<!-- End Header -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of Add Order --}}
+<!-- Section of Add Order -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Orders</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -22,35 +39,23 @@
                             <li class="breadcrumb-item active">Insert</li>
                         </ol>
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-
-        {{-- <div class="card-header d-flex p-2" style="background: #f6f6f6">
-            <h3 class="card-title pt-2 m-0" style="color: black">
-                <i class="fas fa-pencil-alt"></i>
-                Add Order
-            </h3>
-            <div class="form-group ml-auto">
-                <button type="submit" form="catform" class="btn btn-primary">Save</button>
-                <a href="{{ route('orders') }}" class="btn btn-danger">Back</a>
-            </div>
-        </div> --}}
-
-        {{-- Insert Data Section --}}
+        <!-- Insert Data Section -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card --}}
+                        <!-- Card -->
                         <div class="card">
-                            {{-- Form --}}
+                            <!-- Form -->
                             <form action="{{ route('addneworders') }}" id="catform" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
-                                {{-- Card Header --}}
+                                <!-- Card Header -->
                                 <div class="card-header" style="background: #f6f6f6">
                                     <h3 class="card-title pt-2 m-0" style="color: black">
                                         <i class="fa fa-pencil-alt pr-2"></i>
@@ -65,11 +70,11 @@
                                         </a>
                                     </div>
                                 </div>
-                                {{-- End Card Header --}}
+                                <!-- End Card Header -->
 
-                                {{-- Card Body --}}
+                                <!-- Card Body -->
                                 <div class="card-body">
-                                    {{-- Tabs Link --}}
+                                    <!-- Tabs Link -->
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-customer-tab" data-toggle="tab"
                                             href="#nav-customer" role="tab" aria-controls="nav-customer"
@@ -85,11 +90,11 @@
                                         <a class="nav-item nav-link" id="nav-totals-tab" data-toggle="tab" href="#nav-totals"
                                             role="tab" aria-controls="nav-totals" aria-selected="false">Totals</a>
                                     </div>
-                                    {{-- End Tabs Link --}}
+                                    <!-- End Tabs Link -->
 
-                                    {{-- Tab Content --}}
+                                    <!-- Tabs Content -->
                                     <div class="tab-content" id="nav-tabContent">
-                                        {{-- Customer Details Tab --}}
+                                        <!-- Customer Details Tab -->
                                         <div class="tab-pane fade show active" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
                                             <div class="col-md-12">
                                                 <h3 class="mt-3 mb-3">Customer Details</h3>
@@ -192,9 +197,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Customer Details Tab --}}
+                                        <!-- End Customer Details Tab -->
 
-                                        {{-- Payment Details Tab --}}
+                                        <!-- Payment Details Tab -->
                                         <div class="tab-pane fade" id="nav-payment" role="tabpanel" aria-labelledby="nav-payment-tab">
                                             <div class="col-md-12">
                                                 <h3 class="mt-3 mb-3">Payment Details</h3>
@@ -313,9 +318,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Payments Detail Tab --}}
+                                        <!-- End Payments Detail Tab -->
 
-                                        {{-- Shiping Details Tab --}}
+                                        <!-- Shiping Details Tab -->
                                         <div class="tab-pane fade" id="nav-shipping" role="tabpanel"
                                         aria-labelledby="nav-shipping-tab">
                                             <div class="col-md-12">
@@ -429,9 +434,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Shiping Details Tab --}}
+                                        <!-- End Shiping Details Tab -->
 
-                                        {{-- Product Tab --}}
+                                        <!-- Product Tab -->
                                         <div class="tab-pane fade" id="nav-product" role="tabpanel" aria-labelledby="nav-product-tab">
                                             <div class="col-md-12">
                                                 <h3 class="mt-3 mb-3">Products</h3>
@@ -502,9 +507,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Product Tab --}}
+                                        <!-- End Product Tab -->
 
-                                        {{-- Vouchers Tab --}}
+                                        <!-- Vouchers Tab -->
                                         <div class="tab-pane fade show" id="nav-vouchers" role="tabpanel"
                                         aria-labelledby="nav-vouchers-tab">
                                             <div class="col-md-12">
@@ -600,9 +605,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Vouchers Tab --}}
+                                        <!-- End Vouchers Tab -->
 
-                                        {{-- Totals Tab --}}
+                                        <!-- Totals Tab -->
                                         <div class="tab-pane fade show" id="nav-totals" role="tabpanel"
                                         aria-labelledby="nav-totals-tab">
                                             <div class="col-md-12">
@@ -710,28 +715,31 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Totals Tab --}}
+                                        <!-- End Totals Tab -->
                                     </div>
-                                    {{-- End Tab Content --}}
+                                    <!-- End Tabs Content -->
                                 </div>
-                                {{-- End Card Body --}}
+                                <!-- End Card Body -->
                             </form>
-                            {{-- End Form --}}
+                            <!-- End Form -->
                         </div>
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-
+        <!-- End Form Section -->
     </div>
 </section>
-{{-- End Section of Add Category --}}
+<!-- End Section of Add Category -->
+
+
+<!-- Footer Section -->
 @include('footer')
+<!-- End Footer Section -->
 
 
-{{-- SCRIPT --}}
+<!-- SCRIPT -->
 <script type="text/javascript">
 
     // Function Of Get Payment Region By Country ID
@@ -751,6 +759,7 @@
         });
     }
     // End Function Of Get Payment Region By Country ID
+
 
     // Get Payment Address By Customer Address ID
     $('#payment_address').on('change', function()
@@ -775,6 +784,7 @@
     });
     // End Get Payment Address By Customer ID
 
+
     // Get Shipping Address By Customer Address ID
      $('#shipping_address').on('change', function()
      {
@@ -797,6 +807,7 @@
     });
     // End Get Shipping Address By Customer Address ID
 
+
     // Function Of Get Payment Region By Country ID
     function shipping_region()
     {
@@ -815,6 +826,7 @@
     }
     // End Function Of Get Payment Region By Country ID
 
+    // Get Customer Details
     $('#cname').autocomplete({
         source: function(requete, reponse) {
 
@@ -875,11 +887,6 @@
                     $('.productdata').html(response);
                 }
             });
-
-
-
-
-            //  return false;
         },
 
         messages: {
@@ -889,12 +896,14 @@
 
     });
 
+
     // for html code decode
     function htmlDecode(input) {
         var doc = new DOMParser().parseFromString(input, "text/html");
         return doc.documentElement.textContent;
     }
 
+    // Product AutoComplete
     $('#productname').autocomplete({
         source: function(requete, reponse) {
 
@@ -934,4 +943,6 @@
             results: function() {}
         }
     });
+
 </script>
+<!-- END SCRIPT -->

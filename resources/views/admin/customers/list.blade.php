@@ -1,34 +1,23 @@
+<!--
+    THIS IS HEADER CUSTOMER LIST PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It's used for Displayed Customer List
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header Section -->
 @include('header')
+<!-- End Header Section -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 
-<style>
-
-/* Loader CSS */
-.loader_div
-{
-    position: absolute;
-    top: 30%;
-    bottom: 0%;
-    left: 10%;
-    right: 0%;
-    z-index: 99;
-    opacity:0.7;
-    display: none;
-    background: url('{{ asset('public/admin/gif/gif3.gif') }}') center center no-repeat;
-    background-size :150px;
-}
-/* End Loader CSS */
-
-</style>
-
-
-
-{{-- Section of List Customers --}}
+<!-- Section of List Customers -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 @if(Session::has('success'))
@@ -43,27 +32,27 @@
                     <div class="col-sm-6">
                         <h1>Customers</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Customers</li>
                         </ol>
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-        {{-- List Section Start --}}
+        <!-- List Section Start -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        <!-- Card Start -->
                         <div class="card">
-                            {{-- Card Header --}}
+                            <!-- Card Header -->
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
@@ -80,13 +69,13 @@
                                     @endif
                                 </div>
                             </div>
-                            {{-- End Card Header --}}
+                            <!-- End Card Header -->
 
-                            {{-- Card Body --}}
+                            <!-- Card Body -->
                             <div class="card-body">
-                                {{-- Table --}}
+                                <!-- Table -->
                                 <table class="table table-bordered">
-                                    {{-- Table Head Start --}}
+                                    <!-- Table Head Start -->
                                     <thead>
                                         <th>
                                             <input type="checkbox" name="checkall" id="delall">
@@ -101,73 +90,70 @@
                                         <th>Date Added</th>
                                         <th>Action</th>
                                     </thead>
-                                    {{-- End Table Head --}}
+                                    <!-- End Table Head -->
 
-                                    {{-- Table Body Start --}}
+                                    <!-- Table Body Start -->
                                     <tbody class="customers" id="customers">
-
                                     </tbody>
-                                    {{-- End Table Body --}}
+                                    <!-- End Table Body -->
                                 </table>
-                                {{-- End Table --}}
+                                <!-- End Table -->
                             </div>
-                            {{-- End Card Body --}}
+                            <!-- End Card Body -->
                         </div>
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-        <div id="loader_div" class="loader_div"></div>
-
+        <!-- End Form Section -->
     </div>
 </section>
-{{-- End Section of List Customers Group --}}
+<!-- End Section of List Customers Group -->
 
-{{-- Footer Start --}}
+
+<!-- Footer Start -->
 @include('footer')
-{{-- End Footer --}}
+<!-- End Footer -->
 
+
+<!-- SCRIPT -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
 
-
-    $(document).ready(function(){
-
-        // $(".loader_div").show();
-
+    $(document).ready(function()
+    {
         getallCustomers();
-
     });
 
 
-    function getallCustomers(){
+    // Function for get Customers
+    function getallCustomers()
+    {
         var table = $('.table').DataTable();
-       table.destroy();
+        table.destroy();
+
         var table = $('.table').DataTable({
-        processing: true,
-        serverSide: true,
-        "scrollX": true,
-        ajax: "{{ route('getcustomers') }}",
-        "order": [0, 'desc'],
-        columns: [
-            {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
-            {data: 'customer_name', name: 'customer_name'},
-            {data: 'shop', name: 'shop', orderable: false, searchable: false},
-            {data: 'email', name: 'email'},
-            {data: 'customer_group', name: 'customer_group', orderable: false, searchable: false},
-            {data: 'status', name: 'status'},
-            {data: 'approved', name: 'approved', orderable: false, searchable: false},
-            {data: 'ip', name: 'ip'},
-            {data: 'date_added', name: 'date_added'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    });
-
+            processing: true,
+            serverSide: true,
+            "scrollX": true,
+            ajax: "{{ route('getcustomers') }}",
+            "order": [0, 'desc'],
+            columns: [
+                {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
+                {data: 'customer_name', name: 'customer_name'},
+                {data: 'shop', name: 'shop', orderable: false, searchable: false},
+                {data: 'email', name: 'email'},
+                {data: 'customer_group', name: 'customer_group', orderable: false, searchable: false},
+                {data: 'status', name: 'status'},
+                {data: 'approved', name: 'approved', orderable: false, searchable: false},
+                {data: 'ip', name: 'ip'},
+                {data: 'date_added', name: 'date_added'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
     }
-
 
 
     // Select All Checkbox
@@ -184,7 +170,7 @@
     // End Select All Checkbox
 
 
-    // Delete Customer Group
+    // Delete Customers
     $('.deletesellected').click(function()
     {
 
@@ -238,12 +224,10 @@
         }
         else
         {
-            swal("Please select atleast One Customer Group", "", "warning");
+            swal("Please select atleast One Customer", "", "warning");
         }
     });
-
-// End Delete Customer Group
-
+    // End Delete Customers
 </script>
-
+<!-- END SCRIPT -->
 

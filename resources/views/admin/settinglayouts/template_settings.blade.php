@@ -1,4 +1,14 @@
+<!--
+    THIS IS TEMPLATE(THEME) SETTING FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    template_settings.blade.php
+    It Displayed All Template(Theme) List & Storewise Display Template(Theme)
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/assets/css/customradio.css') }}">
@@ -463,6 +473,7 @@
                                                 </div>
                                                 {{-- End Card Header --}}
 
+                                                {{-- Card --}}
                                                 <div class="collapse show" id="coll3">
                                                     {{-- Card Body --}}
                                                     <div class="card-body">
@@ -643,21 +654,18 @@
 {{-- End Section of List Template Setting --}}
 
 
-
+{{-- Footer Section --}}
 @include('footer')
+{{-- End Footer Section --}}
 
+{{-- Script --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-
-// $(document).ready(function() {
-//     $('#transaction').DataTable();
-// } );
 
 // Date Range Picker
 $(function() {
     $('input[name="daterange"]').daterangepicker();
 });
-
-
 </script>
+{{-- End Script --}}

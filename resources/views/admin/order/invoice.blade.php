@@ -1,15 +1,28 @@
+<!--
+    THIS IS INVOICE PAGE
+    ----------------------------------------------------------------------------------------------
+    invoice.blade.php
+    It's used for Generate Order Invoice
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Order</title>
+
+    <!-- Bootstarp -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('public/plugins/fontawesome-free/css/all.min.css') }}">
+
+    <!-- Custom CSS -->
     <style>
         *{
             box-sizing: border-box;
@@ -17,6 +30,8 @@
             font-size: 13px;
         }
     </style>
+    <!-- End Custom CSS -->
+
 </head>
 
 <body>
@@ -155,9 +170,9 @@
         </div>
     </div>
 </body>
+
+<!-- SCRIPT -->
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-<script>
-    // $('td').css(padding : '0');
-</script>
+<!-- END SCRIPT -->
 
 </html>

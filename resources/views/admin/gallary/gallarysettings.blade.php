@@ -1,36 +1,43 @@
+<!--
+    THIS IS GAKKARY SETTINGS PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    gallarysettings.blade.php
+    it is used for gallary settings like enable-disable, background option etc. for frontend.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header Section -->
 @include('header')
+<!-- End Header Section -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 
-{{-- Section of List Gallary Setting --}}
+<!-- Section of List Gallary Setting -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1><i class="fa fa-image"></i> Gallery Settings</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Gallary Setting </li>
                         </ol>
                     </div>
-
-                    {{-- <div class="container" style="text-align: right; padding:30px">
-                        <button type="submit" form="form" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                    </div> --}}
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-        {{-- List Section Start --}}
+        <!-- List Section Start -->
         <section class="content">
             <div class="container-fluid">
                 @if(Session::has('success'))
@@ -43,7 +50,7 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        <!-- Card -->
                         <div class="card ">
                             <form action="{{ route('gallarysettingsstore') }}" method="post" id="form" enctype="multipart/form-data">
                                 @csrf
@@ -112,26 +119,27 @@
                                             </tr>
                                             <tr width="250" id="color" style="display: none">
                                                 <td width="250">Background Color</td>
-                                                <td><input type="color"  name="gallery_background_color"  style="width:40%"class="form-control" value="{{ $gallery_background_color  }}">
+                                                <td>
+                                                    <input type="color"  name="gallery_background_color" class="form-control" value="{{ $gallery_background_color  }}">
                                                 </td>
                                             </tr>
                                             <tr id="image" style="display: none">
                                                 <td width="250">Background Image</td>
-                                                <td><input type="file"  name="gallery_background_image" style="width:40%"class="form-control">
+                                                <td>
+                                                    <input type="file"  name="gallery_background_image" class="form-control p-1">
                                                     <img src="{{asset('public/admin/product/'.$gallery_background_image)}}" alt="" width="100px"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td width="250">Header Text</td>
                                                 <td>
-                                                    <input type="text" value="{{ $gallery_header_text }}" name="gallery_header_text"
-                                                        style="max-width: 40%; width: 40%">
+                                                    <input type="text" class="form-control" value="{{ $gallery_header_text }}" name="gallery_header_text">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td width="250">Header Description</td>
                                                 <td>
-                                                    <textarea name="gallery_header_desc" rows="3" cols="40">{{ $gallery_header_desc }}</textarea>
+                                                    <textarea name="gallery_header_desc" class="form-control" rows="3" cols="40">{{ $gallery_header_desc }}</textarea>
                                                 </td>
                                             </tr>
 
@@ -149,57 +157,84 @@
                                 </div>
                             </form>
                         </div>
-
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-
+        <!-- End Form Section -->
     </div>
 </section>
-{{-- End Section of List Gallary Setting --}}
+<!-- End Section of List Gallary Setting -->
+
+
+<!-- Footer Section -->
 @include('footer')
+<!-- End Footer Section -->
+
+<!-- SCRIPT -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script>
-      $(document).ready(function(){
+
+<script type="text/javascript">
+
+    $(document).ready(function()
+    {
         var data = $('input[name=gallery_background_options]:checked').val();
 
-        if (data == 'transparent') {
+        if (data == 'transparent')
+        {
             $('#image').hide();
             $('#color').hide();
-        } else if (data == 'color') {
+        }
+        else if (data == 'color')
+        {
             $('#color').show();
             $('#image').hide();
-        } else if (data == 'image') {
+        }
+        else if (data == 'image')
+        {
             $('#image').show();
             $('#color').hide();
         }
-      });
-    function getgallary() {
+    });
+
+    // Gallary Settings
+    function getgallary()
+    {
         var data1 = $('input[name=gallery_background_options]:checked').val();
 
         var html = '';
-        if (data1 == 'transparent') {
+        if (data1 == 'transparent')
+        {
             $("#text").html('');
-
-        } else if (data1 == 'color') {
+        }
+        else if (data1 == 'color')
+        {
             $("#text").html('');
-        } else if (data1 == 'image') {
+        }
+        else if (data1 == 'image')
+        {
             $("#text").html('');
         }
 
-        if (data1 == 'transparent') {
+        if (data1 == 'transparent')
+        {
             $('#image').hide();
             $('#color').hide();
-        } else if (data1 == 'color') {
+        }
+        else if (data1 == 'color')
+        {
             $('#color').show();
             $('#image').hide();
-        } else if (data1 == 'image') {
+        }
+        else if (data1 == 'image')
+        {
             $('#image').show();
             $('#color').hide();
         }
 
     }
+    // End Gallary Settings
+
 </script>
+<!-- END SCRIPT -->

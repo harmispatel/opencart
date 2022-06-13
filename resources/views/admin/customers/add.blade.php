@@ -1,18 +1,30 @@
+<!--
+    THIS IS ADD NEW CUSTOMER PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    add.blade.php
+    It's used for add new Customer From Admin Panel
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header Section -->
 @include('header')
+<!-- End Header Section -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of Add Customers --}}
+
+<!-- Section of Add Customers -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Customers</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -20,21 +32,20 @@
                             <li class="breadcrumb-item active">Insert</li>
                         </ol>
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-        {{-- List Section Start --}}
+        <!-- List Section Start -->
         <section class="content">
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        <!-- Card Start -->
                         <div class="card card-primary">
-                            {{-- Card Header --}}
+                            <!-- Card Header -->
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2" style="color: black">
                                     <i class="fas fa-pencil-alt mr-2"></i>
@@ -45,14 +56,14 @@
                                     <a href="{{ route('customers') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
                                 </div>
                             </div>
-                            {{-- End Card Header --}}
+                            <!-- End Card Header -->
 
-                            {{-- Form Strat --}}
+                            <!-- Form Section -->
                             <form id="manuForm" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
-                                {{-- Card Body --}}
+                                <!-- Card Body -->
                                 <div class="card-body">
-                                    {{-- Tabs Link --}}
+                                    <!-- Tabs Link -->
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item">
                                             <a class="nav-link active" id="genral-tab" data-toggle="tab" href="#genral" role="tab" aria-controls="genral" aria-selected="true">General</a>
@@ -61,16 +72,16 @@
                                             <a class="nav-link" id="ip-tab" data-toggle="tab" href="#ip" role="tab" aria-controls="data" aria-selected="false">IP Addresses</a>
                                         </li>
                                     </ul>
-                                    {{-- End Tabs Link --}}
+                                    <!-- End Tabs Link -->
 
-                                    {{-- Tab Content --}}
+                                    <!-- Tabs Content -->
                                     <div class="tab-content pt-4" id="myTabContent">
 
-                                        {{-- Genral Tab --}}
+                                        <!-- Genral Tab -->
                                         <div class="tab-pane fade show active" id="genral" role="tabpanel" aria-labelledby="genral-tab">
                                             <div class="row">
                                                 <div class="col-md-2">
-                                                    {{-- Inner Tab Links --}}
+                                                    <!-- Inner Tab Links -->
                                                     <ul class="nav nav-pills nav-stacked list-group" style="display: grid!important" id="address">
                                                         <li class="nav-item">
                                                             <a href="#tab-customer" class="nav-link active" data-toggle="tab" role="tab" aria-controls="data">General</a>
@@ -81,10 +92,10 @@
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                    {{-- End Inner Tab Links --}}
+                                                    <!-- End Inner Tab Links -->
                                                 </div>
                                                 <div class="col-md-10">
-                                                    {{-- Genral Customer Tab --}}
+                                                    <!-- Genral Customer Tab -->
                                                     <div class="tab-content">
                                                         <div class="tab-pane active" id="tab-customer">
 
@@ -163,13 +174,13 @@
 
                                                         </div>
                                                     </div>
-                                                    {{-- End Genral Customer Tab --}}
+                                                    <!-- End Genral Customer Tab -->
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End Genral Tab --}}
+                                        <!-- End Genral Tab -->
 
-                                        {{-- IP Tab --}}
+                                        <!-- IP Tab -->
                                         <div class="tab-pane fade show" id="ip" role="tabpanel" aria-labelledby="ip-tab">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -191,41 +202,37 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- End IP Tab --}}
-
+                                        <!-- End IP Tab -->
                                     </div>
-                                    {{-- End Tab Content --}}
-
+                                    <!-- End Tabs Content -->
                                 </div>
-                                {{-- End Card Body --}}
-
+                                <!-- End Card Body -->
                             </form>
-                            {{-- Form End --}}
-
-
+                            <!-- End Form Section -->
                         </div>
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
-
+        <!-- End Form Section -->
     </div>
 </section>
-{{-- End Section of Add Manufacturers--}}
+<!-- End Section of Add Manufacturers-->
 
 
-
+<!-- Footer Section -->
 @include('footer')
+<!-- End Footer Section -->
 
+
+<!-- SCRIPT -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 
 <script type="text/javascript">
 
+    // Add New Address
     var address_row = 1;
-
     function addAddress()
     {
 
@@ -311,18 +318,14 @@
 
         $('#genral .tab-content').append(html);
 
-        // $('select[name=\'address[' + address_row + '][country_id]\']').trigger('change');
-
         $('#address-add').before('<li class="nav-item"><a href="#tab-address-' + address_row + '" data-toggle="tab" class="nav-link"> Address ' + address_row + ' <i class="fa fa-minus-circle pl-4" onclick="$(\'#address a:first\').tab(\'show\'); $(\'a[href=\\\'#tab-address-' + address_row + '\\\']\').parent().remove(); $(\'#tab-address-' + address_row + '\').remove();"></i></a></li>');
-
-        // $('#address a[href=\'#tab-address-' + address_row + '\']').tab('show');
 
         address_row++;
     }
+    // End Add New Address
 
 
-
-    // Region
+    // Get Region By Country ID
     function region(row_id){
 
         var country_id = $('#country_id'+row_id+' :selected').val();
@@ -338,134 +341,135 @@
         });
 
     }
-    // End Region
+    // Get Region By Country ID
 
 
-// Save Customer
-function savecustomer() {
+    // Function of Save Customer
+    function savecustomer()
+    {
+        var form_data = new FormData(document.getElementById('manuForm'));
 
-    var form_data = new FormData(document.getElementById('manuForm'));
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+        $.ajax({
+            type: "POST",
+            url: "{{ url('storecustomer') }}",
+            data: form_data,
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response) {
+                alert('Data Inserted');
+                window.location.replace('customers');
+            },
+            error : function (message) {
+                var first_name = message.responseJSON.errors.firstname;
+                var last_name = message.responseJSON.errors.lastname;
+                var e_mail = message.responseJSON.errors.email;
+                var phone_no = message.responseJSON.errors.phone;
+                var pass = message.responseJSON.errors.password;
+                var conf_pass = message.responseJSON.errors.confirm;
+
+
+                // FirstName
+                if(first_name)
+                {
+                    $('#fnameError').text('').show();
+                    $('#firstname').attr('class','form-control is-invalid');
+                    $('#fnameError').text(first_name);
+                }
+                else
+                {
+                    $('#fnameError').text('').hide();
+                    $('#firstname').attr('class','form-control');
+                }
+
+                // LastName
+                if(last_name)
+                {
+                    $('#lnameError').text('').show();
+                    $('#lastname').addClass('is-invalid');
+                    $('#lnameError').text(last_name).show();
+                }
+                else
+                {
+                    $('#lnameError').text('').hide();
+                    $('#lastname').attr('class','form-control');
+                }
+
+                // Email
+                if(e_mail)
+                {
+                    $('#emailError').text('').show();
+                    $('#email').addClass('is-invalid');
+                    $('#emailError').text(e_mail).show();
+                }
+                else
+                {
+                    $('#emailError').text('').hide();
+                    $('#email').attr('class','form-control');
+                }
+
+                // Phone
+                if(phone_no)
+                {
+                    $('#phoneError').text('').show();
+                    $('#phone').addClass('is-invalid');
+                    $('#phoneError').text(phone_no).show();
+                }
+                else
+                {
+                    $('#phoneError').text('').hide();
+                    $('#phone').attr('class','form-control');
+                }
+
+                // Password
+                if(pass)
+                {
+                    $('#passwordError').text('').show();
+                    $('#password').addClass('is-invalid');
+                    $('#passwordError').text(pass).show();
+                }
+                else
+                {
+                    $('#passwordError').text('').hide();
+                    $('#password').attr('class','form-control');
+                }
+
+                // Confirm Password
+                if(conf_pass)
+                {
+                    $('#confirmError').text('').show();
+                    $('#confirm').addClass('is-invalid');
+                    $('#confirmError').text(conf_pass).show();
+                }
+                else
+                {
+                    $('#confirmError').text('').hide();
+                    $('#confirm').attr('class','form-control');
+                }
+
+
+
+            }
+        });
+    }
+    // End Function of Save Customer
+
+
+    // Payment Method Hide Show
+    $('input[name=\'payment\']').on('change', function() {
+        $('.payment').hide();
+        $('#payment-' + this.value).show();
     });
 
-
-    $.ajax({
-        type: "POST",
-        url: "{{ url('storecustomer') }}",
-        data: form_data,
-        dataType: "json",
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function (response) {
-            alert('Data Inserted');
-            window.location.replace('customers');
-        },
-        error : function (message) {
-            var first_name = message.responseJSON.errors.firstname;
-            var last_name = message.responseJSON.errors.lastname;
-            var e_mail = message.responseJSON.errors.email;
-            var phone_no = message.responseJSON.errors.phone;
-            var pass = message.responseJSON.errors.password;
-            var conf_pass = message.responseJSON.errors.confirm;
-
-
-            // FirstName
-            if(first_name)
-            {
-                $('#fnameError').text('').show();
-                $('#firstname').attr('class','form-control is-invalid');
-                $('#fnameError').text(first_name);
-            }
-            else
-            {
-                $('#fnameError').text('').hide();
-                $('#firstname').attr('class','form-control');
-            }
-
-            // LastName
-            if(last_name)
-            {
-                $('#lnameError').text('').show();
-                $('#lastname').addClass('is-invalid');
-                $('#lnameError').text(last_name).show();
-            }
-            else
-            {
-                $('#lnameError').text('').hide();
-                $('#lastname').attr('class','form-control');
-            }
-
-            // Email
-            if(e_mail)
-            {
-                $('#emailError').text('').show();
-                $('#email').addClass('is-invalid');
-                $('#emailError').text(e_mail).show();
-            }
-            else
-            {
-                $('#emailError').text('').hide();
-                $('#email').attr('class','form-control');
-            }
-
-            // Phone
-            if(phone_no)
-            {
-                $('#phoneError').text('').show();
-                $('#phone').addClass('is-invalid');
-                $('#phoneError').text(phone_no).show();
-            }
-            else
-            {
-                $('#phoneError').text('').hide();
-                $('#phone').attr('class','form-control');
-            }
-
-            // Password
-            if(pass)
-            {
-                $('#passwordError').text('').show();
-                $('#password').addClass('is-invalid');
-                $('#passwordError').text(pass).show();
-            }
-            else
-            {
-                $('#passwordError').text('').hide();
-                $('#password').attr('class','form-control');
-            }
-
-            // Confirm Password
-            if(conf_pass)
-            {
-                $('#confirmError').text('').show();
-                $('#confirm').addClass('is-invalid');
-                $('#confirmError').text(conf_pass).show();
-            }
-            else
-            {
-                $('#confirmError').text('').hide();
-                $('#confirm').attr('class','form-control');
-            }
-
-
-
-        }
-    });
-}
-
-
-// Payment Method Hide Show
-$('input[name=\'payment\']').on('change', function() {
-    $('.payment').hide();
-    $('#payment-' + this.value).show();
-});
-
-$('input[name=\'payment\']:checked').trigger('change');
-// End Payment Method
+    $('input[name=\'payment\']:checked').trigger('change');
+    // End Payment Method
 
 </script>
+<!-- END SCRIPT -->

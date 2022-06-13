@@ -8,7 +8,7 @@
 
 {{-- Header --}}
 @include('header')
-{{-- End  Header --}}
+{{-- End Header --}}
 
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
