@@ -12,6 +12,7 @@ class ProductStore extends Model
     protected $primaryKey='product_id';
     public $timestamps=false;
 
+    // Has One Relation with "oc_product_description" table
     public function hasOneProductDescription()
     {
         return $this->hasOne(ProductDescription::class,'product_id','product_id')->select(['product_id','name as pname']);

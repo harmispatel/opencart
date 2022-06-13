@@ -11,6 +11,7 @@ class Message extends Model
     use HasFactory;
     protected $table = 'oc_contact_us';
 
+    // Has One Relation with "oc_store" table
     public function hasOneStore()
     {
         return $this->hasOne(Store::class,'store_id','store_id');
