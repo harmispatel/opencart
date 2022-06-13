@@ -1,4 +1,14 @@
+<!--
+    THIS IS REVIEW LIST FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All Review List & Storewise Display Review
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -64,7 +74,7 @@
 
                                     {{-- Table Head Start --}}
                                     <thead class="text-center">
-                                        <th>Order ID</th>
+                                        <th>Review ID</th>
                                         <th>Customer Name</th>
                                         <th>Order Date</th>
                                         <th>Review Date</th>

@@ -11,10 +11,9 @@ use Illuminate\Support\Facades\Artisan;
 
 class LayoutController extends Controller
 {
-
+    // Template(Theme) Setting For Frontend Layout
     public function templatesettings()
     {
-
         // Check User Permission
         if (check_user_role(73) != 1)
         {
@@ -36,8 +35,6 @@ class LayoutController extends Controller
 
         // Get All Themes
         $themes = Themes::get();
-
-
         $key = ([
             'polianna_navbar_background',
             'polianna_navbar_link',
@@ -98,6 +95,7 @@ class LayoutController extends Controller
     }
 
 
+    // Template(Theme) Setting
     function updateTemplateSetting(Request $request)
     {
         $rules = [
@@ -452,6 +450,7 @@ class LayoutController extends Controller
 
     }
 
+    // Function of Template(Theme) Activat Templeate(Theme)
     public function activetheme($id)
     {
         // Current Store ID
