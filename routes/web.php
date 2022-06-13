@@ -191,18 +191,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
 
 
-
-
-
-
-    // Attributes
-    Route::get('addAttribute',[AttributesController::class,'index'])->name('addAttribute');
-    Route::get('attribute', [AttributesController::class, 'attribute'])->name('attribute');
-    Route::get('attributegroup', [AttributesController::class, 'attributegroup'])->name('attributegroup');
-    Route::get('addAttributeGroup', [AttributesController::class, 'index1'])->name('addAttributeGroup');
-
-
-
     //Menu Options
     Route::get('menuoptions', [OptionController::class, 'index'])->name('menuoptions');
     Route::get('addmenuoptions', [OptionController::class, 'add'])->name('addmenuoptions');
@@ -217,47 +205,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('editmapping', [OptionController::class, 'editmapping'])->name('editmapping');
     Route::post('updatemapping', [OptionController::class, 'updatemapping'])->name('updatemapping');
     Route::post('deletemapping', [OptionController::class, 'deletemapping'])->name('deletemapping');
-
-
-    //Recurring Profiles
-    Route::get('recurringprofiles', [RecurringProfilesController::class, 'index'])->name('recurringprofiles');
-    Route::get('addRecurring', [RecurringProfilesController::class, 'add'])->name('addRecurring');
-    Route::post('addRecurring',[RecurringProfilesController::class, 'store'])->name('addRecurring');
-    Route::post('deleterecurring', [RecurringProfilesController::class, 'deleterecurring'])->name('deleterecurring');
-    Route::get('edit/{id}', [RecurringProfilesController::class, 'edit'])->name('edit');
-    Route::post('updaterecurring',[RecurringProfilesController::class, 'update'])->name('updaterecurring');
-
-
-
-    //Filters
-    Route::get('filter', [FiltersController::class, 'index'])->name('filter');
-    Route::get('addfilter', [FiltersController::class, 'add'])->name('addfilter');
-    Route::post('storeFilter',[FiltersController::class, 'store'])->name('storeFilter');
-    Route::get('editfilter/{id}',[FiltersController::class, 'edit'])->name('editfilter');
-    Route::post('deletefilter',[FiltersController::class, 'delete'])->name('deletefilter');
-    Route::post('updatefilter',[FiltersController::class,'update'])->name('updatefilter');
-
-    // Route::get('showId',[FiltersController::class, 'showId'])->name('showId');
-
-    //Manufacturers
-    Route::get('manufacturer', [ManufacturersController::class, 'index'])->name('manufacturer');
-    Route::get('addmanufacturer', [ManufacturersController::class, 'add'])->name('addmanufacturer');
-    Route::post('storemanufacturer', [ManufacturersController::class, 'store'])->name('storemanufacturer');
-    Route::post('deletemanufacturer', [ManufacturersController::class, 'deletemultimanufacturer'])->name('deletemanufacturer');
-    Route::get('editmanufacturer/{id}', [ManufacturersController::class, 'edit'])->name('editmanufacturer');
-    Route::post('updatemanufacturer', [ManufacturersController::class, 'update'])->name('updatemanufacturer');
-
-    //Downloads
-    Route::get('download', [DownloadsController::class, 'download'])->name('download');
-    Route::get('addDownload',[DownloadsController::class,'index'])->name('addDownload');
-
-    //Informations
-    Route::get('information', [InformationController::class, 'index'])->name('information');
-    Route::get('addinformation',[InformationController::class,'add'])->name('addinformation');
-    Route::post('storeinformation',[InformationController::class,'store'])->name('storeinformation');
-    Route::post('deleteinformation',[InformationController::class,'delete'])->name('deleteinformation');
-    Route::get('editinformation/{id}', [InformationController::class, 'edit'])->name('editinformation');
-    Route::post('updateinformation', [InformationController::class, 'update'])->name('updateinformation');
 
 
     //Reviews

@@ -1,5 +1,13 @@
 <?php
 
+// THIS IS HELPER FILE
+// ----------------------------------------------------------------------------------------------
+// This File has been Includes Some Common Functions.
+// That Function is used in anywhere in this Peoject.
+// EX-: user_details(), storeThemeSettings() etc.
+// ----------------------------------------------------------------------------------------------
+
+
 use App\Models\Category;
 use App\Models\MainMenu;
 use App\Models\SubMenu;
@@ -23,40 +31,22 @@ use App\Models\Product;
 use App\Models\Reviews;
 use Illuminate\Support\Facades\URL;
 
-// Function of User Details
+
+
+
+
+// Function for Get user Details
 function user_details()
 {
     $user_dt = auth()->user();
     return $user_dt;
 }
 
-// function full_copy($source, $target)
-// {
-//     if ( is_dir( $source ) ) {
-//             $d = dir( $source );
-//             while ( FALSE !== ( $entry = $d->read() ) )
-//             {
-//                 if ( $entry == '.' || $entry == '..' )
-//                 {
-//                         continue;
-//                 }
-//                 $Entry = $source . '/' . $entry;
-//                 if ( is_dir( $Entry ) )
-//                 {
-//                     @mkdir( $Entry );
-//                     // $this->full_copy( $Entry, $target . '/' . $entry );
-//                     full_copy( $Entry, $target . '/' . $entry );
-//                     continue;
-//                 }
-//                 copy( $Entry, $target . '/' . $entry );
-//             }
-//             $d->close();
-//     }else {
-//         copy( $source, $target );
-//     }
-// }
 
-// Get Total Ip Count
+
+
+
+// Function for Get Total Ip Count
 function gettotalip($ip)
 {
     $ip = CustomerIP::where('ip',$ip)->count();
@@ -64,11 +54,14 @@ function gettotalip($ip)
 }
 
 
-/* Google Distance matrix calculation Api */
+
+
+
+// Function for Google Distance matrix calculation Api
 function calculationDistanceMatrix($lat1,$long1,$lat2,$long2,$api_key)
 {
 
-    // Create a new CURL instance<br>
+    // Create a new CURL instance
     $url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=".$lat1.",".$long1."&destinations=".$lat2.",".$long2."&mode=driving&alternatives=true&sensor=false&key=".$api_key;
 
     $ch = curl_init();
@@ -83,6 +76,10 @@ function calculationDistanceMatrix($lat1,$long1,$lat2,$long2,$api_key)
 }
 
 
+
+
+
+// Function of get Distance
 function distance($lat1, $lon1, $lat2, $lon2, $unit)
 {
     if (($lat1 == $lat2) && ($lon1 == $lon2))
@@ -114,7 +111,10 @@ function distance($lat1, $lon1, $lat2, $lon2, $unit)
 }
 
 
-//
+
+
+
+// Function for Active Current Theme
 function themeActive()
 {
     // Current Store ID
@@ -148,7 +148,7 @@ function themeActive()
 
 
 
-// Get Template Settings & Social Site Settings & Store Settings
+// Function for Get Template Settings & Social Site Settings & Store Settings
 function storeThemeSettings($theme_id,$store_id)
 {
     // Template Settings
@@ -250,14 +250,22 @@ function storeThemeSettings($theme_id,$store_id)
     return $new;
 
 }
-// End Get Template Settings & Social Site Settings & Store Settings
 
 
+
+
+
+// Function for Get Public URL
 function public_url()
 {
     return asset('');
 }
 
+
+
+
+
+// Function of Get CSS URL
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
@@ -265,6 +273,10 @@ function get_css_url()
 }
 
 
+
+
+
+// Function for Get Top 10 Store Sales
 function getTopTenSales($range)
 {
     $current_store_id = currentStoreId();
@@ -605,6 +617,11 @@ function getTopTenSales($range)
 
 }
 
+
+
+
+
+// Function for get top 10 Customers
 function getTop10Customers($range)
 {
     $current_store_id = currentStoreId();
@@ -927,6 +944,10 @@ function getTop10Customers($range)
 }
 
 
+
+
+
+// Function for get General Totals for Stores
 function getGeneralTotals($range)
 {
     $current_store_id = currentStoreId();
@@ -1266,6 +1287,10 @@ function getGeneralTotals($range)
 }
 
 
+
+
+
+// Function for Check Order Status
 function checkOrderStatus($order_id)
 {
     $order_dt = Orders::where('order_id',$order_id)->first();
@@ -1274,7 +1299,10 @@ function checkOrderStatus($order_id)
 }
 
 
-// Get Theme ID & Store ID
+
+
+
+// Function for Get Theme ID & Store ID
 function themeID($url)
 {
     $slash = substr($url, -1);
@@ -1295,26 +1323,6 @@ function themeID($url)
     $setting = Settings::select('value')->where('store_id',$store_id)->where('key',$key)->first();
     $theme_id = isset($setting->value) ? $setting->value : '';
 
-	// if(session()->has('front_store_id'))
-    // {
-    //     session()->forget('front_store_id');
-    //     session()->put('front_store_id',$store_id);
-    // }
-    // else
-    // {
-    //     session()->put('front_store_id', $store_id);
-    // }
-
-    // if(session()->has('theme_id'))
-    // {
-    //     session()->forget('theme_id');
-    //     session()->put('theme_id', $theme_id);
-    // }
-    // else
-    // {
-    //     session()->put('theme_id', $theme_id);
-    // }
-
     $new = ([
         'theme_id' => $theme_id,
         'store_id' => $store_id,
@@ -1323,13 +1331,14 @@ function themeID($url)
     return $new;
 
 }
-// End Get Theme ID & Store ID
 
 
 
 
 
-function getproductcount($demo){
+// Function for Get Product Count
+function getproductcount($demo)
+{
 	$productcount=Product_to_category::where('category_id',$demo)->count();
 
 	return $productcount;
@@ -1337,6 +1346,11 @@ function getproductcount($demo){
 
 }
 
+
+
+
+
+// Function for get Product
 function getproduct($front_store_id,$cat_id)
 {
     $product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
@@ -1345,6 +1359,12 @@ function getproduct($front_store_id,$cat_id)
     return $product;
 
 }
+
+
+
+
+
+// Function for Get Topping Procuct Price Size
 function getsize($product_id)
 {
 
@@ -1353,6 +1373,11 @@ function getsize($product_id)
 
 }
 
+
+
+
+
+// Function for Get Images for Gallary
 function getimage($current_store)
 {
     if ($current_store == 0)
@@ -1365,14 +1390,23 @@ function getimage($current_store)
     return $image;
 }
 
-function getphoto($current_store,$key){
+
+
+
+
+// Function for Get Gallary Settings
+function getphoto($current_store,$key)
+{
     $gallery = Settings::where('key',$key)->where('store_id',$current_store)->first();
     $new = isset($gallery->value) ? $gallery->value : '';
     return $new;
-
 }
 
 
+
+
+
+// Function for Get Fonts
 function getFonts()
 {
     $fonts = array(
@@ -1397,7 +1431,10 @@ function getFonts()
 }
 
 
-// Function to Get Store Details
+
+
+
+// Function for Get Store Details
 function getStoreDetails($storeid,$key)
 {
     $gedetails = Settings::where('key',$key)->where('store_id',$storeid)->first();
@@ -1405,27 +1442,34 @@ function getStoreDetails($storeid,$key)
     return $new;
 }
 
-function getLoyaltyDetails($storeid,$key){
+
+
+
+
+// Function for Get Loyality Details
+function getLoyaltyDetails($storeid,$key)
+{
 
     $gedetails = Settings::where('store_id',$storeid)->where('key',$key)->first();
+    $point = Settings::select('value')->where('store_id',$storeid)->where('key','point')->first();
+    $unserializepoint =unserialize(isset($point['value']) ? $point['value'] :'');
 
-        $point = Settings::select('value')->where('store_id',$storeid)->where('key','point')->first();
-        $unserializepoint =unserialize(isset($point['value']) ? $point['value'] :'');
-
-        $money = Settings::select('value')->where('store_id',$storeid)->where('key','money')->first();
-        $unserializemoney =unserialize(isset($money['value']) ? $money['value'] :'');
-
-
+    $money = Settings::select('value')->where('store_id',$storeid)->where('key','money')->first();
+    $unserializemoney =unserialize(isset($money['value']) ? $money['value'] :'');
 
     $value = isset($gedetails->value) ? $gedetails->value : '';
     $data['value'] = $value;
     $data['unserializepoint'] =$unserializepoint;
     $data['unserializemoney'] =$unserializemoney;
 
-
     return $data;
 }
 
+
+
+
+
+// Function for get Current Store ID for admin panel
 function currentStoreId()
 {
     if(session()->has('store_id'))
@@ -1440,7 +1484,10 @@ function currentStoreId()
 }
 
 
-// Check Ban IP
+
+
+
+// Function for Check Ban IP
 function checkBanIp($ip)
 {
     $ip = CustomerBanIp::select('ip')->where('ip',$ip)->first();
@@ -1448,7 +1495,10 @@ function checkBanIp($ip)
 }
 
 
-// Check New Model
+
+
+
+// Function for Check New Model
 function checkNewModel()
 {
     $setting = Settings::where('key','new_module_status')->first();
@@ -1464,6 +1514,9 @@ function checkNewModel()
 
 
 
+
+
+// Function for get All Stores
 function getStores()
 {
     $stores = Store::get();
@@ -1471,6 +1524,10 @@ function getStores()
 }
 
 
+
+
+
+// Function for get Current Store URL
 function getCurrentStoreURL($id)
 {
     $store = Store::select('ssl')->where('store_id',$id)->first();
@@ -1479,6 +1536,10 @@ function getCurrentStoreURL($id)
 }
 
 
+
+
+
+// Function for Get Sub option for Menu Options
 function get_sub_opt_names($sub_opt_ids)
 {
     $arr = array();
@@ -1496,6 +1557,10 @@ function get_sub_opt_names($sub_opt_ids)
 }
 
 
+
+
+
+// Function for Users Shop details
 function user_shop_detail($shopID)
 {
     $store_dt = Store::where('store_id',$shopID)->first();
@@ -1504,6 +1569,9 @@ function user_shop_detail($shopID)
 
 
 
+
+
+// Function for Get Zones by Country ID
 function getZonebyId($zid)
 {
     $zone = Region::where('zone_id',$zid)->first();
@@ -1511,8 +1579,12 @@ function getZonebyId($zid)
 }
 
 
-// Function of Genrate Token
-function genratetoken($length = 32) {
+
+
+
+// Function for Genrate random Token
+function genratetoken($length = 32)
+{
     $string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     $max = strlen($string) - 1;
@@ -1528,7 +1600,9 @@ function genratetoken($length = 32) {
 
 
 
-// Function of Sidebar Menu
+
+
+// Function for Sidebar Main Menu
 function sidebar()
 {
     $all_menu = MainMenu::orderBy('menu_order','ASC')->get();
@@ -1538,7 +1612,8 @@ function sidebar()
 
 
 
-// Function of Sidebar Menu of Submenu
+
+// Function for Sidebar Menu of Submenu
 function submenu($menu_id)
 {
     $sub_menu = Submenu::where('menu_id',$menu_id)->get();
@@ -1548,11 +1623,14 @@ function submenu($menu_id)
 
 
 
+
+// Function for  SubMenu of Submenu
 function submenuofsubmenu($submenu_id)
 {
     $submenu_of_submenu = Submenu::where('parent_id',$submenu_id)->get();
     return $submenu_of_submenu;
 }
+
 
 
 
@@ -1567,7 +1645,8 @@ function submenuaction($smenu_id)
 
 
 
-// Function of Get User Role Action
+
+// Function for Get User Role Action
 function get_rel_userrole_action($where)
 {
     $user_role_action = Permission::where($where)->first();
@@ -1577,7 +1656,8 @@ function get_rel_userrole_action($where)
 
 
 
-// Function of Fetch Other Users Sidebar Menu
+
+// Function for Fetch Other Users Sidebar Menu
 function fetch_otherusers_mainmenu($where)
 {
     $resultset = MainMenu::where($where)->select('oc_main_menu.*')->join('oc_userrole_actions','oc_userrole_actions.menu_id','=','oc_main_menu.id')->orderBy('oc_main_menu.menu_order')->get();
@@ -1587,7 +1667,8 @@ function fetch_otherusers_mainmenu($where)
 
 
 
-// Function of Fetch Other Users Sidebar Menu of Submenu
+
+// Function for Fetch Other Users Sidebar Menu of Submenu
 function fetch_otherusers_mainmenu_submenu($where)
 {
     $resultset = Permission::where($where)->where('oc_menu_actions.is_hidden','!=',4)->select('oc_menu_actions.*')->join('oc_menu_actions','oc_menu_actions.id','=','oc_userrole_actions.action_id')->orderBy('oc_menu_actions.id')->get();
@@ -1595,11 +1676,18 @@ function fetch_otherusers_mainmenu_submenu($where)
 }
 
 
+
+
+
+// Function for Get Products Price Size
 function getProductSize($sizeid,$productid)
 {
     $size = ToppingProductPriceSize::where('id_size',$sizeid)->where('id_product',$productid)->first();
     return $size;
 }
+
+
+
 
 
 // Function of Check Userrole of Submenus
@@ -1627,7 +1715,11 @@ function check_user_role($action_id)
     }
 }
 
-// Checkuserrole for Menu
+
+
+
+
+// Function for Check User Role for Menu
 function check_user_role_menu($action_id)
 {
     $admin = user_details();
@@ -1656,7 +1748,8 @@ function check_user_role_menu($action_id)
 
 
 
-// Function of Check Userrole for Single Menu
+
+// Function for Check Userrole for Single Menu
 function check_user_role_for_single_menu($action_id)
 {
     $admin = user_details();
@@ -1682,40 +1775,11 @@ function check_user_role_for_single_menu($action_id)
 
 }
 
-function getmaincat()
-{
-    $fetchparent = CategoryDetail::where('oc_category.parent_id', '=', 0)->select('oc_category.*', 'ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-
-    foreach ($fetchparent as $main) {
-        $subcat = CategoryDetail::where('oc_category.parent_id',$main->category_id)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-    }
-
-    return $fetchparent;
-}
-
-
-
-//Function of Get Sub Category
-function get_subcat($parentid)
-{
-    $subcat = CategoryDetail::where('oc_category.parent_id',$parentid)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();
-    return $subcat;
-}
 
 
 
 
-// Function of Subcategory of Category
-function depend_subcat($value1)
-{
-    $subcat1 = CategoryDetail::where('oc_category.parent_id',$value1)->select('oc_category.*','ocd.name as cat_name')->leftJoin('oc_category_description as ocd', 'ocd.category_id', '=', 'oc_category.category_id')->get();;
-    return $subcat1;
-}
-
-
-
-
-//
+// Function for Get Submenus Array
 function fetch_mainmenu_submenucolumn($id)
 {
     $subMenu = SubMenu::where('menu_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl','parent_id','id','menu_id')->get()->toArray();
@@ -1728,6 +1792,11 @@ function fetch_mainmenu_submenucolumn($id)
 
 }
 
+
+
+
+
+// Function for Get Submenu of Submenu Array
 function fetch_submenuof_submenu($id)
 {
     $subMenu = SubMenu::where('parent_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->select('slugurl','parent_id')->get()->toArray();
@@ -1740,6 +1809,11 @@ function fetch_submenuof_submenu($id)
 
 }
 
+
+
+
+
+// Function for Get Submenu of Submenu Array
 function fetch_subof_sub($id)
 {
     $subMenu = SubMenu::where('parent_id',$id)->where('oc_menu_actions.is_hidden','!=',4)->where('slugurl','!=','')->select('slugurl','parent_id')->get()->toArray();
@@ -1754,6 +1828,9 @@ function fetch_subof_sub($id)
 
 
 
+
+
+// Function for Open-Close Time
 function openclosetime()
 {
     // Get Current Theme ID & Store ID
@@ -1840,17 +1917,11 @@ function openclosetime()
         $open_close[$row] = isset($query->value) ? $query->value : '';
     }
 
-    // $closedate = unserialize($open_close['closing_dates']);
     $delivery = unserialize($open_close['delivery']);
     $collection = unserialize($open_close['collection']);
-    // $timesetting = $open_close;
     $bussines = unserialize($open_close['bussines']);
     $days = $days;
     $times = $times;
-
-    // echo '<pre>';
-    // print_r($open_close);
-    // exit();
 
     // bussines Time
     $openday = array();
@@ -1903,6 +1974,7 @@ function openclosetime()
             }
         }
     }
+
     // delivery Time
     $deliverydays = array();
     $deliveryfrom = array();
@@ -1950,6 +2022,11 @@ function openclosetime()
     return $data;
 }
 
+
+
+
+
+// Function for Get Stores Reviews
 function storereview()
 {
     // Get Current Theme ID & Store ID
@@ -1968,6 +2045,11 @@ function storereview()
     return $data;
 }
 
+
+
+
+
+// Function for get User's Cart
 function getuserCart($userId)
 {
     $customer = Customer::select('cart')->where('customer_id',$userId)->first();
@@ -1977,6 +2059,11 @@ function getuserCart($userId)
     return $cart;
 }
 
+
+
+
+
+// Function for Add to Cart Login User
 function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
 {
     $delivery_type = session()->get('flag_post_code');
@@ -2055,6 +2142,11 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
 
 }
 
+
+
+
+
+// Function for get Coupon
 function getCoupon()
 {
     $currentURL = URL::to("/");
@@ -2092,6 +2184,11 @@ function getCoupon()
     return $Coupon;
 }
 
+
+
+
+
+// Function for Add to Cart
 function addtoCart($request,$productid,$sizeid)
 {
     $delivery_type = session()->get('flag_post_code');
@@ -2166,6 +2263,9 @@ function addtoCart($request,$productid,$sizeid)
 
 
 
+
+
+// Function for get All Products
 function getallproduct($id)
 {
 
@@ -2173,9 +2273,10 @@ function getallproduct($id)
     $categorytoproduct = Product_to_category::with(['hasOneProduct','hasOneDescription'])->whereHas('hasOneProduct', function ($query) use ($cat) {
         $query->where('category_id',$cat);
     })->limit(10)->get();
-    // echo '<pre>';
-    // print_r($categorytoproduct);
-    // exit();
+
     return $categorytoproduct;
 }
+
+
+
 ?>
