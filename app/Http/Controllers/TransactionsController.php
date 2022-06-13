@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
 {
+
+    // Function for Get all Transaction Details
     public function index()
     {
         // Check User Permission
@@ -19,18 +21,28 @@ class TransactionsController extends Controller
         return view('admin.transactions.list');
     }
 
+
+
+
+
+    // Function for get Transaction By Date
     public function getdaterange(Request $request)
     {
+        // Start Date
         $startdate = $request->start;
+
+        // End Date
         $enddate = $request->end;
+
+        // Current Store ID
         $current_store_id = currentStoreId();
 
         $user_details = user_details();
-
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
         }
+
 
         if($user_group_id == 1)
         {

@@ -19,7 +19,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
 {
-    // Function of Get All Customer View
+    // Function of Get All Customers view page
     public function index()
     {
         // Check User Permission
@@ -31,6 +31,10 @@ class CustomerController extends Controller
     }
 
 
+
+
+
+    // Function for Forget Password view page
     function forgotten()
     {
         return view('frontend.pages.forgotten_password');

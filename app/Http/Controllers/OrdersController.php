@@ -25,7 +25,7 @@ use DataTables;
 
 class OrdersController extends Controller
 {
-    // View Order List
+    // Function for Order List
     public function index()
     {
         // Check User Permission
@@ -36,6 +36,10 @@ class OrdersController extends Controller
 
         return view('admin.order.list');
     }
+
+
+
+
 
     // Function of Get Orders By Current Store
     public function getorders(Request $request)
@@ -117,7 +121,6 @@ class OrdersController extends Controller
 
                 }
             }
-            // Get Orders
 
         }
         else
@@ -260,7 +263,8 @@ class OrdersController extends Controller
 
 
 
-    // View order
+
+    // Function for View order
     public function vieworder($id)
     {
         // Check User Permission
@@ -287,6 +291,11 @@ class OrdersController extends Controller
         return view('admin.order.view', ['orders' => $orders, 'orderstatus' => $orderstatus, 'ordertotal' => $ordertotal, 'productorders' => $productorders, 'ordershistory' => $ordershistory]);
     }
 
+
+
+
+
+    // Function of Insert Order page
     public function ordersinsert()
     {
         // Check User Permission
@@ -296,7 +305,6 @@ class OrdersController extends Controller
         }
 
         $user_details = user_details();
-
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
@@ -331,6 +339,9 @@ class OrdersController extends Controller
 
 
 
+
+
+    // Function of Generate Order Invoice..
     function generateinvoice(Request $request)
     {
         $orderID = $request->order_id;
@@ -362,9 +373,14 @@ class OrdersController extends Controller
     }
 
 
-    // Add new order
+
+
+
+
+    // Function for Store New Orders
     public function addneworders(Request $request)
     {
+        // Validation
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
@@ -385,6 +401,7 @@ class OrdersController extends Controller
             'storename' => 'required',
         ]);
 
+        // Insert New Order
         $neworder = new Orders;
         $neworder->store_id                = isset($request->storename) ? $request->storename : "0";
         $neworder->invoice_prefix          = "INV-2013-00";
@@ -445,22 +462,28 @@ class OrdersController extends Controller
     }
 
 
-    // Order History Insert
+
+
+
+
+    // Function for Store new Order History
     public function orderhistoryinsert(Request $request)
     {
+        // New Order History
         $orderhisins = new OrderHistory;
         $orderhisins->order_status_id = $request->order_status_id;
         $orderhisins->order_id = $request->order_id;
         $orderhisins->notify  = isset($request->notify) ? $request->notify : "0";
         $orderhisins->comment = isset($request->comment) ? $request->comment : "";
-
         $orderhisins->date_added = date("Y-m-d h:i:s");
         $orderhisins->save();
 
+        // Update order Status
         $order = Orders::find($request->order_id);
         $order->order_status_id = $request->order_status_id;
         $order->update();
 
+        // Send Mail & Notify to Customer for Changing Status
         if($orderhisins->notify == 1)
         {
             $data['cust_mail'] = $order->email;
@@ -493,8 +516,8 @@ class OrdersController extends Controller
 
         $html = '';
 
-         // Get Total Order History By Order ID
-         $ordershistory = OrderHistory::with(['oneOrderHistoryStatus'])->where('order_id', $request->order_id)->get();
+        // Get Total Order History By Order ID
+        $ordershistory = OrderHistory::with(['oneOrderHistoryStatus'])->where('order_id', $request->order_id)->get();
 
         foreach ($ordershistory as $key => $value)
         {
@@ -513,6 +536,11 @@ class OrdersController extends Controller
         ]);
     }
 
+
+
+
+
+    // Function for Delete Order
     public function deleteorder(Request $request)
     {
         // Check User Permission
@@ -525,10 +553,19 @@ class OrdersController extends Controller
 
         if (count($ids) > 0)
         {
+            // Delete Orders
             Orders::whereIn('order_id', $ids)->delete();
+
+            // Delete Order Cart
             OrderCart::whereIn('order_id',$ids)->delete();
+
+            // Delete Order History
             OrderHistory::whereIn('order_id',$ids)->delete();
+
+            // Delete Orders Products
             OrderProduct::whereIn('order_id',$ids)->delete();
+
+            // Delete Orders Total
             OrderTotal::whereIn('order_id',$ids)->delete();
         }
 
@@ -543,7 +580,7 @@ class OrdersController extends Controller
 
 
 
-    // Print Orders Invoice
+    // Function for Print Invoice
     public function invoice($id)
     {
 
@@ -560,91 +597,7 @@ class OrdersController extends Controller
 
 
 
-
-    public function shipping($id)
-    {
-        $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
-        return view('admin.order.shippinglist', ["orders" => $orders]);
-    }
-
-
-
-
-
-
-    public function returns()
-    {
-        $returns = OrderReturn::join('oc_return', 'oc_return_status.return_status_id', '=', 'oc_return.return_status_id')->get();
-        return view('admin.order.returns', ['returns' => $returns]);
-    }
-
-
-
-
-
-
-    public function addnewreturns()
-    {
-        $return = OrderReturn::get();
-        $returnaction = ReturnAction::get();
-        $returnreason = ReturnReason::get();
-        $customers = Customer::get();
-        $orderproduct = OrderProduct::get();
-        return view('admin.order.addnewreturns', ['return' => $return, 'returnaction' => $returnaction, 'returnreason' => $returnreason, 'customers' => $customers, 'orderproduct' => $orderproduct]);
-    }
-
-
-
-
-
-    public function returnform(Request $request)
-    {
-
-        $request->validate([
-            'order_id' => 'required',
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'required',
-            'telephone' => 'required',
-            'product' => 'required',
-            'model' => 'required',
-        ]);
-
-        $product = OrderProduct::where('order_product_id', $request->product)->first();
-        $productname = $product->name;
-
-        $proreturn = new ReturnProduct;
-        $proreturn->order_id = $request->order_id;
-        $proreturn->product_id = $request->product;
-        $proreturn->customer_id = $request->customer_id;
-        $proreturn->date_ordered = $request->date_ordered;
-        $proreturn->return_status_id = $request->return_status_id;
-        $proreturn->firstname = $request->firstname;
-        $proreturn->lastname = $request->lastname;
-        $proreturn->email = $request->email;
-        $proreturn->telephone = $request->telephone;
-        $proreturn->product = $productname;
-        $proreturn->model = $request->model;
-        $proreturn->quantity                        = isset($request->quantity) ? $request->quantity : 0;
-        $proreturn->opened = $request->opened;
-        $proreturn->comment                         = isset($request->comment) ? $request->comment : '';
-        $proreturn->return_reason_id = $request->return_reason_id;
-        $proreturn->return_action_id = $request->return_action_id;
-
-        $proreturn->date_added = date("Y-m-d h:i:s");
-        $proreturn->date_modified = date("Y-m-d h:i:s");
-        $proreturn->save();
-
-        $errors = "Insert success";
-
-        return redirect()->route('returns')->withErrors($errors);
-    }
-
-
-
-
-
-
+    // Function for Get Products
     public function getproducts($id)
     {
         $productorders = Orders::select('*')->join('oc_order_product as op', 'op.order_id', '=', 'oc_order.order_id')->where('oc_order.customer_id', '=', $id)->get();
@@ -666,7 +619,7 @@ class OrdersController extends Controller
 
 
 
-    // Get Customer By Search
+    // Function for Get Customer By Searching Customer Name
     public function autocomplete(Request $request)
     {
         $user_details = user_details();
@@ -692,7 +645,7 @@ class OrdersController extends Controller
 
 
 
-
+    // Function For Get Product By Searching Product Name
     public function autocompleteproduct(Request $request)
     {
         $user_details = user_details();
@@ -722,7 +675,6 @@ class OrdersController extends Controller
 
 
 
-
     // Function of Get Address By Selected Customer
     public function getaddress($id)
     {
@@ -741,8 +693,7 @@ class OrdersController extends Controller
 
 
 
-
-    // Get Payment & Shipping Address By Customer Address ID
+    // Function for Get Payment & Shipping Address By Customer Address ID
     public function payment_and_shipping_address($id)
     {
         $address = CustomerAddress::where('address_id', '=', $id)->first();

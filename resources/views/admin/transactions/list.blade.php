@@ -1,39 +1,57 @@
+<!--
+    THIS IS TRANSACTION PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    it is used for get all stores transaction Details Like -:
+    ---------------------------------------------------------
+    - No. of Rejected Orders
+    - Rejected Orders Total
+    - No. of Accepted Orders
+    - Accepted Orders Total
+    - Commission Total
+    - Accepted Reataurant Net
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header Section -->
 @include('header')
+<!-- End Header Section -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 
-{{-- Section of List Transactions --}}
+<!-- Section of List Transactions -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Transactions</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Transactions </li>
                         </ol>
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-        {{-- List Section Start --}}
+        <!-- List Section Start -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        <!-- Card Start -->
                         <div class="card card-primary">
-                            {{-- Card Header --}}
+                            <!-- Card Header -->
                             <div class="card-header" style="background: #424e64">
                                 <h3 class="card-title pt-2">
                                     <i class="fa fa-list"></i>
@@ -46,9 +64,9 @@
                                 </form>
 
                             </div>
-                            {{-- End Card Header --}}
+                            <!-- End Card Header -->
 
-                            {{-- Card Body --}}
+                            <!-- Card Body -->
                             <div class="card-body">
                                 <table class="table table-bordered" id="transaction">
                                     @if (Session::has('success'))
@@ -90,71 +108,73 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            {{-- End Card Body --}}
+                            <!-- End Card Body -->
                         </div>
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End Form Section --}}
+        <!-- End Form Section -->
 
     </div>
 </section>
-{{-- End Section of List Trasnsactions --}}
+<!-- End Section of List Trasnsactions -->
 
 
-
+<!-- Footer Section -->
 @include('footer')
+<!-- End Footer Section -->
 
+
+<!-- SCRIPT -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function () {
+    $(document).ready(function () {
 
-    $(function() {
+        $(function() {
 
-        $('input[id="daterange"]').daterangepicker({
-            opens: 'left'
-        }, function(start, end, label) {
-            $('#message').hide();
-            $('#status').show();
-            var startdate = start.format('YYYY-MM-DD');
-            var enddate = end.format('YYYY-MM-DD');
-            $.ajax({
-                type: "post",
-                url: "{{ route('daterange') }}",
-                data: {
-                    'start': startdate,
-                    'end': enddate,
-                },
-                success: function(response) {
-                    $('#customerorder').html(response.customerorder);
-                    $('#rejected').text('');
-                    $('#rejected').append(response.reject);
-                    $('#rejected_amt').text('');
-                    $('#rejected_amt').append(response.reject_amt);
-                    $('#accept').text('');
-                    $('#accept').append(response.accept);
-                    $('#accept_tot').text('');
-                    $('#accept_tot').append(response.accept_tot);
-                    $('#commission').text('');
-                    $('#commission').append(response.commission);
-                    $('#totle').text('');
-                    $('#totle').append(response.totle);
-                    $('#status').hide();
-                    if (response.status == 200) {
+            $('input[id="daterange"]').daterangepicker({
+                opens: 'left'
+            }, function(start, end, label) {
+                $('#message').hide();
+                $('#status').show();
+                var startdate = start.format('YYYY-MM-DD');
+                var enddate = end.format('YYYY-MM-DD');
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('daterange') }}",
+                    data: {
+                        'start': startdate,
+                        'end': enddate,
+                    },
+                    success: function(response) {
+                        $('#customerorder').html(response.customerorder);
+                        $('#rejected').text('');
+                        $('#rejected').append(response.reject);
+                        $('#rejected_amt').text('');
+                        $('#rejected_amt').append(response.reject_amt);
+                        $('#accept').text('');
+                        $('#accept').append(response.accept);
+                        $('#accept_tot').text('');
+                        $('#accept_tot').append(response.accept_tot);
+                        $('#commission').text('');
+                        $('#commission').append(response.commission);
+                        $('#totle').text('');
+                        $('#totle').append(response.totle);
+                        $('#status').hide();
+                        if (response.status == 200) {
+                            $('#message').show();
+                        }
+                    },
+                    error: function(response){
                         $('#message').show();
                     }
-                },
-                error: function(response){
-                    $('#message').show();
-                }
+                });
             });
         });
+
     });
-
-});
-
-
 </script>
+<!-- END SCRIPT -->

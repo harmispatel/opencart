@@ -1,12 +1,25 @@
+<!--
+    THIS IS GALLRY PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    index.blade.php
+    It's used for Photo Gallary for Stores.
+    It's used in Frontend.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header Section -->
 @include('header')
+<!-- End Header Section -->
 
 
 <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}">
-
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/cropper.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/dropzone.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
+
+<!-- Custom CSS -->
 <style>
     .img-de {
         padding: 10px;
@@ -38,13 +51,13 @@
     }
 
 </style>
-{{-- Use the line below instead of the above if you need to cache the css. --}}
-<link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
+<!-- End Custom CSS -->
 
 
-{{-- Section of List Customers --}}
+<!-- Section of List Customers -->
 <section>
     <div class="content-wrapper">
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 @if (Session::has('success'))
@@ -59,7 +72,7 @@
                     <div class="col-sm-6">
                         <h1><i class="fa fa-image"></i>Photo Gallery</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -73,15 +86,13 @@
                             <button class="btn btn-sm btn-primary" disabled><i class="fa fa-save"></i> UPDATE</button>
                         @endif
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
+        <!-- End Breadcumb Section -->
 
-
-        {{-- End Header Section --}}
         @php
-
             $current_store = currentStoreId();
             $user_details = user_details();
 
@@ -100,8 +111,8 @@
             {
                 $image=getimage($user_shop_id);
             }
-
         @endphp
+
         <div class="content">
             <div class="conatiner-fluid">
                 <div class="row" style="margin:0">
@@ -166,11 +177,11 @@
         </div>
     </div>
 </section>
+<!-- End Section of List Customers -->
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog" style="max-width: 950px ">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -192,8 +203,7 @@
                     <div class="ml-auto px-2">
                         <a class="navbar-link d-none" id="multi_selection_toggle">
                             <i class="fa fa-check-double fa-fw"></i>
-                            <span
-                                class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.menu-multiple') }}</span>
+                            <span class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.menu-multiple') }}</span>
                         </a>
                     </div>
                     <a class="navbar-toggler collapsed border-0 px-1 py-2 m-0" data-toggle="collapse"
@@ -359,27 +369,28 @@
                     </a>
                 </div>
             </div>
-            {{-- <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div> --}}
         </div>
-
+        <!-- End Modal content-->
     </div>
 </div>
+<!-- End Modal -->
 
+
+<!-- Footer Section -->
 @include('footer')
+<!-- End Footer Section -->
 
+
+<!-- SCRIPT -->
 <script src="{{ asset('public/vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
 <script src="{{ asset('public/vendor/laravel-filemanager/js/dropzone.min.js') }}"></script>
-<script>
+<script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script>
+
+<script type="text/javascript">
+
     var lang = {!! json_encode(trans('laravel-filemanager::lfm')) !!};
+
     var actions = [
-        // {
-        //   name: 'use',
-        //   icon: 'check',
-        //   label: 'Confirm',
-        //   multiple: true
-        // },
         {
             name: 'rename',
             icon: 'edit',
@@ -392,12 +403,6 @@
             label: lang['menu-download'],
             multiple: true
         },
-        // {
-        //   name: 'preview',
-        //   icon: 'image',
-        //   label: lang['menu-view'],
-        //   multiple: true
-        // },
         {
             name: 'move',
             icon: 'paste',
@@ -435,15 +440,9 @@
             label: lang['nav-sort-time']
         }
     ];
-</script>
-<script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script>
-<script>
 
-</script>
-{{-- Use the line below instead of the above if you need to cache the script. --}}
-{{-- <script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script> --}}
-<script>
 
+    // Function for Get Image URL
     var modalToSelectedFilePath = "";
     var gallary1 ='';
     function getImageUrl(url)
@@ -451,20 +450,24 @@
         modalToSelectedFilePath = url;
     }
 
-    function closePopupAndSetPath(imageId) {
+
+    // Close Popup Modal
+    function closePopupAndSetPath(imageId)
+    {
         var v=$('#test').attr('imageId');
-        //  alert(v);
         jQuery("#myModal").modal('hide');
-        // $(".modal-backdrop").attr("style", "display:none;");
-        // jQuery("#thumb").attr("src", modalToSelectedFilePath);
         jQuery('#thumb' + v).attr("src",modalToSelectedFilePath);
     }
 
-    function showmodal(gallary){
+
+    // Show Popup Modal
+    function showmodal(gallary)
+    {
         $("#myModal").modal('show');
        var gallary1=gallary;
         $('#test').attr('imageId',gallary1);
     }
+
 
     Dropzone.options.uploadForm = {
         paramName: "upload[]", // The name that will be used to transfer the file
@@ -491,6 +494,7 @@
     }
 
 
+    // Add New Image
     var gallary = $('#img_count').val();
     function addGallary()
     {
@@ -522,6 +526,7 @@
         $('#gallryappend').append(html);
     }
 
+
     $('#test').on('click',function()
     {
        var image_id = $(this).attr('imageid');
@@ -536,4 +541,4 @@
     });
 
 </script>
-
+<!-- SCRIPT -->

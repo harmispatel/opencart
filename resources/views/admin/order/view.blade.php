@@ -1,13 +1,28 @@
-{{-- Header --}}
+<!--
+    THIS IS ORDER VIEW PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    view.blade.php
+    it is used for View Customers Orders and Other Details Like
+    ------------------------------------------------------------
+    - Order Details
+    - Payment Details
+    - Products
+    - Order History
+    - Print Order Invoice
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header section -->
 @include('header')
-{{-- End Header --}}
+<!-- End Header section -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of Order View --}}
+<!-- Section of Order View -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 @if (Session::has('success'))
@@ -22,7 +37,7 @@
                     <div class="col-sm-6">
                         <h1>Orders View</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -30,20 +45,20 @@
                             <li class="breadcrumb-item active">Orders View</li>
                         </ol>
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-        {{-- view Section Start --}}
+        <!-- view Section Start -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card --}}
+                        <!-- Card -->
                         <div class="card">
-                            {{-- Card Header --}}
+                            <!-- Card Header -->
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
@@ -61,12 +76,12 @@
                                     </a>
                                 </div>
                             </div>
-                            {{-- End Card Header --}}
+                            <!-- End Card Header -->
 
-                            {{-- Card Body --}}
+                            <!-- Card Body -->
                             <div class="card-body">
 
-                                {{-- Tabs Link --}}
+                                <!-- Tabs Link -->
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                     <a class="nav-item nav-link active" id="nav-order-tab" data-toggle="tab"
                                         href="#nav-order" role="tab" aria-controls="nav-order"
@@ -81,19 +96,19 @@
                                         href="#nav-history" role="tab" aria-controls="nav-history"
                                         aria-selected="false">History</a>
                                 </div>
-                                {{-- End Tabs Link --}}
+                                <!-- End Tabs Link -->
 
-                                {{-- Tabs Content --}}
+                                <!-- Tabs Content -->
                                 <div class="tab-content" id="nav-tabContent">
 
-                                    {{-- Order Details Tab --}}
+                                    <!-- Order Details Tab -->
                                     <div class="tab-pane fade show active" id="nav-order" role="tabpanel"
                                     aria-labelledby="nav-order-tab">
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h3 class="text-center mt-3 mb-3">Order Details</h3>
-                                                    {{-- Table --}}
+                                                    <!-- Table -->
                                                     <table class="table table-bordered table-striped">
                                                         <tbody>
                                                             <tr>
@@ -193,21 +208,21 @@
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                    {{-- End Table --}}
+                                                    <!-- End Table -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- End Order Detail Tab --}}
+                                    <!-- End Order Detail Tab -->
 
-                                    {{-- Payment Details --}}
+                                    <!-- Payment Details -->
                                     <div class="tab-pane fade" id="nav-payment" role="tabpanel"
                                     aria-labelledby="nav-payment-tab">
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h3 class="text-center mt-3 mb-3">Payment Details</h3>
-                                                    {{-- Table --}}
+                                                    <!-- Table -->
                                                     <table class="table table-bordered table-striped">
                                                         <tbody>
                                                             <tr>
@@ -248,21 +263,22 @@
                                                             </tr>
                                                         </tbody>
                                                     </table>
+                                                    <!-- End Table -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- End Payment Details --}}
+                                    <!-- End Payment Details -->
 
 
-                                    {{-- Products Tab --}}
+                                    <!-- Products Tab -->
                                     <div class="tab-pane fade" id="nav-product" role="tabpanel"
                                     aria-labelledby="nav-product-tab">
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h3 class="text-center mt-3 mb-3">Products</h3>
-                                                    {{-- Table --}}
+                                                    <!-- Table -->
                                                     <table class="table table-bordered table-striped">
                                                         <thead class="bg-dark">
                                                             <tr>
@@ -306,13 +322,14 @@
                                                         </tfoot>
                                                         @endforeach
                                                     </table>
+                                                    <!-- End Table -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- End Products Tab --}}
+                                    <!-- End Products Tab -->
 
-                                    {{-- History Tab --}}
+                                    <!-- History Tab -->
                                     <div class="tab-pane fade show" id="nav-history" role="tabpanel"
                                     aria-labelledby="nav-history-tab">
                                         <div class="container">
@@ -325,7 +342,7 @@
                                                         </button>
                                                     </div>
                                                     <h3 class="text-center mt-3 mb-3">Orders History</h3>
-                                                    {{-- Table --}}
+                                                    <!-- Table -->
                                                     <table class="table table-bordered table-striped" id="orderHistory">
                                                         <thead class="bg-dark">
                                                             <tr>
@@ -346,6 +363,7 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+                                                    <!-- End Table -->
                                                 </div>
                                             </div>
                                             <hr style="background: black">
@@ -396,28 +414,30 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- End History Tab --}}
+                                    <!-- End History Tab -->
                                 </div>
-                                {{-- End Tabs Content --}}
+                                <!-- End Tabs Content -->
                             </div>
-                            {{-- End Card Body --}}
+                            <!-- End Card Body -->
                         </div>
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End view Section --}}
+        <!-- End view Section -->
     </div>
 </section>
-{{-- End Section of Order View --}}
+<!-- End Section of Order View -->
 
-{{-- Footer Start --}}
+
+<!-- Footer Section -->
 @include('footer')
-{{-- End Footer --}}
+<!-- End Footer Section -->
 
 
-{{-- SCRIPT --}}
+<!-- SCRIPT -->
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -466,6 +486,7 @@
     });
     // End Insert Order History
 
+
     // Generate Invoice
     function generateinvoice(orderID)
     {
@@ -493,4 +514,4 @@
     // End Genrate Invoice
 
 </script>
-{{-- END SCRIPT --}}
+<!-- END SCRIPT -->

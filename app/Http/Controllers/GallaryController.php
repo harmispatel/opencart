@@ -9,7 +9,7 @@ use App\Models\Settings;
 
 class GallaryController extends Controller
 {
-
+    // Function of Gallary Settings
     public function gallarysettings()
     {
         // Check User Permission
@@ -21,6 +21,11 @@ class GallaryController extends Controller
         return view('admin.gallary.gallarysettings');
     }
 
+
+
+
+
+    // Function of Store Gallary Settings
     public function gallarysettingsstore(Request $request){
 
         $current_store_id = currentStoreId();
@@ -89,15 +94,20 @@ class GallaryController extends Controller
 
         return redirect()->route('gallarysettings')->with('success', 'Settings Updated..');
 
-
-
     }
 
+
+
+
+
+    // Function of Gallary
     public function uploadgallary()
     {
         return view('vendor.laravel-filemanager.index');
     }
 
+
+    // Function of Store new Images for gallary
     public function store(Request $request)
     {
         $current_store_id = currentStoreId();
@@ -152,8 +162,6 @@ class GallaryController extends Controller
        return redirect('uploadgallary');
 
     }
-
-
 
 
 }

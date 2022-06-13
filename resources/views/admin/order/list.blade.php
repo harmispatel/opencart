@@ -1,13 +1,22 @@
-{{-- Header --}}
+<!--
+    THIS IS ORDERS LIST PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    it is used for Displayed All Orders & also Displayed Orders By Stores.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+<!-- Header Section -->
 @include('header')
-{{-- End Header --}}
+<!-- End Header Section -->
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-{{-- Section of List Orders --}}
+<!-- Section of List All Orders -->
 <section>
     <div class="content-wrapper">
-        {{-- Header Section --}}
+        <!-- Breadcumb Section -->
         <section class="content-header">
             <div class="container-fluid">
                 @if(Session::has('success'))
@@ -22,27 +31,27 @@
                     <div class="col-sm-6">
                         <h1>Orders</h1>
                     </div>
-                    {{-- Breadcrumb Start --}}
+                    <!-- Breadcrumb Start -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Orders</li>
                         </ol>
                     </div>
-                    {{-- End Breadcumb --}}
+                    <!-- End Breadcumb -->
                 </div>
             </div>
         </section>
-        {{-- End Header Section --}}
+        <!-- End Breadcumb Section -->
 
-        {{-- List Section Start --}}
+        <!-- List Section Start -->
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        {{-- Card Start --}}
+                        <!-- Card Start -->
                         <div class="card">
-                            {{-- Card Header --}}
+                            <!-- Card Header -->
                             <div class="card-header" style="background: #f6f6f6">
                                 <h3 class="card-title pt-2 m-0" style="color: black">
                                     <i class="fa fa-list pr-2"></i>
@@ -62,13 +71,13 @@
                                     @endif
                                 </div>
                             </div>
-                            {{-- End Card Header --}}
+                            <!-- End Card Header -->
 
-                            {{-- Card Body --}}
+                            <!-- Card Body -->
                             <div class="card-body">
-                                {{-- Table --}}
+                                <!-- Table -->
                                 <table class="table table-bordered table-hover" id="table">
-                                    {{-- Table Head --}}
+                                    <!-- Table Head -->
                                     <thead class="text-center">
                                         <tr>
                                             <th>
@@ -85,35 +94,37 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    {{-- End Table Head --}}
+                                    <!-- End Table Head -->
 
-                                    {{-- Table Body --}}
+                                    <!-- Table Body -->
                                     <tbody class="text-center orders-list">
 
                                     </tbody>
-                                    {{-- End Table Body --}}
+                                    <!-- End Table Body -->
                                 </table>
-                                {{-- End Table --}}
+                                <!-- End Table -->
                             </div>
-                            {{-- End Card Body --}}
+                            <!-- End Card Body -->
                         </div>
-                        {{-- End Card --}}
+                        <!-- End Card -->
                     </div>
                 </div>
             </div>
         </section>
-        {{-- End List Section --}}
+        <!-- End List Section -->
     </div>
 </section>
-{{-- End Section of List Orders --}}
+<!-- End Section of List All Orders -->
 
-{{-- Footer --}}
+
+<!-- Footer Section -->
 @include('footer')
-{{-- End Footer --}}
+<!-- End Footer Section -->
 
 
-{{-- SCRIPT --}}
+<!-- SCRIPTS -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 <script type="text/javascript">
 
     $(document).ready(function ()
@@ -151,6 +162,7 @@
     }
     // End Get All Orders
 
+
     // Select All Checkbox
     $('#delall').on('click', function(e)
     {
@@ -164,6 +176,7 @@
         }
     });
     // End Select All Checkbox
+
 
     // Delete Orders
     $('.deletesellected').click(function()
@@ -225,9 +238,10 @@
         }
         else
         {
-            swal("Please select atleast One User", "", "warning");
+            swal("Please select atleast One Order", "", "warning");
         }
     });
     // End Delete Orders
 
 </script>
+<!-- End Scripts -->
