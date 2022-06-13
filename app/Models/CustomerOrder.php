@@ -12,11 +12,13 @@ class CustomerOrder extends Model
     protected $connection = 'mysql2';
     protected $table = 'customer_order';
 
+    // Has One Relation with "oc_store" table
     public function hasOneStore()
     {
         return $this->hasOne(Store::class,'store_id','store_id');
     }
-    
+
+    // Has One Relation with "oc_order" table
     public function hasOneOrder()
     {
         return $this->hasOne(Orders::class,'store_id','store_id');

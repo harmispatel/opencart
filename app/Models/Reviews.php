@@ -15,11 +15,13 @@ class Reviews extends Model
     public $timestamps = false;
 
 
+    // Has One Relation with "oc_customer" table
     public function hasOneCustomer()
     {
         return $this->hasOne(Customer::class,'customer_id','customer_id')->select('customer_id','firstname','lastname');
     }
 
+    // Has One Relation with "oc_order" table
     public function hasOneOrder()
     {
         return $this->hasOne(Orders::class,'order_id','order_id')->select('order_id','date_added');
