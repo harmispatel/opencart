@@ -1,5 +1,9 @@
 <!--
-    * THIS IS ADMIN DASHBOARD PAGE
+    THIS IS ADMIN DASHBOARD PAGE
+    -------------------------------------------------------------------------------------------------------
+    dashboard.blade.php
+    It's Displayed Store Sales Report, General Total & Top 10 Customers.
+    -------------------------------------------------------------------------------------------------------
 -->
 
 
@@ -10,7 +14,6 @@
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -175,7 +178,7 @@
         });
         // End Get Top Sales
 
-        // Get Top Customer
+        // Get Top 10 Customer
         var cust_range = $('#range :selected').val();
         $("#top-ten-cus").html('');
         $('#top10').attr("disabled",true);
