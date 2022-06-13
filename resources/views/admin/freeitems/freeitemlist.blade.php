@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER FreeItemsList PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    freeitemlist.blade.php
+    It Displayed All FreeItem List & Storewise Display FreeItems
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header--}}
 @include('header')
+{{-- End Header--}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -27,7 +38,6 @@
         {{-- End Header Section --}}
 
         {{-- List Section Start --}}
-
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -112,24 +122,19 @@
 {{-- End Section of List Voucher Themes --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
-
+{{-- End Footer --}}
 
 {{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
 <script type="text/javascript">
-
-
 $(document).ready( function () {
     $('#table').DataTable();
 } );
     $(document).ready(function() {
         getallcategory();
     });
-
 
     // End Get All Category
 
@@ -192,4 +197,7 @@ $(document).ready( function () {
         }
     });
     // End Delete User
+
 </script>
+
+{{-- End SCRIPT --}}

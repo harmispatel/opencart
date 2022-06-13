@@ -1,4 +1,14 @@
+<!--
+    THIS IS HEADER VoucherThemeList PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    vouchertheme.blade.php
+    It Displayed All VoucherTheme List & Storewise Display VoucherTheme
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -81,11 +91,11 @@
                                         <tr>
                                             <th><input type="checkbox" name="del_all" id="delall"></th>
                                             <th>Name</th>
-                                       
+
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    
+
                                     {{-- End Table Head --}}
 
                                     {{-- Table Body --}}
@@ -104,13 +114,13 @@
                                                         Collection
                                                     @else
                                                         Both
-                                                    @endif                                                    
+                                                    @endif
                                                 </td>
                                                 <td>{{ $voucher->name }}</td>
                                                 <td>{{ ($voucher->status == 1) ? "Enable" : "Desable" }}</td>
                                                 <td>{{ strtotime($voucher->date_added) }}</td>
                                                 <td>[<a href="#">send</a>][<a href="{{ url('voucheredit') }}/{{ $voucher->voucher_id }}">Edit</a>]</td>
-                                                
+
                                             </tr>
                                             @endforeach --}}
                                     </tbody>
@@ -139,9 +149,11 @@
 {{-- End Section of List Voucher Themes --}}
 
 
-
+{{-- Footer--}}
 @include('footer')
+{{-- End Footer--}}
 
+{{--Script--}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -157,3 +169,5 @@ $(function() {
 
 
 </script>
+
+{{-- End Script --}}

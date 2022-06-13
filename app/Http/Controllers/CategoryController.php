@@ -17,7 +17,7 @@ class CategoryController extends Controller
 {
 
 
-    // Function of Category View
+    // Function of Category List
     function index()
     {
         // Check User Permission
@@ -115,6 +115,7 @@ class CategoryController extends Controller
                 if (!empty($request->input('search.value'))) {
                     $search = $request->input('search.value');
 
+                    // Search  All Categories
                     $posts =  CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])->where(function ($query) use ($search) {
                         $query->where('sort_order', 'LIKE', "%{$search}%")
                             ->orwhereHas('hasOneCategory', function ($query) use ($search) {
@@ -144,6 +145,7 @@ class CategoryController extends Controller
                             $query->where('store_id', $current_store_id);
                         })->offset($start)->limit($limit)->count();
                 } else {
+                     // Get Categories
                     $posts = CategoryDetail::with(['hasOneCategory', 'hasManyCategoryStore'])
                         ->whereHas('hasManyCategoryStore', function ($query) use ($current_store_id) {
                             $query->where('store_id', $current_store_id);
@@ -767,4 +769,8 @@ class CategoryController extends Controller
             ]);
         }
     }
+
+
+
+
 }

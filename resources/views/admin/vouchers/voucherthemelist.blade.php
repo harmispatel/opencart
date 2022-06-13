@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER VoucherThemeList PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    voucherthemelist.blade.php
+    It Displayed All VoucherTheme List & Storewise Display VoucherTheme
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -116,6 +124,7 @@
 
 <script type="text/javascript">
 
+    // Data Table
     $(document).ready( function ()
     {
         $('#table').DataTable();

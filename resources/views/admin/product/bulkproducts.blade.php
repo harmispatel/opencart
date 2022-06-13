@@ -1,7 +1,16 @@
+<!--
+    THIS IS HEADER bulkproduct PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    bulkproducts.blade.php
+    Its Used for Insert New bulkproducts
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header--}}
 @include('header')
+{{-- End Header--}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
-
 
 {{-- Section of List Bulk Products --}}
 <section>
@@ -107,14 +116,17 @@
 {{-- End Section of List Trasnsactions --}}
 
 
-
+ {{-- Start Footer--}}
 @include('footer')
+ {{-- End Footer--}}
 
+ {{--Start Script--}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
 
 <script>
+    // get bulk product
     $(document).ready(function() {
         var categoryval = $('#categorys :selected').val();
         $("#demo").val(categoryval);
@@ -130,6 +142,7 @@
         getcategoryval(categoryval, "new");
     });
 
+    // Get Category value
     function getcategoryval(categoryval, ctype = "") {
         var total = $('.productone').length;
         var lastid = total;
@@ -172,6 +185,7 @@
     var x = 1;
     var count = 0;
 
+    // Add BulkProduct
     function addMoreProduct() {
 
         var total = $('.productone').length;
@@ -194,6 +208,8 @@
         reset_values();
     });
 
+
+  // reset Bulk Products
     function reset_values() {
         var count = 1;
         $(".productone").each(function() {
@@ -202,7 +218,7 @@
         });
     }
 
-
+    // get Option Values
     function radiocheck(lid, key) {
 
         var cls = '.typetopping_' + lid + '_' + key;
@@ -226,3 +242,5 @@
         }
     }
 </script>
+
+{{-- End Script --}}

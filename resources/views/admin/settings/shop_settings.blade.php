@@ -1,3 +1,14 @@
+<!--
+    THIS IS HEADER ShopSetting PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    shop_setting.blade.php
+    This for Edit ShopSetting
+    ------------------------------
+    - General Tab
+    - Notification Tab
+    - Suspend Tab
+    ----------------------------------------------------------------------------------------------
+-->
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

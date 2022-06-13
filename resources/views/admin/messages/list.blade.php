@@ -1,4 +1,16 @@
+<!--
+    THIS IS HEADER Message List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All Message List & Storewise Display Message
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -96,14 +108,17 @@
 {{-- End Section of List Messages --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function()
     {
+        // call function
         getmessage();
     });
 
@@ -131,3 +146,5 @@
     // End Get All Category
 
 </script>
+
+{{-- End Script Section --}}

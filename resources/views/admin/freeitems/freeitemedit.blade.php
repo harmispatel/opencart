@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER FREEITEMEEDIT PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    freeitemedit.blade.php
+    This for Edit FreeIteme
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

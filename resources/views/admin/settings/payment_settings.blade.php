@@ -1,4 +1,8 @@
+
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -47,21 +51,10 @@
 {{-- End Section of List Payment Settings --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+{{--Script Section--}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-<script type="text/javascript">
-
-// $(document).ready(function() {
-//     $('#transaction').DataTable();
-// } );
-
-// Date Range Picker
-$(function() {
-    $('input[name="daterange"]').daterangepicker();
-});
-
-
-</script>
+{{-- End Script Section--}}

@@ -47,6 +47,10 @@ class SettingsController extends Controller
         '23:59' => 'End day'
     );
 
+
+
+
+
     private $days = array(
         '0' => "Every day",
         '1' => 'Monday',
@@ -58,6 +62,11 @@ class SettingsController extends Controller
         '7' => 'Sunday',
     );
 
+
+
+
+
+     // OpenCloseTime
     public function openclosetime(Request $request)
     {
         // Check User Permission
@@ -129,6 +138,11 @@ class SettingsController extends Controller
         return view('admin.settings.open_close_time_settings', compact(['days', 'timesetting', 'times', 'bussines', 'closedate', 'delivery', 'collection']));
     }
 
+
+
+
+
+    // Create New Store
     public function createstore()
     {
         $language = Language::get();
@@ -137,6 +151,11 @@ class SettingsController extends Controller
         return view('admin.settings.create_store',compact('countries','language','currency'));
     }
 
+
+
+
+
+    // Map And Categoty
     public function mapandcategory()
     {
 
@@ -225,6 +244,11 @@ class SettingsController extends Controller
         return view('admin.settings.map_and_category', compact(['map_category', 'language', 'currency', 'countries']));
     }
 
+
+
+
+
+    // Get Edit  Region By Country
     public function geteditregionbycountry(Request $request)
     {
         $country_id = $request->country_id;
@@ -252,6 +276,10 @@ class SettingsController extends Controller
     }
 
 
+
+
+
+    // Get  Region By Country
     public function getregionbycountry(Request $request)
     {
         $country_id = $request->country_id;
@@ -270,6 +298,10 @@ class SettingsController extends Controller
         }
     }
 
+
+
+
+    // Update  Map And Categoty
     public function updatemapandcategory(Request $request)
     {
         // Check User Permission
@@ -478,6 +510,11 @@ class SettingsController extends Controller
         }
     }
 
+
+
+
+
+    // Insert Store Data
     public function savestoredata(Request $request)
     {
 
@@ -608,6 +645,11 @@ class SettingsController extends Controller
     }
 
 
+
+
+
+
+    // Shop setting
     public function shopsettings()
     {
         // Check User Permission
@@ -694,6 +736,10 @@ class SettingsController extends Controller
     }
 
 
+
+
+
+    // App Setting
     public function appsettings()
     {
 
@@ -744,6 +790,11 @@ class SettingsController extends Controller
         return view('admin.settings.app_settings', compact(['map_category']));
     }
 
+
+
+
+
+    // Update App Setting
     public function updateappsettings(Request $request)
     {
         // Check User Permission
@@ -834,6 +885,11 @@ class SettingsController extends Controller
         return redirect()->route('appsettings')->with('success', 'Settings Updated..');
     }
 
+
+
+
+
+    // Delivery Collection Setting
     public function deliverycollectionsetting()
     {
         // Check User Permission
@@ -893,6 +949,10 @@ class SettingsController extends Controller
     }
 
 
+
+
+
+   // Calculate Distance
     public function calculateDistance(Request $request)
     {
         $current_store_id = currentStoreId();
@@ -961,6 +1021,9 @@ class SettingsController extends Controller
     }
 
 
+
+
+    // Insert Group
     public function addGroup(Request $request)
     {
         $current_store_id = currentStoreId();
@@ -985,6 +1048,10 @@ class SettingsController extends Controller
         ]);
     }
 
+
+
+
+    // Delete Group
     public function deleteGroup(Request $request)
     {
         $delivery_setting_id = $request->id_delivery_settings;
@@ -997,6 +1064,10 @@ class SettingsController extends Controller
     }
 
 
+
+
+
+    // Menage  Delivery Collection
     public function manageDeliveryCollection(Request $request)
     {
         // Check User Permission
@@ -1205,6 +1276,9 @@ class SettingsController extends Controller
     }
 
 
+
+
+     // Payment Setting
     public function paymentsettings()
     {
         // Check User Permission
@@ -1217,6 +1291,10 @@ class SettingsController extends Controller
     }
 
 
+
+
+
+    // Social Link
     public function sociallinks()
     {
         // Check User Permission
@@ -1228,6 +1306,10 @@ class SettingsController extends Controller
         return view('admin.settings.social_links_settings');
     }
 
+
+
+
+    // upadate Social Link
     public function updatesociallinks(Request $request)
     {
         // Check User Permission
@@ -1288,6 +1370,9 @@ class SettingsController extends Controller
 
         return redirect()->route('sociallinks')->with('success', 'Settings Updated..');
     }
+
+
+
 
     // openclosetimeset
     public function openclosetimeset(Request $request)
@@ -1544,6 +1629,10 @@ class SettingsController extends Controller
         return redirect()->route('openclosetime')->with('success', 'Open/Close time Updated..');
     }
 
+
+
+
+    // Day Time
     public function daytime(Request $request)
     {
         $number = $request->number;

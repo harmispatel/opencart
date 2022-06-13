@@ -47,6 +47,9 @@ class CouponController extends Controller
     }
 
 
+
+
+
     //Function of Add New Coupon View
     public function addcoupon()
     {
@@ -57,6 +60,10 @@ class CouponController extends Controller
 
         return view('admin.coupons.add');
     }
+
+
+
+
 
     // Function of Search Products
     public function products(Request $request)
@@ -82,6 +89,10 @@ class CouponController extends Controller
 
         return response()->json($cat);
     }
+
+
+
+
 
     // Function of Search Category
     public function searchcategory(Request $request)
@@ -109,6 +120,9 @@ class CouponController extends Controller
     }
 
 
+
+
+
     // Function of Update Coupon Code Status
     public function updonoff(Request $request)
     {
@@ -120,6 +134,10 @@ class CouponController extends Controller
             "success" => "update status"
         ]);
     }
+
+
+
+
 
     // Function of Store New Coupon
     public function insertcoupon(Request $request)
@@ -188,6 +206,10 @@ class CouponController extends Controller
         return redirect()->route('coupons')->with('success', "Coupon Insert Successfully.");
     }
 
+
+
+
+
     // Function of Update Coupon
     public function couponupdate(Request $request)
     {
@@ -251,6 +273,11 @@ class CouponController extends Controller
         return redirect()->route('coupons')->with('success', "Coupon Update Successfully.");
     }
 
+
+
+
+
+
     // Function of Edit Coupon
     public function editcoupon($id)
     {
@@ -303,6 +330,10 @@ class CouponController extends Controller
         }
     }
 
+
+
+
+
     // Get All Coupons History
     public function getallcouponhistory(Request $request)
     {
@@ -324,4 +355,9 @@ class CouponController extends Controller
                 ->make(true);
         }
     }
+
+
+
+
+
 }

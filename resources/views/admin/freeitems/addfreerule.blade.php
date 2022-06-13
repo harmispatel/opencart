@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER AddfreeRule PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    addfreerule.blade.php
+    Its Used for Insert New AddfreeRule
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

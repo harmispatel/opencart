@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-
+    // function For Permission List
     public function index()
     {
 
@@ -28,6 +28,9 @@ class PermissionController extends Controller
         return view('admin.permission.list',$data);
     }
 
+
+
+    // function  for StoreRelation
     function storerelation(Request $request)
     {
 

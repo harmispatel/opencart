@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER CartRule List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    cartrule.blade.php
+    It Displayed All CartRule List & Storewise Display CartRule
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -116,6 +124,7 @@
 
 <script type="text/javascript">
 
+   // Data Table
     $(document).ready(function()
     {
         $('#table').DataTable();

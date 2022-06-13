@@ -1,9 +1,19 @@
+<!--
+    THIS IS HEADER MenuOptionedit PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    edit.blade.php
+    This for Edit MenuOption
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
+{{--Style Section--}}
 <style>
 /* Custom Radio Button */
 .radio
@@ -15,6 +25,8 @@
   color: #fff;
 }
 </style>
+
+{{--End Style Section--}}
 
 
 {{-- Section of Edit Topping --}}

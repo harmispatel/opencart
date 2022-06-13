@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER UserGroup List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All UserGroup List & Storewise Display UserGroup
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -54,6 +65,7 @@
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
+                                    {{-- Table--}}
                                     <table class="table table-striped" id="usersGroup">
                                        @if(Session::has('success'))
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
@@ -92,6 +104,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    {{-- End Table--}}
                                 </div>
                                 {{-- End Card Body --}}
                                 {{-- Start Card Footer --}}
@@ -106,20 +119,21 @@
             </div>
         </section>
         {{-- End Form Section --}}
-
     </div>
 </section>
 {{-- End Section of List Users Group --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
 
-
+// Data Table
 $(document).ready(function() {
     $('#usersGroup').DataTable();
 } );
@@ -199,6 +213,5 @@ $('.deletesellected').click(function()
 
 // End Delete Usergroup
 
-
-
 </script>
+{{-- End Script Section --}}
