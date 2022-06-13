@@ -1,6 +1,14 @@
+<!--
+    THIS IS HEADER ProductIconsedit PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    edit.blade.php
+    This for Edit ProductIcons
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
-{{-- Footer --}}
+{{-- End Header --}}
 
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
@@ -121,4 +129,6 @@
 @include('footer')
 {{-- End Footer --}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{{-- End Script Section --}}

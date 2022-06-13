@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER Category List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    CategoryList.blade.php
+    It Displayed All Category List & Storewise Display Categories
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

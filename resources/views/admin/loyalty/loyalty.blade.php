@@ -1,4 +1,17 @@
+<!--
+    THIS IS HEADER Loyality PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    loyality.blade.php
+    Its Used for Update New Loyality
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+
+
+{{-- Header --}}
 @include('header')
+{{-- Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -506,11 +519,15 @@
 
 
 
+{{-- Footer Section--}}
 @include('footer')
+{{-- End Footer Section--}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
+    // Select
     $(document).ready(function() {
         $('.category').select2();
         $('.products').select2();
@@ -518,6 +535,8 @@
 </script>
 <script>
     $(document).ready(function() {
+
+        // Show HideOption
         function showhideoption() {
             $('.configdiv').hide();
             var rewardtype = $('input[name="rewardtype"]:checked').val();
@@ -536,3 +555,6 @@
         // $(".category").chosen();
     });
 </script>
+
+{{-- End  Script Section --}}
+

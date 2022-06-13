@@ -1,14 +1,15 @@
 <!--
-    THIS IS ALL USER PROFILE PAGE
+    THIS IS HEADER User List PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     list.blade.php
-    It Displayed USER PROFILE & Storewise Display USER PROFILE
+    It Displayed All User List & Storewise Display User
     ----------------------------------------------------------------------------------------------
 -->
 
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -64,6 +65,7 @@
 
                                 {{-- Card Body --}}
                                 <div class="card-body">
+                                    {{-- Table --}}
                                     <table class="table table-striped" id="usersGroup">
                                         @if(Session::has('success'))
                                         <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
@@ -120,6 +122,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    {{-- End Table --}}
                                 </div>
                                 {{-- End Card Body --}}
                                 {{-- Start Card Footer --}}
@@ -144,15 +147,15 @@
 @include('footer')
 {{-- End Footer --}}
 
-{{-- Script --}}
+{{-- Script Section  --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-
+ // Data Table
 $(document).ready(function() {
     $('#usersGroup').DataTable();
 } );
-
+// End Data Table
 
 // Select All Checkbox
 $('#delall').on('click', function(e) {
@@ -229,4 +232,5 @@ $('.deletesellected').click(function()
 
 
 </script>
-{{-- End Script --}}
+
+{{-- End Script Section  --}}

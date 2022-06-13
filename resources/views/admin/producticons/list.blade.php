@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER ProductIcons List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All ProductIcons List & Storewise Display ProductIcons
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -142,6 +150,7 @@
 
 <script type="text/javascript">
 
+    // Data Table
     $(document).ready(function()
     {
         $('.table').DataTable({
@@ -150,7 +159,7 @@
             } ]
         });
     } );
-
+    // End Data Table
 
     // Select All Checkbox
     $('#delall').on('click', function(e) {

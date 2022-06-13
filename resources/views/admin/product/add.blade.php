@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER Addproduct PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    add.blade.php
+    Its Used for Insert New Product
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+{{-- Header--}}
 @include('header')
+{{-- End Header--}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -236,5 +247,8 @@
         {{-- End Form Section --}}
     </div>
 </section>
-{{-- End Section of Add Category --}}
+{{-- End Section of Add Product --}}
+
+{{-- footer section--}}
 @include('footer')
+{{-- End footer section--}}

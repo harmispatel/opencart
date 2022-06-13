@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class ProductIconsController extends Controller
 {
 
+     // Function For Product Icons List
     public function index()
     {
         // Check User Permission
@@ -21,6 +22,10 @@ class ProductIconsController extends Controller
     }
 
 
+
+
+
+    // function Add  Product Icons
     public function add()
     {
         // Check User Permission
@@ -32,6 +37,10 @@ class ProductIconsController extends Controller
         return view('admin.producticons.add');
     }
 
+
+
+
+    // Function of Insert Product Icons
     public function store(Request $request)
     {
         $request->validate([
@@ -51,6 +60,10 @@ class ProductIconsController extends Controller
         return redirect()->route('producticons')->with('success','Product Icons has been Inserted Successfully.');
 
     }
+
+
+
+
 
     // Function of Delete Product Icons
     public function delete(Request $request)
@@ -75,6 +88,9 @@ class ProductIconsController extends Controller
     }
 
 
+
+
+    // Function of Edit Product Icons
     function edit($id)
     {
         // Check User Permission
@@ -88,6 +104,9 @@ class ProductIconsController extends Controller
     }
 
 
+
+
+    // Function of Update Product Icons
     public function update(Request $request)
     {
         $request->validate([
@@ -105,5 +124,8 @@ class ProductIconsController extends Controller
         return redirect()->route('producticons')->with('success','Product Icons has been Updated Successfully.');
 
     }
+
+
+
 
 }

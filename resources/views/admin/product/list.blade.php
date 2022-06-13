@@ -1,4 +1,14 @@
+<!--
+    THIS IS HEADER Product List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All Product List & Storewise Display Products
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -81,7 +91,6 @@
 
                                     {{-- Table Head --}}
                                     <thead class="text-center header">
-
                                             <th>
                                                 <input type="checkbox" name="checkall" id="del_all">
                                             </th>
@@ -91,9 +100,6 @@
                                             <th id="status">Status</th>
                                             <th id="sort_order">Sort Order</th>
                                             <th id="action">Action</th>
-
-
-
                                     </thead>
                                     {{-- End Table Head --}}
 
@@ -235,6 +241,8 @@
     // });
 </script>
 
+
+{{--  Start Get Product  --}}
 <script>
     $(document).ready(function() {
         var catval = $('#categorys :selected').val();
@@ -367,3 +375,5 @@
 
     });
 </script>
+
+{{--  End Get Product  --}}

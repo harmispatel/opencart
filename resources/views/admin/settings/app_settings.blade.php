@@ -1,3 +1,12 @@
+<!--
+    THIS IS HEADER AppSetting PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    app_settings.blade.php
+    This for Edit AppSetting
+    ----------------------------------------------------------------------------------------------
+
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER UserEdit PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    edit.blade.php
+    This for Edit User
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header  --}}
 @include('header')
+{{-- End Header  --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -230,9 +241,14 @@
 {{-- End Section of Edit User --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript"></script>
+
+{{-- End Script Section --}}

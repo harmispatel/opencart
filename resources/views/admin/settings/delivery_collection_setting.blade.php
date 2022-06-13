@@ -1,3 +1,12 @@
+<!--
+    THIS IS HEADER Delivery_Collection_Setting PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    delivery_collection_setting.blade.php
+    This for Edit Delivery_Collection_Setting
+    ----------------------------------------------------------------------------------------------
+
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -5,6 +14,7 @@
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/assets/css/jquery.tagsinput.css') }}">
 
+{{-- Custom Css--}}
 <style>
 
     .content_form .odd
@@ -310,6 +320,8 @@
     }
 
 </style>
+{{-- End Custom Css--}}
+
 
 {{-- Section of List Delivery Collection Settings --}}
 <section>
@@ -829,13 +841,11 @@
 
 
 {{-- SCRIPT --}}
-
 <script src="{{ asset('public/dist/js/jquery.tagsinput.js') }}"></script>
-
 <script type="text/javascript">
-
 $(document).ready(function()
 {
+    // Add more Group
     $('#add_group').click(function()
     {
         $.ajax({
@@ -865,7 +875,7 @@ $(document).ready(function()
 	var max_feed = {{ $max_feed }} + 1;
     var class_even = '{{ $class }}';
 
-    // Add More Delivery Fee
+    // Add More Delivery Feeds
     function add_more(id_delivery_settings)
     {
         $('#feed_'+id_delivery_settings).after('<ul id="feed_'+id_delivery_settings+'" class="id_delivery_feeds_'+max_feed+'"><li><input type="text" value="" name="price_shipping_'+id_delivery_settings+'[]" style="width:100%;"/></li><li><span class="upto-span">Up To:</span> <input type="text" value="" name="price_upto_'+id_delivery_settings+'[]" style="width:75%;"></li><b onclick="remove_feed('+max_feed+')" class="remove_feed"> X</b></li></ul>');
@@ -873,13 +883,14 @@ $(document).ready(function()
         return false;
     }
 
-    // Remove Delivery Fee
+    // Remove Delivery Feeds
     function remove_feed(id_feed)
     {
         $('.id_delivery_feeds_'+id_feed).remove();
         return false;
     }
 
+    // Add Group
     function add_group(max_id){
         if(class_even == 'odd'){
             class_even = 'even';
@@ -983,6 +994,7 @@ $(document).ready(function()
         $('.inputtag').tagsInput({width:'600px', defaultText: 'add'});
     }
 
+    // Delete Delivery
     function delete_delivery(id_delivery_settings)
     {
         var r = confirm("Do you want delete delivery setting");
@@ -1000,6 +1012,7 @@ $(document).ready(function()
         }
     }
 
+    // Get Calculate Distance
     $('.calculate-distance').click(function()
     {
         $.ajax({

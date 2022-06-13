@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER UserGroup PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    add.blade.php
+    Its Used for Insert New UserGroup
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -159,11 +170,14 @@
 {{-- End Section of Add Users Group --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 <script type="text/javascript">
-
 </script>
+
+{{-- End Script Section --}}
+

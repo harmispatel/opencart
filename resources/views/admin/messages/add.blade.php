@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER SendMeaasges PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    sendmessages.blade.php
+    Its Used for Insert New SendMeaasges
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -105,21 +116,12 @@
 {{-- End Section of List Send Messages --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+
+{{-- Script Sction --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script type="text/javascript">
-
-// $(document).ready(function() {
-//     $('#transaction').DataTable();
-// } );
-
-// Date Range Picker
-$(function() {
-    $('input[name="daterange"]').daterangepicker();
-});
-
-
-</script>
+{{-- Script Sction --}}

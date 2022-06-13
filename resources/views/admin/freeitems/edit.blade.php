@@ -1,4 +1,14 @@
+<!--
+    THIS IS HEADER CartRule PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    edit.blade.php
+    This for Edit CartRule
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header--}}
 @include('header')
+{{-- End Header--}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 

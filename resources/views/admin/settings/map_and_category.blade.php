@@ -1,3 +1,15 @@
+<!--
+    THIS IS HEADER Map and category PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    map_and_category.blade.php
+    This for Edit Map_and_category
+    ------------------------------
+    - General Tab
+    - Notification Tab
+    - Suspend Tab
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER MenuOption List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    list.blade.php
+    It Displayed All menuoption List & Storewise Display menuoption
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -116,9 +124,11 @@
 {{-- End Section of List Menu Options --}}
 
 
-
+{{--Footer Section --}}
 @include('footer')
+{{--End Footer Section --}}
 
+{{--Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -242,3 +252,5 @@ $('.deletesellected').click(function()
 // End Delete Menu Options
 
 </script>
+
+{{--End Script Section --}}

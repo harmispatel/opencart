@@ -1,11 +1,23 @@
+<!--
+    THIS IS HEADER BulkCategory PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    bulkcategory.blade.php
+    Its Used for Insert New bulkcategory
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+{{-- Header Section--}}
 @include('header')
+{{-- End Header Section--}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
+
+{{--Style Section--}}
 <style>
     /* .tb-bor td, th{border:none !important;} */
-
 </style>
-
+{{--End Style Section--}}
 
 {{-- Section of List Reviews --}}
 <section>
@@ -61,6 +73,7 @@
                                 {{-- Card Body --}}
                                 <div class="card-body">
                                     <div class="table-responsive">
+                                        {{-- Start Table--}}
                                         <table class="table list table-bordered table-striped">
                                             <thead>
                                                 <tr>
@@ -205,6 +218,7 @@
                                                 </tr>
                                             </tfoot>
                                         </table>
+                                        {{-- End Table--}}
                                     </div>
                                 </div>
                                 {{-- End Card Body --}}
@@ -235,13 +249,15 @@
 @include('footer')
 {{-- End Footer --}}
 
+{{-- Script Section --}}
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
 <script type="text/javascript">
 
     var cat_row = 0;
-
+    // Add BulkCategory
     function addnewBulkCat()
     {
         cat_row ++;
@@ -396,6 +412,7 @@
     }
     // End Add Size
 
+    // Add New Group
     function addgroup(group_row)
     {
         var numItems = $('#base_size_'+group_row).children('div').length;
@@ -406,7 +423,7 @@
         updatesizegroup(group_row,numItems);
     }
 
-
+   // updatesizegroup
     function updatesizegroup(update_row,count)
     {
         if($('.ybc_cat_'+update_row+' #base_size_'+update_row+' .group_topping').length > 0)
@@ -430,3 +447,5 @@
     }
 
 </script>
+
+{{-- End Script Section --}}

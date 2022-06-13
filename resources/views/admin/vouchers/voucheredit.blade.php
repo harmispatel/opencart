@@ -1,3 +1,12 @@
+<!--
+    THIS IS HEADER VoucherEdit PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    voucheredit.blade.php
+    This for Edit Voucher
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -307,6 +316,8 @@
 
 {{-- SCRIPT --}}
 <script type="text/javascript">
+
+   // Data Table
     $(document).ready(function() {
         $('#myTable').DataTable();
     });

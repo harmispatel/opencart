@@ -1,9 +1,21 @@
+<!--
+    THIS IS HEADER AddMenuOption PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    add.blade.php
+    Its Used for Insert New AddMenuOption
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
+{{--Script Section --}}
 <style>
 /* Custom Radio Button */
 .radio
@@ -16,6 +28,7 @@
 }
 </style>
 
+{{--End Script Section --}}
 
 {{-- Section of Add Topping --}}
 <section>
@@ -215,6 +228,7 @@
     var number_option = 0;
     // $('.showOptions').hide();
 
+    // Add Option
     function addoption()
     {
         var add_number = $('input[name="addNumber"]').val();
@@ -239,6 +253,8 @@
         }
     }
 
+
+    // ShowOption
     function showOptions(e) {
         $('.toppingsTab').removeClass('active');
         $('.showOptions').show();
@@ -246,6 +262,8 @@
         $(e).addClass('active');
     }
 
+
+    // Show Items
     function showItems(e) {
         $('.toppingsTab').removeClass('active');
         $('.showItems').show();

@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER Import Products & Category PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    importproducts.blade.php
+    It Displayed All Import Products & Category & Storewise Display Import Products & Category
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{--Header--}}
 @include('header')
+{{-- End Header--}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -57,9 +68,11 @@
 </section>
 {{-- End Section of List Trasnsactions --}}
 
-
-
+{{--Footer Section --}}
 @include('footer')
+{{--  End Footer Section --}}
+
+{{--script Section--}}
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -74,5 +87,8 @@ $(function() {
     $('input[name="daterange"]').daterangepicker();
 });
 
-
 </script>
+
+{{--End script Section--}}
+
+

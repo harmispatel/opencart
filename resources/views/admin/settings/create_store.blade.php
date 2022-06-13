@@ -1,3 +1,15 @@
+<!--
+    THIS IS HEADER Create_Store PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    create_store.blade.php
+    This for Edit Create_Store
+    ------------------------------
+    - General Tab
+    - Notification Tab
+    - Suspend Tab
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -582,6 +594,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
+
     // START Function Get Stat Country ID
     function getstate()
     {

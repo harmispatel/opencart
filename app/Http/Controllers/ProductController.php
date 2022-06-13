@@ -24,6 +24,8 @@ use Symfony\Component\Console\Input\Input;
 
 class ProductController extends Controller
 {
+
+    // Function of Product List
     function index()
     {
         // Check User Permission
@@ -45,6 +47,10 @@ class ProductController extends Controller
     }
 
 
+
+
+
+    // Get All bulkproducts
     function bulkproducts()
     {
         // Check User Permission
@@ -59,6 +65,11 @@ class ProductController extends Controller
         return view('admin.product.bulkproducts', ['category' => $category]);
     }
 
+
+
+
+
+    // Get All Product
     function getcategoryproduct(Request $request)
     {
 
@@ -191,6 +202,10 @@ class ProductController extends Controller
     }
 
 
+
+
+
+     //  Insert bulkproduct
     function storebulkproduct(Request $request)
     {
 
@@ -304,7 +319,7 @@ class ProductController extends Controller
 
 
 
-
+    //  Import Products
     function importproducts()
     {
         // Check User Permission
@@ -316,6 +331,9 @@ class ProductController extends Controller
     }
 
 
+
+
+   //  Insert Products
     function add()
     {
         // Check User Permission
@@ -358,6 +376,11 @@ class ProductController extends Controller
         return view('admin.product.add', ['result' => $result, 'option' => $option]);
     }
 
+
+
+
+
+   //  Insert Products
     public function store(Request $request)
     {
 
@@ -446,6 +469,10 @@ class ProductController extends Controller
         return redirect()->route('products')->with('success', "Product Inserted Successfully..");
     }
 
+
+
+
+    // Get All Products
     function getproductbycategory(Request $request)
     {
         // $category_id = $request->category_id;
@@ -529,6 +556,10 @@ class ProductController extends Controller
         // }
     }
 
+
+
+
+    // Get All Products
     public function getproduct(Request $request)
     {
         $category_id = $request->cat_id;
@@ -703,9 +734,7 @@ class ProductController extends Controller
 
 
 
-
-
-
+   // Get Option
     public function getoptionhtml(Request $request)
     {
         $option = DB::table('oc_option')->where('type', $request->type)->get();
@@ -713,6 +742,11 @@ class ProductController extends Controller
             'option' => $option,
         ]);
     }
+
+
+
+
+    // Add Option
     public function addOptionValue(Request $request)
     {
         echo '<pre>';
@@ -725,6 +759,11 @@ class ProductController extends Controller
             'option_value' => $option_value,
         ]);
     }
+
+
+
+
+   // Delete Products
     public function deleteproduct(Request $request)
     {
         // Check User Permission
@@ -749,6 +788,8 @@ class ProductController extends Controller
 
 
 
+
+   // Edit Products
     public function edit($id)
     {
 
@@ -775,6 +816,10 @@ class ProductController extends Controller
         return view('admin.product.edit', ['product' => $product, 'result' => $result]);
     }
 
+
+
+
+    // Update Products
     public function update(Request $request)
     {
 
@@ -902,4 +947,9 @@ class ProductController extends Controller
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");
     }
+
+
+
+
+
 }

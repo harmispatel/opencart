@@ -1,3 +1,12 @@
+<!--
+    THIS IS HEADER newcategory PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    newcategory.blade.php
+    Its Used for Insert New Category
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

@@ -1,10 +1,25 @@
+<!--
+    THIS IS HEADER OpenCloseTimeSetting PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    open_close_time_setting.blade.php
+    This for Edit OpenCloseTimeSetting
+    ----------------------------------------------------------------------------------------------
+
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
+{{--Custom CSS --}}
 <style>
     .select2-selection__choice{
         background-color: white!important;
         color: black!important;
     }
 </style>
+{{-- End Custom CSS--}}
+
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" /> --}}
 
@@ -271,10 +286,11 @@
 {{-- End Section of List Open/Close Time Settings --}}
 
 
-
+{{-- Footer Section  --}}
 @include('footer')
+{{-- End Footer Section  --}}
 
-
+ {{-- Script Section--}}
 <script type="text/javascript">
     // $('.multipalselect').siblings().addClass('js-example-basic-multiple');
     $('.selectday').select2();
@@ -324,6 +340,9 @@
     // });
     // End Coll Hours
 
+
+
+    //  Add more Opening Closing Times
 
     $(document).ready(function(){
 
@@ -423,3 +442,4 @@
 
 
 </script>
+ {{-- End Script Section--}}

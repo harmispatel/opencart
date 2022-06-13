@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER Couponsedit PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    edit.blade.php
+    This for Edit Coupons
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -436,9 +444,10 @@
 <script>
     $(document).ready(function()
     {
-
+        // call Function
         getallcouponhistory();
 
+        // Get AllCouponHistory
         function getallcouponhistory()
         {
             var couponid = $('#couponid').val();

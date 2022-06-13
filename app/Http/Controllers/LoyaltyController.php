@@ -12,12 +12,10 @@ use App\Models\Settings;
 
 
 
-
-
-
 class LoyaltyController extends Controller
 {
 
+    // Function of Loyality List
     public function index()
     {
         // Check User Permission
@@ -39,6 +37,9 @@ class LoyaltyController extends Controller
         return view('admin.loyalty.loyalty', ['result' => $result]);
     }
 
+
+
+    // Function of Loyality Insert
     public function store(Request $request)
     {
 
@@ -57,8 +58,6 @@ class LoyaltyController extends Controller
          } else{
              echo "hello";
          }
-
-
 
         if($rewardtype == 'money'){
             $query = Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
@@ -134,14 +133,10 @@ class LoyaltyController extends Controller
                 $settingpoint->save();
             }
            }
-
-
-
-
-
-
-
-
         return redirect('loyalty');
     }
+
+
+
+
 }

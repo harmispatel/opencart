@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER Categoryedit PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    categoryedit.blade.php
+    This for Edit Category
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

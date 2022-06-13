@@ -13,6 +13,8 @@ class UserGroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    // Function For UserGroup List
     public function index()
     {
         // Check User Permission
@@ -25,6 +27,7 @@ class UserGroupController extends Controller
         return view('admin.usersgroup.list',$data);
     }
 
+    // Function For UserGroup Add
     public function add()
     {
         // Check User Permission
@@ -36,6 +39,8 @@ class UserGroupController extends Controller
         return view('admin.usersgroup.add');
     }
 
+
+    // Function For Insert UserGroup
     function store(Request $request)
     {
         $request->validate([
@@ -52,6 +57,8 @@ class UserGroupController extends Controller
 
     }
 
+
+    // Function For Delete UserGroup
     function deletemultiusergroup(Request $request)
     {
 
@@ -72,6 +79,9 @@ class UserGroupController extends Controller
         }
     }
 
+
+
+    //Function For Edit UserGroup
     function edit($id)
     {
         // Check User Permission
@@ -90,6 +100,8 @@ class UserGroupController extends Controller
     }
 
 
+
+     //Function For Update UserGroup
     function update(Request $request)
     {
         $request->validate([

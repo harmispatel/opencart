@@ -1,4 +1,7 @@
+{{-- Header --}}
 @include('header')
+{{-- End Header --}}
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -231,15 +234,17 @@
 {{-- End Section of List Permissions --}}
 
 
-
+ {{-- Footer --}}
 @include('footer')
+ {{-- End Footer --}}
 
+ {{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
 
     var passchedkId=0;
-
+    // permission checked
     $('.checkbox').change(function(){
             var passchedkId=$(this).val();
             var checkboxVal=this.checked ? 1 : 0;
@@ -259,3 +264,5 @@
     });
 
 </script>
+
+ {{-- End Script Section --}}
