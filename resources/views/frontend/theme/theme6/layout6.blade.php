@@ -1,3 +1,11 @@
+<!--
+    THIS IS LAYOUT(THEME) 6 PAGE FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    layout6.blade.php
+    It Displayed Layout(Theme) 6
+    ----------------------------------------------------------------------------------------------
+-->
+
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&amp;display=swap" rel="stylesheet" />
 @php
 

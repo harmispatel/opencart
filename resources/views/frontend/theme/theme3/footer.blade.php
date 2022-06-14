@@ -1,3 +1,11 @@
+<!--
+    THIS IS LAYOUT(THEME) 3 FOOTER PAGE FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    footer.blade.php
+    It Displayed Layout(Theme) 3 Footer
+    ----------------------------------------------------------------------------------------------
+-->
+
 @php
     
     // Get Current Theme ID & Store ID

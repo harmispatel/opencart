@@ -1,3 +1,11 @@
+<!--
+    THIS IS LAYOUT(THEME) 2 PAGE FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    layout2.blade.php
+    It Displayed Layout(Theme) 2
+    ----------------------------------------------------------------------------------------------
+-->
+
 <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;700&amp;family=Oswald:wght@400;500&amp;family=Raleway:wght@400;700&amp;display=swap" rel="stylesheet" />
 
 @php

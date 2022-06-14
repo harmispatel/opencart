@@ -1,6 +1,12 @@
-<link
-    href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&amp;family=Playfair+Display:wght@700&amp;display=swap"
-    rel="stylesheet" />
+<!--
+    THIS IS LAYOUT(THEME) 3 PAGE FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    layout3.blade.php
+    It Displayed Layout(Theme) 3
+    ----------------------------------------------------------------------------------------------
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet" />
 
 @php
    

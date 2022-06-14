@@ -1,3 +1,11 @@
+<!--
+    THIS IS LAYOUT(THEME) 3 HEADER PAGE FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    header.blade.php
+    It Displayed Layout(Theme) 3 Header
+    ----------------------------------------------------------------------------------------------
+-->
+
 @php
    
    // Get Current Theme ID & Store ID
