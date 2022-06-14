@@ -1,3 +1,12 @@
+<!--
+    THIS IS FORGET CUSTOMER PASSWORD PAGE FOR FRONTEND
+    ----------------------------------------------------------------------------------------------
+    forgotten_password.blade.php
+    It's used for change customer password.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 @php
 
     // Get Current Theme ID & Store ID

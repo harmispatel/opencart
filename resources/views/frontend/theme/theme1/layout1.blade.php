@@ -1,3 +1,12 @@
+<!--
+    THIS IS LAYOUT(THEME) 1 PAGE FOR FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    layout1.blade.php
+    It Displayed Layout(Theme) 1
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 <!-- CSS -->
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
 <!-- End CSS -->

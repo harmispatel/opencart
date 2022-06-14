@@ -1,3 +1,17 @@
+<!--
+    THIS IS LAYOUT PAGE FOR FRONTEND
+    ----------------------------------------------------------------------------------------------
+    layout.blade.php
+    It's Included Some layout like..
+    - head
+    - header
+    - layout
+    - footer
+    - script
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 @php
 
     // Get Current Theme ID & Store ID

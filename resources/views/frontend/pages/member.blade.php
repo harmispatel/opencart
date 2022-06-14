@@ -1,3 +1,13 @@
+<!--
+    THIS IS MEMBER PAGE FOR FRONTEND
+    ----------------------------------------------------------------------------------------------
+    member.blade.php
+    It's used for Customer login and Register.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+
 @php
 
     // Get Current Theme ID & Store ID

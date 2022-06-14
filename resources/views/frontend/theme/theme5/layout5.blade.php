@@ -1,6 +1,12 @@
-<link
-    href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap"
-    rel="stylesheet" />
+<!--
+    THIS IS LAYOUT(THEME) 5 PAGE FRONTEND DESIGN
+    ----------------------------------------------------------------------------------------------
+    layout5.blade.php
+    It Displayed Layout(Theme) 5
+    ----------------------------------------------------------------------------------------------
+-->
+
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&amp;family=Playfair+Display:wght@400;700&amp;display=swap" rel="stylesheet" />
 
     @php
         

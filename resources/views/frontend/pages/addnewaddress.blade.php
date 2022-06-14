@@ -1,3 +1,12 @@
+<!--
+    THIS IS NEW CUSTOMER ADDRESS PAGE FOR FRONTEND
+    ----------------------------------------------------------------------------------------------
+    addnewaddress.blade.php
+    It's used Add Customers New Address From Frontend Site.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 @php
 
     // Get Current Theme ID & Store ID
@@ -37,10 +46,10 @@
 <!doctype html>
 <html>
 <head>
-    {{-- CSS --}}
+    <!-- CSS -->
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
-    {{-- End CSS --}}
+    <!-- End CSS -->
 </head>
 <body>
 
