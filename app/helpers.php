@@ -8,16 +8,13 @@
 // ----------------------------------------------------------------------------------------------
 
 
-use App\Models\Category;
 use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
-use App\Models\CategoryDetail;
 use App\Models\Coupon;
 use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
-use App\Models\Option;
 use App\Models\Orders;
 use App\Models\Region;
 use App\Models\Settings;
@@ -25,7 +22,6 @@ use App\Models\Store;
 use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
-use App\Models\ToppingSize;
 use App\Models\PhotoGallry;
 use App\Models\Product;
 use App\Models\Reviews;
