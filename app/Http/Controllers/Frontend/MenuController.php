@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\URL;
 
 class MenuController extends Controller
 {
+    // Function For Show Menu Page
     public function index()
     {
         $currentURL = URL::to("/");
@@ -78,6 +79,10 @@ class MenuController extends Controller
         return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon]);
     }
 
+
+
+
+    // Function For Add To Cart
     public function addToCart(Request $request)
     {
 
@@ -339,6 +344,10 @@ class MenuController extends Controller
         ]);
     }
 
+
+
+
+    // Function For Delete Cart Product
     public function deletecartproduct(Request $request)
     {
         $productid = $request->product_id;
@@ -374,6 +383,10 @@ class MenuController extends Controller
             'success' => 1,
         ]);
     }
+
+
+
+    // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
         $currentURL = URL::to("/");
@@ -473,6 +486,9 @@ class MenuController extends Controller
     }
 
 
+
+
+    // Function For  Set Delivery Type
     public function setDeliveyType(Request $request)
     {
 
@@ -697,12 +713,14 @@ class MenuController extends Controller
         ]);
     }
 
+    // Function For Store data
     public function store(Request $request)
     {
 
         return $request->all();
     }
 
+    // Function For Databade in Search Coupon Code
     public function searchcouponcode(Request $request)
     {
         $currentURL = URL::to("/");
@@ -714,4 +732,5 @@ class MenuController extends Controller
         $filterResult = Coupon::select('code')->where('code', 'LIKE', '%' . $coupon . '%')->where('store_id', $front_store_id)->get();
         return response()->json($filterResult);
     }
+
 }

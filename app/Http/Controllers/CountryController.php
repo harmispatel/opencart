@@ -7,18 +7,20 @@ use Illuminate\Http\Request;
 
 class CountryController extends Controller
 {
+    // Function For country List
     public function index()
     {
         $data['countries'] = Country::get();
         return view('admin.countries.list', $data);
     }
 
+    // function for  view Country Add Page
     public function add()
     {
         return view('admin.countries.add');
     }
 
-
+    // function for  Insert Country
     public function store(Request $request)
     {
         $request->validate([
@@ -42,6 +44,10 @@ class CountryController extends Controller
 
         return redirect()->route('countries')->with('success', 'Country Added successfully!');
     }
+
+
+
+    // function for  Delete Country
     function deletecountry(Request $request)
     {
 
@@ -56,6 +62,8 @@ class CountryController extends Controller
     }
 
 
+
+    // function for  Edit Country
     public function edit($id)
     {
         // Check Country Permission
@@ -76,7 +84,7 @@ class CountryController extends Controller
 
 
 
-
+    // function for  Update Country
     public function update(Request $request, Country $country)
     {
         $request->validate([
@@ -100,6 +108,10 @@ class CountryController extends Controller
         return redirect()->route('countries')->with('success', 'Country Updated successfully!');
     }
 
+
+
+
+    // function for  Delete Country
     public function delete()
     {
         //

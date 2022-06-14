@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\URL;
 
 class HomeController extends Controller
 {
-
+    // Function For Fronted Home Page
     public function index()
     {
         $currentURL = URL::to("/");
@@ -81,6 +81,9 @@ class HomeController extends Controller
     }
 
 
+
+
+    // Function For ZipCode
     public function checkZipCode(Request $request)
     {
 
@@ -280,6 +283,10 @@ class HomeController extends Controller
         return response()->json($json);
     }
 
+
+
+
+    // Function For PostCode
     public function postcodes(Request $request)
     {
         $keyword = $request->keyword;
@@ -294,4 +301,8 @@ class HomeController extends Controller
         }
         return response()->json($json);
     }
+
+
+
+
 }

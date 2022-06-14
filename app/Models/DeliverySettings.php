@@ -12,6 +12,7 @@ class DeliverySettings extends Model
     protected $primaryKey = 'id_delivery_settings';
     public $timestamps = false;
 
+    // Has Many Relation with "oc_delivery_feeds" table
     public function hasManyDeliveryFeeds()
     {
         return $this->hasMany(DeliverySettingFeeds::class,'id_delivery_settings','id_delivery_settings');

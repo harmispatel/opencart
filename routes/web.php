@@ -176,12 +176,21 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
+    Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
     Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
     Route::post('generateinvoice', [OrdersController::class, 'generateinvoice'])->name('generateinvoice');
     Route::get('autocompleteproduct', [OrdersController::class, 'autocompleteproduct'])->name('autocompleteproduct');
     Route::get('autocomplete', [OrdersController::class, 'autocomplete'])->name('autocomplete');
+    // Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
     Route::get('payment_and_shipping_address/{id}', [OrdersController::class, 'payment_and_shipping_address'])->name('payment_and_shipping_address');
+
+    // Order returns
+    Route::get('returns', [OrdersController::class, 'returns'])->name('returns');
+    Route::get('addnewreturns', [OrdersController::class, 'addnewreturns'])->name('addnewreturns');
+    Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
+    Route::post('returnform', [OrdersController::class, 'returnform'])->name('returnform');
+    // Route::post('getoptionhtml', [ProductController::class, 'getoptionhtml'])->name('getoptionhtml');
     Route::post('getcustomer', [OrdersController::class, 'getcustomer'])->name('getcustomer');
 
 

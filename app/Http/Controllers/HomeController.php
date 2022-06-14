@@ -23,7 +23,7 @@ class HomeController extends Controller
 
 
 
-
+    // Function Admin Page Dashboard
     public function index()
     {
         return view('home');
@@ -105,7 +105,9 @@ class HomeController extends Controller
 
     }
 
-     public function getSalesReport(Request $request)
+
+    // Function for Get Sales Report
+    public function getSalesReport(Request $request)
      {
         $range = 'year';
         $html = '';
@@ -155,6 +157,10 @@ class HomeController extends Controller
 
      }
 
+
+
+
+    // Function for Get Top Ten Customer
      function getTopTenCustomer(Request $request)
      {
         $range = 'year';
@@ -214,6 +220,9 @@ class HomeController extends Controller
 
      }
 
+
+
+     // Function for Get General Total
      function getGeneralTotal(Request $request)
      {
         $range = 'year';
@@ -275,6 +284,10 @@ class HomeController extends Controller
 
      }
 
+
+
+
+    // Function for Set Store
     function setStore(Request $request)
     {
         $storeId = $request->store_id;

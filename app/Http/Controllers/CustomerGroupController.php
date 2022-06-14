@@ -117,6 +117,10 @@ class CustomerGroupController extends Controller
         return redirect()->route('customersgroup')->with('success','Usergroup Updated Successfully..');
     }
 
+
+
+
+    // Function of Delete Customer Group
     public function delete(Request $request)
     {
         // Check User Permission

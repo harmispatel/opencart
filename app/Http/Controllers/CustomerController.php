@@ -40,6 +40,8 @@ class CustomerController extends Controller
         return view('frontend.pages.forgotten_password');
     }
 
+
+    // Function for Send Forget Password Link
     function sendforgorpasslink(Request $request)
     {
         $request->validate([
@@ -67,11 +69,16 @@ class CustomerController extends Controller
         return redirect()->route('member')->with('success', 'Password Reset Link has been sent Successfully..');
     }
 
+
+     // function Show Reset Password Form
     function showResetPasswordForm($token)
     {
         return view('admin.forgetPasswordLink', ['token' => $token]);
     }
 
+
+
+    // function Submit Reset Password Form
     function submitResetPasswordForm(Request $request)
     {
         $request->validate([

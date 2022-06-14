@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
+
+    // Function For Make Reservation
     public function index(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
+
         $current_store_id = currentStoreId();
         $reservations = new Reservation;
         $reservations->store_id = $current_store_id;

@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
+
+    // Fonction For show Member Page
     public function member()
     {
 
@@ -22,19 +24,27 @@ class MemberController extends Controller
             $customers = Customer::where('customer_id', $userlogin)->first();
             $customeraddress = CustomerAddress::with(['hasOneRegion', 'hasOneCountry'])->where('customer_id', $userlogin)->get();
             $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus'])->where('customer_id', $userlogin)->orderBy('order_id', 'DESC')->get();
-            // echo '<pre>';
-            // print_r($customerorders);
-            // exit();
             return view('frontend.pages.member', compact('customers', 'customeraddress', 'customerorders'));
         } else {
             return view('frontend.pages.member');
         }
     }
+
+
+
+
+    // Fonction For New Member Register
     public function memberregister()
     {
         $countries = Country::get();
         return view('frontend.pages.register', compact('countries'));
     }
+
+
+
+
+
+    // Fonction For Add New Address
 
     public function addnewaddress()
     {
@@ -43,6 +53,10 @@ class MemberController extends Controller
         return view('frontend.pages.addnewaddress', compact('countries'));
     }
 
+
+
+
+    // Fonction For ChengeDef Customer Address
     public function changeDefAddress(Request $request)
     {
         $addressid = $request->address_id;
@@ -57,6 +71,10 @@ class MemberController extends Controller
         ]);
     }
 
+
+
+
+    // Fonction For New Address Customer
     public function newaddress(Request $request)
     {
         $userlogin = session('userid');
@@ -97,12 +115,21 @@ class MemberController extends Controller
             return redirect()->route('home');
         }
     }
+
+
+
+
+    // Fonction For Delete Customer Address
     public function customeraddressdelete($id)
     {
         CustomerAddress::find($id)->delete();
         return redirect()->route('member');
     }
 
+
+
+
+    // Fonction For Edit Customer Address
     public function customeraddressedit($id)
     {
         // Get All Countries
@@ -111,6 +138,10 @@ class MemberController extends Controller
         return view('frontend.pages.editcustomeraddress', compact('countries', 'customeraddress'));
     }
 
+
+
+
+    // Fonction For Update Customer Address
     public function updatecustomeraddress(Request $request)
     {
         $userlogin = session('userid');
@@ -151,6 +182,10 @@ class MemberController extends Controller
         }
     }
 
+
+
+
+    // Fonction For  Get Customer order Detail
     public function getcustomerorderdetail(Request $request)
     {
         $cusromerOrderId = $request->customerorderid;
@@ -277,6 +312,10 @@ class MemberController extends Controller
         return response()->json(['customerorders' => $html]);
     }
 
+
+
+
+    // Fonction For Order Reviwe
     public function orderreviwe(Request $request)
     {
         $this->validate($request, [
@@ -302,4 +341,7 @@ class MemberController extends Controller
         $review->save();
         return response()->json();
     }
+
+
+
 }
