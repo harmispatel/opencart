@@ -177,6 +177,7 @@
 
 <script type="text/javascript">
 
+     // Gallary  Radio Button OnClick
     $(document).ready(function()
     {
         var data = $('input[name=gallery_background_options]:checked').val();

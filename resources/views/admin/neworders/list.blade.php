@@ -1,4 +1,14 @@
+<!--
+    THIS IS HEADER NewOrders List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    List.blade.php
+    It Displayed All NewOrders List & Storewise Display NewOrders
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- End  Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -214,9 +224,12 @@
 {{-- End Section of List Trasnsactions --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -232,3 +245,4 @@ $(function() {
 
 
 </script>
+{{-- End Script Section --}}

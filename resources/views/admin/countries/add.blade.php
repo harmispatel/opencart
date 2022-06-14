@@ -1,4 +1,14 @@
+<!--
+    THIS IS HEADER Countrys PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    add.blade.php
+    Its Used for Insert New Countrys
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header --}}
 @include('header')
+{{-- Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -167,11 +177,14 @@
 {{-- End Section of Add Users--}}
 
 
-
+{{-- Footer Section --}}
 @include('footer')
+{{-- End Footer Section --}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
 
 </script>
+{{-- End Script Section --}}

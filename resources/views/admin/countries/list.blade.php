@@ -1,4 +1,16 @@
+<!--
+    THIS IS HEADER Countries List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    List.blade.php
+    It Displayed All Countries List & Storewise Display Countries
+    ----------------------------------------------------------------------------------------------
+-->
+
+{{-- Header--}}
 @include('header')
+{{-- End Header--}}
+
+
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -87,7 +99,7 @@
                                                     <td>{{ $country->name }}</td>
                                                     <td>{{ $country->iso_code_2 }}</td>
                                                     <td>{{ $country->iso_code_3 }}</td>
-                                                    <td>{{ $country->address_format }}</td> 
+                                                    <td>{{ $country->address_format }}</td>
                                                     <td>{{ $country->postcode_required }}</td>
                                                     <td>
                                                         @if($country->status == 1)
@@ -132,18 +144,18 @@
 {{-- End Section of List Country --}}
 
 
-
+{{-- Footer--}}
 @include('footer')
+{{-- End Footer--}}
 
+
+{{-- Script Section--}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 <script type="text/javascript">
-
+// Data Table
 $(document).ready(function() {
     $('#country').DataTable();
 });
-
-
 // Select All Checkbox
 $('#delall').on('click', function(e) {
     if($(this).is(':checked',true))
@@ -214,8 +226,6 @@ $('.deletesellected').click(function()
         swal("Please select atleast One User", "", "warning");
     }
 });
-
-// End Delete 
-
-
+// End Delete
 </script>
+{{-- Script Section--}}

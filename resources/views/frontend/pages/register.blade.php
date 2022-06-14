@@ -1,3 +1,11 @@
+<!--
+THIS IS Insert Register PAGE FOR FRONTEND
+----------------------------------------------------------------------------------------------
+register.blade.php
+It's used for New Register.
+----------------------------------------------------------------------------------------------
+-->
+
 @php
 
     // Get Current Theme ID & Store ID
@@ -110,6 +118,7 @@
                         {{ csrf_field() }}
                         <div class="reg-details-inr">
                             <h3>Your Personal Details</h3>
+                           {{-- start Table  Personal Details --}}
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -159,9 +168,11 @@
                                     </tr>
                                 </tbody>
                             </table>
+                           {{-- End Table  Personal Details--}}
                         </div>
                         <div class="reg-details-inr">
                             <h3>Your Address</h3>
+                            {{-- start Table  Address --}}
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -240,9 +251,11 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            {{-- End Table  Address --}}
                         </div>
                         <div class="reg-details-inr">
                             <h3>Your Password</h3>
+                            {{-- start Table  Password --}}
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -267,9 +280,12 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            {{-- End Table  Password --}}
+
                         </div>
                         <div class="reg-details-inr">
                             <h3>Newsletter</h3>
+                            {{-- start Table  Newsletter --}}
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -286,6 +302,8 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            {{-- End Table  Newsletter --}}
+
                         </div>
                         <div class="reg-bt d-flex justify-content-between">
                             <a href="{{ route('member') }}" type="submit" class="btn">Back</a>
