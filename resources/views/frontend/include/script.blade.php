@@ -1,3 +1,13 @@
+<!--
+    THIS IS SCRIPT PAGE FOR FRONTEND JS
+    ----------------------------------------------------------------------------------------------
+    script.blade.php
+    It's Included Some JS Links with diffrent themes.
+    it is used for including Javscript Libraries.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 @php
 
     // Get Current Theme ID & Store ID

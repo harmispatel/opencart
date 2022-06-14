@@ -1,5 +1,14 @@
-@php
+<!--
+    THIS IS HEAD PAGE FOR FRONTEND
+    ----------------------------------------------------------------------------------------------
+    head.blade.php
+    It's Included Some CSS Links with diffrent themes.
+    it is used for including styling for frontend site.
+    ----------------------------------------------------------------------------------------------
+-->
 
+
+@php
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
     $current_theme_id = themeID($currentURL);
@@ -21,7 +30,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>{{ (isset($store_settings['config_title']) ? $store_settings['config_title'] : '') }}</title>
 
-{{-- Style Sheet Links --}}
+<!-- Style Sheet Links -->
 <link rel="stylesheet" href="{{ get_css_url().'public/plugins/jquery-ui/jquery-ui.min.css' }}">
 <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
 
@@ -46,7 +55,7 @@
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/css/app.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/css/responsive.css'  }}">
 @endif
-{{-- End Style Sheet Links --}}
+<!-- End Style Sheet Links -->
 
 <!-- Customer Register & Login Model -->
 <div class="modal fade" id="login" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
