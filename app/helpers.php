@@ -264,8 +264,8 @@ function public_url()
 // Function of Get CSS URL
 function get_css_url()
 {
-    // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.116/opencart/';
+    return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
+    // return 'http://192.168.1.116/opencart/';
 }
 
 
