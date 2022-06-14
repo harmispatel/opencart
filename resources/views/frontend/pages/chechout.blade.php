@@ -1,3 +1,12 @@
+<!--
+    THIS IS CHECKOUT PAGE FOR FRONTEND
+    ----------------------------------------------------------------------------------------------
+    checkout.blade.php
+    It's used for checkout customer order.
+    ----------------------------------------------------------------------------------------------
+-->
+
+
 @php
 
     // Get Current Theme ID & Store ID
