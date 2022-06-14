@@ -143,6 +143,7 @@ It's used for View Menu.
                     $fromtime = $openclose['fromtime'];
                     $totime = $openclose['totime'];
                     $closedate = $openclose['close_date'];
+                    $currentdate = strtotime(date("Y-m-d"));
                     $closedates = explode(',',$closedate);
                     $date_close1 = array();
                     foreach ($closedates as $value) {
@@ -157,7 +158,6 @@ It's used for View Menu.
                             $firstday = $item[0];
                             $lastday = $item[$t];
                             $today = time();
-                            $currentdate = strtotime(date("Y-m-d"));
                         @endphp
                         @if (in_array($currentdate,$date_close1))
                             <strong>Close</strong>
