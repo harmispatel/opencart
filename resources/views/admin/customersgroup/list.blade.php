@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER CustomerGroup List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    List.blade.php
+    It Displayed All CustomerGroup List & Storewise Display CustomerGroup
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+{{-- Header --}}
 @include('header')
+{{-- End  Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -124,6 +135,9 @@
 @include('footer')
 {{-- End Footer --}}
 
+
+{{-- Script Section --}}
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -131,7 +145,7 @@
 
     $(document).ready(function(){
 
-        // Data Table of Manufacturers List
+        // Data Table of CustomerGroup List
         $('.table').DataTable();
 
     });
@@ -213,5 +227,6 @@
 // End Delete Customer Group
 
 </script>
+{{-- End Script Section --}}
 
 

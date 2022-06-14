@@ -1,3 +1,11 @@
+<!--
+    THIS IS HEADER Premission List PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    List.blade.php
+    It Displayed All Premission List & Storewise Display Premission
+    ----------------------------------------------------------------------------------------------
+-->
+
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}

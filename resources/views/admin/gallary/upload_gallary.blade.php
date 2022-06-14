@@ -1,4 +1,15 @@
+<!--
+    THIS IS HEADER UploadGallary PAGE FOR ADMIN PANEL
+    ----------------------------------------------------------------------------------------------
+    upload_gallary.blade.php
+    This for Edit UploadGallary
+    ----------------------------------------------------------------------------------------------
+-->
+
+
+{{-- Header --}}
 @include('header')
+{{-- End  Header --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -31,7 +42,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        
+
                     </div>
                 </div>
             </div>
@@ -43,8 +54,11 @@
 {{-- End Section of List Users --}}
 
 
-
+{{-- Footer --}}
 @include('footer')
+{{-- End Footer --}}
 
+{{-- Script Section --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{{-- End Script Section --}}
 
