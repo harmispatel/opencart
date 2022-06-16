@@ -12,6 +12,10 @@
     ----------------------------------------------------------------------------------------------
 -->
 
+@php
+    // $current_store_CurrencySymbol($store_setting['config_currency']);
+
+@endphp
 
 <!-- Header section -->
 @include('header')
@@ -168,7 +172,7 @@
                                                             @endphp
                                                             <tr>
                                                                 <th>Total</th>
-                                                                <td>£{{ isset($ordertotle) ? $ordertotle : "" }}</td>
+                                                                <td>{{ $orders->hasOneCurrency['symbol_left'] }} {{ isset($ordertotle) ? $ordertotle : "" }}</td>
                                                             </tr>
                                                             <tr>
                                                                 <th>Order Status</th>
@@ -308,8 +312,8 @@
                                                                     </td>
                                                                     <td>{{ $order->model  }}</td>
                                                                     <td>{{ $order->quantity  }}</td>
-                                                                    <td>£{{ number_format($order->price,2)  }}</td>
-                                                                    <td>£{{ number_format($order->total,2)  }}</td>
+                                                                    <td>{{ $orders->hasOneCurrency['symbol_left'] }} {{ number_format($order->price,2)  }}</td>
+                                                                    <td>{{ $orders->hasOneCurrency['symbol_left'] }} {{ number_format($order->total,2)  }}</td>
                                                                 </tr>
                                                             @endforeach
                                                         </tbody>

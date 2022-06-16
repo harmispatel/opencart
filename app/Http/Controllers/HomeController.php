@@ -112,6 +112,19 @@ class HomeController extends Controller
         $range = 'year';
         $html = '';
 
+        $current_store_id = currentStoreId();
+
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings(0,$current_store_id);
+        //End Get Store Settings & Theme Settings & Other
+
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
+
+        // Get Currency Details
+        $currency = getCurrencySymbol($store_setting['config_currency']);
+
 		if(isset($request->SalesReport))
         {
 			$range = $request->SalesReport;
@@ -132,10 +145,10 @@ class HomeController extends Controller
                 $html .= '<div class="dash-sales">';
                 $html .= '<table class="table">';
                 $html .= '<h6 class="mb-2"><b>'.$store->store_name.'</b></h6>';
-                $html .= '<tr><td><b>Total Sales : </b></td><td class="align-middle">£ '.number_format($total_sale,2).'</td></tr>';
+                $html .= '<tr><td><b>Total Sales : </b></td><td class="align-middle">'.$currency.' '.number_format($total_sale,2).'</td></tr>';
                 $html .= '<tr><td><b>Total Orders : </b></td><td class="align-middle">'.$order_count.'</td></tr>';
-                $html .= '<tr><td><b>Total Cash Order Amount : </b></td><td class="align-middle">£ '.number_format($cod_total,2).'</td></tr>';
-                $html .= '<tr><td><b>Total Card Order Amount : </b></td><td class="align-middle">£ '.number_format($card_total,2).'</td></tr>';
+                $html .= '<tr><td><b>Total Cash Order Amount : </b></td><td class="align-middle">'.$currency.' '.number_format($cod_total,2).'</td></tr>';
+                $html .= '<tr><td><b>Total Card Order Amount : </b></td><td class="align-middle">'.$currency.' '.number_format($card_total,2).'</td></tr>';
                 $html .= '<tr><td><b>No. of Customers : </b></td><td class="align-middle">'.$customer_count.'</td></tr>';
                 $html .= '</table>';
                 $html .= '</div>';
@@ -165,6 +178,19 @@ class HomeController extends Controller
      {
         $range = 'year';
         $html = '';
+
+        $current_store_id = currentStoreId();
+
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings(0,$current_store_id);
+        //End Get Store Settings & Theme Settings & Other
+
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
+
+        // Get Currency Details
+        $currency = getCurrencySymbol($store_setting['config_currency']);
 
         if(isset($request->range))
         {
@@ -196,9 +222,9 @@ class HomeController extends Controller
 
                 $html .= '<tr>';
                 $html .= '<td>'.$cust_name.'</td>';
-                $html .= '<td>£ '.number_format($total_sale,2).'</td>';
-                $html .= '<td>£ '.number_format($cod_total,2).'</td>';
-                $html .= '<td>£ '.number_format($card_total,2).'</td>';
+                $html .= '<td>'.$currency.' '.number_format($total_sale,2).'</td>';
+                $html .= '<td>'.$currency.' '.number_format($cod_total,2).'</td>';
+                $html .= '<td>'.$currency.' '.number_format($card_total,2).'</td>';
                 $html .= '</tr>';
 
             }
@@ -228,6 +254,19 @@ class HomeController extends Controller
         $range = 'year';
         $html = '';
 
+        $current_store_id = currentStoreId();
+
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings(0,$current_store_id);
+        //End Get Store Settings & Theme Settings & Other
+
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
+
+        // Get Currency Details
+        $currency = getCurrencySymbol($store_setting['config_currency']);
+
         if(isset($request->range))
         {
 			$range = $request->range;
@@ -242,38 +281,38 @@ class HomeController extends Controller
             $ttl_amnt = $general_totals['cash_total'] + $general_totals['pp_express_total'] + $general_totals['worldpayhp_total'] +$general_totals['mfb_total'] + $general_totals['ccod_total'];
 
             $html .= '<table class="table">';
-            $html .= '<tr><td><b>Cash Total</b></td><td>'.$general_totals['cash_count'].'</td><td>£ '.number_format($general_totals['cash_total'],2).'</td></tr>';
-            $html .= '<tr><td><b>Paypal Total</b></td><td>'.$general_totals['pp_express_count'].'</td><td>£ '.number_format($general_totals['pp_express_total'],2).'</td></tr>';
-            $html .= '<tr><td><b>Worldpay Total</b></td><td>'.$general_totals['worldpayhp_count'].'</td><td>£ '.number_format($general_totals['worldpayhp_total'],2).'</td></tr>';
-            $html .= '<tr><td><b>MFB Pay Total</b></td><td>'.$general_totals['mfb_count'].'</td><td>£ '.number_format($general_totals['mfb_total'],2).'</td></tr>';
-            $html .= '<tr><td><b>Card on Delivery</b></td><td>'.$general_totals['ccod_count'].'</td><td>£ '.number_format($general_totals['ccod_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Cash Total</b></td><td>'.$general_totals['cash_count'].'</td><td>'.$currency.' '.number_format($general_totals['cash_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Paypal Total</b></td><td>'.$general_totals['pp_express_count'].'</td><td>'.$currency.' '.number_format($general_totals['pp_express_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Worldpay Total</b></td><td>'.$general_totals['worldpayhp_count'].'</td><td>'.$currency.' '.number_format($general_totals['worldpayhp_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>MFB Pay Total</b></td><td>'.$general_totals['mfb_count'].'</td><td>'.$currency.' '.number_format($general_totals['mfb_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Card on Delivery</b></td><td>'.$general_totals['ccod_count'].'</td><td>'.$currency.' '.number_format($general_totals['ccod_total'],2).'</td></tr>';
             $html .= '</table>';
 
             $html .= '<table class="table mt-3">';
-            $html .= '<tr><td><b>Totals</b></td><td>'.$ttl_qty.'</td><td>£ '.number_format($ttl_amnt,2).'</td></tr>';
+            $html .= '<tr><td><b>Totals</b></td><td>'.$ttl_qty.'</td><td>'.$currency.' '.number_format($ttl_amnt,2).'</td></tr>';
             $html .= '</table>';
 
             $html .= '<table class="table mt-3">';
-            $html .= '<tr><td><b>Rejected Orders</b></td><td>'.$general_totals['rejct_count'].'</td><td>£ '.number_format($general_totals['rejct_total'],2).'</td></tr>';
+            $html .= '<tr><td><b>Rejected Orders</b></td><td>'.$general_totals['rejct_count'].'</td><td>'.$currency.' '.number_format($general_totals['rejct_total'],2).'</td></tr>';
             $html .= '</table>';
 
         }
         else
         {
             $html .= '<table class="table">';
-            $html .= '<tr><td><b>Cash Total</b></td><td>0</td><td>£ 0.00</td></tr>';
-            $html .= '<tr><td><b>Paypal Total</b></td><td>0</td><td>£ 0.00</td></tr>';
-            $html .= '<tr><td><b>Worldpay Total</b></td><td>0</td><td>£ 0.00</td></tr>';
-            $html .= '<tr><td><b>MFB Pay Total</b></td><td>0</td><td>£ 0.00</td></tr>';
-            $html .= '<tr><td><b>Card on Delivery</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Cash Total</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
+            $html .= '<tr><td><b>Paypal Total</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
+            $html .= '<tr><td><b>Worldpay Total</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
+            $html .= '<tr><td><b>MFB Pay Total</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
+            $html .= '<tr><td><b>Card on Delivery</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
             $html .= '</table>';
 
             $html .= '<table class="table mt-3">';
-            $html .= '<tr><td><b>Totals</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Totals</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
             $html .= '</table>';
 
             $html .= '<table class="table mt-3">';
-            $html .= '<tr><td><b>Rejected Orders</b></td><td>0</td><td>£ 0.00</td></tr>';
+            $html .= '<tr><td><b>Rejected Orders</b></td><td>0</td><td>'.$currency.' 0.00</td></tr>';
             $html .= '</table>';
         }
 

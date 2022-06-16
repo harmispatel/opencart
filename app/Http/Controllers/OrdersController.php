@@ -77,24 +77,24 @@ class OrdersController extends Controller
                 {
                     $search = $request->input('search.value');
 
-                    $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                    $posts =  Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where(function ($query) use ($search){
                         $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
                     })->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
 
-                    $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                    $totalFiltered = Orders::with(['hasOneStore','hasOneCurrency'])->where(function ($query) use ($search){
                         $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
                     })->offset($start)->orderBy($order,$dir)->limit($limit)->count();
                 }
                 else
                 {
-                    $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+                    $posts = Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->offset($start)->limit($limit)->orderBy($order,$dir)->get();
 
                 }
             }
             else
             {
-                $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$current_store_id)->count();
+                $totalData = Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where('store_id',$current_store_id)->count();
 
                 $totalFiltered = $totalData;
                 $limit = $request->request->get('length');
@@ -106,18 +106,18 @@ class OrdersController extends Controller
                 {
                     $search = $request->input('search.value');
 
-                    $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                    $posts =  Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where(function ($query) use ($search){
                         $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
                     })->where('store_id',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
 
-                    $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                    $totalFiltered = Orders::with(['hasOneStore','hasOneCurrency'])->where(function ($query) use ($search){
                         $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
                     })->where('store_id',$current_store_id)->offset($start)->orderBy($order,$dir)->limit($limit)->count();
                 }
                 else
                 {
-                    $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$current_store_id)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+                    $posts = Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where('store_id',$current_store_id)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
 
                 }
             }
@@ -128,7 +128,7 @@ class OrdersController extends Controller
             $user_shop_id = $user_details['user_shop'];
 
             // Get Orders
-            $totalData = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$user_shop_id)->count();
+            $totalData = Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where('store_id',$user_shop_id)->count();
 
             $totalFiltered = $totalData;
             $limit = $request->request->get('length');
@@ -140,18 +140,18 @@ class OrdersController extends Controller
             {
                 $search = $request->input('search.value');
 
-                $posts =  Orders::with(['hasOneOrderStatus','hasOneStore'])->where(function ($query) use ($search){
+                $posts =  Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where(function ($query) use ($search){
                     $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
                 })->where('store_id',$user_shop_id)->offset($start)->orderBy($order,$dir)->limit($limit)->get();
 
 
-                $totalFiltered = Orders::with(['hasOneStore'])->where(function ($query) use ($search){
+                $totalFiltered = Orders::with(['hasOneStore','hasOneCurrency'])->where(function ($query) use ($search){
                     $query->where('order_id','LIKE',"%{$search}%")->orWhere('firstname','LIKE',"%{$search}%")->orWhere('lastname','LIKE',"%{$search}%")->orWhere('flag_post_code','LIKE',"%{$search}%")->orWhere('date_added','LIKE',"%{$search}%");
                 })->where('store_id',$user_shop_id)->offset($start)->orderBy($order,$dir)->limit($limit)->count();
             }
             else
             {
-                $posts = Orders::with(['hasOneOrderStatus','hasOneStore'])->where('store_id',$user_shop_id)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+                $posts = Orders::with(['hasOneOrderStatus','hasOneStore','hasOneCurrency'])->where('store_id',$user_shop_id)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
 
             }
         }
@@ -170,6 +170,7 @@ class OrdersController extends Controller
                 $status = isset($post->hasOneOrderStatus->name) ? $post->hasOneOrderStatus->name : '';
                 $edit_url = route('vieworder', $post->order_id);
 
+                $currency = $post->hasOneCurrency['symbol_left'];
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$order_id'>";
                 $data['order_id'] = $order_id;
@@ -206,7 +207,7 @@ class OrdersController extends Controller
                     $data['status'] = '-';
                 }
 
-                $data['total'] = "£". number_format($post->total,2);
+                $data['total'] = $currency.' '.number_format($post->total,2);
                 $data['date_added'] = date('Y-m-d',strtotime($post->date_added));
 
                 if ($post->payment_code == "worldpayhp")
@@ -274,7 +275,7 @@ class OrdersController extends Controller
         }
 
         // Get Order Details By Order ID
-        $orders = Orders::with(['hasOneOrderStatus','hasOneCustomerGroupDescription','hasOneCountry','hasOneRegion'])->where('order_id', '=', $id)->first();
+        $orders = Orders::with(['hasOneOrderStatus','hasOneCustomerGroupDescription','hasOneCountry','hasOneRegion','hasOneCurrency'])->where('order_id', '=', $id)->first();
 
         // Get All Status
         $orderstatus = OrderStatus::all();

@@ -32,6 +32,9 @@
     $store_setting = $store_theme_settings['store_settings'];
     // End Store Settings
 
+    // Get Currency Details
+    $currency = getCurrencySymbol($store_setting['config_currency']);
+
     // Get Open-Close Time
     $openclose = openclosetime();
     // End Open-Close Time
@@ -744,26 +747,26 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td><b>Sub-Total:</b></td>
-                                                                            <td><span><b>£ {{ $subtotal }}</b></span></td>
+                                                                            <td><span><b>{{ $currency }} {{ $subtotal }}</b></span></td>
                                                                         </tr>
                                                                         <tr class="coupon_code">
                                                                             <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
                                                                             <td>
                                                                                 <span>
-                                                                                    <b>£ -{{ isset($couponcode) ? $couponcode : 0 }}</b>
+                                                                                    <b>{{ $currency }} -{{ isset($couponcode) ? $couponcode : 0 }}</b>
                                                                                 </span>
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="voucher"></tr>
                                                                         <tr>
                                                                             <td><b>Delivery Charge :</b></td>
-                                                                            <td><span><b id="del_charge">£
+                                                                            <td><span><b id="del_charge">{{ $currency }}
                                                                                         {{ $delivery_charge }}</b></span>
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="total">
                                                                             <td><b>Total to pay:</b></td>
-                                                                            <td><span><b id="total_pay">£
+                                                                            <td><span><b id="total_pay">{{ $currency }}
                                                                                         {{ $total }}</b></span>
                                                                             </td>
                                                                         </tr>
@@ -864,7 +867,7 @@
                             <input type="hidden" name="delivery_charge" id="delivery_charge" value="{{ isset($delivery_charge) ? $delivery_charge : '' }}">
                             <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
                             <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
-                            <input type="button" value="Pay £ {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
+                            <input type="button" value="Pay {{ $currency }} {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
                             <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
                         </div>
                     </div>

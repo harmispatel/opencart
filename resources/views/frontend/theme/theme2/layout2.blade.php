@@ -292,12 +292,12 @@
           @endif
         </div>
       <div class="col-md-12 col-lg-6 content">
-          @if (!empty($template_setting['polianna_store_description']) )
-            {!! $template_setting['polianna_store_description'] !!}
-          @else
-            <strong class="sub-title text-capitalize">star kebab & pizza</strong>
-            <h3 class="title text-uppercase">about us</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Bibendum est ultricies integer quis. Iaculis urna id volutpat lacus laoreet. Mauris vitae ultricies leo integer malesuada. Ac odio tempor orci dapibus ultrices in. Egestas diam in arcu cursus</p>
+            @if (!empty($template_setting['polianna_store_description']) )
+                {!! $template_setting['polianna_store_description'] !!}
+            @else
+                <strong class="sub-title text-capitalize">star kebab & pizza</strong>
+                <h3 class="title text-uppercase">about us</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Bibendum est ultricies integer quis. Iaculis urna id volutpat lacus laoreet. Mauris vitae ultricies leo integer malesuada. Ac odio tempor orci dapibus ultrices in. Egestas diam in arcu cursus</p>
             @endif
 
             <div class="about-us-swiper swiper">

@@ -33,6 +33,9 @@ It's used for View Menu.
     $store_setting = $store_theme_settings['store_settings'];
     // End Store Settings
 
+    // Get Currency Details
+    $currency = getCurrencySymbol($store_setting['config_currency']);
+
     // Get Open-Close Time
     $openclose = openclosetime();
     // End Open-Close Time
@@ -143,7 +146,6 @@ It's used for View Menu.
                     $fromtime = $openclose['fromtime'];
                     $totime = $openclose['totime'];
                     $closedate = $openclose['close_date'];
-                    $currentdate = strtotime(date("Y-m-d"));
                     $closedates = explode(',',$closedate);
                     $date_close1 = array();
                     foreach ($closedates as $value) {
@@ -158,6 +160,7 @@ It's used for View Menu.
                             $firstday = $item[0];
                             $lastday = $item[$t];
                             $today = time();
+                            $currentdate = strtotime(date("Y-m-d"));
                         @endphp
                         @if (in_array($currentdate,$date_close1))
                             <strong>Close</strong>
@@ -349,16 +352,23 @@ It's used for View Menu.
                                                                                                                 @endphp
                                                                                                                     @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                         @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                            <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
-                                                                                                                                class="btn options-btn">
-                                                                                                                                <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                            </a>
+                                                                                                                            @if ($setsizeprice == 0)
+                                                                                                                                <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;" disabled>
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                                </button>
+                                                                                                                            @else
+                                                                                                                                <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                                    class="btn options-btn">
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                                </a>
+                                                                                                                            @endif
                                                                                                                         @endif
                                                                                                                     @else
                                                                                                                         @if ($currentday == $value || $firstday == "Every day")
                                                                                                                             <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                                <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }} {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                                 <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
@@ -395,20 +405,20 @@ It's used for View Menu.
                                                                                                                 @if ($today >= $firsttime && $today <= $lasttime)
                                                                                                                     @if ($currentday == $value || $firstday == "Every day")
                                                                                                                         <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a>
                                                                                                                     @endif
                                                                                                                 @else
                                                                                                                     @if ($currentday == $value || $firstday == "Every day")
                                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a>
                                                                                                                     @break
                                                                                                                     {{-- @elseif ($currentday != $value || $firstday != "Every day")
                                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">£{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a> --}}
                                                                                                                     @endif
@@ -473,7 +483,7 @@ It's used for View Menu.
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
                                     <span class="tg-icon" id="tg-icon"><i class="fas fa-angle-double-up"></i></span>
-                                    <div class="mob-basket">0 X ITEMS | TOTAL: £0.00</div>
+                                    <div class="mob-basket">0 X ITEMS | TOTAL: {{ $currency }}0.00</div>
                                 </div>
                                 <div class="minicart" id="minicart">
                                     <div class="minibox-title">
@@ -506,7 +516,7 @@ It's used for View Menu.
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
                                                                 <td>{{ $cart['name'] }}</td>
-                                                                <td>£{{ $price }}</td>
+                                                                <td>{{ $currency }}{{ $price }}</td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -527,7 +537,7 @@ It's used for View Menu.
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td colspan="2">{{ $cart['name'] }}</td>
-                                                                <td>£{{ $price }}</td>
+                                                                <td>{{ $currency }}{{ $price }}</td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -560,16 +570,16 @@ It's used for View Menu.
                                                     <div class="minicart-list-item-innr sub-total">
                                                         <label>Sub-Total</label>
                                                         @if (isset($subtotal))
-                                                            <span>£ {{ $subtotal }}</span>
+                                                            <span>{{ $currency }} {{ $subtotal }}</span>
                                                         @else
-                                                            <span>£ {{ $subtotal }}</span>
+                                                            <span>{{ $currency }} {{ $subtotal }}</span>
                                                         @endif
                                                     </div>
                                                 </li>
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr del_charge">
                                                         <label>Delivery Charge</label>
-                                                        <span>£ {{ $delivery_charge }}</span>
+                                                        <span>{{ $currency }} {{ $delivery_charge }}</span>
                                                     </div>
                                                 </li>
                                                 @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
@@ -578,7 +588,7 @@ It's used for View Menu.
                                                             @if ($Coupon != '' || !empty($Coupon))
                                                                 <label
                                                                     id="coupontext">Coupon({{ $Coupon['code'] }})</label>
-                                                                <span>£
+                                                                <span>{{ $currency }}
                                                                     -{{ isset($couponcode) ? $couponcode : '' }}</span>
                                                             @endif
                                                         </div>
@@ -631,7 +641,7 @@ It's used for View Menu.
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                        <span>£ {{ isset($total) ? $total : '' }}</span>
+                                                        <span>{{ $currency }} {{ isset($total) ? $total : '' }}</span>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -790,7 +800,7 @@ It's used for View Menu.
                 </div>
                 <div class="modal-body">
                     <h5 class="modal-title" id="pricemodelLabel">Order Now</h5>
-                    <p>Minimum delivery is £15.00</p>
+                    <p>Minimum delivery is {{ $currency }}15.00</p>
                     <button class="btn csmodal-btn" onclick="showmodal();">Deliver my order</button>
                     <button class="btn csmodal-btn" data-bs-dismiss="modal">I will come and collect</button>
                     <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go
