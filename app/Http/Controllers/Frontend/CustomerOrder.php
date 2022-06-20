@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\OrderCart;
@@ -85,6 +86,18 @@ class CustomerOrder extends Controller
         $current_theme = themeID($currentURL);
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
+
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings($current_theme_id,$front_store_id);
+        //End Get Store Settings & Theme Settings & Other
+
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
+
+        // Get Currency Details
+        $currency_code = $store_setting['config_currency'];
+        $currency_details = Currency::where('code',$currency_code)->first();
 
         $delivery_type = session()->get('flag_post_code');
 
@@ -194,9 +207,9 @@ class CustomerOrder extends Controller
                         $gorder->affiliate_id = 0;
                         $gorder->commission = 0.00;
                         $gorder->language_id = 1;
-                        $gorder->currency_id = 1;
-                        $gorder->currency_code = "GBP";
-                        $gorder->currency_value = "1.00000000";
+                        $gorder->currency_id = $currency_details['currency_id'];
+                        $gorder->currency_code = $currency_details['code'];
+                        $gorder->currency_value = $currency_details['value'];
                         $gorder->ip = $request->ip();
                         $gorder->forwarded_ip = '';
                         $gorder->user_agent = '';
@@ -280,7 +293,7 @@ class CustomerOrder extends Controller
                         $gorderdelivery->order_id = $gorder->order_id;
                         $gorderdelivery->code = 'delivery';
                         $gorderdelivery->title = 'Delivery';
-                        $gorderdelivery->text = '£ 0.00';
+                        $gorderdelivery->text = $currency_details['symbol_left'].' 0.00';
                         $gorderdelivery->value = 0.00;
                         $gorderdelivery->sort_order = 0;
                         $gorderdelivery->save();
@@ -291,7 +304,7 @@ class CustomerOrder extends Controller
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
                             $gordercoupon->title = 'Coupon(' . $couponname . ')';
-                            $gordercoupon->text = '£ -' . $couponcode;
+                            $gordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
                             $gordercoupon->value = '-' . $couponcode;
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
@@ -302,7 +315,7 @@ class CustomerOrder extends Controller
                         $gordersubtotal->order_id = $gorder->order_id;
                         $gordersubtotal->code = 'sub_total';
                         $gordersubtotal->title = 'Sub-Total';
-                        $gordersubtotal->text = '£ ' . $subtotal;
+                        $gordersubtotal->text = $currency_details['symbol_left'].$subtotal;
                         $gordersubtotal->value = $subtotal;
                         $gordersubtotal->sort_order = 0;
                         $gordersubtotal->save();
@@ -312,7 +325,7 @@ class CustomerOrder extends Controller
                         $gordertotal->order_id = $gorder->order_id;
                         $gordertotal->code = 'total';
                         $gordertotal->title = 'Total to Pay';
-                        $gordertotal->text = '£ ' . $total;
+                        $gordertotal->text = $currency_details['symbol_left']. $total;
                         $gordertotal->value = $total;
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
@@ -383,9 +396,9 @@ class CustomerOrder extends Controller
                     $order->affiliate_id = 0;
                     $order->commission = 0.00;
                     $order->language_id = 1;
-                    $order->currency_id = 1;
-                    $order->currency_code = "GBP";
-                    $order->currency_value = "1.00000000";
+                    $order->currency_id = $currency_details['currency_id'];
+                    $order->currency_code = $currency_details['code'];
+                    $order->currency_value = $currency_details['value'];
                     $order->ip = isset($customer->ip) ? $customer->ip : '';
                     $order->forwarded_ip = '';
                     $order->user_agent = '';
@@ -471,7 +484,7 @@ class CustomerOrder extends Controller
                     $orderdelivery->order_id = $order->order_id;
                     $orderdelivery->code = 'delivery';
                     $orderdelivery->title = 'Delivery';
-                    $orderdelivery->text = '£ 0.00';
+                    $orderdelivery->text = $currency_details['symbol_left'].'0.00';
                     $orderdelivery->value = 0.00;
                     $orderdelivery->sort_order = 0;
                     $orderdelivery->save();
@@ -482,7 +495,7 @@ class CustomerOrder extends Controller
                         $ordercoupon->order_id = $order->order_id;
                         $ordercoupon->code = 'coupon';
                         $ordercoupon->title = 'Coupon(' . $couponname . ')';
-                        $ordercoupon->text = '£ -' . $couponcode;
+                        $ordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
                         $ordercoupon->value = '-' . $couponcode;
                         $ordercoupon->sort_order = 0;
                         $ordercoupon->save();
@@ -493,7 +506,7 @@ class CustomerOrder extends Controller
                     $ordersubtotal->order_id = $order->order_id;
                     $ordersubtotal->code = 'sub_total';
                     $ordersubtotal->title = 'Sub-Total';
-                    $ordersubtotal->text = '£ ' . $subtotal;
+                    $ordersubtotal->text = $currency_details['symbol_left'].$subtotal;
                     $ordersubtotal->value = $subtotal;
                     $ordersubtotal->sort_order = 0;
                     $ordersubtotal->save();
@@ -503,7 +516,7 @@ class CustomerOrder extends Controller
                     $ordertotal->order_id = $order->order_id;
                     $ordertotal->code = 'total';
                     $ordertotal->title = 'Total to Pay';
-                    $ordertotal->text = '£ ' . $total;
+                    $ordertotal->text = $currency_details['symbol_left'].$total;
                     $ordertotal->value = $total;
                     $ordertotal->sort_order = 0;
                     $ordertotal->save();
@@ -584,9 +597,9 @@ class CustomerOrder extends Controller
                         $gorder->affiliate_id = 0;
                         $gorder->commission = 0.00;
                         $gorder->language_id = 1;
-                        $gorder->currency_id = 1;
-                        $gorder->currency_code = "GBP";
-                        $gorder->currency_value = "1.00000000";
+                        $gorder->currency_id = $currency_details['currency_id'];
+                        $gorder->currency_code = $currency_details['code'];
+                        $gorder->currency_value = $currency_details['value'];
                         $gorder->ip = $request->ip();
                         $gorder->forwarded_ip = '';
                         $gorder->user_agent = '';
@@ -669,7 +682,7 @@ class CustomerOrder extends Controller
                         $gorderdelivery->order_id = $gorder->order_id;
                         $gorderdelivery->code = 'delivery';
                         $gorderdelivery->title = 'Delivery';
-                        $gorderdelivery->text = '£ ' . $delivery_charge;
+                        $gorderdelivery->text = $currency_details['symbol_left'].$delivery_charge;
                         $gorderdelivery->value = $delivery_charge;
                         $gorderdelivery->sort_order = 0;
                         $gorderdelivery->save();
@@ -680,7 +693,7 @@ class CustomerOrder extends Controller
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
                             $gordercoupon->title = 'Coupon(' . $couponname . ')';
-                            $gordercoupon->text = '£ -' . $couponcode;
+                            $gordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
                             $gordercoupon->value = '-' . $couponcode;
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
@@ -691,7 +704,7 @@ class CustomerOrder extends Controller
                         $gordersubtotal->order_id = $gorder->order_id;
                         $gordersubtotal->code = 'sub_total';
                         $gordersubtotal->title = 'Sub-Total';
-                        $gordersubtotal->text = '£ ' . $subtotal;
+                        $gordersubtotal->text = $currency_details['symbol_left']. $subtotal;
                         $gordersubtotal->value = $subtotal;
                         $gordersubtotal->sort_order = 0;
                         $gordersubtotal->save();
@@ -701,7 +714,7 @@ class CustomerOrder extends Controller
                         $gordertotal->order_id = $gorder->order_id;
                         $gordertotal->code = 'total';
                         $gordertotal->title = 'Total to Pay';
-                        $gordertotal->text = '£ ' . $total;
+                        $gordertotal->text = $currency_details['symbol_left'].$total;
                         $gordertotal->value = $total;
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
@@ -774,9 +787,9 @@ class CustomerOrder extends Controller
                         $order->affiliate_id = 0;
                         $order->commission = 0.00;
                         $order->language_id = 1;
-                        $order->currency_id = 1;
-                        $order->currency_code = "GBP";
-                        $order->currency_value = "1.00000000";
+                        $order->currency_id = $currency_details['currency_id'];
+                        $order->currency_code = $currency_details['code'];
+                        $order->currency_value = $currency_details['value'];
                         $order->ip = isset($customer->ip) ? $customer->ip : '';
                         $order->forwarded_ip = '';
                         $order->user_agent = '';
@@ -860,7 +873,7 @@ class CustomerOrder extends Controller
                         $orderdelivery->order_id = $order->order_id;
                         $orderdelivery->code = 'delivery';
                         $orderdelivery->title = 'Delivery';
-                        $orderdelivery->text = '£ ' . $delivery_charge;
+                        $orderdelivery->text = $currency_details['symbol_left']. $delivery_charge;
                         $orderdelivery->value = $delivery_charge;
                         $orderdelivery->sort_order = 0;
                         $orderdelivery->save();
@@ -871,7 +884,7 @@ class CustomerOrder extends Controller
                             $ordercoupon->order_id = $order->order_id;
                             $ordercoupon->code = 'coupon';
                             $ordercoupon->title = 'Coupon(' . $couponname . ')';
-                            $ordercoupon->text = '£ -' . $couponcode;
+                            $ordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
                             $ordercoupon->value = '-' . $couponcode;
                             $ordercoupon->sort_order = 0;
                             $ordercoupon->save();
@@ -882,7 +895,7 @@ class CustomerOrder extends Controller
                         $ordersubtotal->order_id = $order->order_id;
                         $ordersubtotal->code = 'sub_total';
                         $ordersubtotal->title = 'Sub-Total';
-                        $ordersubtotal->text = '£ ' . $subtotal;
+                        $ordersubtotal->text = $currency_details['symbol_left'].$subtotal;
                         $ordersubtotal->value = $subtotal;
                         $ordersubtotal->sort_order = 0;
                         $ordersubtotal->save();
@@ -892,7 +905,7 @@ class CustomerOrder extends Controller
                         $ordertotal->order_id = $order->order_id;
                         $ordertotal->code = 'total';
                         $ordertotal->title = 'Total to Pay';
-                        $ordertotal->text = '£ ' . $total;
+                        $ordertotal->text = $currency_details['symbol_left'].$total;
                         $ordertotal->value = $total;
                         $ordertotal->sort_order = 0;
                         $ordertotal->save();

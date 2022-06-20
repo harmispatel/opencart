@@ -12,6 +12,7 @@ use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
 use App\Models\Coupon;
+use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
@@ -38,6 +39,16 @@ function user_details()
     return $user_dt;
 }
 
+
+
+
+// Get Currency Symbol
+function getCurrencySymbol($code)
+{
+    $currency = Currency::select('symbol_left')->where('code',$code)->first();
+    $symbol = (isset($currency->symbol_left) && $currency->symbol_left != '') ? $currency->symbol_left : '£';
+    return $symbol;
+}
 
 
 
@@ -229,6 +240,7 @@ function storeThemeSettings($theme_id,$store_id)
         'gallery_background_options',
         'gallery_header_text',
         'gallery_header_desc',
+        'config_currency',
     ]);
     $store_settings = [];
     foreach($store_key as $row)
@@ -1612,7 +1624,7 @@ function sidebar()
 // Function for Sidebar Menu of Submenu
 function submenu($menu_id)
 {
-    $sub_menu = Submenu::where('menu_id',$menu_id)->get();
+    $sub_menu = Submenu::where('menu_id',$menu_id)->where('is_hidden','!=',1)->get();
     return $sub_menu;
 }
 
@@ -1975,27 +1987,27 @@ function openclosetime()
     $deliverydays = array();
     $deliveryfrom = array();
     $deliveryto = array();
-    if (isset($delivery['day']) && count($delivery['day'])) {
-        foreach ($delivery['day'] as $keyday => $daytime) {
-            $deliveryday = array();
-            foreach ($days as $key => $day) {
-                if (in_array($key, $daytime)) {
-                   $deliveryday[] = $day;
-                }
-            }
-            $deliverydays[]=$deliveryday;
-            foreach ($times as $key => $time) {
-                if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
-                    $deliveryfrom[] = $time;
-                }
-            }
-            foreach ($times as $key => $time) {
-                if (isset($delivery['to'][$keyday]) && $delivery['to'][$keyday] == $key) {
-                    $deliveryto[] = $time;
-                }
-            }
-        }
-    }
+    // if (isset($delivery['day']) && count($delivery['day'])) {
+    //     foreach ($delivery['day'] as $keyday => $daytime) {
+    //         $deliveryday = array();
+    //         foreach ($days as $key => $day) {
+    //             if (in_array($key, $daytime)) {
+    //                $deliveryday[] = $day;
+    //             }
+    //         }
+    //         $deliverydays[]=$deliveryday;
+    //         foreach ($times as $key => $time) {
+    //             if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
+    //                 $deliveryfrom[] = $time;
+    //             }
+    //         }
+    //         foreach ($times as $key => $time) {
+    //             if (isset($delivery['to'][$keyday]) && $delivery['to'][$keyday] == $key) {
+    //                 $deliveryto[] = $time;
+    //             }
+    //         }
+    //     }
+    // }
     $data['deliverydays'] = $deliverydays;
     $data['deliveryfrom'] = $deliveryfrom;
     $data['deliveryto'] = $deliveryto;

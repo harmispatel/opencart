@@ -282,7 +282,7 @@
 <section class="popular-foods">
     <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
         <h3 class="section-title color-green">Popular Foods</h3>
-        <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br> dolore eu fugiat nulla pariatur.</p>
+        <p class="text">Pizza is the topmost liked food in the world. Today you can find pizza in almost every corner of the world. This traditional Italian dish is made of flattened round dough topped with cheese, and tomatoes, and additionally garnished with basil, olives, and oregano.</p>
         <div class="popular-foods-swiper">
             <div class="swiper">
                 <div class="swiper-wrapper">

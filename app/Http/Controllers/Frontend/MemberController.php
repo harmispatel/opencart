@@ -23,7 +23,7 @@ class MemberController extends Controller
         if (!empty($userlogin)) {
             $customers = Customer::where('customer_id', $userlogin)->first();
             $customeraddress = CustomerAddress::with(['hasOneRegion', 'hasOneCountry'])->where('customer_id', $userlogin)->get();
-            $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus'])->where('customer_id', $userlogin)->orderBy('order_id', 'DESC')->get();
+            $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus','hasOneCurrency'])->where('customer_id', $userlogin)->orderBy('order_id', 'DESC')->get();
             return view('frontend.pages.member', compact('customers', 'customeraddress', 'customerorders'));
         } else {
             return view('frontend.pages.member');
@@ -189,7 +189,7 @@ class MemberController extends Controller
     public function getcustomerorderdetail(Request $request)
     {
         $cusromerOrderId = $request->customerorderid;
-        $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus', 'hasManyOrderTotal'])->where('order_id', $cusromerOrderId)->first();
+        $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus', 'hasManyOrderTotal','hasOneCurrency'])->where('order_id', $cusromerOrderId)->first();
 
         // Get Current Theme ID & Store ID
         $currentURL = URL::to("/");
@@ -236,7 +236,7 @@ class MemberController extends Controller
             $html .= '<tr>';
             $html .=     '<td style="text-align:center; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">' . $value->quantity . 'x</td>';
             $html .=     '<td style="text-align:left; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;"><span class="name-parent">' . $value->name . '</span><br><div class="topping_text"><span class="bg" style="display:block"></span></div></td>';
-            $html .=     '<td style="text-align:right; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">£' . number_format($value->total, 2) . '</td>';
+            $html .=     '<td style="text-align:right; border-bottom: 1px solid rgb(221, 221, 221); padding: 7px 0;">'.$customerorders->hasOneCurrency["symbol_left"].' '.number_format($value->total, 2) . '</td>';
             $html .= '</tr>';
         }
         $html .=                 '</tbody>';

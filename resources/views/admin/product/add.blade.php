@@ -105,7 +105,7 @@
 
                                             <div class="mb-3">
                                                 <label for="category" class="form-label">Category</label>
-                                                <select name="category" id="category" class="form-control">
+                                                <select name="category" id="category" class="form-control {{ $errors->has('category') ? 'is-invalid' : '' }}">
                                                     <option disabled selected>select</option>
                                                     @foreach ($result['category'] as $category)
                                                         <option value="{{ $category->category_id }}">
@@ -113,8 +113,11 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-
-
+                                            @if ($errors->has('category'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('category') }}
+                                                </div>
+                                            @endif
 
                                             <div class="mb-3">
                                                 <label for="product" class="form-label"><span
@@ -191,17 +194,14 @@
                                             <div class="class=mb-3">
                                                 <label for="price" class="form-label">Price</label>
                                                 <div>
-                                                    Main Price <input type="number" name="mainprice"
-                                                        class="form-control {{ $errors->has('mainprice') ? 'is-invalid' : '' }}" value="{{ old('mainprice') }}">
-                                                        @if ($errors->has('mainprice'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('mainprice') }}
-                                                    </div>
-                                                @endif
-                                                    Delivery Price <input type="text" name="deliveryprice"
-                                                        class="form-control" value="{{ old('deliveryprice') }}">
-                                                    Collection Price <input type="text" name="collectionprice"
-                                                        class="form-control" value="{{ old('collectionprice') }}">
+                                                    Main Price <input type="text" name="mainprice" class="form-control {{ $errors->has('mainprice') ? 'is-invalid' : '' }}" value="{{ old('mainprice') }}">
+                                                    @if ($errors->has('mainprice'))
+                                                        <div class="invalid-feedback">
+                                                            {{ $errors->first('mainprice') }}
+                                                        </div>
+                                                    @endif
+                                                    Delivery Price <input type="text" name="deliveryprice" class="form-control" value="{{ old('deliveryprice') }}">
+                                                    Collection Price <input type="text" name="collectionprice" class="form-control" value="{{ old('collectionprice') }}">
                                                 </div>
                                             </div>
 

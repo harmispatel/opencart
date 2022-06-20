@@ -269,6 +269,7 @@
             //     //   $('.cat-list').append(res.table);
             //    },
             },
+            "order": [0, 'desc'],
             columns: [{
                     "data": "checkbox",
                     "orderable": false,
