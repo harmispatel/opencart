@@ -352,14 +352,12 @@ It's used for View Menu.
                                                                                                                             <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
                                                                                                                                 class="btn options-btn">
                                                                                                                                 <span class="sizeprice hide-carttext text-white">£{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
                                                                                                                     @else
                                                                                                                         @if ($currentday == $value || $firstday == "Every day")
                                                                                                                             <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                                 <span class="sizeprice hide-carttext text-white">£ {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
                                                                                                                     @endif

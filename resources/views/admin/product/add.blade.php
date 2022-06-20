@@ -152,19 +152,19 @@
                                                 <label class="form-label">select the days
                                                     availiable</label>
                                                 <div>
-                                                    <input type="checkbox" name="day[]" value="2" checked> Mon
+                                                    <input type="checkbox" name="day[]" value="2"> Mon
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="3" checked> Tue
+                                                    <input type="checkbox" name="day[]" value="3"> Tue
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="4" checked> Wed
+                                                    <input type="checkbox" name="day[]" value="4"> Wed
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="5" checked> Thu
+                                                    <input type="checkbox" name="day[]" value="5"> Thu
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="6" checked> Fir
+                                                    <input type="checkbox" name="day[]" value="6"> Fir
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="7" checked> Sat
+                                                    <input type="checkbox" name="day[]" value="7"> Sat
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="8" checked> Sun
+                                                    <input type="checkbox" name="day[]" value="8"> Sun
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>
@@ -172,7 +172,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Order Type</label>
                                                 <div>
-                                                    <input type="radio" name="order_type[]" value="both" checked> Both
+                                                    <input type="radio" name="order_type[]" value="both" > Both
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                     <input type="radio" name="order_type[]" value="delivery"> Delivery
                                                     Only &nbsp;&nbsp;&nbsp;&nbsp;
@@ -191,8 +191,13 @@
                                             <div class="class=mb-3">
                                                 <label for="price" class="form-label">Price</label>
                                                 <div>
-                                                    Main Price <input type="text" name="mainprice"
-                                                        class="form-control" value="{{ old('mainprice') }}">
+                                                    Main Price <input type="number" name="mainprice"
+                                                        class="form-control {{ $errors->has('mainprice') ? 'is-invalid' : '' }}" value="{{ old('mainprice') }}">
+                                                        @if ($errors->has('mainprice'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('mainprice') }}
+                                                    </div>
+                                                @endif
                                                     Delivery Price <input type="text" name="deliveryprice"
                                                         class="form-control" value="{{ old('deliveryprice') }}">
                                                     Collection Price <input type="text" name="collectionprice"
