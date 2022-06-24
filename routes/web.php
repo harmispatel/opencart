@@ -292,10 +292,21 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
     Route::post('updateTemplateSetting', [LayoutController::class, 'updateTemplateSetting'])->name('updateTemplateSetting');
+    Route::post('deleteSlider', [LayoutController::class, 'deleteSlider'])->name('deleteSlider');
 
     Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
     Route::get('bannerandblocks', [LayoutController::class, 'bannerandblocks'])->name('bannerandblocks');
     Route::get('activetheme/{id}', [LayoutController::class, 'activetheme'])->name('activetheme');
+    Route::get('activeheader/{id}', [LayoutController::class, 'activeheader'])->name('activeheader');
+    Route::get('activefooter/{id}', [LayoutController::class, 'activefooter'])->name('activefooter');
+    Route::get('activegallary/{id}', [LayoutController::class, 'activegallary'])->name('activegallary');
+    Route::get('activebestcategory/{id}', [LayoutController::class, 'activebestcategory'])->name('activebestcategory');
+    Route::get('activepopularfood/{id}', [LayoutController::class, 'activepopularfood'])->name('activepopularfood');
+    Route::get('activeslider/{id}', [LayoutController::class, 'activeslider'])->name('activeslider');
+    Route::get('activerecentreview/{id}', [LayoutController::class, 'activerecentreview'])->name('activerecentreview');
+    Route::get('activeabout/{id}', [LayoutController::class, 'activeabout'])->name('activeabout');
+    Route::get('activereservation/{id}', [LayoutController::class, 'activereservation'])->name('activereservation');
+    Route::get('activeopenhours/{id}', [LayoutController::class, 'activeopenhours'])->name('activeopenhours');
 
     // Messages
     Route::get('messages', [MessageController::class, 'index'])->name('messages');
