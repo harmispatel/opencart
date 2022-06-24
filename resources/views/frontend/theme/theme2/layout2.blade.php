@@ -333,7 +333,7 @@
                 <div class="swiper-wrapper">
                     @if(count($best_categories) > 0)
                         @foreach ($best_categories as $categorydet)
-                            <a class="swiper-slide" href="#">
+                            <a class="swiper-slide" href="{{route('menu')}}">
                                 <div class="img">
                                     @if (isset($categorydet->hasOneCategoryDetails['image']))
                                         <img class="img-fluid" src="{{$categorydet->hasOneCategoryDetails['image'] }}"/>
@@ -369,7 +369,7 @@
                 <div class="swiper-wrapper">
                     @if(count($popular_foods) > 0)
                         @foreach ($popular_foods as $food)
-                            <a class="swiper-slide" href="#">
+                            <a class="swiper-slide" href="{{route('menu')}}">
                                 <div class="img">
                                     @if (isset($food->hasOneProduct['image']))
                                         <img class="img-fluid" src="{{ $food->hasOneProduct['image'] }}">

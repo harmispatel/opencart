@@ -293,6 +293,7 @@
             @if (count($popular_foods) > 0)
                 @foreach ($popular_foods as $food)
                     <div class="col-12 col-sm-12 col-md-6">
+                        <a href="{{route('menu')}}">
                         <div class="item">
                             <div class="item">
                                 <div class="img">
@@ -318,6 +319,7 @@
                                 </div>
                             </div>
                         </div>
+                    </a>
                     </div>
                 @endforeach
             @else
@@ -355,6 +357,7 @@
                                 <div class="swiper-wrapper">
                                     @foreach ($allproducts as $product)
                                         <div class="swiper-slide">
+                                            <a href="{{route('menu')}}">
                                             <div class="item">
                                                 <div class="img">
                                                     @if (!empty($product->hasOneProduct['image']))
@@ -370,6 +373,7 @@
                                                 </div>
                                                 <p>@php echo html_entity_decode($product->hasOneDescription['description']) @endphp</p>
                                             </div>
+                                            </a>
                                         </div>
                                     @endforeach
                                 </div>
