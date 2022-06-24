@@ -492,7 +492,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="card-footer">
-                                                                                        <span class="float-start text-bold" style="font-size: 23px"><i class="fa fa-shopping-basket" aria-hidden="true"></i> £{{ number_format($orders->total,2) }}</span>
+                                                                                        <span class="float-start text-bold" style="font-size: 23px"><i class="fa fa-shopping-basket" aria-hidden="true"></i> {{ $orders->hasOneCurrency['symbol_left'] }} {{ number_format($orders->total,2) }}</span>
                                                                                         <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail" data-bs-toggle="modal" data-bs-target="#orderreceipt">View</button>
                                                                                     </div>
                                                                                 </div>

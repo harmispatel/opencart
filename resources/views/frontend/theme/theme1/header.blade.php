@@ -31,6 +31,9 @@
     $store_setting = $store_theme_settings['store_settings'];
     // End Store Settings
 
+    // Get Currency Details
+    $currency = getCurrencySymbol($store_setting['config_currency']);
+
     // Get Open-Close Time
     $openclose = openclosetime();
     // End Open-Close Time
@@ -151,7 +154,7 @@
 
 <!-- Header -->
 <header class="header">
-    <div class="container">
+    <div class="container-fluid p-0">
         <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
             <div class="working-time">
                 <strong class="text-uppercase">Working Time:</strong>
@@ -265,7 +268,7 @@
             @endif
         </div>
 
-        <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="background: {{ $template_setting['polianna_navbar_background'] }};">
+        <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="border-radius:0px!important;background: {{ $template_setting['polianna_navbar_background'] }};">
             <a class="logo" href="{{ route('home') }}">
                 <img class="img-fluid" src="{{ $template_setting['polianna_main_logo'] }}" style="width: {{ $template_setting['polianna_main_logo_width'] }}px; height: {{ $template_setting['polianna_main_logo_height'] }}px;"/>
             </a>
@@ -299,7 +302,7 @@
                 <div class="price-box">
                     <strong>Shopping Cart</strong>
                     <div class="price">
-                        <i class="fas fa-pound-sign"></i> <span class="pirce-value">{{ $headertotal }}</span>
+                        <h3 style="color: black">{{ $currency }} <span class="pirce-value">{{ $headertotal }}</span></h3>
                     </div>
                 </div>
             </a>

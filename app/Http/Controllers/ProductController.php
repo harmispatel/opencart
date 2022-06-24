@@ -36,12 +36,12 @@ class ProductController extends Controller
         // Current Store ID
         $current_store_id = currentStoreId();
         if ($current_store_id == 0) {
-            $category = Category::with(['hasOneCategoryToStore'])->get();
+            $category = Category::with(['hasOneCategoryToStore'])->orderBy('category_id','DESC')->get();
         } else {
 
             $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
                 $query->where('store_id', $current_store_id);
-            })->get();
+            })->orderBy('category_id','DESC')->get();
         }
         return view('admin.product.list', ['category' => $category]);
     }
@@ -388,6 +388,8 @@ class ProductController extends Controller
             'product' => 'required',
             'product_icons' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'mainprice' => 'required',
+            'category' => 'required',
         ]);
 
         $product = new Product();
@@ -803,7 +805,7 @@ class ProductController extends Controller
         $current_store_id = currentStoreId();
         $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($current_store_id) {
             $query->where('store_id', $current_store_id);
-        })->get();
+        })->orderBy('category_id','DESC')->get();
         $product_icon = ProductIcons::select('*')->get();
         $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $prod_id)->first();
 
@@ -826,7 +828,7 @@ class ProductController extends Controller
         $request->validate([
             'product' => 'required',
             'product_icons' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         $product_id = $request->product_id;
@@ -852,8 +854,12 @@ class ProductController extends Controller
         $product->collection_price = isset($request->collectionprice) ? $request->collectionprice : 0;
         $product->status = isset($request->status) ? $request->status : 0;
         $product->sort_order = isset($request->sort_order) ? $request->sort_order : 0;
-        $icon = $request['product_icons'];
-        $product_icons = implode(',', $icon);
+        // $icon = $request['product_icons'];
+        // $product_icons = implode(',', $icon);
+        if (!empty($icon = $request['product_icons'])) {
+            $product_icons = implode(',', $icon);
+            $product->product_icons = isset($product_icons) ? $product_icons : 0;
+        }
         $product->product_icons = isset($product_icons) ? $product_icons : 0;
         $order_type = $request['order_type'];
         $product->order_type = isset($order_type) ? $order_type : 0;
@@ -861,8 +867,8 @@ class ProductController extends Controller
         if (!empty($day))
         {
             $days = implode(',', $day);
+            $product->availibleday = isset($days) ? $days : '';
         }
-        $product->availibleday = isset($days) ? $days : '';
 
         $currentURL = public_url();
         if ($request->hasFile('image'))
@@ -897,18 +903,18 @@ class ProductController extends Controller
 
         $type_topping = isset($request->typetopping) ? $request->typetopping : 0;
 
-        if (!empty($type_topping) || $type_topping != '')
-        {
-            $toppingtype = ProductToppingType::find($product_id);
-            $toppingtype->typetopping =  $type_topping;
-            $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
-            $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
-            $toppingtype->choose = isset($request->choose) ? $request->choose : '';
-            $toppingtype->enable = $request->enable;
-            $toppingtype->renamegroup = $request->renamegroup;
-            $toppingtype->topping_sort_order = $request->topping_sort_order;
-            $toppingtype->update();
-        }
+        // if (!empty($type_topping) || $type_topping != '')
+        // {
+        //     $toppingtype = ProductToppingType::find($product_id);
+        //     // $toppingtype->typetopping =  $type_topping;
+        //     $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
+        //     $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
+        //     $toppingtype->choose = isset($request->choose) ? $request->choose : '';
+        //     $toppingtype->enable = $request->enable;
+        //     $toppingtype->renamegroup = $request->renamegroup;
+        //     $toppingtype->topping_sort_order = $request->topping_sort_order;
+        //     $toppingtype->update();
+        // }
 
         $mainprice = isset($request->mainprices) ? $request->mainprices : "";
         $mainprice = $request->mainprices;

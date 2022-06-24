@@ -91,68 +91,23 @@ class MenuController extends Controller
         $current_theme_id = $current_theme['theme_id'];
         $front_store_id =  $current_theme['store_id'];
 
+        // Get Store Settings & Theme Settings & Other
+        $store_theme_settings = storeThemeSettings($current_theme_id,$front_store_id);
+        //End Get Store Settings & Theme Settings & Other
+
+        // Store Settings
+        $store_setting = $store_theme_settings['store_settings'];
+        // End Store Settings
+
+        // Get Currency Details
+        $currency = getCurrencySymbol($store_setting['config_currency']);
+
         $productid = $request->product_id;
         $pro_name = ProductDescription::where('product_id', $productid)->first();
         $cat_id = Product_to_category::where('product_id', $productid)->first();
         $toppingType = ToppingCatOption::where('id_category', $cat_id->category_id)->first();
         $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
         unset($group['number_group']);
-
-
-
-
-        // //     foreach($dropdown as $dropdowns){
-        //           //         echo "<pre>";
-        //           //       print_r($dropdowns->name);
-        //           //     }
-        //             // echo "<pre>";
-        //             // print_r($top->name_topping);
-
-        //           $top = Topping::where('id_topping',$value['id_group_option'])->first();
-        //           $dropdown = ToppingOption::where('id_group_topping',$top->id_topping)->get();
-        //           echo "<pre>";
-        //           print_r($dropdown);
-        //         }
-        // exit;
-
-        // $modal ='';
-        // $modal .='<div class="modal-header">';
-        // $modal .='<h5 class="modal-title text-center" id="FreeitemLabel">'.$pro_name->name.'</h5>';
-        // $modal .='<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-        // $modal .='</div>';
-        // $modal .='<div class="modal-body">';
-        // $modal .='<div class="accordion" id="accordionExample">';
-        // $modal .='<div class="accordion-item">';
-        // $modal .='<h2 class="accordion-header" id="headingOne">';
-        // foreach($group as $key=>$value)
-        // {
-        //     $top = Topping::where('id_topping',$value['id_group_option'])->first();
-        //     $modal .='<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree'.$key.'" aria-expanded="true" aria-controls="collapsefree"><span>'.$top->name_topping.'</span></button>';
-        //     $dropdown = ToppingOption::where('id_group_topping',$top->id_topping)->get();
-        // $modal .='</h2>';
-
-        // $modal .='<div id="collapsefree'.$key.'" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">';
-        // $modal .='<div class="accordion-body">';
-        // $modal .=' <select style="width: 200px">';
-        // foreach($dropdown as $dropdowns){
-        // $modal .='<option style="display: none" selected>--</option><option>'.$dropdowns->name.'</option>';
-        // }
-        // $modal .='</select>';
-        // $modal .='</div>';
-        // $modal .='</div>';
-        // }
-        // $modal .='</div>';
-        // $modal .='</div>';
-        // $modal .='<div class="mt-4">';
-        // $modal .='<b>Add your special request?</b><br><textarea  name="request" rows="5" style="width: 465px"></textarea>';
-        // $modal .='</div>';
-        // $modal .='</div>';
-        // $modal .='<div class="modal-footer">';
-        // $modal .='<button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>';
-        // $modal .='</div>';
-
-
-
 
 
         $sizeid = $request->size_id;
@@ -266,7 +221,7 @@ class MenuController extends Controller
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
                 $html .= '<td>' . $cart['size'] . '</td>';
                 $html .= '<td>' . $cart['name'] . '</td>';
-                $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
+                $html .= '<td style="width: 80px;">'.$currency.' '.$price.'</td>';
                 $html .= '</tr>';
 
                 // Delivery Charge
@@ -288,7 +243,7 @@ class MenuController extends Controller
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
                 $html .= '<td colspan="2">' . $cart['name'] . '</td>';
-                $html .= '<td style="width: 80px;">£ ' . $price . '</td>';
+                $html .= '<td style="width: 80px;">'.$currency.' '. $price . '</td>';
                 $html .= '</tr>';
 
                 // Delivery Charge
@@ -314,7 +269,7 @@ class MenuController extends Controller
             if ($Coupon['type'] == 'F') {
                 $couponcode =  $Coupon['discount'];
             }
-            $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span>£ -' . number_format($couponcode, 2) . '</span>';
+            $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -'.$currency.' '.number_format($couponcode, 2) . '</span>';
             // Main Total
             $total = $subtotal - $couponcode + $delivery_charge;
         } else {
@@ -327,9 +282,9 @@ class MenuController extends Controller
         $headertotal = 0;
         $total_html = '';
 
-        $subtotl_html .= '<label>Sub-Total</label><span>£ ' . $subtotal . '</span>';
-        $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>£ ' . $delivery_charge . '</span>';
-        $total_html .= '<label><b>Total to pay:</b></label><span>£ ' . $total . '</span>';
+        $subtotl_html .= '<label>Sub-Total</label><span>'.$currency.' '.$subtotal . '</span>';
+        $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>'.$currency.' '.$delivery_charge . '</span>';
+        $total_html .= '<label><b>Total to pay:</b></label><span>'.$currency.' '. $total . '</span>';
         $headertotal += $total;
 
         return response()->json([

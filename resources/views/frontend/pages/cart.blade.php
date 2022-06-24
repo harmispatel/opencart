@@ -33,6 +33,9 @@
     $store_setting = $store_theme_settings['store_settings'];
     // End Store Settings
 
+    // Get Currency Details
+    $currency = getCurrencySymbol($store_setting['config_currency']);
+
     // Get Open-Close Time
     $openclose = openclosetime();
     // End Open-Close Time
@@ -210,21 +213,21 @@
                             <tbody>
                                 <tr>
                                     <td><b>Sub-Total:</b></td>
-                                    <td><span><b>£{{ $subtotal }}</b></span></td>
+                                    <td><span><b>{{ $currency }}{{ $subtotal }}</b></span></td>
                                 </tr>
                                 <tr>
                                     <td><b>Delivery Charge:</b></td>
-                                    <td><span><b>£{{ $delivery_charge }}</b></span></td>
+                                    <td><span><b>{{ $currency }}{{ $delivery_charge }}</b></span></td>
                                 </tr>
                                 <tr>
                                     @if(!empty($Coupon) || $Coupon != '')
                                         <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
-                                        <td><span><b>£-{{ $couponcode }}</b></span></td>
+                                        <td><span><b>{{ $currency }}-{{ $couponcode }}</b></span></td>
                                     @endif
                                 </tr>
                                 <tr>
                                     <td><b>Total to pay:</b></td>
-                                    <td><span><b>£{{ $total }}</b></span></td>
+                                    <td><span><b>{{ $currency }}{{ $total }}</b></span></td>
                                 </tr>
                             </tbody>
                         </table>

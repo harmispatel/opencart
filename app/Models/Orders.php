@@ -60,4 +60,10 @@ class Orders extends Model
         return $this->hasMany(OrderTotal::class,'order_id','order_id');
     }
 
+    // Has One Relation with "oc_currency" table
+    public function hasOneCurrency()
+    {
+        return $this->hasOne(Currency::class,'currency_id','currency_id');
+    }
+
 }

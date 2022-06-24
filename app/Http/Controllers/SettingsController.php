@@ -603,6 +603,7 @@ class SettingsController extends Controller
         $data['theme_id'] = 1;
         $data['enable_delivery'] = 'both';
         $data['delivery_option'] = 'post_codes';
+        $data['enable_gallery_module'] = 1;
 
 
         if ($request->hasFile('suspend_logo')) {
@@ -637,9 +638,9 @@ class SettingsController extends Controller
             $shopadd->save();
         }
 
-        $dest = 'home/thepublic/public_html/App-Myfood/sites/'.$data['file_directory_url'];
+        // $dest = 'home/thepublic/public_html/App-Myfood/sites/'.$data['file_directory_url'];
 
-        shell_exec("cp -R /home/thepublic/public_html/App-Myfood/myfoodbasket/newsite/. /$dest");
+        // shell_exec("cp -R /home/thepublic/public_html/App-Myfood/myfoodbasket/newsite/. /$dest");
 
         return redirect()->route('dashboard')->with('success', 'Settings Updated..');
     }
