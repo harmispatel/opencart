@@ -2,16 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AboutLayouts;
+use App\Models\BestCategoryLayouts;
+use App\Models\Footers;
+use App\Models\GallaryLayouts;
+use App\Models\Headers;
 use App\Models\Layout;
+use App\Models\OpenhourLayouts;
+use App\Models\PopularFoodsLayouts;
+use App\Models\RecentReviewsLayouts;
+use App\Models\ReservationLayouts;
 use App\Models\Settings;
+use App\Models\Slider;
+use App\Models\SlidersLayouts;
+use App\Models\Store;
 use App\Models\Themes;
+use GuzzleHttp\Psr7\Header;
 use Illuminate\Http\Request;
 use URL;
 use Illuminate\Support\Facades\Artisan;
 
 class LayoutController extends Controller
 {
-    // Template(Theme) Setting For Frontend Layout
+
+    // Delete Slider by Slider ID
+    function deleteSlider(Request $request)
+    {
+        $slider_id = $request->slider_id;
+
+        $slider = Slider::where('id',$slider_id)->first();
+
+        $slider_image = isset($slider->image) ? $slider->image : '';
+        $slider_logo = isset($slider->logo) ? $slider->logo : '';
+
+        if(!empty($slider_image) || $slider_image != '')
+        {
+            if(file_exists($slider_image))
+            {
+                unlink($slider_image);
+            }
+        }
+
+        if(!empty($slider_logo) || $slider_logo != '')
+        {
+            if(file_exists($slider_logo))
+            {
+                unlink($slider_logo);
+            }
+        }
+
+        $slider->delete();
+
+        return response([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Template Setting For Frontend Layout
     public function templatesettings()
     {
         // Check User Permission
@@ -20,437 +72,830 @@ class LayoutController extends Controller
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
         }
 
-        // Current Store ID
-        $current_store_id = currentStoreId();
 
+        // Get User Details
         $user_details = user_details();
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
         }
-        $user_shop_id = $user_details['user_shop'];
 
-        // Current Store Theme ID
-        $current_store_theme = themeActive();
 
-        // Get All Themes
-        $themes = Themes::get();
-        $key = ([
-            'polianna_navbar_background',
-            'polianna_navbar_link',
-            'polianna_navbar_link_hover',
-            'polianna_main_logo',
-            'polianna_main_logo_width',
-            'polianna_main_logo_height',
-
-            'polianna_slider_permission',
-            'polianna_slider_1',
-            'polianna_slider_2',
-            'polianna_slider_3',
-            'polianna_slider_1_title',
-            'polianna_slider_2_title',
-            'polianna_slider_3_title',
-            'polianna_slider_1_description',
-            'polianna_slider_2_description',
-            'polianna_slider_3_description',
-
-            'polianna_online_order_permission',
-            'polianna_open_close_store_permission',
-
-            'polianna_open_banner',
-            'polianna_close_banner',
-            'polianna_open_close_banner_width',
-            'polianna_open_close_banner_height',
-
-            'polianna_store_fonts',
-            'polianna_popular_food_count',
-            'polianna_best_category_count',
-            'polianna_recent_review_count',
-            'polianna_store_description',
-            'polianna_banner_image',
-
-            'polianna_footer_background',
-            'polianna_footer_text_color',
-            'polianna_footer_title_color',
-            'polianna_footer_logo',
-
-        ]);
-
-        $template_settings = [];
-
-        foreach($key as $row)
+        // Current Store ID
+        if($user_group_id == 1)
         {
-            if($user_group_id == 1)
-            {
-                $query = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key',$row)->first();
-            }
-            else
-            {
-                $query = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key',$row)->first();
-            }
-            $template_settings[$row] = isset($query->value) ? $query->value : '';
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
         }
 
-        return view('admin.settinglayouts.template_settings',compact(['themes','template_settings']));
+
+        // Get All Stores List
+        $stores = Store::get();
+
+        // Get All Sliders
+        $sliders = Slider::where('store_id',$current_store_id)->orderBy('id','ASC')->get();
+
+        // Get General Settings
+        $get_genearl_settings = Settings::select('value')->where('store_id',$current_store_id)->where('key','general_settings')->first();
+        $general_settings = isset($get_genearl_settings->value) ? unserialize($get_genearl_settings->value) : '';
+
+        // Get All Headers
+        $headers = Headers::get();
+
+        // Get All Footers
+        $footers = Footers::get();
+
+        // Get All Gallary Layouts
+        $gallary_layouts = GallaryLayouts::get();
+
+        // Get All Best Category Layouts
+        $bestcategory_layouts = BestCategoryLayouts::get();
+
+        // Get All Popular Foods Layouts
+        $popularfoods_layouts = PopularFoodsLayouts::get();
+
+        // Get All Sliders Layouts
+        $sliders_layouts = SlidersLayouts::get();
+
+        // Get All Recent Reviews Layouts
+        $reviews_layouts = RecentReviewsLayouts::get();
+
+        // Get All About Layouts
+        $about_layouts = AboutLayouts::get();
+
+        // Get All Reservation Layouts
+        $reservation_layouts = ReservationLayouts::get();
+
+        // Get All Open Hours Layouts
+        $openhours_layouts = OpenhourLayouts::get();
+
+
+        return view('admin.settinglayouts.template_settings',compact([
+            'headers',
+            'footers',
+            'gallary_layouts',
+            'bestcategory_layouts',
+            'popularfoods_layouts',
+            'sliders_layouts',
+            'reviews_layouts',
+            'about_layouts',
+            'reservation_layouts',
+            'openhours_layouts',
+            'stores',
+            'sliders',
+            'general_settings',
+        ]));
     }
 
 
-    // Template(Theme) Setting
+
+
+
+    // Update Template Settings
     function updateTemplateSetting(Request $request)
     {
-        $rules = [
-            'polianna_main_logo' => 'max:1024',
-            'polianna_slider_1' => 'max:1024',
-            'polianna_slider_2' => 'max:1024',
-            'polianna_slider_3' => 'max:1024',
-            'polianna_open_banner' => 'max:1024',
-            'polianna_close_banner' => 'max:1024',
-            'polianna_banner_image' => 'max:1024',
-            'polianna_footer_logo' => 'max:1024',
-        ];
-
-        $customMessages = [
-            'max' => 'Please Select File Less than or equal 1MB'
-        ];
-
-        $this->validate($request, $rules, $customMessages);
+        // Get Current URL
+        $currentURL = public_url();
 
 
-        // Current Store ID
-        $current_store_id = currentStoreId();
-
+        // Get User Details
         $user_details = user_details();
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
         }
-        $user_shop_id = $user_details['user_shop'];
-
-        // Current Store Theme ID
-        $current_store_theme = themeActive();
-
-        // Current URL
-        // $currentURL = URL::to("/");
-        $currentURL = public_url();
 
 
-        // NAVBAR
-        $data['polianna_navbar_background'] = isset($request->polianna_navbar_background) ? $request->polianna_navbar_background : '';
-        $data['polianna_navbar_link'] = isset($request->polianna_navbar_link) ? $request->polianna_navbar_link : '';
-        $data['polianna_navbar_link_hover'] = isset($request->polianna_navbar_link_hover) ? $request->polianna_navbar_link_hover : '';
-        $data['polianna_main_logo_width'] = isset($request->polianna_main_logo_width) ? $request->polianna_main_logo_width : '';
-        $data['polianna_main_logo_height'] = isset($request->polianna_main_logo_height) ? $request->polianna_main_logo_height : '';
-        if($request->hasFile('polianna_main_logo'))
+        // Current Store ID
+        if($user_group_id == 1)
         {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_main_logo')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_main_logo')->first();
-            }
-
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_main_logo_url = $currentURL.'/public/frontend/navbar/';
-
-            $polianna_main_logo = genratetoken(6).'.'.$request->file('polianna_main_logo')->getClientOriginalExtension();
-            $request->file('polianna_main_logo')->move(public_path('frontend/navbar'),$polianna_main_logo);
-            // $data['polianna_main_logo'] = 'public/frontend/navbar/'.$polianna_main_logo;
-            $data['polianna_main_logo'] = $polianna_main_logo_url.$polianna_main_logo;
+            $current_store_id = currentStoreId();
         }
-        // END NAVBAR
-
-
-        // SLIDERS
-        $data['polianna_slider_permission'] = isset($request->polianna_slider_permission) ? $request->polianna_slider_permission : '';
-        $data['polianna_slider_1_title'] = isset($request->polianna_slider_1_title) ? $request->polianna_slider_1_title : '';
-        $data['polianna_slider_2_title'] = isset($request->polianna_slider_2_title) ? $request->polianna_slider_2_title : '';
-        $data['polianna_slider_3_title'] = isset($request->polianna_slider_3_title) ? $request->polianna_slider_3_title : '';
-        $data['polianna_slider_1_description'] = isset($request->polianna_slider_1_description) ? $request->polianna_slider_1_description : '';
-        $data['polianna_slider_2_description'] = isset($request->polianna_slider_2_description) ? $request->polianna_slider_2_description : '';
-        $data['polianna_slider_3_description'] = isset($request->polianna_slider_3_description) ? $request->polianna_slider_3_description : '';
-        if($request->hasFile('polianna_slider_1'))
+        else
         {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_1')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_1')->first();
-            }
-
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_slider_1_url = $currentURL.'/public/frontend/sliders/';
-
-            $polianna_slider_1 = genratetoken(6).$request->file('polianna_slider_1')->getClientOriginalExtension();
-            $request->file('polianna_slider_1')->move(public_path('frontend/sliders'),$polianna_slider_1);
-            // $data['polianna_slider_1'] = 'public/frontend/sliders/'.$polianna_slider_1;
-            $data['polianna_slider_1'] = $polianna_slider_1_url.$polianna_slider_1;
+            $current_store_id = $user_details['user_shop'];
         }
 
-        if($request->hasFile('polianna_slider_2'))
+
+        // Add & Update General Settings
+        $general_settings = $request->general;
+
+        if(isset($general_settings))
         {
-            if($user_group_id == 1)
+            $serial = serialize($general_settings);
+
+            $check_general_setting = Settings::where('store_id',$current_store_id)->where('key','general_settings')->first();
+
+            $general_setting_id = isset($check_general_setting->setting_id) ? $check_general_setting->setting_id : '';
+
+            if (!empty($general_setting_id) || $general_setting_id != '')
             {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_2')->first();
+                $general_setting_update = Settings::find($general_setting_id);
+                $general_setting_update->value = $serial;
+                $general_setting_update->update();
             }
             else
             {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_2')->first();
+                $general_setting_new = new Settings;
+                $general_setting_new->group = 'template';
+                $general_setting_new->store_id = $current_store_id;
+                $general_setting_new->key = 'general_settings';
+                $general_setting_new->value = $serial;
+                $general_setting_new->serialized = 1;
+                $general_setting_new->save();
             }
-
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_slider_2_url = $currentURL.'/public/frontend/sliders/';
-
-            $polianna_slider_2 = genratetoken(6).$request->file('polianna_slider_2')->getClientOriginalExtension();
-            $request->file('polianna_slider_2')->move(public_path('frontend/sliders'),$polianna_slider_2);
-            // $data['polianna_slider_2'] = 'public/frontend/sliders/'.$polianna_slider_2;
-            $data['polianna_slider_2'] = $polianna_slider_2_url.$polianna_slider_2;
         }
+        // End Add & Update General Settings
 
-        if($request->hasFile('polianna_slider_3'))
+
+        // Add & Update Header Settings
+        $header_settings = $request->header_setting;
+
+        if(isset($header_settings))
         {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_3')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_slider_3')->first();
-            }
+            $header_id = $header_settings['header_layout_id'];
 
-            $old_name = isset($old->value) ? $old->value : '';
+            $check_header_setting = Settings::where('store_id',$current_store_id)->where('key','header_settings')->where('header_id',$header_id)->first();
 
-            if(!empty($old_name) || $old_name != '')
+            $old_header_setting = isset($check_header_setting->value) ? unserialize($check_header_setting->value) : '';
+
+            $header_setting_id = isset($check_header_setting->setting_id) ? $check_header_setting->setting_id : '';
+
+            if (!empty($header_setting_id) || $header_setting_id != '')
             {
-                if(file_exists($old_name))
+                $open_banner = isset($header_settings['menu_topbar_open_banner']) ? $header_settings['menu_topbar_open_banner'] : '';
+
+                $close_banner = isset($header_settings['menu_topbar_close_banner']) ? $header_settings['menu_topbar_close_banner'] : '';
+
+                if(!empty($open_banner) || $open_banner != '')
                 {
-                    unlink($old_name);
-                }
-            }
+                    $old_open_banner = isset($old_header_setting['menu_topbar_open_banner']) ? $old_header_setting['menu_topbar_open_banner'] : '';
 
-            $polianna_slider_3_url = $currentURL.'/public/frontend/sliders/';
+                    if(!empty($old_open_banner) || $old_open_banner != '')
+                    {
+                        if(file_exists($old_open_banner))
+                        {
+                            unlink($old_open_banner);
+                        }
+                    }
 
-            $polianna_slider_3 = genratetoken(6).$request->file('polianna_slider_3')->getClientOriginalExtension();
-            $request->file('polianna_slider_3')->move(public_path('frontend/sliders'),$polianna_slider_3);
-            // $data['polianna_slider_3'] = 'public/frontend/sliders/'.$polianna_slider_3;
-            $data['polianna_slider_3'] = $polianna_slider_3_url.$polianna_slider_3;
-        }
-        // END SLIDERS
-
-
-        // PERMISSION
-        $data['polianna_online_order_permission'] = isset($request->polianna_online_order_permission) ? $request->polianna_online_order_permission : '';
-        $data['polianna_open_close_store_permission'] = isset($request->polianna_open_close_store_permission) ? $request->polianna_open_close_store_permission : '';
-        // END PERMISSION
-
-
-        // OPEN CLOSE BANNER
-        if($request->hasFile('polianna_open_banner'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_open_banner')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_open_banner')->first();
-            }
-
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_open_banner_url = $currentURL.'/public/frontend/banners/';
-
-            $polianna_open_banner = genratetoken(6).$request->file('polianna_open_banner')->getClientOriginalExtension();
-            $request->file('polianna_open_banner')->move(public_path('frontend/banners'),$polianna_open_banner);
-            // $data['polianna_open_banner'] = 'public/frontend/banners/'.$polianna_open_banner;
-            $data['polianna_open_banner'] = $polianna_open_banner_url.$polianna_open_banner;
-        }
-
-        if($request->hasFile('polianna_close_banner'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_close_banner')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_close_banner')->first();
-            }
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_close_banner_url = $currentURL.'/public/frontend/banners/';
-
-            $polianna_close_banner = genratetoken(6).$request->file('polianna_close_banner')->getClientOriginalExtension();
-            $request->file('polianna_close_banner')->move(public_path('frontend/banners'),$polianna_close_banner);
-            // $data['polianna_close_banner'] = 'public/frontend/banners/'.$polianna_close_banner;
-            $data['polianna_close_banner'] = $polianna_close_banner_url.$polianna_close_banner;
-        }
-
-        $data['polianna_open_close_banner_width'] = isset($request->polianna_open_close_banner_width) ? $request->polianna_open_close_banner_width : '';
-        $data['polianna_open_close_banner_height'] = isset($request->polianna_open_close_banner_height) ? $request->polianna_open_close_banner_height : '';
-        // END OPEN CLOSE BANNER
-
-
-        // EXTRA
-        $data['polianna_store_fonts'] = isset($request->polianna_store_fonts) ? $request->polianna_store_fonts : '';
-        $data['polianna_popular_food_count'] = isset($request->polianna_popular_food_count) ? $request->polianna_popular_food_count : '';
-        $data['polianna_best_category_count'] = isset($request->polianna_best_category_count) ? $request->polianna_best_category_count : '';
-        $data['polianna_recent_review_count'] = isset($request->polianna_recent_review_count) ? $request->polianna_recent_review_count : '';
-        $data['polianna_store_description'] = isset($request->polianna_store_description) ? $request->polianna_store_description : '';
-        if($request->hasFile('polianna_banner_image'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_banner_image')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_banner_image')->first();
-            }
-
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_banner_image_url = $currentURL.'/public/frontend/banners/';
-
-            $polianna_banner_image = genratetoken(6).$request->file('polianna_banner_image')->getClientOriginalExtension();
-            $request->file('polianna_banner_image')->move(public_path('frontend/banners'),$polianna_banner_image);
-            // $data['polianna_banner_image'] = 'public/frontend/banners/'.$polianna_banner_image;
-            $data['polianna_banner_image'] = $polianna_banner_image_url.$polianna_banner_image;
-        }
-        // END EXTRA
-
-
-        // FOOTER
-        $data['polianna_footer_background'] = isset($request->polianna_footer_background) ? $request->polianna_footer_background : '';
-        $data['polianna_footer_text_color'] = isset($request->polianna_footer_text_color) ? $request->polianna_footer_text_color : '';
-        $data['polianna_footer_title_color'] = isset($request->polianna_footer_title_color) ? $request->polianna_footer_title_color : '';
-        if($request->hasFile('polianna_footer_logo'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id',$current_store_id)->where('theme_id',$current_store_theme)->where('key','polianna_footer_logo')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id',$user_shop_id)->where('theme_id',$current_store_theme)->where('key','polianna_footer_logo')->first();
-            }
-
-            $old_name = isset($old->value) ? $old->value : '';
-
-            if(!empty($old_name) || $old_name != '')
-            {
-                if(file_exists($old_name))
-                {
-                    unlink($old_name);
-                }
-            }
-
-            $polianna_footer_logo_url = $currentURL.'/public/frontend/footer/';
-
-            $polianna_footer_logo =genratetoken(6).'.'.$request->file('polianna_footer_logo')->getClientOriginalExtension();
-            $request->file('polianna_footer_logo')->move(public_path('frontend/footer'),$polianna_footer_logo);
-            // $data['polianna_footer_logo'] = 'public/frontend/footer/'.$polianna_footer_logo;
-            $data['polianna_footer_logo'] = $polianna_footer_logo_url.$polianna_footer_logo;
-        }
-        // END FOOTER
-
-        foreach($data as $key => $new)
-        {
-            if($user_group_id == 1)
-            {
-                $query = Settings::where('store_id', $current_store_id)->where('theme_id',$current_store_theme)->where('key', $key)->first();
-            }
-            else
-            {
-                $query = Settings::where('store_id', $user_shop_id)->where('theme_id',$current_store_theme)->where('key', $key)->first();
-            }
-
-            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
-            if (!empty($setting_id) || $setting_id != '')
-            {
-                $template_update = Settings::find($setting_id);
-                $template_update->value = $new;
-                $template_update->update();
-            }
-            else
-            {
-                $new_template = new Settings();
-                if($user_group_id == 1)
-                {
-                    $new_template->store_id = $current_store_id;
+                    $open_banner_path = $currentURL.'/public/admin/open_close_banners/open/';
+                    $open_banner_name = genratetoken(10).'.'.$open_banner->getClientOriginalExtension();
+                    $open_banner->move(public_path('admin/open_close_banners/open'),$open_banner_name);
+                    $header_settings['menu_topbar_open_banner'] = $open_banner_path.$open_banner_name;
                 }
                 else
                 {
-                    $new_template->store_id = $user_shop_id;
+                    $header_settings['menu_topbar_open_banner'] = $old_header_setting['menu_topbar_open_banner'];
                 }
-                $new_template->theme_id = $current_store_theme;
-                $new_template->group = 'polianna';
-                $new_template->key = $key;
-                $new_template->value = $new;
-                $new_template->serialized = 0;
-                $new_template->save();
+
+                if(!empty($close_banner) || $close_banner != '')
+                {
+                    $old_close_banner = isset($old_header_setting['menu_topbar_close_banner']) ? $old_header_setting['menu_topbar_close_banner'] : '';
+
+                    if(!empty($old_close_banner) || $old_close_banner != '')
+                    {
+                        if(file_exists($old_close_banner))
+                        {
+                            unlink($old_close_banner);
+                        }
+                    }
+
+                    $close_banner_path = $currentURL.'/public/admin/close_close_banners/close/';
+                    $close_banner_name = genratetoken(10).'.'.$close_banner->getClientOriginalExtension();
+                    $close_banner->move(public_path('admin/close_close_banners/close'),$close_banner_name);
+                    $header_settings['menu_topbar_close_banner'] = $close_banner_path.$close_banner_name;
+                }
+                else
+                {
+                    $header_settings['menu_topbar_close_banner'] = $old_header_setting['menu_topbar_close_banner'];
+                }
+                $update_serial_header_setting = serialize($header_settings);
+
+                $header_setting_update = Settings::find($header_setting_id);
+                $header_setting_update->value = $update_serial_header_setting;
+                $header_setting_update->update();
+            }
+            else
+            {
+
+                $open_banner = isset($header_settings['menu_topbar_open_banner']) ? $header_settings['menu_topbar_open_banner'] : '';
+
+                $close_banner = isset($header_settings['menu_topbar_close_banner']) ? $header_settings['menu_topbar_close_banner'] : '';
+
+                if(!empty($open_banner) || $open_banner != '')
+                {
+                    $open_banner_path = $currentURL.'/public/admin/open_close_banners/open/';
+                    $open_banner_name = genratetoken(10).'.'.$open_banner->getClientOriginalExtension();
+                    $open_banner->move(public_path('admin/open_close_banners/open'),$open_banner_name);
+                    $header_settings['menu_topbar_open_banner'] = $open_banner_path.$open_banner_name;
+                }
+
+                if(!empty($close_banner) || $close_banner != '')
+                {
+                    $close_banner_path = $currentURL.'/public/admin/close_close_banners/close/';
+                    $close_banner_name = genratetoken(10).'.'.$close_banner->getClientOriginalExtension();
+                    $close_banner->move(public_path('admin/close_close_banners/close'),$close_banner_name);
+                    $header_settings['menu_topbar_close_banner'] = $close_banner_path.$close_banner_name;
+                }
+
+                $serial_header_setting = serialize($header_settings);
+
+                $header_setting_new = new Settings;
+                $header_setting_new->group = 'template';
+                $header_setting_new->store_id = $current_store_id;
+                $header_setting_new->header_id = $header_settings['header_layout_id'];
+                $header_setting_new->key = 'header_settings';
+                $header_setting_new->value = $serial_header_setting;
+                $header_setting_new->serialized = 1;
+                $header_setting_new->save();
+            }
+
+        }
+        // End Add & Update Header Settings
+
+
+        // Add & Update  Slider Settings
+        $slider_settings = $request->slider_setting;
+
+        if(isset($slider_settings))
+        {
+            $slider_id = $slider_settings['slider_layout_id'];
+
+            $check_slider_setting = Settings::where('store_id',$current_store_id)->where('key','slider_settings')->where('slider_id',$slider_id)->first();
+
+            $slider_setting_id = isset($check_slider_setting->setting_id) ? $check_slider_setting->setting_id : '';
+
+            if (!empty($slider_setting_id) || $slider_setting_id != '')
+            {
+                $update_serial_slider_setting = serialize($slider_settings);
+
+                $slider_setting_update = Settings::find($slider_setting_id);
+                $slider_setting_update->value = $update_serial_slider_setting;
+                $slider_setting_update->update();
+            }
+            else
+            {
+                $serial_slider_setting = serialize($slider_settings);
+
+                $slider_setting_new = new Settings;
+                $slider_setting_new->group = 'template';
+                $slider_setting_new->store_id = $current_store_id;
+                $slider_setting_new->slider_id = $slider_settings['slider_layout_id'];
+                $slider_setting_new->key = 'slider_settings';
+                $slider_setting_new->value = $serial_slider_setting;
+                $slider_setting_new->serialized = 1;
+                $slider_setting_new->save();
             }
         }
+        // End Add & Update  Slider Settings.
+
+
+        // Add & Update HTML BOX Settings
+        $about_settings = $request->about_setting;
+
+        if(isset($about_settings))
+        {
+            $about_id = $about_settings['about_layout_id'];
+
+            $check_about_setting = Settings::where('store_id',$current_store_id)->where('key','about_settings')->where('about_id',$about_id)->first();
+
+            $old_about_setting = isset($check_about_setting->value) ? unserialize($check_about_setting->value) : '';
+
+            $about_setting_id = isset($check_about_setting->setting_id) ? $check_about_setting->setting_id : '';
+
+            if (!empty($about_setting_id) || $about_setting_id != '')
+            {
+                $about_background_image = isset($about_settings['about_background_image']) ? $about_settings['about_background_image'] : '';
+
+                $about_image = isset($about_settings['about_image']) ? $about_settings['about_image'] : '';
+
+                if(!empty($about_background_image) || $about_background_image != '')
+                {
+                    $old_about_background_image = isset($old_about_setting['about_background_image']) ? $old_about_setting['about_background_image'] : '';
+
+                    if(!empty($old_about_background_image) || $old_about_background_image != '')
+                    {
+                        if(file_exists($old_about_background_image))
+                        {
+                            unlink($old_about_background_image);
+                        }
+                    }
+
+                    $about_background_image_path = $currentURL.'/public/admin/html_box/bg_image/';
+                    $about_background_image_name = genratetoken(10).'.'.$about_background_image->getClientOriginalExtension();
+                    $about_background_image->move(public_path('admin/html_box/bg_image'),$about_background_image_name);
+                    $about_settings['about_background_image'] = $about_background_image_path.$about_background_image_name;
+                }
+                else
+                {
+                    $about_settings['about_background_image'] = $old_about_setting['about_background_image'];
+                }
+
+                if(!empty($about_image) || $about_image != '')
+                {
+                    $old_about_image = isset($old_about_setting['about_image']) ? $old_about_setting['about_image'] : '';
+
+                    if(!empty($old_about_image) || $old_about_image != '')
+                    {
+                        if(file_exists($old_about_image))
+                        {
+                            unlink($old_about_image);
+                        }
+                    }
+
+                    $about_image_path = $currentURL.'/public/admin/html_box/image/';
+                    $about_image_name = genratetoken(10).'.'.$about_image->getClientOriginalExtension();
+                    $about_image->move(public_path('admin/html_box/image'),$about_image_name);
+                    $about_settings['about_image'] = $about_image_path.$about_image_name;
+                }
+                else
+                {
+                    $about_settings['about_image'] = $old_about_setting['about_image'];
+                }
+                $update_serial_about_setting = serialize($about_settings);
+
+                $about_setting_update = Settings::find($about_setting_id);
+                $about_setting_update->value = $update_serial_about_setting;
+                $about_setting_update->update();
+            }
+            else
+            {
+
+                $about_background_image = isset($about_settings['about_background_image']) ? $about_settings['about_background_image'] : '';
+
+                $about_image = isset($about_settings['about_image']) ? $about_settings['about_image'] : '';
+
+                if(!empty($about_background_image) || $about_background_image != '')
+                {
+                    $about_background_image_path = $currentURL.'/public/admin/html_box/bg_image/';
+                    $about_background_image_name = genratetoken(10).'.'.$about_background_image->getClientOriginalExtension();
+                    $about_background_image->move(public_path('admin/html_box/bg_image'),$about_background_image_name);
+                    $about_settings['about_background_image'] = $about_background_image_path.$about_background_image_name;
+                }
+
+                if(!empty($about_image) || $about_image != '')
+                {
+                    $about_image_path = $currentURL.'/public/admin/html_box/image/';
+                    $about_image_name = genratetoken(10).'.'.$about_image->getClientOriginalExtension();
+                    $about_image->move(public_path('admin/html_box/image'),$about_image_name);
+                    $about_settings['about_image'] = $about_image_path.$about_image_name;
+                }
+
+                $serial_about_setting = serialize($about_settings);
+
+                $about_setting_new = new Settings;
+                $about_setting_new->group = 'template';
+                $about_setting_new->store_id = $current_store_id;
+                $about_setting_new->about_id = $about_settings['about_layout_id'];
+                $about_setting_new->key = 'about_settings';
+                $about_setting_new->value = $serial_about_setting;
+                $about_setting_new->serialized = 1;
+                $about_setting_new->save();
+            }
+
+        }
+        // End Add & Update HTML BOX Settings
+
+
+        // Add & Update Popular food Settings
+        $popularfood_settings = $request->popularfood_setting;
+
+        if(isset($popularfood_settings))
+        {
+            $popularfood_id = $popularfood_settings['popularfood_layout_id'];
+
+            $check_popularfood_setting = Settings::where('store_id',$current_store_id)->where('key','popularfood_settings')->where('popularfood_id',$popularfood_id)->first();
+
+            $old_popularfood_setting = isset($check_popularfood_setting->value) ? unserialize($check_popularfood_setting->value) : '';
+
+            $popularfood_setting_id = isset($check_popularfood_setting->setting_id) ? $check_popularfood_setting->setting_id : '';
+
+            if (!empty($popularfood_setting_id) || $popularfood_setting_id != '')
+            {
+                $popularfood_background_image = isset($popularfood_settings['popularfood_background_image']) ? $popularfood_settings['popularfood_background_image'] : '';
+
+                if(!empty($popularfood_background_image) || $popularfood_background_image != '')
+                {
+                    $old_popularfood_background_image = isset($old_popularfood_setting['popularfood_background_image']) ? $old_popularfood_setting['popularfood_background_image'] : '';
+
+                    if(!empty($old_popularfood_background_image) || $old_popularfood_background_image != '')
+                    {
+                        if(file_exists($old_popularfood_background_image))
+                        {
+                            unlink($old_popularfood_background_image);
+                        }
+                    }
+
+                    $popularfood_background_image_path = $currentURL.'/public/admin/popularfood/';
+                    $popularfood_background_image_name = genratetoken(10).'.'.$popularfood_background_image->getClientOriginalExtension();
+                    $popularfood_background_image->move(public_path('admin/popularfood'),$popularfood_background_image_name);
+                    $popularfood_settings['popularfood_background_image'] = $popularfood_background_image_path.$popularfood_background_image_name;
+                }
+                else
+                {
+                    $popularfood_settings['popularfood_background_image'] = $old_popularfood_setting['popularfood_background_image'];
+                }
+
+                $update_serial_popularfood_setting = serialize($popularfood_settings);
+
+                $popularfood_setting_update = Settings::find($popularfood_setting_id);
+                $popularfood_setting_update->value = $update_serial_popularfood_setting;
+                $popularfood_setting_update->update();
+            }
+            else
+            {
+
+                $popularfood_background_image = isset($popularfood_settings['popularfood_background_image']) ? $popularfood_settings['popularfood_background_image'] : '';
+
+                if(!empty($popularfood_background_image) || $popularfood_background_image != '')
+                {
+                    $popularfood_background_image_path = $currentURL.'/public/admin/popularfood/';
+                    $popularfood_background_image_name = genratetoken(10).'.'.$popularfood_background_image->getClientOriginalExtension();
+                    $popularfood_background_image->move(public_path('admin/popularfood'),$popularfood_background_image_name);
+                    $popularfood_settings['popularfood_background_image'] = $popularfood_background_image_path.$popularfood_background_image_name;
+                }
+
+                $serial_popularfood_setting = serialize($popularfood_settings);
+
+                $popularfood_setting_new = new Settings;
+                $popularfood_setting_new->group = 'template';
+                $popularfood_setting_new->store_id = $current_store_id;
+                $popularfood_setting_new->popularfood_id = $popularfood_settings['popularfood_layout_id'];
+                $popularfood_setting_new->key = 'popularfood_settings';
+                $popularfood_setting_new->value = $serial_popularfood_setting;
+                $popularfood_setting_new->serialized = 1;
+                $popularfood_setting_new->save();
+            }
+
+        }
+        // End Add & Update Popular food Settings
+
+
+        // Add & Update Best Category Settings
+        $bestcategory_settings = $request->bestcategory_setting;
+
+        if(isset($bestcategory_settings))
+        {
+            $bestcategory_id = $bestcategory_settings['bestcategory_layout_id'];
+
+            $check_bestcategory_setting = Settings::where('store_id',$current_store_id)->where('key','bestcategory_settings')->where('bestcategory_id',$bestcategory_id)->first();
+
+            $old_bestcategory_setting = isset($check_bestcategory_setting->value) ? unserialize($check_bestcategory_setting->value) : '';
+
+            $bestcategory_setting_id = isset($check_bestcategory_setting->setting_id) ? $check_bestcategory_setting->setting_id : '';
+
+            if (!empty($bestcategory_setting_id) || $bestcategory_setting_id != '')
+            {
+                $bestcategory_background_image = isset($bestcategory_settings['bestcategory_background_image']) ? $bestcategory_settings['bestcategory_background_image'] : '';
+
+                if(!empty($bestcategory_background_image) || $bestcategory_background_image != '')
+                {
+                    $old_bestcategory_background_image = isset($old_bestcategory_setting['bestcategory_background_image']) ? $old_bestcategory_setting['bestcategory_background_image'] : '';
+
+                    if(!empty($old_bestcategory_background_image) || $old_bestcategory_background_image != '')
+                    {
+                        if(file_exists($old_bestcategory_background_image))
+                        {
+                            unlink($old_bestcategory_background_image);
+                        }
+                    }
+
+                    $bestcategory_background_image_path = $currentURL.'/public/admin/bestcategory/';
+                    $bestcategory_background_image_name = genratetoken(10).'.'.$bestcategory_background_image->getClientOriginalExtension();
+                    $bestcategory_background_image->move(public_path('admin/bestcategory'),$bestcategory_background_image_name);
+                    $bestcategory_settings['bestcategory_background_image'] = $bestcategory_background_image_path.$bestcategory_background_image_name;
+                }
+                else
+                {
+                    $bestcategory_settings['bestcategory_background_image'] = $old_bestcategory_setting['bestcategory_background_image'];
+                }
+
+                $update_serial_bestcategory_setting = serialize($bestcategory_settings);
+
+                $bestcategory_setting_update = Settings::find($bestcategory_setting_id);
+                $bestcategory_setting_update->value = $update_serial_bestcategory_setting;
+                $bestcategory_setting_update->update();
+            }
+            else
+            {
+
+                $bestcategory_background_image = isset($bestcategory_settings['bestcategory_background_image']) ? $bestcategory_settings['bestcategory_background_image'] : '';
+
+                if(!empty($bestcategory_background_image) || $bestcategory_background_image != '')
+                {
+                    $bestcategory_background_image_path = $currentURL.'/public/admin/bestcategory/';
+                    $bestcategory_background_image_name = genratetoken(10).'.'.$bestcategory_background_image->getClientOriginalExtension();
+                    $bestcategory_background_image->move(public_path('admin/bestcategory'),$bestcategory_background_image_name);
+                    $bestcategory_settings['bestcategory_background_image'] = $bestcategory_background_image_path.$bestcategory_background_image_name;
+                }
+
+                $serial_bestcategory_setting = serialize($bestcategory_settings);
+
+                $bestcategory_setting_new = new Settings;
+                $bestcategory_setting_new->group = 'template';
+                $bestcategory_setting_new->store_id = $current_store_id;
+                $bestcategory_setting_new->bestcategory_id = $bestcategory_settings['bestcategory_layout_id'];
+                $bestcategory_setting_new->key = 'bestcategory_settings';
+                $bestcategory_setting_new->value = $serial_bestcategory_setting;
+                $bestcategory_setting_new->serialized = 1;
+                $bestcategory_setting_new->save();
+            }
+
+        }
+        // End Add & Update Best Category Settings
+
+
+        // Add & Update Recent Reviews Settings
+        $review_settings = $request->review_setting;
+
+        if(isset($review_settings))
+        {
+            $review_id = $review_settings['review_layout_id'];
+
+            $check_review_setting = Settings::where('store_id',$current_store_id)->where('key','review_settings')->where('reviews_id',$review_id)->first();
+
+            $old_review_setting = isset($check_review_setting->value) ? unserialize($check_review_setting->value) : '';
+
+            $review_setting_id = isset($check_review_setting->setting_id) ? $check_review_setting->setting_id : '';
+
+            if (!empty($review_setting_id) || $review_setting_id != '')
+            {
+                $review_background_image = isset($review_settings['review_background_image']) ? $review_settings['review_background_image'] : '';
+
+                if(!empty($review_background_image) || $review_background_image != '')
+                {
+                    $old_review_background_image = isset($old_review_setting['review_background_image']) ? $old_review_setting['review_background_image'] : '';
+
+                    if(!empty($old_review_background_image) || $old_review_background_image != '')
+                    {
+                        if(file_exists($old_review_background_image))
+                        {
+                            unlink($old_review_background_image);
+                        }
+                    }
+
+                    $review_background_image_path = $currentURL.'/public/admin/review/';
+                    $review_background_image_name = genratetoken(10).'.'.$review_background_image->getClientOriginalExtension();
+                    $review_background_image->move(public_path('admin/review'),$review_background_image_name);
+                    $review_settings['review_background_image'] = $review_background_image_path.$review_background_image_name;
+                }
+                else
+                {
+                    $review_settings['review_background_image'] = $old_review_setting['review_background_image'];
+                }
+
+                $update_serial_review_setting = serialize($review_settings);
+
+                $review_setting_update = Settings::find($review_setting_id);
+                $review_setting_update->value = $update_serial_review_setting;
+                $review_setting_update->update();
+            }
+            else
+            {
+
+                $review_background_image = isset($review_settings['review_background_image']) ? $review_settings['review_background_image'] : '';
+
+                if(!empty($review_background_image) || $review_background_image != '')
+                {
+                    $review_background_image_path = $currentURL.'/public/admin/review/';
+                    $review_background_image_name = genratetoken(10).'.'.$review_background_image->getClientOriginalExtension();
+                    $review_background_image->move(public_path('admin/review'),$review_background_image_name);
+                    $review_settings['review_background_image'] = $review_background_image_path.$review_background_image_name;
+                }
+
+                $serial_review_setting = serialize($review_settings);
+
+                $review_setting_new = new Settings;
+                $review_setting_new->group = 'template';
+                $review_setting_new->store_id = $current_store_id;
+                $review_setting_new->reviews_id = $review_settings['review_layout_id'];
+                $review_setting_new->key = 'review_settings';
+                $review_setting_new->value = $serial_review_setting;
+                $review_setting_new->serialized = 1;
+                $review_setting_new->save();
+            }
+
+        }
+        // End Add & Update Recent Reviews Settings
+
+
+        // Add & Update Reservation Settings
+        $reservation_settings = $request->reservation_setting;
+
+        if(isset($reservation_settings))
+        {
+            $reservation_id = $reservation_settings['reservation_layout_id'];
+
+            $check_reservation_setting = Settings::where('store_id',$current_store_id)->where('key','reservation_settings')->where('reservation_id',$reservation_id)->first();
+
+            $reservation_setting_id = isset($check_reservation_setting->setting_id) ? $check_reservation_setting->setting_id : '';
+
+            if (!empty($reservation_setting_id) || $reservation_setting_id != '')
+            {
+                $update_serial_reservation_setting = serialize($reservation_settings);
+
+                $reservation_setting_update = Settings::find($reservation_setting_id);
+                $reservation_setting_update->value = $update_serial_reservation_setting;
+                $reservation_setting_update->update();
+            }
+            else
+            {
+                $serial_reservation_setting = serialize($reservation_settings);
+
+                $reservation_setting_new = new Settings;
+                $reservation_setting_new->group = 'template';
+                $reservation_setting_new->store_id = $current_store_id;
+                $reservation_setting_new->reservation_id = $reservation_settings['reservation_layout_id'];
+                $reservation_setting_new->key = 'reservation_settings';
+                $reservation_setting_new->value = $serial_reservation_setting;
+                $reservation_setting_new->serialized = 1;
+                $reservation_setting_new->save();
+            }
+
+        }
+        // End Add & Update Reservation Settings
+
+
+        // Add & Update Gallary Settings
+        $gallary_settings = $request->gallary_setting;
+
+        if(isset($gallary_settings))
+        {
+            $gallary_id = $gallary_settings['gallary_layout_id'];
+
+            $check_gallary_setting = Settings::where('store_id',$current_store_id)->where('key','gallary_settings')->where('gallary_id',$gallary_id)->first();
+
+            $gallary_setting_id = isset($check_gallary_setting->setting_id) ? $check_gallary_setting->setting_id : '';
+
+            if (!empty($gallary_setting_id) || $gallary_setting_id != '')
+            {
+                $update_serial_gallary_setting = serialize($gallary_settings);
+
+                $gallary_setting_update = Settings::find($gallary_setting_id);
+                $gallary_setting_update->value = $update_serial_gallary_setting;
+                $gallary_setting_update->update();
+            }
+            else
+            {
+                $serial_gallary_setting = serialize($gallary_settings);
+
+                $gallary_setting_new = new Settings;
+                $gallary_setting_new->group = 'template';
+                $gallary_setting_new->store_id = $current_store_id;
+                $gallary_setting_new->gallary_id = $gallary_settings['gallary_layout_id'];
+                $gallary_setting_new->key = 'gallary_settings';
+                $gallary_setting_new->value = $serial_gallary_setting;
+                $gallary_setting_new->serialized = 1;
+                $gallary_setting_new->save();
+            }
+
+        }
+        // End Add & Update Gallary Settings
+
+
+        // Add & Update Footer Settings
+        $footer_settings = $request->footer_setting;
+
+        if(isset($footer_settings))
+        {
+            $footer_id = $footer_settings['footer_layout_id'];
+
+            $check_footer_setting = Settings::where('store_id',$current_store_id)->where('key','footer_settings')->where('footer_id',$footer_id)->first();
+
+            $footer_setting_id = isset($check_footer_setting->setting_id) ? $check_footer_setting->setting_id : '';
+
+            if (!empty($footer_setting_id) || $footer_setting_id != '')
+            {
+                $update_serial_footer_setting = serialize($footer_settings);
+
+                $footer_setting_update = Settings::find($footer_setting_id);
+                $footer_setting_update->value = $update_serial_footer_setting;
+                $footer_setting_update->update();
+            }
+            else
+            {
+                $serial_footer_setting = serialize($footer_settings);
+
+                $footer_setting_new = new Settings;
+                $footer_setting_new->group = 'template';
+                $footer_setting_new->store_id = $current_store_id;
+                $footer_setting_new->footer_id = $footer_settings['footer_layout_id'];
+                $footer_setting_new->key = 'footer_settings';
+                $footer_setting_new->value = $serial_footer_setting;
+                $footer_setting_new->serialized = 1;
+                $footer_setting_new->save();
+            }
+
+        }
+        // End Add & Update Footer Settings
+
+
+        // Add Sliders & Update Sliders
+        $sliders = $request->slider;
+
+        if(isset($sliders))
+        {
+            foreach($sliders as $slider)
+            {
+                $slider_title =  isset($slider['title']) ? $slider['title'] : '';
+                $slider_desc =  isset($slider['desc']) ? $slider['desc'] : '';
+                $slider_image =  isset($slider['image']) ? $slider['image'] : '';
+                $slider_logo =  isset($slider['logo']) ? $slider['logo'] : '';
+                $slider_edit =  isset($slider['edit']) ? $slider['edit'] : '';
+
+                if($slider_edit != '' || !empty($slider_edit))
+                {
+                    $edit_slider = Slider::find($slider_edit);
+                    $edit_slider->title =  $slider_title;
+                    $edit_slider->description = $slider_desc;
+
+                    // Slider Image
+                    if($slider_image != '' || !empty($slider_image))
+                    {
+                        $old_slider_image = isset($edit_slider->image) ? $edit_slider->image : '';
+
+                        if(!empty($old_slider_image || $old_slider_image != ''))
+                        {
+                            if(file_exists($old_slider_image))
+                            {
+                                unlink($old_slider_image);
+                            }
+                        }
+
+                        $slider_image_path = $currentURL.'/public/admin/sliders/';
+                        $slider_image_name = genratetoken(10).'.'.$slider_image->getClientOriginalExtension();
+                        $slider_image->move(public_path('admin/sliders'),$slider_image_name);
+                        $edit_slider->image = $slider_image_path.$slider_image_name;
+                    }
+
+                    // Slider Logo
+                    if($slider_logo != '' || !empty($slider_logo))
+                    {
+                        $old_slider_logo = isset($edit_slider->logo) ? $edit_slider->logo : '';
+
+                        if(!empty($old_slider_logo || $old_slider_logo != ''))
+                        {
+                            if(file_exists($old_slider_logo))
+                            {
+                                unlink($old_slider_logo);
+                            }
+                        }
+
+                        $slider_logo_path = $currentURL.'/public/admin/sliders/logo/';
+                        $slider_logo_name = genratetoken(10).'.'.$slider_logo->getClientOriginalExtension();
+                        $slider_logo->move(public_path('admin/sliders/logo'),$slider_logo_name);
+                        $edit_slider->logo = $slider_logo_path.$slider_logo_name;
+                    }
+
+                    $edit_slider->update();
+
+                }
+                else
+                {
+                    $new_slider = new Slider;
+                    $new_slider->title = $slider_title;
+                    $new_slider->description = $slider_desc;
+                    $new_slider->store_id = $current_store_id;
+
+                    // Slider Image
+                    if($slider_image != '' || !empty($slider_image))
+                    {
+                        $slider_image_path = $currentURL.'/public/admin/sliders/';
+                        $slider_image_name = genratetoken(10).'.'.$slider_image->getClientOriginalExtension();
+                        $slider_image->move(public_path('admin/sliders'),$slider_image_name);
+                        $new_slider->image = $slider_image_path.$slider_image_name;
+                    }
+
+                    // Slider Logo
+                    if($slider_logo != '' || !empty($slider_logo))
+                    {
+                        $slider_logo_path = $currentURL.'/public/admin/sliders/logo/';
+                        $slider_logo_name = genratetoken(10).'.'.$slider_logo->getClientOriginalExtension();
+                        $slider_logo->move(public_path('admin/sliders/logo'),$slider_logo_name);
+                        $new_slider->logo = $slider_logo_path.$slider_logo_name;
+                    }
+
+                    $new_slider->save();
+
+                }
+
+            }
+        }
+        // End Add Sliders & Update Sliders
 
         return redirect()->route('templatesettings')->with('success', 'Settings Updated..');
 
     }
 
-    // Function of Template(Theme) Activat Templeate(Theme)
+
+
+
+
+    // Function of Active Current Theme for Frontend
     public function activetheme($id)
     {
         // Current Store ID
@@ -507,7 +952,570 @@ class LayoutController extends Controller
 
 
 
-     // Function of Slider Setting
+
+
+    // Function of Active Current Header Layout for Frontend
+    public function activeheader($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $header_id = $id;
+        $key = 'header_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $header_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $header_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Footer Layout for Frontend
+    public function activefooter($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $footer_id = $id;
+        $key = 'footer_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $footer_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $footer_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Gallary Layout for Frontend
+    public function activegallary($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $gallary_id = $id;
+        $key = 'gallary_id';
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $gallary_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $gallary_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+    // Function of Active Current Best Category Layout for Frontend
+    public function activebestcategory($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $bestcategory_id = $id;
+        $key = 'bestcategory_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $bestcategory_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $bestcategory_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Popular Foods Layout for Frontend
+    public function activepopularfood($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $popularfood_id = $id;
+        $key = 'popularfood_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $popularfood_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $popularfood_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Slider Layout for Frontend
+    public function activeslider($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $slider_id = $id;
+        $key = 'slider_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $slider_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $slider_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Recent Review Layout for Frontend
+    public function activerecentreview($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $review_id = $id;
+        $key = 'review_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $review_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $review_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current About Layout for Frontend
+    public function activeabout($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $about_id = $id;
+        $key = 'about_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $about_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $about_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Reservation Layout for Frontend
+    public function activereservation($id)
+    {
+        // User Details
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
+
+        $reservation_id = $id;
+        $key = 'reservation_id';
+
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $reservation_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            $active_new->store_id = $current_store_id;
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $reservation_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
+    }
+
+
+
+
+
+    // Function of Active Current Open Hours Layout for Frontend
+    public function activeopenhours($id)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        $openhour_id = $id;
+        $key = 'openhour_id';
+
+        if($user_group_id == 1)
+        {
+            $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
+        }
+        else
+        {
+            $setting = Settings::where('store_id',$user_shop_id)->where('key',$key)->first();
+        }
+
+        if(!empty($setting) || $setting != '')
+        {
+            $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
+
+            $active_header = Settings::find($setting_id);
+            $active_header->value = $openhour_id;
+            $active_header->update();
+        }
+        else
+        {
+            $active_new = new Settings();
+            if($user_group_id == 1)
+            {
+                $active_new->store_id = $current_store_id;
+            }
+            else
+            {
+                $active_new->store_id = $user_shop_id;
+            }
+
+            $active_new->group = 'polianna';
+            $active_new->key = $key;
+            $active_new->value = $openhour_id;
+            $active_new->serialized = 0;
+            $active_new->save();
+        }
+        return redirect()->route('templatesettings');
+
+    }
+
+
+
+
+
+    // Function of Slider Setting
     public function slidersettings()
     {
         // Check User Permission

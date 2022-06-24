@@ -143,7 +143,7 @@
                                     src="{{ get_css_url().'public/assets/theme5/demo-data/slider.png' }}" /></div>
                         </div>
                     @endif
-                    <div class="happy-customers"><strong class="text-uppercase">our happy customers</strong>
+                    {{-- <div class="happy-customers"><strong class="text-uppercase">our happy customers</strong>
                         <div class="__img-list">
                             <div class="__img"><img class="img-fluid"
                                     src="{{ get_css_url().'public/assets/theme5/demo-data/girl.jpeg' }}" /></div>
@@ -153,12 +153,12 @@
                                     src="{{ get_css_url().'public/assets/theme5/demo-data/girl.jpeg' }}" /></div>
                             <div class="__count">8+</div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
     </div>
-    <div class="home-slide-category">
+    {{-- <div class="home-slide-category">
         <div class="swiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
@@ -255,7 +255,7 @@
         </div>
         <div class="swiper-button-prev"><i class="fas fa-long-arrow-alt-left"></i></div>
         <div class="swiper-button-next"><i class="fas fa-long-arrow-alt-right"></i></div>
-    </div>
+    </div> --}}
 </section>
 <section class="who-are-we-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container">
@@ -289,8 +289,7 @@
     <div class="default-title-v5 text-center container"><strong class="sub-title text-uppercase color-green">best
             categories</strong>
         <h3 class="title text-capitalize">best categories</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa earum excepturi fugit, <br> maiores
-            praesentium qui, quidem rerum sed suscipit tempora temporibus totam voluptatibus.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa earum excepturi fugit, <br> maiores praesentium qui, quidem rerum sed suscipit tempora temporibus totam voluptatibus.</p>
     </div>
     <div class="container">
         <div class="best-categories-v5-swiper">
@@ -582,9 +581,9 @@
                             <strong>{{ $firstday }} - {{ $lastday }}</strong>
                         @endif
                         <div class="__time-box">
-                            <div class="__left-time"><span>{{ $fromtime[$key] }}</span></div>
+                            <div class="__left-time"><span>{{  date('H',strtotime($fromtime[$key])) }}</span></div>
                             <div class="__time-divier"></div>
-                            <div class="__right-time"><span>{{ $totime[$key] }}</span></div>
+                            <div class="__right-time"><span>{{ date('H',strtotime($totime[$key])) }}</span></div>
                         </div>
                     </div>
                 <br>

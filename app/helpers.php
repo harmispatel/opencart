@@ -7,7 +7,8 @@
 // EX-: user_details(), storeThemeSettings() etc.
 // ----------------------------------------------------------------------------------------------
 
-
+use App\Models\AboutLayouts;
+use App\Models\BestCategoryLayouts;
 use App\Models\MainMenu;
 use App\Models\SubMenu;
 use App\Models\Permission;
@@ -16,6 +17,9 @@ use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
+use App\Models\Footers;
+use App\Models\GallaryLayouts;
+use App\Models\Headers;
 use App\Models\Orders;
 use App\Models\Region;
 use App\Models\Settings;
@@ -24,8 +28,12 @@ use App\Models\Topping;
 use App\Models\ToppingProductPriceSize;
 use App\Models\Product_to_category;
 use App\Models\PhotoGallry;
+use App\Models\PopularFoodsLayouts;
 use App\Models\Product;
+use App\Models\RecentReviewsLayouts;
+use App\Models\ReservationLayouts;
 use App\Models\Reviews;
+use App\Models\SlidersLayouts;
 use Illuminate\Support\Facades\URL;
 
 
@@ -149,6 +157,416 @@ function themeActive()
 
     return $theme_id;
 
+}
+
+
+
+
+
+// Function for Active Current Header
+function headerActive()
+{
+
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Get Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'header_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Header ID
+    $header_id = isset($setting->value) ? $setting->value : '';
+
+    // Header Details
+    $header_deatails = Headers::where('header_id',$header_id)->first();
+
+    return $header_deatails;
+}
+
+
+
+
+
+// Function for Active Current Footer
+function footerActive()
+{
+
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'footer_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Footer ID
+    $footer_id = isset($setting->value) ? $setting->value : '';
+
+    // Footer Details
+    $footer_deatails = Footers::where('footer_id',$footer_id)->first();
+
+    return $footer_deatails;
+}
+
+
+
+
+
+// Function for Active Current Gallary Layout
+function gallaryActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+    $key = 'gallary_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Gallary ID
+    $gallary_id = isset($setting->value) ? $setting->value : '';
+
+    // Gallary Details
+    $gallary_deatails = GallaryLayouts::where('gallary_id',$gallary_id)->first();
+
+    return $gallary_deatails;
+}
+
+
+
+
+
+// Function for Active Current Best Category Layout
+function bestcategoryActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'bestcategory_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Best Category ID
+    $bestcategory_id = isset($setting->value) ? $setting->value : '';
+
+    // Best Category Details
+    $bestcategory_deatails = BestCategoryLayouts::where('best_category_id',$bestcategory_id)->first();
+
+    return $bestcategory_deatails;
+}
+
+
+
+
+
+// Function for Active Current Popular Food Layout
+function popularfoodActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'popularfood_id';
+
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Popular Food ID
+    $popularfood_id = isset($setting->value) ? $setting->value : '';
+
+    // Popular Food Details
+    $popularfood_deatails = PopularFoodsLayouts::where('popular_food_id',$popularfood_id)->first();
+
+    return $popularfood_deatails;
+}
+
+
+
+
+
+// Function for Active Current Slider Layout
+function sliderActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'slider_id';
+
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Slider ID
+    $slider_id = isset($setting->value) ? $setting->value : '';
+
+    // Header Details
+    $slider_deatails = SlidersLayouts::where('slider_id',$slider_id)->first();
+
+    return $slider_deatails;
+}
+
+
+
+
+
+// Function for Active Current Recent Review Layout
+function recentreviewActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'review_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Review ID
+    $review_id = isset($setting->value) ? $setting->value : '';
+
+    // Reviews Layout Details
+    $review_deatails = RecentReviewsLayouts::where('review_id',$review_id)->first();
+
+    return $review_deatails;
+}
+
+
+
+
+
+// Function for Active Current Recent Review Layout
+function reservationActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+    $key = 'reservation_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Reservation ID
+    $reservation_id = isset($setting->value) ? $setting->value : '';
+
+    // Reservation Details
+    $reservation_deatails = ReservationLayouts::where('reservation_id',$reservation_id)->first();
+
+    return $reservation_deatails;
+}
+
+
+
+
+
+// Function for Active Current About Layout
+function aboutActive()
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $key = 'about_id';
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // About ID
+    $about_id = isset($setting->value) ? $setting->value : '';
+
+    // About Details
+    $about_deatails = AboutLayouts::where('about_id',$about_id)->first();
+
+    return $about_deatails;
+}
+
+
+
+
+
+// Function for Active Current Open hours Layout
+function openhoursActive()
+{
+    // Current Store ID
+    $current_store_id = currentStoreId();
+
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+    $user_shop_id = $user_details['user_shop'];
+
+    $key = 'openhour_id';
+
+    if($user_group_id == 1)
+    {
+        $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+    }
+    else
+    {
+        $setting = Settings::select('value')->where('store_id',$user_shop_id)->where('key',$key)->first();
+    }
+
+    $openhour_id = isset($setting->value) ? $setting->value : '';
+
+    return $openhour_id;
+}
+
+
+
+
+
+// Get Layouts
+function getLayouts($key,$current_layout_id,$layout_column_name)
+{
+    // User Details
+    $user_details = user_details();
+    if(isset($user_details))
+    {
+        $user_group_id = $user_details['user_group_id'];
+    }
+
+
+    // Get Current Store ID
+    if($user_group_id == 1)
+    {
+        $current_store_id = currentStoreId();
+    }
+    else
+    {
+        $current_store_id = $user_details['user_shop'];
+    }
+
+
+    $get_header_settings = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->where($layout_column_name,$current_layout_id)->first();
+
+    $unserial = isset($get_header_settings->value) ? unserialize($get_header_settings->value) : '';
+
+    return $unserial;
 }
 
 
@@ -1418,21 +1836,17 @@ function getphoto($current_store,$key)
 function getFonts()
 {
     $fonts = array(
-        ''             => '- default -',
-        'Arial'        => 'Arial',
-        'Verdana'      => 'Verdana',
-        'Helvetica'    => 'Helvetica',
-        'Cursive'      => 'cursive',
-        'Calibri'      => 'Calibri',
-        'Noto'         => 'Noto',
-        'Lucida Sans'  => 'Lucida Sans',
-        'Gill Sans'    => 'Gill Sans',
-        'Candara'      => 'Candara',
-        'Futara'       => 'Futara',
-        'Geneva'       => 'Geneva',
-        'Segoe UI'     => 'Segoe UI',
-        'Optima'       => 'Optima',
-        'Avanta Garde' => 'Avanta Garde',
+        "Cedarville Cursive"      => "'Cedarville Cursive', cursive",
+        "Roboto"      => "'Roboto', sans-serif",
+        "League Gothic"      => "'League Gothic', sans-serif",
+        "Open Sans"      => "'Open Sans', sans-serif",
+        "Raleway"      => "'Raleway', sans-serif",
+        "Joan"      => "'Joan', serif",
+        "Ubuntu"      => "'Ubuntu', sans-serif",
+        "Roboto Slab"      => "'Roboto Slab', serif",
+        "Noto Sans"      => "'Noto Sans', sans-serif",
+        "Kdam Thmor Pro"      => "'Kdam Thmor Pro', sans-serif",
+        "Roboto Mono"      => "'Roboto Mono', monospace",
 	);
 
     return $fonts;

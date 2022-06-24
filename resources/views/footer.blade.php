@@ -66,9 +66,11 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- Custom Scripts -->
 <script type="text/javascript">
+
     $('#summernote').summernote({
         minHeight: 300,
     });
+
     $(document).ready(function() {
         $('#SearchStore').select2();
 
