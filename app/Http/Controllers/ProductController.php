@@ -386,6 +386,7 @@ class ProductController extends Controller
 
         $request->validate([
             'product' => 'required',
+            'mainprice' => 'required',
             'product_icons' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'mainprice' => 'required',

@@ -295,6 +295,7 @@
     <div class="container">
         <div class="best-categories-v5-swiper">
             <div class="swiper">
+            <a href="{{route('menu')}}">
                 <div class="swiper-wrapper">
                     {{-- <div class="swiper-slide">
                         <div class="item">
@@ -309,6 +310,7 @@
                     @if(count($best_categories) > 0)
                     @foreach ($best_categories as $categorydet)
                     <div class="swiper-slide">
+                        <a href="{{route('menu')}}">
                         <div class="item">
                             <div class="img">
                                 @if (isset($categorydet->hasOneCategoryDetails['image']))
@@ -323,6 +325,7 @@
                                 <a href="">Read more</a>
                             </div>
                         </div>
+                    </a>
                     </div>
                     @endforeach
                     @endif
@@ -332,6 +335,7 @@
                         </div>
                     </div>
                 </div>
+            </a>
             </div>
             <div class="best-categories-v5-swiper-control">
                 <div class="__empty"></div>
@@ -361,6 +365,7 @@
                     @if (count($popular_foods) > 0)
                     @foreach ($popular_foods as $food)
                         <div class="swiper-slide">
+                            <a href="{{route('menu')}}">
                             <div class="item">
                                 <div class="img">
                                     @if (isset($food->hasOneProduct['image']))

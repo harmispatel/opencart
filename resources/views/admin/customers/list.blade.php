@@ -124,6 +124,8 @@
 
     $(document).ready(function()
     {
+        var table = $('.table').DataTable();
+        table.destroy();
         getallCustomers();
     });
 

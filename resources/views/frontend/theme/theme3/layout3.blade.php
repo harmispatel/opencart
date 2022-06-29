@@ -183,6 +183,7 @@
             @if(count($best_categories) > 0)
                 @foreach ($best_categories as $categorydet)
                 <div class="col-6 col-md-4 col-lg-2">
+                    <a href="{{route('menu')}}">
                     <div class="item">
                         <div class="img">
                             @if (isset($categorydet->hasOneCategoryDetails['image']))
@@ -194,6 +195,7 @@
                         </div>
                         <strong>{{ $categorydet->hasOneCategoryDetails->hasOneCategory['name'] }}</strong>
                     </div>
+                </a>
                 </div>
                 @endforeach
             @else
@@ -217,6 +219,7 @@
             @if (count($popular_foods) > 0)
                 @foreach ($popular_foods as $food)
                     <div class="col-12 col-md-6 col-lg-4 mb-4">
+                        <a href="{{route('menu')}}">
                         <div class="item">
                             <div class="img">
                                 @if (isset($food->hasOneProduct['image']))
@@ -242,6 +245,7 @@
                                     @endphp
                             </div>
                         </div>
+                        </a>
                     </div>
                 @endforeach
             @else
