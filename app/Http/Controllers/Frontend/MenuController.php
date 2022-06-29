@@ -28,8 +28,8 @@ class MenuController extends Controller
     public function index()
     {
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $current_date = strtotime(date('Y-m-d'));
@@ -87,8 +87,8 @@ class MenuController extends Controller
     {
 
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         // Get Store Settings & Theme Settings & Other
@@ -345,8 +345,8 @@ class MenuController extends Controller
     public function getcoupon(Request $request)
     {
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $current_date = strtotime(date('Y-m-d'));
@@ -448,8 +448,8 @@ class MenuController extends Controller
     {
 
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         // $Coupon = Coupon::where('store_id', $front_store_id)->first();
@@ -679,8 +679,8 @@ class MenuController extends Controller
     public function searchcouponcode(Request $request)
     {
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $coupon = $request->coupon;

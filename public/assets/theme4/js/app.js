@@ -7,66 +7,6 @@ $(function() {
 
     let width = $(window).width();
 
-    /*** .home-slide-v4 ***/
-    const homeSlideV3SwiperChange = (event) => {
-        $('.__thumbs-item a').removeClass('active')
-        $('.__thumbs-item a').eq(event.activeIndex).addClass('active')
-    }
-
-    let homeSlideV4Swiper = new Swiper(".home-slide-v4 .swiper", {
-        spaceBetween: 0,
-        speed: 500,
-        loop: false,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        //effect: "fade",
-        mousewheel: false,
-        keyboard: false,
-        on: {
-            init: function(event) {
-                homeSlideV3SwiperChange(event)
-            },
-        },
-    })
-
-    homeSlideV4Swiper.on('slideChange', function(event) {
-        homeSlideV3SwiperChange(event)
-    })
-
-    $('.__thumbs-item a').click(function(event) {
-        event.preventDefault()
-        homeSlideV4Swiper.slideTo($(this).data('index'))
-    })
-
-
-    /*** .user-comments-v4-swiper ***/
-    let userCommentsV4SlideSwiper = new Swiper(".user-comments-v4-swiper .swiper", {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        speed: 500,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        navigation: {
-            nextEl: ".user-comments-v4-swiper .swiper-button-next",
-            prevEl: ".user-comments-v4-swiper .swiper-button-prev"
-        },
-        mousewheel: false,
-        keyboard: false,
-    })
-
-    /*** select2 ***/
-    // $('.select2').select2({
-    //     language: "tr",
-    //     placeholder: 'Person'
-    // });
-
     /*** datetimepickerIcons ***/
     const datetimepickerIcons = {
         time: 'far fa-clock',

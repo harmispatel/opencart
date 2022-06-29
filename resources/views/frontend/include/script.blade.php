@@ -12,13 +12,13 @@
 
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     // // Get Current Theme ID & Store ID
 
     // Get Store Settings & Theme Settings
-    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    // $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
     //End Get Store Settings & Theme Settings
 
 @endphp
@@ -26,20 +26,90 @@
 
 
 <!--Js Files-->
-   @if (!empty($theme_id) || $theme_id != '')
-        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/jquery/dist/jquery.min.js' }}"></script> --}}
-        <script src="{{ get_css_url().'public/assets/js/jquery_v3.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/moment/min/moment.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/moment/min/locales.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/wow/dist/wow.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/swiper-js/swiper-bundle.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/ui/dist/fancybox.umd.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/select2/dist/js/select2.min.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/plugins/select2/dist/js/i18n/tr.js' }}"></script>
-        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme'.$theme_id.'/js/app.js' }}"></script>
-   @else
+    <script src="{{ get_css_url().'public/assets/js/jquery_v3.min.js' }}"></script>
+    <script src="{{  get_css_url().'public/assets/frontend_js/slider.js' }}"></script>
+
+    <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/moment/min/moment.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/moment/min/moment.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/moment/min/moment.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/moment/min/moment.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/moment/min/moment.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/moment/min/moment.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/moment/min/locales.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/moment/min/locales.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/moment/min/locales.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/moment/min/locales.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/moment/min/locales.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/moment/min/locales.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/bootstrap/dist/js/bootstrap.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/wow/dist/wow.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/wow/dist/wow.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/wow/dist/wow.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/wow/dist/wow.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/wow/dist/wow.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/wow/dist/wow.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/swiper-js/swiper-bundle.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/swiper-js/swiper-bundle.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/swiper-js/swiper-bundle.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/swiper-js/swiper-bundle.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/swiper-js/swiper-bundle.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/swiper-js/swiper-bundle.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/ui/dist/fancybox.umd.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/ui/dist/fancybox.umd.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/ui/dist/fancybox.umd.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/ui/dist/fancybox.umd.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/ui/dist/fancybox.umd.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/ui/dist/fancybox.umd.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/select2/dist/js/select2.min.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/select2/dist/js/select2.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/select2/dist/js/select2.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/select2/dist/js/select2.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/select2/dist/js/select2.min.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/select2/dist/js/select2.min.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/select2/dist/js/i18n/tr.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/plugins/select2/dist/js/i18n/tr.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/plugins/select2/dist/js/i18n/tr.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/plugins/select2/dist/js/i18n/tr.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/plugins/select2/dist/js/i18n/tr.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/plugins/select2/dist/js/i18n/tr.js' }}"></script> --}}
+
+
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/js/app.js' }}"></script>
+        {{-- <script type="text/javascript" src="{{ get_css_url().'public/assets/theme2/js/app.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme3/js/app.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme4/js/app.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme5/js/app.js' }}"></script>
+        <script type="text/javascript" src="{{ get_css_url().'public/assets/theme6/js/app.js' }}"></script> --}}
+
+
+   {{-- @else
         <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/jquery/dist/jquery.min.js' }}"></script>
         <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/moment/min/moment.min.js' }}"></script>
         <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/moment/min/locales.min.js' }}"></script>
@@ -51,7 +121,7 @@
         <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/select2/dist/js/select2.min.js' }}"></script>
         <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/plugins/select2/dist/js/i18n/tr.js' }}"></script>
         <script type="text/javascript" src="{{ get_css_url().'public/assets/theme1/js/app.js' }}"></script>
-   @endif
+   @endif --}}
 <script src="{{ get_css_url().'public/plugins/jquery-ui/jquery-ui.min.js' }}"></script>
 <!-- End Js Files-->
 

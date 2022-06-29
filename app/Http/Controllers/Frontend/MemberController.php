@@ -193,8 +193,8 @@ class MemberController extends Controller
 
         // Get Current Theme ID & Store ID
         $currentURL = URL::to("/");
-        $current_theme_id = themeID($currentURL);
-        $theme_id = $current_theme_id['theme_id'];
+        $current_theme_id = themeID;
+        $theme_id = $current_theme_id['header_id'];
         $front_store_id =  $current_theme_id['store_id'];
         // Get Current Theme ID & Store ID
 
@@ -323,8 +323,8 @@ class MemberController extends Controller
             'reviewmessage' => 'required',
         ]);
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
         $userlogin = session('userid');
         $review = new Reviews;

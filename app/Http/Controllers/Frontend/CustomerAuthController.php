@@ -85,8 +85,8 @@ class CustomerAuthController extends Controller
     public function customerregister(Request $request)
     {
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $ajaxregister = isset($request->ajaxregister) ? $request->ajaxregister : 0;
@@ -224,8 +224,8 @@ class CustomerAuthController extends Controller
     {
         $customerid = session('userid');
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         // Validation

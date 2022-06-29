@@ -15,8 +15,8 @@ class Cartcontroller extends Controller
     {
 
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $current_date = strtotime(date('Y-m-d'));

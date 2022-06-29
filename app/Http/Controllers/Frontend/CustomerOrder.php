@@ -83,8 +83,8 @@ class CustomerOrder extends Controller
     {
 
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         // Get Store Settings & Theme Settings & Other
@@ -930,8 +930,8 @@ class CustomerOrder extends Controller
     {
 
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = themeID;
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $delivery_type = session()->get('flag_post_code');

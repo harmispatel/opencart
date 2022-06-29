@@ -11,8 +11,8 @@
 
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     // // Get Current Theme ID & Store ID
 
@@ -188,6 +188,7 @@
     @endif
     <div class="__btn-bottom"><i class="fas fa-arrow-down"></i></div>
 </section>
+
 <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container">
         <div style="height: 300px; overflow: hidden;" id="shopDescription">

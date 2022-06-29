@@ -1,0 +1,133 @@
+/* COMMON CSS */
+/* ------------------------------------------------------------------------------------------------ */
+/*** Padding ***/
+.pt-110 {
+    padding-top: 110px;
+}
+.pb-110 {
+    padding-bottom: 110px;
+}
+
+.pt-75 {
+    padding-top: 75px;
+}
+
+.pb-75 {
+    padding-bottom: 75px;
+}
+
+
+/*** .section-title ***/
+.section-title {
+    display: block;
+    text-align: center;
+    position: relative;
+    padding: 20px 0;
+    font-size: 52px;
+}
+.section-title:before {
+    display: block;
+    content: "";
+    width: 20px;
+    height: 4px;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -10px;
+}
+.section-title.divider-white:before {
+    background-color: #fff;
+}
+
+
+/*** default color ***/
+.color-red {
+    color: #F4494E;
+}
+.color-green {
+    color: #4ED58C;
+}
+.color-orange {
+    color: #FBBC42;
+}
+
+
+/*** default bg-color ***/
+.bg-color-red {
+    background-color: #F4494E;
+}
+.bg-color-green {
+    background-color: #4ED58C;
+}
+.bg-color-orange {
+    background-color: #FBBC42;
+}
+
+
+/*** .btn- ***/
+.btn-green, .btn-red {
+    color: #fff;
+    font-size: 13px;
+    line-height: 55px;
+    padding: 0 2.5rem;
+    border-radius: 30px;
+    min-width: 180px;
+    transition: 0.3s;
+}
+
+.btn-green {
+    background-color: #4ED58C;
+}
+.btn-green:hover {
+    background-color: #23cb70;
+    color: #fff;
+}
+.btn-red {
+    background-color: #F4494E;
+}
+.btn-red:hover {
+    background-color: #ec262d;
+    color: #fff;
+}
+.btn-orange {
+    color: #fff;
+    background-color: #FE753E;
+  }
+  .btn-orange:hover {
+    color: #fff;
+    background-color: #f8591a;
+  }
+
+
+
+/* NEW CSS */
+.srch-input {
+    position: relative;
+    margin: 12px 0 14px;
+}
+
+.postcode-input-error {
+    border: 3px solid red !important
+}
+
+.postcode-error {
+    font-size: 16px !important;
+    color: red !important;
+    float: left !important;
+    margin-left: 7% !important;
+    padding: 0 !important;
+    font-family: arial !important;
+    font-weight: 700 !important
+}
+
+.wrap_row {
+    border-bottom: 1px dashed red;
+    float: left;
+    width: 96%;
+  }
+
+  .input-xlarge {
+    float: left;
+    width: 100%;
+}
