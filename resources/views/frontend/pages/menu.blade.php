@@ -12,8 +12,8 @@ It's used for View Menu.
 
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     // Get Current Theme ID & Store ID
 

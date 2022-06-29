@@ -794,6 +794,80 @@ class LayoutController extends Controller
         // End Add & Update Footer Settings
 
 
+        // Add & Update Open Hours Settings
+        $openhour_settings = $request->openhour_setting;
+
+        if(isset($openhour_settings))
+        {
+            $openhour_id = $openhour_settings['openhour_layout_id'];
+
+            $check_openhour_setting = Settings::where('store_id',$current_store_id)->where('key','openhour_settings')->where('openhours_id',$openhour_id)->first();
+
+            $old_openhour_setting = isset($check_openhour_setting->value) ? unserialize($check_openhour_setting->value) : '';
+
+            $openhour_setting_id = isset($check_openhour_setting->setting_id) ? $check_openhour_setting->setting_id : '';
+
+            if (!empty($openhour_setting_id) || $openhour_setting_id != '')
+            {
+                $openhour_background_image = isset($openhour_settings['openhour_background_image']) ? $openhour_settings['openhour_background_image'] : '';
+
+                if(!empty($openhour_background_image) || $openhour_background_image != '')
+                {
+                    $old_openhour_background_image = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
+
+                    if(!empty($old_openhour_background_image) || $old_openhour_background_image != '')
+                    {
+                        if(file_exists($old_openhour_background_image))
+                        {
+                            unlink($old_openhour_background_image);
+                        }
+                    }
+
+                    $openhour_background_image_path = $currentURL.'/public/admin/openhour/';
+                    $openhour_background_image_name = genratetoken(10).'.'.$openhour_background_image->getClientOriginalExtension();
+                    $openhour_background_image->move(public_path('admin/openhour'),$openhour_background_image_name);
+                    $openhour_settings['openhour_background_image'] = $openhour_background_image_path.$openhour_background_image_name;
+                }
+                else
+                {
+                    $openhour_settings['openhour_background_image'] = $old_openhour_setting['openhour_background_image'];
+                }
+
+                $update_serial_openhour_setting = serialize($openhour_settings);
+
+                $openhour_setting_update = Settings::find($openhour_setting_id);
+                $openhour_setting_update->value = $update_serial_openhour_setting;
+                $openhour_setting_update->update();
+            }
+            else
+            {
+
+                $openhour_background_image = isset($openhour_settings['openhour_background_image']) ? $openhour_settings['openhour_background_image'] : '';
+
+                if(!empty($openhour_background_image) || $openhour_background_image != '')
+                {
+                    $openhour_background_image_path = $currentURL.'/public/admin/openhour/';
+                    $openhour_background_image_name = genratetoken(10).'.'.$openhour_background_image->getClientOriginalExtension();
+                    $openhour_background_image->move(public_path('admin/openhour'),$openhour_background_image_name);
+                    $openhour_settings['openhour_background_image'] = $openhour_background_image_path.$openhour_background_image_name;
+                }
+
+                $serial_openhour_setting = serialize($openhour_settings);
+
+                $openhour_setting_new = new Settings;
+                $openhour_setting_new->group = 'template';
+                $openhour_setting_new->store_id = $current_store_id;
+                $openhour_setting_new->openhours_id = $openhour_settings['openhour_layout_id'];
+                $openhour_setting_new->key = 'openhour_settings';
+                $openhour_setting_new->value = $serial_openhour_setting;
+                $openhour_setting_new->serialized = 1;
+                $openhour_setting_new->save();
+            }
+
+        }
+        // End Add & Update Open Hours Settings
+
+
         // Add Sliders & Update Sliders
         $sliders = $request->slider;
 
@@ -1459,32 +1533,33 @@ class LayoutController extends Controller
     // Function of Active Current Open Hours Layout for Frontend
     public function activeopenhours($id)
     {
-        // Current Store ID
-        $current_store_id = currentStoreId();
-
+        // User Details
         $user_details = user_details();
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
         }
-        $user_shop_id = $user_details['user_shop'];
+
+
+        // Current Store ID
+        if($user_group_id == 1)
+        {
+            $current_store_id = currentStoreId();
+        }
+        else
+        {
+            $current_store_id = $user_details['user_shop'];
+        }
+
 
         $openhour_id = $id;
         $key = 'openhour_id';
 
-        if($user_group_id == 1)
-        {
-            $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
-        }
-        else
-        {
-            $setting = Settings::where('store_id',$user_shop_id)->where('key',$key)->first();
-        }
+        $setting = Settings::where('store_id',$current_store_id)->where('key',$key)->first();
 
         if(!empty($setting) || $setting != '')
         {
             $setting_id = isset($setting->setting_id) ? $setting->setting_id : '';
-
             $active_header = Settings::find($setting_id);
             $active_header->value = $openhour_id;
             $active_header->update();
@@ -1492,22 +1567,17 @@ class LayoutController extends Controller
         else
         {
             $active_new = new Settings();
-            if($user_group_id == 1)
-            {
-                $active_new->store_id = $current_store_id;
-            }
-            else
-            {
-                $active_new->store_id = $user_shop_id;
-            }
-
+            $active_new->store_id = $current_store_id;
             $active_new->group = 'polianna';
             $active_new->key = $key;
             $active_new->value = $openhour_id;
             $active_new->serialized = 0;
             $active_new->save();
         }
-        return redirect()->route('templatesettings');
+
+        return response()->json([
+            'success' => 1,
+        ]);
 
     }
 

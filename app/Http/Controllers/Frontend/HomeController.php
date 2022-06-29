@@ -13,6 +13,7 @@ use App\Models\Postcodes;
 use App\Models\Product;
 use App\Models\Product_to_category;
 use App\Models\Settings;
+use App\Models\Slider;
 use App\Models\ToppingProductPriceSize;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -23,16 +24,17 @@ class HomeController extends Controller
     public function index()
     {
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = layoutID($currentURL,'header_id');
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
-        $food_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_popular_food_count')->first();
-        $food_limit =  isset($food_limit_setting['value']) ? $food_limit_setting['value'] : 1;
+        // $food_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_popular_food_count')->first();
+        // $food_limit =  isset($food_limit_setting['value']) ? $food_limit_setting['value'] : 1;
 
-        $cat_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_best_category_count')->first();
-        $cat_limit = isset($cat_limit_setting['value']) ? $cat_limit_setting['value'] : 1;
+        // $cat_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_best_category_count')->first();
+        // $cat_limit = isset($cat_limit_setting['value']) ? $cat_limit_setting['value'] : 1;
 
+        $sliders = Slider::where('store_id',$front_store_id)->get();
 
         $photos = Gallary::where('store_id', $front_store_id)->get();
 
@@ -40,7 +42,7 @@ class HomeController extends Controller
             $q->whereHas('hasManyCategoryStore', function ($q1) use ($front_store_id) {
                 $q1->where('store_id', $front_store_id);
             });
-        })->groupBy('category_id')->limit($cat_limit)->get()->sortByDesc(function ($query) {
+        })->groupBy('category_id')->limit(10)->get()->sortByDesc(function ($query) {
             return $query->hasManyOrders->count();
         });
 
@@ -53,12 +55,10 @@ class HomeController extends Controller
                 $query->where('category_id', $cat);
             })->get();
         }
-        // echo '<pre>';
-        // print_r($categorytoproduct->toArray());
-        // exit();
+
         $popular_foods = OrderProduct::with(['hasOrder', 'hasOneProduct'])->whereHas('hasOrder', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
-        })->groupBy('name')->select('product_id', DB::raw('count(*) as total_product'))->orderBy('total_product', 'DESC')->limit($food_limit)->get();
+        })->groupBy('name')->select('product_id', DB::raw('count(*) as total_product'))->orderBy('total_product', 'DESC')->limit(10)->get();
 
         $get_areas = DeliverySettings::select('area', 'id_delivery_settings')->where('id_store', $front_store_id)->where('delivery_type', 'area')->first();
         $area_explode = explode(',', isset($get_areas->area) ? $get_areas->area : '');
@@ -77,7 +77,7 @@ class HomeController extends Controller
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
-        return view('frontend.pages.home', compact(['photos', 'best_categories', 'popular_foods', 'delivery_setting', 'areas']));
+        return view('frontend.pages.home', compact(['photos', 'best_categories', 'popular_foods', 'delivery_setting', 'areas', 'sliders']));
     }
 
 
@@ -88,8 +88,8 @@ class HomeController extends Controller
     {
 
         $currentURL = URL::to("/");
-        $current_theme = themeID($currentURL);
-        $current_theme_id = $current_theme['theme_id'];
+        $current_theme = layoutID($currentURL,'header_id');
+        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
         $type = $request->type;

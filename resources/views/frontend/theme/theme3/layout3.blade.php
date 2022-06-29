@@ -12,8 +12,8 @@
    
    // Get Current Theme ID & Store ID
    $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     // // Get Current Theme ID & Store ID
 
@@ -155,6 +155,7 @@
         </div>
     </div>
 </section>
+
 <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container text-center">
         <div>
@@ -170,6 +171,7 @@
         </div>
     </div>
 </section>
+
 <section class="best-categories-icon pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="default-title-v3 text-center container">
         <h3 class="title text-capitalize">best categories</h3>
@@ -202,6 +204,7 @@
         </div>
     </div>
 </section>
+
 <section class="popular-foods-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
     <div class="container">
         <div class="default-title-v3 text-center">

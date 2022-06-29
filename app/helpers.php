@@ -20,6 +20,7 @@ use App\Models\CustomerIP;
 use App\Models\Footers;
 use App\Models\GallaryLayouts;
 use App\Models\Headers;
+use App\Models\OpenhourLayouts;
 use App\Models\Orders;
 use App\Models\Region;
 use App\Models\Settings;
@@ -510,30 +511,36 @@ function aboutActive()
 // Function for Active Current Open hours Layout
 function openhoursActive()
 {
-    // Current Store ID
-    $current_store_id = currentStoreId();
-
+    // User Details
     $user_details = user_details();
     if(isset($user_details))
     {
         $user_group_id = $user_details['user_group_id'];
     }
-    $user_shop_id = $user_details['user_shop'];
 
-    $key = 'openhour_id';
 
+    // Current Store ID
     if($user_group_id == 1)
     {
-        $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+        $current_store_id = currentStoreId();
     }
     else
     {
-        $setting = Settings::select('value')->where('store_id',$user_shop_id)->where('key',$key)->first();
+        $current_store_id = $user_details['user_shop'];
     }
 
+
+    $key = 'openhour_id';
+
+    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+
+    // Open Hours ID
     $openhour_id = isset($setting->value) ? $setting->value : '';
 
-    return $openhour_id;
+    // OpenHours Details
+    $openhours_deatails = OpenhourLayouts::where('openhour_id',$openhour_id)->first();
+
+    return $openhours_deatails;
 }
 
 
@@ -574,106 +581,86 @@ function getLayouts($key,$current_layout_id,$layout_column_name)
 
 
 // Function for Get Template Settings & Social Site Settings & Store Settings
-function storeThemeSettings($theme_id,$store_id)
+function storeLayoutSettings($layout_id,$store_id,$setting_name,$key_name)
 {
-    // Template Settings
-    $key = ([
-        'polianna_navbar_background',
-        'polianna_navbar_link',
-        'polianna_navbar_link_hover',
-        'polianna_main_logo',
-        'polianna_main_logo_width',
-        'polianna_main_logo_height',
-
-        'polianna_slider_permission',
-        'polianna_slider_1',
-        'polianna_slider_2',
-        'polianna_slider_3',
-        'polianna_slider_1_title',
-        'polianna_slider_2_title',
-        'polianna_slider_3_title',
-        'polianna_slider_1_description',
-        'polianna_slider_2_description',
-        'polianna_slider_3_description',
-
-        'polianna_online_order_permission',
-        'polianna_open_close_store_permission',
-
-        'polianna_open_banner',
-        'polianna_close_banner',
-        'polianna_open_close_banner_width',
-        'polianna_open_close_banner_height',
-
-        'polianna_store_fonts',
-        'polianna_popular_food_count',
-        'polianna_recent_review_count',
-        'polianna_best_category_count',
-        'polianna_store_description',
-        'polianna_banner_image',
-
-        'polianna_footer_background',
-        'polianna_footer_text_color',
-        'polianna_footer_title_color',
-        'polianna_footer_logo',
-    ]);
-    $template_settings = [];
-    foreach($key as $row)
+    if($setting_name == 'header_settings')
     {
-        $query = Settings::select('value')->where('store_id',$store_id)->where('theme_id',$theme_id)->where('key',$row)->first();
-        $template_settings[$row] = isset($query->value) ? $query->value : '';
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $header_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $header_setting;
     }
-    // End Template Settings
+
+    if($setting_name == 'slider_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $slider_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $slider_setting;
+    }
+
+    if($setting_name == 'about_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $about_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $about_setting;
+    }
+
+    if($setting_name == 'bestcategory_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $bestcategory_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $bestcategory_setting;
+    }
 
 
     // Social Site
-    $social_key = ([
-        'polianna_facebook_id',
-        'polianna_twitter_username',
-        'polianna_gplus_id',
-        'polianna_linkedin_id',
-        'polianna_youtube_id',
-    ]);
-    $social_settings = [];
-    foreach($social_key as $row)
-    {
-        $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
-        $social_settings[$row] = isset($query->value) ? $query->value : '';
-    }
+    // $social_key = ([
+    //     'polianna_facebook_id',
+    //     'polianna_twitter_username',
+    //     'polianna_gplus_id',
+    //     'polianna_linkedin_id',
+    //     'polianna_youtube_id',
+    // ]);
+    // $social_settings = [];
+    // foreach($social_key as $row)
+    // {
+    //     $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
+    //     $social_settings[$row] = isset($query->value) ? $query->value : '';
+    // }
     // End Social Site
 
 
     // Store Settings
-    $store_key = ([
-        'config_name',
-        'config_owner',
-        'config_address',
-        'map_ifram',
-        'sitemap_url',
-        'config_telephone',
-        'config_email',
-        'config_title',
-        'config_meta_description',
-        'enable_gallery_module',
-        'enable_home_gallery',
-        'gallery_background_options',
-        'gallery_header_text',
-        'gallery_header_desc',
-        'config_currency',
-    ]);
-    $store_settings = [];
-    foreach($store_key as $row)
-    {
-        $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
-        $store_settings[$row] = isset($query->value) ? $query->value : '';
-    }
+    // $store_key = ([
+    //     'config_name',
+    //     'config_owner',
+    //     'config_address',
+    //     'map_ifram',
+    //     'sitemap_url',
+    //     'config_telephone',
+    //     'config_email',
+    //     'config_title',
+    //     'config_meta_description',
+    //     'enable_gallery_module',
+    //     'enable_home_gallery',
+    //     'gallery_background_options',
+    //     'gallery_header_text',
+    //     'gallery_header_desc',
+    //     'config_currency',
+    // ]);
+    // $store_settings = [];
+    // foreach($store_key as $row)
+    // {
+    //     $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
+    //     $store_settings[$row] = isset($query->value) ? $query->value : '';
+    // }
 
-    $new = ([
-        'template_settings' => $template_settings,
-        'social_settings' => $social_settings,
-        'store_settings' => $store_settings,
-    ]);
+    // $new = ([
+    //     'template_settings' => $template_settings,
+    //     'social_settings' => $social_settings,
+    //     'store_settings' => $store_settings,
+    // ]);
 
-    return $new;
+    // return $new;
 
 }
 
@@ -1729,28 +1716,31 @@ function checkOrderStatus($order_id)
 
 
 // Function for Get Theme ID & Store ID
-function themeID($url)
+function layoutID($currentURL,$layout_key)
 {
-    $slash = substr($url, -1);
+    $slash = substr($currentURL, -1);
 
     if($slash != '/')
     {
-        $new_url = $url .= '/';
+        $new_url = $currentURL .= '/';
     }
     else
     {
-        $new_url = $url;
+        $new_url = $currentURL;
     }
     $storeDetails = Store::where('url',$new_url)->orWhere('ssl',$new_url)->first();
 
     $store_id = isset($storeDetails->store_id) ? $storeDetails->store_id : '';
 
-    $key = 'theme_id';
+    $key = $layout_key;
     $setting = Settings::select('value')->where('store_id',$store_id)->where('key',$key)->first();
-    $theme_id = isset($setting->value) ? $setting->value : '';
+
+    $new_var = '$'.$layout_key;
+
+    $new_var = isset($setting->value) ? $setting->value : '';
 
     $new = ([
-        'theme_id' => $theme_id,
+        $layout_key => $new_var,
         'store_id' => $store_id,
     ]);
 
@@ -2257,8 +2247,8 @@ function openclosetime()
 {
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     // Get Current Theme ID & Store ID
 
@@ -2453,8 +2443,8 @@ function storereview()
 {
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     // Get Current Theme ID & Store ID
 
@@ -2572,8 +2562,8 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
 function getCoupon()
 {
     $currentURL = URL::to("/");
-    $current_theme = themeID($currentURL);
-    $current_theme_id = $current_theme['theme_id'];
+    $current_theme = layoutID($currentURL,'header_id');
+    $current_theme_id = $current_theme['header_id'];
     $front_store_id =  $current_theme['store_id'];
 
     $current_date = strtotime(date('Y-m-d'));

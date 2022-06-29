@@ -7,60 +7,7 @@ $(function() {
 
     let width = $(window).width();
 
-    /*** .home-slide ***/
-    let homeSlideSwiper = new Swiper(".home-slide .swiper", {
-        spaceBetween: 0,
-        speed: 500,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        navigation: {
-            nextEl: ".home-slide .swiper .swiper-button-next",
-            prevEl: ".home-slide .swiper .swiper-button-prev"
-        },
-        mousewheel: false,
-        keyboard: false,
-    })
 
-    /*** .categories-swiper ***/
-    let bestCategoriesSwiper = new Swiper(".categories-swiper .swiper", {
-        slidesPerView: 1,
-        spaceBetween: 10,
-        speed: 500,
-        loop: false,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        navigation: {
-            nextEl: ".categories-swiper .swiper-button-next",
-            prevEl: ".categories-swiper .swiper-button-prev"
-        },
-        mousewheel: false,
-        keyboard: false,
-        breakpoints: {
-            640: {
-                slidesPerView: 2,
-                spaceBetween: 30,
-            },
-            768: {
-                slidesPerView: 3,
-                spaceBetween: 30,
-            },
-            991: {
-                slidesPerView: 4,
-                spaceBetween: 30,
-            },
-            1199: {
-                slidesPerView: 5,
-                spaceBetween: 30,
-            },
-        },
-    })
 
     /*** .popular-foods-swiper ***/
     let popularFoodsSwiper = new Swiper(".popular-foods-swiper .swiper", {

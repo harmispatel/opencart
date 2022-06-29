@@ -600,7 +600,7 @@ class SettingsController extends Controller
         $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
         $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
         $data['bussines'] = 'a:3:{s:3:"day";a:1:{i:0;a:1:{i:0;s:1:"0";}}s:4:"from";a:1:{i:0;s:4:"0:00";}s:2:"to";a:1:{i:0;s:5:"23:50";}}';
-        $data['theme_id'] = 1;
+        $data['header_id'] = 1;
         $data['enable_delivery'] = 'both';
         $data['delivery_option'] = 'post_codes';
         $data['enable_gallery_module'] = 1;

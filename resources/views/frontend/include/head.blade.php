@@ -1,50 +1,113 @@
-<!--
+{{--
     THIS IS HEAD PAGE FOR FRONTEND
     ----------------------------------------------------------------------------------------------
     head.blade.php
     It's Included Some CSS Links with diffrent themes.
     it is used for including styling for frontend site.
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 @php
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = themeID($currentURL);
-    $theme_id = $current_theme_id['theme_id'];
+    $current_theme_id = layoutID($currentURL,'header_id');
+    $theme_id = $current_theme_id['header_id'];
     $front_store_id =  $current_theme_id['store_id'];
     //End  Get Current Theme ID & Store ID
 
     // Get Store Settings & Theme Settings
-    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
+    // $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
     //End Get Store Settings & Theme Settings
 
     // Store Settings
-    $store_settings = $store_theme_settings['store_settings']
+    // $store_settings = $store_theme_settings['store_settings']
     // End Store Settings
 
 @endphp
 
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>{{ (isset($store_settings['config_title']) ? $store_settings['config_title'] : '') }}</title>
+<title>no</title>
 
-<!-- Style Sheet Links -->
+{{-- Style Sheet Links --}}
 <link rel="stylesheet" href="{{ get_css_url().'public/plugins/jquery-ui/jquery-ui.min.css' }}">
 <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
 
-@if (!empty($theme_id) || $theme_id != '')
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/plugins/fontawesome/css/all.min.css'  }}">
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/plugins/swiper-js/swiper-bundle.min.css'  }}">
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/plugins/ui/dist/fancybox.css'  }}">
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/plugins/animate.css/animate.min.css'  }}">
-    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/select2/dist/css/select2.min.css'  }}"> --}}
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/css/app.css'  }}">
-    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme'.$theme_id.'/css/responsive.css'  }}">
-@else
+{{-- @if (!empty($theme_id) || $theme_id != '') --}}
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/header.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/slider.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/about_us.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/category.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/common.css' }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/plugins/bootstrap/dist/css/bootstrap.min.css'  }}"> --}}
+
+
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}"> --}}
+
+
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/fontawesome/css/all.min.css'  }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/fontawesome/css/all.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/fontawesome/css/all.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/fontawesome/css/all.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/plugins/fontawesome/css/all.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/plugins/fontawesome/css/all.min.css'  }}"> --}}
+
+
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/swiper-js/swiper-bundle.min.css'  }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/swiper-js/swiper-bundle.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/swiper-js/swiper-bundle.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/swiper-js/swiper-bundle.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/plugins/swiper-js/swiper-bundle.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/plugins/swiper-js/swiper-bundle.min.css'  }}"> --}}
+
+
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/ui/dist/fancybox.css'  }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/ui/dist/fancybox.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/ui/dist/fancybox.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/ui/dist/fancybox.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/plugins/ui/dist/fancybox.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/plugins/ui/dist/fancybox.css'  }}"> --}}
+
+
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/animate.css/animate.min.css'  }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/animate.css/animate.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/animate.css/animate.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/animate.css/animate.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/plugins/animate.css/animate.min.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/plugins/animate.css/animate.min.css'  }}"> --}}
+
+
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/select2/dist/css/select2.min.css'  }}"> --}}
+
+
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/css/app.css'  }}"> --}}
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/css/app.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/css/app.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/css/app.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/css/app.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/css/app.css'  }}"> --}}
+
+
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/css/responsive.css'  }}">
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/css/responsive.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/css/responsive.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/css/responsive.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme5/css/responsive.css'  }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme6/css/responsive.css'  }}"> --}}
+
+
+{{-- @else
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/plugins/fontawesome/css/all.min.css'  }}">
@@ -54,7 +117,7 @@
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/select2/dist/css/select2.min.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/css/app.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/css/responsive.css'  }}">
-@endif
+@endif --}}
 <!-- End Style Sheet Links -->
 
 <!-- Customer Register & Login Model -->

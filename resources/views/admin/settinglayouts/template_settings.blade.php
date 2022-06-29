@@ -38,6 +38,9 @@
     // Get Current Footer
     $footer_data = footerActive();
 
+    // Get Current OpenHour
+    $openhour_data = openhoursActive();
+
 @endphp
 {{-- END PHP CODE --}}
 
@@ -324,21 +327,21 @@
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th class="align-middle">
                                                             <label>Menu Button Hover Color</label>
                                                         </th>
                                                         <td>
                                                             <input type="color" name="header_setting[menu_button_hover_color]" value="{{ isset($get_header_settings['menu_button_hover_color']) ? $get_header_settings['menu_button_hover_color'] : '' }}" class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
                                                     <tr>
                                                         <th class="align-middle">
-                                                            <label>Menu Button Hover Text Color</label>
+                                                            <label>Menu Button Text Color</label>
                                                         </th>
                                                         <td>
-                                                            <input type="color" name="header_setting[menu_button_hover_text_color]" value="{{ isset($get_header_settings['menu_button_hover_text_color']) ? $get_header_settings['menu_button_hover_text_color'] : '' }}" class="form-control">
+                                                            <input type="color" name="header_setting[menu_button_text_color]" value="{{ isset($get_header_settings['menu_button_text_color']) ? $get_header_settings['menu_button_text_color'] : '' }}" class="form-control">
                                                         </td>
                                                     </tr>
 
@@ -1431,6 +1434,112 @@
                     {{-- End Gallary Section --}}
 
 
+                    {{-- Opening Hours Section --}}
+                    @php
+                        $openhour_id = isset($openhour_data['openhour_id']) ? $openhour_data['openhour_id'] : '';
+                        $get_openhour_settings = getLayouts('openhour_settings',$openhour_id,'openhours_id');
+                    @endphp
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-success">
+                                    <h3 class="card-title pt-2">
+                                        Opening Hours Section
+                                    </h3>
+                                    <div class="container" style="text-align: right">
+                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll11" aria-expanded="true" aria-controls="coll11">
+                                            <i class="fa" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="collapse show" id="coll11">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="table table-bordered table-striped">
+
+                                                    <tr>
+                                                        <th width="250" class="align-middle">
+                                                            <label>Opening Hours Design</label>
+                                                        </th>
+                                                        <td>
+                                                            <select name="openhour_setting[openhour_layout_id]" id="openhour_layout" onchange="changeActiveOpeningHoursLayout()" class="form-control">
+                                                                @foreach ($openhours_layouts as $openhours)
+                                                                    <option value="{{ $openhours->openhour_id }}" {{ ($openhours->openhour_id == $openhour_id) ? 'selected' : '' }}>{{ $openhours->openhour_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th width="250" class="align-middle">
+                                                            <label>Preview</label>
+                                                        </th>
+                                                        <td id="openhour-preview" class="bg-light">
+                                                            @php
+                                                                $openhour_image = isset($openhour_data['openhour_image']) ? $openhour_data['openhour_image'] : '';
+                                                            @endphp
+                                                            <img src="{{ asset('public/admin/openhour_view/'.$openhour_image) }}" alt="Not Found" class="w-100">
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th width="250" class="align-middle">
+                                                            <label>Background Color</label>
+                                                        </th>
+                                                        <td>
+                                                            <input type="color" name="openhour_setting[openhour_background_color]" value="{{ isset($get_openhour_settings['openhour_background_color']) ? $get_openhour_settings['openhour_background_color'] : '' }}" class="form-control">
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th width="250" class="align-middle">
+                                                            <label>Background Hover Color</label>
+                                                        </th>
+                                                        <td>
+                                                            <input type="color" name="openhour_setting[openhour_background_hover_color]" value="{{ isset($get_openhour_settings['openhour_background_hover_color']) ? $get_openhour_settings['openhour_background_hover_color'] : '' }}" class="form-control">
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th width="250" class="align-middle">
+                                                            <label>Background Image</label>
+                                                        </th>
+                                                        <td>
+                                                            <input type="file" name="openhour_setting[openhour_background_image]" class="form-control p-1">
+                                                            <img class="mt-2" src="{{ isset($get_openhour_settings['openhour_background_image']) ? $get_openhour_settings['openhour_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th width="250" class="align-middle">
+                                                            <label>Background Image Position</label>
+                                                        </th>
+                                                        <td>
+                                                            <select name="openhour_setting[openhour_background_image_position]" class="form-control">
+                                                                @php
+                                                                    $openhour_background_image_position = isset($get_openhour_settings['openhour_background_image_position']) ? $get_openhour_settings['openhour_background_image_position'] : '';
+                                                                @endphp
+                                                                <option value="top" {{ ($openhour_background_image_position == 'top') ? 'selected' : '' }}>Top</option>
+                                                                <option value="bottom" {{ ($openhour_background_image_position == 'bottom') ? 'selected' : '' }}>Bottom</option>
+                                                                <option value="left" {{ ($openhour_background_image_position == 'left') ? 'selected' : '' }}>Left</option>
+                                                                <option value="right" {{ ($openhour_background_image_position == 'right') ? 'selected' : '' }}>Right</option>
+                                                                <option value="center" {{ ($openhour_background_image_position == 'center') ? 'selected' : '' }}>Center</option>
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- End Opening Hours Section --}}
+
+
                     {{-- Footer Section --}}
                     @php
                         $footer_id = isset($footer_data['footer_id']) ? $footer_data['footer_id'] : '';
@@ -1549,21 +1658,6 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-
-    $('document').ready(function(){
-
-        // Get Header Preview Image
-        // $.ajax({
-        //     type: "method",
-        //     url: "url",
-        //     data: "data",
-        //     dataType: "dataType",
-        //     success: function (response) {
-
-        //     }
-        // });
-
-    });
 
     // Date Range Picker
     $(function() {
@@ -1848,6 +1942,28 @@
 
     }
     // End Change Active Footer
+
+
+    // Change Active Openhours Layout
+    function changeActiveOpeningHoursLayout()
+    {
+        var openhour_id = $('#openhour_layout :selected').val();
+
+        $.ajax({
+            type: "GET",
+            url: "{{ url('activeopenhours') }}/" +openhour_id,
+            dataType: "json",
+            success: function (response)
+            {
+                if(response.success == 1)
+                {
+                    location.reload();
+                }
+            }
+        });
+
+    }
+    // End Change Active Openhours Layout
 
 
 </script>

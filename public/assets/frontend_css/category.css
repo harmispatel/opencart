@@ -1,0 +1,245 @@
+/* BEST CATEGORY 1 CSS */
+.categories {
+    background-color: #F7F2EF;
+  }
+  .categories > .container {
+    background-color: #fff;
+  }
+  .categories > .container p.text {
+    font-size: 16px;
+    color: black;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .categories .categories-swiper {
+    position: relative;
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+  .categories .categories-swiper .swiper-wrapper {
+    height: auto;
+  }
+  .categories .categories-swiper .swiper-button-next,
+  .categories .categories-swiper .swiper-button-prev {
+    top: -50px;
+    margin-top: initial;
+    opacity: 0.3;
+    transition: opacity 0.33s;
+  }
+  .categories .categories-swiper .swiper-button-next:hover,
+  .categories .categories-swiper .swiper-button-prev:hover {
+    opacity: 1;
+  }
+  .categories .categories-swiper .swiper-button-next i,
+  .categories .categories-swiper .swiper-button-prev i {
+    font-size: 26px;
+    color: #000;
+  }
+  .categories .categories-swiper .swiper-button-next:after,
+  .categories .categories-swiper .swiper-button-prev:after {
+    display: none;
+  }
+  .categories .categories-swiper .swiper-button-next {
+    right: 75px;
+  }
+  .categories .categories-swiper .swiper-button-prev {
+    left: 75px;
+  }
+  .categories .categories-swiper .swiper-slide:hover strong {
+    color: #F4494E;
+  }
+  .categories .categories-swiper .swiper-slide:hover strong:after {
+    width: 75%;
+  }
+  .categories .categories-swiper .swiper-slide .img {
+    position: relative;
+    height: 190px;
+    width: 190px;
+    margin-bottom: 1rem;
+  }
+  .categories .categories-swiper .swiper-slide .img img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+  }
+  .categories .categories-swiper .swiper-slide strong {
+    font-size: 16px;
+    text-align: center;
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #000;
+    transition: color 0.33s;
+    position: relative;
+  }
+  .categories .categories-swiper .swiper-slide strong:after {
+    height: 1px;
+    width: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    content: "";
+    background-color: #F4494E;
+    bottom: 0;
+    transition: width 0.33s;
+  }
+  .categories .categories-swiper .swiper-slide p {
+    margin-bottom: 0;
+    font-size: 14px;
+    color: #000;
+    text-align: center;
+  }
+
+
+
+
+
+/* BEST CATEGORY 2 CSS */
+.categories-v2 {
+    background-color: rgba(76, 215, 144, 0.1);
+}
+
+.categories-v2 .swiper-slide {
+    padding: 10px;
+    background-color: #fff;
+}
+
+.categories-v2 .swiper-slide .img {
+    position: relative;
+    height: 200px;
+    margin-bottom: 1rem;
+}
+
+.categories-v2 .swiper-slide .img img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.categories-v2 .swiper-slide strong {
+    text-align: center;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 0.6rem;
+}
+
+.categories-v2 .swiper-slide p {
+    font-size: 14px;
+    margin-bottom: 0;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.categories-v2 .categories-swiper-v2 .swiper-pagination {
+    bottom: -45px;
+}
+
+.categories-v2 .swiper-pagination .swiper-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    opacity: 1;
+}
+
+.categories-v2 .swiper-pagination .swiper-pagination-bullet-active {
+    background-color: #BC8B5F;
+}
+
+
+
+
+/* BEST CATEGORY 3 CSS */
+.best-categories-icon {
+    padding-bottom: 30px;
+}
+
+.best-categories-icon .list-item {
+    margin-top: 5rem;
+}
+
+.best-categories-icon .list-item .item {
+    margin-bottom: 3rem;
+}
+
+.best-categories-icon .list-item .item .img {
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.best-categories-icon .list-item .item .img img {
+    max-height: 85px;
+}
+
+.best-categories-icon .list-item .item strong {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+}
+
+
+
+
+/* BEST CATEGORY 4 CSS */
+.best-categories-v4 {
+    padding-bottom: 30px;
+}
+
+.best-categories-v4 .list-item {
+    margin-top: 5rem;
+}
+
+.best-categories-v4 .list-item .item {
+    margin-bottom: 3rem;
+    border-radius: 5px;
+    box-shadow: -1px -6px 38px 0 #EEEEFC;
+}
+
+.best-categories-v4 .list-item .item .img {
+    height: 212px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.best-categories-v4 .list-item .item .img img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.best-categories-v4 .list-item .item .text-content {
+    padding: 0 15px 60px 15px;
+}
+
+.best-categories-v4 .list-item .item strong {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+}
+
+.best-categories-v4 .list-item .item p {
+    margin-bottom: 0;
+    font-size: 20px;
+}

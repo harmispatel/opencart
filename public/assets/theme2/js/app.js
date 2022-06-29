@@ -8,41 +8,10 @@ $(function() {
     let width = $(window).width();
 
     /*** .home-slide ***/
-    let homeSlideV2Swiper = new Swiper(".home-slide-v2.swiper", {
-        spaceBetween: 0,
-        speed: 500,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        navigation: {
-            nextEl: ".home-slide-v2 .swiper-button-next",
-            prevEl: ".home-slide-v2 .swiper-button-prev"
-        },
-        mousewheel: false,
-        keyboard: false,
-    })
+
 
     /*** .about-us-swiper ***/
-    let aboutUsSlideSwiper = new Swiper(".about-us-swiper.swiper", {
-        slidesPerView: 3,
-        spaceBetween: 30,
-        speed: 500,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        navigation: {
-            nextEl: ".about-us-swiper .swiper-button-next",
-            prevEl: ".about-us-swiper .swiper-button-prev"
-        },
-        mousewheel: false,
-        keyboard: false,
-    })
+
 
     /*** .popular-foods-v2 ***/
     let popularFoodsV2Swiper = new Swiper(".popular-foods-swiper-v2 .swiper", {
@@ -82,41 +51,7 @@ $(function() {
     })
 
     /*** .categories-swiper-v2 ***/
-    let bestCategoriesV2Swiper = new Swiper(".categories-swiper-v2 .swiper", {
-        slidesPerView: 2,
-        spaceBetween: 50,
-        speed: 500,
-        loop: false,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        mousewheel: false,
-        keyboard: false,
-        breakpoints: {
-            0: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-            },
-            768: {
-                slidesPerView: 3,
-                spaceBetween: 30,
-            },
-            991: {
-                slidesPerView: 4,
-                spaceBetween: 40,
-            },
-            1199: {
-                slidesPerView: 5,
-                spaceBetween: 50,
-            },
-        },
-        pagination: {
-            el: ".categories-swiper-v2 .swiper-pagination",
-            clickable: true,
-        },
-    })
+
 
     /*** .user-comments-v2-swiper ***/
     let userCommentsV2SlideSwiper = new Swiper(".user-comments-v2-swiper .swiper", {

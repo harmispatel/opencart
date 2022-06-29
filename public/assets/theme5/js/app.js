@@ -7,19 +7,6 @@ $(function() {
 
     let width = $(window).width();
 
-    /*** .home-slide-v5 ***/
-    let homeSlideV5Swiper = new Swiper(".home-slide-v5-swiper.swiper", {
-        spaceBetween: 0,
-        speed: 500,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        mousewheel: false,
-        keyboard: false,
-    })
 
     /*** .home-slide-category ***/
     let homeSlideCategory = new Swiper(".home-slide-category .swiper", {
