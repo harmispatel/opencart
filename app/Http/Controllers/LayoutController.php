@@ -264,9 +264,9 @@ class LayoutController extends Controller
                         }
                     }
 
-                    $close_banner_path = $currentURL.'/public/admin/close_close_banners/close/';
+                    $close_banner_path = $currentURL.'/public/admin/open_close_banners/close/';
                     $close_banner_name = genratetoken(10).'.'.$close_banner->getClientOriginalExtension();
-                    $close_banner->move(public_path('admin/close_close_banners/close'),$close_banner_name);
+                    $close_banner->move(public_path('admin/open_close_banners/close'),$close_banner_name);
                     $header_settings['menu_topbar_close_banner'] = $close_banner_path.$close_banner_name;
                 }
                 else
@@ -296,9 +296,9 @@ class LayoutController extends Controller
 
                 if(!empty($close_banner) || $close_banner != '')
                 {
-                    $close_banner_path = $currentURL.'/public/admin/close_close_banners/close/';
+                    $close_banner_path = $currentURL.'/public/admin/open_close_banners/close/';
                     $close_banner_name = genratetoken(10).'.'.$close_banner->getClientOriginalExtension();
-                    $close_banner->move(public_path('admin/close_close_banners/close'),$close_banner_name);
+                    $close_banner->move(public_path('admin/open_close_banners/close'),$close_banner_name);
                     $header_settings['menu_topbar_close_banner'] = $close_banner_path.$close_banner_name;
                 }
 

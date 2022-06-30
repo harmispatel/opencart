@@ -149,16 +149,7 @@
                                             <img src="{{ asset('public/admin/users/'.$users->image) }}" width="60">
                                     </div>
 
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                @if (!empty($users->image))
-                                                    <img src="{{ asset('public/admin/users/' . $users->image) }}"
-                                                        alt="Not Found" width="120">
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+
 
                                     <div class="form-group">
                                         <label for="password">Password</label>

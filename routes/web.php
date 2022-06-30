@@ -16,6 +16,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FreeItemController;
+use App\Http\Controllers\CopyTemplateSettingsController;
 use App\Http\Controllers\Frontend\ContactUsController;
 use App\Http\Controllers\Frontend\CustomerAuthController;
 use App\Http\Controllers\GallaryController;
@@ -342,6 +343,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deleteproducticons', [ProductIconsController::class, 'delete'])->name('deleteproducticons');
     Route::get('editproducticons/{id}', [ProductIconsController::class, 'edit'])->name('editproducticons');
     Route::post('updateproducticons', [ProductIconsController::class, 'update'])->name('updateproducticons');
+
+    // copytemplatesettings
+
+    Route::post('copytemplatesettings',[CopyTemplateSettingsController::class,'copytemplatesettings'])->name('copytemplatesettings');
 
     //option
     Route::get('option', [OptionController::class, 'index'])->name('option');
