@@ -1,0 +1,425 @@
+/* RESERVATION 1 CSS */
+.reservation {
+    background-color: #1B1B1B;
+  }
+  .reservation p.text {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+  .reservation form .form-control {
+    height: 60px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .reservation form .select2-dropdown {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .reservation form .select2-container--default {
+    width: 100% !important;
+  }
+  .reservation form .select2-container--default .select2-selection--single {
+    height: 60px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .reservation form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .reservation form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+  }
+  .reservation form .select2-container--below .select2-selection--single .select2-selection__rendered {
+    color: #fff;
+  }
+  .reservation form .btn {
+    width: 100%;
+    font-size: 18px;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: 20px;
+    padding: 0 2rem;
+  }
+  .reservation form .btn i {
+    color: #fff;
+  }
+  .reservation form div.icon {
+    position: relative;
+  }
+  .reservation form div.icon i {
+    position: absolute;
+    color: #fff;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+
+
+
+/* RESERVATION 2 CSS */
+.reservation-v2 {
+    background-color: rgba(177, 130, 99, 0.1);
+}
+
+.reservation-v2 form .form-control {
+    height: 60px;
+    border-radius: 0;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #000000;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.reservation-v2 form .select2-dropdown {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.reservation-v2 form .select2-container--default {
+    width: 100% !important;
+}
+
+.reservation-v2 form .select2-container--default .select2-selection--single {
+    height: 60px;
+    border-radius: 0;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.reservation-v2 form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.reservation-v2 form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+}
+
+.reservation-v2 form .select2-container--below .select2-selection--single .select2-selection__rendered {
+    color: #000000;
+}
+
+.reservation-v2 form .__btn {
+    width: 100%;
+    font-size: 18px;
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: 0;
+    padding: 0 2rem;
+    background-color: #F4494E;
+    color: #fff;
+    border: none;
+    transition: 0.33s ease;
+}
+
+.reservation-v2 form .__btn:hover {
+    background-color: #ec262d;
+}
+
+.reservation-v2 form .__btn i {
+    color: #fff;
+}
+
+.reservation-v2 form div.icon {
+    position: relative;
+}
+
+.reservation-v2 form div.icon i {
+    position: absolute;
+    color: #000000;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
+/* RESERVATION 3 CSS */
+.reservation-v3 .__mobile-show {
+    display: none !important;
+    margin-top: 3rem;
+}
+
+.reservation-v3 form .form-control {
+    height: 60px;
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #000000;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.reservation-v3 form .select2-dropdown {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.reservation-v3 form .select2-container--default {
+    width: 100% !important;
+}
+
+.reservation-v3 form .select2-container--default .select2-selection--single {
+    height: 60px;
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.reservation-v3 form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.reservation-v3 form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+}
+
+.reservation-v3 form .select2-container--below .select2-selection--single .select2-selection__rendered {
+    color: #000000;
+}
+
+.reservation-v3 form .btn {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: 4px;
+    padding: 0 2rem;
+}
+
+.reservation-v3 form div.icon {
+    position: relative;
+}
+
+.reservation-v3 form div.icon i {
+    position: absolute;
+    color: #000000;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
+
+/* RESERVATION 4 CSS */
+.reservation-v4 {
+    background-color: #ECFAF2;
+}
+
+.reservation-v4 form .form-control {
+    height: 60px;
+    border-radius: 5px;
+    border: none;
+    background-color: #fff;
+    color: #0B1C4D;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.reservation-v4 form .select2-dropdown {
+    background-color: #fff;
+}
+
+.reservation-v4 form .select2-container--default {
+    width: 100% !important;
+}
+
+.reservation-v4 form .select2-container--default .select2-selection--single {
+    height: 60px;
+    border-radius: 5px;
+    border: none;
+    background-color: #fff;
+}
+
+.reservation-v4 form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.reservation-v4 form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+}
+
+.reservation-v4 form .select2-container--below .select2-selection--single .select2-selection__rendered {
+    color: #0B1C4D;
+}
+
+.reservation-v4 form .btn {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reservation-v4 form div.icon {
+    position: relative;
+    z-index: 2;
+}
+
+.reservation-v4 form div.icon i {
+    position: absolute;
+    color: #0B1C4D;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+.btn-purple {
+    color: #fff;
+    font-size: 13px;
+    line-height: 55px;
+    padding: 0 2.5rem;
+    border-radius: 26px;
+    min-width: 180px;
+    transition: 0.3s;
+}
+.btn-purple {
+    background-color: #6D009D;
+}
+
+.btn-purple:hover {
+    color: #fff;
+    background-color: #4b006c;
+}
+
+
+
+
+/* RESERVATION 5 CSS */
+.reservation-v5 form .form-control {
+    height: 60px;
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #0F194C;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .reservation-v5 form .select2-dropdown {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .reservation-v5 form .select2-container--default {
+    width: 100% !important;
+  }
+  .reservation-v5 form .select2-container--default .select2-selection--single {
+    height: 60px;
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  .reservation-v5 form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .reservation-v5 form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+  }
+  .reservation-v5 form .select2-container--below .select2-selection--single .select2-selection__rendered {
+    color: #0F194C;
+  }
+  .reservation-v5 form .btn {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: 4px;
+    padding: 0 2rem;
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+  }
+  .reservation-v5 form div.icon {
+    position: relative;
+  }
+  .reservation-v5 form div.icon i {
+    position: absolute;
+    color: #0F194C;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+
+/* RESERVATION 6 CSS */
+.reservation-v6 {
+    background-color: #EDEDED;
+  }
+  .reservation-v6 form .form-control {
+    height: 60px;
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: #443F3F;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .reservation-v6 form .select2-dropdown {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  .reservation-v6 form .select2-container--default {
+    width: 100% !important;
+  }
+  .reservation-v6 form .select2-container--default .select2-selection--single {
+    height: 60px;
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  .reservation-v6 form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 60px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .reservation-v6 form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    display: none;
+  }
+  .reservation-v6 form .select2-container--below .select2-selection--single .select2-selection__rendered {
+    color: #443F3F;
+  }
+  .reservation-v6 form .btn {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: 0;
+    padding: 0 2rem;
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+  }
+  .reservation-v6 form div.icon {
+    position: relative;
+  }
+  .reservation-v6 form div.icon i {
+    position: absolute;
+    color: #443F3F;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .pt-90 {
+    padding-top: 90px;
+  }
+
+  .pb-90 {
+    padding-bottom: 90px;
+  }

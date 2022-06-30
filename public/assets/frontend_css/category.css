@@ -243,3 +243,162 @@
     margin-bottom: 0;
     font-size: 20px;
 }
+
+
+
+
+/* BEST CATEGORY 5 CSS */
+.best-categories-v5 {
+    background-color: #ECFAF2;
+  }
+  .best-categories-v5 .swiper-slide .item .img {
+    height: 246px;
+    position: relative;
+    z-index: 0;
+  }
+  .best-categories-v5 .swiper-slide .item .img img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+  }
+  .best-categories-v5 .swiper-slide .item .text-content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 45px 45px;
+    position: relative;
+    z-index: 1;
+    margin-top: -10px;
+  }
+  .best-categories-v5 .swiper-slide .item .text-content strong {
+    font-size: 24px;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  .best-categories-v5 .swiper-slide .item .text-content p {
+    margin-bottom: 1.5rem;
+    font-size: 16px;
+    opacity: 0.5;
+  }
+  .best-categories-v5 .swiper-slide .item .text-content a {
+    color: #4CD790;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5rem;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide {
+    display: flex;
+    align-items: center;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide .__text {
+    font-size: 18px;
+    margin-right: 15px;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide .swiper-scrollbar {
+    width: 135px;
+    height: 4px;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide .swiper-scrollbar .swiper-scrollbar-drag {
+    background-color: #4CD790;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide .swiper-pagination {
+    width: initial;
+    position: relative;
+    margin-left: 15px;
+    bottom: 0;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .number-of-slide .swiper-pagination * {
+    color: #0F194C;
+    font-size: 18px;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .best-categories-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .best-categories-buttons div {
+    position: initial;
+    left: initial;
+    right: initial;
+    margin-top: initial;
+    display: flex;
+    width: 50px;
+    height: 50px;
+    color: #0F194C;
+    border-radius: 6px;
+    border: 1px solid #0F194C;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .best-categories-buttons div:nth-child(1) {
+    margin-right: 30px;
+  }
+  .best-categories-v5 .best-categories-v5-swiper-control .best-categories-buttons div::after {
+    font-size: 22px;
+  }
+
+
+
+
+/* BEST CATEGORY 6 CSS */
+.popular-categories-v6 {
+    background-color: #EDEDED;
+  }
+  .popular-categories-v6 .__btn-list {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(219, 219, 219, 0.4);
+    border-bottom: 1px solid rgba(219, 219, 219, 0.4);
+    padding: 25px 0;
+    justify-content: center;
+    margin-bottom: 5rem;
+  }
+  .popular-categories-v6 .__btn-list a {
+    font-size: 18px;
+    color: #443F3F;
+    margin-left: 10px;
+    margin-right: 10px;
+    transition: 0.33s;
+  }
+  .popular-categories-v6 .__btn-list a:hover, .popular-categories-v6 .__btn-list a.active {
+    color: #D91D1D;
+  }
+  .popular-categories-v6 .swiper {
+    padding-bottom: 60px;
+    position: relative;
+  }
+  .popular-categories-v6 .swiper-slide .item .img {
+    position: relative;
+    border: 3px solid #fff;
+    height: 270px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .popular-categories-v6 .swiper-slide .item .img img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .popular-categories-v6 .swiper-slide .item strong {
+    display: block;
+    color: #D91D1D;
+    font-size: 20px;
+    text-align: center;
+  }
+  .popular-categories-v6 .swiper-slide .item p {
+    margin-bottom: 0;
+    font-size: 14px;
+    text-align: center;
+  }
+  .popular-categories-v6 .swiper-pagination {
+    bottom: 0;
+  }
+  .popular-categories-v6 .swiper-pagination .swiper-pagination-bullet-active {
+    background-color: #D91D1D;
+  }

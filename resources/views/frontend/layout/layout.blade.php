@@ -17,31 +17,56 @@
     // Current URL
     $currentURL = URL::to("/");
 
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
+
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
     // Get Current Header ID & Header Settings
     $current_header_id = layoutID($currentURL,'header_id');
     $header_id = $current_header_id['header_id'];
-    $front_store_id =  $current_header_id['store_id'];
     $store_header_settings = storeLayoutSettings($header_id,$front_store_id,'header_settings','header_id');
 
     // Get Current Slider ID & Slider Settings
     $current_slider_id = layoutID($currentURL,'slider_id');
     $slider_id = $current_slider_id['slider_id'];
-    $front_store_id =  $current_slider_id['store_id'];
     $store_slider_settings = storeLayoutSettings($slider_id,$front_store_id,'slider_settings','slider_id');
 
     // Get Current About ID & About Settings
     $current_about_id = layoutID($currentURL,'about_id');
     $about_id = $current_about_id['about_id'];
-    $front_store_id =  $current_about_id['store_id'];
     $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
 
     // Get Current BestCategory ID & BestCategory Settings
     $current_bestcategory_id = layoutID($currentURL,'bestcategory_id');
     $bestcategory_id = $current_bestcategory_id['bestcategory_id'];
-    $front_store_id =  $current_bestcategory_id['store_id'];
     $store_bestcategory_settings = storeLayoutSettings($bestcategory_id,$front_store_id,'bestcategory_settings','bestcategory_id');
 
-    $store_theme_settings = '';
+    // Get Current PopularFood ID & PopularFood Settings
+    $current_popularfood_id = layoutID($currentURL,'popularfood_id');
+    $popularfood_id = $current_popularfood_id['popularfood_id'];
+    $store_popularfood_settings = storeLayoutSettings($popularfood_id,$front_store_id,'popularfood_settings','popularfood_id');
+
+    // Get Current Reviews ID & Reviews Settings
+    $current_review_id = layoutID($currentURL,'review_id');
+    $review_id = $current_review_id['review_id'];
+    $store_review_settings = storeLayoutSettings($review_id,$front_store_id,'review_settings','reviews_id');
+
+    // Get Current Reservation ID & Reservation Settings
+    $current_reservation_id = layoutID($currentURL,'reservation_id');
+    $reservation_id = $current_reservation_id['reservation_id'];
+    $store_reservation_settings = storeLayoutSettings($reservation_id,$front_store_id,'reservation_settings','reservation_id');
+
+    // Get Current OpenHours ID & OpenHours Settings
+    $current_openhour_id = layoutID($currentURL,'openhour_id');
+    $openhour_id = $current_openhour_id['openhour_id'];
+    $store_openhour_settings = storeLayoutSettings($openhour_id,$front_store_id,'openhour_settings','openhours_id');
+
+    // Get Current Footer ID & Footer Settings
+    $current_footer_id = layoutID($currentURL,'footer_id');
+    $footer_id = $current_footer_id['footer_id'];
+    $store_footer_settings = storeLayoutSettings($footer_id,$front_store_id,'footer_settings','footer_id');
 
 
 @endphp
@@ -679,6 +704,990 @@
                 }
             }
         ?>
+
+
+        {{-- Category 5 --}}
+        <?php
+            if($bestcategory_id == 5)
+            {
+                if($store_bestcategory_settings['bestcategory_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .best-categories-v5
+                        {
+                            background: url("<?php echo $store_bestcategory_settings['bestcategory_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .best-categories-v5
+                        {
+                            background-color: <?php echo $store_bestcategory_settings['bestcategory_background_color'] ?>;
+                        }
+
+                        .best-categories-v5:hover
+                        {
+                            background-color: <?php echo $store_bestcategory_settings['bestcategory_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+        {{-- Category 6 --}}
+        <?php
+            if($bestcategory_id == 6)
+            {
+                if($store_bestcategory_settings['bestcategory_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-categories-v6
+                        {
+                            background: url("<?php echo $store_bestcategory_settings['bestcategory_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-categories-v6
+                        {
+                            background-color: <?php echo $store_bestcategory_settings['bestcategory_background_color'] ?>;
+                        }
+
+                        .popular-categories-v6:hover
+                        {
+                            background-color: <?php echo $store_bestcategory_settings['bestcategory_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Popular Food 1 --}}
+        <?php
+            if($popularfood_id == 1)
+            {
+                if($store_popularfood_settings['popularfood_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-foods
+                        {
+                            background: url("<?php echo $store_popularfood_settings['popularfood_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-foods
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_color'] ?>;
+                        }
+
+                        .popular-foods:hover
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Popular Food 2 --}}
+        <?php
+            if($popularfood_id == 2)
+            {
+                if($store_popularfood_settings['popularfood_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-foods-v2
+                        {
+                            background: url("<?php echo $store_popularfood_settings['popularfood_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-foods-v2
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_color'] ?>;
+                        }
+
+                        .popular-foods-v2:hover
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Popular Food 3 --}}
+        <?php
+            if($popularfood_id == 3)
+            {
+                if($store_popularfood_settings['popularfood_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-foods-v3
+                        {
+                            background: url("<?php echo $store_popularfood_settings['popularfood_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-foods-v3
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_color'] ?>;
+                        }
+
+                        .popular-foods-v3:hover
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Popular Food 4 --}}
+        <?php
+            if($popularfood_id == 4)
+            {
+                if($store_popularfood_settings['popularfood_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-foods-v4
+                        {
+                            background: url("<?php echo $store_popularfood_settings['popularfood_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-foods-v4
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_color'] ?>;
+                        }
+
+                        .popular-foods-v4:hover
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Popular Food 5 --}}
+        <?php
+            if($popularfood_id == 5)
+            {
+                if($store_popularfood_settings['popularfood_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-foods-v5
+                        {
+                            background: url("<?php echo $store_popularfood_settings['popularfood_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-foods-v5
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_color'] ?>;
+                        }
+
+                        .popular-foods-v5:hover
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Popular Food 6 --}}
+        <?php
+            if($popularfood_id == 6)
+            {
+                if($store_popularfood_settings['popularfood_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .popular-foods-v6
+                        {
+                            background: url("<?php echo $store_popularfood_settings['popularfood_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .popular-foods-v6
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_color'] ?>;
+                        }
+
+                        .popular-foods-v6:hover
+                        {
+                            background-color: <?php echo $store_popularfood_settings['popularfood_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Reviews 1 --}}
+        <?php
+            if($review_id == 1)
+            {
+                if($store_review_settings['review_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .user-comments
+                        {
+                            background: url("<?php echo $store_review_settings['review_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .user-comments
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_color'] ?>;
+                        }
+
+                        .user-comments:hover
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Reviews 2 --}}
+        <?php
+            if($review_id == 2)
+            {
+                if($store_review_settings['review_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .user-comments-v2
+                        {
+                            background: url("<?php echo $store_review_settings['review_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .user-comments-v2
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_color'] ?>;
+                        }
+
+                        .user-comments-v2:hover
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+        {{-- Reviews 3 --}}
+        <?php
+            if($review_id == 3)
+            {
+                if($store_review_settings['review_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .user-comments-v3
+                        {
+                            background: url("<?php echo $store_review_settings['review_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .user-comments-v3
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_color'] ?>;
+                        }
+
+                        .user-comments-v3:hover
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Reviews 4 --}}
+        <?php
+            if($review_id == 4)
+            {
+                if($store_review_settings['review_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .user-comments-v4
+                        {
+                            background: url("<?php echo $store_review_settings['review_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .user-comments-v4
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_color'] ?>;
+                        }
+
+                        .user-comments-v4:hover
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Reviews 5 --}}
+        <?php
+            if($review_id == 5)
+            {
+                if($store_review_settings['review_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .user-comments-v5
+                        {
+                            background: url("<?php echo $store_review_settings['review_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .user-comments-v5
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_color'] ?>;
+                        }
+
+                        .user-comments-v5:hover
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+        {{-- Reviews 6 --}}
+        <?php
+            if($review_id == 6)
+            {
+                if($store_review_settings['review_background_option'] == 1)
+                {
+        ?>
+                    <style>
+                        .user-comments-v6
+                        {
+                            background: url("<?php echo $store_review_settings['review_background_image'] ?>") no-repeat center;
+                            background-size: cover;
+                        }
+                    </style>
+        <?php
+                }
+                else
+                {
+        ?>
+                    <style>
+                        .user-comments-v6
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_color'] ?>;
+                        }
+
+                        .user-comments-v6:hover
+                        {
+                            background-color: <?php echo $store_review_settings['review_background_hover_color'] ?>;
+                        }
+                    </style>
+        <?php
+                }
+            }
+        ?>
+
+
+
+        {{-- Reservation 1 --}}
+        <?php
+            if($reservation_id == 1)
+            {
+        ?>
+                <style>
+                    .reservation
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_color'] ?>;
+                    }
+
+                    .reservation:hover
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Reservation 2 --}}
+        <?php
+            if($reservation_id == 2)
+            {
+        ?>
+                <style>
+                    .reservation-v2
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_color'] ?>;
+                    }
+
+                    .reservation-v2:hover
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Reservation 3 --}}
+        <?php
+            if($reservation_id == 3)
+            {
+        ?>
+                <style>
+                    .reservation-v3
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_color'] ?>;
+                    }
+
+                    .reservation-v3:hover
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Reservation 4 --}}
+        <?php
+            if($reservation_id == 4)
+            {
+        ?>
+                <style>
+                    .reservation-v4
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_color'] ?>;
+                    }
+
+                    .reservation-v4:hover
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Reservation 5 --}}
+        <?php
+            if($reservation_id == 5)
+            {
+        ?>
+                <style>
+                    .reservation-v5
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_color'] ?>;
+                    }
+
+                    .reservation-v5:hover
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Reservation 6 --}}
+        <?php
+            if($reservation_id == 6)
+            {
+        ?>
+                <style>
+                    .reservation-v6
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_color'] ?>;
+                    }
+
+                    .reservation-v6:hover
+                    {
+                        background-color: <?php echo $store_reservation_settings['reservation_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+
+
+        {{-- OpenHours 1 --}}
+        <?php
+            if($openhour_id == 1)
+            {
+        ?>
+                <style>
+                    .opening-hours
+                    {
+                        background: url("<?php echo $store_openhour_settings['openhour_background_image'] ?>"), <?php echo $store_openhour_settings['openhour_background_color'] ?> 80px;
+                        background-repeat: no-repeat;
+                        background-position: <?php echo $store_openhour_settings['openhour_background_image_position'] ?>;
+                        background-size: 120px;
+                    }
+
+                    .opening-hours:hover
+                    {
+                        background-color: <?php echo $store_openhour_settings['openhour_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- OpenHours 2 --}}
+        <?php
+            if($openhour_id == 2)
+            {
+        ?>
+                <style>
+                    .opening-hours-v2
+                    {
+                        background: url("<?php echo $store_openhour_settings['openhour_background_image'] ?>"), <?php echo $store_openhour_settings['openhour_background_color'] ?>;
+                        background-repeat: no-repeat;
+                        background-position: <?php echo $store_openhour_settings['openhour_background_image_position'] ?>;
+                        background-size: 120px;
+                    }
+
+
+                    .opening-hours-v2:hover
+                    {
+                        background-color: <?php echo $store_openhour_settings['openhour_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- OpenHours 3 --}}
+        <?php
+            if($openhour_id == 3)
+            {
+        ?>
+                <style>
+                    .opening-hours-v3
+                    {
+                        background: url("<?php echo $store_openhour_settings['openhour_background_image'] ?>"), <?php echo $store_openhour_settings['openhour_background_color'] ?>;
+                        background-repeat: no-repeat;
+                        background-position: <?php echo $store_openhour_settings['openhour_background_image_position'] ?>;
+                        background-size: 120px;
+                    }
+
+
+                    .opening-hours-v3:hover
+                    {
+                        background-color: <?php echo $store_openhour_settings['openhour_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- OpenHours 4 --}}
+        <?php
+            if($openhour_id == 4)
+            {
+        ?>
+                <style>
+                    .opening-hours-v4
+                    {
+                        background: url("<?php echo $store_openhour_settings['openhour_background_image'] ?>"), <?php echo $store_openhour_settings['openhour_background_color'] ?>;
+                        background-repeat: no-repeat;
+                        background-position: <?php echo $store_openhour_settings['openhour_background_image_position'] ?>;
+                        background-size: 120px;
+                    }
+
+
+                    .opening-hours-v4:hover
+                    {
+                        background-color: <?php echo $store_openhour_settings['openhour_background_hover_color'] ?>;
+                    }
+
+                    .opening-hours-v4 .__time
+                    {
+                        background-image: url("<?php echo get_css_url().'public/admin/opening-hours.svg' ?>");
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- OpenHours 5 --}}
+        <?php
+            if($openhour_id == 5)
+            {
+        ?>
+                <style>
+                    .opening-hours-v5
+                    {
+                        background: url("<?php echo $store_openhour_settings['openhour_background_image'] ?>"), <?php echo $store_openhour_settings['openhour_background_color'] ?>;
+                        background-repeat: no-repeat;
+                        background-position: <?php echo $store_openhour_settings['openhour_background_image_position'] ?>;
+                        background-size: 120px;
+                    }
+
+
+                    .opening-hours-v5:hover
+                    {
+                        background-color: <?php echo $store_openhour_settings['openhour_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- OpenHours 6 --}}
+        <?php
+            if($openhour_id == 6)
+            {
+        ?>
+                <style>
+                    .opening-hours-v6
+                    {
+                        background: url("<?php echo $store_openhour_settings['openhour_background_image'] ?>"), <?php echo $store_openhour_settings['openhour_background_color'] ?>;
+                        background-repeat: no-repeat;
+                        background-position: <?php echo $store_openhour_settings['openhour_background_image_position'] ?>;
+                        background-size: 120px;
+                    }
+
+
+                    .opening-hours-v6:hover
+                    {
+                        background-color: <?php echo $store_openhour_settings['openhour_background_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Footer 1 --}}
+        <?php
+            if($footer_id == 1)
+            {
+        ?>
+                <style>
+                    .footer .info-group
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_color'] ?>;
+                    }
+
+                    .footer .info-group:hover
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_hover_color'] ?>;
+                    }
+
+                    .footer .info-group .input-group-item .title, .footer .info-group .input-group-item p   i, .footer .info-group .input-group-item a i
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+                    .footer .info-group:hover .input-group-item .title
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Footer 2 --}}
+        <?php
+            if($footer_id == 2)
+            {
+        ?>
+                <style>
+                    .footer-v2
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_color'] ?>;
+                    }
+
+                    .footer-v2:hover
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_hover_color'] ?>;
+                    }
+
+                    .footer-v2:hover .footer-content .footer-title
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+
+                    .footer-v2 .footer-content .footer-title
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+                    .footer-v2 .footer-content .social-links a
+                    {
+                        background-color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+                    .footer-v2:hover .footer-content .social-links a
+                    {
+                        background-color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Footer 3 --}}
+        <?php
+            if($footer_id == 3)
+            {
+        ?>
+                <style>
+                    .footer-v3
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_color'] ?>;
+                    }
+
+                    .footer-v3:hover
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_hover_color'] ?>;
+                    }
+
+                    .footer-v3 .footer-top .footer-title, .footer-v3 .footer-bottom p
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+
+                    .footer-v3:hover .footer-top .footer-title, .footer-v3:hover .footer-bottom p
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Footer 4 --}}
+        <?php
+            if($footer_id == 4)
+            {
+        ?>
+                <style>
+                    .footer-v4
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_color'] ?>;
+                    }
+
+                    .footer-v4:hover
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_hover_color'] ?>;
+                    }
+
+                    .footer-v4 .footer-top .__menu li a, .footer-v4 .footer-top .__social-links a
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+                    .footer-v4:hover .footer-top .__menu li a, .footer-v4:hover .footer-top .__social-links a
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Footer 5 --}}
+        <?php
+            if($footer_id == 5)
+            {
+        ?>
+                <style>
+                    .footer-v5
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_color'] ?>;
+                    }
+
+                    .footer-v5:hover
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_hover_color'] ?>;
+                    }
+
+                    .footer-v5:hover .footer-title, .footer-v5:hover .copyright p
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+
+                    .footer-v5 .footer-title, .footer-v5 .copyright p
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
+
+        {{-- Footer 6 --}}
+        <?php
+            if($footer_id == 6)
+            {
+        ?>
+                <style>
+                    .footer-v6 .footer-top
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_color'] ?>;
+                    }
+
+                    .footer-v6 .footer-top:hover
+                    {
+                        background: <?php echo $store_footer_settings['footer_background_hover_color'] ?>;
+                    }
+
+                    .footer-v6 .footer-top .__footer-title
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_color'] ?>;
+                    }
+
+                    .footer-v6 .footer-top:hover .__footer-title
+                    {
+                        color: <?php echo $store_footer_settings['footer_link_hover_color'] ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
 
 
     {{-- End Custom CSS --}}

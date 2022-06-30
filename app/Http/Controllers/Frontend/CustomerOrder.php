@@ -82,18 +82,19 @@ class CustomerOrder extends Controller
     function confirmorder(Request $request)
     {
 
-        $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+       // Get Current URL
+       $currentURL = URL::to("/");
 
-        // Get Store Settings & Theme Settings & Other
-        $store_theme_settings = storeThemeSettings($current_theme_id,$front_store_id);
-        //End Get Store Settings & Theme Settings & Other
 
-        // Store Settings
-        $store_setting = $store_theme_settings['store_settings'];
-        // End Store Settings
+       // Get Store Settings & Other Settings
+       $store_data = frontStoreID($currentURL);
+
+
+       // Get Current Front Store ID
+       $front_store_id =  $store_data['store_id'];
+
+       // Store Settings
+       $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // Get Currency Details
         $currency_code = $store_setting['config_currency'];
@@ -929,10 +930,17 @@ class CustomerOrder extends Controller
     public function customerdeliveryaddress(Request $request)
     {
 
-        $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+       // Get Current URL
+       $currentURL = URL::to("/");
+
+       // Get Store Settings & Other Settings
+       $store_data = frontStoreID($currentURL);
+
+       // Get Current Front Store ID
+       $front_store_id =  $store_data['store_id'];
+
+       // Store Settings
+       $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         $delivery_type = session()->get('flag_post_code');
 

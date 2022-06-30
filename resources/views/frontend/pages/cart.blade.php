@@ -10,28 +10,25 @@
 
 @php
 
-    // Get Current Theme ID & Store ID
+
+    // Get Current URL
     $currentURL = URL::to("/");
-    $current_theme_id = layoutID($currentURL,'header_id');
-    $theme_id = $current_theme_id['header_id'];
-    $front_store_id =  $current_theme_id['store_id'];
-    // // Get Current Theme ID & Store ID
 
-    // Get Store Settings & Theme Settings & Other
-    $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
-    //End Get Store Settings & Theme Settings & Other
 
-    // Template Settings
-    $template_setting = $store_theme_settings['template_settings'];
-    // End Template Settings
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
+
+
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
 
     // Social Site Settings
-    $social_site = $store_theme_settings['social_settings'];
-    // End Social Site Settings
+    $social_site = isset($store_data['social_settings']) ? $store_data['social_settings'] : '';
+
 
     // Store Settings
-    $store_setting = $store_theme_settings['store_settings'];
-    // End Store Settings
+    $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
     // Get Currency Details
     $currency = getCurrencySymbol($store_setting['config_currency']);
@@ -75,13 +72,8 @@
     <!-- End User Delivery Type -->
 
 
-    <!-- Header -->
-    @if (!empty($theme_id) || $theme_id != '')
-        @include('frontend.theme.theme' . $theme_id . '.header')
-    @else
-        @include('frontend.theme.theme1.header')
-    @endif
-    <!-- End Header -->
+   {{-- Header  --}}
+   @include('frontend.theme.all_themes.header')
 
 
     <!-- Cart Section -->
@@ -251,13 +243,8 @@
     <!-- End Cart Section -->
 
 
-    <!-- Footer -->
-    @if (!empty($theme_id) || $theme_id != '')
-        @include('frontend.theme.theme' . $theme_id . '.footer')
-    @else
-        @include('frontend.theme.theme1.footer')
-    @endif
-    <!-- End Footer -->
+    {{-- Footer  --}}
+    @include('frontend.theme.all_themes.footer')
 
 
     <!-- JS -->

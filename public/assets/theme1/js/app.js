@@ -8,67 +8,6 @@ $(function() {
     let width = $(window).width();
 
 
-
-    /*** .popular-foods-swiper ***/
-    let popularFoodsSwiper = new Swiper(".popular-foods-swiper .swiper", {
-        slidesPerView: 1,
-        spaceBetween: 0,
-        speed: 500,
-        loop: false,
-        // autoplay: {
-        //     delay: 3000,
-        //     disableOnInteraction: false,
-        //     pauseOnMouseEnter: true
-        // },
-        mousewheel: false,
-        keyboard: false,
-        pagination: {
-            el: ".popular-foods-swiper .swiper-pagination",
-            clickable: true,
-        },
-        breakpoints: {
-            640: {
-                slidesPerView: 2,
-                slidesPerGroup: 2,
-                spaceBetween: 0,
-            },
-            768: {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 0,
-                grid: {
-                    rows: 2,
-                },
-            },
-            1024: {
-                slidesPerView: 5,
-                slidesPerGroup: 5,
-                spaceBetween: 0,
-                grid: {
-                    rows: 2,
-                },
-            },
-        },
-    })
-
-    /*** .user-comments-swiper ***/
-    let userCommentsSlideSwiper = new Swiper(".user-comments-swiper .swiper", {
-        spaceBetween: 0,
-        speed: 500,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-        },
-        pagination: {
-            el: ".user-comments-swiper .swiper-pagination",
-            clickable: true,
-        },
-        mousewheel: false,
-        keyboard: false,
-    })
-
     /*** select2 ***/
     // $('.select2').select2({
     //     language: "tr",

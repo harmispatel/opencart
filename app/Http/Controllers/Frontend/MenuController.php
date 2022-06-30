@@ -27,10 +27,17 @@ class MenuController extends Controller
     // Function For Show Menu Page
     public function index()
     {
+        // Get Current URL
         $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         $current_date = strtotime(date('Y-m-d'));
         $Coupon = '';
@@ -86,18 +93,17 @@ class MenuController extends Controller
     public function addToCart(Request $request)
     {
 
+        // Get Current URL
         $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
 
-        // Get Store Settings & Theme Settings & Other
-        $store_theme_settings = storeThemeSettings($current_theme_id,$front_store_id);
-        //End Get Store Settings & Theme Settings & Other
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
 
         // Store Settings
-        $store_setting = $store_theme_settings['store_settings'];
-        // End Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // Get Currency Details
         $currency = getCurrencySymbol($store_setting['config_currency']);
@@ -344,10 +350,17 @@ class MenuController extends Controller
     // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
-        $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+       // Get Current URL
+       $currentURL = URL::to("/");
+
+       // Get Store Settings & Other Settings
+       $store_data = frontStoreID($currentURL);
+
+       // Get Current Front Store ID
+       $front_store_id =  $store_data['store_id'];
+
+       // Store Settings
+       $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         $current_date = strtotime(date('Y-m-d'));
 
@@ -447,10 +460,17 @@ class MenuController extends Controller
     public function setDeliveyType(Request $request)
     {
 
+        // Get Current URL
         $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // $Coupon = Coupon::where('store_id', $front_store_id)->first();
 
@@ -678,10 +698,17 @@ class MenuController extends Controller
     // Function For Databade in Search Coupon Code
     public function searchcouponcode(Request $request)
     {
-        $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+       // Get Current URL
+       $currentURL = URL::to("/");
+
+       // Get Store Settings & Other Settings
+       $store_data = frontStoreID($currentURL);
+
+       // Get Current Front Store ID
+       $front_store_id =  $store_data['store_id'];
+
+       // Store Settings
+       $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         $coupon = $request->coupon;
         $filterResult = Coupon::select('code')->where('code', 'LIKE', '%' . $coupon . '%')->where('store_id', $front_store_id)->get();

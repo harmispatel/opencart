@@ -281,6 +281,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="header_setting[header_layout_id]" onchange="changeActiveHeader()" class="form-control" id="header_layout">
+                                                                    <option value=""> - Select Header - </option>
                                                                 @foreach ($headers as $header)
                                                                     <option value="{{ $header->header_id }}" {{ ($header->header_id == $header_id) ? 'selected' : '' }}>{{ $header->header_name }}</option>
                                                                 @endforeach
@@ -461,6 +462,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="slider_setting[slider_layout_id]" id="slider_layout" class="form-control" onchange="changeActiveSlider()">
+                                                                <option value=""> - Select Slider - </option>
                                                                 @foreach ($sliders_layouts as $slayout)
                                                                     <option value="{{ $slayout->slider_id }}" {{ ($slayout->slider_id == $slider_id) ? 'selected' : '' }}>{{ $slayout->slider_name }}</option>
                                                                 @endforeach
@@ -707,6 +709,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="about_setting[about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
+                                                                <option value=""> - Select HTML Box - </option>
                                                                 @foreach ($about_layouts as $about)
                                                                     <option value="{{ $about->about_id }}" {{ ($about->about_id == $about_id) ? 'selected' : '' }}>{{ $about->about_name }}</option>
                                                                 @endforeach
@@ -855,6 +858,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="popularfood_setting[popularfood_layout_id]" id="popularfood_layout" onchange="changeActivePopularFoodLayout()" class="form-control">
+                                                                <option value=""> - Select Popular Foods - </option>
                                                                 @foreach ($popularfoods_layouts as $popularfood)
                                                                     <option value="{{ $popularfood->popular_food_id }}" {{ ($popularfood->popular_food_id == $popularfood_id) ? 'selected' : '' }}>{{ $popularfood->popular_food_name }}</option>
                                                                 @endforeach
@@ -1003,6 +1007,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="bestcategory_setting[bestcategory_layout_id]" id="bestcategory_layout" onchange="changeActiveBestcategoryLayout()" class="form-control">
+                                                                <option value=""> - Select Best Categories - </option>
                                                                 @foreach ($bestcategory_layouts as $bestcategory)
                                                                     <option value="{{ $bestcategory->best_category_id }}" {{ ($bestcategory->best_category_id == $bestcategory_id) ? 'selected' : '' }}>{{ $bestcategory->best_category_name }}</option>
                                                                 @endforeach
@@ -1151,6 +1156,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="review_setting[review_layout_id]" id="review_layout" onchange="changeActiveReviewLayout()" class="form-control">
+                                                                <option value=""> - Select reviews - </option>
                                                                 @foreach ($reviews_layouts as $review)
                                                                     <option value="{{ $review->review_id }}" {{ ($review->review_id == $review_id) ? 'selected' : '' }}>{{ $review->review_name }}</option>
                                                                 @endforeach
@@ -1299,6 +1305,7 @@
                                                         </th>
                                                         <td>
                                                             <select  name="reservation_setting[reservation_layout_id]" id="reservation_layout" onchange="changeActiveReservationLayout()" class="form-control">
+                                                                <option value=""> - Select Reservation - </option>
                                                                 @foreach ($reservation_layouts as $reservation)
                                                                     <option value="{{ $reservation->reservation_id }}" {{ ($reservation->reservation_id == $reservation_id) ? 'selected' : '' }}>{{ $reservation->reservation_name }}</option>
                                                                 @endforeach
@@ -1395,6 +1402,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="gallary_setting[gallary_layout_id]" id="gallary_layout" onchange="changeActiveGallaryLayout()" class="form-control">
+                                                                <option value=""> - Select Gallary - </option>
                                                                 @foreach ($gallary_layouts as $gallary)
                                                                     <option value="{{ $gallary->gallary_id }}" {{ ($gallary->gallary_id == $gallary_id) ? 'selected' : '' }}>{{ $gallary->gallary_name }}</option>
                                                                 @endforeach
@@ -1464,6 +1472,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="openhour_setting[openhour_layout_id]" id="openhour_layout" onchange="changeActiveOpeningHoursLayout()" class="form-control">
+                                                                <option value=""> - Select Open Hours - </option>
                                                                 @foreach ($openhours_layouts as $openhours)
                                                                     <option value="{{ $openhours->openhour_id }}" {{ ($openhours->openhour_id == $openhour_id) ? 'selected' : '' }}>{{ $openhours->openhour_name }}</option>
                                                                 @endforeach
@@ -1570,6 +1579,7 @@
                                                         </th>
                                                         <td>
                                                             <select name="footer_setting[footer_layout_id]" id="footer_layout" onchange="changeActiveFooterLayout()" class="form-control">
+                                                                <option value=""> - Select Footer - </option>
                                                                 @foreach ($footers as $footer)
                                                                     <option value="{{ $footer->footer_id }}" {{ ($footer->footer_id == $footer_id) ? 'selected' : '' }}>{{ $footer->footer_name }}</option>
                                                                 @endforeach

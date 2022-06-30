@@ -9,26 +9,28 @@
 
 
 @php
-    // Get Current Theme ID & Store ID
-    $currentURL = URL::to("/");
-    $current_theme_id = layoutID($currentURL,'header_id');
-    $theme_id = $current_theme_id['header_id'];
-    $front_store_id =  $current_theme_id['store_id'];
-    //End  Get Current Theme ID & Store ID
 
-    // Get Store Settings & Theme Settings
-    // $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
-    //End Get Store Settings & Theme Settings
+        // Get Current URL
+    $currentURL = URL::to("/");
+
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
+
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
+    // Social Site Settings
+    $social_site = isset($store_data['social_settings']) ? $store_data['social_settings'] : '';
+
 
     // Store Settings
-    // $store_settings = $store_theme_settings['store_settings']
-    // End Store Settings
+    $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
 @endphp
 
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>no</title>
+<title>{{ $store_setting['config_title'] }}</title>
 
 {{-- Style Sheet Links --}}
 <link rel="stylesheet" href="{{ get_css_url().'public/plugins/jquery-ui/jquery-ui.min.css' }}">
@@ -41,6 +43,12 @@
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/about_us.css' }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/category.css' }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/common.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/food.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/reviews.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/reservation.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/gallary.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/openhours.css' }}">
+    <link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/footer.css' }}">
     {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/plugins/bootstrap/dist/css/bootstrap.min.css'  }}">
@@ -91,7 +99,7 @@
     {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/select2/dist/css/select2.min.css'  }}"> --}}
 
 
-    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/css/app.css'  }}"> --}}
+    {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme1/css/app.css'  }}"> --}}
     {{-- <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme2/css/app.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme3/css/app.css'  }}">
     <link rel="stylesheet" href="{{  get_css_url().'public/assets/theme4/css/app.css'  }}">

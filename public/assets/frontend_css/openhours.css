@@ -1,0 +1,383 @@
+/* OPEN HOURS 1 CSS */
+.opening-hours {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-bottom: 250px;
+  }
+  .opening-hours .title {
+    font-size: 70px;
+    color: #4ED58C;
+    margin-bottom: 1.2rem;
+  }
+  .opening-hours .sub-title {
+    font-size: 40px;
+    color: #fff;
+    margin-bottom: 2.5rem;
+  }
+  .opening-hours img {
+    margin-bottom: 3rem;
+  }
+  .opening-hours p {
+    margin-bottom: 0;
+    color: #fff;
+    font-size: 25px;
+  }
+
+
+
+
+/* OPEN HOURS 2 CSS */
+.opening-hours-v2 {
+    background-color: #F4494E;
+}
+
+.opening-hours-v2 .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    max-width: 580px;
+}
+
+.opening-hours-v2 .container img {
+    margin-bottom: 1rem;
+}
+
+.opening-hours-v2 .container img:nth-of-type(2) {
+    margin-bottom: 0;
+    margin-top: 1rem;
+}
+
+.opening-hours-v2 .container .title {
+    color: #fff;
+    font-size: 42px;
+    margin-bottom: 1rem;
+}
+
+.opening-hours-v2 .container .title.__divider {
+    font-size: 55px;
+    position: relative;
+    /* background-color: #F4494E; */
+    display: block;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+}
+
+.opening-hours-v2 .container .title.__divider::before {
+    content: "";
+    width: 100%;
+    height: 1px;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -0.5px;
+    z-index: -1;
+}
+
+.opening-hours-v2 .container .title.__divider::after {
+    content: "";
+    width: 190px;
+    height: 90px;
+    /* background-color: #F4494E; */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+.opening-hours-v2 .container ._divider {
+    height: 1px;
+    width: 100%;
+    background: #fff;
+    margin-bottom: 0.7rem;
+    display: block;
+}
+
+.opening-hours-v2 .container a {
+    color: #fff;
+    font-size: 34px;
+    margin-bottom: 0.7rem;
+}
+
+.opening-hours-v2 .container .__time {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 380px;
+}
+
+.opening-hours-v2 .container .__time span {
+    color: #fff;
+    font-size: 26px;
+}
+
+
+
+
+
+/* OPEN HOURS 3 CSS */
+.opening-hours-v3 {
+    background-color: #F7F2EF;
+    background-repeat: no-repeat;
+    background-position: 35vw 50px;
+}
+
+.opening-hours-v3 .default-title-v3 .title {
+    color: #16124A;
+}
+
+.opening-hours-v3 .__time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 560px;
+    margin: 0 auto;
+    margin-top: 5rem;
+}
+
+.opening-hours-v3 .__time .__time-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.opening-hours-v3 .__time .__time-item strong {
+    font-size: 30px;
+}
+
+.opening-hours-v3 .__time .__time-item span {
+    font-size: 30px;
+    color: #F4494E;
+}
+
+
+
+
+
+/* OPEN HOURS 4 CSS */
+.opening-hours-v4 {
+    background-color: #F7F9FF;
+    min-height: 660px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.opening-hours-v4 .default-title-v4 {
+    margin-left: 41.6666666667%;
+    top: 50px;
+    position: relative;
+}
+
+.opening-hours-v4 .container {
+    position: relative;
+    max-width: 1024px;
+}
+
+.opening-hours-v4 .__time {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* background-image: url(../img/bg/opening-hours.svg); */
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 600px;
+    width: 600px;
+    top: 0;
+    left: 0;
+}
+
+.opening-hours-v4 .__time .__time-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.opening-hours-v4 .__time .__time-item strong {
+    font-size: 42px;
+    background-color: #4CD790;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0 25px;
+}
+
+.opening-hours-v4 .__time .__time-item:nth-child(2) strong {
+    background-color: #FDB932;
+}
+
+.opening-hours-v4 .__time .__time-item div {
+    display: flex;
+    align-items: center;
+}
+
+.opening-hours-v4 .__time .__time-item span {
+    font-size: 52px;
+}
+
+.opening-hours-v4 .__time .__time-item span:nth-child(1) {
+    margin-right: 30px;
+}
+
+
+
+
+
+/* OPEN HOURS 5 */
+.opening-hours-v5 {
+    background-color: rgba(76, 215, 144, 0.1);
+  }
+  .opening-hours-v5 .default-title-v5 {
+    margin-bottom: 3.5rem;
+  }
+  .opening-hours-v5 .__info {
+    /* background-color: #FDB932; */
+    padding: 30px 15px;
+    text-align: center;
+  }
+  .opening-hours-v5 .__info .__container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .opening-hours-v5 .__info .__time-title {
+    display: block;
+    font-size: 100px;
+    color: #fff;
+    border-top: 2px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) strong {
+    color: #fff;
+    font-size: 24px;
+    margin-right: 30px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box {
+    display: flex;
+    align-items: center;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__time-divier {
+    width: 30px;
+    height: 10px;
+    background-color: #fff;
+    margin-left: 30px;
+    margin-right: 0;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__left-time, .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__right-time {
+    display: flex;
+    align-items: center;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__left-time span, .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__right-time span {
+    font-size: 180px;
+    color: #fff;
+    letter-spacing: -25px;
+    line-height: 170px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__left-time span:nth-child(2), .opening-hours-v5 .__info .__time:nth-of-type(1) .__time-box .__right-time span:nth-child(2) {
+    font-size: 84px;
+    line-height: 75px;
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(2) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  }
+  .opening-hours-v5 .__info .__time:nth-of-type(2) span {
+    font-size: 22px;
+    color: #fff;
+  }
+
+
+
+
+
+/* OPEN HOURS 6 */
+.opening-hours-v6 {
+    background-color: #EDEDED;
+  }
+  .opening-hours-v6 .default-title-v6 {
+    margin-bottom: 3.5rem;
+  }
+  .opening-hours-v6 .__info {
+    max-width: 527px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .opening-hours-v6 .__info .__divider {
+    position: relative;
+    background-color: transparent;
+    width: 100%;
+    height: 2px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  .opening-hours-v6 .__info .__divider::before {
+    width: 25%;
+    height: 2px;
+    background: #000;
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 1px;
+  }
+  .opening-hours-v6 .__info .__divider::after {
+    width: 25%;
+    height: 2px;
+    background: #000;
+    content: "";
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 1px;
+  }
+  .opening-hours-v6 .__info .__time-title {
+    font-size: 65px;
+  }
+  .opening-hours-v6 .__info .__time {
+    margin-bottom: 1rem;
+  }
+  .opening-hours-v6 .__info .__time:nth-last-of-type(1) {
+    margin-bottom: 0;
+  }
+  .opening-hours-v6 .__info .__time strong {
+    opacity: 0.34;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .opening-hours-v6 .__info .__time .__time-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .opening-hours-v6 .__info .__time .__time-box .__time-divier {
+    width: 5px;
+    height: 2px;
+    background: #000;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .opening-hours-v6 .__info .__time .__time-box .__left-time, .opening-hours-v6 .__info .__time .__time-box .__right-time {
+    display: flex;
+    align-items: center;
+  }
+  .opening-hours-v6 .__info .__time .__time-box .__left-time span:nth-child(1), .opening-hours-v6 .__info .__time .__time-box .__right-time span:nth-child(1) {
+    font-size: 36px;
+  }
+  .opening-hours-v6 .__info .__time .__time-box .__left-time span:nth-child(2), .opening-hours-v6 .__info .__time .__time-box .__right-time span:nth-child(2) {
+    font-size: 18px;
+    margin-left: 10px;
+  }

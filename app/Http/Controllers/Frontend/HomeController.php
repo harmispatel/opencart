@@ -23,10 +23,19 @@ class HomeController extends Controller
     // Function For Fronted Home Page
     public function index()
     {
+        // Get Current URL
         $currentURL = URL::to("/");
-        $current_theme = layoutID($currentURL,'header_id');
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // $food_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_popular_food_count')->first();
         // $food_limit =  isset($food_limit_setting['value']) ? $food_limit_setting['value'] : 1;

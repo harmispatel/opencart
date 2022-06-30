@@ -84,10 +84,17 @@ class CustomerAuthController extends Controller
     // Function For Customer Registration
     public function customerregister(Request $request)
     {
+        // Get Current URL
         $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         $ajaxregister = isset($request->ajaxregister) ? $request->ajaxregister : 0;
 
@@ -223,10 +230,18 @@ class CustomerAuthController extends Controller
     public function customerdetailupdate(Request $request)
     {
         $customerid = session('userid');
+
+       // Get Current URL
         $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // Validation
         $request->validate([

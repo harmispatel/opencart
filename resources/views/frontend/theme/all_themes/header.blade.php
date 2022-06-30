@@ -8,53 +8,55 @@
 
 @php
     
-    // Get Current Theme ID & Store ID
+    // Get Current URL
     $currentURL = URL::to("/");
+
+
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
+
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
+    // Get Current Header ID & Header Settings
     $current_header_id = layoutID($currentURL,'header_id');
     $header_id = $current_header_id['header_id'];
-    $front_store_id =  $current_header_id['store_id'];
-    // End Get Current Theme ID & Store ID
-
-    // Get Header Settings
     $store_header_settings = storeLayoutSettings($header_id,$front_store_id,'header_settings','header_id');
-    $store_theme_settings = '';
-    //End Get Header Settings
-
-    // Template Settings
-    $template_setting = isset($store_theme_settings['template_settings']) ? $store_theme_settings['template_settings'] : '';
-    // End Template Settings
+    
 
     // Social Site Settings
-    $social_site = isset($store_theme_settings['social_settings']) ? $store_theme_settings['social_settings'] : '';
-    // End Social Site Settings
+    $social_site = isset($store_data['social_settings']) ? $store_data['social_settings'] : '';
+
 
     // Store Settings
-    $store_setting = isset($store_theme_settings['store_settings']) ? $store_theme_settings['store_settings'] :'';
-    // End Store Settings
+    $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
 
     // Get Currency Details
     $currency = getCurrencySymbol(isset($store_setting['config_currency']));
 
+
     // Get Open-Close Time
     $openclose = openclosetime();
-    // End Open-Close Time
+
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
-    // End User Delivery Type
+
   
     // User Details
     $userlogin = session('username');
-    // End User Details
+
 
     // Get Coupon
     $Coupon = getCoupon();
-    // End Get Coupon
+
 
     $html = '';
     $headertotal = 0;
     $delivery_charge = 0;
     $price = 0;
+
 
     // Cart Details
     if(session()->has('userid'))
@@ -230,19 +232,19 @@
                     @elseif ($store_header_settings['menu_topbar_left'] == 'social_media_links')
                         <ul class="social-links">
                             <li>
-                                <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) }}" target="_blank"></a>
+                                <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) }}" target="_blank"></a>
+                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) }}" target="_blank"></a>
+                                <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) ? $social_site['polianna_gplus_id'] : '' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) }}" target="_blank"></a>
+                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.linkedin.com' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) }}" target="_blank"></a>
+                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.youtube.com' }}" target="_blank"></a>
                             </li>
                         </ul>
                     @else
@@ -351,19 +353,19 @@
                     @elseif ($store_header_settings['menu_topbar_center'] == 'social_media_links')
                         <ul class="social-links">
                             <li>
-                                <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) }}" target="_blank"></a>
+                                <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) }}" target="_blank"></a>
+                                <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) }}" target="_blank"></a>
+                                <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) }}" target="_blank"></a>
+                                <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) }}" target="_blank"></a>
+                                <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
                             </li>
                         </ul>
                     @else
@@ -519,29 +521,29 @@
 
                 <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="border-radius:0 0 10px 10px!important;">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ isset($template_setting['polianna_main_logo'] )}}" style="width: {{ isset($template_setting['polianna_main_logo_width'] )}}px; height: {{ isset($template_setting['polianna_main_logo_height'] )}}px;"/>
+                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="Logo" width="80" />
                     </a>
                     <ul class="menu">
                         <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('home') }}"">home</a>
                         </li>
                         <li class="{{ ((request()->is('member'))) ? 'active' : '' }}">
-                            <a class="text-uppercase" href="{{ route('member') }}" style="color: {{  (request()->is('member')) ? 'white' : isset($template_setting['polianna_navbar_link'] )}};">member</a>
+                            <a class="text-uppercase" href="{{ route('member') }}">member</a>
                         </li>
                         <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
-                            <a class="text-uppercase" href="{{ route('menu') }}" style="color:{{  (request()->is('menu')) ? 'white' : isset($template_setting['polianna_navbar_link'] )}};">menu</a>
+                            <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
                         @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
-                                <a class="text-uppercase" href="{{ route('cart') }}" style="color: {{  (request()->is('checkout')) ? 'white' : isset($template_setting['polianna_navbar_link'] )}};">check out</a>
+                                <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
                         @else
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
-                                <a class="text-uppercase" href="{{ route('checkout') }}" style="color: {{  (request()->is('checkout')) ? 'white' : isset($template_setting['polianna_navbar_link'] )}};">check out</a>
+                                <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
                         @endif  
                         <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
-                            <a class="text-uppercase" href="{{ route('contact') }}" style="color: {{  (request()->is('contact')) ? 'white' : isset($template_setting['polianna_navbar_link'] )}};">contact us</a>
+                            <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
                     </ul>
                     <a class="menu-shopping-cart" href="{{ route('cart') }}">
@@ -627,7 +629,7 @@
                     @endif
         
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="" alt="logo" />
+                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="logo" width="80" />
                     </a>
 
                     <div class="working-time">
@@ -689,7 +691,7 @@
                                 <li>
                                     <form method="POST" action="{{ route('customerlogout') }}">
                                         {{ csrf_field() }}
-                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt" style="color: {{ isset($template_setting['polianna_navbar_link']) ? $template_setting['polianna_navbar_link'] : 'white'; }}"></i><span style="color: {{ isset($template_setting['polianna_navbar_link']) ? $template_setting['polianna_navbar_link'] : 'white'; }}">Logout</span></button>
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt">Logout</span></button>
                                     </form>
                                 </li>
                             </ul>            
@@ -812,7 +814,7 @@
                 <div class="container">
                     <a class="logo" href="{{route('home')}}">
                         <img class="attach img-fluid" src="{{ get_css_url().'public/assets/theme3/img/icon/logo-attach.svg' }}" />
-                        <img class="img-fluid" src="" alt="logo" />
+                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="logo" width="150" />
                     </a>
                     <ul class="menu">
                         <li class="{{ request()->is('/') ? 'active' : '' }}">
@@ -977,11 +979,11 @@
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="" alt=" Logo" />
+                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt=" Logo" width="80" />
                     </a>
                     <ul class="menu">
                         <li class="{{ (request()->is('/')) ? 'active' : '' }}">
-                        <a class="text-uppercase" href="{{ route('home') }}" style="color: {{  (request()->is('/')) ? 'white' : $template_setting['polianna_navbar_link'] }};">home</a>
+                        <a class="text-uppercase" href="{{ route('home') }}">home</a>
                         </li>
                         <li class="{{ (request()->is('member')) ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('member') }}">member</a>
@@ -1009,11 +1011,11 @@
                         </div>
                         @if (!empty($userlogin))
                             <ul class="authentication-links" style="list-style: none">
-                                <li><p class="m-0"></p><a href="{{ route('member') }}" style="color: {{isset($template_setting['polianna_navbar_link'])? $template_setting['polianna_navbar_link'] : 'white'}} ">({{ $userlogin }})</a></li>
+                                <li><p class="m-0"></p><a href="{{ route('member') }}">({{ $userlogin }})</a></li>
                                 <li>
                                     <form method="POST" action="{{ route('customerlogout') }}">
                                         {{ csrf_field() }}
-                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt" style="color: {{isset($template_setting['polianna_navbar_link'])? $template_setting['polianna_navbar_link'] : 'white'}} "></i><span style="color: {{isset($template_setting['polianna_navbar_link'])? $template_setting['polianna_navbar_link'] : 'white'}} ">Logout</span></button>
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt" ></i><span>Logout</span></button>
                                     </form>
                                 </li>
                             </ul>            
@@ -1072,7 +1074,7 @@
                         @endif
                     </div>
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="" alt="Logo" />
+                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="Logo" width="80" />
                     </a>
                     @if (!empty($userlogin))
                         <ul class="authentication-links">
@@ -1284,7 +1286,7 @@
                     </div>
 
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="" alt="Logo" />
+                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="Logo" width="80" />
                     </a>
 
                     @if (in_array($currentdate,$date_close1))

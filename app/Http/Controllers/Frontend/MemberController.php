@@ -191,20 +191,17 @@ class MemberController extends Controller
         $cusromerOrderId = $request->customerorderid;
         $customerorders = Orders::with(['hasManyOrderProduct', 'hasOneOrderStatus', 'hasManyOrderTotal','hasOneCurrency'])->where('order_id', $cusromerOrderId)->first();
 
-        // Get Current Theme ID & Store ID
-        $currentURL = URL::to("/");
-        $current_theme_id = themeID;
-        $theme_id = $current_theme_id['header_id'];
-        $front_store_id =  $current_theme_id['store_id'];
-        // Get Current Theme ID & Store ID
+       // Get Current URL
+       $currentURL = URL::to("/");
 
-        // Get Store Settings & Theme Settings & Other
-        $store_theme_settings = storeThemeSettings($theme_id,$front_store_id);
-        //End Get Store Settings & Theme Settings & Other
+       // Get Store Settings & Other Settings
+       $store_data = frontStoreID($currentURL);
 
-        // Store Settings
-        $store_setting = $store_theme_settings['store_settings'];
-        // End Store Settings
+       // Get Current Front Store ID
+       $front_store_id =  $store_data['store_id'];
+
+       // Store Settings
+       $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
 
         $html = '';
@@ -322,10 +319,21 @@ class MemberController extends Controller
             'reviewtitle' => 'required',
             'reviewmessage' => 'required',
         ]);
-        $currentURL = URL::to("/");
-        $current_theme = themeID;
-        $current_theme_id = $current_theme['header_id'];
-        $front_store_id =  $current_theme['store_id'];
+
+
+       // Get Current URL
+       $currentURL = URL::to("/");
+
+       // Get Store Settings & Other Settings
+       $store_data = frontStoreID($currentURL);
+
+       // Get Current Front Store ID
+       $front_store_id =  $store_data['store_id'];
+
+       // Store Settings
+       $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+
         $userlogin = session('userid');
         $review = new Reviews;
         $review->customer_id = $userlogin;

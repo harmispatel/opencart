@@ -611,56 +611,47 @@ function storeLayoutSettings($layout_id,$store_id,$setting_name,$key_name)
         return $bestcategory_setting;
     }
 
+    if($setting_name == 'popularfood_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $popularfood_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $popularfood_setting;
+    }
 
-    // Social Site
-    // $social_key = ([
-    //     'polianna_facebook_id',
-    //     'polianna_twitter_username',
-    //     'polianna_gplus_id',
-    //     'polianna_linkedin_id',
-    //     'polianna_youtube_id',
-    // ]);
-    // $social_settings = [];
-    // foreach($social_key as $row)
-    // {
-    //     $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
-    //     $social_settings[$row] = isset($query->value) ? $query->value : '';
-    // }
-    // End Social Site
+    if($setting_name == 'review_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $review_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $review_setting;
+    }
 
+    if($setting_name == 'reservation_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $reservation_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $reservation_setting;
+    }
 
-    // Store Settings
-    // $store_key = ([
-    //     'config_name',
-    //     'config_owner',
-    //     'config_address',
-    //     'map_ifram',
-    //     'sitemap_url',
-    //     'config_telephone',
-    //     'config_email',
-    //     'config_title',
-    //     'config_meta_description',
-    //     'enable_gallery_module',
-    //     'enable_home_gallery',
-    //     'gallery_background_options',
-    //     'gallery_header_text',
-    //     'gallery_header_desc',
-    //     'config_currency',
-    // ]);
-    // $store_settings = [];
-    // foreach($store_key as $row)
-    // {
-    //     $query = Settings::select('value')->where('store_id',$store_id)->where('key',$row)->first();
-    //     $store_settings[$row] = isset($query->value) ? $query->value : '';
-    // }
+    if($setting_name == 'gallary_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $gallary_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $gallary_setting;
+    }
 
-    // $new = ([
-    //     'template_settings' => $template_settings,
-    //     'social_settings' => $social_settings,
-    //     'store_settings' => $store_settings,
-    // ]);
+    if($setting_name == 'openhour_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $openhour_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $openhour_setting;
+    }
 
-    // return $new;
+    if($setting_name == 'footer_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where($key_name,$layout_id)->where('key',$setting_name)->first();
+        $footer_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $footer_setting;
+    }
 
 }
 
@@ -682,7 +673,7 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.3/opencart/';
+    return 'http://192.168.1.73/ECOMM/';
 }
 
 
@@ -2438,21 +2429,84 @@ function openclosetime()
 
 
 
+// Front Store ID
+function frontStoreID($currentURL)
+{
+    $slash = substr($currentURL, -1);
+
+    if($slash != '/')
+    {
+        $new_url = $currentURL .= '/';
+    }
+    else
+    {
+        $new_url = $currentURL;
+    }
+    $storeDetails = Store::where('url',$new_url)->orWhere('ssl',$new_url)->first();
+
+    $data['store_id'] = isset($storeDetails->store_id) ? $storeDetails->store_id : '';
+
+
+    // Social Site Settings
+    $social_key = ([
+        'polianna_facebook_id',
+        'polianna_twitter_username',
+        'polianna_gplus_id',
+        'polianna_linkedin_id',
+        'polianna_youtube_id',
+    ]);
+    $data['social_settings'] = [];
+    foreach($social_key as $row)
+    {
+        $query = Settings::select('value')->where('store_id',$data['store_id'])->where('key',$row)->first();
+        $data['social_settings'][$row] = isset($query->value) ? $query->value : '';
+    }
+    // End Social Site
+
+    // Store Settings
+    $store_key = ([
+        'config_name',
+        'config_owner',
+        'config_address',
+        'map_ifram',
+        'sitemap_url',
+        'config_telephone',
+        'config_email',
+        'config_title',
+        'config_meta_description',
+        'enable_gallery_module',
+        'enable_home_gallery',
+        'gallery_background_options',
+        'gallery_header_text',
+        'gallery_header_desc',
+        'config_currency',
+        'config_logo',
+    ]);
+    $data['store_settings'] = [];
+    foreach($store_key as $row)
+    {
+        $query = Settings::select('value')->where('store_id',$data['store_id'])->where('key',$row)->first();
+        $data['store_settings'][$row] = isset($query->value) ? $query->value : '';
+    }
+
+    return $data;
+}
+
+
+
+
+
 // Function for Get Stores Reviews
 function storereview()
 {
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = layoutID($currentURL,'header_id');
-    $theme_id = $current_theme_id['header_id'];
-    $front_store_id =  $current_theme_id['store_id'];
+    $front_store_id = frontStoreID($currentURL);
     // Get Current Theme ID & Store ID
 
-    $review_limit_setting = Settings::select('value')->where('store_id',$front_store_id)->where('theme_id',$current_theme_id)->where('key','polianna_recent_review_count')->first();
-    $review_limit = isset($review_limit_setting['value']) ? $review_limit_setting['value'] : 1;
+    $review_limit = 10;
 
     $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->orderBy('store_review_id','DESC')->take($review_limit)->get();
-    // $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->latest('store_review_id')->take($review_limit)->get();
 
     return $data;
 }
