@@ -371,7 +371,7 @@ b {
     position: absolute;
     z-index: 11;
     bottom: -51px;
-    background: transparent url(../img/icon/footer-top-divider.svg) no-repeat center center;
+    /* background: transparent url(../img/icon/footer-top-divider.svg) no-repeat center center; */
   }
   .__btn-top i {
     color: #D91D1D;

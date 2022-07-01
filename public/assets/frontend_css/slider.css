@@ -619,7 +619,7 @@
 
 .home-slide-v5 {
     background-color: #13164B;
-    padding-bottom: 90px;
+    padding: 90px 0;
   }
   .home-slide-v5 .container-fluid {
     width: calc(100% - 360px);

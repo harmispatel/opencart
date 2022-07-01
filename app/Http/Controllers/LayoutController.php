@@ -249,7 +249,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $header_settings['menu_topbar_open_banner'] = $old_header_setting['menu_topbar_open_banner'];
+                    if(isset($old_header_setting['menu_topbar_open_banner']))
+                    {
+                        $header_settings['menu_topbar_open_banner'] = $old_header_setting['menu_topbar_open_banner'];
+                    }
                 }
 
                 if(!empty($close_banner) || $close_banner != '')
@@ -271,7 +274,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $header_settings['menu_topbar_close_banner'] = $old_header_setting['menu_topbar_close_banner'];
+                    if(isset($old_header_setting['menu_topbar_close_banner']))
+                    {
+                        $header_settings['menu_topbar_close_banner'] = $old_header_setting['menu_topbar_close_banner'];
+                    }
                 }
                 $update_serial_header_setting = serialize($header_settings);
 
@@ -392,7 +398,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $about_settings['about_background_image'] = $old_about_setting['about_background_image'];
+                    if(isset($old_about_setting['about_background_image']))
+                    {
+                        $about_settings['about_background_image'] = isset($old_about_setting['about_background_image']) ? $old_about_setting['about_background_image'] : '';
+                    }
                 }
 
                 if(!empty($about_image) || $about_image != '')
@@ -414,7 +423,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $about_settings['about_image'] = $old_about_setting['about_image'];
+                    if(isset($old_about_setting['about_image']))
+                    {
+                        $about_settings['about_image'] = isset($old_about_setting['about_image']) ? $old_about_setting['about_image'] : '';
+                    }
                 }
                 $update_serial_about_setting = serialize($about_settings);
 
@@ -497,7 +509,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $popularfood_settings['popularfood_background_image'] = $old_popularfood_setting['popularfood_background_image'];
+                    if(isset($old_popularfood_setting['popularfood_background_image']))
+                    {
+                        $popularfood_settings['popularfood_background_image'] = $old_popularfood_setting['popularfood_background_image'];
+                    }
                 }
 
                 $update_serial_popularfood_setting = serialize($popularfood_settings);
@@ -571,7 +586,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $bestcategory_settings['bestcategory_background_image'] = $old_bestcategory_setting['bestcategory_background_image'];
+                    if(isset($old_bestcategory_setting['bestcategory_background_image']))
+                    {
+                        $bestcategory_settings['bestcategory_background_image'] = $old_bestcategory_setting['bestcategory_background_image'];
+                    }
                 }
 
                 $update_serial_bestcategory_setting = serialize($bestcategory_settings);
@@ -645,7 +663,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $review_settings['review_background_image'] = $old_review_setting['review_background_image'];
+                    if(isset($old_review_setting['review_background_image']))
+                    {
+                        $review_settings['review_background_image'] = $old_review_setting['review_background_image'];
+                    }
                 }
 
                 $update_serial_review_setting = serialize($review_settings);
@@ -830,7 +851,10 @@ class LayoutController extends Controller
                 }
                 else
                 {
-                    $openhour_settings['openhour_background_image'] = $old_openhour_setting['openhour_background_image'];
+                    if(isset($old_openhour_setting['openhour_background_image']))
+                    {
+                        $openhour_settings['openhour_background_image'] = $old_openhour_setting['openhour_background_image'];
+                    }
                 }
 
                 $update_serial_openhour_setting = serialize($openhour_settings);

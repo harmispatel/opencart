@@ -23,6 +23,9 @@
     $header_id = $current_header_id['header_id'];
     $store_header_settings = storeLayoutSettings($header_id,$front_store_id,'header_settings','header_id');
     
+    // Menu Topbar Open Close Permission
+    $menu_topbar_open_close_permission = isset($store_header_settings['menu_topbar_open_close_permission']) ? $store_header_settings['menu_topbar_open_close_permission'] : '';
+    
 
     // Social Site Settings
     $social_site = isset($store_data['social_settings']) ? $store_data['social_settings'] : '';
@@ -30,6 +33,9 @@
 
     // Store Settings
     $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+    // Store Logo
+    $store_logo = isset($store_setting['config_logo']) ? $store_setting['config_logo'] : '';
 
 
     // Get Currency Details
@@ -149,13 +155,18 @@
 {{-- Header --}}
 
     {{-- Header 1 --}}
+    @php
+        $menu_topbar_left = (isset($store_header_settings['menu_topbar_left'])) ? $store_header_settings['menu_topbar_left'] : '';
+        $menu_topbar_center = (isset($store_header_settings['menu_topbar_center'])) ? $store_header_settings['menu_topbar_center'] : '';
+        $menu_topbar_right = (isset($store_header_settings['menu_topbar_right'])) ? $store_header_settings['menu_topbar_right'] : '';
+    @endphp
     @if ($header_id == 1)
         <header class="header">
             <div class="container">
                 <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
 
                     {{-- Topbar Left --}}
-                    @if ($store_header_settings['menu_topbar_left'] == 'opening_times')
+                    @if ($menu_topbar_left == 'opening_times')
                         <div class="working-time">
                             <strong class="text-uppercase">Working Time:</strong>
                             @php
@@ -194,8 +205,8 @@
                         </div>
                         @if (in_array($currentdate,$date_close1))
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                               @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                               @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                @endif
                             </div>
                         @else
@@ -212,16 +223,16 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" style="max-width: 80px;"/>
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
                                                 @endif
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
@@ -229,7 +240,7 @@
                                 @endforeach
                             @endforeach
                         @endif
-                    @elseif ($store_header_settings['menu_topbar_left'] == 'social_media_links')
+                    @elseif ($menu_topbar_left == 'social_media_links')
                         <ul class="social-links">
                             <li>
                                 <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}" target="_blank"></a>
@@ -276,7 +287,7 @@
                     {{-- End Topbar Left --}}
 
                     {{-- Topbar Center --}}
-                    @if ($store_header_settings['menu_topbar_center'] == 'opening_times')
+                    @if ($menu_topbar_center == 'opening_times')
                         <div class="working-time">
                             <strong class="text-uppercase">Working Time:</strong>
                             @php
@@ -315,8 +326,8 @@
                         </div>
                         @if (in_array($currentdate,$date_close1))
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                               @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                               @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                @endif
                             </div>
                         @else
@@ -333,16 +344,16 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" style="max-width: 80px;"/>
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
                                                 @endif
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
@@ -350,22 +361,22 @@
                                 @endforeach
                             @endforeach
                         @endif
-                    @elseif ($store_header_settings['menu_topbar_center'] == 'social_media_links')
+                    @elseif ($menu_topbar_center == 'social_media_links')
                         <ul class="social-links">
                             <li>
-                                <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                                <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                                <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) ? $social_site['polianna_gplus_id'] : '' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.linkedin.com' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.youtube.com' }}" target="_blank"></a>
                             </li>
                         </ul>
                     @else
@@ -397,7 +408,7 @@
                     {{-- End Topbar Center --}}
 
                     {{-- Topbar Right --}}
-                    @if ($store_header_settings['menu_topbar_right'] == 'opening_times')
+                    @if ($menu_topbar_right == 'opening_times')
                         <div class="working-time">
                             <strong class="text-uppercase">Working Time:</strong>
                             @php
@@ -436,8 +447,8 @@
                         </div>
                         @if (in_array($currentdate,$date_close1))
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                               @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                               @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                @endif
                             </div>
                         @else
@@ -454,16 +465,16 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" style="max-width: 80px;"/>
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
                                                 @endif
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
@@ -471,22 +482,22 @@
                                 @endforeach
                             @endforeach
                         @endif
-                    @elseif ($store_header_settings['menu_topbar_right'] == 'social_media_links')
+                    @elseif ($menu_topbar_right == 'social_media_links')
                         <ul class="social-links">
                             <li>
-                                <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) }}" target="_blank"></a>
+                                <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : '' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) }}" target="_blank"></a>
+                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : '' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) }}" target="_blank"></a>
+                                <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) ? $social_site['polianna_gplus_id'] : '' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) }}" target="_blank"></a>
+                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : '' }}" target="_blank"></a>
                             </li>
                             <li>
-                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) }}" target="_blank"></a>
+                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : '' }}" target="_blank"></a>
                             </li>
                         </ul>
                     @else
@@ -521,11 +532,11 @@
 
                 <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="border-radius:0 0 10px 10px!important;">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="Logo" width="80" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
                     <ul class="menu">
                         <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">
-                            <a class="text-uppercase" href="{{ route('home') }}"">home</a>
+                            <a class="text-uppercase" href="{{ route('home') }}">home</a>
                         </li>
                         <li class="{{ ((request()->is('member'))) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('member') }}">member</a>
@@ -592,8 +603,8 @@
 
                     @if (in_array($currentdate,$date_close1))
                         <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                            @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;"/>
+                            @if ($menu_topbar_open_close_permission == 1)
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                             @endif
                         </div>
                     @else
@@ -610,16 +621,16 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
@@ -629,7 +640,7 @@
                     @endif
         
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="logo" width="80" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
                     </a>
 
                     <div class="working-time">
@@ -814,7 +825,7 @@
                 <div class="container">
                     <a class="logo" href="{{route('home')}}">
                         <img class="attach img-fluid" src="{{ get_css_url().'public/assets/theme3/img/icon/logo-attach.svg' }}" />
-                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="logo" width="150" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" width="170" />
                     </a>
                     <ul class="menu">
                         <li class="{{ request()->is('/') ? 'active' : '' }}">
@@ -842,8 +853,8 @@
                     <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
                     @if (in_array($currentdate,$date_close1))
                         <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                            @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                            @if ($menu_topbar_open_close_permission == 1)
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                             @endif
                         </div>
                     @else
@@ -861,16 +872,16 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 80px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
                                                 @endif
                                             </div>
                                         @endif
@@ -892,10 +903,10 @@
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
                     <div class="social-links">
-                        <a class="fab fa-facebook-f" href=""></a>
-                        <a class="fab fa-twitter" href=""></a>
-                        <a class="fab fa-linkedin" href=""></a>
-                        <a class="fab fa-youtube" href=""></a>
+                        <a class="fab fa-facebook-f" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}"></a>
+                        <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}"></a>
+                        <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}"></a>
+                        <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
                     </div>
                     <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
                     <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
@@ -916,8 +927,8 @@
                         @endphp
                         @if (in_array($currentdate,$date_close1))
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 120px;" />
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
                                 @endif
                             </div>
                         @else
@@ -933,16 +944,16 @@
                                     @if ($today >= $firsttime && $today <= $lasttime)
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" style="max-width: 120px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
                                                 @endif
                                             </div>
                                         @endif
                                     @else
                                         @if ($currentday == $value || $firstday == "Every day")
                                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" style="max-width: 120px;" />
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
                                                 @endif
                                             </div>
                                         @endif
@@ -979,7 +990,7 @@
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt=" Logo" width="80" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt=" Logo" style="max-width: 130px;" />
                     </a>
                     <ul class="menu">
                         <li class="{{ (request()->is('/')) ? 'active' : '' }}">
@@ -1074,7 +1085,7 @@
                         @endif
                     </div>
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="Logo" width="80" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
                     @if (!empty($userlogin))
                         <ul class="authentication-links">
@@ -1118,20 +1129,20 @@
                                     @endphp
 
                                     @if (in_array($currentdate,$date_close1))
-                                        @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                            <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" alt="banner" style="max-width: 100px;"/>
+                                        @if ($menu_topbar_open_close_permission == 1)
+                                            <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
                                         @endif
                                     @else
                                         @if ($today >= $firsttime && $today <= $lasttime)
                                             @if ($currentday == $value || $firstday == "Every day")
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" alt="banner" style="max-width: 100px;"/>
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
                                                 @endif
                                             @endif
                                         @else
                                             @if ($currentday == $value || $firstday == "Every day")
-                                                @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                    <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" alt="banner" style="max-width: 100px;"/>
+                                                @if ($menu_topbar_open_close_permission == 1)
+                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
                                                 @endif
                                             @endif
                                         @endif
@@ -1286,13 +1297,13 @@
                     </div>
 
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ $store_setting['config_logo'] }}" alt="Logo" width="80" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
 
                     @if (in_array($currentdate,$date_close1))
                         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                            @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" alt="banner" style="max-width: 100px;"/>
+                            @if ($menu_topbar_open_close_permission == 1)
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
                             @endif
                         </div>
                     @else
@@ -1308,16 +1319,16 @@
                                 @if ($today >= $firsttime && $today <= $lasttime)
                                     @if ($currentday == $value || $firstday == "Every day")
                                         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                                            @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_open_banner'] }}" alt="banner" style="max-width: 100px;"/>
+                                            @if ($menu_topbar_open_close_permission == 1)
+                                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
                                             @endif
                                         </div>
                                     @endif
                                 @else
                                     @if ($currentday == $value || $firstday == "Every day")
                                         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                                            @if ($store_header_settings['menu_topbar_open_close_permission'] == 1)
-                                                <img class="img-fluid" src="{{ $store_header_settings['menu_topbar_close_banner'] }}" alt="banner" style="max-width: 100px;"/>
+                                            @if ($menu_topbar_open_close_permission == 1)
+                                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
                                             @endif
                                         </div>
                                     @endif                   

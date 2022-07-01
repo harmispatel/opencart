@@ -11,6 +11,7 @@ use App\Models\Store;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class HomeController extends Controller
 {
@@ -36,14 +37,8 @@ class HomeController extends Controller
     // Function for ADMIN LOGIN
     function adminLogin()
     {
-        if(session()->has('password_hash_web'))
-        {
-            return redirect()->route('dashboard');
-        }
-        else
-        {
-            return view('admin.login');
-        }
+
+        return view('admin.login');
     }
 
 
@@ -114,13 +109,19 @@ class HomeController extends Controller
 
         $current_store_id = currentStoreId();
 
-        // Get Store Settings & Theme Settings & Other
-        $store_theme_settings = storeThemeSettings(0,$current_store_id);
-        //End Get Store Settings & Theme Settings & Other
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
 
         // Store Settings
-        $store_setting = $store_theme_settings['store_settings'];
-        // End Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // Get Currency Details
         $currency = getCurrencySymbol($store_setting['config_currency']);
@@ -181,13 +182,19 @@ class HomeController extends Controller
 
         $current_store_id = currentStoreId();
 
-        // Get Store Settings & Theme Settings & Other
-        $store_theme_settings = storeThemeSettings(0,$current_store_id);
-        //End Get Store Settings & Theme Settings & Other
+         // Get Current URL
+         $currentURL = URL::to("/");
 
-        // Store Settings
-        $store_setting = $store_theme_settings['store_settings'];
-        // End Store Settings
+
+         // Get Store Settings & Other Settings
+         $store_data = frontStoreID($currentURL);
+
+
+         // Get Current Front Store ID
+         $front_store_id =  $store_data['store_id'];
+
+         // Store Settings
+         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // Get Currency Details
         $currency = getCurrencySymbol($store_setting['config_currency']);
@@ -256,13 +263,19 @@ class HomeController extends Controller
 
         $current_store_id = currentStoreId();
 
-        // Get Store Settings & Theme Settings & Other
-        $store_theme_settings = storeThemeSettings(0,$current_store_id);
-        //End Get Store Settings & Theme Settings & Other
+         // Get Current URL
+         $currentURL = URL::to("/");
 
-        // Store Settings
-        $store_setting = $store_theme_settings['store_settings'];
-        // End Store Settings
+
+         // Get Store Settings & Other Settings
+         $store_data = frontStoreID($currentURL);
+
+
+         // Get Current Front Store ID
+         $front_store_id =  $store_data['store_id'];
+
+         // Store Settings
+         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
         // Get Currency Details
         $currency = getCurrencySymbol($store_setting['config_currency']);

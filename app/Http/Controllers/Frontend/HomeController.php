@@ -37,21 +37,37 @@ class HomeController extends Controller
         // Store Settings
         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
-        // $food_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_popular_food_count')->first();
-        // $food_limit =  isset($food_limit_setting['value']) ? $food_limit_setting['value'] : 1;
+        // Get Current BestCategory ID & BestCategory Settings
+        $current_bestcategory_id = layoutID($currentURL,'bestcategory_id');
+        $bestcategory_id = $current_bestcategory_id['bestcategory_id'];
+        $store_bestcategory_settings = storeLayoutSettings($bestcategory_id,$front_store_id,'bestcategory_settings','bestcategory_id');
 
-        // $cat_limit_setting = Settings::select('value')->where('store_id', $front_store_id)->where('theme_id', $current_theme_id)->where('key', 'polianna_best_category_count')->first();
-        // $cat_limit = isset($cat_limit_setting['value']) ? $cat_limit_setting['value'] : 1;
+        // Get Current PopularFood ID & PopularFood Settings
+        $current_popularfood_id = layoutID($currentURL,'popularfood_id');
+        $popularfood_id = $current_popularfood_id['popularfood_id'];
+        $store_popularfood_settings = storeLayoutSettings($popularfood_id,$front_store_id,'popularfood_settings','popularfood_id');
+
+        // Get Current Gallary ID & Gallary Settings
+        $current_gallary_id = layoutID($currentURL,'gallary_id');
+        $gallary_id = $current_gallary_id['gallary_id'];
+        $store_gallary_settings = storeLayoutSettings($gallary_id,$front_store_id,'gallary_settings','gallary_id');
+
+
+        $food_limit =  isset($store_popularfood_settings['popularfood_limit']) ? $store_popularfood_settings['popularfood_limit'] : 10;
+
+        $cat_limit = isset($store_popularfood_settings['popularfood_limit']) ? $store_popularfood_settings['popularfood_limit'] : 5;
+
+        $gallary_limit = isset($store_gallary_settings['gallary_limit']) ? $store_gallary_settings['gallary_limit'] : 10;
 
         $sliders = Slider::where('store_id',$front_store_id)->get();
 
-        $photos = Gallary::where('store_id', $front_store_id)->get();
+        $photos = Gallary::where('store_id', $front_store_id)->limit($gallary_limit)->get();
 
         $best_categories = Product_to_category::with(['hasManyOrders', 'hasOneCategoryDetails'])->select('category_id', 'product_id', DB::raw('count(*) as total_category'))->whereHas('hasOneCategoryDetails', function ($q) use ($front_store_id) {
             $q->whereHas('hasManyCategoryStore', function ($q1) use ($front_store_id) {
                 $q1->where('store_id', $front_store_id);
             });
-        })->groupBy('category_id')->limit(10)->get()->sortByDesc(function ($query) {
+        })->groupBy('category_id')->limit($cat_limit)->get()->sortByDesc(function ($query) {
             return $query->hasManyOrders->count();
         });
 
@@ -67,7 +83,7 @@ class HomeController extends Controller
 
         $popular_foods = OrderProduct::with(['hasOrder', 'hasOneProduct'])->whereHas('hasOrder', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
-        })->groupBy('name')->select('product_id', DB::raw('count(*) as total_product'))->orderBy('total_product', 'DESC')->limit(10)->get();
+        })->groupBy('name')->select('product_id', DB::raw('count(*) as total_product'))->orderBy('total_product', 'DESC')->limit($food_limit)->get();
 
         $get_areas = DeliverySettings::select('area', 'id_delivery_settings')->where('id_store', $front_store_id)->where('delivery_type', 'area')->first();
         $area_explode = explode(',', isset($get_areas->area) ? $get_areas->area : '');

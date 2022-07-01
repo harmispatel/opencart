@@ -17,8 +17,8 @@
     $currentURL = URL::to("/");
 
 
-     // Get Store Settings & Other Settings
-     $store_data = frontStoreID($currentURL);
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
 
     // Get Current Front Store ID
     $front_store_id =  $store_data['store_id'];
@@ -29,6 +29,8 @@
     $slider_id = $current_slider_id['slider_id'];
     $store_slider_settings = storeLayoutSettings($slider_id,$front_store_id,'slider_settings','slider_id');
 
+    // Slider Search Box Permission
+    $slider_online_searchbox_permission = isset($store_slider_settings['slider_online_searchbox_permission']) ? $store_slider_settings['slider_online_searchbox_permission'] : '';
 
     // Get Current About ID & About Settings
     $current_about_id = layoutID($currentURL,'about_id');
@@ -170,8 +172,8 @@
                     @foreach ($sliders as $slider)
                         <div class="swiper-slide">
                             <strong class="title text-uppercase">Welcome To</strong>
-                            <strong class="sub-title text-capitalize">{{ $slider->title }}</strong>
-                            <img class="img-fluid" style="background-image: url('{{ $slider->image }}')"/>
+                            <strong class="sub-title text-capitalize">{{ isset($slider->title) ? $slider->title : '' }}</strong>
+                            <img class="img-fluid" style="background-image: url('{{ isset($slider->image) ? $slider->image : '' }}')"/>
                         </div>
                     @endforeach
                 </div>
@@ -185,7 +187,7 @@
             {{-- End Slider --}}
 
             {{-- Online Order --}}
-            @if ($store_slider_settings['slider_online_searchbox_permission'] == 1)
+            @if ($slider_online_searchbox_permission == 1)
                 <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
                     <strong class="title text-uppercase">order online</strong>
                     @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -198,12 +200,12 @@
                                     @endforeach
                                 </select>
                             @else
-                                <input id="search_input1" placeholder="{{ $store_slider_settings['slider_online_searchbox_default'] }}" type="text"/>
+                                <input id="search_input1" placeholder="{{ isset($store_slider_settings['slider_online_searchbox_default']) ? $store_slider_settings['slider_online_searchbox_default'] : '' }}" type="text"/>
                                 <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                             @endif
                         </div>
                         <div class="enter_postcode">
-                            <p>{{ $store_slider_settings['slider_online_searchbox_text'] }}</p>
+                            <p>{{ isset($store_slider_settings['slider_online_searchbox_text']) ? $store_slider_settings['slider_online_searchbox_text'] : '' }}</p>
                         </div>
                     @endif
                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
@@ -229,12 +231,12 @@
         <div class="home-slide-v2 swiper wow animate__fadeInDown" data-wow-duration="1s">
             <div class="swiper-wrapper">
                 @foreach ($sliders as $slider)
-                    <div class="swiper-slide" style="background-image: url('{{ $slider->image }}')">
+                    <div class="swiper-slide" style="background-image: url('{{ isset($slider->image) ? $slider->image : '' }}')">
                         <div class="container">
-                            <h3 class="text-capitalize">{{ $slider->title }}</h3>
+                            <h3 class="text-capitalize">{{ isset($slider->title) ? $slider->title : '' }}</h3>
                             <img class="img-fluid __icon"
                                 src="{{ get_css_url().'public/assets/theme2/img/icon/slide-divider.svg' }}" />
-                            <p>{{ $slider->description }}</p>
+                            <p>{{ isset($slider->description) ? $slider->description : '' }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -254,10 +256,10 @@
                     <div class="col-md-12 col-lg-6 wow animate__fadeInLeft" data-wow-duration="1s">
                         <div class="order-online-v3">
                             <h1 class="__title">Welcome to
-                                <br><span>Your Store Name</span>
+                                <br><span>{{ isset($store_setting['config_name']) ? $store_setting['config_name'] : '' }}</span>
                             </h1>
 
-                            @if ($store_slider_settings['slider_online_searchbox_permission'] == 1)
+                            @if ($slider_online_searchbox_permission == 1)
                                 <strong class="title text-uppercase">order online</strong>
                                 @if ($delivery_setting['enable_delivery'] != 'collection')
                                     <div class="srch-input">
@@ -269,12 +271,12 @@
                                                 @endforeach
                                             </select>
                                         @else
-                                            <input type="text" id="search_input1" placeholder="{{ $store_slider_settings['slider_online_searchbox_default'] }}"/>
+                                            <input type="text" id="search_input1" placeholder="{{ isset($store_slider_settings['slider_online_searchbox_default']) ? $store_slider_settings['slider_online_searchbox_default'] : '' }}"/>
                                             <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                         @endif
                                     </div>
                                     <div class="enter_postcode">
-                                        <p>{{ $store_slider_settings['slider_online_searchbox_text'] }}</p>
+                                        <p>{{ isset($store_slider_settings['slider_online_searchbox_text']) ? $store_slider_settings['slider_online_searchbox_text'] : '' }}</p>
                                     </div>
                                 @endif
                                 <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
@@ -304,7 +306,7 @@
                         <div class="swiper">
                             <div class="swiper-wrapper">
                                 @foreach ($sliders as $slider)
-                                    <div class="swiper-slide" style="background-image: url('{{ $slider->image }}')" data-title="{{ $slider->title }}"></div>
+                                    <div class="swiper-slide" style="background-image: url('{{ isset($slider->image) ? $slider->image : '' }}')" data-title="{{ isset($slider->title) ? $slider->title : '' }}"></div>
                                 @endforeach
                             </div>
                         </div>
@@ -325,7 +327,7 @@
                         <div class="__circle">
                             <div class="__thumbs-item">
                                 @foreach ($sliders as $slider)
-                                    <a href="#" style="background-image: url('{{ $slider->image }}')" data-index="{{ $loop->index }}"></a>
+                                    <a href="#" style="background-image: url('{{ isset($slider->image) ? $slider->image : '' }}')" data-index="{{ $loop->index }}"></a>
                                     @if ($loop->iteration == 3)
                                         @break
                                     @endif
@@ -336,7 +338,7 @@
                             <div class="swiper-wrapper">
                                 @foreach ($sliders as $slider)
                                     <div class="swiper-slide">
-                                        <img class="img-fluid" src="{{ $slider->image }}" />
+                                        <img class="img-fluid" src="{{ isset($slider->image) ? $slider->image : '' }}" />
                                     </div>
                                     @if ($loop->iteration == 3)
                                         @break
@@ -348,10 +350,10 @@
                     <div class="col-md-12 col-lg-5">
                         <div class="order-online-v4">
                             <h1 class="__title">Welcome to <br>
-                                <span>Store Name</span>
+                                <span>{{ isset($store_setting['config_name']) ? $store_setting['config_name'] : '' }}</span>
                             </h1>
 
-                            @if ($store_slider_settings['slider_online_searchbox_permission'] == 1)
+                            @if ($slider_online_searchbox_permission == 1)
                                 <div class="order-online text-center wow animate__fadeInUp" data-wow-duration="1s">
                                     <strong class="title text-uppercase">order online</strong>
                                     @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -364,12 +366,12 @@
                                                     @endforeach
                                                 </select>
                                             @else
-                                                <input type="text" id="search_input1" placeholder="{{ $store_slider_settings['slider_online_searchbox_default'] }}">
+                                                <input type="text" id="search_input1" placeholder="{{ isset($store_slider_settings['slider_online_searchbox_default']) ? $store_slider_settings['slider_online_searchbox_default'] : '' }}">
                                                 <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                             @endif
                                         </div>
                                         <div class="enter_postcode">
-                                            <p>{{ $store_slider_settings['slider_online_searchbox_text'] }}</p>
+                                            <p>{{ isset($store_slider_settings['slider_online_searchbox_text']) ? $store_slider_settings['slider_online_searchbox_text'] : '' }}</p>
                                         </div>
                                     @endif
                                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
@@ -396,13 +398,13 @@
     {{-- SLIDER 5 --}}
     @if ($slider_id == 5)
         <section class="home-slide-v5 wow animate__fadeInUp" data-wow-duration="1s">
-            <div class="container-fluid">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-6 col-sm-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
                         <div class="order-online-v5">
-                            <h2 class="__title">Store Name</h2>
+                            <h2 class="__title">{{ isset($store_setting['config_name']) ? $store_setting['config_name'] : '' }}</h2>
 
-                            @if ($store_slider_settings['slider_online_searchbox_permission'] == 1)
+                            @if ($slider_online_searchbox_permission == 1)
                                 <div class="order-online wow animate__fadeInUp" data-wow-duration="1s" style="text-align: center">
                                     <strong class="title text-uppercase">order online</strong>
                                     @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -415,12 +417,12 @@
                                                     @endforeach
                                                 </select>
                                             @else
-                                                <input id="search_input1" placeholder="{{ $store_slider_settings['slider_online_searchbox_default'] }}" type="text"/>
+                                                <input id="search_input1" placeholder="{{ isset($store_slider_settings['slider_online_searchbox_default']) ? $store_slider_settings['slider_online_searchbox_default'] : '' }}" type="text"/>
                                                 <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                             @endif
                                         </div>
                                         <div class="enter_postcode">
-                                            <p>{{ $store_slider_settings['slider_online_searchbox_text'] }}</p>
+                                            <p>{{ isset($store_slider_settings['slider_online_searchbox_text']) ? $store_slider_settings['slider_online_searchbox_text'] : '' }}</p>
                                         </div>
                                     @endif
 
@@ -445,7 +447,7 @@
                             <div class="swiper-wrapper">
                                 @foreach ($sliders as $slider)
                                     <div class="swiper-slide">
-                                        <img class="img-fluid" src="{{ $slider->image }}" />
+                                        <img class="img-fluid" src="{{ isset($slider->image) ? $slider->image : '' }}" />
                                     </div>
                                 @endforeach
                             </div>
@@ -465,13 +467,13 @@
                 <div class="swiper">
                     <div class="swiper-wrapper">
                         @foreach ($sliders as $slider)
-                            <div class="swiper-slide" style="background-image: url('{{ $slider->image }}')">
+                            <div class="swiper-slide" style="background-image: url('{{ isset($slider->image) ? $slider->image : '' }}')">
                                 <div class="container">
                                     <div class="slide-logo">
-                                        <img class="img-fluid" src="{{ $slider->logo }}" style="max-width: 150px;" />
+                                        <img class="img-fluid" src="{{ isset($slider->logo) ? $slider->logo : '' }}" style="max-width: 150px;" />
                                     </div>
-                                    <h2 class="__title">{{ $slider->title }}</h2>
-                                    <p>{{ $slider->description }}</p>
+                                    <h2 class="__title">{{ isset($slider->title) ? $slider->title : '' }}</h2>
+                                    <p>{{ isset($slider->description) ? $slider->description : '' }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -479,7 +481,7 @@
                 </div>
             </div>
 
-            @if ($store_slider_settings['slider_online_searchbox_permission'] == 1)
+            @if ($slider_online_searchbox_permission == 1)
                 <div class="order-online-v6">
                     <strong class="title text-uppercase">order online</strong>
                     @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -492,12 +494,12 @@
                                     @endforeach
                                 </select>
                             @else
-                                <input id="search_input1" placeholder="{{ $store_slider_settings['slider_online_searchbox_default'] }}" type="text"/>
+                                <input id="search_input1" placeholder="{{ isset($store_slider_settings['slider_online_searchbox_default']) ? $store_slider_settings['slider_online_searchbox_default'] : '' }}" type="text"/>
                                 <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                             @endif
                         </div>
                         <div class="enter_postcode">
-                            <p>{{ $store_slider_settings['slider_online_searchbox_text'] }}</p>
+                            <p>{{ isset($store_slider_settings['slider_online_searchbox_text']) ? $store_slider_settings['slider_online_searchbox_text'] : '' }}</p>
                         </div>
                         <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
                         <div class="button_content1" style ="">
@@ -533,10 +535,10 @@
                         <div class="col-sm-12 col-md-6 wow animate__fadeInLeft" data-wow-duration="1s">
                             <div style="height: 300px; overflow: hidden;" id="shopDescription">
                                 <h3 class="section-title color-green">
-                                    {{ $store_about_settings['about_title'] }}
+                                    {{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}
                                 </h3>
                                 <p>
-                                    {!! $store_about_settings['about_description'] !!}
+                                    {!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}
                                 </p>
                             </div>
                             <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
@@ -545,7 +547,7 @@
 
                         <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
                             <div class="img-box">
-                                 <img class="img-fluid" src="{{ $store_about_settings['about_image'] }}"/>
+                                 <img class="img-fluid" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}"/>
                             </div>
                         </div>
                     </div>
@@ -560,11 +562,11 @@
             <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s">
                 <div class="row">
                     <div class="col-md-12 col-lg-6 img">
-                        <img class="img-fluid" src="{{ $store_about_settings['about_image'] }}" />
+                        <img class="img-fluid" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}" />
                     </div>
                     <div class="col-md-12 col-lg-6 content">
-                        <h3 class="title text-uppercase text-center">{{ $store_about_settings['about_title'] }}</h3>
-                        <p>{!! $store_about_settings['about_description'] !!}</p>
+                        <h3 class="title text-uppercase text-center">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</h3>
+                        <p>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</p>
 
                         <div class="about-us-swiper swiper">
                             <div class="swiper-wrapper">
@@ -593,9 +595,9 @@
             <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
                 <div class="container text-center">
                     <div class="default-title-v3">
-                        <h3 class="title color-green">{{ $store_about_settings['about_title'] }}</h3>
+                        <h3 class="title color-green">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</h3>
                     </div>
-                    <div>{!! $store_about_settings['about_description'] !!}</div>
+                    <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
                 </div>
             </section>
         @endif
@@ -609,12 +611,12 @@
                     <div class="row">
                         <div class="col-12 col-md-12 col-lg-6">
                             <div class="default-title-v4">
-                                <strong class="sub-title">{{ $store_about_settings['about_title'] }}</strong>
+                                <strong class="sub-title">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</strong>
                             </div>
-                            <div>{!! $store_about_settings['about_description'] !!}</div>
+                            <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
                         </div>
                         <div class="col-12 col-md-12 col-lg-6">
-                            <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ $store_about_settings['about_image'] }}" />
+                            <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}" />
                         </div>
                     </div>
                 </div>
@@ -629,15 +631,15 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
-                            <img class="img-fluid" src="{{ $store_about_settings['about_image'] }}" />
+                            <img class="img-fluid" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}" />
                         </div>
 
                         <div class="col-sm-12 col-md-6">
                             <div style="height: 300px; overflow: hidden;" id="shopDescription">
                                 <div class="default-title-v5">
-                                    <strong class="sub-title color-orange text-uppercase">{{ $store_about_settings['about_title'] }}</strong>
+                                    <strong class="sub-title color-orange text-uppercase">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</strong>
                                 </div>
-                                <div>{!! $store_about_settings['about_description'] !!}</div>
+                                <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
                             </div>
                             <a class="btn mt-2 btn-orange text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
                             <a style="display: none;" class="btn mt-2 btn-orange text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
@@ -655,9 +657,9 @@
                 <div class="container p-4">
                     <div style="height: 300px; overflow: hidden;" id="shopDescription">
                         <div class="default-title-v6">
-                            <strong class="sub-title color-orange text-uppercase">{{ $store_about_settings['about_title'] }}</strong>
+                            <strong class="sub-title color-orange text-uppercase">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</strong>
                         </div>
-                        <div>{!! $store_about_settings['about_description'] !!}</div>
+                        <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
                     </div>
 
                     <a class="btn mt-3 text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
@@ -679,8 +681,8 @@
     @if ($bestcategory_id == 1)
         <section class="categories pt-110 pb-110">
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
-                <h3 class="section-title color-red">{{ $store_bestcategory_settings['bestcategory_title'] }}</h3>
-                <p class="text">{{ $store_bestcategory_settings['bestcategory_description'] }}</p>
+                <h3 class="section-title color-red">{{ isset($store_bestcategory_settings['bestcategory_title']) ? $store_bestcategory_settings['bestcategory_title'] : '' }}</h3>
+                <p class="text">{{ isset($store_bestcategory_settings['bestcategory_description']) ? $store_bestcategory_settings['bestcategory_description'] : '' }}</p>
                 @if(count($best_categories) > 0)
                     <div class="categories-swiper">
                         <div class="swiper-button-next">
@@ -724,8 +726,8 @@
         <section class="categories-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="container">
                 <div class="default-title-v2 text-center">
-                    <h3 class="title color-red">{{ $store_bestcategory_settings['bestcategory_title'] }}</h3>
-                    <p class="text">{{ $store_bestcategory_settings['bestcategory_description'] }}</p>
+                    <h3 class="title color-red">{{ isset($store_bestcategory_settings['bestcategory_title']) ? $store_bestcategory_settings['bestcategory_title'] : '' }}</h3>
+                    <p class="text">{{ isset($store_bestcategory_settings['bestcategory_description']) ? $store_bestcategory_settings['bestcategory_description'] : '' }}</p>
                 </div>
                 <div class="categories-swiper-v2 position-relative">
                     @if(count($best_categories) > 0)
@@ -768,8 +770,8 @@
     @if ($bestcategory_id == 3)
         <section class="best-categories-icon pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v3 text-center container">
-                <h3 class="title text-capitalize color-green">{{ $store_bestcategory_settings['bestcategory_title'] }}</h3>
-                <p>{{ $store_bestcategory_settings['bestcategory_description'] }}</p>
+                <h3 class="title text-capitalize color-green">{{ isset($store_bestcategory_settings['bestcategory_title']) ? $store_bestcategory_settings['bestcategory_title'] : '' }}</h3>
+                <p>{{ isset($store_bestcategory_settings['bestcategory_description']) ? $store_bestcategory_settings['bestcategory_description'] : '' }}</p>
             </div>
             <div class="container">
                 @if(count($best_categories) > 0)
@@ -806,8 +808,8 @@
     @if ($bestcategory_id == 4)
         <section class="best-categories-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v4 text-center container"><strong class="sub-title color-green">Your Choose</strong>
-                <h3 class="title text-capitalize">{{ $store_bestcategory_settings['bestcategory_title'] }}</h3>
-                <p>{{ $store_bestcategory_settings['bestcategory_description'] }}</p>
+                <h3 class="title text-capitalize">{{ isset($store_bestcategory_settings['bestcategory_title']) ? $store_bestcategory_settings['bestcategory_title'] : '' }}</h3>
+                <p>{{ isset($store_bestcategory_settings['bestcategory_description']) ? $store_bestcategory_settings['bestcategory_description'] : '' }}</p>
             </div>
             <div class="container">
                 <div class="row list-item">
@@ -842,8 +844,8 @@
     @if ($bestcategory_id == 5)
         <section class="best-categories-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v5 text-center container">
-                <h3 class="title text-capitalize color-green">{{ $store_bestcategory_settings['bestcategory_title'] }}</h3>
-                <p>{{ $store_bestcategory_settings['bestcategory_description'] }}</p>
+                <h3 class="title text-capitalize color-green">{{ isset($store_bestcategory_settings['bestcategory_title']) ? $store_bestcategory_settings['bestcategory_title'] : '' }}</h3>
+                <p>{{ isset($store_bestcategory_settings['bestcategory_description']) ? $store_bestcategory_settings['bestcategory_description'] : '' }}</p>
             </div>
             <div class="container">
                 @if(count($best_categories) > 0)
@@ -902,8 +904,8 @@
     @if ($bestcategory_id == 6)
         <section class="popular-categories-v6 pt-90 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v6 text-center container">
-                <strong class="sub-title text-uppercase">{{ $store_bestcategory_settings['bestcategory_title'] }}</strong>
-                <h3 class="title text-capitalize">{{ $store_bestcategory_settings['bestcategory_description'] }}</h3>
+                <strong class="sub-title text-uppercase">{{ isset($store_bestcategory_settings['bestcategory_title']) ? $store_bestcategory_settings['bestcategory_title'] : '' }}</strong>
+                <h3 class="title text-capitalize">{{ isset($store_bestcategory_settings['bestcategory_description']) ? $store_bestcategory_settings['bestcategory_description'] : '' }}</h3>
             </div>
             <div class="container">
                 @if(count($best_categories) > 0)
@@ -978,8 +980,8 @@
     @if ($popularfood_id == 1)
         <section class="popular-foods">
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
-                <h3 class="section-title color-green">{{ $store_popularfood_settings['popularfood_title'] }}</h3>
-                <p class="text">{{ $store_popularfood_settings['popularfood_description'] }}</p>
+                <h3 class="section-title color-green">{{ isset($store_popularfood_settings['popularfood_title']) ? $store_popularfood_settings['popularfood_title'] : '' }}</h3>
+                <p class="text">{{ isset($store_popularfood_settings['popularfood_description']) ? $store_popularfood_settings['popularfood_description'] : '' }}</p>
 
                 @if (count($popular_foods) > 0)
                     <div class="popular-foods-swiper">
@@ -1034,8 +1036,8 @@
         <section class="popular-foods-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="container">
                 <div class="default-title-v2 text-center">
-                    <h3 class="title color-red">{{ $store_popularfood_settings['popularfood_title'] }}</h3>
-                    <p class="text">{{ $store_popularfood_settings['popularfood_description'] }}</p>
+                    <h3 class="title color-red">{{ isset($store_popularfood_settings['popularfood_title']) ? $store_popularfood_settings['popularfood_title'] : '' }}</h3>
+                    <p class="text">{{ isset($store_popularfood_settings['popularfood_description']) ? $store_popularfood_settings['popularfood_description'] : '' }}</p>
                 </div>
                 @if(count($popular_foods) > 0)
                     <div class="popular-foods-swiper-v2 position-relative">
@@ -1084,8 +1086,8 @@
         <section class="popular-foods-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="container">
                 <div class="default-title-v3 text-center">
-                    <h3 class="title text-capitalize color-green">{{ $store_popularfood_settings['popularfood_title'] }}</h3>
-                    <p>{{ $store_popularfood_settings['popularfood_description'] }}</p>
+                    <h3 class="title text-capitalize color-green">{{ isset($store_popularfood_settings['popularfood_title']) ? $store_popularfood_settings['popularfood_title'] : '' }}</h3>
+                    <p>{{ isset($store_popularfood_settings['popularfood_description']) ? $store_popularfood_settings['popularfood_description'] : '' }}</p>
                 </div>
 
                 <div class="row list-item">
@@ -1139,8 +1141,8 @@
             <div class="container">
                 <div class="default-title-v4 text-center">
                     <strong class="sub-title color-purple">Delicious Ones</strong>
-                    <h3 class="title text-capitalize">{{ $store_popularfood_settings['popularfood_title'] }}</h3>
-                    <p>{{ $store_popularfood_settings['popularfood_description'] }}</p>
+                    <h3 class="title text-capitalize">{{ isset($store_popularfood_settings['popularfood_title']) ? $store_popularfood_settings['popularfood_title'] : '' }}</h3>
+                    <p>{{ isset($store_popularfood_settings['popularfood_description']) ? $store_popularfood_settings['popularfood_description'] : '' }}</p>
                 </div>
                 <div class="row list-item">
                     @if (count($popular_foods) > 0)
@@ -1191,8 +1193,8 @@
     @if ($popularfood_id == 5)
         <section class="popular-foods-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v5 text-center container">
-                <h3 class="title text-capitalize color-orange">{{ $store_popularfood_settings['popularfood_title'] }}</h3>
-                <p>{{ $store_popularfood_settings['popularfood_description'] }}</p>
+                <h3 class="title text-capitalize color-orange">{{ isset($store_popularfood_settings['popularfood_title']) ? $store_popularfood_settings['popularfood_title'] : '' }}</h3>
+                <p>{{ isset($store_popularfood_settings['popularfood_description']) ? $store_popularfood_settings['popularfood_description'] : '' }}</p>
             </div>
             <div class="container">
                 @if (count($popular_foods) > 0)
@@ -1258,8 +1260,8 @@
     @if ($popularfood_id == 6)
         <section class="popular-foods-v6 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v6">
-                <strong class="sub-title color-orange text-uppercase">{{ $store_popularfood_settings['popularfood_title'] }}</strong>
-                <h3 class="title text-uppercase">{{ $store_popularfood_settings['popularfood_description'] }}</h3>
+                <strong class="sub-title color-orange text-uppercase">{{ isset($store_popularfood_settings['popularfood_title']) ? $store_popularfood_settings['popularfood_title'] : '' }}</strong>
+                <h3 class="title text-uppercase">{{ isset($store_popularfood_settings['popularfood_description']) ? $store_popularfood_settings['popularfood_description'] : '' }}</h3>
             </div>
             <div class="container">
                 <div class="row list-item">
@@ -1318,7 +1320,7 @@
     @if ($review_id == 1)
         <section class="user-comments pt-110 pb-110">
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
-                <h3 class="section-title color-red">{{ $store_review_settings['review_title'] }}</h3>
+                <h3 class="section-title color-red">{{ isset($store_review_settings['review_title']) ? $store_review_settings['review_title'] : '' }}</h3>
                 @if (count($review['reviews']) > 0)
                     <div class="user-comments-swiper">
                         <div class="swiper">
@@ -1358,8 +1360,8 @@
         <section class="user-comments-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="container-fluid">
                 <div class="default-title-v2 text-center">
-                    <h3 class="title">{{ $store_review_settings['review_title'] }}</h3>
-                    <p class="text">{{ $store_review_settings['review_description'] }}</p>
+                    <h3 class="title">{{ isset($store_review_settings['review_title']) ? $store_review_settings['review_title'] : '' }}</h3>
+                    <p class="text">{{ isset($store_review_settings['review_description']) ? $store_review_settings['review_description'] : '' }}</p>
                 </div>
                 @if (count($review['reviews']) > 0)
                     <div class="user-comments-v2-swiper position-relative">
@@ -1398,8 +1400,8 @@
         <section class="user-comments-v3 pt-75 pb-75">
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
                 <div class="default-title-v3 text-center">
-                    <h3 class="title color-red">{{ $store_review_settings['review_title'] }}</h3>
-                    <p>{{ $store_review_settings['review_description'] }}</p>
+                    <h3 class="title color-red">{{ isset($store_review_settings['review_title']) ? $store_review_settings['review_title'] : '' }}</h3>
+                    <p>{{ isset($store_review_settings['review_description']) ? $store_review_settings['review_description'] : '' }}</p>
                 </div>
                 @if (count($review['reviews']) > 0)
                     <div class="user-comments-v3-swiper position-relative">
@@ -1441,7 +1443,7 @@
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
                 <div class="default-title-v4 text-center mb-0">
                     <strong class="sub-title color-green">Reviews</strong>
-                    <h3 class="title">{{ $store_review_settings['review_title'] }}</h3>
+                    <h3 class="title">{{ isset($store_review_settings['review_title']) ? $store_review_settings['review_title'] : '' }}</h3>
                     <img class="img-fluid" src="{{ get_css_url().'public/assets/theme4/img/icon/commit-icon.svg' }}" />
                 </div>
                 @if (count($review['reviews']) > 0)
@@ -1483,8 +1485,8 @@
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
                 <div class="default-title-v5">
                     <strong class="sub-title text-uppercase color-orange">Recent Web Reviews</strong>
-                    <h3 class="title">{{ $store_review_settings['review_title'] }}</h3>
-                    <p>{{ $store_review_settings['review_description'] }}</p>
+                    <h3 class="title">{{ isset($store_review_settings['review_title']) ? $store_review_settings['review_title'] : '' }}</h3>
+                    <p>{{ isset($store_review_settings['review_description']) ? $store_review_settings['review_description'] : '' }}</p>
                 </div>
                 @if (count($review['reviews']) > 0)
                     <div class="user-comments-v5-swiper position-relative">
@@ -1524,8 +1526,8 @@
         <section class="user-comments-v6 pt-90 pb-90">
             <div class="container pt-110 pb-110 wow animate__fadeInUp" data-wow-duration="1s">
                 <div class="default-title-v6">
-                    <strong class="sub-title text-uppercase">{{ $store_review_settings['review_title'] }}</strong>
-                    <h3 class="title">{{ $store_review_settings['review_description'] }}</h3>
+                    <strong class="sub-title text-uppercase">{{ isset($store_review_settings['review_title']) ? $store_review_settings['review_title'] : '' }}</strong>
+                    <h3 class="title">{{ isset($store_review_settings['review_description']) ? $store_review_settings['review_description'] : '' }}</h3>
                 </div>
                 @if (count($review['reviews']) > 0)
                     <div class="user-comments-v6-swiper position-relative">
@@ -1563,10 +1565,10 @@
 
     {{-- RESERVATION 1 --}}
     @if ($reservation_id == 1)
-        <section class="reservation pt-110 pb-110">
+        <section class="reservation pt-110 pb-110" id="reservation">
             <div class="container wow animate__fadeInUp" data-wow-duration="1s">
-                <h3 class="section-title color-green divider-white text-capitalize">{{ $store_reservation_settings['reservation_title'] }}</h3>
-                <p class="text">{{ $store_reservation_settings['reservation_description'] }}</p>
+                <h3 class="section-title color-green divider-white text-capitalize">{{ isset($store_reservation_settings['reservation_title']) ? $store_reservation_settings['reservation_title'] : '' }}</h3>
+                <p class="text">{{ isset($store_reservation_settings['reservation_description']) ? $store_reservation_settings['reservation_description'] : '' }}</p>
                 <form class="row" method="POST" action="{{ route('reservation') }}">
                     {{ csrf_field() }}
                     <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
@@ -1608,11 +1610,11 @@
 
     {{-- RESERVATION 2 --}}
     @if ($reservation_id == 2)
-        <section class="reservation-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="reservation-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" id="reservation">
             <div class="container">
                 <div class="default-title-v2 text-center">
-                    <h3 class="title text-capitalize">{{ $store_reservation_settings['reservation_title'] }}</h3>
-                    <p class="text">{{ $store_reservation_settings['reservation_description'] }}</p>
+                    <h3 class="title text-capitalize">{{ isset($store_reservation_settings['reservation_title']) ? $store_reservation_settings['reservation_title'] : '' }}</h3>
+                    <p class="text">{{ isset($store_reservation_settings['reservation_description']) ? $store_reservation_settings['reservation_description'] : '' }}</p>
                 </div>
                 <form class="row" method="POST" action="{{ route('reservation') }}">
                     {{ csrf_field() }}
@@ -1656,14 +1658,14 @@
 
     {{-- RESERVATION 3 --}}
     @if ($reservation_id == 3)
-        <section class="reservation-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="reservation-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" id="reservation">
             <form class="container" method="POST" action="{{ route('reservation') }}">
                 {{ csrf_field() }}
                 <div class="row align-items-center">
                 <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
                     <div class="default-title-v3">
-                        <h3 class="title color-green text-capitalize">{{ $store_reservation_settings['reservation_title'] }}</h3>
-                        <p>{{ $store_reservation_settings['reservation_description'] }}.</p>
+                        <h3 class="title color-green text-capitalize">{{ isset($store_reservation_settings['reservation_title']) ? $store_reservation_settings['reservation_title'] : '' }}</h3>
+                        <p>{{ isset($store_reservation_settings['reservation_description']) ? $store_reservation_settings['reservation_description'] : '' }}.</p>
                     </div>
                     <button class="btn btn-red text-capitalize">make reservation now</button>
                     </div>
@@ -1711,13 +1713,13 @@
 
     {{-- RESERVATION 4 --}}
     @if ($reservation_id == 4)
-        <section class="reservation-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="reservation-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" id="reservation">
             <form class="container" method="POST" action="{{ route('reservation') }}">
                 {{ csrf_field() }}
                 <div class="default-title-v4 text-center">
                     <strong class="sub-title color-purple text-capitalize">book now</strong>
-                    <h3 class="title text-capitalize">{{ $store_reservation_settings['reservation_title'] }}</h3>
-                    <p>{{ $store_reservation_settings['reservation_description'] }}</p>
+                    <h3 class="title text-capitalize">{{ isset($store_reservation_settings['reservation_title']) ? $store_reservation_settings['reservation_title'] : '' }}</h3>
+                    <p>{{ isset($store_reservation_settings['reservation_description']) ? $store_reservation_settings['reservation_description'] : '' }}</p>
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-12 col-sm-6 col-md-4 mb-4">
@@ -1760,15 +1762,15 @@
 
     {{-- RESERVATION 5 --}}
     @if ($reservation_id == 5)
-        <section class="reservation-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="reservation-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" id="reservation">
             <form class="container" method="POST" action="{{ route('reservation') }}">
                 {{ csrf_field() }}
                 <div class="row align-items-center">
                     <div class="col-md-12 col-lg-5 wow animate__fadeInLeft" data-wow-duration="1s">
                         <div class="default-title-v5">
                             <strong class="sub-title color-orange text-capitalize">reservation</strong>
-                            <h3 class="title text-capitalize">{{ $store_reservation_settings['reservation_title'] }}</h3>
-                            <p>{{ $store_reservation_settings['reservation_description'] }}</p>
+                            <h3 class="title text-capitalize">{{ isset($store_reservation_settings['reservation_title']) ? $store_reservation_settings['reservation_title'] : '' }}</h3>
+                            <p>{{ isset($store_reservation_settings['reservation_description']) ? $store_reservation_settings['reservation_description'] : '' }}</p>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-7 wow animate__fadeInRight" data-wow-duration="1s">
@@ -1814,13 +1816,13 @@
     
     {{-- RESERVATION 6 --}}
     @if ($reservation_id == 6)
-        <section class="reservation-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="reservation-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s" id="reservation">
             <form class="container" method="POST" action="{{ route('reservation') }}">
                 {{ csrf_field() }}
                 <div class="default-title-v6">
                     <strong class="sub-title color-orange text-uppercase">reservation</strong>
-                    <h3 class="title text-uppercase">{{ $store_reservation_settings['reservation_title'] }}</h3>
-                    <p>{{ $store_reservation_settings['reservation_description'] }}</p>
+                    <h3 class="title text-uppercase">{{ isset($store_reservation_settings['reservation_title']) ? $store_reservation_settings['reservation_title'] : '' }}</h3>
+                    <p>{{ isset($store_reservation_settings['reservation_description']) ? $store_reservation_settings['reservation_description'] : '' }}</p>
                 </div>
                 <div class="row">
                     <div class="col">
@@ -1869,7 +1871,7 @@
 
     {{-- GALLARY 1 --}}
     @if ($gallary_id == 1)
-        <section class="photo-gallery pt-110 pb-110">
+        <section class="photo-gallery pt-110 pb-110" id="photo-gallary">
             <div class="container wow animate__fadeInUp" data-wow-duration="1s">
                 @if(!empty($store_setting['gallery_header_text']))
                     <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
@@ -1908,12 +1910,20 @@
 
     {{-- GALLARY 2 --}}
     @if ($gallary_id == 2)
-        <section class="photo-gallery-v2 pt-75 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="photo-gallery-v2 pt-75 wow animate__fadeInUp" data-wow-duration="1s" id="photo-gallary">
             <div class="container">
                 <div class="default-title-v2 text-center">
-                    <h3 class="title text-capitalize"><span>photo &nbsp;</span>gallery</h3>
-                    <p class="text">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum <br>
-                        dolore eu fugiat nulla pariatur.</p>
+                    @if(!empty($store_setting['gallery_header_text']))
+                        <h3 class="title text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+                    @else
+                        <h3 class="title text-capitalize"><span>photo &nbsp;</span>gallery</h3>
+                    @endif
+
+                    @if(!empty($store_setting['gallery_header_desc']))
+                        <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+                    @else
+                        <p class="text">This is Our Food Photo Gallary, Best Food In Our Store.</p>
+                    @endif
                 </div>
             </div>
             <div class="container-fluid wow animate__fadeInUp mb-3" data-wow-duration="1s">
@@ -1940,11 +1950,20 @@
 
     {{-- GALLARY 3 --}}
     @if ($gallary_id == 3)
-        <div class="photo-gallery-v3 pt-75 pb-75">
+        <div class="photo-gallery-v3 pt-75 pb-75" id="photo-gallary">
             <div class="container">
                 <div class="default-title-v3 text-center">
-                    <h3 class="title text-capitalize color-red">photo gallery</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit, maiores praesentium qui</p>
+                    @if(!empty($store_setting['gallery_header_text']))
+                        <h3 class="title text-capitalize color-red">{{ $store_setting['gallery_header_text'] }}</h3>
+                    @else
+                        <h3 class="title text-capitalize color-red">photo gallery</h3>
+                    @endif
+
+                    @if(!empty($store_setting['gallery_header_desc']))
+                        <p>{{ $store_setting['gallery_header_desc'] }}</p>
+                    @else
+                        <p>This is Our Food Photo Gallary, Best Food In Our Store.</p>
+                    @endif
                 </div>
             </div>
             <div class="container-fluid">
@@ -1977,13 +1996,21 @@
 
     {{-- GALLARY 4 --}}
     @if ($gallary_id == 4)
-        <div class="photo-gallery-v4 pt-75 pb-75">
+        <div class="photo-gallery-v4 pt-75 pb-75" id="photo-gallary">
             <div class="container">
                 <div class="default-title-v4 text-center">
                     <strong class="sub-title color-purple text-uppercase">gallary</strong>
-                        <h3 class="section-title color-green divider-white text-capitalize"> My Food Gallary</h3>
-        
-                        <p class="text">This is our gallary lorem ipsum doler sit amet</p>
+                        @if(!empty($store_setting['gallery_header_text']))
+                            <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+                        @else
+                            <h3 class="section-title color-green divider-white text-capitalize"> My Food Gallary</h3>
+                        @endif
+
+                        @if(!empty($store_setting['gallery_header_desc']))
+                            <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+                        @else
+                            <p class="text">This is Our Food Photo Gallary, Best Food In Our Store.</p>
+                        @endif             
                 </div>
             </div>
             @if(count($photos) > 0)
@@ -2014,17 +2041,26 @@
     @endif
     {{-- END GALLARY 4 --}}
 
+
     {{-- GALLARY 5 --}}
     @if ($gallary_id == 5)
-        <div class="photo-gallery-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        <div class="photo-gallery-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" id="photo-gallary">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12 col-lg-3 offset-lg-1">
-                        <div class="default-title-v5"><strong
-                                class="sub-title color-red text-uppercase color-orange">gallery</strong>
-                            <h3 class="title text-capitalize mb-5">Our gallery in the restaurant and you can see them.</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. <br>Culpa earum excepturi fugit,
-                                maiores praesentium qui</p>
+                        <div class="default-title-v5">
+                            <strong class="sub-title color-red text-uppercase color-orange">gallery</strong>
+                            @if(!empty($store_setting['gallery_header_text']))
+                                <h3 class="title text-capitalize mb-5">{{ $store_setting['gallery_header_text'] }}</h3>
+                            @else
+                                <h3 class="title text-capitalize mb-5">My Food Gallary</h3>
+                            @endif
+
+                            @if(!empty($store_setting['gallery_header_desc']))
+                                <p>{{ $store_setting['gallery_header_desc'] }}</p>
+                            @else
+                                <p>This is Our Food Photo Gallary, Best Food In Our Store.</p>
+                            @endif
                         </div>
                         @if(count($photos) > 0)
                             <div class="user-comments-v5-swiper-info">
@@ -2073,10 +2109,19 @@
 
     {{-- GALLARY 6 --}}
     @if ($gallary_id == 6)
-        <section class="photo-gallery-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="photo-gallery-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s" id="photo-gallary">
             <div class="default-title-v6">
-                <h3 class="section-title color-green divider-white text-capitalize">gallary</h3>
-                <p class="text">Lorem Ipsum doler sit amet Gallary</p>
+                @if(!empty($store_setting['gallery_header_text']))
+                    <h3 class="section-title color-green divider-white text-capitalize">{{ $store_setting['gallery_header_text'] }}</h3>
+                @else
+                    <h3 class="section-title color-green divider-white text-capitalize">My Food Gallary</h3>
+                @endif
+
+                @if(!empty($store_setting['gallery_header_desc']))
+                    <p class="text">{{ $store_setting['gallery_header_desc'] }}</p>
+                @else
+                    <p class="text">This is Our Food Photo Gallary, Best Food In Our Store.</p>
+                @endif
             </div>
             <div class="container">
                 <div class="row">
@@ -2152,7 +2197,7 @@
             <div class="container"><img class="img-fluid" src="{{ get_css_url().'public/assets/theme2/img/icon/opening-hours-top-divider.svg' }}" />
                 <h3 class="title text-uppercase">opening hours</h3>
                 <div class="_divider"></div>
-                <a href="tel:5354">TEL: 5354</a>
+                <a href="tel:{{ isset($store_setting['config_telephone']) ? $store_setting['config_telephone'] : '' }}">TEL: {{ isset($store_setting['config_telephone']) ? $store_setting['config_telephone'] : '' }}</a>
                 <h3 class="title text-uppercase __divider">hours</h3>
                 
                 @php

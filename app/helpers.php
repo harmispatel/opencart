@@ -653,6 +653,13 @@ function storeLayoutSettings($layout_id,$store_id,$setting_name,$key_name)
         return $footer_setting;
     }
 
+    if($setting_name == 'general_settings')
+    {
+        $query = Settings::select('value')->where('store_id',$store_id)->where('key',$setting_name)->first();
+        $general_setting = isset($query->value) ? unserialize($query->value) : '';
+        return $general_setting;
+    }
+
 }
 
 
@@ -2499,12 +2506,21 @@ function frontStoreID($currentURL)
 // Function for Get Stores Reviews
 function storereview()
 {
-    // Get Current Theme ID & Store ID
+    // Current URL
     $currentURL = URL::to("/");
-    $front_store_id = frontStoreID($currentURL);
-    // Get Current Theme ID & Store ID
 
-    $review_limit = 10;
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
+
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
+    // Get Current Reviews ID & Reviews Settings
+    $current_review_id = layoutID($currentURL,'review_id');
+    $review_id = $current_review_id['review_id'];
+    $store_review_settings = storeLayoutSettings($review_id,$front_store_id,'review_settings','reviews_id');
+
+    $review_limit = isset($store_review_settings['review_limit']) ? $store_review_settings['review_limit'] : 5;
 
     $data['reviews'] = Reviews::with(['hasOneCustomer'])->where('store_id',$front_store_id)->orderBy('store_review_id','DESC')->take($review_limit)->get();
 

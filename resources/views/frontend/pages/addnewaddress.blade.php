@@ -9,7 +9,7 @@
 
 @php
 
-    / // Get Current URL
+    // Get Current URL
     $currentURL = URL::to("/");
 
 
