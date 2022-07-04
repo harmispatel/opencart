@@ -253,6 +253,70 @@ class CopyTemplateSettingsController extends Controller
 
 
 
+            // Gallary Settings
+            if($value == 'gallary_settings')
+            {
+                $get_from_current_gallary = Settings::select('value')->where('key','gallary_id')->where('store_id',$copy_from_store_id)->first();
+                $get_from_current_gallary_id = isset($get_from_current_gallary->value) ? $get_from_current_gallary->value : '';
+
+                if(!empty($get_from_current_gallary_id) || $get_from_current_gallary_id != '')
+                {
+                    $get_from_gallary_settings = Settings::select('value')->where('key',$value)->where('store_id',$copy_from_store_id)->where('gallary_id',$get_from_current_gallary_id)->first();
+                    $from_gallary_settings_value = isset($get_from_gallary_settings->value) ? $get_from_gallary_settings->value : '';
+
+                    if(!empty($from_gallary_settings_value) || $from_gallary_settings_value != '')
+                    {
+                        $get_to_current_gallary = Settings::where('key','gallary_id')->where('store_id',$current_store_id)->first();
+                        $get_to_current_gallary_id = isset($get_to_current_gallary->value) ? $get_to_current_gallary->value : '';
+
+                        if(!empty($get_to_current_gallary_id) || $get_to_current_gallary_id != '')
+                        {
+                            if($get_to_current_gallary_id != $get_from_current_gallary_id)
+                            {
+                                $update_to_current_gallary = Settings::find($get_to_current_gallary->setting_id);
+                                $update_to_current_gallary->value = $get_from_current_gallary_id;
+                                $update_to_current_gallary->update();
+                            }
+                        }
+                        else
+                        {
+                            $new_to_current_gallary = new Settings;
+                            $new_to_current_gallary->store_id = $current_store_id;
+                            $new_to_current_gallary->group = 'polianna';
+                            $new_to_current_gallary->key = 'gallary_id';
+                            $new_to_current_gallary->value = $get_from_current_gallary_id;
+                            $new_to_current_gallary->save();
+                        }
+
+                        $get_to_gallary_settings = Settings::where('key',$value)->where('store_id',$current_store_id)->where('gallary_id',$get_from_current_gallary_id)->first();
+                        $to_gallary_setting_id = isset($get_to_gallary_settings->setting_id) ? $get_to_gallary_settings->setting_id : '';
+
+                        if(!empty($to_gallary_setting_id) || $to_gallary_setting_id != '')
+                        {
+                            $update_to_gallary_settings = Settings::find($to_gallary_setting_id);
+                            $update_to_gallary_settings->value = $from_gallary_settings_value;
+                            $update_to_gallary_settings->update();
+                        }
+                        else
+                        {
+                            $new_to_gallary_settings = new Settings;
+                            $new_to_gallary_settings->group = 'template';
+                            $new_to_gallary_settings->store_id = $current_store_id;
+                            $new_to_gallary_settings->gallary_id = $get_from_current_gallary_id;
+                            $new_to_gallary_settings->key = 'gallary_settings';
+                            $new_to_gallary_settings->value = $from_gallary_settings_value;
+                            $new_to_gallary_settings->serialized = 1;
+                            $new_to_gallary_settings->save();
+                        }
+
+                    }
+                }
+
+            }
+            // End Gallary Settings
+
+
+
             // PopularFood Settings
             if($value == 'popularfood_settings')
             {

@@ -134,7 +134,7 @@ $openhour_data = openhoursActive();
                     <div class="col-md-6">
                         <div class="row">
                             <div class="col-md-4">
-                                <h6 class="mt-2" style="font-size: 18px;">Copy Template From</h6>
+                                <p class="mt-2" style="font-size: 16px;"><i class="fa fa-copy"></i>&nbsp; Copy Template From</p>
                             </div>
                             <div class="col-md-8">
                                 <select name="copytemplatesettings" id="copytemplatesettings" class="form-control">
