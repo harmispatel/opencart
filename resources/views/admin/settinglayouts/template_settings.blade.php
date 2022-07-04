@@ -2300,8 +2300,8 @@ $openhour_data = openhoursActive();
     }
     // End Change Active Openhours Layout
 
-    // Start Copy Template Settings
 
+    // Start Copy Template Settings
     $('#copytemplatesettings').change(function() {
         var store_id = this.value;
         $.ajax({
@@ -2311,7 +2311,10 @@ $openhour_data = openhoursActive();
                 store_id : store_id,
             },
             success: function(data) {
-                // location.reload();
+                if(data.success == 1)
+                {
+                    location.reload();
+                }
             }
         });
     });

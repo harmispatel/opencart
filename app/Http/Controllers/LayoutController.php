@@ -93,7 +93,7 @@ class LayoutController extends Controller
 
 
         // Get All Stores List
-        $stores = Store::get();
+        $stores = Store::where('store_id','!=',$current_store_id)->get();
 
         // Get All Sliders
         $sliders = Slider::where('store_id',$current_store_id)->orderBy('id','ASC')->get();

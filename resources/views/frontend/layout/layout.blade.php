@@ -1723,7 +1723,7 @@
                 font-family: "Font Awesome 5 Free"!important;
             }
 
-            button, a.btn{
+            button, a.btn, #go-up{
                 background-color : <?php echo (isset($store_general_settings['general_buttons_color'])) ? $store_general_settings['general_buttons_color'] : '' ?>!important;
                 color: <?php echo (isset($store_general_settings['general_buttons_fonts_color'])) ? $store_general_settings['general_buttons_fonts_color'] : '' ?>!important;
             }
