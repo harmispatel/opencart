@@ -1,10 +1,10 @@
-<!--
+{{--
 THIS IS View Menu  PAGE FOR FRONTEND
 ----------------------------------------------------------------------------------------------
 menu.blade.php
 It's used for View Menu.
 ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 
@@ -139,6 +139,7 @@ It's used for View Menu.
                     $closedate = $openclose['close_date'];
                     $closedates = explode(',',$closedate);
                     $date_close1 = array();
+                    $currentdate = strtotime(date("Y-m-d"));
                     foreach ($closedates as $value) {
                         $date_close = strtotime($value);
                         $date_close1[] = $date_close;
@@ -151,7 +152,6 @@ It's used for View Menu.
                             $firstday = $item[0];
                             $lastday = $item[$t];
                             $today = time();
-                            $currentdate = strtotime(date("Y-m-d"));
                         @endphp
                         @if (in_array($currentdate,$date_close1))
                             <strong>Close</strong>
@@ -367,6 +367,12 @@ It's used for View Menu.
                                                                                                             @endforeach
                                                                                                         @endforeach
                                                                                                     @endif
+                                                                                                    @if ($currentday != $value && $firstday != "Every day")
+                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }} {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                        </a>
+                                                                                                    @endif
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -406,16 +412,16 @@ It's used for View Menu.
                                                                                                                             <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a>
-                                                                                                                    @break
-                                                                                                                    {{-- @elseif ($currentday != $value || $firstday != "Every day")
-                                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                        </a> --}}
                                                                                                                     @endif
                                                                                                                 @endif
                                                                                                         @endforeach
                                                                                                     @endforeach
+                                                                                                @endif
+                                                                                                @if ($currentday != $value && $firstday != "Every day")
+                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                    </a>
                                                                                                 @endif
                                                                                             </div>
                                                                                         </div>
@@ -470,6 +476,11 @@ It's used for View Menu.
                                         @endif
                                     @endforeach
                                 @endforeach
+                            @endif
+                            @if ($currentday != $value && $firstday != "Every day")
+                                <div class="close-shop">
+                                    <h2 class="mb-0">Sorry we are closed now!</h2>
+                                </div>
                             @endif
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
@@ -748,13 +759,14 @@ It's used for View Menu.
                                                 @if ($currentday == $value || $firstday == "Every day")
                                                     @if (!empty($mycart['size']))
                                                         <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                                        {{-- @break --}}
+                                                        <div class="closed-now">
+                                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                                        </div>
                                                     @else
                                                         <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
                                                         <div class="closed-now">
                                                             <span class="closing-text" style="color: green !important;">We are open now!</span>
                                                         </div>
-                                                        {{-- @break --}}
                                                     @endif
                                                 @endif
                                                 @break
@@ -771,6 +783,14 @@ It's used for View Menu.
                                             @endif
                                     @endforeach
                                 @endforeach
+                            @endif
+                            @if ($currentday != $value && $firstday != "Every day")
+                                <div class="closed-now">
+                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                                    <div class="closed-now">
+                                        <span class="closing-text">We are closed now!</span>
+                                    </div>
+                                </div>
                             @endif
                         </div>
                     </div>
