@@ -55,7 +55,7 @@ class HomeController extends Controller
 
         $food_limit =  isset($store_popularfood_settings['popularfood_limit']) ? $store_popularfood_settings['popularfood_limit'] : 10;
 
-        $cat_limit = isset($store_popularfood_settings['popularfood_limit']) ? $store_popularfood_settings['popularfood_limit'] : 5;
+        $cat_limit = isset($store_bestcategory_settings['bestcategory_limit']) ? $store_bestcategory_settings['bestcategory_limit'] : 5;
 
         $gallary_limit = isset($store_gallary_settings['gallary_limit']) ? $store_gallary_settings['gallary_limit'] : 10;
 

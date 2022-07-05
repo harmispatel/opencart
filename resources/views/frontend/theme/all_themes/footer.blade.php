@@ -11,7 +11,6 @@
     // Get Current URL
     $currentURL = URL::to("/");
 
-
     // Get Store Settings & Other Settings
     $store_data = frontStoreID($currentURL);
 
@@ -41,6 +40,212 @@
 
 @endphp
 
+
+{{-- CSS --}}
+    {{-- FOOTER --}}
+    {{------------------------------------------------------------------------------------------------}}
+        {{-- Footer 1 --}}
+        <?php
+            if($footer_id == 1)
+            {
+        ?>
+                <style>
+                    .footer .info-group
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_color'])) ? $store_footer_settings['footer_background_color'] : '' ?>;
+                    }
+
+                    .footer .info-group:hover
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_hover_color'])) ? $store_footer_settings['footer_background_hover_color'] : '' ?>;
+                    }
+
+                    .footer .info-group .input-group-item .title, .footer .info-group .input-group-item p   i, .footer .info-group .input-group-item a i
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+                    .footer .info-group:hover .input-group-item .title
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Footer 2 --}}
+        <?php
+            if($footer_id == 2)
+            {
+        ?>
+                <style>
+                    .footer-v2
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_color'])) ? $store_footer_settings['footer_background_color'] : '' ?>;
+                    }
+
+                    .footer-v2:hover
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_hover_color'])) ? $store_footer_settings['footer_background_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v2:hover .footer-content .footer-title
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v2 .footer-content .footer-title
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+                    .footer-v2 .footer-content .social-links a
+                    {
+                        background-color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+                    .footer-v2:hover .footer-content .social-links a
+                    {
+                        background-color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Footer 3 --}}
+        <?php
+            if($footer_id == 3)
+            {
+        ?>
+                <style>
+                    .footer-v3
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_color'])) ? $store_footer_settings['footer_background_color'] : '' ?>;
+                    }
+
+                    .footer-v3:hover
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_hover_color'])) ? $store_footer_settings['footer_background_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v3 .footer-top .footer-title, .footer-v3 .footer-bottom p
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+
+                    .footer-v3:hover .footer-top .footer-title, .footer-v3:hover .footer-bottom p
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Footer 4 --}}
+        <?php
+            if($footer_id == 4)
+            {
+        ?>
+                <style>
+                    .footer-v4
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_color'])) ? $store_footer_settings['footer_background_color'] : '' ?>;
+                    }
+
+                    .footer-v4:hover
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_hover_color'])) ? $store_footer_settings['footer_background_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v4 .footer-top .__menu li a, .footer-v4 .footer-top .__social-links a
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+                    .footer-v4:hover .footer-top .__menu li a, .footer-v4:hover .footer-top .__social-links a
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Footer 5 --}}
+        <?php
+            if($footer_id == 5)
+            {
+        ?>
+                <style>
+                    .footer-v5
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_color'])) ? $store_footer_settings['footer_background_color'] : '' ?>;
+                    }
+
+                    .footer-v5:hover
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_hover_color'])) ? $store_footer_settings['footer_background_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v5:hover .footer-title, .footer-v5:hover .copyright p
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v5 .footer-title, .footer-v5 .copyright p
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Footer 6 --}}
+        <?php
+            if($footer_id == 6)
+            {
+        ?>
+                <style>
+                    .footer-v6 .footer-top
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_color'])) ? $store_footer_settings['footer_background_color'] : '' ?>;
+                    }
+
+                    .footer-v6 .footer-top:hover
+                    {
+                        background: <?php echo (isset($store_footer_settings['footer_background_hover_color'])) ? $store_footer_settings['footer_background_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v6 .footer-top .__footer-title
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_color'])) ? $store_footer_settings['footer_link_color'] : '' ?>;
+                    }
+
+                    .footer-v6 .footer-top:hover .__footer-title
+                    {
+                        color: <?php echo (isset($store_footer_settings['footer_link_hover_color'])) ? $store_footer_settings['footer_link_hover_color'] : '' ?>;
+                    }
+
+                    .footer-v6 .footer-top .__btn-top
+                    {
+                        background: transparent url("<?php echo get_css_url().'public/admin/footer-top-divider.svg' ?>") no-repeat center center;
+                    }
+
+                </style>
+        <?php
+            }
+        ?>
+    {{------------------------------------------------------------------------------------------------}}
+    {{-- END FOOTER --}}
+{{-- END CSS --}}
 
 
 {{-- FOOTER SECTION --}}

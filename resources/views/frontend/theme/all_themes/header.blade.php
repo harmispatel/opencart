@@ -8,9 +8,8 @@
 
 @php
     
-    // Get Current URL
-    $currentURL = URL::to("/");
-
+   // Current URL
+   $currentURL = URL::to("/");
 
     // Get Store Settings & Other Settings
     $store_data = frontStoreID($currentURL);
@@ -39,7 +38,7 @@
 
 
     // Get Currency Details
-    $currency = getCurrencySymbol(isset($store_setting['config_currency']));
+    $currency = getCurrencySymbol($store_setting['config_currency']);
 
 
     // Get Open-Close Time
@@ -150,6 +149,243 @@
     // End Cart Details
    
 @endphp
+
+
+{{-- CSS --}}
+    {{-- HEADER CSS --}}
+    {{------------------------------------------------------------------------------------------------}}
+        {{-- Header 1 --}}
+        <?php
+            if($header_id == 1)
+            {
+        ?>
+                <style>
+                    /* Menu Background Color */
+                    .header .header-bottom
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_background_color'])) ? $store_header_settings['menu_background_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Links Color */
+                    .header .header-bottom .menu li a, .menu-shopping-cart .price-box strong, .menu-shopping-cart .number i, .menu-shopping-cart .price-box .price h3, .menu-shopping-cart .price-box .price h3 span
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Active Button Color */
+                    .header .header-bottom .menu li.active, .header .header-bottom .menu li.active:before, .header .header-bottom .menu li:hover:before, .header .header-bottom .menu li.active:after, .header .header-bottom .menu li:hover:after
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_button_color']))? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Active Buttons Links Color */
+                    .header .header-bottom .menu li.active a, .header .header-bottom .menu li a:hover,.header .header-bottom .menu li:hover a
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_text_color'])) ? $store_header_settings['menu_button_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Active Button Hover Color */
+                    .header .header-bottom .menu li:hover
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_button_color']))? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Header 2 --}}
+        <?php
+            if($header_id == 2)
+            {
+        ?>
+                <style>
+                    /* Menu Background Color */
+                    .header-v2 .header-bottom
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_background_color'])) ? $store_header_settings['menu_background_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Link Color */
+                    .header-v2 .header-bottom .menu li a, .header-v2 .header-bottom .authentication-links li a span, .header-v2 .header-bottom .menu-shopping-cart .price-box strong, .header-v2 .header-bottom .menu-shopping-cart .price-box i, .header-v2 .header-bottom .menu-shopping-cart .price-box span
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+                    .authentication-links li a span,.header-v2 .header-bottom .menu-shopping-cart .price-box strong,.header-v2 .header-bottom .menu-shopping-cart .price-box .price i, .header-v2 .header-bottom .menu-shopping-cart .price-box .price span
+                    {
+                        font-size: 15px!important;
+                    }
+
+                    /* Menu Button Color */
+                    .header-v2 .header-bottom .menu li:hover:after, .header-v2 .header-bottom .menu li.active:after, .header-v2 .header-bottom .menu-shopping-cart i.fa-shopping-basket
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                    .header-v2 .header-bottom .authentication-links li a i
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                    .menu-shopping-cart .number span
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                        background: <?php echo (isset($store_header_settings['menu_button_text_color'])) ? $store_header_settings['menu_button_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Button Active Link Color */
+                    .header-v2 .header-bottom .menu li.active a, .header-v2 .header-bottom .menu li a:hover,.header-v2 .header-bottom .menu li:hover a, .header-v2 .header-bottom .menu-shopping-cart i.fa-shopping-basket
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_text_color'])) ? $store_header_settings['menu_button_text_color'] : '' ?>!important;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Header 3 --}}
+        <?php
+            if($header_id == 3)
+            {
+        ?>
+                <style>
+                    /* Menu Background Color */
+                    .header-v3 .header-bottom
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_background_color'])) ? $store_header_settings['menu_background_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Link Color */
+                    .header-v3 .header-bottom .menu li a
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Active Button Color */
+                    .header-v3 .header-bottom .menu li:hover a, .header-v3 .header-bottom .menu li.active a
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Header 4 --}}
+        <?php
+            if($header_id == 4)
+            {
+        ?>
+                <style>
+                    /* Menu Background Color */
+                    .header-v4 .header-bottom
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_background_color'])) ? $store_header_settings['menu_background_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Link Color */
+                    .header-v4 .header-bottom .menu li a
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Button Color */
+                    .header-v4 .header-bottom .menu li.active a, .header-v4 .header-bottom .menu li:hover a, .header-v4 .header-bottom .__btn-group a.__purple, .header-v4 .header-bottom .__btn-group a.__green
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Button Active Link Color */
+                    .header-v4 .header-bottom .menu li.active a, .header-v4 .header-bottom .menu li:hover a, .header-v4 .header-bottom .__btn-group a i, .header-v4 .header-bottom .__btn-group a.__purple, .header-v4 .header-bottom .__btn-group a.__green
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_text_color'])) ? $store_header_settings['menu_button_text_color'] : '' ?>!important;
+                    }
+
+                    .productcountitem span{
+                        background-color: <?php echo (isset($store_header_settings['menu_button_text_color'])) ? $store_header_settings['menu_button_text_color'] : '' ?>!important;
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Header 5 --}}
+        <?php
+            if($header_id == 5)
+            {
+        ?>
+                <style>
+                    /* Menu Background Color */
+                    .header-v5 .header-bottom
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_background_color'])) ? $store_header_settings['menu_background_color'] : '' ?>!important;
+                    }
+                    .header-v5 .header-bottom .menu-shopping-cart .number span
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                        background-color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Links Color */
+                    .header-v5 .header-bottom .menu li a, .header-v5 .header-bottom .menu-shopping-cart .price-box strong, .header-v5 .header-bottom .menu-shopping-cart .price-box .price i, .header-v5 .header-bottom .menu-shopping-cart .price-box .price span
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Button Color */
+                    .header-v5 .header-bottom .menu li:hover a, .header-v5 .header-bottom .menu li.active a
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                    .header-v5 .header-bottom .menu-shopping-cart .number i
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Buttons Text Color */
+                    .header-v5 .header-bottom .menu li.active a,.header-v5 .header-bottom .menu li:hover a
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_text_color'])) ? $store_header_settings['menu_button_text_color'] : '' ?>!important;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+
+        {{-- Header 6 --}}
+        <?php
+            if($header_id == 6)
+            {
+        ?>
+                <style>
+                    /* Menu Background Color */
+                    .header-v6
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_background_color'])) ? $store_header_settings['menu_background_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Links Color */
+                    .header-v6 .header-center .menu li a, .header-v6 .header-bottom .working-time strong, .header-v6 .header-top .authentication-links li a span, .header-v6 .header-top .menu-shopping-cart .price-box strong, .header-v6 .header-top .menu-shopping-cart .price-box i, .header-v6 .header-top .menu-shopping-cart .price-box span
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                    }
+                    .header-v6 .header-top .menu-shopping-cart .number span
+                    {
+                        background-color: <?php echo (isset($store_header_settings['menu_text_color'])) ? $store_header_settings['menu_text_color'] : '' ?>!important;
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+
+                    /* Menu Button Color */
+                    .header-v6 .header-center .menu li.active a, .header-v6 .header-center .menu li:hover a, .header-v6 .header-bottom .working-time i, .header-v6 .header-top .authentication-links li a i, .header-v6 .header-top .menu-shopping-cart .number i
+                    {
+                        color: <?php echo (isset($store_header_settings['menu_button_color'])) ? $store_header_settings['menu_button_color'] : '' ?>!important;
+                    }
+                </style>
+        <?php
+            }
+        ?>
+    {{------------------------------------------------------------------------------------------------}}
+    {{-- END HEADER --}}
+{{-- END CSS --}}
 
 
 {{-- Header --}}

@@ -138,18 +138,17 @@
 
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        {{-- <input type="file" name="image" style="padding:3px;" id="image"
-                                            class="form-control"> --}}
-                                            <input class="form-control    {{ $errors->has('image') ? 'is-invalid' : '' }}" name="image" id="image" type="file">
-                                                        @if ($errors->has('image'))
-                                                            <div class="invalid-feedback">
-                                                                {{ $errors->first('image') }}
-                                                            </div>
-                                                        @endif
-                                            <img src="{{ asset('public/admin/users/'.$users->image) }}" width="60">
+                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }} p-1" name="image" id="image" type="file">
+                                        @if ($errors->has('image'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('image') }}
+                                            </div>
+                                        @endif
                                     </div>
 
-
+                                    <div class="form-group">
+                                        <img src="{{ asset('public/admin/users/'.$users->image) }}" width="60">
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="password">Password</label>
