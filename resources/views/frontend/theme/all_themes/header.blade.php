@@ -934,11 +934,14 @@
                     <div class="__right">
                         @if (!empty($userlogin))
                             <ul class="authentication-links">
-                                <li class="d-flex"><p class="m-0 text-white"></p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                                <li class="d-flex">
+                                    <p class="m-0 text-white"></p>&nbsp;
+                                    <a href="{{ route('member') }}"> ({{ $userlogin }})</a>
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ route('customerlogout') }}">
                                         {{ csrf_field() }}
-                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt">Logout</span></button>
+                                        <a type="submit" class="border-0"><i class="fas fa-sign-out-alt"></i>Logout</span></a>
                                     </form>
                                 </li>
                             </ul>            
