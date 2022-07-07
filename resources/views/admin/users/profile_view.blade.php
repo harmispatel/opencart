@@ -117,13 +117,12 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="image">Image</label>
-                                                {{-- <input type="file" name="image" style="padding:3px;" id="image" class="form-control"> --}}
                                                 <input type="file" name="image" style="padding:3px;" id="image" class="form-control {{ ($errors->has('image')) ? 'is-invalid' : '' }}" value="{{ old('image') }}">
-                                        @if($errors->has('image'))
-                                            <div class="invalid-feedback">
-                                                {{ $errors->first('image') }}
-                                            </div>
-                                        @endif
+                                                @if($errors->has('image'))
+                                                    <div class="invalid-feedback">
+                                                        {{ $errors->first('image') }}
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
 

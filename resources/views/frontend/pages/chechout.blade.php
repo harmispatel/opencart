@@ -184,14 +184,14 @@
                                             <div class="row justify-content-center">
                                                 <div class="col-md-4">
                                                     <div class="login-main text-center">
-                                                        <div class="fb-login ">
+                                                        {{-- <div class="fb-login ">
                                                             <a href="" class="btn fb-log-bt">
                                                                 <i class="fab fa-facebook-square"></i> <span>Login with facebook</span>
                                                             </a>
                                                         </div>
                                                         <div class="my-3">
                                                             <strong>OR</strong>
-                                                        </div>
+                                                        </div> --}}
                                                         <form action="{{ route('customerlogin') }}" method="POST">
                                                             {{ csrf_field() }}
                                                             <div class="login-details w-100">
