@@ -11,6 +11,7 @@ class CustomerOrder extends Model
     use HasFactory;
     protected $connection = 'mysql2';
     protected $table = 'customer_order';
+    public $timestamps = false;
 
     // Has One Relation with "oc_store" table
     public function hasOneStore()

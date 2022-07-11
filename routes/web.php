@@ -39,6 +39,7 @@ use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
 use App\Http\Controllers\Frontend\MemberController;
 use App\Http\Controllers\Frontend\MenuController;
 use App\Http\Controllers\Frontend\ReservationController;
+use App\Http\Controllers\PayPalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -374,6 +375,15 @@ Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postc
 Route::get('success', [MyBasketController::class, 'success'])->name('success');
 Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
 
+// Payment paypal
+Route::get('create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
+Route::post('process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
+Route::get('success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
+Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
+
+// Stripe
+Route::get('stripe', [StripeController::class, 'stripe']);
+Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
 
 // Get state by conrty
 Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');

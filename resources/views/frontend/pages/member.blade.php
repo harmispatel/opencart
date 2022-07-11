@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS MEMBER PAGE FOR FRONTEND
     ----------------------------------------------------------------------------------------------
     member.blade.php
     It's used for Customer login and Register.
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 
@@ -472,7 +472,7 @@
                                                                                                 </tr>
                                                                                             </table>
                                                                                             <div class="d-flex justify-content-around">
-                                                                                                <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a>
+                                                                                                {{-- <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a> --}}
                                                                                                 <button type="button" class="btn btn-sm customerorderdetail" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
                                                                                             </div>
                                                                                         </div>

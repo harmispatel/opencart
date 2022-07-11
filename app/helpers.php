@@ -680,7 +680,8 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.73/ECOMM/';
+    return 'http://192.168.1.116/opencart/';
+    // return 'http://192.168.1.73/ECOMM/';
 }
 
 
@@ -2389,27 +2390,27 @@ function openclosetime()
     $deliverydays = array();
     $deliveryfrom = array();
     $deliveryto = array();
-    // if (isset($delivery['day']) && count($delivery['day'])) {
-    //     foreach ($delivery['day'] as $keyday => $daytime) {
-    //         $deliveryday = array();
-    //         foreach ($days as $key => $day) {
-    //             if (in_array($key, $daytime)) {
-    //                $deliveryday[] = $day;
-    //             }
-    //         }
-    //         $deliverydays[]=$deliveryday;
-    //         foreach ($times as $key => $time) {
-    //             if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
-    //                 $deliveryfrom[] = $time;
-    //             }
-    //         }
-    //         foreach ($times as $key => $time) {
-    //             if (isset($delivery['to'][$keyday]) && $delivery['to'][$keyday] == $key) {
-    //                 $deliveryto[] = $time;
-    //             }
-    //         }
-    //     }
-    // }
+    if (isset($delivery['day']) && count($delivery['day'])) {
+        foreach ($delivery['day'] as $keyday => $daytime) {
+            $deliveryday = array();
+            foreach ($days as $key => $day) {
+                if (in_array($key, $daytime)) {
+                   $deliveryday[] = $day;
+                }
+            }
+            $deliverydays[]=$deliveryday;
+            foreach ($times as $key => $time) {
+                if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
+                    $deliveryfrom[] = $time;
+                }
+            }
+            foreach ($times as $key => $time) {
+                if (isset($delivery['to'][$keyday]) && $delivery['to'][$keyday] == $key) {
+                    $deliveryto[] = $time;
+                }
+            }
+        }
+    }
     $data['deliverydays'] = $deliverydays;
     $data['deliveryfrom'] = $deliveryfrom;
     $data['deliveryto'] = $deliveryto;

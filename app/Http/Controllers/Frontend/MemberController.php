@@ -301,7 +301,7 @@ class MemberController extends Controller
         $html .=         '<div class="center" style="float: left;width: 100%;text-align: center;margin-bottom: 20px;">';
         $html .=             '<a onclick="printDiv(`printthis`)" id="Print" class="btn btn-success" href="javascript:void(0)"><i class="fa fa-print" aria-hidden="true"></i> Print</a>';
         $html .=             '<a class="getorderid btn btn-success mx-2 " href="#" class="button action-write-review" value="' . $customerorders->order_id . '" data-bs-toggle="modal" data-bs-target="#orderreview"><i class="far fa-comment"></i> Review</a>';
-        $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a>';
+        // $html .=             '<a class="btn btn-success" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a>';
         $html .=         '</div>';
         $html .=     '</div>';
         $html .= '</div>';
