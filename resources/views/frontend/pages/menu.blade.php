@@ -138,8 +138,8 @@ It's used for View Menu.
                     $totime = $openclose['totime'];
                     $closedate = $openclose['close_date'];
                     $closedates = explode(',',$closedate);
-                    $date_close1 = array();
                     $currentdate = strtotime(date("Y-m-d"));
+                    $date_close1 = array();
                     foreach ($closedates as $value) {
                         $date_close = strtotime($value);
                         $date_close1[] = $date_close;
@@ -667,7 +667,6 @@ It's used for View Menu.
                                                     @php
                                                         $collectiondays = $openclose['collectiondays'];
                                                         $collectionfrom = $openclose['collectionfrom'];
-
                                                         $collection_same_bussiness = isset($openclose['collection_same_bussiness']) ? $openclose['collection_same_bussiness'] : '';
                                                     @endphp
                                                     @if ($collection_same_bussiness == 1)
@@ -681,7 +680,7 @@ It's used for View Menu.
                                                                     $firstday = $item[0];
                                                                     $lastday = $item[$t];
                                                                     $today = date('l');
-                                                                    $currentdate = strtotime(date("Y-m-d"));
+                                                                    // $currentdate = strtotime(date("Y-m-d"));
                                                                 @endphp
                                                                 @if (in_array($currentdate,$date_close1))
                                                                     <span>Close</span>
@@ -697,9 +696,7 @@ It's used for View Menu.
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
-                                                    <input class="form-check-input" type="radio" name="delivery_type"
-                                                        id="delivery"
-                                                        {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
+                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -718,9 +715,8 @@ It's used for View Menu.
                                                                     $firstday = $item[0];
                                                                     $lastday = $item[$t];
                                                                     $today = date('l');
-                                                                    $currentdate = strtotime(date("Y-m-d"));
+                                                                    // $currentdate = strtotime(date("Y-m-d"));
                                                                 @endphp
-
                                                                 @if (in_array($currentdate,$date_close1))
                                                                     <span>Close</span>
                                                                 @else
@@ -844,7 +840,7 @@ It's used for View Menu.
                                             @endforeach
                                         </select>
                                     @else
-                                        <input id="search_input1" placeholder="AB10 1BW" type="text" />
+                                        <input id="search_input1" oninput="this.value = this.value.toUpperCase()" placeholder="AB10 1BW" type="text" />
                                         <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}"
                                             style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                     @endif

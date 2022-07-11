@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS CHECKOUT PAGE FOR FRONTEND
     ----------------------------------------------------------------------------------------------
     checkout.blade.php
     It's used for checkout customer order.
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 @php
@@ -160,7 +160,14 @@
     {{-- Header  --}}
     @include('frontend.theme.all_themes.header')
 
-
+    @if(\Session::has('error'))
+        <div class="alert alert-danger">{{ \Session::get('error') }}</div>
+        {{ \Session::forget('error') }}
+    @endif
+    @if(\Session::has('success'))
+        <div class="alert alert-success">{{ \Session::get('success') }}</div>
+        {{ \Session::forget('success') }}
+    @endif
     @if (empty($userlogin) && empty($guestlogin))
         <!-- Checkout Step 1 -->
         <section class="check-main" id="checkout1">
@@ -831,10 +838,10 @@
                                                 <div class="login-details w-100">
                                                     {{-- <div class="payment-class myfoodbasketpayments_gateway">
                                                         <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/checkout-payment-card.png'}}">
-                                                    </div>
-                                                    <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/paypal.png'}}">
                                                     </div> --}}
+                                                    <div class="payment-class myfoodbasketpayments_gateway">
+                                                        <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/paypal.png'}}">
+                                                    </div>
                                                     <div class="payment-class myfoodbasketpayments_gateway">
                                                         <input type="radio" name="payment_method" value="3" id="cod" class="text-bold change_color pay_btn">
                                                         <span class="check_btn"></span>
@@ -854,12 +861,16 @@
                             <button class="btn" onclick="$('#checkout3').hide(); $('#checkout2').show();">
                                 <i class="fa fa-angle-left"></i> Back
                             </button>
-                            <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
-                            <input type="hidden" name="delivery_charge" id="delivery_charge" value="{{ isset($delivery_charge) ? $delivery_charge : '' }}">
-                            <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
-                            <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
-                            <input type="button" value="Pay {{ $currency }} {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
-                            <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                             <form action="{{ route('processTransaction') }}" method="post">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
+                                <input type="hidden" name="delivery_charge" id="delivery_charge" value="{{ isset($delivery_charge) ? $delivery_charge : '' }}">
+                                <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
+                                <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
+                                <input type="button" value="Pay {{ $currency }} {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
+                                <input type="hidden" name="currency_code" value="{{ $store_setting['config_currency'] }}">
+                                <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -1160,10 +1171,18 @@
         {
             var method_type = $('input[name="payment_method"]:checked').val();
 
+            if (method_type == 2)
+            {
+                $('#button-payment-method').val('');
+                $('#button-payment-method').val("Pay {{ $currency }} {{ isset($total) ? $total : '' }}");
+                $('#button-payment-method').removeAttr("type").attr("type", "submit");
+                // $('#button-payment-method').html("<a href='#'>Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a>");
+            }
             if (method_type == 3)
             {
                 $('#button-payment-method').val('');
                 $('#button-payment-method').val('CONFIRM');
+                $('#button-payment-method').removeAttr("type").attr("type", "button");
             }
             $('#button-payment-method').removeAttr('disabled');
         });
@@ -1218,34 +1237,59 @@
         $('#button-payment-method').on('click', function()
         {
             var method_type = $('input[name="payment_method"]:checked').val();
+            // alert(method_type);
+            // return false;
             var total = $('#total').val();
             var subtotal = $('#subtotal').val();
             var delivery_charge = $('#delivery_charge').val();
             var couponcode = $('#couponcode').val();
             var couponname = $('#couponname').val();
 
-            $.ajax({
-                type: "post",
-                url: "{{ url('confirmorder') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'p_method': method_type,
-                    'total': total,
-                    'subtotal': subtotal,
-                    'delivery_charge': delivery_charge,
-                    'couponcode': couponcode,
-                    'couponname': couponname,
-                },
-                dataType: "json",
-                success: function(response)
-                {
-                    if (response.success == 1)
+
+            // Paypal Payment Getway
+            // if (method_type == 2) {
+            //     // window.location.replace("{{ route('processTransaction') }}");
+            //     $.ajax({
+            //         type: "post",
+            //         url: "{{ route('processTransaction') }}",
+            //         data: {
+            //             "_token": "{{ csrf_token() }}",
+            //             'currencycode' : "{{ $store_setting['config_currency'] }}",
+            //             'total': total,
+            //         },
+            //         dataType: "json",
+            //         success: function (response) {
+            //             alert("Success");
+            //         }
+            //     });
+            // }
+
+
+            if (method_type == 3)
+            {
+                $.ajax({
+                    type: "post",
+                    url: "{{ url('confirmorder') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        'p_method': method_type,
+                        'total': total,
+                        'subtotal': subtotal,
+                        'delivery_charge': delivery_charge,
+                        'couponcode': couponcode,
+                        'couponname': couponname,
+                    },
+                    dataType: "json",
+                    success: function(response)
                     {
-                        var new_url = response.success_url;
-                        window.location = new_url;
+                        if (response.success == 1)
+                        {
+                            var new_url = response.success_url;
+                            window.location = new_url;
+                        }
                     }
-                }
-            });
+                });
+            }
 
         });
         // End Checkout

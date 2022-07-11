@@ -941,7 +941,7 @@
                                 <li>
                                     <form method="POST" action="{{ route('customerlogout') }}">
                                         {{ csrf_field() }}
-                                        <a type="submit" class="border-0"><i class="fas fa-sign-out-alt"></i>Logout</span></a>
+                                        <button type="submit" style="background: transparent !important" class="border-0"><i class="fas fa-sign-out-alt"></i></i>Logout</span></button>
                                     </form>
                                 </li>
                             </ul>            

@@ -1,11 +1,11 @@
-<!--
+{{--
     THIS IS HEADER OpenCloseTimeSetting PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     open_close_time_setting.blade.php
     This for Edit OpenCloseTimeSetting
     ----------------------------------------------------------------------------------------------
 
--->
+--}}
 
 {{-- Header --}}
 @include('header')
@@ -113,10 +113,10 @@
                                             <span class="btn btn-primary addtime" rel="bussines">+Add another set of hours</span>
                                         </div>
                                     </div>
-                                        <!-- end bussinestime -->
+                                        {{-- end bussinestime  --}}
 
 
-                                        <!--Closing Dates--->
+                                        {{-- Closing Dates --}}
                                         <div class="col-sm-12" id="closingdates">
                                             <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">CLOSING DATES</h4>
                                             <div class="row">
@@ -166,7 +166,7 @@
                                                                 <div class="form-group col-sm-6">
                                                                     <select class="selectday" name="delivery[day][{{ $key_delivery}}][]" class="form-control" multiple="multiple" style="width: 100% !importent;">
                                                                         @foreach($days as $key => $day)
-                                                                        <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key}}">{{$day}}</option>
+                                                                            <option @if (in_array($key, $daytime)) {{'selected'}} @endif value="{{ $key}}">{{$day}}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -261,7 +261,7 @@
                                         </div>
                                     </div>
 
-                                    <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">SETTING ORDER</h4>
+                                    {{-- <h4 class="text-success pt-3" style="border-bottom: 1px dotted black">SETTING ORDER</h4>
                                         <!-- accept order out of bussines time -->
                                         <div class="col-sm-12" id="outofbusiness">
                                             <div class="col-sm-12 d-flex">
@@ -271,7 +271,7 @@
                                                 <input class="switch-size" {{ (isset($timesetting['order_outof_bussiness_time']) && $timesetting['order_outof_bussiness_time'] == 0) ? 'checked="checked"' : '' }} name="order_outof_bussiness_time" type="radio" value="0"  />No
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                 </form>
                             </div>
                         </div>
