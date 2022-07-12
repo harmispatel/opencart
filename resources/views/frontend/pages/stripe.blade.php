@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Stripe Payment Page - HackTheStuff</title>
+      <title>Checkout</title>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
       <style type="text/css">
@@ -22,18 +22,34 @@
          }
       </style>
    </head>
-   <body>
+   <body class="vh-100">
+    @php
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
+
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+        // Get Currency Details
+        $currency = getCurrencySymbol($store_setting['config_currency']);
+
+        $ordertotal = session()->has('total') ? session('total') : '';
+    @endphp
       <div class="container">
-         <h1>Stripe Payment Page - HackTheStuff</h1>
-         <div class="row">
+         <div class="row justify-content-center h-100 align-item-center">
             <div class="col-md-6 col-md-offset-3">
                <div class="panel panel-default credit-card-box">
                   <div class="panel-heading display-table" >
                      <div class="row display-tr" >
                         <h3 class="panel-title display-td" >Payment Details</h3>
-                        <div class="display-td" >
-                           <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
-                        </div>
                      </div>
                   </div>
                   <div class="panel-body">
@@ -80,6 +96,7 @@
                               <label class='control-label'>Expiration Year</label> <input
                                  class='form-control card-expiry-year' placeholder='YYYY' size='4'
                                  type='text'>
+                                 <input type="hidden" value="{{ isset($ordertotal) ? $ordertotal : '' }}" name="total"><input type="hidden" value="{{ $store_setting['config_currency'] }}" name="currency_code">
                            </div>
                         </div>
                         <div class='form-row row'>
@@ -91,7 +108,7 @@
                         </div>
                         <div class="row">
                            <div class="col-xs-12">
-                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
+                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay {{ $currency }} {{ isset($ordertotal) ? $ordertotal : '' }}</button>
                            </div>
                         </div>
                      </form>
@@ -127,6 +144,7 @@
         if (!$form.data('cc-on-file')) {
             e.preventDefault();
             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+            // alert(form.data('stripe-publishable-key')
             Stripe.createToken({
                 number: $('.card-number').val(),
                 cvc: $('.card-cvc').val(),

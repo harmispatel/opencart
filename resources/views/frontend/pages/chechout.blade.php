@@ -30,6 +30,7 @@
 
     // Get Currency Details
     $currency = getCurrencySymbol($store_setting['config_currency']);
+    session()->put('currency', $currency);
 
     // Get Open-Close Time
     $openclose = openclosetime();
@@ -71,6 +72,9 @@
 
     $subtotal = 0;
 
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
 @endphp
 
 <!doctype html>
@@ -670,9 +674,13 @@
                                                                                                     $couponcode = $Coupon['discount'];
                                                                                                 }
                                                                                                 $total = $subtotal - $couponcode + $delivery_charge;
+                                                                                                session()->push('total');
+                                                                                                session()->save();
                                                                                             }
                                                                                         } else {
                                                                                             $total = $subtotal + $delivery_charge;
+
+
                                                                                         }
 
                                                                                     @endphp
@@ -836,9 +844,9 @@
                                         <div class="col-md-4">
                                             <div class="login-main text-center">
                                                 <div class="login-details w-100">
-                                                    {{-- <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/checkout-payment-card.png'}}">
-                                                    </div> --}}
+                                                    <div class="payment-class myfoodbasketpayments_gateway">
+                                                        <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/checkout-payment-card.png'}}">
+                                                    </div>
                                                     <div class="payment-class myfoodbasketpayments_gateway">
                                                         <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/paypal.png'}}">
                                                     </div>
@@ -868,6 +876,7 @@
                                 <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
                                 <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
                                 <input type="button" value="Pay {{ $currency }} {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
+                                {{-- <a type="hidden" href="{{ route('stripe') }}">Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a> --}}
                                 <input type="hidden" name="currency_code" value="{{ $store_setting['config_currency'] }}">
                                 <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
                             </form>
@@ -1171,6 +1180,11 @@
         {
             var method_type = $('input[name="payment_method"]:checked').val();
 
+            if (method_type == 1) {
+                $('#button-payment-method').val('');
+                $('#button-payment-method').val("Pay {{ $currency }} {{ isset($total) ? $total : '' }}");
+                $('#button-payment-method').removeAttr("type").attr("type", "button");
+            }
             if (method_type == 2)
             {
                 $('#button-payment-method').val('');
@@ -1245,6 +1259,35 @@
             var couponcode = $('#couponcode').val();
             var couponname = $('#couponname').val();
 
+            if (method_type == 1) {
+                window.location.href = "{{ route('stripe') }}";
+            }
+
+            // if (method_type == 1)
+            // {
+            //     $.ajax({
+            //         type: "post",
+            //         url: "{{ url('confirmorder') }}",
+            //         data: {
+            //             "_token": "{{ csrf_token() }}",
+            //             'p_method': method_type,
+            //             'total': total,
+            //             'subtotal': subtotal,
+            //             'delivery_charge': delivery_charge,
+            //             'couponcode': couponcode,
+            //             'couponname': couponname,
+            //         },
+            //         dataType: "json",
+            //         success: function(response)
+            //         {
+            //             if (response.success == 1)
+            //             {
+            //                 var new_url = response.success_url;
+            //                 window.location = new_url;
+            //             }
+            //         }
+            //     });
+            // }
 
             // Paypal Payment Getway
             // if (method_type == 2) {

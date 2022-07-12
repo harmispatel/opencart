@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Orders;
 use Illuminate\Http\Request;
 use Session;
 use Stripe;
+use Stripe\Order;
 
 class StripeController extends Controller
 {
@@ -25,17 +27,25 @@ class StripeController extends Controller
      */
     public function stripePost(Request $request)
     {
-        // dd($request->all());
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         Stripe\Charge::create ([
-                "amount" => 100,
-                "currency" => "inr",
+                // "amount" => 100 * 100,
+                "amount" => ceil($request->total) * 100,
+                "currency" => $request->currency_code,
                 "source" => $request->stripeToken,
-                "description" => "This payment is tested purpose"
+                "description" => "This payment is tested purpose phpcodingstuff.com"
         ]);
+
+        Orders::stripestoreOrder($request);
 
         Session::flash('success', 'Payment successful!');
 
-        return back();
+        // return back();
+        return redirect()
+        ->route('success')
+        ->with('success', 'Payment successful!');
     }
 }

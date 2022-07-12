@@ -2616,6 +2616,8 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
         }
     }
 
+
+
     $serial = serialize($arr);
     $base64 = base64_encode($serial);
     $user_id = $userid;

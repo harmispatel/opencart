@@ -282,6 +282,12 @@ class MenuController extends Controller
             $total = $subtotal + $delivery_charge;
         }
 
+        $sessiontotal = session()->put('total',$total);
+        $sessionsubtotal = session()->put('subtotal',$subtotal);
+        $sessioncouponcode = session()->put('couponcode',isset($couponcode) ? $couponcode : '');
+        $sessioncouponname = session()->put('couponname',isset($Coupon['code']) ? $Coupon['code'] : '');
+        $sessioncurrency = session()->put('currency',$store_setting['config_currency']);
+        $sessiondelivery_charge = session()->put('delivery_charge',$delivery_charge);
 
         $subtotl_html = '';
         $deliverycharge_html = '';
@@ -679,7 +685,7 @@ class MenuController extends Controller
 
         $total_pay = $sub_total - $coupontotal;
 
-        session()->put('flag_post_code', $d_type);
+        session()->put('flag_post_code','collection');
 
         return response()->json([
             'success' => 1,

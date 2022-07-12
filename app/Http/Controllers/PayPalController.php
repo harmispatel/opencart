@@ -53,13 +53,17 @@ class PayPalController extends Controller
             ]
         ]);
 
+        // echo '<pre>';
+        // print_r($response['id']);
+        // exit();
+
         if (isset($response['id']) && $response['id'] != null) {
 
             // redirect to approve href
             foreach ($response['links'] as $links) {
                 if ($links['rel'] == 'approve') {
                     // $this->successTransaction($request); // Send request to another function
-                    Orders::storeOrder($request);
+                    Orders::paypalstoreOrder($request);
                     return redirect()->away($links['href']);
                 }
             }
