@@ -32,7 +32,7 @@ $.fn.fab = function (options) {
 };
 
 $(document).ready(function () {
-
+    // alert('dsfdfd');
   $('#fab').fab({
     buttons: [
       {
@@ -47,6 +47,7 @@ $(document).ready(function () {
       }
     ]
   });
+
 
   actions.reverse().forEach(function (action) {
     $('#nav-buttons > ul').prepend(
@@ -259,10 +260,13 @@ function setOpenFolders() {
 // ====================
 
 function performLfmRequest(url, parameter, type) {
-  var data = defaultParameters();
+    var data = defaultParameters();
 
-  if (parameter != null) {
-    $.each(parameter, function (key, value) {
+     console.log(type)
+
+
+    if (parameter != null) {
+        $.each(parameter, function (key, value) {
       data[key] = value;
     });
   }
@@ -289,6 +293,7 @@ function displayErrorResponse(jqXHR) {
 }
 
 var refreshFoldersAndItems = function (data) {
+
   loadFolders();
   if (data != 'OK') {
     data = Array.isArray(data) ? data.join('<br/>') : data;
@@ -421,6 +426,7 @@ function createPagination(paginationSetting) {
 
 function loadItems(page) {
   loading(true);
+
   performLfmRequest('jsonitems', {show_list: show_list, sort_type: sort_type, page: page || 1}, 'html')
     .done(function (data) {
       selected = [];

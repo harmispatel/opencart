@@ -357,6 +357,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::group(['prefix' => 'uploadgallary','as'=>'n','middleware' => ['web']], function (){
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
+
+    // Route::group(['prefix' => 'addproduct','as'=>'n','middleware' => ['web']], function (){
+    //     \UniSharp\LaravelFilemanager\Lfm::routes();
+    // });
 });
 
 
