@@ -447,6 +447,7 @@
     var gallary1 ='';
     function getImageUrl(url)
     {
+
         modalToSelectedFilePath = url;
     }
 
