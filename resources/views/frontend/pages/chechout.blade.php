@@ -9,6 +9,15 @@
 
 @php
 
+// $paypal         = paymentdetails();
+// $paypalClint    = $paypal['paypal']['pp_sandbox_clint'];
+// $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
+// echo '<pre>';
+// print_r($paypalClint"';
+// echo "<br>";
+// print_r('$paypalSecret');
+// exit();
+
    // Get Current URL
    $currentURL = URL::to("/");
 
@@ -65,6 +74,16 @@
     }
     // End Get Guest User Detail
 
+//     $paypal = paymentdetails();
+// $paypalClint = $paypal['paypal']['pp_sandbox_clint'];
+// $paypalSecret = $paypal['paypal']['pp_sandbox_secret'];
+// echo '<pre>';
+// print_r($paypalClint);
+// echo "<br>";
+// print_r($paypalSecret);
+// exit();
+
+
     // Customer Details
     $userlogin = session('username');
     $customerid = session('userid');
@@ -72,9 +91,13 @@
 
     $subtotal = 0;
 
-        // echo '<pre>';
-        // print_r(session()->all());
-        // exit();
+    // cash on delevery setting
+    $servicecharge = paymentdetails();
+
+    $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
+    $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
+    $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
+
 @endphp
 
 <!doctype html>
@@ -195,14 +218,6 @@
                                             <div class="row justify-content-center">
                                                 <div class="col-md-4">
                                                     <div class="login-main text-center">
-                                                        {{-- <div class="fb-login ">
-                                                            <a href="" class="btn fb-log-bt">
-                                                                <i class="fab fa-facebook-square"></i> <span>Login with facebook</span>
-                                                            </a>
-                                                        </div>
-                                                        <div class="my-3">
-                                                            <strong>OR</strong>
-                                                        </div> --}}
                                                         <form action="{{ route('customerlogin') }}" method="POST">
                                                             {{ csrf_field() }}
                                                             <div class="login-details w-100">
@@ -374,9 +389,9 @@
                 </div>
             </div>
         </section>
-        <!-- End Checkout Step 1 -->
+        {{-- End Checkout Step 1 --}}
     @else
-        <!-- Checkout Step 2 -->
+        {{-- Checkout Step 2 --}}
         <section class="check-main" id="checkout2">
             <div class="container">
                 <div class="check-inr">
@@ -674,13 +689,11 @@
                                                                                                     $couponcode = $Coupon['discount'];
                                                                                                 }
                                                                                                 $total = $subtotal - $couponcode + $delivery_charge;
-                                                                                                session()->push('total');
-                                                                                                session()->save();
+                                                                                                // session()->push('total');
+                                                                                                // session()->save();
                                                                                             }
                                                                                         } else {
                                                                                             $total = $subtotal + $delivery_charge;
-
-
                                                                                         }
 
                                                                                     @endphp
@@ -770,6 +783,14 @@
                                                                                         {{ $delivery_charge }}</b></span>
                                                                             </td>
                                                                         </tr>
+                                                                        <tr id="servicecharge" style="display: none">
+                                                                            <td><b>Service Charge :</b></td>
+                                                                            <td>
+                                                                                <span id="servicechargeammout">
+                                                                                    {{-- <b id="del_charge">{{ $currency }} {{ $cashondelivery['cod_charge_payment'] ? $cashondelivery['cod_charge_payment'] : '0.00' }}</b> --}}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
                                                                         <tr class="total">
                                                                             <td><b>Total to pay:</b></td>
                                                                             <td><span><b id="total_pay">{{ $currency }}
@@ -844,18 +865,29 @@
                                         <div class="col-md-4">
                                             <div class="login-main text-center">
                                                 <div class="login-details w-100">
-                                                    <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/checkout-payment-card.png'}}">
-                                                    </div>
-                                                    <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/paypal.png'}}">
-                                                    </div>
-                                                    <div class="payment-class myfoodbasketpayments_gateway">
-                                                        <input type="radio" name="payment_method" value="3" id="cod" class="text-bold change_color pay_btn">
-                                                        <span class="check_btn"></span>
-                                                        <img src="{{ get_css_url().'public/frontend/other/cash.png' }}">
-                                                        <label class="ybc_cod" for="cod">Cash on Delivery </label>
-                                                    </div>
+                                                    @if ($servicecharge["stripe"]["stripe_status"] == 1)
+                                                        <div class="payment-class myfoodbasketpayments_gateway">
+                                                            <input type="radio" name="payment_method" value="1" id="myfoodbasketpayments_gateway" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/checkout-payment-card.png'}}">
+                                                        </div>
+                                                    @endif
+                                                    @if ($servicecharge["paypal"]["pp_express_status"] == 1)
+                                                        <div class="payment-class myfoodbasketpayments_gateway">
+                                                            <input type="radio" name="payment_method" value="2" id="myfoodbasketpayments_gateway1" class="text-bold change_color pay_btn"><span class="check_btn"></span><img class="w-100" src="{{get_css_url().'public/frontend/other/paypal.png'}}">
+                                                        </div>
+                                                    @endif
+                                                    @if ($servicecharge["cod"]["cod_status"] == 1)
+                                                        <div class="payment-class myfoodbasketpayments_gateway">
+                                                            <input type="radio" name="payment_method" value="3" id="cod" class="text-bold change_color pay_btn">
+                                                            <span class="check_btn"></span>
+                                                            <img src="{{ get_css_url().'public/frontend/other/cash.png' }}">
+                                                            @if ($userdeliverytype == 'collection')
+                                                                <label class="ybc_cod" for="cod">{{ $servicecharge['cod']['cod_front_text'] ? $servicecharge['cod']['cod_front_text'] : 'Cash On Collection' }}</label>
+                                                            @endif
+                                                            @if ($userdeliverytype == 'delivery')
+                                                                <label class="ybc_cod" for="cod">{{ $servicecharge['cod']['cod_front_text_delivery'] ? $servicecharge['cod']['cod_front_text_delivery'] : 'Cash On Delivery' }}</label>
+                                                            @endif
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -873,6 +905,7 @@
                                 {{ csrf_field() }}
                                 <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
                                 <input type="hidden" name="delivery_charge" id="delivery_charge" value="{{ isset($delivery_charge) ? $delivery_charge : '' }}">
+                                <input type="hidden" name="service_charge" id="service_charge">
                                 <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
                                 <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
                                 <input type="button" value="Pay {{ $currency }} {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
@@ -1182,21 +1215,41 @@
 
             if (method_type == 1) {
                 $('#button-payment-method').val('');
-                $('#button-payment-method').val("Pay {{ $currency }} {{ isset($total) ? $total : '' }}");
+                $('#button-payment-method').val("Pay {{ $currency }} {{ $total + $stripe_charge }}");
                 $('#button-payment-method').removeAttr("type").attr("type", "button");
+                $('#servicecharge').css("display", "contents");
+                $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} {{ $stripe_charge }}</b>');
+                $('#total_pay').text('');
+                $('#total_pay').text("{{ $currency }} {{ $total + $stripe_charge }}");
+                $('#total').val({{ $total + $stripe_charge }});
+                $('#service_charge').val({{ $stripe_charge }});
+                // $.session.set('total', {{ $total + $stripe_charge }});
             }
             if (method_type == 2)
             {
                 $('#button-payment-method').val('');
-                $('#button-payment-method').val("Pay {{ $currency }} {{ isset($total) ? $total : '' }}");
+                $('#button-payment-method').val("Pay {{ $currency }} {{ $total + $paypal_charge }}");
                 $('#button-payment-method').removeAttr("type").attr("type", "submit");
-                // $('#button-payment-method').html("<a href='#'>Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a>");
+                $('#button-payment-method').html("<a href='#'>Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a>");
+                $('#servicecharge').css("display", "contents");
+                $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} {{ $paypal_charge }}</b>');
+                $('#total_pay').text('');
+                $('#total_pay').text("{{ $currency }} {{ $total + $paypal_charge }}");
+                $('#total').val({{ $total + $paypal_charge }});
+                $('#service_charge').val({{ $paypal_charge }});
             }
             if (method_type == 3)
             {
                 $('#button-payment-method').val('');
                 $('#button-payment-method').val('CONFIRM');
                 $('#button-payment-method').removeAttr("type").attr("type", "button");
+                $('#servicecharge').css("display", "contents");
+                $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} {{ $cod_charge }}</b>');
+                $('#total_pay').text('');
+                $('#total_pay').text("{{ $currency }} {{ $total + $cod_charge }}");
+                $('#total').val({{ $total + $cod_charge }});
+                $('#service_charge').val({{ $cod_charge }});
+
             }
             $('#button-payment-method').removeAttr('disabled');
         });
@@ -1256,6 +1309,7 @@
             var total = $('#total').val();
             var subtotal = $('#subtotal').val();
             var delivery_charge = $('#delivery_charge').val();
+            var service_charge = $('#service_charge').val();
             var couponcode = $('#couponcode').val();
             var couponname = $('#couponname').val();
 
@@ -1319,6 +1373,7 @@
                         'total': total,
                         'subtotal': subtotal,
                         'delivery_charge': delivery_charge,
+                        'service_charge': service_charge,
                         'couponcode': couponcode,
                         'couponname': couponname,
                     },

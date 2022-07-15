@@ -41,7 +41,17 @@
         // Get Currency Details
         $currency = getCurrencySymbol($store_setting['config_currency']);
 
+        $servicecharge = paymentdetails();
+        // stripe key
+        $stripekey = $servicecharge["stripe"]["stripe_publickey"] ? $servicecharge["stripe"]["stripe_publickey"] : '';
+
+        $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
+        $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
+        $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
+
+
         $ordertotal = session()->has('total') ? session('total') : '';
+        $total = $ordertotal + $stripe_charge;
     @endphp
       <div class="container">
          <div class="row justify-content-center h-100 align-item-center">
@@ -65,7 +75,7 @@
                         method="post"
                         class="require-validation"
                         data-cc-on-file="false"
-                        data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
+                        data-stripe-publishable-key="{{ $stripekey }}"
                         id="payment-form">
                         @csrf
                         <div class='form-row row'>
@@ -96,7 +106,9 @@
                               <label class='control-label'>Expiration Year</label> <input
                                  class='form-control card-expiry-year' placeholder='YYYY' size='4'
                                  type='text'>
-                                 <input type="hidden" value="{{ isset($ordertotal) ? $ordertotal : '' }}" name="total"><input type="hidden" value="{{ $store_setting['config_currency'] }}" name="currency_code">
+                                 <input type="hidden" value="{{ $total }}" name="total">
+                                 <input type="hidden" value="{{ $store_setting['config_currency'] }}" name="currency_code">
+                                 <input type="hidden" value="{{ $stripe_charge }}" name="stripe_service_charge">
                            </div>
                         </div>
                         <div class='form-row row'>
@@ -108,7 +120,7 @@
                         </div>
                         <div class="row">
                            <div class="col-xs-12">
-                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay {{ $currency }} {{ isset($ordertotal) ? $ordertotal : '' }}</button>
+                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay {{ $currency }} {{ $total }}</button>
                            </div>
                         </div>
                      </form>

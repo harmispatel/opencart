@@ -1,8 +1,8 @@
 {{--
-    THIS IS HEADER CASHSETTING PAGE FOR ADMIN PANEL
+    THIS IS HEADER PAYPALSETTING PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
-    cashsetting.blade.php
-    Its Used for Cash Payment Setting
+    paypalsetting.blade.php
+    Its Used for Paypal Payment Setting
     ----------------------------------------------------------------------------------------------
 --}}
 
@@ -39,7 +39,7 @@
                 @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Cash</h1>
+                        <h1>Paypal</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
@@ -61,13 +61,13 @@
                         {{-- Card --}}
                         <div class="card card-primary">
                             {{-- Form --}}
-                            <form action="{{ route('storecashsetting') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('storepaypalsetting') }}" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Header --}}
                                 <div class="card-header">
                                     <h3 class="card-title pt-2 m-0" style="color: black">
                                         <i class="fa fa-cog pr-2"></i>
-                                        CASH SETTING
+                                        PAYPAL SETTING
                                     </h3>
                                     <div class="container" style="text-align: right">
                                         <button type="submit" class="btn btn-sm btn-primary ml-auto">
@@ -84,9 +84,9 @@
                                 <div class="card-body">
                                     <div class="form-group float-right">
                                         <div class="btn-group">
-                                            <input type="radio" class="radio" id="enable" name="cod_status" value="1" {{ $cod['cod_status'] == 1 ? 'checked': '' }}>
+                                            <input type="radio" class="radio" id="enable" name="paypal_status" value="1" {{ $paypal['pp_express_status'] == 1 ? 'checked' : '' }}>
                                             <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable">Enable</label>
-                                            <input type="radio" class="radio" id="disable" name="cod_status" value="0" {{ $cod['cod_status'] == 0 ? 'checked': '' }}>
+                                            <input type="radio" class="radio" id="disable" name="paypal_status" value="0" {{ $paypal['pp_express_status'] == 0 ? 'checked' : '' }}>
                                             <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable">Disable</label>
                                         </div>
                                     </div>
@@ -94,23 +94,55 @@
                                     <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
 
                                         <div class="form-group mt-3">
-                                            <label for="fronttext">Front end text for collection</label>
-                                            <input type="text" class="form-control" name="fronttext" value="{{ $cod['cod_front_text'] }}" id="fronttext">
+                                            <label for="apiusername">* API Username</label>
+                                            <input type="text" class="form-control" name="apiusername" value="{{ $paypal['pp_express_username'] }}" id="apiusername">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="printertext">Printer Text</label>
-                                            <input type="text" class="form-control" name="printertext" value="{{ $cod['cod_printer_text'] }}" id="printertext">
+                                            <label for="apipassword">* API Password</label>
+                                            <input type="text" class="form-control" name="apipassword" value="{{ $paypal['pp_express_password'] }}" id="apipassword">
                                         </div>
 
                                         <div class="form-group">
+                                            <label for="apisignature">* API Signature</label>
+                                            <input type="text" class="form-control" name="apisignature" value="{{ $paypal['pp_express_signature'] }}" id="apisignature">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="fronttext">Front end text</label>
+                                            <input type="text" class="form-control" name="fronttext" value="{{ $paypal['pp_front_text'] }}" id="fronttext">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="sandbox_clint">Sandbox Clint Id</label>
+                                            <input type="text" class="form-control" name="sandbox_clint" value="{{ $paypal['pp_sandbox_clint'] }}" id="sandbox_clint">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="sandbox_secret">Sandbox Secret Key</label>
+                                            <input type="text" class="form-control" name="sandbox_secret" value="{{ $paypal['pp_sandbox_secret'] }}" id="sandbox_secret">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="mr-4" for="sandbox_secret">Paypal(Sandbox)</label>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="paypalmod" id="yes" value="1" {{ $paypal['pp_express_test'] == 1 ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="yes">Yes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="paypalmod"  id="no" value="0" {{ $paypal['pp_express_test'] == 0 ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="no">No</label>
+                                            </div>
+                                        </div>
+
+                                        {{-- <div class="form-group">
                                             <label for="deliverytext">Front end text for delivery</label>
-                                            <input class="form-control" name="deliverytext" value="{{ $cod['cod_front_text_delivery'] }}" id="deliverytext" type="text">
-                                        </div>
+                                            <input class="form-control" name="deliverytext" value="{{ $paypal['cod_front_text'] }}" id="deliverytext" type="text">
+                                        </div> --}}
 
                                         <div class="form-group">
-                                            <label for="paycharge">Charge for payment</label>
-                                            <input class="form-control" name="paycharge" value="{{ $cod['cod_charge_payment'] }}" id="paycharge" type="text">
+                                            <label for="paycharge">Charge for this payment</label>
+                                            <input class="form-control" name="paycharge" value="{{ $paypal['pp_charge_payment'] }}" id="paycharge" type="text">
                                         </div>
 
                                         {{-- <div class="form-group">
@@ -120,7 +152,7 @@
 
                                         <div class="form-group">
                                             <label for="sortorder">Sort Order</label>
-                                            <input class="form-control" name="sortorder" value="{{ $cod['cod_sort_order'] }}" id="sortorder" type="text">
+                                            <input class="form-control" name="sortorder" value="{{ $paypal['pp_express_sort_order'] }}" id="sortorder" type="text">
                                         </div>
                                     </div>
                                     {{-- End General Tab --}}

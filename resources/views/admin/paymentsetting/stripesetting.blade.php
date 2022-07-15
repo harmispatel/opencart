@@ -1,8 +1,8 @@
 {{--
-    THIS IS HEADER CASHSETTING PAGE FOR ADMIN PANEL
+    THIS IS HEADER STRIPESETTING PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
-    cashsetting.blade.php
-    Its Used for Cash Payment Setting
+    stripesetting.blade.php
+    Its Used for Stripe Payment Setting
     ----------------------------------------------------------------------------------------------
 --}}
 
@@ -39,7 +39,7 @@
                 @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Cash</h1>
+                        <h1>Stripe</h1>
                     </div>
                     {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
@@ -61,13 +61,13 @@
                         {{-- Card --}}
                         <div class="card card-primary">
                             {{-- Form --}}
-                            <form action="{{ route('storecashsetting') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('storestripesetting') }}" method="POST" enctype="multipart/form-data">
                                 {{ @csrf_field() }}
                                 {{-- Card Header --}}
                                 <div class="card-header">
                                     <h3 class="card-title pt-2 m-0" style="color: black">
                                         <i class="fa fa-cog pr-2"></i>
-                                        CASH SETTING
+                                        STRIPE SETTING
                                     </h3>
                                     <div class="container" style="text-align: right">
                                         <button type="submit" class="btn btn-sm btn-primary ml-auto">
@@ -78,54 +78,58 @@
                                         </a>
                                     </div>
                                 </div>
-                                {{-- End Card Header --}}
 
-                                {{-- Card Body --}}
                                 <div class="card-body">
                                     <div class="form-group float-right">
                                         <div class="btn-group">
-                                            <input type="radio" class="radio" id="enable" name="cod_status" value="1" {{ $cod['cod_status'] == 1 ? 'checked': '' }}>
+                                            <input type="radio" class="radio" id="enable" name="stripe_status" value="1" {{ $stripe['stripe_status'] == 1  ? 'checked' : ''}}>
                                             <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable">Enable</label>
-                                            <input type="radio" class="radio" id="disable" name="cod_status" value="0" {{ $cod['cod_status'] == 0 ? 'checked': '' }}>
+                                            <input type="radio" class="radio" id="disable" name="stripe_status" value="0"  {{ $stripe['stripe_status'] == 0  ? 'checked' : ''}}>
                                             <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable">Disable</label>
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
-
-                                        <div class="form-group mt-3">
-                                            <label for="fronttext">Front end text for collection</label>
-                                            <input type="text" class="form-control" name="fronttext" value="{{ $cod['cod_front_text'] }}" id="fronttext">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="printertext">Printer Text</label>
-                                            <input type="text" class="form-control" name="printertext" value="{{ $cod['cod_printer_text'] }}" id="printertext">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="deliverytext">Front end text for delivery</label>
-                                            <input class="form-control" name="deliverytext" value="{{ $cod['cod_front_text_delivery'] }}" id="deliverytext" type="text">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="paycharge">Charge for payment</label>
-                                            <input class="form-control" name="paycharge" value="{{ $cod['cod_charge_payment'] }}" id="paycharge" type="text">
-                                        </div>
-
-                                        {{-- <div class="form-group">
-                                            <label for="minammount">Minimum Amounth</label>
-                                            <input class="form-control" name="minammount" id="minammount" type="text">
-                                        </div> --}}
-
-                                        <div class="form-group">
-                                            <label for="sortorder">Sort Order</label>
-                                            <input class="form-control" name="sortorder" value="{{ $cod['cod_sort_order'] }}" id="sortorder" type="text">
-                                        </div>
+                                    <div class="form-group mt-3">
+                                        <label for="publickey">* Public Key</label>
+                                        <input type="text" class="form-control" name="publickey" value="{{ $stripe['stripe_publickey'] }}" id="publickey">
                                     </div>
-                                    {{-- End General Tab --}}
 
-                                    {{-- End Tabs Content --}}
+                                    <div class="form-group">
+                                        <label for="secretkey">* Secret Key</label>
+                                        <input type="text" class="form-control" name="secretkey" value="{{ $stripe['stripe_secretkey'] }}" id="secretkey">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="printertext">Printer Text</label>
+                                        <input type="text" class="form-control" name="printertext" value="{{ $stripe['stripe_printer_text'] }}" id="printertext">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="paycharge">Charge for this payment</label>
+                                        <input class="form-control" name="paycharge" value="{{ $stripe['stripe_charge_payment'] }}" id="paycharge" type="text">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="order_status">* Successful Transaction Order Status</label>
+                                        <select class="form-control" id="order_status" name="order_status">
+                                            <option selected disabled>Please select an option...</option>
+                                            @foreach ($orderstatus as $item)
+                                                <option value="{{ $item->order_status_id }}" {{ ($item->order_status_id == $stripe['stripe_order_status']) ? 'selected' : "" }}>{{$item->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="form-text text-muted">Select the desired status for a succesful transaction made through the gateway</small>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="orderstatus_faild">* Failed Transaction Order Status</label>
+                                        <select class="form-control" id="orderstatus_faild" name="orderstatus_faild">
+                                            <option selected disabled>Please select an option...</option>
+                                            @foreach ($orderstatus as $item)
+                                                <option value="{{ $item->order_status_id }}" {{ ($item->order_status_id == $stripe['stripe_orderstatus_faild']) ? 'selected' : "" }}>{{$item->name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <small class="form-text text-muted">Select the desired status for a failed transaction made through the gateway</small>
+                                    </div>
                                 </div>
                                 {{-- End Card Body --}}
                             </form>

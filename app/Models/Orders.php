@@ -91,6 +91,7 @@ class Orders extends Model
      $delivery_type = session()->get('flag_post_code');
 
      $total = $request->total;
+     $servicecharge = $request->service_charge;
      $subtotal = $request->subtotal;
      $delivery_charge = $request->delivery_charge;
      $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
@@ -308,6 +309,19 @@ class Orders extends Model
                      $gordersubtotal->sort_order = 0;
                      $gordersubtotal->save();
 
+
+                    // service charge
+                    if ($servicecharge != "") {
+                        $gordertotal = new OrderTotal;
+                        $gordertotal->order_id = $gorder->order_id;
+                        $gordertotal->code = 'credit';
+                        $gordertotal->title = 'Service Charge';
+                        $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                        $gordertotal->value = $servicecharge;
+                        $gordertotal->sort_order = 0;
+                        $gordertotal->save();
+                    }
+
                      // Total to Pay
                      $gordertotal = new OrderTotal;
                      $gordertotal->order_id = $gorder->order_id;
@@ -491,6 +505,18 @@ class Orders extends Model
                  $ordersubtotal->value = $subtotal;
                  $ordersubtotal->sort_order = 0;
                  $ordersubtotal->save();
+
+                // service charge
+                if ($servicecharge != "") {
+                    $orderservicecharge = new OrderTotal;
+                    $orderservicecharge->order_id = $order->order_id;
+                    $orderservicecharge->code = 'credit';
+                    $orderservicecharge->title = 'Service Charge';
+                    $orderservicecharge->text = $currency_details['symbol_left'].$servicecharge;
+                    $orderservicecharge->value = $servicecharge;
+                    $orderservicecharge->sort_order = 0;
+                    $orderservicecharge->save();
+                }
 
                  // Total to Pay
                  $ordertotal = new OrderTotal;
@@ -710,6 +736,18 @@ class Orders extends Model
                      $gordersubtotal->sort_order = 0;
                      $gordersubtotal->save();
 
+                    // service charge
+                    if ($servicecharge != "") {
+                        $gordertotal = new OrderTotal;
+                        $gordertotal->order_id = $gorder->order_id;
+                        $gordertotal->code = 'credit';
+                        $gordertotal->title = 'Service Charge';
+                        $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                        $gordertotal->value = $servicecharge;
+                        $gordertotal->sort_order = 0;
+                        $gordertotal->save();
+                    }
+
                      // Total to Pay
                      $gordertotal = new OrderTotal;
                      $gordertotal->order_id = $gorder->order_id;
@@ -894,6 +932,18 @@ class Orders extends Model
                      $ordersubtotal->sort_order = 0;
                      $ordersubtotal->save();
 
+                    // service charge
+                    if ($servicecharge != "") {
+                        $orderservisecharge = new OrderTotal;
+                        $orderservisecharge->order_id = $order->order_id;
+                        $orderservisecharge->code = 'credit';
+                        $orderservisecharge->title = 'Service Charge';
+                        $orderservisecharge->text = $currency_details['symbol_left'].$servicecharge;
+                        $orderservisecharge->value = $servicecharge;
+                        $orderservisecharge->sort_order = 0;
+                        $orderservisecharge->save();
+                    }
+
                      // Total to Pay
                      $ordertotal = new OrderTotal;
                      $ordertotal->order_id = $order->order_id;
@@ -937,7 +987,7 @@ class Orders extends Model
      }
    }
 
-
+    // Stripe payment gateway order store
    public static function stripestoreOrder(Request $request)
    {
 
@@ -964,8 +1014,9 @@ class Orders extends Model
      $delivery_charge = session()->get('delivery_charge');
      $couponcode = session()->get('couponcode');
      $couponname = session()->get('couponname');
+     $servicecharge = $request->stripe_service_charge;
 
-    //  $total = $request->total;
+     $total = $request->total;
     //  $subtotal = $request->subtotal;
     //  $delivery_charge = $request->delivery_charge;
     //  $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
@@ -1183,6 +1234,18 @@ class Orders extends Model
                      $gordersubtotal->sort_order = 0;
                      $gordersubtotal->save();
 
+                    // service charge
+                    if ($servicecharge != "") {
+                        $gordertotal = new OrderTotal;
+                        $gordertotal->order_id = $gorder->order_id;
+                        $gordertotal->code = 'credit';
+                        $gordertotal->title = 'Service Charge';
+                        $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                        $gordertotal->value = $servicecharge;
+                        $gordertotal->sort_order = 0;
+                        $gordertotal->save();
+                    }
+
                      // Total to Pay
                      $gordertotal = new OrderTotal;
                      $gordertotal->order_id = $gorder->order_id;
@@ -1366,6 +1429,18 @@ class Orders extends Model
                  $ordersubtotal->value = $subtotal;
                  $ordersubtotal->sort_order = 0;
                  $ordersubtotal->save();
+
+                // service charge
+                if ($servicecharge != "") {
+                    $ordertservicecharge = new OrderTotal;
+                    $ordertservicecharge->order_id = $order->order_id;
+                    $ordertservicecharge->code = 'credit';
+                    $ordertservicecharge->title = 'Service Charge';
+                    $ordertservicecharge->text = $currency_details['symbol_left'].$servicecharge;
+                    $ordertservicecharge->value = $servicecharge;
+                    $ordertservicecharge->sort_order = 0;
+                    $ordertservicecharge->save();
+                }
 
                  // Total to Pay
                  $ordertotal = new OrderTotal;
@@ -1565,14 +1640,14 @@ class Orders extends Model
 
                      // Coupon Code
                      if ($couponcode != 0) {
-                         $gordercoupon = new OrderTotal;
-                         $gordercoupon->order_id = $gorder->order_id;
-                         $gordercoupon->code = 'coupon';
-                         $gordercoupon->title = 'Coupon(' . $couponname . ')';
-                         $gordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
-                         $gordercoupon->value = '-' . $couponcode;
-                         $gordercoupon->sort_order = 0;
-                         $gordercoupon->save();
+                        $gordercoupon = new OrderTotal;
+                        $gordercoupon->order_id = $gorder->order_id;
+                        $gordercoupon->code = 'coupon';
+                        $gordercoupon->title = 'Coupon(' . $couponname . ')';
+                        $gordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
+                        $gordercoupon->value = '-' . $couponcode;
+                        $gordercoupon->sort_order = 0;
+                        $gordercoupon->save();
                      }
 
                      // Subtotal
@@ -1584,6 +1659,18 @@ class Orders extends Model
                      $gordersubtotal->value = $subtotal;
                      $gordersubtotal->sort_order = 0;
                      $gordersubtotal->save();
+
+                    // service charge
+                    if ($servicecharge != "") {
+                        $gordertotal = new OrderTotal;
+                        $gordertotal->order_id = $gorder->order_id;
+                        $gordertotal->code = 'credit';
+                        $gordertotal->title = 'Service Charge';
+                        $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                        $gordertotal->value = $servicecharge;
+                        $gordertotal->sort_order = 0;
+                        $gordertotal->save();
+                    }
 
                      // Total to Pay
                      $gordertotal = new OrderTotal;
@@ -1768,6 +1855,18 @@ class Orders extends Model
                      $ordersubtotal->value = $subtotal;
                      $ordersubtotal->sort_order = 0;
                      $ordersubtotal->save();
+
+                    // service charge
+                    if ($servicecharge != "") {
+                        $orderservicecharge = new OrderTotal;
+                        $orderservicecharge->order_id = $order->order_id;
+                        $orderservicecharge->code = 'credit';
+                        $orderservicecharge->title = 'Service Charge';
+                        $orderservicecharge->text = $currency_details['symbol_left'].$servicecharge;
+                        $orderservicecharge->value = $servicecharge;
+                        $orderservicecharge->sort_order = 0;
+                        $orderservicecharge->save();
+                    }
 
                      // Total to Pay
                      $ordertotal = new OrderTotal;

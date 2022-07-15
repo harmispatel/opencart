@@ -22,6 +22,7 @@ use App\Models\GallaryLayouts;
 use App\Models\Headers;
 use App\Models\OpenhourLayouts;
 use App\Models\Orders;
+use App\Models\OrderStatus;
 use App\Models\Region;
 use App\Models\Settings;
 use App\Models\Store;
@@ -2760,6 +2761,121 @@ function getallproduct($id)
     })->limit(10)->get();
 
     return $categorytoproduct;
+}
+
+// Payment settings
+function paymentdetails()
+{
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        $key = ([
+            'cod_order_status_id',
+            'cod_total',
+            'cod_charge_payment',
+            'cod_geo_zone_id',
+            'cod_front_text_delivery',
+            'cod_printer_text',
+            'cod_status',
+            'cod_front_text',
+            'cod_sort_order',
+        ]);
+
+        $cod = [];
+
+        foreach ($key as $row)
+        {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+            $cod[$row] = isset($query->value) ? $query->value : '';
+        }
+
+        $orderstatus = OrderStatus::get();
+
+
+        $key = ([
+            'stripe_publickey',
+            'stripe_secretkey',
+            'stripe_charge_payment',
+            'stripe_geo_zone_id',
+            'stripe_printer_text',
+            'stripe_order_status',
+            'stripe_orderstatus_faild',
+            'stripe_status',
+        ]);
+
+        $stripe = [];
+
+        foreach ($key as $row)
+        {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+            $stripe[$row] = isset($query->value) ? $query->value : '';
+        }
+
+        $key = ([
+            'pp_express_completed_status_id',
+            'pp_express_pending_status_id',
+            'pp_express_failed_status_id',
+            'pp_express_expired_status_id',
+            'pp_express_denied_status_id',
+            'pp_express_canceled_reversal_status_id',
+            'pp_express_profile_cancel_status',
+            'pp_express_currency',
+            'pp_express_geo_zone_id',
+            'pp_express_method',
+            'pp_express_total',
+            'pp_express_debug',
+            'pp_express_logo',
+            'pp_express_border_colour',
+            'pp_express_processed_status_id',
+            'pp_express_refunded_status_id',
+            'pp_express_reversed_status_id',
+            'pp_express_voided_status_id',
+            'pp_express_allow_note',
+            'pp_express_voided_status_id',
+            'pp_express_reversed_status_id',
+            'curren_store_id',
+            'pp_express_debug',
+            'pp_express_method',
+            'pp_express_geo_zone_id',
+            'pp_express_currency',
+            'pp_express_profile_cancel_status',
+            'pp_express_canceled_reversal_status_id',
+            'pp_express_completed_status_id',
+            'pp_express_expired_status_id',
+            'pp_express_failed_status_id',
+            'pp_express_pending_status_id',
+            'pp_express_processed_status_id',
+            'pp_express_refunded_status_id',
+            'pp_printer_text',
+            'pp_express_test',
+            'pp_express_page_colour',
+            'pp_express_password',
+            'pp_express_username',
+            'pp_express_header_colour',
+            'cod_status',
+            'pp_express_sort_order',
+            'pp_charge_payment',
+            'pp_front_text',
+            'pp_express_signature',
+            'pp_sandbox_secret',
+            'pp_sandbox_clint',
+            'pp_express_status',
+        ]);
+        $paypal = [];
+
+        foreach ($key as $row)
+        {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+            $paypal[$row] = isset($query->value) ? $query->value : '';
+        }
+
+        return compact('cod', 'stripe', 'paypal');
 }
 
 

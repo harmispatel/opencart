@@ -51,8 +51,8 @@
                                     {{ csrf_field() }}
                                     <h5><a href="{{ route('cashpaysetting') }}" style="cursor: pointer;">Cash</a></h5><hr>
                                     {{-- <h5><a href="#" style="cursor: pointer;">Cash on Delivery</a></h5><hr> --}}
-                                    <h5><a href="#" style="cursor: pointer;">Paypal</a></h5><hr>
-                                    <h5><a href="#" style="cursor: pointer;">Strip</a></h5><hr>
+                                    <h5><a href="{{ route('paypalsetting') }}" style="cursor: pointer;">Paypal</a></h5><hr>
+                                    <h5><a href="{{ route('stripesetting') }}" style="cursor: pointer;">Strip</a></h5><hr>
                                 </form>
                             </div>
                         </div>

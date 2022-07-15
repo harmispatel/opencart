@@ -339,9 +339,17 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deleteGroup', [SettingsController::class, 'deleteGroup'])->name('deleteGroup');
     Route::post('manageDeliveryCollection', [SettingsController::class, 'manageDeliveryCollection'])->name('manageDeliveryCollection');
 
-    // payment settings
+    // cash payment settings
     Route::get('cashpaysetting', [PaymentSettingController::class, 'cashpaysetting'])->name('cashpaysetting');
     Route::post('storecashsetting', [PaymentSettingController::class, 'storecashsetting'])->name('storecashsetting');
+
+    // paypal payment settings
+    Route::get('paypalsetting', [PaymentSettingController::class, 'paypalsetting'])->name('paypalsetting');
+    Route::post('storepaypalsetting', [PaymentSettingController::class, 'storepaypalsetting'])->name('storepaypalsetting');
+
+    // stripe payment settings
+    Route::get('stripesetting', [PaymentSettingController::class, 'stripesetting'])->name('stripesetting');
+    Route::post('storestripesetting', [PaymentSettingController::class, 'storestripesetting'])->name('storestripesetting');
 
 
     // Product icons

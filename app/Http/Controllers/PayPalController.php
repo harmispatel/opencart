@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orders;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
@@ -29,13 +30,25 @@ class PayPalController extends Controller
     public function processTransaction(Request $request)
     {
 
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
+        $paypal         = paymentdetails();
+        $paypalmod    = $paypal['paypal']['pp_express_test'];
+
+        $paypalClint    = $paypal['paypal']['pp_sandbox_clint'];
+        $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
+        if ($paypalmod == 1) {
+            Config::set('paypal.mode', "live");
+            // Config::set('paypal.live.client_id', $paypalClint);
+            // Config::set('paypal.live.client_secret', $paypalSecret);
+        }
+        if ($paypalmod == 0) {
+            Config::set('paypal.mode', "sandbox");
+            Config::set('paypal.sandbox.client_id', $paypalClint);
+            Config::set('paypal.sandbox.client_secret', $paypalSecret);
+        }
 
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
-        $data['paypalToken'] = $provider->getAccessToken();
+        $paypalToken = $provider->getAccessToken();
 
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
@@ -63,7 +76,7 @@ class PayPalController extends Controller
             foreach ($response['links'] as $links) {
                 if ($links['rel'] == 'approve') {
                     // $this->successTransaction($request); // Send request to another function
-                    Orders::paypalstoreOrder($request);
+                    // Orders::paypalstoreOrder($request);
                     return redirect()->away($links['href']);
                 }
             }
