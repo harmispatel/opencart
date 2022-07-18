@@ -385,6 +385,8 @@
                                                                 <select name="order_status_id" id="input-order-status" class="form-control">
                                                                         @foreach ($orderstatus as $status)
                                                                             <option value="{{ $status->order_status_id }}">
+                                                                                {{-- Old order status selected --}}
+                                                                            {{-- <option value="{{ $status->order_status_id }}" {{ $status->order_status_id ==  $orders->order_status_id ? 'selected' : ''}}> --}}
                                                                                 {{ $status->name }}
                                                                             </option>
                                                                         @endforeach
@@ -442,7 +444,6 @@
 
 <!-- SCRIPT -->
 
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
 

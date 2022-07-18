@@ -40,7 +40,9 @@ use App\Http\Controllers\Frontend\HomeController as HomeControllerFront;
 use App\Http\Controllers\Frontend\MemberController;
 use App\Http\Controllers\Frontend\MenuController;
 use App\Http\Controllers\Frontend\ReservationController;
+use App\Http\Controllers\PaymentSettingController;
 use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\StripeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -338,6 +340,19 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deleteGroup', [SettingsController::class, 'deleteGroup'])->name('deleteGroup');
     Route::post('manageDeliveryCollection', [SettingsController::class, 'manageDeliveryCollection'])->name('manageDeliveryCollection');
 
+    // cash payment settings
+    Route::get('cashpaysetting', [PaymentSettingController::class, 'cashpaysetting'])->name('cashpaysetting');
+    Route::post('storecashsetting', [PaymentSettingController::class, 'storecashsetting'])->name('storecashsetting');
+
+    // paypal payment settings
+    Route::get('paypalsetting', [PaymentSettingController::class, 'paypalsetting'])->name('paypalsetting');
+    Route::post('storepaypalsetting', [PaymentSettingController::class, 'storepaypalsetting'])->name('storepaypalsetting');
+
+    // stripe payment settings
+    Route::get('stripesetting', [PaymentSettingController::class, 'stripesetting'])->name('stripesetting');
+    Route::post('storestripesetting', [PaymentSettingController::class, 'storestripesetting'])->name('storestripesetting');
+
+
     // Product icons
     Route::get('producticons', [ProductIconsController::class, 'index'])->name('producticons');
     Route::get('addproducticon', [ProductIconsController::class, 'add'])->name('addproducticon');
@@ -392,7 +407,7 @@ Route::get('success-transaction', [PayPalController::class, 'successTransaction'
 Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
 
 // Stripe
-Route::get('stripe', [StripeController::class, 'stripe']);
+Route::get('stripe', [StripeController::class, 'stripe'])->name('stripe');
 Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
 
 // Get state by conrty

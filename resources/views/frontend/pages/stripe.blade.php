@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Stripe Payment Page - HackTheStuff</title>
+      <title>Checkout</title>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
       <style type="text/css">
@@ -22,18 +22,44 @@
          }
       </style>
    </head>
-   <body>
+   <body class="vh-100">
+    @php
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
+
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+        // Get Currency Details
+        $currency = getCurrencySymbol($store_setting['config_currency']);
+
+        $servicecharge = paymentdetails();
+        // stripe key
+        $stripekey = $servicecharge["stripe"]["stripe_publickey"] ? $servicecharge["stripe"]["stripe_publickey"] : '';
+
+        $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
+        $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
+        $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
+
+
+        $ordertotal = session()->has('total') ? session('total') : '';
+        $total = $ordertotal + $stripe_charge;
+    @endphp
       <div class="container">
-         <h1>Stripe Payment Page - HackTheStuff</h1>
-         <div class="row">
+         <div class="row justify-content-center h-100 align-item-center">
             <div class="col-md-6 col-md-offset-3">
                <div class="panel panel-default credit-card-box">
                   <div class="panel-heading display-table" >
                      <div class="row display-tr" >
                         <h3 class="panel-title display-td" >Payment Details</h3>
-                        <div class="display-td" >
-                           <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
-                        </div>
                      </div>
                   </div>
                   <div class="panel-body">
@@ -49,7 +75,7 @@
                         method="post"
                         class="require-validation"
                         data-cc-on-file="false"
-                        data-stripe-publishable-key="{{ env('STRIPE_KEY') }}"
+                        data-stripe-publishable-key="{{ $stripekey }}"
                         id="payment-form">
                         @csrf
                         <div class='form-row row'>
@@ -80,18 +106,20 @@
                               <label class='control-label'>Expiration Year</label> <input
                                  class='form-control card-expiry-year' placeholder='YYYY' size='4'
                                  type='text'>
+                                 <input type="hidden" value="{{ $total }}" name="total">
+                                 <input type="hidden" value="{{ $store_setting['config_currency'] }}" name="currency_code">
+                                 <input type="hidden" value="{{ $stripe_charge }}" name="stripe_service_charge">
                            </div>
                         </div>
                         <div class='form-row row'>
                            <div class='col-md-12 error form-group hide'>
-                              <div class='alert-danger alert'>Please correct the errors and try
-                                 again.
-                              </div>
+                              {{-- <div class='alert-danger alert'>Please correct the errors and try again.</div> --}}
+                              <div class='alert-danger alert'></div>
                            </div>
                         </div>
                         <div class="row">
                            <div class="col-xs-12">
-                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay Now ($100)</button>
+                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay {{ $currency }} {{ $total }}</button>
                            </div>
                         </div>
                      </form>
@@ -127,6 +155,7 @@
         if (!$form.data('cc-on-file')) {
             e.preventDefault();
             Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+            // alert(form.data('stripe-publishable-key')
             Stripe.createToken({
                 number: $('.card-number').val(),
                 cvc: $('.card-cvc').val(),
@@ -139,6 +168,7 @@
         if (response.error) {
             $('.error')
                 .removeClass('hide')
+                .addClass('')
                 .find('.alert')
                 .text(response.error.message);
         } else {

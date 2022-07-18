@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Orders;
+use App\Models\OrderTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
@@ -29,13 +31,29 @@ class PayPalController extends Controller
     public function processTransaction(Request $request)
     {
 
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
+        $paypal         = paymentdetails();
+        $paypalmod    = $paypal['paypal']['pp_express_test'];
+
+        $paypalClint    = $paypal['paypal']['pp_sandbox_clint'];
+        $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
+
+        // Paypal Live Mod
+        if ($paypalmod == 1) {
+            Config::set('paypal.mode', "live");
+            // Config::set('paypal.live.client_id', $paypalClint);
+            // Config::set('paypal.live.client_secret', $paypalSecret);
+        }
+
+        // Paypal Sandbox Mod
+        if ($paypalmod == 0) {
+            Config::set('paypal.mode', "sandbox");
+            Config::set('paypal.sandbox.client_id', $paypalClint);
+            Config::set('paypal.sandbox.client_secret', $paypalSecret);
+        }
 
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
-        $data['paypalToken'] = $provider->getAccessToken();
+        $paypalToken = $provider->getAccessToken();
 
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
@@ -58,8 +76,7 @@ class PayPalController extends Controller
             // redirect to approve href
             foreach ($response['links'] as $links) {
                 if ($links['rel'] == 'approve') {
-                    // $this->successTransaction($request); // Send request to another function
-                    Orders::storeOrder($request);
+                    Orders::paypalstoreOrder($request);
                     return redirect()->away($links['href']);
                 }
             }
@@ -82,10 +99,26 @@ class PayPalController extends Controller
      */
     public function successTransaction(Request $request)
     {
+        $paypal         = paymentdetails();
+        $paypalmod    = $paypal['paypal']['pp_express_test'];
+
+        $paypalClint    = $paypal['paypal']['pp_sandbox_clint'];
+        $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
+
+        // Paypal Live Mod
+        if ($paypalmod == 1) {
+            Config::set('paypal.mode', "live");
+            // Config::set('paypal.live.client_id', $paypalClint);
+            // Config::set('paypal.live.client_secret', $paypalSecret);
+        }
+        // Paypal Sandbox Mod
+        if ($paypalmod == 0) {
+            Config::set('paypal.mode', "sandbox");
+            Config::set('paypal.sandbox.client_id', $paypalClint);
+            Config::set('paypal.sandbox.client_secret', $paypalSecret);
+        }
         $lastorderid = session()->get('last_order_id');
-        // echo '<pre>';
-        // print_r($lastorderid);
-        // exit();
+
         $provider = new PayPalClient;
         $provider->setApiCredentials(config('paypal'));
         $provider->getAccessToken();
@@ -94,15 +127,38 @@ class PayPalController extends Controller
         if (isset($response['status']) && $response['status'] == 'COMPLETED')
         {
             Orders::where('order_id',$lastorderid)->update([
-                'payment_status' => 1, // 1 payment success
+                'order_status_id' => 2, // 2 Order Prossesing
             ]);
+
+            $amount = $response['purchase_units']['0']['payments']['captures']['0']['amount']['value'];
+            $status = $response['status'];
+
+            // Store Order Transaction Details
+            $ordertransaction = new OrderTransaction;
+            $ordertransaction->myfoodba_order_id = $lastorderid;
+            $ordertransaction->transaction_id = $response['id'];
+            $ordertransaction->parent_transaction_id = "";
+            $ordertransaction->created = date("Y-m-d h:i:s");
+            $ordertransaction->note = "";
+            $ordertransaction->msgsubid = "";
+            $ordertransaction->receipt_id = "";
+            $ordertransaction->payment_type = "";
+            $ordertransaction->payment_status = $status;
+            $ordertransaction->pending_reason = "None";
+            $ordertransaction->transaction_entity = "";
+            $ordertransaction->amount = $amount;
+            $ordertransaction->debug_data = "";
+            $ordertransaction->call_data = null;
+            $ordertransaction->order_status_id = 2; // 2 Order Prossesing
+            $ordertransaction->save();
+
             return redirect()
                 ->route('success')
                 ->with('success', 'Transaction complete.');
         }
         else {
             Orders::where('order_id',$lastorderid)->update([
-                'payment_status' => 0, // 0 payment faild
+                'order_status_id' => 7, // 7 Order Rejected
             ]);
             return redirect()
                 ->route('createTransaction')

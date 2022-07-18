@@ -15,6 +15,7 @@ use App\Models\Settings;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Stripe\Order;
 
 class CustomerOrder extends Controller
 {
@@ -102,13 +103,13 @@ class CustomerOrder extends Controller
 
         $delivery_type = session()->get('flag_post_code');
 
-        $total = $request->total;
 
         $subtotal = $request->subtotal;
+        $total = $request->total;
         $delivery_charge = $request->delivery_charge;
         $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
+        $servicecharge = $request->service_charge;
         $couponname = $request->couponname;
-
 
         // Store Details
         $store = Store::where('store_id', $front_store_id)->first();
@@ -225,6 +226,7 @@ class CustomerOrder extends Controller
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+
                         session()->put('last_order_id',$gorder->order_id);
 
                         // Guest Order Product
@@ -326,10 +328,22 @@ class CustomerOrder extends Controller
                         $gordertotal->order_id = $gorder->order_id;
                         $gordertotal->code = 'total';
                         $gordertotal->title = 'Total to Pay';
-                        $gordertotal->text = $currency_details['symbol_left']. $total;
+                        $gordertotal->text =  $total;
                         $gordertotal->value = $total;
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
+
+                        // service charge
+                        if ($servicecharge != "") {
+                            $gordertotal = new OrderTotal;
+                            $gordertotal->order_id = $gorder->order_id;
+                            $gordertotal->code = 'credit';
+                            $gordertotal->title = 'Service Charge';
+                            $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                            $gordertotal->value = $servicecharge;
+                            $gordertotal->sort_order = 0;
+                            $gordertotal->save();
+                        }
 
                         session()->forget('cart1');
                         session()->forget('guest_user');
@@ -502,6 +516,18 @@ class CustomerOrder extends Controller
                         $ordercoupon->save();
                     }
 
+                    // service charge
+                    if ($servicecharge != "") {
+                        $gordertotal = new OrderTotal;
+                        $gordertotal->order_id = $order->order_id;
+                        $gordertotal->code = 'credit';
+                        $gordertotal->title = 'Service Charge';
+                        $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                        $gordertotal->value = $servicecharge;
+                        $gordertotal->sort_order = 0;
+                        $gordertotal->save();
+                    }
+
                     // Subtotal
                     $ordersubtotal = new OrderTotal;
                     $ordersubtotal->order_id = $order->order_id;
@@ -517,7 +543,7 @@ class CustomerOrder extends Controller
                     $ordertotal->order_id = $order->order_id;
                     $ordertotal->code = 'total';
                     $ordertotal->title = 'Total to Pay';
-                    $ordertotal->text = $currency_details['symbol_left'].$total;
+                    $ordertotal->text = $total;
                     $ordertotal->value = $total;
                     $ordertotal->sort_order = 0;
                     $ordertotal->save();
@@ -700,6 +726,19 @@ class CustomerOrder extends Controller
                             $gordercoupon->save();
                         }
 
+                        // service charge
+                        if ($servicecharge != "") {
+                            $gordertotal = new OrderTotal;
+                            $gordertotal->order_id = $gorder->order_id;
+                            $gordertotal->code = 'credit';
+                            $gordertotal->title = 'Service Charge';
+                            $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                            $gordertotal->value = $servicecharge;
+                            $gordertotal->sort_order = 0;
+                            $gordertotal->save();
+                        }
+
+
                         // Subtotal
                         $gordersubtotal = new OrderTotal;
                         $gordersubtotal->order_id = $gorder->order_id;
@@ -715,7 +754,7 @@ class CustomerOrder extends Controller
                         $gordertotal->order_id = $gorder->order_id;
                         $gordertotal->code = 'total';
                         $gordertotal->title = 'Total to Pay';
-                        $gordertotal->text = $currency_details['symbol_left'].$total;
+                        $gordertotal->text = $total;
                         $gordertotal->value = $total;
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
@@ -891,6 +930,19 @@ class CustomerOrder extends Controller
                             $ordercoupon->save();
                         }
 
+
+                        // service charge
+                        if ($servicecharge != "") {
+                            $gordertotal = new OrderTotal;
+                            $gordertotal->order_id = $order->order_id;
+                            $gordertotal->code = 'credit';
+                            $gordertotal->title = 'Service Charge';
+                            $gordertotal->text = $currency_details['symbol_left'].$servicecharge;
+                            $gordertotal->value = $servicecharge;
+                            $gordertotal->sort_order = 0;
+                            $gordertotal->save();
+                        }
+
                         // Subtotal
                         $ordersubtotal = new OrderTotal;
                         $ordersubtotal->order_id = $order->order_id;
@@ -906,7 +958,7 @@ class CustomerOrder extends Controller
                         $ordertotal->order_id = $order->order_id;
                         $ordertotal->code = 'total';
                         $ordertotal->title = 'Total to Pay';
-                        $ordertotal->text = $currency_details['symbol_left'].$total;
+                        $ordertotal->text = $$total;
                         $ordertotal->value = $total;
                         $ordertotal->sort_order = 0;
                         $ordertotal->save();
