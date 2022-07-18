@@ -94,7 +94,7 @@
                                     <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
 
                                         <div class="form-group mt-3">
-                                            <label for="apiusername">* API Username</label>
+                                            {{-- <label for="apiusername">* API Username</label>
                                             <input type="text" class="form-control" name="apiusername" value="{{ $paypal['pp_express_username'] }}" id="apiusername">
                                         </div>
 
@@ -111,15 +111,15 @@
                                         <div class="form-group">
                                             <label for="fronttext">Front end text</label>
                                             <input type="text" class="form-control" name="fronttext" value="{{ $paypal['pp_front_text'] }}" id="fronttext">
-                                        </div>
+                                        </div> --}}
 
                                         <div class="form-group">
-                                            <label for="sandbox_clint">Sandbox Clint Id</label>
+                                            <label for="sandbox_clint">Paypal Clint Id</label>
                                             <input type="text" class="form-control" name="sandbox_clint" value="{{ $paypal['pp_sandbox_clint'] }}" id="sandbox_clint">
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="sandbox_secret">Sandbox Secret Key</label>
+                                            <label for="sandbox_secret">Paypal Secret Key</label>
                                             <input type="text" class="form-control" name="sandbox_secret" value="{{ $paypal['pp_sandbox_secret'] }}" id="sandbox_secret">
                                         </div>
 

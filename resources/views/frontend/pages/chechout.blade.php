@@ -9,17 +9,9 @@
 
 @php
 
-// $paypal         = paymentdetails();
-// $paypalClint    = $paypal['paypal']['pp_sandbox_clint'];
-// $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
-// echo '<pre>';
-// print_r($paypalClint"';
-// echo "<br>";
-// print_r('$paypalSecret');
-// exit();
 
-   // Get Current URL
-   $currentURL = URL::to("/");
+    // Get Current URL
+    $currentURL = URL::to("/");
 
 
     // Get Store Settings & Other Settings
@@ -74,14 +66,6 @@
     }
     // End Get Guest User Detail
 
-//     $paypal = paymentdetails();
-// $paypalClint = $paypal['paypal']['pp_sandbox_clint'];
-// $paypalSecret = $paypal['paypal']['pp_sandbox_secret'];
-// echo '<pre>';
-// print_r($paypalClint);
-// echo "<br>";
-// print_r($paypalSecret);
-// exit();
 
 
     // Customer Details
@@ -90,6 +74,7 @@
     //End Customer Details
 
     $subtotal = 0;
+    $total = 0;
 
     // cash on delevery setting
     $servicecharge = paymentdetails();

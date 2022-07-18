@@ -68,6 +68,7 @@ class Orders extends Model
         return $this->hasOne(Currency::class,'currency_id','currency_id');
     }
 
+    // paypal order
    public static function paypalstoreOrder(Request $request)
    {
 
@@ -190,7 +191,7 @@ class Orders extends Model
                      $gorder->shipping_code = '';
                      $gorder->comment = '';
                      $gorder->total = $total;
-                     $gorder->order_status_id = 2; //Processing
+                     $gorder->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                      $gorder->message = '';
                      $gorder->accepted_time = '';
                      $gorder->affiliate_id = 0;
@@ -271,7 +272,7 @@ class Orders extends Model
                      // Guest Order History
                      $gorderhistory = new OrderHistory;
                      $gorderhistory->order_id = $gorder->order_id;
-                     $gorderhistory->order_status_id = 2; //Processing
+                     $gorderhistory->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                      $gorderhistory->notify = 1;
                      $gorderhistory->comment = '';
                      $gorderhistory->date_added = date('Y-m-d h:i:s');
@@ -385,7 +386,7 @@ class Orders extends Model
                  $order->shipping_code = '';
                  $order->comment = '';
                  $order->total = $total;
-                 $order->order_status_id = 2; //Processing
+                 $order->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                  $order->message = '';
                  $order->accepted_time = '';
                  $order->affiliate_id = 0;
@@ -468,7 +469,7 @@ class Orders extends Model
                  // Order History
                  $orderhistory = new OrderHistory;
                  $orderhistory->order_id = $order->order_id;
-                 $orderhistory->order_status_id = 2; //Processing
+                 $orderhistory->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                  $orderhistory->notify = 1;
                  $orderhistory->comment = '';
                  $orderhistory->date_added = date('Y-m-d h:i:s');
@@ -618,7 +619,7 @@ class Orders extends Model
                      $gorder->shipping_code = '';
                      $gorder->comment = '';
                      $gorder->total = $total;
-                     $gorder->order_status_id = 2; //Processing
+                     $gorder->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                      $gorder->message = '';
                      $gorder->accepted_time = '';
                      $gorder->affiliate_id = 0;
@@ -698,7 +699,7 @@ class Orders extends Model
                      // Guest Order History
                      $gorderhistory = new OrderHistory;
                      $gorderhistory->order_id = $gorder->order_id;
-                     $gorderhistory->order_status_id = 2; //Processing
+                     $gorderhistory->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                      $gorderhistory->notify = 1;
                      $gorderhistory->comment = '';
                      $gorderhistory->date_added = date('Y-m-d h:i:s');
@@ -813,7 +814,7 @@ class Orders extends Model
                      $order->shipping_code = '';
                      $order->comment = '';
                      $order->total = $total;
-                     $order->order_status_id = 2; //Processing
+                     $order->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                      $order->message = '';
                      $order->accepted_time = '';
                      $order->affiliate_id = 0;
@@ -894,7 +895,7 @@ class Orders extends Model
                      // Order History
                      $orderhistory = new OrderHistory;
                      $orderhistory->order_id = $order->order_id;
-                     $orderhistory->order_status_id = 2; //Processing
+                     $orderhistory->order_status_id = 7; //Rejected. paypal success trnnsaction after order prossesing.
                      $orderhistory->notify = 1;
                      $orderhistory->comment = '';
                      $orderhistory->date_added = date('Y-m-d h:i:s');

@@ -113,9 +113,8 @@
                         </div>
                         <div class='form-row row'>
                            <div class='col-md-12 error form-group hide'>
-                              <div class='alert-danger alert'>Please correct the errors and try
-                                 again.
-                              </div>
+                              {{-- <div class='alert-danger alert'>Please correct the errors and try again.</div> --}}
+                              <div class='alert-danger alert'></div>
                            </div>
                         </div>
                         <div class="row">
@@ -169,6 +168,7 @@
         if (response.error) {
             $('.error')
                 .removeClass('hide')
+                .addClass('')
                 .find('.alert')
                 .text(response.error.message);
         } else {

@@ -426,16 +426,9 @@ class CustomerOrder extends Controller
                     $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                     $order->clear_history = 0;
                     $order->is_delete = 0;
-                    // $order->save();
-                    echo '<pre>';
-                    print_r($order);
-                    exit();
+                    $order->save();
 
                     $last_order_id = $order->order_id;
-                    // $ordertest = Orders::find($last_order_id);
-                    // echo '<pre>';
-                    // print_r($ordertest);
-                    // exit();
 
                     session()->put('last_order_id',$order->order_id);
 

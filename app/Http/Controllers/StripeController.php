@@ -36,7 +36,7 @@ class StripeController extends Controller
                 "amount" => ceil($request->total) * 100,
                 "currency" => $request->currency_code,
                 "source" => $request->stripeToken,
-                "description" => "This payment is tested purpose phpcodingstuff.com"
+                "description" => "This payment is tested purpose"
         ]);
 
         Orders::stripestoreOrder($request);
