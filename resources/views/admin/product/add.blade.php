@@ -208,15 +208,15 @@
 
                                             <div class="form-group">
                                                 <label for="image" class="form-label">Image</label>
-                                                {{-- <input type="file" name="image" id="image" class="form-control"> --}}
-                                                <input
-                                                    class="form-control p-1   {{ $errors->has('image') ? 'is-invalid' : '' }}"
-                                                    name="image" id="image" type="file">
-                                                @if ($errors->has('image'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('image') }}
-                                                    </div>
-                                                @endif
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                      <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                        <i class="fa fa-picture-o"></i> Choose
+                                                      </a>
+                                                    </span>
+                                                    <input id="thumbnail" class="form-control" type="text" name="image">
+                                                  </div>
+                                                  <img id="holder" style="margin-top:15px;max-height:100px;">
                                             </div>
                                         </div>
                                         {{-- end Genral --}}
@@ -257,3 +257,15 @@
 {{-- footer section--}}
 @include('footer')
 {{-- End footer section--}}
+
+{{-- <script src="{{ asset('public/vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
+<script src="{{ asset('public/vendor/laravel-filemanager/js/dropzone.min.js') }}"></script>
+<script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script> --}}
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+
+<script>
+     $('#lfm').filemanager('file');
+    var route_prefix = "filemanager";
+    $('#lfm').filemanager('image', {prefix: route_prefix});
+</script>

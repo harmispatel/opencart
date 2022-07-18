@@ -279,8 +279,8 @@ class CategoryController extends Controller
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
 
@@ -288,20 +288,20 @@ class CategoryController extends Controller
         $catdetail = new CategoryDetail;
 
         // Insert Category Image
-        if ($request->hasFile('image')) {
-            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/category'), $imgname);
-            $categoryurl = $currentURL . '/public/admin/category/';
-            $catdetail->image = $categoryurl . $imgname;
-        }
+        // if ($request->hasFile('image')) {
+        //     $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/category'), $imgname);
+        //     $categoryurl = $currentURL . '/public/admin/category/';
+        // }
+        $catdetail->image =$request->image;
 
         // Insert Banner Image
-        if ($request->hasFile('banner')) {
-            $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-            $bannerurl = $currentURL . '/public/admin/category/banner/';
-            $catdetail->img_banner = $bannerurl . $bannerimgname;
-        }
+        // if ($request->hasFile('banner')) {
+        //     $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
+        //     $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
+        //     $bannerurl = $currentURL . '/public/admin/category/banner/';
+        //     $catdetail->img_banner = $bannerurl . $bannerimgname;
+        // }
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0) {
             $availibleday = implode(",", $days);
@@ -569,8 +569,8 @@ class CategoryController extends Controller
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $currentURL = public_url();
@@ -578,32 +578,32 @@ class CategoryController extends Controller
         $catdetail = CategoryDetail::find($request->id);
 
         // update Category Image
-        if ($request->hasFile('image')) {
-            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
-            if (!empty($image) || $image != '') {
-                if (file_exists('public/admin/category/' . $image)) {
-                    unlink('public/admin/category/' . $image);
-                }
-            }
-            $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/category/'), $imgname);
-            $categoryurl = $currentURL . '/public/admin/category/';
-            $catdetail->image = $categoryurl . $imgname;
-        }
+        // if ($request->hasFile('image')) {
+        //     $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+        //     if (!empty($image) || $image != '') {
+        //         if (file_exists('public/admin/category/' . $image)) {
+        //             unlink('public/admin/category/' . $image);
+        //         }
+        //     }
+        //     $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/category/'), $imgname);
+        //     $categoryurl = $currentURL . '/public/admin/category/';
+        // }
+        $catdetail->image =$request->image;
 
         // Insert Banner Image
-        if ($request->hasFile('banner')) {
-            $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
-            if (!empty($banner) || $banner != '') {
-                if (file_exists('public/admin/category/banner/' . $banner)) {
-                    unlink('public/admin/category/banner/' . $banner);
-                }
-            }
-            $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-            $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-            $bannerurl = $currentURL . '/public/admin/category/banner/';
-            $catdetail->img_banner = $bannerurl . $bannerimgname;
-        }
+        // if ($request->hasFile('banner')) {
+        //     $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
+        //     if (!empty($banner) || $banner != '') {
+        //         if (file_exists('public/admin/category/banner/' . $banner)) {
+        //             unlink('public/admin/category/banner/' . $banner);
+        //         }
+        //     }
+        //     $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
+        //     $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
+        //     $bannerurl = $currentURL . '/public/admin/category/banner/';
+        //     $catdetail->img_banner = $bannerurl . $bannerimgname;
+        // }
 
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0) {

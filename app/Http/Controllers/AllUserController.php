@@ -69,7 +69,7 @@ class AllUserController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|unique:oc_user',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'store' => 'required',
             'password' => 'min:6|required_with:confirm|same:confirm',
             'confirm' => 'min:6|required_with:password|same:password',
@@ -91,14 +91,14 @@ class AllUserController extends Controller
         $data->accessdirectory = isset($request->accessdirectory) ? $request->accessdirectory : '';
         $data->date_added = date('Y-m-d');
 
-        if ($request->hasFile('image'))
-        {
-            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/users/'), $imgname);
-            $producturl = $currentURL.'public/admin/users/';
-            $data->image = $producturl.$imgname;
-        }
-
+        // if ($request->hasFile('image'))
+        // {
+        //     $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/users/'), $imgname);
+        //     $producturl = $currentURL.'public/admin/users/';
+        //     $data->image = $producturl.$imgname;
+        // }
+        $data->image = $request->image;
         $data->save();
         return redirect()->route('users')->with('success','Users created successfully!');
 
@@ -185,7 +185,7 @@ class AllUserController extends Controller
             'lastname' => 'required',
             'email' => 'required',
             'store' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $user_id = $request->id;
@@ -209,19 +209,20 @@ class AllUserController extends Controller
             $data->password = bcrypt($request['password']);
         }
 
-        if($request->hasFile('image'))
-        {
-            if(!empty($old_img))
-            {
-                unlink($old_img);
-            }
+        // if($request->hasFile('image'))
+        // {
+        //     if(!empty($old_img))
+        //     {
+        //         unlink($old_img);
+        //     }
 
-            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/users/'), $imgname);
-            $producturl = $currentURL.'public/admin/users/';
-            $data->image = $producturl.$imgname;
-        }
-
+        //     $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/users/'), $imgname);
+        //     $producturl = $currentURL.'public/admin/users/';
+        //     $data->image = $producturl.$imgname;
+        // }
+        $data->image = $request->image;
+        ;
         $data->update();
         return redirect()->route('users')->with('success','Users Updated successfully!');
 
@@ -257,12 +258,14 @@ class AllUserController extends Controller
     // Function of Update User Profile
     function updateprofile(Request $request)
     {
+
+
         $request->validate([
             'username' => 'required',
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $user_id = $request->id;
@@ -286,20 +289,20 @@ class AllUserController extends Controller
             $data->password = bcrypt($request['password']);
         }
 
-        if($request->hasFile('image'))
-        {
-            if(!empty($old_img))
-            {
-                if(file_exists('public/admin/users/'.$old_img))
-                {
-                    unlink('public/admin/users/'.$old_img);
-                }
-            }
+        // if($request->hasFile('image'))
+        // {
+        //     if(!empty($old_img))
+        //     {
+        //         if(file_exists('public/admin/users/'.$old_img))
+        //         {
+        //             unlink('public/admin/users/'.$old_img);
+        //         }
+        //     }
 
-            $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/users/'),$imageName);
-            $data->image = $imageName;
-        }
+        //     $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/users/'),$imageName);
+        // }
+        $data->image = $request->image;
 
         $data->update();
         return redirect()->route('dashboard')->with('success','Your Profile has been Updated.');

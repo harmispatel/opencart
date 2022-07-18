@@ -92,11 +92,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="image"><span class="text-danger">*</span> Image</label>
-                                        <input class="form-control p-1" name="image" id="image" type="file">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                              <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                <i class="fa fa-picture-o"></i> Choose
+                                              </a>
+                                            </span>
+                                            <input id="thumbnail" class="form-control" type="text" name="image">
+                                          </div>
+                                          <img id="holder" style="margin-top:15px;max-height:100px;">
                                     </div>
                                     <div class="form-group">
                                         @if (!empty($vouchertheme->image) || $vouchertheme->image != '')
-                                            <img src="{{ asset('public/admin/voucherthemes/' . $vouchertheme->image) }}"
+                                            <img src="{{  $vouchertheme->image}}"
                                                 width="60">
                                         @endif
                                     </div>
@@ -119,3 +127,10 @@
 {{-- Footer --}}
 @include('footer')
 {{-- End Footer --}}
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+<script>
+    $('#lfm').filemanager('file');
+   var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+   $('#lfm').filemanager('image', {prefix: route_prefix});
+</script>

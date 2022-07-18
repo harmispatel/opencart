@@ -291,14 +291,17 @@
 
                                                         <div class="form-group">
                                                             <label for="image" class="form-label">Image</label>
-                                                            <input
-                                                                class="form-control p-1   {{ $errors->has('image') ? 'is-invalid' : '' }}"
-                                                                name="image" id="image" type="file">
-                                                            @if ($errors->has('image'))
-                                                                <div class="invalid-feedback">
-                                                                    {{ $errors->first('image') }}
-                                                                </div>
-                                                            @endif
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    {{-- <iframe src="{{ url('filemanager') }}" frameborder="0"><i class="fa fa-picture-o"></i> Choose</iframe> --}}
+                                                                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                                    <i class="fa fa-picture-o"></i> Choose
+                                                                  </a>
+                                                                </span>
+                                                                <input id="thumbnail" class="form-control" type="text" name="image">
+                                                              </div>
+                                                              <img id="holder" style="margin-top:15px;max-height:100px;">
+                                                           </div>
                                                             @php
                                                                 $p_image = isset($product->image) ? $product->image : '';
                                                             @endphp
@@ -404,6 +407,7 @@
 
 
 {{-- Start Script --}}
+
 <script>
     //  Show Checkbox
     $(document).ready(function() {
@@ -435,5 +439,13 @@
         }
         $("#text").append(html);
     }
+</script>
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+
+<script>
+     $('#lfm').filemanager('file');
+    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+    $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
 {{-- End Start Script --}}
