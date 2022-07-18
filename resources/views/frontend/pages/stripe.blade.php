@@ -165,7 +165,6 @@
         if (response.error) {
             $('.error')
                 .removeClass('hide')
-                .addClass('')
                 .find('.alert')
                 .text(response.error.message);
         } else {
