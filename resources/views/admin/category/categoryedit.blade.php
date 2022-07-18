@@ -85,10 +85,10 @@
                                  <div class="card-body">
                                     <div class="form-group">
 
-                                        <input type="hidden" name="id" value="{{ $data->category_id }}">
+                                        <input type="hidden" name="id" value="{{ isset($data->category_id) ? $data->category_id : '' }}">
                                         <input type="hidden" name="top_cat_option_id" value="{{ isset($topcatoption->id) ? $topcatoption->id : '' }}">
                                         <label for="category" class="form-label"><span class="text-danger">*</span> Name</label>
-                                        <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ $data->hasOneCategory->name }}">
+                                        <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ isset($data->hasOneCategory->name) ? $data->hasOneCategory->name : '' }}">
                                         @if ($errors->has('category'))
                                             <div class="invalid-feedback">{{ $errors->first('category') }}</div>
                                         @endif
@@ -97,7 +97,7 @@
                                         <label for="days" class="form-label">Days Available</label><br>
                                         <div class="p-2 rounded" style="border: 1px solid rgb(197, 197, 197)">
                                             @php
-                                                $days = explode(',',$data->availibleday);
+                                                $days = explode(',',isset($data->availibleday) ? $data->availibleday : '');
                                             @endphp
                                             <input type="checkbox" id="inlineCheckbox1" value="1" name="availibleday[]" {{ (in_array('1',$days)) ? 'checked' : '' }}>
                                             <label class="form-check-label pr-3" for="inlineCheckbox1">Sunday</label>
@@ -123,7 +123,7 @@
                                     </div>
 
                                     @php
-                                        $descr = html_entity_decode($data->hasOneCategory->description);
+                                        $descr = html_entity_decode(isset($data->hasOneCategory->description) ? $data->hasOneCategory->description : '');
                                     @endphp
                                     <div class="form-group">
                                         <label for="summernote" class="form-label">Description</label>
@@ -353,12 +353,15 @@
 
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="image" id="image" type="file">
-                                        @if ($errors->has('image'))
-                                            <div class="invalid-feedback">
-                                                {{ $errors->first('image') }}
-                                            </div>
-                                        @endif
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                              <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                <i class="fa fa-picture-o"></i> Choose
+                                              </a>
+                                            </span>
+                                            <input id="thumbnail" class="form-control" type="text" name="image">
+                                          </div>
+                                          <img id="holder" style="margin-top:15px;max-height:100px;">
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->image))
                                                 <img src="{{ $data->image }}" alt="Not Found" width="60">
@@ -368,7 +371,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="banner">Banner</label>
                                         <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="banner" id="banner" type="file">
                                         @if ($errors->has('banner'))
@@ -383,11 +386,11 @@
                                                 <h3 class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i></h3>
                                             @endif
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <div class="form-group">
                                         <label for="sortorder" class="form-label">Sort Order</label>
-                                        <input type="text" class="form-control" name="sortorder" id="sortorder" value="{{ $data->sort_order }}">
+                                        <input type="text" class="form-control" name="sortorder" id="sortorder" value="{{ isset($data->sort_order) ? $data->sort_order : '' }}">
                                     </div>
 
                                  </div>
@@ -537,6 +540,13 @@ function deleteOptionSize(id)
 }
 // End Delete Option Size
 
+</script>
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+<script>
+    $('#lfm').filemanager('file');
+   var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+   $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
 {{-- END SCRIPT --}}
 

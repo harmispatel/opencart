@@ -117,19 +117,22 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="image">Image</label>
-                                                <input type="file" name="image" style="padding:3px;" id="image" class="form-control {{ ($errors->has('image')) ? 'is-invalid' : '' }}" value="{{ old('image') }}">
-                                                @if($errors->has('image'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('image') }}
-                                                    </div>
-                                                @endif
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                      <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                        <i class="fa fa-picture-o"></i> Choose
+                                                      </a>
+                                                    </span>
+                                                    <input id="thumbnail" class="form-control" type="text" name="image">
+                                                  </div>
+                                                  <img id="holder" style="margin-top:15px;max-height:100px;">
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 @if(!empty($users->image))
-                                                    <img src="{{ asset('public/admin/users/'.$users->image) }}" alt="Not Found" width="80">
+                                                    <img src="{{ $users->image}}" alt="Not Found" width="80">
                                                 @endif
                                             </div>
                                         </div>
@@ -199,7 +202,12 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<script type="text/javascript">
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+<script>
+     $('#lfm').filemanager('file');
+    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+    $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
 
 {{--End Script Section --}}

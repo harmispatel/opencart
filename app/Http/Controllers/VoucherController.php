@@ -296,14 +296,14 @@ class VoucherController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $imageName = $request->image->getClientOriginalName();
-        $request->image->move(public_path('admin/voucherthemes'),$imageName);
+        // $imageName = $request->image->getClientOriginalName();
+        // $request->image->move(public_path('admin/voucherthemes'),$imageName);
 
         $vouchertheme = new Voucherthemes;
-        $vouchertheme->image = $imageName;
+        $vouchertheme->image = $request->image;
         $vouchertheme->save();
 
         $Voucherthemename = new VoucherThemenames;
@@ -370,22 +370,22 @@ class VoucherController extends Controller
 
         $vouchertheme = Voucherthemes::find($vouchertheme_id);
 
-        if ($request->hasFile('image'))
-        {
-            $image = isset($vouchertheme['image']) ? $vouchertheme['image'] : '';
+        // if ($request->hasFile('image'))
+        // {
+        //     $image = isset($vouchertheme['image']) ? $vouchertheme['image'] : '';
 
-            if(!empty($image) || $image != '')
-            {
-                if(file_exists(public_path('admin/voucherthemes/').$image))
-                {
-                    unlink(public_path('admin/voucherthemes/').$image);
-                }
-            }
-            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+        //     if(!empty($image) || $image != '')
+        //     {
+        //         if(file_exists(public_path('admin/voucherthemes/').$image))
+        //         {
+        //             unlink(public_path('admin/voucherthemes/').$image);
+        //         }
+        //     }
+        //     $imgname = time().".". $request->file('image')->getClientOriginalExtension();
 
-            $request->file('image')->move(public_path('admin/voucherthemes/'),$imgname);
-            $vouchertheme->image = $imgname;
-        }
+        //     $request->file('image')->move(public_path('admin/voucherthemes/'),$imgname);
+        // }
+        $vouchertheme->image = $request->image;
 
         $vouchertheme->update();
 

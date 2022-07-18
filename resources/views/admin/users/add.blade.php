@@ -128,12 +128,15 @@
 
                                     <div class="form-group">
                                         <label for="image">Image</label>
-                                        <input type="file" name="image" style="padding:3px;" id="image" class="form-control {{ ($errors->has('image')) ? 'is-invalid' : '' }}" value="{{ old('image') }}">
-                                        @if($errors->has('image'))
-                                            <div class="invalid-feedback">
-                                                {{ $errors->first('image') }}
-                                            </div>
-                                        @endif
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                              <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                <i class="fa fa-picture-o"></i> Choose
+                                              </a>
+                                            </span>
+                                            <input id="thumbnail" class="form-control" type="text" name="image">
+                                          </div>
+                                          <img id="holder" style="margin-top:15px;max-height:100px;">
                                     </div>
 
                                     <div class="form-group">
@@ -199,3 +202,11 @@
 @include('footer')
 {{-- End Footer --}}
 
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+
+<script>
+     $('#lfm').filemanager('file');
+    var route_prefix = "filemanager";
+    $('#lfm').filemanager('image', {prefix: route_prefix});
+</script>

@@ -28,6 +28,7 @@ use App\Http\Controllers\NewOrderController;
 use App\Http\Controllers\ProductIconsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\FilemanagerController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\MyBasketController;
 use App\Http\Controllers\Frontend\Cartcontroller;
@@ -361,6 +362,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Route::group(['prefix' => 'addproduct','as'=>'n','middleware' => ['web']], function (){
     //     \UniSharp\LaravelFilemanager\Lfm::routes();
     // });
+
+    // filemanager
+    Route::get('filemanager',[FilemanagerController::class,'index'])->name('filemanager');
+
+
 });
 
 

@@ -384,11 +384,12 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+
         $request->validate([
             'product' => 'required',
             'mainprice' => 'required',
             'product_icons' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'mainprice' => 'required',
             'category' => 'required',
         ]);
@@ -425,22 +426,22 @@ class ProductController extends Controller
             $days = implode(',', $day);
             $product->availibleday = isset($days) ? $days : 0;
         }
-        $currentURL = public_url();
-        if ($request->hasFile('image'))
-        {
-            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
-            if(!empty($image) || $image != '')
-            {
-                if(file_exists('public/admin/product/'.$image))
-                {
-                    unlink('public/admin/product/'.$image);
-                }
-            }
-            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/product/'), $imgname);
-            $producturl = $currentURL.'public/admin/product/';
-            $product->image = $producturl.$imgname;
-        }
+        // $currentURL = public_url();
+        // if ($request->hasFile('image'))
+        // {
+        //     $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+        //     if(!empty($image) || $image != '')
+        //     {
+        //         if(file_exists('public/admin/product/'.$image))
+        //         {
+        //             unlink('public/admin/product/'.$image);
+        //         }
+        //     }
+        //     $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/product/'), $imgname);
+        //     $producturl = $currentURL.'public/admin/product/';
+        // }
+        $product->image = $request->image;
         $product->save();
 
         $product_description = new ProductDescription();
@@ -699,7 +700,7 @@ class ProductController extends Controller
                     $image_path = $data['image'];
                     $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
                 } else {
-                    $image_path = asset('public/admin/product/no_image.jpg');
+                    $image_path = asset('public/admin/no_image.jpg');
                     $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
                 }
                 $data['name'] = $post->name;
