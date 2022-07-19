@@ -93,8 +93,8 @@
 
                                     <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
 
-                                        <div class="form-group mt-3">
-                                            {{-- <label for="apiusername">* API Username</label>
+                                        {{-- <div class="form-group mt-3">
+                                            <label for="apiusername">* API Username</label>
                                             <input type="text" class="form-control" name="apiusername" value="{{ $paypal['pp_express_username'] }}" id="apiusername">
                                         </div>
 
