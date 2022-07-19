@@ -429,15 +429,15 @@ class MenuController extends Controller
                 $success_message = '';
 
                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                $couponcode_html .= '<label>Coupon(' . $Couponcode->code . ')</label><span>£ -' . $couponcode . '</span>';
-                $total_html .= '<label><b>Total to pay:</b></label><span>£ ' . $total . '</span>';
+                $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">£ ' . $total . '</b></span>';
 
                 return response()->json([
                     'success' => 1,
                     'success_message' => $success_message,
                     'couponcode' => $couponcode_html,
                     'total' => $total_html,
-                    'headertotal' => $total,
+                    'headertotal' => number_format($total,2),
                 ]);
             } else // Expired Coupon
             {

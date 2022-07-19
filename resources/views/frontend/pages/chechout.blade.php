@@ -88,12 +88,12 @@
 <!doctype html>
 <html>
 <head>
-    <!-- CSS -->
+    {{-- CSS  --}}
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
-    <!-- End CSS -->
+    {{-- CSS --}}
 
-    <!-- Custom CSS -->
+    {{-- Custom CSS --}}
     <style>
         .myfoodbasketpayments_gateway,.cod,.pp_express
         {
@@ -164,7 +164,7 @@
         }
 
     </style>
-    <!-- End Custom CSS -->
+    {{-- End Custom CSS --}}
 
 </head>
 <body>
@@ -181,7 +181,7 @@
         {{ \Session::forget('success') }}
     @endif
     @if (empty($userlogin) && empty($guestlogin))
-        <!-- Checkout Step 1 -->
+        {{-- Checkout Step 1 --}}
         <section class="check-main" id="checkout1">
             <div class="container">
                 <div class="check-inr">
@@ -574,10 +574,10 @@
                 </div>
             </div>
         </section>
-        <!-- End Checkout Step 2 -->
+        {{-- End Checkout Step 2 --}}
     @endif
 
-    <!-- Checkout Step 3 -->
+    {{-- Checkout Step 3 --}}
     <section class="check-main" id="checkout3" style="display: none">
         <div class="container">
             <div class="check-inr">
@@ -904,19 +904,19 @@
             </div>
         </div>
     </section>
-    <!-- End Checkout Step 3 -->
+    {{-- End Checkout Step 3 --}}
 
 
     {{-- footer  --}}
     @include('frontend.theme.all_themes.footer')
 
 
-    <!-- JS -->
+    {{-- JS --}}
     @include('frontend.include.script')
-    <!-- End JS -->
+    {{-- End JS --}}
 
 
-    <!-- Custom JS -->
+    {{-- Custom JS --}}
     <script type="text/javascript">
 
         // Document Script
@@ -1551,7 +1551,7 @@
                         $('#couponSuccess').html('');
                         $('#couponSuccess').append(result.success_message);
                         $('.coupon_code').html('');
-                        $('.coupon_code').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.couponcode+'</b></td>');
+                        $('.coupon_code').append('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
                         $('.total').html('');
                         $('.total').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
                         $('.pirce-value').text('');
@@ -1571,7 +1571,7 @@
 
 
     </script>
-    <!-- End Custom JS -->
+    {{-- End Custom JS --}}
 
 </body>
 </html>

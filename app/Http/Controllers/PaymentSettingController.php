@@ -199,6 +199,10 @@ class PaymentSettingController extends Controller
     // paylal setting store/update
     public function storepaypalsetting(Request $request)
     {
+        $request->validate([
+            'clint_id' => 'required',
+            'clint_secret' => 'required',
+        ]);
         // Current Store ID
        $current_store_id = currentStoreId();
 
@@ -222,8 +226,8 @@ class PaymentSettingController extends Controller
         $data['current_store_id'] = $current_store_id ;
         $data['pp_front_text'] = $request->fronttext;
         $data['pp_express_sort_order'] = $request->sortorder;
-        $data['pp_sandbox_secret'] = $request->sandbox_secret;
-        $data['pp_sandbox_clint'] = $request->sandbox_clint;
+        $data['pp_sandbox_secret'] = $request->clint_secret;
+        $data['pp_sandbox_clint'] = $request->clint_id;
         $data['pp_express_test'] = $request->paypalmod;
         $data['pp_express_status'] = $request->paypal_status;
 
@@ -310,6 +314,10 @@ class PaymentSettingController extends Controller
 
     public function storestripesetting(Request $request)
     {
+        $request->validate([
+            'public_key' => 'required',
+            'secret_key' => 'required',
+        ]);
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -320,8 +328,8 @@ class PaymentSettingController extends Controller
         }
         $user_shop_id = $user_details['user_shop'];
 
-        $data['stripe_publickey'] = $request->publickey;
-        $data['stripe_secretkey'] = $request->secretkey;
+        $data['stripe_publickey'] = $request->public_key;
+        $data['stripe_secretkey'] = $request->secret_key;
         $data['stripe_charge_payment'] = $request->paycharge;
         $data['stripe_geo_zone_id'] = 0;
         $data['stripe_printer_text'] = $request->printertext;

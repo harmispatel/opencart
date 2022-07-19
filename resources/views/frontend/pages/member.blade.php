@@ -473,13 +473,18 @@
                                                                                             </table>
                                                                                             <div class="d-flex justify-content-around">
                                                                                                 {{-- <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a> --}}
-                                                                                                <button type="button" class="btn btn-sm customerorderdetail" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
+                                                                                                <button type="button" class="btn btn-sm" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="card-footer">
+                                                                                    <div class="card-footer d-flex justify-content-between">
                                                                                         <span class="float-start text-bold" style="font-size: 23px"><i class="fa fa-shopping-basket" aria-hidden="true"></i> {{ $orders->hasOneCurrency['symbol_left'] }} {{ number_format($orders->total,2) }}</span>
-                                                                                        <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail" data-bs-toggle="modal" data-bs-target="#orderreceipt">View</button>
+                                                                                        {{-- <img class="orderdetailload" src="{{ asset('public/admin/gif/gif4.gif') }}" style="display: none">
+                                                                                        <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail">View</button> --}}
+                                                                                        <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail">
+                                                                                            <span class="spinner-border spinner-border-sm orderdetailload" role="status" aria-hidden="true" style="display: none"></span>
+                                                                                            View
+                                                                                        </button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -547,6 +552,8 @@
         // Customer Orders Details
         $('.customerorderdetail').on('click', function ()
         {
+            $(this).find(".orderdetailload").css("display", "inline-block");
+
             var customerorderid = $(this).val();
             $('#corderid').val(customerorderid);
 
@@ -556,11 +563,13 @@
                 data:
                 {
                     "_token": "{{ csrf_token() }}",
-                        'customerorderid': customerorderid,
+                    'customerorderid': customerorderid,
                 },
                 dataType: 'json',
                 success: function (response)
                 {
+                    $('.orderdetailload').css("display", "none");
+                    $('#orderreceipt').modal('show');
                     $('#customerordermodal').html(response.customerorders);
                 }
             });
