@@ -92,18 +92,18 @@
                                     <div class="form-group mt-3">
                                         <label for="publickey">* Public Key</label>
                                         <input type="text" class="@error('public_key') is-invalid @enderror form-control" name="public_key" value="{{ $stripe['stripe_publickey'] }}" id="publickey">
+                                        @error('public_key')
+                                            <div>{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    @error('public_key')
-                                        <div>{{ $message }}</div>
-                                    @enderror
 
                                     <div class="form-group">
                                         <label for="secretkey">* Secret Key</label>
                                         <input type="text" class="@error('secret_key') is-invalid @enderror form-control" name="secret_key" value="{{ $stripe['stripe_secretkey'] }}" id="secretkey">
+                                        @error('secret_key')
+                                            <div>{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    @error('secret_key')
-                                        <div>{{ $message }}</div>
-                                    @enderror
 
                                     <div class="form-group">
                                         <label for="printertext">Printer Text</label>

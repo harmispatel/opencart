@@ -116,18 +116,18 @@
                                         <div class="form-group">
                                             <label for="sandbox_clint">Paypal Clint Id</label>
                                             <input type="text" class="@error('clint_id') is-invalid @enderror form-control" name="clint_id" value="{{ $paypal['pp_sandbox_clint'] }}" id="clint_id">
+                                            @error('clint_id')
+                                                <div>{{ $message }}</div>
+                                            @enderror
                                         </div>
-                                        @error('clint_id')
-                                            <div>{{ $message }}</div>
-                                        @enderror
 
                                         <div class="form-group">
                                             <label for="sandbox_secret">Paypal Secret Key</label>
                                             <input type="text" class="@error('clint_secret') is-invalid @enderror form-control" name="clint_secret" value="{{ $paypal['pp_sandbox_secret'] }}" id="clint_secret">
+                                            @error('clint_secret')
+                                                <div>{{ $message }}</div>
+                                            @enderror
                                         </div>
-                                        @error('clint_secret')
-                                            <div>{{ $message }}</div>
-                                        @enderror
 
                                         <div class="form-group">
                                             <label class="mr-4" for="sandbox_secret">Paypal(Sandbox)</label>
