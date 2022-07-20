@@ -1287,7 +1287,39 @@ class SettingsController extends Controller
             return redirect()->route('dashboard')->with('error',"Sorry you haven't Access.");
         }
 
-        return view('admin.settings.payment_settings');
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        $key = ([
+            'cod_status',
+            'pp_express_status',
+            'stripe_status',
+        ]);
+
+        $paymentstatus = [];
+
+        foreach ($key as $row)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::select('value')->where('store_id', $current_store_id)->where('key', $row)->first();
+            }
+            else
+            {
+                $query = Settings::select('value')->where('store_id', $user_shop_id)->where('key', $row)->first();
+            }
+
+            $paymentstatus[$row] = isset($query->value) ? $query->value : '';
+        }
+
+        return view('admin.settings.payment_settings', compact('paymentstatus'));
     }
 
 

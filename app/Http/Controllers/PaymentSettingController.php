@@ -374,4 +374,66 @@ class PaymentSettingController extends Controller
         return redirect()->back()->with('success', 'Settings Updated..');
     }
 
+    public function paymentstatus(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        // cod status
+        if ($request->p_type == 'cod_status') {
+            $data['cod_status'] = $request->p_status;
+        }
+
+        // paypal status
+        if ($request->p_type == 'paypal_status') {
+            $data['pp_express_status'] = $request->p_status;
+        }
+
+        // stripe status
+        if ($request->p_type == 'stripe_status') {
+            $data['stripe_status'] = $request->p_status;
+        }
+
+        foreach ($data as $key => $new)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+            if (!empty($setting_id) || $setting_id != '') {
+                $stripe_update = Settings::find($setting_id);
+                $stripe_update->value = $new;
+                $stripe_update->update();
+            } else {
+                $stripe_add = new Settings();
+                if($user_group_id == 1)
+                {
+                    $stripe_add->store_id = $current_store_id;
+                }
+                else
+                {
+                    $stripe_add->store_id = $user_shop_id;
+                }
+                $stripe_add->group = 'stripe';
+                $stripe_add->key = $key;
+                $stripe_add->value = $new;
+                $stripe_add->serialized = 0;
+                $stripe_add->save();
+            }
+        }
+    }
+
 }
