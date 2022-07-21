@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\OrderHistory;
 use App\Models\Orders;
 use App\Models\OrderTransaction;
 use Illuminate\Http\Request;
@@ -65,7 +65,7 @@ class PayPalController extends Controller
                 0 => [
                     "amount" => [
                         "currency_code" => $request->currency_code,
-                        "value" => $request->total,
+                        "value" => round($request->total,2),
                     ]
                 ]
             ]
@@ -126,7 +126,13 @@ class PayPalController extends Controller
 
         if (isset($response['status']) && $response['status'] == 'COMPLETED')
         {
+            // Order status
             Orders::where('order_id',$lastorderid)->update([
+                'order_status_id' => 2, // 2 Order Prossesing
+            ]);
+
+            // Order history status
+            OrderHistory::where('order_id',$lastorderid)->update([
                 'order_status_id' => 2, // 2 Order Prossesing
             ]);
 

@@ -33,7 +33,8 @@ class StripeController extends Controller
         Stripe\Stripe::setApiKey($stripesecret);
         Stripe\Charge::create ([
                 // "amount" => 100 * 100,
-                "amount" => ceil($request->total) * 100,
+                // "amount" => ceil($request->total) * 100,
+                "amount" => round($request->total,2) * 100,
                 "currency" => $request->currency_code,
                 "source" => $request->stripeToken,
                 "description" => "This payment is tested purpose"

@@ -333,8 +333,8 @@ class PaymentSettingController extends Controller
         $data['stripe_charge_payment'] = $request->paycharge;
         $data['stripe_geo_zone_id'] = 0;
         $data['stripe_printer_text'] = $request->printertext;
-        $data['stripe_order_status'] = $request->order_status;
-        $data['stripe_orderstatus_faild'] = $request->orderstatus_faild;
+        // $data['stripe_order_status'] = $request->order_status;
+        // $data['stripe_orderstatus_faild'] = $request->orderstatus_faild;
         $data['stripe_status'] = $request->stripe_status;
 
 
