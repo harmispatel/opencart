@@ -830,7 +830,7 @@ class ProductController extends Controller
         $request->validate([
             'product' => 'required',
             'product_icons' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 
         $product_id = $request->product_id;
@@ -872,22 +872,23 @@ class ProductController extends Controller
             $product->availibleday = isset($days) ? $days : '';
         }
 
-        $currentURL = public_url();
-        if ($request->hasFile('image'))
-        {
-            $image = isset($catdetail['image']) ? $catdetail['image'] : '';
-            if(!empty($image) || $image != '')
-            {
-                if(file_exists('public/admin/product/'.$image))
-                {
-                    unlink('public/admin/product/'.$image);
-                }
-            }
-            $imgname = time().".". $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('admin/product/'), $imgname);
-            $producturl = $currentURL.'public/admin/product/';
-            $product->image = $producturl.$imgname;
-        }
+        // $currentURL = public_url();
+        // if ($request->hasFile('image'))
+        // {
+        //     $image = isset($catdetail['image']) ? $catdetail['image'] : '';
+        //     if(!empty($image) || $image != '')
+        //     {
+        //         if(file_exists('public/admin/product/'.$image))
+        //         {
+        //             unlink('public/admin/product/'.$image);
+        //         }
+        //     }
+        //     $imgname = time().".". $request->file('image')->getClientOriginalExtension();
+        //     $request->file('image')->move(public_path('admin/product/'), $imgname);
+        //     $producturl = $currentURL.'public/admin/product/';
+        //     $product->image = $producturl.$imgname;
+        // }
+        $product->image = $request->image;
         $product->update();
 
         $product_description = ProductDescription::find($product_id);

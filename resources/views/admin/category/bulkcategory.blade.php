@@ -213,7 +213,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <td class="text-right" colspan="5">
-                                                        <a id="addcatbulk" onclick="addnewBulkCat()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> ADD NEW</a>
+                                                        <a id="addcatbulk" style="display: inline-block" onclick="addnewBulkCat()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> ADD NEW</a>
                                                     </td>
                                                 </tr>
                                             </tfoot>

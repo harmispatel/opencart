@@ -193,7 +193,7 @@
                     <a class="nav-link p-0 text-uppercase" style="color: rgb(71, 69, 69); font-weight: 700;font-family: verdana" data-toggle="dropdown" href="#">
                         <!-- If User have a profile image then shown image -->
                         @if(!empty(user_details()))
-                            <img src="{{ ( (user_details()->image != '') || (user_details()->image != null) ) ? asset('public/admin/users/'.user_details()->image) : asset('public/admin/users/blank.png') }}" class="m-0 img-circle" width="40" height="40">
+                            <img src="{{ ( (user_details()->image != '') || (user_details()->image != null) ) ? user_details()->image : asset('public/admin/users/blank.png') }}" class="m-0 img-circle" width="40" height="40">
                             {{ user_details()->username }}
                         <!-- Else Show Message Not Found -->
                         @else

@@ -135,27 +135,20 @@
                                                         </div>
                                                         <hr>
                                                         <div class="mb-3">
-                                                            <label for="category" class="form-label"><span
-                                                                    class="text-danger">*</span>Product Icon</label>
+                                                            <label for="category" class="form-label">Product Icon</label>
                                                             @php
                                                                 $pro_icon = isset($product->product_icons) ? $product->product_icons : '';
                                                                 $array = explode(',', $pro_icon);
 
                                                             @endphp
                                                             <select name="product_icons[]" id="product_icon"
-                                                                class="form-control {{ $errors->has('product_icons') ? 'is-invalid' : '' }}"
-                                                                multiple>
+                                                                class="form-control" multiple>
                                                                 @foreach ($result['product_icon'] as $productIcon)
                                                                     <option value="{{ $productIcon->id }}"
                                                                         {{ in_array($productIcon->id, $array) == $productIcon->id ? 'selected' : '' }}>
                                                                         {{ $productIcon->icon_name }}</option>
                                                                 @endforeach
                                                             </select>
-                                                            @if ($errors->has('product_icons'))
-                                                                <div class="invalid-feedback">
-                                                                    {{ $errors->first('product_icons') }}
-                                                                </div>
-                                                            @endif
                                                         </div>
                                                         <hr>
                                                         <div class="mb-3">
@@ -291,9 +284,16 @@
 
                                                         <div class="form-group">
                                                             <label for="image" class="form-label">Image</label>
+                                                            {{-- <input
+                                                                class="form-control p-1   {{ $errors->has('image') ? 'is-invalid' : '' }}"
+                                                                name="image" id="image" type="file">
+                                                            @if ($errors->has('image'))
+                                                                <div class="invalid-feedback">
+                                                                    {{ $errors->first('image') }}
+                                                                </div>
+                                                            @endif --}}
                                                             <div class="input-group">
                                                                 <span class="input-group-btn">
-                                                                    {{-- <iframe src="{{ url('filemanager') }}" frameborder="0"><i class="fa fa-picture-o"></i> Choose</iframe> --}}
                                                                   <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
                                                                     <i class="fa fa-picture-o"></i> Choose
                                                                   </a>
@@ -301,7 +301,6 @@
                                                                 <input id="thumbnail" class="form-control" type="text" name="image">
                                                               </div>
                                                               <img id="holder" style="margin-top:15px;max-height:100px;">
-                                                           </div>
                                                             @php
                                                                 $p_image = isset($product->image) ? $product->image : '';
                                                             @endphp
@@ -407,7 +406,6 @@
 
 
 {{-- Start Script --}}
-
 <script>
     //  Show Checkbox
     $(document).ready(function() {
@@ -441,8 +439,6 @@
     }
 </script>
 <script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
-
-
 <script>
      $('#lfm').filemanager('file');
     var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
