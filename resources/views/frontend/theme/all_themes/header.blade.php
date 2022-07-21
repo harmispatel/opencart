@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS LAYOUT(THEME) 1 HEADER PAGE FRONTEND DESIGN
     ----------------------------------------------------------------------------------------------
     header.blade.php
     It Displayed Layout(Theme) 1 Header
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 @php
     
@@ -820,7 +820,7 @@
         <header class="header-v2">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
+                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
                     @php
                         $openday =$openclose['openday'];
                         $fromtime = $openclose['fromtime'];
@@ -1054,7 +1054,7 @@
                         <a class="menu-shopping-cart" href="{{ route('cart') }}">
                             <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                             <div class="price-box"><strong>Shopping Cart:</strong>
-                                <div class="price"><i class="fas fa-dollar-sign"></i><span class="pirce-value">{{ $headertotal }}</span></div>
+                                <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
                             </div>
                         </a>
                     </div>
@@ -1089,7 +1089,7 @@
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
                     </ul>
-                    <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
+                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
                     @if (in_array($currentdate,$date_close1))
                         <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                             @if ($menu_topbar_open_close_permission == 1)
@@ -1147,7 +1147,7 @@
                         <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}"></a>
                         <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
                     </div>
-                    <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
+                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
                     <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
                         @php
                             $openday =$openclose['openday'];
@@ -1354,7 +1354,7 @@
             </div>
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    <!-- restaurant açık ise open kapalı ise closed clas'ını kullanın-->
+                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
                         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
@@ -1458,7 +1458,7 @@
                     <a class="menu-shopping-cart" href="{{ route('cart') }}">
                         <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                         <div class="price-box"><strong>Shopping Cart:</strong>
-                            <div class="price"><i class="fas fa-dollar-sign"></i><span class="pirce-value">{{ $headertotal }}</span></div>
+                            <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
                         </div>
                     </a>
                 </div>

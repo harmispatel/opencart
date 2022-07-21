@@ -28,12 +28,13 @@ class StripeController extends Controller
     public function stripePost(Request $request)
     {
         $servicecharge = paymentdetails();
-        // stripe secret key
+        // dynamic stripe secret key
         $stripesecret = $servicecharge["stripe"]["stripe_secretkey"] ? $servicecharge["stripe"]["stripe_secretkey"] : '';
         Stripe\Stripe::setApiKey($stripesecret);
         Stripe\Charge::create ([
                 // "amount" => 100 * 100,
-                "amount" => ceil($request->total) * 100,
+                // "amount" => ceil($request->total) * 100,
+                "amount" => round($request->total,2) * 100,
                 "currency" => $request->currency_code,
                 "source" => $request->stripeToken,
                 "description" => "This payment is tested purpose"

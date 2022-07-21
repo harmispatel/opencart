@@ -24,9 +24,6 @@
    </head>
    <body class="vh-100">
     @php
-        // echo '<pre>';
-        // print_r(session()->all());
-        // exit();
 
         // Get Current URL
         $currentURL = URL::to("/");
@@ -42,7 +39,7 @@
         $currency = getCurrencySymbol($store_setting['config_currency']);
 
         $servicecharge = paymentdetails();
-        // stripe key
+        // dynamic stripe key
         $stripekey = $servicecharge["stripe"]["stripe_publickey"] ? $servicecharge["stripe"]["stripe_publickey"] : '';
 
         $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
@@ -168,7 +165,6 @@
         if (response.error) {
             $('.error')
                 .removeClass('hide')
-                .addClass('')
                 .find('.alert')
                 .text(response.error.message);
         } else {

@@ -88,12 +88,12 @@
 <!doctype html>
 <html>
 <head>
-    <!-- CSS -->
+    {{-- CSS  --}}
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
-    <!-- End CSS -->
+    {{-- CSS --}}
 
-    <!-- Custom CSS -->
+    {{-- Custom CSS --}}
     <style>
         .myfoodbasketpayments_gateway,.cod,.pp_express
         {
@@ -164,7 +164,7 @@
         }
 
     </style>
-    <!-- End Custom CSS -->
+    {{-- End Custom CSS --}}
 
 </head>
 <body>
@@ -172,16 +172,8 @@
     {{-- Header  --}}
     @include('frontend.theme.all_themes.header')
 
-    @if(\Session::has('error'))
-        <div class="alert alert-danger">{{ \Session::get('error') }}</div>
-        {{ \Session::forget('error') }}
-    @endif
-    @if(\Session::has('success'))
-        <div class="alert alert-success">{{ \Session::get('success') }}</div>
-        {{ \Session::forget('success') }}
-    @endif
     @if (empty($userlogin) && empty($guestlogin))
-        <!-- Checkout Step 1 -->
+        {{-- Checkout Step 1 --}}
         <section class="check-main" id="checkout1">
             <div class="container">
                 <div class="check-inr">
@@ -379,6 +371,15 @@
         {{-- Checkout Step 2 --}}
         <section class="check-main" id="checkout2">
             <div class="container">
+            {{-- <div class="alert alert-danger">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae eum tempore accusantium possimus quo nobis.</div> --}}
+                @if(\Session::has('error'))
+                    <div class="alert alert-danger">{{ \Session::get('error') }}</div>
+                    {{ \Session::forget('error') }}
+                @endif
+                @if(\Session::has('success'))
+                    <div class="alert alert-success">{{ \Session::get('success') }}</div>
+                    {{ \Session::forget('success') }}
+                @endif
                 <div class="check-inr">
                     <div class="row justify-content-center" id="demo">
                         <div class="col-md-12">
@@ -574,10 +575,10 @@
                 </div>
             </div>
         </section>
-        <!-- End Checkout Step 2 -->
+        {{-- End Checkout Step 2 --}}
     @endif
 
-    <!-- Checkout Step 3 -->
+    {{-- Checkout Step 3 --}}
     <section class="check-main" id="checkout3" style="display: none">
         <div class="container">
             <div class="check-inr">
@@ -757,7 +758,7 @@
                                                                             <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
                                                                             <td>
                                                                                 <span>
-                                                                                    <b>{{ $currency }} -{{ isset($couponcode) ? $couponcode : 0 }}</b>
+                                                                                    <b>{{ $currency }} -{{ round(isset($couponcode) ? $couponcode : 0 ,2) }}</b>
                                                                                 </span>
                                                                             </td>
                                                                         </tr>
@@ -805,7 +806,7 @@
                             <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <div class="row justify-content-center">
-                                        <div class="col-md-5">
+                                        <div class="col-md-6">
                                             <div class="login-main text-center">
                                                 <div class="login-details w-100">
                                                     <div id="voucher" class="content">
@@ -813,9 +814,14 @@
                                                             @csrf
                                                             <div style="display: none;">Enter your gift voucher code
                                                                 here:&nbsp;</div>
-                                                            <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                                                <input type="text" name="voucher" value="" placeholder="Voucher Code" class="w-100">
-                                                                <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                                            {{-- <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex"> --}}
+                                                            <div class="login-details-inr w-100 vouchercode d-flex">
+                                                                <input type="text" name="voucher" value="" placeholder="Voucher Code" class="w-75">
+                                                                {{-- <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger"> --}}
+                                                                <button class="ms-2 btn" style="text-transform: uppercase;display: inline-block;" type="submit  ">
+                                                                    Apply
+                                                                  <span class="spinner-border spinner-border-sm ms-2" id="voucherload" role="status" aria-hidden="true" style="display: none"></span>
+                                                                </button>
                                                             </div>
                                                             <p class="text-danger" id="voucherError" style="text-align: left"></p>
                                                             <p class="text-success" id="voucherSuccess" style="text-align: left"></p>
@@ -825,9 +831,13 @@
                                                         <form action="{{ route('coupon') }}" method="post" enctype="multipart/form-data" id="coupon_form">
                                                             @csrf
                                                             <div style="display: none;">Enter your coupon here:&nbsp;</div>
-                                                            <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex">
-                                                                <input type="text" name="coupon" value="" placeholder="Coupon Code" class="w-100">
-                                                                <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger">
+                                                            <div class="login-details-inr w-100 vouchercode d-flex">
+                                                                <input type="text" name="coupon" value="" placeholder="Coupon Code" class="w-75">
+                                                                {{-- <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger"> --}}
+                                                                <button class="ms-2 btn" style="text-transform: uppercase;display: inline-block;" type="submit">
+                                                                    Apply
+                                                                  <span class="spinner-border spinner-border-sm ms-2" id="couponload" role="status" aria-hidden="true" style="display: none"></span>
+                                                                </button>
                                                             </div>
                                                             <p class="text-danger" id="couponError" style="text-align: left"></p>
                                                             <p class="text-success" id="couponSuccess" style="text-align: left"></p>
@@ -904,19 +914,19 @@
             </div>
         </div>
     </section>
-    <!-- End Checkout Step 3 -->
+    {{-- End Checkout Step 3 --}}
 
 
     {{-- footer  --}}
     @include('frontend.theme.all_themes.footer')
 
 
-    <!-- JS -->
+    {{-- JS --}}
     @include('frontend.include.script')
-    <!-- End JS -->
+    {{-- End JS --}}
 
 
-    <!-- Custom JS -->
+    {{-- Custom JS --}}
     <script type="text/javascript">
 
         // Document Script
@@ -1206,7 +1216,7 @@
                 $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} {{ $stripe_charge }}</b>');
                 $('#total_pay').text('');
                 $('#total_pay').text("{{ $currency }} {{ $total + $stripe_charge }}");
-                $('#total').val({{ $total + $stripe_charge }});
+                $('#total').val({{ round($total + $stripe_charge,2) }});
                 $('#service_charge').val({{ $stripe_charge }});
                 // $.session.set('total', {{ $total + $stripe_charge }});
             }
@@ -1220,7 +1230,7 @@
                 $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} {{ $paypal_charge }}</b>');
                 $('#total_pay').text('');
                 $('#total_pay').text("{{ $currency }} {{ $total + $paypal_charge }}");
-                $('#total').val({{ $total + $paypal_charge }});
+                $('#total').val({{ round($total + $paypal_charge,2) }});
                 $('#service_charge').val({{ $paypal_charge }});
             }
             if (method_type == 3)
@@ -1232,7 +1242,7 @@
                 $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} {{ $cod_charge }}</b>');
                 $('#total_pay').text('');
                 $('#total_pay').text("{{ $currency }} {{ $total + $cod_charge }}");
-                $('#total').val({{ $total + $cod_charge }});
+                $('#total').val({{ round($total + $cod_charge,2) }});
                 $('#service_charge').val({{ $cod_charge }});
 
             }
@@ -1491,6 +1501,7 @@
         $('#voucher_form').submit(function(e)
         {
             e.preventDefault();
+            $('#voucherload').css('display' , 'inline-block');
             var voucher = $("input[name='voucher']").val();
 
             $.ajax({
@@ -1503,11 +1514,16 @@
                 dataType: 'json',
                 success: function(result)
                 {
+                    $('#voucherload').css('display' , 'none');
                     if(result.errors == 1)
                     {
                         $('#voucherSuccess').html('');
                         $('#voucherError').html('');
                         $('#voucherError').append(result.errors_message);
+                        setTimeout(() => {
+                            $('#voucherSuccess').html('');
+                            $('#voucherError').html('');
+                        }, 5000);
                     }
 
                     if(result.success == 1)
@@ -1521,6 +1537,10 @@
                         $('.total').append(result.total);
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.total);
+                        setTimeout(() => {
+                            $('#voucherError').html('');
+                            $('#voucherSuccess').html('');
+                        }, 5000);
                     }
                 }
             });
@@ -1533,29 +1553,35 @@
         {
             e.preventDefault();
             var coupon = $("input[name='coupon']").val();
-
+            var method_type = $('input[name="payment_method"]:checked').val();
+            $('#couponload').css('display' , 'inline-block');
             $.ajax({
                 type: 'post',
                 url: '{{ url("getcoupon") }}',
                 data: {
                     "_token": "{{ csrf_token() }}",
                     'coupon': coupon,
+                    'method_type': method_type,
                 },
                 dataType: 'json',
                 success: function(result)
                 {
+                    $('#couponload').css('display' , 'none');
                     if(result.success == 1)
                     {
-                        console.log(result)
                         $('#couponError').html('');
                         $('#couponSuccess').html('');
                         $('#couponSuccess').append(result.success_message);
                         $('.coupon_code').html('');
-                        $('.coupon_code').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.couponcode+'</b></td>');
+                        $('.coupon_code').append('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
                         $('.total').html('');
                         $('.total').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.headertotal);
+                        setTimeout(() => {
+                            $('#couponError').html('');
+                            $('#couponSuccess').html('');
+                        }, 5000);
                     }
 
                     if(result.errors == 1)
@@ -1563,6 +1589,10 @@
                         $('#couponSuccess').html('');
                         $('#couponError').html('');
                         $('#couponError').append(result.errors_message);
+                        setTimeout(() => {
+                            $('#couponSuccess').html('');
+                            $('#couponError').html('');
+                        }, 10000);
                     }
                 }
             });
@@ -1571,7 +1601,7 @@
 
 
     </script>
-    <!-- End Custom JS -->
+    {{-- End Custom JS --}}
 
 </body>
 </html>

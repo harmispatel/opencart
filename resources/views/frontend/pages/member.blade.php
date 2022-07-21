@@ -39,10 +39,10 @@
 <!doctype html>
 <html>
 <head>
-    <!-- CSS -->
+    {{-- CSS --}}
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
-    <!-- End CSS -->
+    {{-- End CSS --}}
 </head>
 <body>
 
@@ -75,7 +75,7 @@
         </ul>
     </div>
 </sidebar>
-    <!-- Customer Orders Model -->
+    {{-- Customer Orders Model --}}
     <div class="modal fade" id="orderreceipt" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreceiptLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -87,9 +87,9 @@
             </div>
         </div>
     </div>
-    <!-- End Customer Orders Model -->
+    {{-- End Customer Orders Model --}}
 
-    <!-- Customer Review Modal -->
+    {{-- Customer Review Modal --}}
     <div class="modal fade" id="orderreview" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreviewLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -139,12 +139,12 @@
           </div>
         </div>
       </div>
-    <!-- End Customer Review Modal -->
+    {{-- End Customer Review Modal --}}
 
     {{-- Header  --}}
     @include('frontend.theme.all_themes.header')
 
-    <!-- Member Section -->
+    {{-- Member Section --}}
     <section class="member-main">
         <div class="container">
             @if($errors->any())
@@ -473,13 +473,18 @@
                                                                                             </table>
                                                                                             <div class="d-flex justify-content-around">
                                                                                                 {{-- <a class="btn btn-sm" href="#" class="button"><i class="fas fa-redo-alt"></i> Re-Order</a> --}}
-                                                                                                <button type="button" class="btn btn-sm customerorderdetail" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
+                                                                                                <button type="button" class="btn btn-sm" data-bs-toggle="modal"  data-bs-target="#orderreview" value="{{ $orders->order_id }}"><i class="far fa-comment"></i> Review</button>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="card-footer">
+                                                                                    <div class="card-footer d-flex justify-content-between">
                                                                                         <span class="float-start text-bold" style="font-size: 23px"><i class="fa fa-shopping-basket" aria-hidden="true"></i> {{ $orders->hasOneCurrency['symbol_left'] }} {{ number_format($orders->total,2) }}</span>
-                                                                                        <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail" data-bs-toggle="modal" data-bs-target="#orderreceipt">View</button>
+                                                                                        {{-- <img class="orderdetailload" src="{{ asset('public/admin/gif/gif4.gif') }}" style="display: none">
+                                                                                        <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail">View</button> --}}
+                                                                                        <button type="button" value="{{ $orders->order_id }}" class="float-end btn btn-danger customerorderdetail">
+                                                                                            View
+                                                                                            <span class="spinner-border spinner-border-sm orderdetailload text-white" role="status" aria-hidden="true" style="display: none"></span>
+                                                                                        </button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -501,19 +506,19 @@
             @endif
         </div>
     </section>
-    <!-- End Member Section -->
+    {{-- End Member Section --}}
 
 
     {{-- Footer --}}
     @include('frontend.theme.all_themes.footer')
 
 
-    <!-- JS -->
+    {{-- JS --}}
     @include('frontend.include.script')
-    <!-- End JS -->
+    {{-- End JS --}}
 
 
-    <!-- Custom JS -->
+    {{-- Custom JS --}}
     <script type="text/javascript">
 
         // Change Customer Default Address
@@ -547,6 +552,8 @@
         // Customer Orders Details
         $('.customerorderdetail').on('click', function ()
         {
+            $(this).find(".orderdetailload").css("display", "inline-block");
+
             var customerorderid = $(this).val();
             $('#corderid').val(customerorderid);
 
@@ -556,11 +563,13 @@
                 data:
                 {
                     "_token": "{{ csrf_token() }}",
-                        'customerorderid': customerorderid,
+                    'customerorderid': customerorderid,
                 },
                 dataType: 'json',
                 success: function (response)
                 {
+                    $('.orderdetailload').css("display", "none");
+                    $('#orderreceipt').modal('show');
                     $('#customerordermodal').html(response.customerorders);
                 }
             });
@@ -628,7 +637,7 @@
 
 
     </script>
-    <!-- End Custom JS -->
+    {{-- End Custom JS --}}
 
 
 </body>

@@ -91,12 +91,18 @@
 
                                     <div class="form-group mt-3">
                                         <label for="publickey">* Public Key</label>
-                                        <input type="text" class="form-control" name="publickey" value="{{ $stripe['stripe_publickey'] }}" id="publickey">
+                                        <input type="text" class="@error('public_key') is-invalid @enderror form-control" name="public_key" value="{{ $stripe['stripe_publickey'] }}" id="publickey">
+                                        @error('public_key')
+                                            <div>{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
                                         <label for="secretkey">* Secret Key</label>
-                                        <input type="text" class="form-control" name="secretkey" value="{{ $stripe['stripe_secretkey'] }}" id="secretkey">
+                                        <input type="text" class="@error('secret_key') is-invalid @enderror form-control" name="secret_key" value="{{ $stripe['stripe_secretkey'] }}" id="secretkey">
+                                        @error('secret_key')
+                                            <div>{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
@@ -109,7 +115,7 @@
                                         <input class="form-control" name="paycharge" value="{{ $stripe['stripe_charge_payment'] }}" id="paycharge" type="text">
                                     </div>
 
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="order_status">* Successful Transaction Order Status</label>
                                         <select class="form-control" id="order_status" name="order_status">
                                             <option selected disabled>Please select an option...</option>
@@ -129,7 +135,7 @@
                                             @endforeach
                                         </select>
                                         <small class="form-text text-muted">Select the desired status for a failed transaction made through the gateway</small>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 {{-- End Card Body --}}
                             </form>

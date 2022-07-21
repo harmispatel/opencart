@@ -93,8 +93,8 @@
 
                                     <div class="tab-pane fade show active mt-3" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer-tab">
 
-                                        <div class="form-group mt-3">
-                                            {{-- <label for="apiusername">* API Username</label>
+                                        {{-- <div class="form-group mt-3">
+                                            <label for="apiusername">* API Username</label>
                                             <input type="text" class="form-control" name="apiusername" value="{{ $paypal['pp_express_username'] }}" id="apiusername">
                                         </div>
 
@@ -115,12 +115,18 @@
 
                                         <div class="form-group">
                                             <label for="sandbox_clint">Paypal Clint Id</label>
-                                            <input type="text" class="form-control" name="sandbox_clint" value="{{ $paypal['pp_sandbox_clint'] }}" id="sandbox_clint">
+                                            <input type="text" class="@error('clint_id') is-invalid @enderror form-control" name="clint_id" value="{{ $paypal['pp_sandbox_clint'] }}" id="clint_id">
+                                            @error('clint_id')
+                                                <div>{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="sandbox_secret">Paypal Secret Key</label>
-                                            <input type="text" class="form-control" name="sandbox_secret" value="{{ $paypal['pp_sandbox_secret'] }}" id="sandbox_secret">
+                                            <input type="text" class="@error('clint_secret') is-invalid @enderror form-control" name="clint_secret" value="{{ $paypal['pp_sandbox_secret'] }}" id="clint_secret">
+                                            @error('clint_secret')
+                                                <div>{{ $message }}</div>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
