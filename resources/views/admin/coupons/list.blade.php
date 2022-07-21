@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS HEADER Coupons List PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     List.blade.php
     It Displayed All Coupons List & Storewise Display Coupons
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 {{-- Header --}}

@@ -368,6 +368,15 @@ class MenuController extends Controller
        // Store Settings
        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
+       // Get Currency Details
+       $currency = getCurrencySymbol($store_setting['config_currency']);
+
+        // cash on delevery setting
+        $servicecharge = paymentdetails();
+        $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
+        $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
+        $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
+
         $current_date = strtotime(date('Y-m-d'));
 
         if (session()->has('userid')) {
@@ -375,6 +384,8 @@ class MenuController extends Controller
         } else {
             $userid = 0;
         }
+
+
 
         $Coupon = $request->coupon;
         $Couponcode = coupon::where('code', $Coupon)->where('store_id', $front_store_id)->first();
@@ -429,15 +440,28 @@ class MenuController extends Controller
                 $success_message = '';
 
                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                $couponcode_html .= '<label>Coupon(' . $Couponcode->code . ')</label><span>£ -' . $couponcode . '</span>';
-                $total_html .= '<label><b>Total to pay:</b></label><span>£ ' . $total . '</span>';
+                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>'.$currency.' -' . round($couponcode,2) . '</b></span></td></tr>';
+                // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
+                if ($request->method_type == 1) {
+                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$stripe_charge ,2) . '</b></span></td></tr>';
+                }
+                elseif ($request->method_type == 2) {
+                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$paypal_charge, 2) . '</b></span></td></tr>';
+                }
+                elseif ($request->method_type == 3) {
+                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$cod_charge, 2) . '</b></span></td></tr>';
+                }
+                else{
+                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total,2) . '</b></span></td></tr>';
+                }
 
                 return response()->json([
                     'success' => 1,
                     'success_message' => $success_message,
                     'couponcode' => $couponcode_html,
                     'total' => $total_html,
-                    'headertotal' => $total,
+                    'headertotal' => number_format($total,2),
                 ]);
             } else // Expired Coupon
             {

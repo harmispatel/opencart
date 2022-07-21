@@ -417,7 +417,24 @@ class Orders extends Model
                  if (isset($usercart)) {
                      if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
                          foreach ($usercart['withoutSize'] as $key => $cart) {
+                            // Order Product without size
                              $order_product = new OrderProduct;
+                             $order_product->order_id = $last_order_id;
+                             $order_product->product_id = $cart['product_id'];
+                             $order_product->name = $cart['name'];
+                             $order_product->model = '';
+                             $order_product->quantity = $cart['quantity'];
+                             $order_product->price = $cart['main_price'];
+                             $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                             $order_product->tax = 0.00;
+                             $order_product->reward = 0;
+                             $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                             $order_product->toppings = '';
+                             $order_product->request = '';
+                             $order_product->save();
+
+                             // payment db, Customer Order Product without size
+                             $order_product = new CustomerOrderProduct;
                              $order_product->order_id = $last_order_id;
                              $order_product->product_id = $cart['product_id'];
                              $order_product->name = $cart['name'];
@@ -436,6 +453,7 @@ class Orders extends Model
 
                      if (isset($usercart['size']) && count($usercart['size']) > 0) {
                          foreach ($usercart['size'] as $key => $cart) {
+                            // Order Product without size
                              $order_product = new OrderProduct;
                              $order_product->order_id = $last_order_id;
                              $order_product->product_id = $cart['product_id'];
@@ -450,6 +468,22 @@ class Orders extends Model
                              $order_product->toppings = '';
                              $order_product->request = '';
                              $order_product->save();
+
+                            // paymant db, Customer Order product with size
+                             $payment_order_product = new CustomerOrderProduct;
+                             $payment_order_product->order_id = $last_order_id;
+                             $payment_order_product->product_id = $cart['product_id'];
+                             $payment_order_product->name = $cart['name'];
+                             $payment_order_product->model = '';
+                             $payment_order_product->quantity = $cart['quantity'];
+                             $payment_order_product->price = $cart['main_price'];
+                             $payment_order_product->total = $cart['main_price'] *  $cart['quantity'];
+                             $payment_order_product->tax = 0.00;
+                             $payment_order_product->reward = 0;
+                             $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                             $payment_order_product->toppings = '';
+                             $payment_order_product->request = '';
+                             $payment_order_product->save();
                          }
                      }
                  }
@@ -648,6 +682,7 @@ class Orders extends Model
                      if (isset($guestUserCart)) {
                          if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
                              foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                                // Order Product without size
                                  $gorder_product = new OrderProduct;
                                  $gorder_product->order_id = $gorder->order_id;
                                  $gorder_product->product_id = $cart['product_id'];
@@ -662,11 +697,28 @@ class Orders extends Model
                                  $gorder_product->toppings = '';
                                  $gorder_product->request = '';
                                  $gorder_product->save();
+
+                                 // payment db, Customer Order Product without size
+                                 $payment_gorder_product = new CustomerOrderProduct;
+                                 $payment_gorder_product->order_id = $gorder->order_id;
+                                 $payment_gorder_product->product_id = $cart['product_id'];
+                                 $payment_gorder_product->name = $cart['name'];
+                                 $payment_gorder_product->model = '';
+                                 $payment_gorder_product->quantity = $cart['quantity'];
+                                 $payment_gorder_product->price = $cart['main_price'];
+                                 $payment_gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                 $payment_gorder_product->tax = 0.00;
+                                 $payment_gorder_product->reward = 0;
+                                 $payment_gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                 $payment_gorder_product->toppings = '';
+                                 $payment_gorder_product->request = '';
+                                 $payment_gorder_product->save();
                              }
                          }
 
                          if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
                              foreach ($guestUserCart['size'] as $key => $cart) {
+                                // Order Product with size
                                  $gorder_product = new OrderProduct;
                                  $gorder_product->order_id = $gorder->order_id;
                                  $gorder_product->product_id = $cart['product_id'];
@@ -681,6 +733,22 @@ class Orders extends Model
                                  $gorder_product->toppings = '';
                                  $gorder_product->request = '';
                                  $gorder_product->save();
+
+                                // payment db, Customer Order Product with size
+                                 $payment_gorder_product = new CustomerOrderProduct;
+                                 $payment_gorder_product->order_id = $gorder->order_id;
+                                 $payment_gorder_product->product_id = $cart['product_id'];
+                                 $payment_gorder_product->name = $cart['name'];
+                                 $payment_gorder_product->model = '';
+                                 $payment_gorder_product->quantity = $cart['quantity'];
+                                 $payment_gorder_product->price = $cart['main_price'];
+                                 $payment_gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                 $payment_gorder_product->tax = 0.00;
+                                 $payment_gorder_product->reward = 0;
+                                 $payment_gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                 $payment_gorder_product->toppings = '';
+                                 $payment_gorder_product->request = '';
+                                 $payment_gorder_product->save();
                              }
                          }
                      }
@@ -843,6 +911,7 @@ class Orders extends Model
                      if (isset($usercart)) {
                          if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
                              foreach ($usercart['withoutSize'] as $key => $cart) {
+                                // Order Product without size
                                  $order_product = new OrderProduct;
                                  $order_product->order_id = $order->order_id;
                                  $order_product->product_id = $cart['product_id'];
@@ -857,11 +926,28 @@ class Orders extends Model
                                  $order_product->toppings = '';
                                  $order_product->request = '';
                                  $order_product->save();
+
+                                // payment db, Customer Order Product without size
+                                 $payment_order_product = new CustomerOrderProduct;
+                                 $payment_order_product->order_id = $order->order_id;
+                                 $payment_order_product->product_id = $cart['product_id'];
+                                 $payment_order_product->name = $cart['name'];
+                                 $payment_order_product->model = '';
+                                 $payment_order_product->quantity = $cart['quantity'];
+                                 $payment_order_product->price = $cart['main_price'];
+                                 $payment_order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                 $payment_order_product->tax = 0.00;
+                                 $payment_order_product->reward = 0;
+                                 $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                 $payment_order_product->toppings = '';
+                                 $payment_order_product->request = '';
+                                 $payment_order_product->save();
                              }
                          }
 
                          if (isset($usercart['size']) && count($usercart['size']) > 0) {
                              foreach ($usercart['size'] as $key => $cart) {
+                                // Order Product with size
                                  $order_product = new OrderProduct;
                                  $order_product->order_id = $order->order_id;
                                  $order_product->product_id = $cart['product_id'];
@@ -876,6 +962,22 @@ class Orders extends Model
                                  $order_product->toppings = '';
                                  $order_product->request = '';
                                  $order_product->save();
+
+                                // payment db, Customer Order Product with size
+                                 $payment_order_product = new CustomerOrderProduct;
+                                 $payment_order_product->order_id = $order->order_id;
+                                 $payment_order_product->product_id = $cart['product_id'];
+                                 $payment_order_product->name = $cart['name'];
+                                 $payment_order_product->model = '';
+                                 $payment_order_product->quantity = $cart['quantity'];
+                                 $payment_order_product->price = $cart['main_price'];
+                                 $payment_order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                 $payment_order_product->tax = 0.00;
+                                 $payment_order_product->reward = 0;
+                                 $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                 $payment_order_product->toppings = '';
+                                 $payment_order_product->request = '';
+                                 $payment_order_product->save();
                              }
                          }
                      }

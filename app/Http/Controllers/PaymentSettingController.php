@@ -199,6 +199,10 @@ class PaymentSettingController extends Controller
     // paylal setting store/update
     public function storepaypalsetting(Request $request)
     {
+        $request->validate([
+            'clint_id' => 'required',
+            'clint_secret' => 'required',
+        ]);
         // Current Store ID
        $current_store_id = currentStoreId();
 
@@ -222,8 +226,8 @@ class PaymentSettingController extends Controller
         $data['current_store_id'] = $current_store_id ;
         $data['pp_front_text'] = $request->fronttext;
         $data['pp_express_sort_order'] = $request->sortorder;
-        $data['pp_sandbox_secret'] = $request->sandbox_secret;
-        $data['pp_sandbox_clint'] = $request->sandbox_clint;
+        $data['pp_sandbox_secret'] = $request->clint_secret;
+        $data['pp_sandbox_clint'] = $request->clint_id;
         $data['pp_express_test'] = $request->paypalmod;
         $data['pp_express_status'] = $request->paypal_status;
 
@@ -310,6 +314,10 @@ class PaymentSettingController extends Controller
 
     public function storestripesetting(Request $request)
     {
+        $request->validate([
+            'public_key' => 'required',
+            'secret_key' => 'required',
+        ]);
         // Current Store ID
         $current_store_id = currentStoreId();
 
@@ -320,13 +328,13 @@ class PaymentSettingController extends Controller
         }
         $user_shop_id = $user_details['user_shop'];
 
-        $data['stripe_publickey'] = $request->publickey;
-        $data['stripe_secretkey'] = $request->secretkey;
+        $data['stripe_publickey'] = $request->public_key;
+        $data['stripe_secretkey'] = $request->secret_key;
         $data['stripe_charge_payment'] = $request->paycharge;
         $data['stripe_geo_zone_id'] = 0;
         $data['stripe_printer_text'] = $request->printertext;
-        $data['stripe_order_status'] = $request->order_status;
-        $data['stripe_orderstatus_faild'] = $request->orderstatus_faild;
+        // $data['stripe_order_status'] = $request->order_status;
+        // $data['stripe_orderstatus_faild'] = $request->orderstatus_faild;
         $data['stripe_status'] = $request->stripe_status;
 
 
@@ -364,6 +372,68 @@ class PaymentSettingController extends Controller
             }
         }
         return redirect()->back()->with('success', 'Settings Updated..');
+    }
+
+    public function paymentstatus(Request $request)
+    {
+        // Current Store ID
+        $current_store_id = currentStoreId();
+
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        // cod status
+        if ($request->p_type == 'cod_status') {
+            $data['cod_status'] = $request->p_status;
+        }
+
+        // paypal status
+        if ($request->p_type == 'paypal_status') {
+            $data['pp_express_status'] = $request->p_status;
+        }
+
+        // stripe status
+        if ($request->p_type == 'stripe_status') {
+            $data['stripe_status'] = $request->p_status;
+        }
+
+        foreach ($data as $key => $new)
+        {
+            if($user_group_id == 1)
+            {
+                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
+            }
+            else
+            {
+                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
+            }
+
+            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+            if (!empty($setting_id) || $setting_id != '') {
+                $stripe_update = Settings::find($setting_id);
+                $stripe_update->value = $new;
+                $stripe_update->update();
+            } else {
+                $stripe_add = new Settings();
+                if($user_group_id == 1)
+                {
+                    $stripe_add->store_id = $current_store_id;
+                }
+                else
+                {
+                    $stripe_add->store_id = $user_shop_id;
+                }
+                $stripe_add->group = 'stripe';
+                $stripe_add->key = $key;
+                $stripe_add->value = $new;
+                $stripe_add->serialized = 0;
+                $stripe_add->save();
+            }
+        }
     }
 
 }

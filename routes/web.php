@@ -332,13 +332,17 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('daytime', [SettingsController::class, 'daytime'])->name('daytime');
 
     Route::get('deliverycollectionsetting', [SettingsController::class, 'deliverycollectionsetting'])->name('deliverycollectionsetting');
-    Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
     Route::get('sociallinks', [SettingsController::class, 'sociallinks'])->name('sociallinks');
     Route::post('updatesociallinks', [SettingsController::class, 'updatesociallinks'])->name('updatesociallinks');
     Route::post('calculateDistance', [SettingsController::class, 'calculateDistance'])->name('calculateDistance');
     Route::post('addGroup', [SettingsController::class, 'addGroup'])->name('addGroup');
     Route::post('deleteGroup', [SettingsController::class, 'deleteGroup'])->name('deleteGroup');
     Route::post('manageDeliveryCollection', [SettingsController::class, 'manageDeliveryCollection'])->name('manageDeliveryCollection');
+    Route::get('paymentsettings', [SettingsController::class, 'paymentsettings'])->name('paymentsettings');
+
+    // payment status
+    Route::post('paymentstatus', [PaymentSettingController::class, 'paymentstatus'])->name('paymentstatus');
+
 
     // cash payment settings
     Route::get('cashpaysetting', [PaymentSettingController::class, 'cashpaysetting'])->name('cashpaysetting');

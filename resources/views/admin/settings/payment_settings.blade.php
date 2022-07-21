@@ -2,6 +2,20 @@
 @include('header')
 {{-- End Header --}}
 
+{{-- Custom CSS for Radio Buttons --}}
+<style>
+    .radio {
+        display: none;
+    }
+
+    .radio:checked+label {
+        background: rgb(41, 41, 41) !important;
+        color: #fff;
+    }
+</style>
+{{-- End Custom CSS for Radio Buttons --}}
+
+
 {{-- Section of List Payment Settings --}}
 <section>
     <div class="content-wrapper">
@@ -40,19 +54,50 @@
                     <div class="col-md-12">
                         {{-- Card Start --}}
                         <div class="card card-primary">
-                            <div class="card-header" style="background: #f6f6f6">
+                            {{-- <div class="card-header" style="background: #f6f6f6">
                                 <div class="container" style="text-align: right">
-                                    {{-- <button type="submit" form="openclosetime" class="btn btn-sm btn-primary ml-auto"><i class="fa fa-save"></i></button> --}}
+                                    <button type="submit" form="openclosetime" class="btn btn-sm btn-primary ml-auto"><i class="fa fa-save"></i></button>
                                     <a href="{{ route('dashboard') }}" class="btn btn-sm btn-danger"><i class="fa fa-arrow-left"></i></a>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="card-body">
                                 <form action="{{ route('openclosetimeset') }}" method="POST" id="openclosetime">
                                     {{ csrf_field() }}
-                                    <h5><a href="{{ route('cashpaysetting') }}" style="cursor: pointer;">Cash</a></h5><hr>
+                                    <div>
+                                        <div class="form-group float-right">
+                                            <div class="btn-group">
+                                                <input type="radio" class="radio" id="cod_enable" name="cod_status" value="1" {{ $paymentstatus['cod_status'] == 1 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="cod_enable">Enable</label>
+                                                <input type="radio" class="radio" id="cod_disable" name="cod_status" value="0" {{ $paymentstatus['cod_status'] == 0 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="cod_disable">Disable</label>
+                                            </div>
+                                        </div>
+                                        <h5><a href="{{ route('cashpaysetting') }}" style="cursor: pointer;">Cash</a></h5><hr>
+                                    </div>
                                     {{-- <h5><a href="#" style="cursor: pointer;">Cash on Delivery</a></h5><hr> --}}
-                                    <h5><a href="{{ route('paypalsetting') }}" style="cursor: pointer;">Paypal</a></h5><hr>
-                                    <h5><a href="{{ route('stripesetting') }}" style="cursor: pointer;">Strip</a></h5><hr>
+                                    <div>
+                                        <div class="form-group float-right">
+                                            <div class="btn-group">
+                                                <input type="radio" class="radio" id="enable_paypal" name="paypal_status" value="1" {{ $paymentstatus['pp_express_status'] == 1 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable_paypal">Enable</label>
+                                                <input type="radio" class="radio" id="disable_paypal" name="paypal_status" value="0" {{ $paymentstatus['pp_express_status'] == 0 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable_paypal">Disable</label>
+                                            </div>
+                                        </div>
+                                        <h5><a href="{{ route('paypalsetting') }}" style="cursor: pointer;">Paypal</a></h5><hr>
+                                    </div>
+                                    <div>
+                                        <div class="form-group float-right">
+                                            <div class="btn-group">
+                                                <input type="radio" class="radio" id="enable_stripe" name="stripe_status" value="1" {{ $paymentstatus['stripe_status'] == 1 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable_stripe">Enable</label>
+                                                <input type="radio" class="radio" id="disable_stripe" name="stripe_status" value="0" {{ $paymentstatus['stripe_status'] == 0 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable_stripe">Disable</label>
+                                            </div>
+                                        </div>
+                                        <h5><a href="{{ route('stripesetting') }}" style="cursor: pointer;">Strip</a></h5><hr>
+
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -72,6 +117,31 @@
 @include('footer')
 {{-- End Footer --}}
 
-{{-- Script Section --}}
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-{{-- End Script Section --}}
+<script>
+    // Change payment Status
+    $(".radio").on('click', function()
+    {
+        let p_status = $(this).val();
+        var p_type = $(this).attr("name");
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+                type: "post",
+                url: "{{ route('paymentstatus') }}",
+                data: {
+                    p_status: p_status,
+                    p_type: p_type,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+
+                }
+        });
+    });
+</script>
