@@ -390,10 +390,10 @@ class MenuController extends Controller
         $Coupon = $request->coupon;
         $Couponcode = coupon::where('code', $Coupon)->where('store_id', $front_store_id)->first();
 
-        if ($Couponcode->on_off == 1) {
-            if ($request->total >= $Couponcode->total) {
-                if (!empty($Couponcode) || $Couponcode != '') // Valid Coupon
-                {
+        if (!empty($Couponcode) || $Couponcode != '') // Valid Coupon
+        {
+            if ($Couponcode->on_off == 1) {
+                if ($request->total >= $Couponcode->total) {
                     $start_date = isset($Couponcode->date_start) ? strtotime($Couponcode->date_start) : '';
                     $end_date = isset($Couponcode->date_end) ? strtotime($Couponcode->date_end) : '';
 
@@ -474,28 +474,28 @@ class MenuController extends Controller
                             'errors_message' => $error_msg,
                         ]);
                     }
-                } else // Invalid Coupon
-                {
+                }
+                else{
                     $error_msg = '';
-                    $error_msg .= '<span class="text-danger">Please enter valid Coupon Code</span>';
+                    $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                     return response()->json([
                         'errors' => 1,
                         'errors_message' => $error_msg,
                     ]);
                 }
-            }
-            else{
+            } else {
                 $error_msg = '';
-                $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
+                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
                 return response()->json([
                     'errors' => 1,
                     'errors_message' => $error_msg,
                 ]);
             }
         }
-        else {
+        else // Invalid Coupon
+        {
             $error_msg = '';
-            $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+            $error_msg .= '<span class="text-danger">Please enter valid Coupon Code</span>';
             return response()->json([
                 'errors' => 1,
                 'errors_message' => $error_msg,

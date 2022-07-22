@@ -1521,7 +1521,6 @@
                         $('#voucherError').html('');
                         $('#voucherError').append(result.errors_message);
                         setTimeout(() => {
-                            $('#voucherSuccess').html('');
                             $('#voucherError').html('');
                         }, 10000);
                     }
@@ -1538,7 +1537,6 @@
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.total);
                         setTimeout(() => {
-                            $('#voucherError').html('');
                             $('#voucherSuccess').html('');
                         }, 10000);
                     }
@@ -1581,7 +1579,6 @@
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.headertotal);
                         setTimeout(() => {
-                            $('#couponError').html('');
                             $('#couponSuccess').html('');
                         }, 10000);
                     }
@@ -1592,7 +1589,6 @@
                         $('#couponError').html('');
                         $('#couponError').append(result.errors_message);
                         setTimeout(() => {
-                            $('#couponSuccess').html('');
                             $('#couponError').html('');
                         }, 10000);
                     }
