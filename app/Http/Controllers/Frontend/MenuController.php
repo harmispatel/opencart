@@ -390,92 +390,112 @@ class MenuController extends Controller
         $Coupon = $request->coupon;
         $Couponcode = coupon::where('code', $Coupon)->where('store_id', $front_store_id)->first();
 
-        if (!empty($Couponcode) || $Couponcode != '') // Valid Coupon
-        {
-            $start_date = isset($Couponcode->date_start) ? strtotime($Couponcode->date_start) : '';
-            $end_date = isset($Couponcode->date_end) ? strtotime($Couponcode->date_end) : '';
+        if ($Couponcode->on_off == 1) {
+            if ($request->total >= $Couponcode->total) {
+                if (!empty($Couponcode) || $Couponcode != '') // Valid Coupon
+                {
+                    $start_date = isset($Couponcode->date_start) ? strtotime($Couponcode->date_start) : '';
+                    $end_date = isset($Couponcode->date_end) ? strtotime($Couponcode->date_end) : '';
 
-            if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
-            {
-                $code = $Couponcode->toArray();
-                session()->put('currentcoupon', $code);
-                session()->save();
+                    if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+                    {
+                        $code = $Couponcode->toArray();
+                        session()->put('currentcoupon', $code);
+                        session()->save();
 
-                if ($userid == 0) {
-                    $mycart = $request->session()->get('cart1');
-                } else {
-                    $mycart = getuserCart($userid);
-                }
+                        if ($userid == 0) {
+                            $mycart = $request->session()->get('cart1');
+                        } else {
+                            $mycart = getuserCart($userid);
+                        }
 
-                $subtotal = 0;
-                $delivery_charge = 0;
+                        $subtotal = 0;
+                        $delivery_charge = 0;
 
-                if (isset($mycart['size']) || !empty($mycart['size'])) {
-                    foreach ($mycart['size'] as $key => $cart) {
-                        $price = $cart['main_price'] * $cart['quantity'];
-                        $subtotal += $price;
-                        $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+                        if (isset($mycart['size']) || !empty($mycart['size'])) {
+                            foreach ($mycart['size'] as $key => $cart) {
+                                $price = $cart['main_price'] * $cart['quantity'];
+                                $subtotal += $price;
+                                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+                            }
+                        }
+
+                        if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
+                            foreach ($mycart['withoutSize'] as $key => $cart) {
+                                $price = $cart['main_price'] * $cart['quantity'];
+                                $subtotal += $price;
+                                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
+                            }
+                        }
+
+                        if ($Couponcode->type == 'P') {
+                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                        }
+                        if ($Couponcode->type == 'F') {
+                            $couponcode = $Couponcode->discount;
+                        }
+
+                        $total = $subtotal - $couponcode + $delivery_charge;
+
+                        $total_html = '';
+                        $couponcode_html = '';
+                        $success_message = '';
+
+                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                        // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>'.$currency.' -' . round($couponcode,2) . '</b></span></td></tr>';
+                        // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
+                        if ($request->method_type == 1) {
+                            $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$stripe_charge ,2) . '</b></span></td></tr>';
+                        }
+                        elseif ($request->method_type == 2) {
+                            $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$paypal_charge, 2) . '</b></span></td></tr>';
+                        }
+                        elseif ($request->method_type == 3) {
+                            $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$cod_charge, 2) . '</b></span></td></tr>';
+                        }
+                        else{
+                            $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total,2) . '</b></span></td></tr>';
+                        }
+
+                        return response()->json([
+                            'success' => 1,
+                            'success_message' => $success_message,
+                            'couponcode' => $couponcode_html,
+                            'total' => $total_html,
+                            'headertotal' => number_format($total,2),
+                        ]);
+                    } else // Expired Coupon
+                    {
+                        $error_msg = '';
+                        $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                        return response()->json([
+                            'errors' => 1,
+                            'errors_message' => $error_msg,
+                        ]);
                     }
+                } else // Invalid Coupon
+                {
+                    $error_msg = '';
+                    $error_msg .= '<span class="text-danger">Please enter valid Coupon Code</span>';
+                    return response()->json([
+                        'errors' => 1,
+                        'errors_message' => $error_msg,
+                    ]);
                 }
-
-                if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
-                    foreach ($mycart['withoutSize'] as $key => $cart) {
-                        $price = $cart['main_price'] * $cart['quantity'];
-                        $subtotal += $price;
-                        $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
-                    }
-                }
-
-                if ($Couponcode->type == 'P') {
-                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                }
-                if ($Couponcode->type == 'F') {
-                    $couponcode = $Couponcode->discount;
-                }
-
-                $total = $subtotal - $couponcode + $delivery_charge;
-
-                $total_html = '';
-                $couponcode_html = '';
-                $success_message = '';
-
-                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>'.$currency.' -' . round($couponcode,2) . '</b></span></td></tr>';
-                // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
-                if ($request->method_type == 1) {
-                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$stripe_charge ,2) . '</b></span></td></tr>';
-                }
-                elseif ($request->method_type == 2) {
-                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$paypal_charge, 2) . '</b></span></td></tr>';
-                }
-                elseif ($request->method_type == 3) {
-                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total+$cod_charge, 2) . '</b></span></td></tr>';
-                }
-                else{
-                    $total_html .= '<tr class="total"><td><b>Total to pay:</b></td><td><span><b id="total_pay">'.$currency.' ' . round($total,2) . '</b></span></td></tr>';
-                }
-
-                return response()->json([
-                    'success' => 1,
-                    'success_message' => $success_message,
-                    'couponcode' => $couponcode_html,
-                    'total' => $total_html,
-                    'headertotal' => number_format($total,2),
-                ]);
-            } else // Expired Coupon
-            {
+            }
+            else{
                 $error_msg = '';
-                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                 return response()->json([
                     'errors' => 1,
                     'errors_message' => $error_msg,
                 ]);
             }
-        } else // Invalid Coupon
-        {
+        }
+        else {
             $error_msg = '';
-            $error_msg .= '<span class="text-danger">Please enter valid Coupon Code</span>';
+            $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
             return response()->json([
                 'errors' => 1,
                 'errors_message' => $error_msg,

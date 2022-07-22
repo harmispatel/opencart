@@ -1523,7 +1523,7 @@
                         setTimeout(() => {
                             $('#voucherSuccess').html('');
                             $('#voucherError').html('');
-                        }, 5000);
+                        }, 10000);
                     }
 
                     if(result.success == 1)
@@ -1540,7 +1540,7 @@
                         setTimeout(() => {
                             $('#voucherError').html('');
                             $('#voucherSuccess').html('');
-                        }, 5000);
+                        }, 10000);
                     }
                 }
             });
@@ -1555,6 +1555,7 @@
             var coupon = $("input[name='coupon']").val();
             var method_type = $('input[name="payment_method"]:checked').val();
             $('#couponload').css('display' , 'inline-block');
+            let total = $('#total').val()
             $.ajax({
                 type: 'post',
                 url: '{{ url("getcoupon") }}',
@@ -1562,6 +1563,7 @@
                     "_token": "{{ csrf_token() }}",
                     'coupon': coupon,
                     'method_type': method_type,
+                    'total': total,
                 },
                 dataType: 'json',
                 success: function(result)
@@ -1581,7 +1583,7 @@
                         setTimeout(() => {
                             $('#couponError').html('');
                             $('#couponSuccess').html('');
-                        }, 5000);
+                        }, 10000);
                     }
 
                     if(result.errors == 1)
