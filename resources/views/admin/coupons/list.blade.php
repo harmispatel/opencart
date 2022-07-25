@@ -17,13 +17,20 @@
 
 {{-- Custom CSS for Radio Buttons --}}
 <style>
-    .radio {
+    .radioenable {
+        display: none;
+    }
+    .radiodisable {
         display: none;
     }
 
-    .radio:checked+label {
-        background: rgb(41, 41, 41) !important;
-        color: #fff;
+    .radioenable:checked+label {
+        background: green !important;
+        color: #fff !important;
+    }
+    .radiodisable:checked+label {
+        background: red !important;
+        color: #fff !important;
     }
 </style>
 {{-- End Custom CSS for Radio Buttons --}}
@@ -125,22 +132,10 @@
                                                             {{ $coupon->code }}
                                                             <form>
                                                                 <div class="btn-group ml-2">
-                                                                    <input type="radio" class="radio"
-                                                                        data-id="{{ $coupon->coupon_id }}"
-                                                                        id="enable_{{ $i }}" name="on_off"
-                                                                        value="1"
-                                                                        {{ $coupon->on_off == 1 ? 'checked' : '' }} />
-                                                                    <label class="btn btn-sm"
-                                                                        style=" background: green;color:white;"
-                                                                        for="enable_{{ $i }}">ON</label>
-                                                                    <input type="radio" class="radio"
-                                                                        data-id="{{ $coupon->coupon_id }}"
-                                                                        id="disable_{{ $i }}" name="on_off"
-                                                                        value="0"
-                                                                        {{ $coupon->on_off == 0 ? 'checked' : '' }} />
-                                                                    <label class="btn btn-sm"
-                                                                        style=" background: rgb(248, 9, 9);color: white;"
-                                                                        for="disable_{{ $i }}">OFF</label>
+                                                                    <input type="radio" class="radioenable" data-id="{{ $coupon->coupon_id }}" id="enable_{{ $i }}" name="on_off" value="1" {{ $coupon->on_off == 1 ? 'checked' : '' }} />
+                                                                    <label class="btn btn-sm" style=" background: black;color:white;" for="enable_{{ $i }}">ON</label>
+                                                                    <input type="radio" class="radiodisable" data-id="{{ $coupon->coupon_id }}" id="disable_{{ $i }}" name="on_off" value="0" {{ $coupon->on_off == 0 ? 'checked' : '' }} />
+                                                                    <label class="btn btn-sm" style=" background: black;color: white;" for="disable_{{ $i }}">OFF</label>
                                                                 </div>
                                                             </form>
                                                         </div>

@@ -15,15 +15,21 @@
 
 {{--Style Section--}}
 <style>
-/* Custom Radio Button */
-.radio
-{
-    display: none;
-}
-.radio:checked + label {
-  background: dimgrey!important;
-  color: #fff;
-}
+    .radioenable {
+        display: none;
+    }
+    .radiodisable {
+        display: none;
+    }
+
+    .radioenable:checked+label {
+        background: green !important;
+        color: #fff !important;
+    }
+    .radiodisable:checked+label {
+        background: red !important;
+        color: #fff !important;
+    }
 </style>
 
 {{--End Style Section--}}
@@ -201,10 +207,10 @@
                                                                 <th><label>Print Group Title</label></th>
                                                                 <td>
                                                                     <div class="btn-group">
-                                                                        <input type="radio" class="radio" id="enable" name="show_group_title" value="1" {{ ($topping->show_group_title == 1) ? 'checked' : '' }}/>
-                                                                        <label class="btn btn-sm" style="background: green;color:white;" for="enable">Enable</label>
-                                                                        <input type="radio" class="radio" id="disable" name="show_group_title" value="0" {{ ($topping->show_group_title == 0) ? 'checked' : '' }} />
-                                                                        <label class="btn btn-sm" style="background: red;color: white;" for="disable">Disable</label>
+                                                                        <input type="radio" class="radioenable" id="enable" name="show_group_title" value="1" {{ ($topping->show_group_title == 1) ? 'checked' : '' }}/>
+                                                                        <label class="btn btn-sm" style="background: black;color:white;" for="enable">Enable</label>
+                                                                        <input type="radio" class="radiodisable" id="disable" name="show_group_title" value="0" {{ ($topping->show_group_title == 0) ? 'checked' : '' }} />
+                                                                        <label class="btn btn-sm" style="background: black;color: white;" for="disable">Disable</label>
                                                                     </div>
                                                                 </td>
                                                             </tr>
