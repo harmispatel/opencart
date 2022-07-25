@@ -2488,6 +2488,8 @@ function frontStoreID($currentURL)
         'gallery_background_options',
         'gallery_header_text',
         'gallery_header_desc',
+        'gallery_background_color',
+        'gallery_background_image',
         'config_currency',
         'config_logo',
     ]);

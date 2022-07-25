@@ -263,6 +263,15 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
+                                                    <tr>
+                                                        <th class="align-middle">
+                                                            <label>Copyright &copy;</label>
+                                                        </th>
+                                                        <td>
+                                                            <input type="text" name="general[general_copyright_text]" class="form-control" value="{{ isset($general_settings['general_copyright_text']) ? $general_settings['general_copyright_text'] : '' }}">
+                                                        </td>
+                                                    </tr>
+
                                                 </table>
                                             </div>
                                         </div>

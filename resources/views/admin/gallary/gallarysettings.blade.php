@@ -126,7 +126,17 @@
                                             <tr id="image" style="display: none">
                                                 <td width="250">Background Image</td>
                                                 <td>
-                                                    <input type="file"  name="gallery_background_image" class="form-control p-1">
+                                                    {{-- <input type="file"  name="gallery_background_image" class="form-control p-1"> --}}
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                          <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                            <i class="fa fa-picture-o"></i> Choose
+                                                          </a>
+                                                        </span>
+                                                        <input id="thumbnail" class="form-control" type="text" name="gallery_background_image">
+                                                      </div>
+                                                      <img id="holder" style="margin-top:15px;max-height:100px;">
+
                                                     <img src="{{asset('public/admin/product/'.$gallery_background_image)}}" alt="" width="100px"/>
                                                 </td>
                                             </tr>
@@ -237,5 +247,16 @@
     }
     // End Gallary Settings
 
+
+
+</script>
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+<script>
+     $('#lfm').filemanager('file');
+    var getUrl = window.location;
+    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]+'/filemanager';
+    // alert(baseUrl)
+//    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+   $('#lfm').filemanager('image', {prefix: baseUrl});
 </script>
 <!-- END SCRIPT -->

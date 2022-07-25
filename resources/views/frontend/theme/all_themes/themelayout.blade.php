@@ -7,10 +7,6 @@
 --}}
 
 
-{{--  CSS --}}
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
-{{-- END CSS --}}
-
 @php
 
     // Current URL
@@ -93,6 +89,47 @@
     $review = storereview();
 
 @endphp
+
+
+{{--  CSS --}}
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
+
+<?php 
+    if($store_setting['gallery_background_options'] == 'transparent')
+    {
+?>
+        <style>
+            .photo-gallery, .photo-gallery-v2, .photo-gallery-v3, .photo-gallery-v4, .photo-gallery-v5, .photo-gallery-v6{
+                background: transparent;
+            }
+        </style>
+<?php
+    }
+    elseif ($store_setting['gallery_background_options'] == 'color') 
+    {
+?>
+        <style>
+            .photo-gallery, .photo-gallery-v2, .photo-gallery-v3, .photo-gallery-v4, .photo-gallery-v5, .photo-gallery-v6{
+                background: <?php echo $store_setting['gallery_background_color']; ?>;
+            }
+        </style>
+<?php
+    }
+    else 
+    {
+?>
+        <style>
+            .photo-gallery, .photo-gallery-v2, .photo-gallery-v3, .photo-gallery-v4, .photo-gallery-v5, .photo-gallery-v6{
+                background: url('<?php echo $store_setting["gallery_background_image"] ?>');
+                background-repeat: no-repeat;
+                background-size: cover;
+            }
+        </style>
+<?php
+    }
+?>
+{{-- END CSS --}}
+
 
 
 <!-- Mobile Menu -->
@@ -1866,7 +1903,7 @@
 
 
 
-
+@if ($store_setting['enable_gallery_module'] == 1)
 {{-- GALLARY SECTION --}}
 
     {{-- GALLARY 1 --}}
@@ -2151,6 +2188,7 @@
     {{-- END GALLARY 6 --}}
 
 {{-- END GALLARY SECTION --}}
+@endif
 
 
 
