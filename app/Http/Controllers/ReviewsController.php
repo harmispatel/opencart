@@ -49,8 +49,8 @@ class ReviewsController extends Controller
     // Function of Reviews Status
     function reviewStatus(Request $request)
     {
-        $status = $request->val;
-        $review_id = $request->rid;
+        $status = $request->status;
+        $review_id = $request->dataid;
 
         $review = Reviews::find($review_id);
         $review->status = $status;

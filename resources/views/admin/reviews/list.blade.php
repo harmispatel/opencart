@@ -1,14 +1,34 @@
-<!--
+{{--
     THIS IS REVIEW LIST FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     list.blade.php
     It Displayed All Review List & Storewise Display Review
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
+
+{{-- Custom CSS for Radio Buttons --}}
+<style>
+    .radioenable {
+        display: none;
+    }
+    .radiodisable {
+        display: none;
+    }
+
+    .radioenable:checked+label {
+        background: green !important;
+        color: #fff !important;
+    }
+    .radiodisable:checked+label {
+        background: red !important;
+        color: #fff !important;
+    }
+</style>
+{{-- End Custom CSS for Radio Buttons --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
@@ -86,6 +106,7 @@
 
                                     {{-- Table Body Start --}}
                                     <tbody class="text-center review-list">
+                                        @php $i=1; @endphp
                                         @foreach ($reviews as $review )
                                             <tr>
                                                 @php
@@ -133,7 +154,7 @@
                                                 </td>
                                                 <td>{{ $review->message }}</td>
                                                 <td>
-                                                    <div class="btn-group" role="group" style="height: 30px;" id="reviewStatus">
+                                                    {{-- <div class="btn-group" role="group" style="height: 30px;" id="reviewStatus">
                                                         @if ($review->status == 1)
                                                             <button class="btn btn-xs btn-success" onclick="reviewStatus(1,{{ $review->store_review_id }})">Enabled</button>
                                                             <button class="btn btn-xs btn-secondary" onclick="reviewStatus(0,{{ $review->store_review_id }})">Disabled</button>
@@ -141,9 +162,18 @@
                                                             <button class="btn btn-xs btn-secondary" onclick="reviewStatus(1,{{ $review->store_review_id }})">Enabled</button>
                                                             <button class="btn btn-xs btn-danger" onclick="reviewStatus(0,{{ $review->store_review_id }})">Disabled</button>
                                                         @endif
-                                                    </div>
+                                                    </div> --}}
+                                                    <form>
+                                                        <div class="btn-group ml-2">
+                                                            <input type="radio" class="radioenable" data-id="{{ $review->store_review_id  }}" id="enable_{{ $i }}" name="on_off" value="1" {{ ($review->status == 1) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: black;color:white;" for="enable_{{ $i }}">ON</label>
+                                                            <input type="radio" class="radiodisable" data-id="{{ $review->store_review_id  }}" id="disable_{{ $i }}" name="on_off" value="0" {{ ($review->status == 0) ? 'checked' : '' }}/>
+                                                            <label class="btn btn-sm" style=" background: black;color: white;" for="disable_{{ $i }}">OFF</label>
+                                                        </div>
+                                                    </form>
                                                 </td>
                                             </tr>
+                                            @php $i++ @endphp
                                         @endforeach
                                     </tbody>
                                     {{-- End Table Body --}}
@@ -179,24 +209,35 @@
 
     });
 
-    // Review Status Enabled Disabled
-    function reviewStatus(val,rid)
+    // Change Coupon Status
+    $("input[name='on_off']").on('click', function()
     {
-        $.ajax({
-            type: "POST",
-            url: "{{ url('reviewStatus') }}",
-            data: {'val':val,"_token": "{{ csrf_token() }}",'rid':rid},
-            dataType: "json",
-            success: function (response) {
+        var status = $(this).val();
+        var dataid = $(this).attr("data-id");
 
-               if(response.success == 1)
-               {
-                   location.reload();
-               }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-    }
-    // End Review Status Enabled Disabled
+
+        $.ajax({
+                type: "post",
+                url: "{{ route('reviewStatus') }}",
+                data: {
+                    status: status,
+                    dataid: dataid,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+                    return false;
+                }
+        });
+    });
+    // End Change Coupon Status
+
+
 
 </script>
 
