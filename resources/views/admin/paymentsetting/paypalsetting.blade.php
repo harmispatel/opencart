@@ -13,13 +13,20 @@
 
 {{-- Custom CSS for Radio Buttons --}}
 <style>
-    .radio {
+    .radioenable {
+        display: none;
+    }
+    .radiodisable {
         display: none;
     }
 
-    .radio:checked+label {
-        background: rgb(41, 41, 41) !important;
-        color: #fff;
+    .radioenable:checked+label {
+        background: green !important;
+        color: #fff !important;
+    }
+    .radiodisable:checked+label {
+        background: red !important;
+        color: #fff !important;
     }
 </style>
 {{-- End Custom CSS for Radio Buttons --}}
@@ -84,10 +91,10 @@
                                 <div class="card-body">
                                     <div class="form-group float-right">
                                         <div class="btn-group">
-                                            <input type="radio" class="radio" id="enable" name="paypal_status" value="1" {{ $paypal['pp_express_status'] == 1 ? 'checked' : '' }}>
-                                            <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable">Enable</label>
-                                            <input type="radio" class="radio" id="disable" name="paypal_status" value="0" {{ $paypal['pp_express_status'] == 0 ? 'checked' : '' }}>
-                                            <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable">Disable</label>
+                                            <input type="radio" class="radioenable" id="enable" name="paypal_status" value="1" {{ $paypal['pp_express_status'] == 1 ? 'checked' : '' }}>
+                                            <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="enable">Enable</label>
+                                            <input type="radio" class="radiodisable" id="disable" name="paypal_status" value="0" {{ $paypal['pp_express_status'] == 0 ? 'checked' : '' }}>
+                                            <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="disable">Disable</label>
                                         </div>
                                     </div>
 

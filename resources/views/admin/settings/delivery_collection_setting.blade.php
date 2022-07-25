@@ -1,11 +1,11 @@
-<!--
+{{--
     THIS IS HEADER Delivery_Collection_Setting PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     delivery_collection_setting.blade.php
     This for Edit Delivery_Collection_Setting
     ----------------------------------------------------------------------------------------------
 
--->
+--}}
 
 {{-- Header --}}
 @include('header')
@@ -914,7 +914,7 @@ $(document).ready(function()
             html += '<td class="label-td">Delivery Feeds: </td>';
             html += '<td class="input-td">';
             html += '<ul id="feed_'+max_id+'">';
-            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""></li><li> <span class="upto-span">Up To:</span> <input type="text" name="price_upto_'+max_id+'[]" value=""></li>'
+            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""></li><li> <span class="upto-span">Up To:</span> <input type="text" class="w-75" name="price_upto_'+max_id+'[]" value=""></li>'
             html += '</ul>';
             html += '<div class="addfeedplus"><b onclick="add_more('+max_id+');" class="add_feeds" href="">+Add Fee</b></div>';
             html += '</td>';
@@ -944,7 +944,7 @@ $(document).ready(function()
             html += '<td class="label-td">Delivery Feeds: </td>';
             html += '<td class="input-td">';
             html += '<ul id="feed_'+max_id+'">';
-            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""> </li><li><span class="upto-span">Up To:</span> <input type="text" name="price_upto_'+max_id+'[]" value=""></li>'
+            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""> </li><li><span class="upto-span">Up To:</span> <input type="text" class="w-75" name="price_upto_'+max_id+'[]" value=""></li>'
             html += '</ul>';
             html += '<div class="addfeedplus"><b onclick="add_more('+max_id+');" class="add_feeds" href="">+Add Fee</b></div>';
             html += '</td>';
@@ -976,7 +976,7 @@ $(document).ready(function()
             html += '<td class="label-td">Delivery Feeds: </td>';
             html += '<td class="input-td">';
             html += '<ul id="feed_'+max_id+'">';
-            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""> </li><li><span class="upto-span">Up To:</span><input type="text" name="price_upto_'+max_id+'[]" value=""></li>'
+            html += '<li id="id_delivery_feeds_'+max_feed+'"><input type="text" name="price_shipping_'+max_id+'[]" value=""> </li><li><span class="upto-span">Up To:</span><input type="text" class="w-75" name="price_upto_'+max_id+'[]" value=""></li>'
             html += '</ul>';
             html += '<div class="addfeedplus"><b onclick="add_more('+max_id+');" class="add_feeds" href="">+Add Fee</b></div>';
             html += '</td>';

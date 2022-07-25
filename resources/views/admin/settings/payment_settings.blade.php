@@ -4,13 +4,20 @@
 
 {{-- Custom CSS for Radio Buttons --}}
 <style>
-    .radio {
+    .radioenable {
+        display: none;
+    }
+    .radiodisable {
         display: none;
     }
 
-    .radio:checked+label {
-        background: rgb(41, 41, 41) !important;
-        color: #fff;
+    .radioenable:checked+label {
+        background: green !important;
+        color: #fff !important;
+    }
+    .radiodisable:checked+label {
+        background: red !important;
+        color: #fff !important;
     }
 </style>
 {{-- End Custom CSS for Radio Buttons --}}
@@ -66,10 +73,10 @@
                                     <div>
                                         <div class="form-group float-right">
                                             <div class="btn-group">
-                                                <input type="radio" class="radio" id="cod_enable" name="cod_status" value="1" {{ $paymentstatus['cod_status'] == 1 ? 'checked': '' }}>
-                                                <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="cod_enable">Enable</label>
-                                                <input type="radio" class="radio" id="cod_disable" name="cod_status" value="0" {{ $paymentstatus['cod_status'] == 0 ? 'checked': '' }}>
-                                                <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="cod_disable">Disable</label>
+                                                <input type="radio" class="radioenable" id="cod_enable" name="cod_status" value="1" {{ $paymentstatus['cod_status'] == 1 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="cod_enable">Enable</label>
+                                                <input type="radio" class="radiodisable" id="cod_disable" name="cod_status" value="0" {{ $paymentstatus['cod_status'] == 0 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="cod_disable">Disable</label>
                                             </div>
                                         </div>
                                         <h5><a href="{{ route('cashpaysetting') }}" style="cursor: pointer;">Cash</a></h5><hr>
@@ -78,10 +85,10 @@
                                     <div>
                                         <div class="form-group float-right">
                                             <div class="btn-group">
-                                                <input type="radio" class="radio" id="enable_paypal" name="paypal_status" value="1" {{ $paymentstatus['pp_express_status'] == 1 ? 'checked': '' }}>
-                                                <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable_paypal">Enable</label>
-                                                <input type="radio" class="radio" id="disable_paypal" name="paypal_status" value="0" {{ $paymentstatus['pp_express_status'] == 0 ? 'checked': '' }}>
-                                                <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable_paypal">Disable</label>
+                                                <input type="radio" class="radioenable" id="enable_paypal" name="paypal_status" value="1" {{ $paymentstatus['pp_express_status'] == 1 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="enable_paypal">Enable</label>
+                                                <input type="radio" class="radiodisable" id="disable_paypal" name="paypal_status" value="0" {{ $paymentstatus['pp_express_status'] == 0 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="disable_paypal">Disable</label>
                                             </div>
                                         </div>
                                         <h5><a href="{{ route('paypalsetting') }}" style="cursor: pointer;">Paypal</a></h5><hr>
@@ -89,10 +96,10 @@
                                     <div>
                                         <div class="form-group float-right">
                                             <div class="btn-group">
-                                                <input type="radio" class="radio" id="enable_stripe" name="stripe_status" value="1" {{ $paymentstatus['stripe_status'] == 1 ? 'checked': '' }}>
-                                                <label class="btn btn-sm" style="width: 80px; background: green;color:white;" for="enable_stripe">Enable</label>
-                                                <input type="radio" class="radio" id="disable_stripe" name="stripe_status" value="0" {{ $paymentstatus['stripe_status'] == 0 ? 'checked': '' }}>
-                                                <label class="btn btn-sm" style="width: 80px; background: red;color: white;" for="disable_stripe">Disable</label>
+                                                <input type="radio" class="radioenable" id="enable_stripe" name="stripe_status" value="1" {{ $paymentstatus['stripe_status'] == 1 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="enable_stripe">Enable</label>
+                                                <input type="radio" class="radiodisable" id="disable_stripe" name="stripe_status" value="0" {{ $paymentstatus['stripe_status'] == 0 ? 'checked': '' }}>
+                                                <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="disable_stripe">Disable</label>
                                             </div>
                                         </div>
                                         <h5><a href="{{ route('stripesetting') }}" style="cursor: pointer;">Strip</a></h5><hr>
