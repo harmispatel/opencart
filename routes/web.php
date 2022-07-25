@@ -219,6 +219,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('review', [ReviewsController::class, 'index'])->name('review');
     Route::post('storereview',[ReviewsController::class,'store'])->name('storereview');
     Route::post('updatereview',[ReviewsController::class,'update'])->name('updatereview');
+    Route::post('reviewStatus',[ReviewsController::class,'reviewStatus'])->name('reviewStatus');
 
 
     // Countries
