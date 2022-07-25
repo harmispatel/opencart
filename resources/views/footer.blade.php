@@ -1,51 +1,51 @@
-<!--
+{{--
     THIS IS FOOTER PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     footer.blade.php
     It's Included Some JS Links & Custom JS.
     it is used for admin panel's Bottom Part
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
-    <!-- Footer -->
+    {{-- Footer --}}
     <footer class="main-footer">
         <strong>Powered by Best <a href="">Epos.</a> All Rights Reserved.</strong>
     </footer>
-    <!-- End Footer -->
+    {{-- End Footer --}}
 
-    <!-- Control Sidebar -->
+    {{-- Control Sidebar --}}
     <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
+        {{-- Control sidebar content goes here --}}
     </aside>
-    <!-- /.control-sidebar -->
+    {{-- /.control-sidebar --}}
 </div>
-<!-- ./wrapper -->
+{{-- ./wrapper --}}
 
 
-<!-- jQuery -->
+{{-- jQuery --}}
 <script src="{{ asset('public/plugins/jquery/jquery.min.js') }}"></script>
 
-<!-- jQuery UI 1.11.4 -->
+{{-- jQuery UI 1.11.4 --}}
 <script src="{{ asset('public/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<!-- Bootstrap 4 -->
+{{-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip --}}
+{{-- Bootstrap 4 --}}
 <script src="{{ asset('public/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-<!-- daterangepicker -->
+{{-- daterangepicker --}}
 <script src="{{ asset('public/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('public/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
-<!-- Tempusdominus Bootstrap 4 -->
+{{-- Tempusdominus Bootstrap 4 --}}
 <script src="{{ asset('public/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
 
-<!-- overlayScrollbars -->
+{{-- overlayScrollbars --}}
 <script src="{{ asset('public/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 
-<!-- AdminLTE App -->
+{{-- AdminLTE App --}}
 <script src="{{ asset('public/dist/js/adminlte.js') }}"></script>
 
-<!-- Sweet Alert -->
+{{-- Sweet Alert --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.js"
 integrity="sha512-2N36vOIIxkP6F+ZuYOIOyiNupgE6uLgNEduYUrKtvrtbgRiqfpc1Mu0f7blAyLx67Y2uwDspjgesfQcOXQ8gdQ=="
 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -53,18 +53,18 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 integrity="sha512-+q01aE1/3DSt/pNwhpoMKxjkWyRTpXPA7xceLKlhmJMADbLJL020BuGSTCExgwe+fD7bvX2HiVGS1suMf2056A=="
 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<!-- Select -->
+{{-- Select --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
 
-<!-- Datatable -->
+{{-- Datatable --}}
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-<!-- Summernote -->
+{{-- Summernote --}}
 <script src="{{ asset('public/plugins/summernote/summernote.min.js') }}"></script>
 
 
-<!-- Custom Scripts -->
+{{-- Custom Scripts --}}
 <script type="text/javascript">
 
     $('#summernote').summernote({
@@ -120,7 +120,7 @@ crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     });
 
 </script>
-<!-- End Custom Scripts -->
+{{-- End Custom Scripts --}}
 
 </body>
 </html>
