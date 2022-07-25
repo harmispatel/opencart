@@ -280,7 +280,7 @@
 
 
     // Change Coupon Status
-    $(".radio").on('click', function()
+    $("input[name='on_off']").on('click', function()
     {
         var onoff = $(this).val();
         var dataid = $(this).attr("data-id");
