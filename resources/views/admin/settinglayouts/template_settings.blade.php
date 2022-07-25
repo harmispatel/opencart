@@ -364,15 +364,6 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    {{-- <tr>
-                                                        <th class="align-middle">
-                                                            <label>Menu Button Hover Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color" name="header_setting[menu_button_hover_color]" value="{{ isset($get_header_settings['menu_button_hover_color']) ? $get_header_settings['menu_button_hover_color'] : '' }}" class="form-control">
-                                                        </td>
-                                                    </tr> --}}
-
                                                     <tr>
                                                         <th class="align-middle">
                                                             <label>Menu Button Text Color</label>
@@ -395,42 +386,78 @@ $openhour_data = openhoursActive();
                                                                 @php
                                                                     $menu_topbar_left = isset($get_header_settings['menu_topbar_left']) ? $get_header_settings['menu_topbar_left'] : '';
                                                                 @endphp
-                                                                <option value="opening_times"
+
+                                                                @if ($header_id == 1 || $header_id == 2 || $header_id == 3 || $header_id == 4 || $header_id == 5)
+                                                                    <option value="opening_times"
                                                                     {{ $menu_topbar_left == 'opening_times' ? 'selected' : '' }}>
                                                                     Opening Times</option>
-                                                                <option value="social_media_links"
-                                                                    {{ $menu_topbar_left == 'social_media_links' ? 'selected' : '' }}>
-                                                                    Social Media Links</option>
-                                                                <option value="customer_login"
-                                                                    {{ $menu_topbar_left == 'customer_login' ? 'selected' : '' }}>
-                                                                    Customer Login</option>
+                                                                @endif
+
+                                                                @if ($header_id == 1 || $header_id == 4)
+                                                                    <option value="social_media_links" {{ $menu_topbar_left == 'social_media_links' ? 'selected' : '' }}> Social Media Links</option>
+                                                                @endif
+
+                                                                @if ($header_id == 1 || $header_id == 3 || $header_id == 5 || $header_id == 6)
+                                                                    <option value="customer_login" {{ $menu_topbar_left == 'customer_login' ? 'selected' : '' }}> Customer Login</option>
+                                                                @endif
+
+                                                                @if ($header_id == 2 || $header_id == 4)
+                                                                    <option value="open_close_image" {{ $menu_topbar_left == 'open_close_image' ? 'selected' : '' }}> Open/Close Banner</option>
+                                                                @endif
+
+                                                                @if ($header_id == 2 || $header_id == 5)
+                                                                    <option value="main_logo" {{ $menu_topbar_left == 'main_logo' ? 'selected' : '' }}> Logo</option>
+                                                                @endif
+
+                                                                @if ($header_id == 3 || $header_id == 6)
+                                                                    <option value="shopping_cart" {{ $menu_topbar_left == 'shopping_cart' ? 'selected' : '' }}> Shopping Cart</option>
+                                                                @endif
+
                                                             </select>
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
-                                                        <th class="align-middle">
-                                                            <label>Top Bar Center</label>
-                                                        </th>
-                                                        <td>
-                                                            <select name="header_setting[menu_topbar_center]"
-                                                                class="form-control">
-                                                                @php
-                                                                    $menu_topbar_center = isset($get_header_settings['menu_topbar_center']) ? $get_header_settings['menu_topbar_center'] : '';
-                                                                @endphp
-                                                                <option value="opening_times"
-                                                                    {{ $menu_topbar_center == 'opening_times' ? 'selected' : '' }}>
-                                                                    Opening Times</option>
-                                                                <option value="social_media_links"
-                                                                    {{ $menu_topbar_center == 'social_media_links' ? 'selected' : '' }}>
-                                                                    Social Media Links</option>
-                                                                <option value="customer_login"
-                                                                    {{ $menu_topbar_center == 'customer_login' ? 'selected' : '' }}>
-                                                                    Customer Login</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
+                                                    @if ($header_id != 6)
+                                                        <tr>
+                                                            <th class="align-middle">
+                                                                <label>Top Bar Center</label>
+                                                            </th>
+                                                            <td>
+                                                                <select name="header_setting[menu_topbar_center]"
+                                                                    class="form-control">
+                                                                    @php
+                                                                        $menu_topbar_center = isset($get_header_settings['menu_topbar_center']) ? $get_header_settings['menu_topbar_center'] : '';
+                                                                    @endphp
 
+                                                                    @if ($header_id == 1 || $header_id == 2 || $header_id == 3 || $header_id == 4 || $header_id == 5)
+                                                                        <option value="opening_times"
+                                                                        {{ $menu_topbar_left == 'opening_times' ? 'selected' : '' }}>
+                                                                        Opening Times</option>
+                                                                    @endif
+
+                                                                    @if ($header_id == 1 || $header_id == 4)
+                                                                        <option value="social_media_links" {{ $menu_topbar_center == 'social_media_links' ? 'selected' : '' }}> Social Media Links</option>
+                                                                    @endif
+
+                                                                    @if ($header_id == 1 || $header_id == 3 || $header_id == 5 || $header_id == 6)
+                                                                        <option value="customer_login" {{ $menu_topbar_center == 'customer_login' ? 'selected' : '' }}> Customer Login</option>
+                                                                    @endif
+
+                                                                    @if ($header_id == 2 || $header_id == 4)
+                                                                        <option value="open_close_image" {{ $menu_topbar_center == 'open_close_image' ? 'selected' : '' }}> Open/Close Banner</option>
+                                                                    @endif
+
+                                                                    @if ($header_id == 2 || $header_id == 5)
+                                                                        <option value="main_logo" {{ $menu_topbar_center == 'main_logo' ? 'selected' : '' }}> Logo</option>
+                                                                    @endif
+
+                                                                    @if ($header_id == 3 || $header_id == 6)
+                                                                        <option value="shopping_cart" {{ $menu_topbar_center == 'shopping_cart' ? 'selected' : '' }}> Shopping Cart</option>
+                                                                    @endif
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
                                                     <tr>
                                                         <th class="align-middle">
                                                             <label>Top Bar Right</label>
@@ -441,63 +468,82 @@ $openhour_data = openhoursActive();
                                                                 @php
                                                                     $menu_topbar_right = isset($get_header_settings['menu_topbar_right']) ? $get_header_settings['menu_topbar_right'] : '';
                                                                 @endphp
-                                                                <option value="opening_times"
+
+                                                                @if ($header_id == 1 || $header_id == 2 || $header_id == 3 || $header_id == 4 || $header_id == 5)
+                                                                    <option value="opening_times"
                                                                     {{ $menu_topbar_right == 'opening_times' ? 'selected' : '' }}>
                                                                     Opening Times</option>
-                                                                <option value="social_media_links"
-                                                                    {{ $menu_topbar_right == 'social_media_links' ? 'selected' : '' }}>
-                                                                    Social Media Links</option>
-                                                                <option value="customer_login"
-                                                                    {{ $menu_topbar_right == 'customer_login' ? 'selected' : '' }}>
-                                                                    Customer Login</option>
+                                                                @endif
+
+                                                                @if ($header_id == 1 || $header_id == 4)
+                                                                    <option value="social_media_links" {{ $menu_topbar_right == 'social_media_links' ? 'selected' : '' }}> Social Media Links</option>
+                                                                @endif
+
+                                                                @if ($header_id == 1 || $header_id == 3 || $header_id == 5 || $header_id == 6)
+                                                                    <option value="customer_login" {{ $menu_topbar_right == 'customer_login' ? 'selected' : '' }}> Customer Login</option>
+                                                                @endif
+
+                                                                @if ($header_id == 2 || $header_id == 4)
+                                                                    <option value="open_close_image" {{ $menu_topbar_right == 'open_close_image' ? 'selected' : '' }}> Open/Close Banner</option>
+                                                                @endif
+
+                                                                @if ($header_id == 2 || $header_id == 5)
+                                                                    <option value="main_logo" {{ $menu_topbar_right == 'main_logo' ? 'selected' : '' }}> Logo</option>
+                                                                @endif
+
+                                                                @if ($header_id == 3 || $header_id == 6)
+                                                                    <option value="shopping_cart" {{ $menu_topbar_right == 'shopping_cart' ? 'selected' : '' }}> Shopping Cart</option>
+                                                                @endif
                                                             </select>
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
-                                                        <th class="align-middle">
-                                                            <label>Open Close Banner</label>
-                                                        </th>
-                                                        <td>
-                                                            <select
-                                                                name="header_setting[menu_topbar_open_close_permission]"
-                                                                id="" class="form-control">
-                                                                @php
-                                                                    $menu_topbar_open_close_permission = isset($get_header_settings['menu_topbar_open_close_permission']) ? $get_header_settings['menu_topbar_open_close_permission'] : '';
-                                                                @endphp
-                                                                <option value="1"
-                                                                    {{ $menu_topbar_open_close_permission == 1 ? 'selected' : '' }}>
-                                                                    Enabled</option>
-                                                                <option value="0"
-                                                                    {{ $menu_topbar_open_close_permission == 0 ? 'selected' : '' }}>
-                                                                    Disabled</option>
-                                                            </select>
-                                                            <hr class="bg-dark">
-                                                            <div class="form-group">
-                                                                <label class="form-label text-success">Open
-                                                                    Banner</label>
-                                                                <input type="file"
-                                                                    name="header_setting[menu_topbar_open_banner]"
-                                                                    class="form-control p-1">
-                                                                <img class="mt-2"
-                                                                    src="{{ isset($get_header_settings['menu_topbar_open_banner']) ? $get_header_settings['menu_topbar_open_banner'] : '' }}"
-                                                                    width="120" height="80"
-                                                                    style="border: 2px solid green;">
-                                                            </div>
-                                                            <hr class="bg-dark">
-                                                            <div class="form-group">
-                                                                <label class="form-label text-danger">Close
-                                                                    Banner</label>
-                                                                <input type="file"
-                                                                    name="header_setting[menu_topbar_close_banner]"
-                                                                    class="form-control p-1">
-                                                                <img class="mt-2"
-                                                                    src="{{ isset($get_header_settings['menu_topbar_close_banner']) ? $get_header_settings['menu_topbar_close_banner'] : '' }}"
-                                                                    width="120" height="80"
-                                                                    style="border: 2px solid red;">
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                    @if($header_id != 1)
+                                                        <tr>
+                                                            <th class="align-middle">
+                                                                <label>Open Close Banner</label>
+                                                            </th>
+                                                            <td>
+                                                                <select
+                                                                    name="header_setting[menu_topbar_open_close_permission]"
+                                                                    id="" class="form-control">
+                                                                    @php
+                                                                        $menu_topbar_open_close_permission = isset($get_header_settings['menu_topbar_open_close_permission']) ? $get_header_settings['menu_topbar_open_close_permission'] : '';
+                                                                    @endphp
+                                                                    <option value="1"
+                                                                        {{ $menu_topbar_open_close_permission == 1 ? 'selected' : '' }}>
+                                                                        Enabled</option>
+                                                                    <option value="0"
+                                                                        {{ $menu_topbar_open_close_permission == 0 ? 'selected' : '' }}>
+                                                                        Disabled</option>
+                                                                </select>
+                                                                <hr class="bg-dark">
+                                                                <div class="form-group">
+                                                                    <label class="form-label text-success">Open
+                                                                        Banner</label>
+                                                                    <input type="file"
+                                                                        name="header_setting[menu_topbar_open_banner]"
+                                                                        class="form-control p-1">
+                                                                    <img class="mt-2"
+                                                                        src="{{ isset($get_header_settings['menu_topbar_open_banner']) ? $get_header_settings['menu_topbar_open_banner'] : '' }}"
+                                                                        width="120" height="80"
+                                                                        style="border: 2px solid green;">
+                                                                </div>
+                                                                <hr class="bg-dark">
+                                                                <div class="form-group">
+                                                                    <label class="form-label text-danger">Close
+                                                                        Banner</label>
+                                                                    <input type="file"
+                                                                        name="header_setting[menu_topbar_close_banner]"
+                                                                        class="form-control p-1">
+                                                                    <img class="mt-2"
+                                                                        src="{{ isset($get_header_settings['menu_topbar_close_banner']) ? $get_header_settings['menu_topbar_close_banner'] : '' }}"
+                                                                        width="120" height="80"
+                                                                        style="border: 2px solid red;">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
                                                 </table>
                                             </div>

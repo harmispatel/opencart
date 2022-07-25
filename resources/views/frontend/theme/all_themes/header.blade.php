@@ -389,13 +389,13 @@
 
 
 {{-- Header --}}
-
-    {{-- Header 1 --}}
     @php
         $menu_topbar_left = (isset($store_header_settings['menu_topbar_left'])) ? $store_header_settings['menu_topbar_left'] : '';
         $menu_topbar_center = (isset($store_header_settings['menu_topbar_center'])) ? $store_header_settings['menu_topbar_center'] : '';
         $menu_topbar_right = (isset($store_header_settings['menu_topbar_right'])) ? $store_header_settings['menu_topbar_right'] : '';
     @endphp
+
+    {{-- Header 1 --}}
     @if ($header_id == 1)
         <header class="header">
             <div class="container">
@@ -439,7 +439,8 @@
                             @endif
                             
                         </div>
-                        @if (in_array($currentdate,$date_close1))
+                        
+                        {{-- @if (in_array($currentdate,$date_close1))
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                                @if ($menu_topbar_open_close_permission == 1)
                                     <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
@@ -475,7 +476,7 @@
                                     @endif
                                 @endforeach
                             @endforeach
-                        @endif
+                        @endif --}}
                     @elseif ($menu_topbar_left == 'social_media_links')
                         <ul class="social-links">
                             <li>
@@ -820,7 +821,6 @@
         <header class="header-v2">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
                     @php
                         $openday =$openclose['openday'];
                         $fromtime = $openclose['fromtime'];
@@ -837,72 +837,220 @@
                         }
                     @endphp
 
-                    @if (in_array($currentdate,$date_close1))
-                        <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                            @if ($menu_topbar_open_close_permission == 1)
-                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
-                            @endif
-                        </div>
-                    @else
-                        @foreach ($openday as $key => $item)
-                            @foreach ($item as $value)
-                                @php
-                                    $firstday = $item[0];
-                                    $firsttime = strtotime($fromtime[$key]);
-                                    $lasttime = strtotime($totime[$key]);
-                                    $today = time();
-                                    $currentday = date('l');
-        
-                                @endphp
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @endif
-                            @endforeach
-                        @endforeach
-                    @endif
-        
-                    <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
-                    </a>
-
-                    <div class="working-time">
-                        <strong class="text-uppercase">Working Time:</strong>
+                    
+                    {{-- topbar left --}}
+                    @if ($menu_topbar_left == 'open_close_image')
                         @if (in_array($currentdate,$date_close1))
-                            <strong>Close</strong>
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                @endif
+                            </div>
                         @else
                             @foreach ($openday as $key => $item)
                                 @foreach ($item as $value)
                                     @php
-                                        $t = count($item)-1;
                                         $firstday = $item[0];
-                                        $lastday = $item[$t];
-                                        $today = date('l');
-                                        $currentdate = strtotime(date("Y-m-d"));
+                                        $firsttime = strtotime($fromtime[$key]);
+                                        $lasttime = strtotime($totime[$key]);
+                                        $today = time();
+                                        $currentday = date('l');
+            
                                     @endphp
-
-                                    @if ($today == $value)
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @elseif ($firstday == "Every day")
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @endif                        
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endif
                                 @endforeach
                             @endforeach
                         @endif
-                    </div>
+                    @elseif ($menu_topbar_left == 'main_logo')
+                        <a class="logo" href="{{ route('home') }}">
+                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
+                        </a>
+                    @else
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+
+                                        @if ($today == $value)
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif                        
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
+
+
+                    {{-- topbar center --}}
+                    @if ($menu_topbar_center == 'open_close_image')
+                        @if (in_array($currentdate,$date_close1))
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                @endif
+                            </div>
+                        @else
+                            @foreach ($openday as $key => $item)
+                                @foreach ($item as $value)
+                                    @php
+                                        $firstday = $item[0];
+                                        $firsttime = strtotime($fromtime[$key]);
+                                        $lasttime = strtotime($totime[$key]);
+                                        $today = time();
+                                        $currentday = date('l');
+            
+                                    @endphp
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endif
+                                @endforeach
+                            @endforeach
+                        @endif
+                    @elseif ($menu_topbar_center == 'main_logo')
+                        <a class="logo" href="{{ route('home') }}">
+                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
+                        </a>
+                    @else
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+
+                                        @if ($today == $value)
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif                        
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
+
+
+                    {{-- topbar right --}}
+                    @if ($menu_topbar_right == 'open_close_image')
+                        @if (in_array($currentdate,$date_close1))
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                @endif
+                            </div>
+                        @else
+                            @foreach ($openday as $key => $item)
+                                @foreach ($item as $value)
+                                    @php
+                                        $firstday = $item[0];
+                                        $firsttime = strtotime($fromtime[$key]);
+                                        $lasttime = strtotime($totime[$key]);
+                                        $today = time();
+                                        $currentday = date('l');
+            
+                                    @endphp
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endif
+                                @endforeach
+                            @endforeach
+                        @endif
+                    @elseif ($menu_topbar_right == 'main_logo')
+                        <a class="logo" href="{{ route('home') }}">
+                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
+                        </a>
+                    @else
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+
+                                        @if ($today == $value)
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif                        
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
+        
+
                 </div>
             </div>
 
@@ -987,77 +1135,241 @@
         <header class="header-v3">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    <div class="working-time">
-                        <strong class="text-uppercase">Working Time:</strong>
-                        @php
-                            $openday =$openclose['openday'];
-                            $fromtime = $openclose['fromtime'];
-                            $totime = $openclose['totime'];
-                            $closedate = $openclose['close_date'];
-                            $currentdate = strtotime(date("Y-m-d"));
-                            $closedates = explode(',',$closedate);
-                            $date_close1 = array();
 
-                            foreach ($closedates as $value) 
-                            {
-                                $date_close = strtotime($value);
-                                $date_close1[] = $date_close;
-                            }
-                        @endphp
-        
-                        @if (in_array($currentdate,$date_close1))
-                            <strong>Close</strong>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $t = count($item)-1;
-                                        $firstday = $item[0];
-                                        $lastday = $item[$t];
-                                        $today = date('l');
-                                    @endphp
+                    {{-- Topbar left --}}
+                    @if ($menu_topbar_left == 'opening_times')
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
 
-                                    @if ($today == $value || $firstday == "Every day")
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @elseif ($firstday == "Every day")
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @endif
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+            
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                        @endphp
+
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                @endforeach
                             @endforeach
-                        @endforeach
-                        @endif
-                    </div>
-                    <div class="__right-content">
+                            @endif
+                        </div>
+                    @elseif ($menu_topbar_left == 'customer_login')
                         @if (!empty($userlogin))
-                        <ul class="authentication-links">
-                            <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
-                            <li>
-                                <form method="POST" action="{{ route('customerlogout') }}">
-                                    {{ csrf_field() }}
-                                    <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
-                                </form>
-                            </li>
-                        </ul>            
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
                         @else            
-                        <ul class="authentication-links">
-                            <li>
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                                    <i class="far fa-user"></i><span>Login</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                                    <i class="fas fa-sign-in-alt"></i><span>Register</span>
-                                </a>
-                            </li>
-                        </ul>
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
                         @endif
-                        <a class="menu-shopping-cart" href="{{ route('cart') }}">
-                            <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
-                            <div class="price-box"><strong>Shopping Cart:</strong>
-                                <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
-                            </div>
-                        </a>
-                    </div>
+                    @else
+                        <div class="__right-content">
+                            <a class="menu-shopping-cart" href="{{ route('cart') }}">
+                                <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
+                                <div class="price-box"><strong>Shopping Cart:</strong>
+                                    <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
+
+
+                    {{-- Topbar center --}}
+                    @if ($menu_topbar_center == 'opening_times')
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+            
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                        @endphp
+
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                @endforeach
+                            @endforeach
+                            @endif
+                        </div>
+                    @elseif ($menu_topbar_center == 'customer_login')
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    @else
+                        <div class="__right-content">
+                            <a class="menu-shopping-cart" href="{{ route('cart') }}">
+                                <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
+                                <div class="price-box"><strong>Shopping Cart:</strong>
+                                    <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
+
+
+                    {{-- Topbar right --}}
+                    @if ($menu_topbar_right == 'opening_times')
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+            
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                        @endphp
+
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                @endforeach
+                            @endforeach
+                            @endif
+                        </div>
+                    @elseif ($menu_topbar_right == 'customer_login')
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    @else
+                        <div class="__right-content">
+                            <a class="menu-shopping-cart" href="{{ route('cart') }}">
+                                <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
+                                <div class="price-box"><strong>Shopping Cart:</strong>
+                                    <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
+
+    
                 </div>
             </div>
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
@@ -1141,89 +1453,273 @@
         <header class="header-v4">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    <div class="social-links">
-                        <a class="fab fa-facebook-f" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}"></a>
-                        <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}"></a>
-                        <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}"></a>
-                        <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
-                    </div>
-                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
-                    <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
-                        @php
-                            $openday =$openclose['openday'];
-                            $fromtime = $openclose['fromtime'];
-                            $totime = $openclose['totime'];
-                            $closedate = $openclose['close_date'];
-                            $currentdate = strtotime(date("Y-m-d"));
-                            $closedates = explode(',',$closedate);
-                            $date_close1 = array();
 
-                            foreach ($closedates as $value) 
-                            {
-                                $date_close = strtotime($value);
-                                $date_close1[] = $date_close;
-                            }
-                        @endphp
-                        @if (in_array($currentdate,$date_close1))
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                @if ($menu_topbar_open_close_permission == 1)
-                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
-                                @endif
-                            </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
+                    {{-- Topbar left --}}
+                    @if ($menu_topbar_left == 'social_media_links')
+                        <div class="social-links">
+                            <a class="fab fa-facebook-f" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
+                        </div>
+                    @elseif ($menu_topbar_left == 'open_close_image')
+                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+                            @if (in_array($currentdate,$date_close1))
+                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                    @if ($menu_topbar_open_close_permission == 1)
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                                    @endif
+                                </div>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                            $firstday = $item[0];
+                                        @endphp                
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @else
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
                                     @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
+                                        $t = count($item)-1;
                                         $firstday = $item[0];
-                                    @endphp                
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
-                                                @endif
-                                            </div>
+                                        $lastday = $item[$t];
+                                        $today = date('l');
+                                        $currentdate = strtotime(date("Y-m-d"));
+                                    @endphp
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
                                         @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
-                                                @endif
-                                            </div>
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
+
+
+                    {{-- Topbar center --}}
+                    @if ($menu_topbar_center == 'social_media_links')
+                        <div class="social-links">
+                            <a class="fab fa-facebook-f" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
+                        </div>
+                    @elseif ($menu_topbar_center == 'open_close_image')
+                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+                            @if (in_array($currentdate,$date_close1))
+                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                    @if ($menu_topbar_open_close_permission == 1)
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                                    @endif
+                                </div>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                            $firstday = $item[0];
+                                        @endphp                
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
                                         @endif
-                                    @endif
+                                    @endforeach
                                 @endforeach
-                            @endforeach
-                        @endif
-                    </div>
-                    <div class="working-time">
-                        <strong class="text-uppercase">Working Time:</strong>
-                        @if (in_array($currentdate,$date_close1))
-                            <strong>Close</strong>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                @php
-                                    $t = count($item)-1;
-                                    $firstday = $item[0];
-                                    $lastday = $item[$t];
-                                    $today = date('l');
-                                    $currentdate = strtotime(date("Y-m-d"));
-                                @endphp
-                                    @if ($today == $value || $firstday == "Every day")
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @elseif ($firstday == "Every day")
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @endif
+                            @endif
+                        </div>
+                    @else
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                    @php
+                                        $t = count($item)-1;
+                                        $firstday = $item[0];
+                                        $lastday = $item[$t];
+                                        $today = date('l');
+                                        $currentdate = strtotime(date("Y-m-d"));
+                                    @endphp
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                    @endforeach
                                 @endforeach
-                            @endforeach
-                        @endif
-                    </div>
+                            @endif
+                        </div>
+                    @endif
+
+
+                    {{-- Topbar right --}}
+                    @if ($menu_topbar_right == 'social_media_links')
+                        <div class="social-links">
+                            <a class="fab fa-facebook-f" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}"></a>
+                            <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
+                        </div>
+                    @elseif ($menu_topbar_right == 'open_close_image')
+                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+                            @if (in_array($currentdate,$date_close1))
+                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                    @if ($menu_topbar_open_close_permission == 1)
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                                    @endif
+                                </div>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $firsttime = strtotime($fromtime[$key]);
+                                            $lasttime = strtotime($totime[$key]);
+                                            $today = time();
+                                            $currentday = date('l');
+                                            $firstday = $item[0];
+                                        @endphp                
+                                        @if ($today >= $firsttime && $today <= $lasttime)
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @else
+                                            @if ($currentday == $value || $firstday == "Every day")
+                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                                    @if ($menu_topbar_open_close_permission == 1)
+                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @else
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                    @php
+                                        $t = count($item)-1;
+                                        $firstday = $item[0];
+                                        $lastday = $item[$t];
+                                        $today = date('l');
+                                        $currentdate = strtotime(date("Y-m-d"));
+                                    @endphp
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @elseif ($firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @endif
+
                 </div>
             </div>
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
@@ -1286,70 +1782,220 @@
         <header class="header-v5">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    <div class="working-time">
-                        <strong class="text-uppercase">Working Time:</strong>
-                        @php
-                            $openday =$openclose['openday'];
-                            $fromtime = $openclose['fromtime'];
-                            $totime = $openclose['totime'];
-                            $closedate = $openclose['close_date'];
-                            $currentdate = strtotime(date("Y-m-d"));
-                            $closedates = explode(',',$closedate);
-                            $date_close1 = array();
 
-                            foreach ($closedates as $value) 
-                            {
-                                $date_close = strtotime($value);
-                                $date_close1[] = $date_close;
-                            }
-                        @endphp
-            
-                        @if (in_array($currentdate,$date_close1))
-                            <strong>Close</strong>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $t = count($item)-1;
-                                        $firstday = $item[0];
-                                        $lastday = $item[$t];
-                                        $today = date('l');
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                    @if ($today == $value || $firstday == "Every day")
-                                        <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                    @endif
+                    {{-- Topbar left --}}
+                    @if ($menu_topbar_left == 'opening_times')
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+                
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                            @endif
+                        </div>
+                    @elseif ($menu_topbar_left == 'main_logo')
+                        <a class="logo" href="{{ route('home') }}">
+                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                        </a>
+                    @else
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}" class="text-success"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
                         @endif
-                    </div>
-                    <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
-                    </a>
-                    @if (!empty($userlogin))
-                        <ul class="authentication-links">
-                            <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}" class="text-success"> ({{ $userlogin }})</a></li>
-                            <li>
-                                <form method="POST" action="{{ route('customerlogout') }}">
-                                    {{ csrf_field() }}
-                                    <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
-                                </form>
-                            </li>
-                        </ul>            
-                    @else            
-                        <ul class="authentication-links">
-                            <li>
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                                    <i class="far fa-user"></i><span>Login</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                                    <i class="fas fa-sign-in-alt"></i><span>Register</span>
-                                </a>
-                            </li>
-                        </ul>
                     @endif
+                    
+
+                    {{-- Topbar center --}}
+                    @if ($menu_topbar_center == 'opening_times')
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+                
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @elseif ($menu_topbar_center == 'main_logo')
+                        <a class="logo" href="{{ route('home') }}">
+                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                        </a>
+                    @else
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}" class="text-success"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    @endif
+
+
+                    {{-- Topbar right --}}
+                    @if ($menu_topbar_right == 'opening_times')
+                        <div class="working-time">
+                            <strong class="text-uppercase">Working Time:</strong>
+                            @php
+                                $openday =$openclose['openday'];
+                                $fromtime = $openclose['fromtime'];
+                                $totime = $openclose['totime'];
+                                $closedate = $openclose['close_date'];
+                                $currentdate = strtotime(date("Y-m-d"));
+                                $closedates = explode(',',$closedate);
+                                $date_close1 = array();
+
+                                foreach ($closedates as $value) 
+                                {
+                                    $date_close = strtotime($value);
+                                    $date_close1[] = $date_close;
+                                }
+                            @endphp
+                
+                            @if (in_array($currentdate,$date_close1))
+                                <strong>Close</strong>
+                            @else
+                                @foreach ($openday as $key => $item)
+                                    @foreach ($item as $value)
+                                        @php
+                                            $t = count($item)-1;
+                                            $firstday = $item[0];
+                                            $lastday = $item[$t];
+                                            $today = date('l');
+                                            $currentdate = strtotime(date("Y-m-d"));
+                                        @endphp
+                                        @if ($today == $value || $firstday == "Every day")
+                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        </div>
+                    @elseif ($menu_topbar_right == 'main_logo')
+                        <a class="logo" href="{{ route('home') }}">
+                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                        </a>
+                    @else
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}" class="text-success"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    @endif
+
+
                 </div>
             </div>
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
@@ -1431,36 +2077,79 @@
         <header class="header-v6">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s" >
                 <div class="container">
-                    @if (!empty($userlogin))
-                        <ul class="authentication-links">
-                            <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
-                            <li>
-                                <form method="POST" action="{{ route('customerlogout') }}">
-                                    {{ csrf_field() }}
-                                    <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
-                                </form>
-                            </li>
-                        </ul>            
-                    @else            
-                        <ul class="authentication-links">
-                            <li>
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                                    <i class="far fa-user"></i><span>Login</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a type="button" data-bs-toggle="modal" data-bs-target="#login">
-                                    <i class="fas fa-sign-in-alt"></i><span>Register</span>
-                                </a>
-                            </li>
-                        </ul>
+
+                    {{-- Topbar left --}}
+                    @if ($menu_topbar_left == 'customer_login')
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    @elseif ($menu_topbar_left == 'shopping_cart')
+                        <a class="menu-shopping-cart" href="{{ route('cart') }}">
+                            <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
+                            <div class="price-box"><strong>Shopping Cart:</strong>
+                                <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
+                            </div>
+                        </a>
                     @endif
-                    <a class="menu-shopping-cart" href="{{ route('cart') }}">
-                        <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
-                        <div class="price-box"><strong>Shopping Cart:</strong>
-                            <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
-                        </div>
-                    </a>
+
+
+                    {{-- Topbar right --}}
+                    @if ($menu_topbar_right == 'customer_login')
+                        @if (!empty($userlogin))
+                            <ul class="authentication-links">
+                                <li class="d-flex"><p class="m-0 text-white">You are logged in as</p>&nbsp;<a href="{{ route('member') }}"> ({{ $userlogin }})</a></li>
+                                <li>
+                                    <form method="POST" action="{{ route('customerlogout') }}">
+                                        {{ csrf_field() }}
+                                        <button type="submit" class="bg-transparent border-0"><i class="fas fa-sign-out-alt text-white"></i><span class="text-white">Logout</span></button>
+                                    </form>
+                                </li>
+                            </ul>            
+                        @else            
+                            <ul class="authentication-links">
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="far fa-user"></i><span>Login</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#login">
+                                        <i class="fas fa-sign-in-alt"></i><span>Register</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    @elseif ($menu_topbar_right == 'shopping_cart')
+                        <a class="menu-shopping-cart" href="{{ route('cart') }}">
+                            <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
+                            <div class="price-box"><strong>Shopping Cart:</strong>
+                                <div class="price">{{$currency}}<span class="pirce-value">{{ $headertotal }}</span></div>
+                            </div>
+                        </a>
+                    @endif
+                    
+                    
                 </div>
             </div>
             <div class="header-center">
