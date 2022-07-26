@@ -5,6 +5,14 @@
     It Displayed All Product List & Storewise Display Products
     ----------------------------------------------------------------------------------------------
 -->
+@php
+    if(session()->has('current_category_id')){
+        $current_category_id = session()->get('current_category_id');
+    }else{
+        $current_category_id = 0;
+    }
+@endphp
+
 
 {{-- Header --}}
 @include('header')
@@ -51,7 +59,7 @@
                                     category &nbsp;&nbsp;&nbsp;&nbsp;
                                     <select name="category" id="categorys" style="width: 70%">
                                         @foreach ($category as $categorys)
-                                            <option value="{{ $categorys->category_id }}">{{ $categorys->name }}
+                                            <option value="{{ $categorys->category_id }}" {{ ($current_category_id == $categorys->category_id ) ? 'selected' : '' }}>{{ $categorys->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -269,7 +277,7 @@
             //     //   $('.cat-list').append(res.table);
             //    },
             },
-            "order": [0, 'desc'],
+            "order": [0, 'asc'],
             columns: [{
                     "data": "checkbox",
                     "orderable": false,

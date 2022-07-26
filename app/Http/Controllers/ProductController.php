@@ -567,11 +567,13 @@ class ProductController extends Controller
     public function getproduct(Request $request)
     {
         $category_id = $request->cat_id;
-
+        if(!empty($category_id) || $category_id != ''){
+            session()->put('current_category_id',$category_id);
+        }
         $current_store_id = currentStoreId();
         $columns = array(
             0 => 'product_id',
-            3 => 'name',
+            5 => 'sort_order',
         );
 
         // Get data

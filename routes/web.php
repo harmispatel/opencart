@@ -382,11 +382,11 @@ Route::group(['middleware' => 'AuthUser'], function () {
     //     \UniSharp\LaravelFilemanager\Lfm::routes();
     // });
 
-    // filemanager
-    Route::get('filemanager',[FilemanagerController::class,'index'])->name('filemanager');
 
 
 });
+// filemanager
+Route::get('filemanager',[FilemanagerController::class,'index'])->name('filemanager');
 
 
 // ---------------------------------------------------------------------------------------------

@@ -266,11 +266,11 @@
 
                         <a id="item-template" class="d-none">
                             <div class="square"></div>
-
                             <div class="info">
-                                <div class="item_name text-truncate"></div>
+                                <div class="item_name text-truncate customclick"></div>
                                 <time class="text-muted font-weight-light text-truncate"></time>
                             </div>
+
                         </a>
                     </div>
 
@@ -449,13 +449,16 @@
     {
 
         modalToSelectedFilePath = url;
+
     }
+
 
 
     // Close Popup Modal
     function closePopupAndSetPath(imageId)
     {
         var v=$('#test').attr('imageId');
+
         jQuery("#myModal").modal('hide');
         jQuery('#thumb' + v).attr("src",modalToSelectedFilePath);
     }
@@ -539,6 +542,10 @@
        $('#image_'+image_id).val('');
        $('#image_'+image_id).val(new_url);
 
+    });
+
+    $('.customclick').on('click',function(){
+        alert("fg");
     });
 
 </script>

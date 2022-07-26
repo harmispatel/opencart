@@ -465,8 +465,13 @@ function loadItems(page) {
           }
 
 
+
+            var newName =  '<div onclick="getImageUrl(\''+item.thumb_url+'\')">'+item.name+'</div>';
+
+
           template.find('.square').append(image);
-          template.find('.item_name').text(item.name);
+          //template.find('.item_name').text(item.name);
+          template.find('.item_name').append(newName);
           template.find('time').text((new Date(item.time * 1000)).toLocaleString());
 
           $('#content').append(template);
@@ -819,3 +824,4 @@ function dialog(title, value, callback) {
   });
   $('#dialog').modal('show').find('.modal-title').text(title);
 }
+
