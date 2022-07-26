@@ -148,6 +148,8 @@
     }
     // End Cart Details
    
+
+    $currentdate = strtotime(date("Y-m-d")); 
 @endphp
 
 
