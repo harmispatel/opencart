@@ -681,8 +681,8 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.3/opencart/';
-    // return 'http://192.168.1.73/ECOMM/';
+    // return 'http://192.168.1.3/opencart/';
+    return 'http://192.168.1.73/ECOMM/';
 }
 
 
@@ -2488,6 +2488,8 @@ function frontStoreID($currentURL)
         'gallery_background_options',
         'gallery_header_text',
         'gallery_header_desc',
+        'gallery_background_color',
+        'gallery_background_image',
         'config_currency',
         'config_logo',
     ]);

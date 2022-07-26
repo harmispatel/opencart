@@ -1,43 +1,56 @@
-<!--
+{{--
     THIS IS GAKKARY SETTINGS PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     gallarysettings.blade.php
     it is used for gallary settings like enable-disable, background option etc. for frontend.
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
-<!-- Header Section -->
+{{-- Header Section --}}
 @include('header')
-<!-- End Header Section -->
+{{-- End Header Section --}}
+@php
+    // Current URL
+    $currentURL = URL::to("/");
 
+
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
+
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
+    // Store Settings
+    $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+@endphp
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 
-<!-- Section of List Gallary Setting -->
+{{-- Section of List Gallary Setting --}}
 <section>
     <div class="content-wrapper">
-        <!-- Breadcumb Section -->
+        {{-- Breadcumb Section --}}
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1><i class="fa fa-image"></i> Gallery Settings</h1>
                     </div>
-                    <!-- Breadcrumb Start -->
+                    {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Gallary Setting </li>
                         </ol>
                     </div>
-                    <!-- End Breadcumb -->
+                    {{-- End Breadcumb --}}
                 </div>
             </div>
         </section>
-        <!-- End Breadcumb Section -->
+        {{-- End Breadcumb Section --}}
 
-        <!-- List Section Start -->
+        {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
                 @if(Session::has('success'))
@@ -50,7 +63,7 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12">
-                        <!-- Card -->
+                        {{-- Card --}}
                         <div class="card ">
                             <form action="{{ route('gallarysettingsstore') }}" method="post" id="form" enctype="multipart/form-data">
                                 @csrf
@@ -126,7 +139,24 @@
                                             <tr id="image" style="display: none">
                                                 <td width="250">Background Image</td>
                                                 <td>
-                                                    <input type="file"  name="gallery_background_image" class="form-control p-1">
+                                                    {{-- <input type="file"  name="gallery_background_image" class="form-control p-1"> --}}
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                          <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                            <i class="fa fa-picture-o"></i> Choose
+                                                          </a>
+                                                        </span>
+                                                        <input id="thumbnail" class="form-control" type="text" name="gallery_background_image">
+                                                    </div>
+                                                    <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
+                                                        @if(!empty($store_setting["gallery_background_image"]))
+                                                            <img src="{{ $store_setting["gallery_background_image"] }}" alt="Not Found" width="60">
+                                                        @else
+                                                            <h3 class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i></h3>
+                                                        @endif
+                                                    </div>
+                                                      <img id="holder" style="margin-top:15px;max-height:100px;">
+
                                                     <img src="{{asset('public/admin/product/'.$gallery_background_image)}}" alt="" width="100px"/>
                                                 </td>
                                             </tr>
@@ -157,22 +187,22 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- End Card -->
+                        {{-- End Card --}}
                     </div>
                 </div>
             </div>
         </section>
-        <!-- End Form Section -->
+        {{-- End Form Section --}}
     </div>
 </section>
-<!-- End Section of List Gallary Setting -->
+{{-- End Section of List Gallary Setting --}}
 
 
-<!-- Footer Section -->
+{{-- Footer Section --}}
 @include('footer')
-<!-- End Footer Section -->
+{{-- End Footer Section --}}
 
-<!-- SCRIPT -->
+{{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -237,5 +267,16 @@
     }
     // End Gallary Settings
 
+
+
 </script>
-<!-- END SCRIPT -->
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+<script>
+     $('#lfm').filemanager('file');
+    var getUrl = window.location;
+    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]+'/index.php/filemanager';
+    // alert(baseUrl)
+//    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+   $('#lfm').filemanager('image', {prefix: baseUrl});
+</script>
+{{-- END SCRIPT --}}

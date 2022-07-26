@@ -35,8 +35,14 @@
     // Get Open-Close Time
     $openclose = openclosetime();
 
+    // Get Current General Settings
+    $store_general_settings = storeLayoutSettings('',$front_store_id,'general_settings','');
+
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+
+    // Copyright Dynamic
+    $copyright = (isset($store_general_settings['general_copyright_text'])) ? $store_general_settings['general_copyright_text'] : ''
 
 @endphp
 
@@ -290,7 +296,7 @@
                 </li>
             </ul>
             <div class="copyright">
-                <p>Copyright © 2022 Star Kebab Tenterden</p>
+                <p>{{ $copyright }}</p>
             </div>
         </footer>
     @endif
@@ -355,7 +361,7 @@
 
             <div class="footer-copyright">
                 <div class="container">
-                    <p>Copyright © 2022 Star Kebab Tenterden</p>
+                    <p>{{ $copyright }}</p>
                 </div>
             </div>
         </footer>
@@ -404,7 +410,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>Copyright © 2022 Star Kebab Tenterden</p>
+                <p>{{ $copyright }}</p>
             </div>
         </footer>
     @endif
@@ -445,7 +451,7 @@
                 </a>
             </div>
             <div class="footer-bottom">
-                <p>Copyright © 2022 Star Kebab Tenterden</p>
+                <p>{{ $copyright }}</p>
             </div>
         </footer>
     @endif
@@ -513,7 +519,7 @@
                 </div>
             </div>
             <div class="copyright">
-                <p>Copyright © 2022 Star Kebab Tenterden</p>
+                <p>{{ $copyright }}</p>
             </div>
         </footer>
     @endif
@@ -524,7 +530,7 @@
         <footer class="footer-v6 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="footer-top backgroundcolor">
                 <h4 class="__footer-title text-uppercase">thank you and welcome back!</h4>
-                <p class="copyright">Copyright © 2022 Star Kebab Tenterden</p>
+                <p class="copyright">{{ $copyright }}</p>
                 <div class="__btn-top">
                     <i class="fas fa-arrow-up"></i>
                 </div>

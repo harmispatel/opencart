@@ -545,8 +545,11 @@ function deleteOptionSize(id)
 
 <script>
     $('#lfm').filemanager('file');
-   var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
-   $('#lfm').filemanager('image', {prefix: route_prefix});
+    var getUrl = window.location;
+    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]+'/index.php/filemanager';
+    // alert(baseUrl)
+//    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+   $('#lfm').filemanager('image', {prefix: baseUrl});
 </script>
 {{-- END SCRIPT --}}
 

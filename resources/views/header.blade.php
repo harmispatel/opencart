@@ -1,11 +1,11 @@
-<!--
+{{--
     THIS IS HEADER PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     header.blade.php
     It's Included Some CSS Links.
     it is used for admin panel's top navigation & Sidebar Menu
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 @php
@@ -40,7 +40,7 @@
     <link rel="shortcut icon" href="{{{ asset('public/admin/favicon/myfoodbasket-icon.png') }}}">
     <title>{{ Str::ucfirst(request()->route()->getName())}}</title>
 
-    <!-- CUSTOM CSS -->
+    {{-- CUSTOM CSS --}}
     <style>
         .select2-container--default .select2-selection--single .select2-selection__rendered
         {
@@ -89,7 +89,7 @@
     }
 
 </style>
-    <!-- END CUSTOM CSS -->
+    {{-- END CUSTOM CSS --}}
 
     <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}">
     <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/cropper.min.css') }}">
@@ -97,55 +97,53 @@
     <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
 
-    <!-- Google Font: Source Sans Pro -->
-    {{-- <link href="https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Joan&family=Kdam+Thmor+Pro&family=League+Gothic&family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet"> --}}
 
     <link rel="stylesheet" href="{{ asset('public/assets/fonts/fonts.min.css') }}">
 
-    <!-- Font Awesome -->
+    {{-- Font Awesome --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <!-- Ionicons -->
+    {{-- Ionicons --}}
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-    <!-- Tempusdominus Bootstrap 4 -->
+    {{-- Tempusdominus Bootstrap 4 --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 
-    <!-- iCheck -->
+    {{-- iCheck --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 
-    <!-- JQVMap -->
+    {{-- JQVMap --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/jqvmap/jqvmap.min.css') }}">
 
     {{-- JQ UI --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/jquery-ui/jquery-ui.min.css') }}">
 
-    <!-- Theme style -->
+    {{-- Theme style --}}
     <link rel="stylesheet" href="{{ asset('public/dist/css/adminlte.min.css') }}">
 
-    <!-- Custom style -->
+    {{-- Custom style --}}
     <link rel="stylesheet" href="{{ asset('public/dist/css/custom.css') }}">
 
-    <!-- overlayScrollbars -->
+    {{-- overlayScrollbars --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
 
-    <!-- Daterange picker -->
+    {{-- Daterange picker --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/daterangepicker/daterangepicker.css') }}">
 
-    <!-- DataTable -->
+    {{-- DataTable --}}
     <link href="//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="//cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css" rel="stylesheet">
 
-    <!-- Sweet alert -->
+    {{-- Sweet alert --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.2.0/sweet-alert.css"/>
 
-    <!-- Select Box -->
+    {{-- Select Box --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
 
-    <!-- Summernote -->
+    {{-- Summernote --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/summernote/summernote.min.css') }}">
 
-    <!-- Gallary Style -->
+    {{-- Gallary Style --}}
     <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 </head>
@@ -153,15 +151,15 @@
 
     <div class="wrapper">
 
-        <!-- NAVBAR -->
+        {{-- NAVBAR --}}
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- LEFT TOP NAVBAR -->
+            {{-- LEFT TOP NAVBAR --}}
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
 
-                <!-- If user is ADMIN then show add new store option -->
+                {{-- If user is ADMIN then show add new store option --}}
                 @if ($user_group_id == 1)
                     <li class="nav-item pt-1 pr-3">
                         <a href="{{ route('createstore') }}" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> NEW</a>
@@ -177,25 +175,25 @@
                     <li class="nav-item pl-3 pt-2 pr-3">
                         <a href="{{ getCurrentStoreURL($current_store_id) }}" target="_blanck" id="visitShop">Visit Shop</a>
                     </li>
-                <!-- Otherwise Only Show Shop Name -->
+                {{-- Otherwise Only Show Shop Name --}}
                 @else
                     <li class="nav-item pt-1">
                         <h3>{{ $user_shop->name }}</h3>
                     </li>
                 @endif
             </ul>
-            <!-- END LEFT TOP NAVBAR -->
+            {{-- END LEFT TOP NAVBAR --}}
 
-            <!-- RIGHT TOP NAVBAR -->
+            {{-- RIGHT TOP NAVBAR --}}
             <ul class="navbar-nav ml-auto">
-                <!-- USER PROFILE SECTION -->
+                {{-- USER PROFILE SECTION --}}
                 <li class="nav-item dropdown p-0">
                     <a class="nav-link p-0 text-uppercase" style="color: rgb(71, 69, 69); font-weight: 700;font-family: verdana" data-toggle="dropdown" href="#">
-                        <!-- If User have a profile image then shown image -->
+                        {{-- If User have a profile image then shown image --}}
                         @if(!empty(user_details()))
                             <img src="{{ ( (user_details()->image != '') || (user_details()->image != null) ) ? user_details()->image : asset('public/admin/users/blank.png') }}" class="m-0 img-circle" width="40" height="40">
                             {{ user_details()->username }}
-                        <!-- Else Show Message Not Found -->
+                        {{-- Else Show Message Not Found --}}
                         @else
                             <img src="{{ asset('public/admin/users/blank.png') }}" class="m-0 img-circle" width="40" height="40">
                             Not Found
@@ -220,30 +218,30 @@
                         @endif
                     </div>
                 </li>
-                <!-- END USER PROFILE SECTION -->
+                {{-- END USER PROFILE SECTION --}}
             </ul>
-            <!-- END RIGHT TOP NAVBAR -->
+            {{-- END RIGHT TOP NAVBAR --}}
         </nav>
-        <!-- END NAVBAR -->
+        {{-- END NAVBAR --}}
 
-        <!-- SIDEBAR FOR LINKS -->
+        {{-- SIDEBAR FOR LINKS --}}
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="{{ route('dashboard') }}" class="brand-link text-center" style="background: #357f94; color: white;">
                 <span class="brand-text font-weight-light"><b>MANAGER</b></span>
             </a>
 
-            <!-- SIDEBAR -->
+            {{-- SIDEBAR --}}
             <div class="sidebar" style="background: #3742;">
-                <!-- SIDEBAR MENU -->
+                {{-- SIDEBAR MENU --}}
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column custom-nav" data-widget="treeview" role="menu" data-accordion="false">
 
-                        <!-- DYNAMIC SIDEBAR -->
+                        {{-- DYNAMIC SIDEBAR --}}
                         @if(!empty(sidebar()))
-                            <!-- If user is Main Admin Then All Menu show -->
+                            {{-- If user is Main Admin Then All Menu show --}}
                             @if ($useraccess == 1)
                                 @foreach (sidebar() as $item)
-                                    <!-- SINGLE MENU LINK -->
+                                    {{-- SINGLE MENU LINK --}}
                                     @if( ($item->alias != '') || ($item->alias) != null )
                                         <li class="nav-item">
                                             <a href="{{ route($item->alias) }}" class="nav-link {{ (request()->is($item->alias)) ? 'active' : ''}}">
@@ -251,7 +249,7 @@
                                                 <p>{{ $item->main_menu }}</p>
                                             </a>
                                         </li>
-                                    <!-- SUBMENU LINK -->
+                                    {{-- SUBMENU LINK --}}
                                     @else
                                         @php
                                             // This Function is used for get submenu of Menu
@@ -310,7 +308,7 @@
                                                 <p>{{ $item->main_menu }} <i class="right fas fa-angle-left"></i></p>
                                             </a>
 
-                                            <!-- SUBMENUS -->
+                                            {{-- SUBMENUS --}}
                                             <ul class="nav nav-treeview">
                                                 @php
                                                     $submenus = submenu($item->id);
@@ -399,11 +397,11 @@
                                                 @endif
 
                                             </ul>
-                                            <!-- END SUBMENUS -->
+                                            {{-- END SUBMENUS --}}
                                         </li>
                                     @endif
                                 @endforeach
-                            <!-- Else Show Permission Accessed Menu -->
+                            {{-- Else Show Permission Accessed Menu --}}
                             @else
 
                                 @php
@@ -581,208 +579,208 @@
 
                             @endif
                         @endif
-                        <!-- END DYNAMIC SIDEBAR -->
+                        {{-- END DYNAMIC SIDEBAR --}}
                     </ul>
                 </nav>
-                <!-- END SIDEBAR MENU -->
+                {{-- END SIDEBAR MENU --}}
             </div>
-            <!-- END SIDEBAR -->
+            {{-- END SIDEBAR --}}
         </aside>
-        <!-- END SIDEBAR FOR LINKS -->
+        {{-- END SIDEBAR FOR LINKS --}}
 
-        <!-- Modal -->
-        {{-- <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog" style="max-width: 950px ">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Photo Gallery</h2>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
+        {{-- Modal --}}
+            {{-- <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog" style="max-width: 950px ">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Photo Gallery</h2>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
 
-                        <nav class="navbar sticky-top navbar-expand-lg navbar-dark" id="nav">
-                            <a class="navbar-brand invisible-lg d-none d-lg-inline" id="to-previous">
-                                <i class="fas fa-arrow-left fa-fw"></i>
-                                <span class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.nav-back') }}</span>
-                            </a>
-                            <a class="navbar-brand d-block d-lg-none" id="show_tree">
-                                <i class="fas fa-bars fa-fw"></i>
-                            </a>
-                            <a class="navbar-brand d-block d-lg-none" id="current_folder"></a>
-                            <a id="loading" class="navbar-brand"><i class="fas fa-spinner fa-spin"></i></a>
-                            <div class="ml-auto px-2">
-                                <a class="navbar-link d-none" id="multi_selection_toggle">
-                                    <i class="fa fa-check-double fa-fw"></i>
-                                    <span class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.menu-multiple') }}</span>
+                            <nav class="navbar sticky-top navbar-expand-lg navbar-dark" id="nav">
+                                <a class="navbar-brand invisible-lg d-none d-lg-inline" id="to-previous">
+                                    <i class="fas fa-arrow-left fa-fw"></i>
+                                    <span class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.nav-back') }}</span>
                                 </a>
-                            </div>
-                            <a class="navbar-toggler collapsed border-0 px-1 py-2 m-0" data-toggle="collapse"
-                                data-target="#nav-buttons">
-                                <i class="fas fa-cog fa-fw"></i>
-                            </a>
-                            <div class="collapse navbar-collapse flex-grow-0" id="nav-buttons">
-                                <ul class="navbar-nav">
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-display="grid">
-                                            <i class="fas fa-th-large fa-fw"></i>
-                                            <span>{{ trans('laravel-filemanager::lfm.nav-thumbnails') }}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-display="list">
-                                            <i class="fas fa-list-ul fa-fw"></i>
-                                            <span>{{ trans('laravel-filemanager::lfm.nav-list') }}</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-sort fa-fw"></i>{{ trans('laravel-filemanager::lfm.nav-sort') }}
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right border-0"></div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
+                                <a class="navbar-brand d-block d-lg-none" id="show_tree">
+                                    <i class="fas fa-bars fa-fw"></i>
+                                </a>
+                                <a class="navbar-brand d-block d-lg-none" id="current_folder"></a>
+                                <a id="loading" class="navbar-brand"><i class="fas fa-spinner fa-spin"></i></a>
+                                <div class="ml-auto px-2">
+                                    <a class="navbar-link d-none" id="multi_selection_toggle">
+                                        <i class="fa fa-check-double fa-fw"></i>
+                                        <span class="d-none d-lg-inline">{{ trans('laravel-filemanager::lfm.menu-multiple') }}</span>
+                                    </a>
+                                </div>
+                                <a class="navbar-toggler collapsed border-0 px-1 py-2 m-0" data-toggle="collapse"
+                                    data-target="#nav-buttons">
+                                    <i class="fas fa-cog fa-fw"></i>
+                                </a>
+                                <div class="collapse navbar-collapse flex-grow-0" id="nav-buttons">
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-display="grid">
+                                                <i class="fas fa-th-large fa-fw"></i>
+                                                <span>{{ trans('laravel-filemanager::lfm.nav-thumbnails') }}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-display="list">
+                                                <i class="fas fa-list-ul fa-fw"></i>
+                                                <span>{{ trans('laravel-filemanager::lfm.nav-list') }}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-sort fa-fw"></i>{{ trans('laravel-filemanager::lfm.nav-sort') }}
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right border-0"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
 
-                        <nav class="bg-light fixed-bottom border-top d-none" id="actions">
-                            <a data-action="open" data-multiple="false"><i
-                                    class="fas fa-folder-open"></i>{{ trans('laravel-filemanager::lfm.btn-open') }}</a>
-                            <a data-action="preview" data-multiple="true"><i
-                                    class="fas fa-images"></i>{{ trans('laravel-filemanager::lfm.menu-view') }}</a>
-                            <a data-action="use" onclick="closePopupAndSetPath()" data-z="0" id="test" data-multiple="true"><i
-                                    class="fas fa-check"></i>Confirm</a>
-                        </nav>
+                            <nav class="bg-light fixed-bottom border-top d-none" id="actions">
+                                <a data-action="open" data-multiple="false"><i
+                                        class="fas fa-folder-open"></i>{{ trans('laravel-filemanager::lfm.btn-open') }}</a>
+                                <a data-action="preview" data-multiple="true"><i
+                                        class="fas fa-images"></i>{{ trans('laravel-filemanager::lfm.menu-view') }}</a>
+                                <a data-action="use" onclick="closePopupAndSetPath()" data-z="0" id="test" data-multiple="true"><i
+                                        class="fas fa-check"></i>Confirm</a>
+                            </nav>
 
-                        <div class="d-flex flex-row">
-                            <div id="tree"></div>
+                            <div class="d-flex flex-row">
+                                <div id="tree"></div>
 
-                            <div id="main">
-                                <div id="alerts"></div>
+                                <div id="main">
+                                    <div id="alerts"></div>
 
-                                <nav aria-label="breadcrumb" class="d-none d-lg-block" id="breadcrumbs">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item invisible">Home</li>
-                                    </ol>
-                                </nav>
+                                    <nav aria-label="breadcrumb" class="d-none d-lg-block" id="breadcrumbs">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item invisible">Home</li>
+                                        </ol>
+                                    </nav>
 
-                                <div id="empty" class="d-none">
-                                    <i class="far fa-folder-open"></i>
-                                    {{ trans('laravel-filemanager::lfm.message-empty') }}
+                                    <div id="empty" class="d-none">
+                                        <i class="far fa-folder-open"></i>
+                                        {{ trans('laravel-filemanager::lfm.message-empty') }}
+                                    </div>
+
+                                    <div id="content"></div>
+                                    <div id="pagination"></div>
+
+                                    <a id="item-template" class="d-none">
+                                        <div class="square"></div>
+
+                                        <div class="info">
+                                            <div class="item_name text-truncate"></div>
+                                            <time class="text-muted font-weight-light text-truncate"></time>
+                                        </div>
+                                    </a>
                                 </div>
 
-                                <div id="content"></div>
-                                <div id="pagination"></div>
-
-                                <a id="item-template" class="d-none">
-                                    <div class="square"></div>
-
-                                    <div class="info">
-                                        <div class="item_name text-truncate"></div>
-                                        <time class="text-muted font-weight-light text-truncate"></time>
-                                    </div>
-                                </a>
+                                <div id="fab"></div>
                             </div>
 
-                            <div id="fab"></div>
-                        </div>
-
-                        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="myModalLabel">
-                                            {{ trans('laravel-filemanager::lfm.title-upload') }}</h4>
-                                        <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close"><span aia-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="{{ route('unisharp.lfm.upload') }}" role='form' id='uploadForm'
-                                            name='uploadForm' method='post' enctype='multipart/form-data'
-                                            class="dropzone">
-                                            <div class="form-group" id="attachment">
-                                                <div class="controls text-center">
-                                                    <div class="input-group w-100">
-                                                        <a class="btn btn-primary w-100 text-white"
-                                                            id="upload-button">{{ trans('laravel-filemanager::lfm.message-choose') }}</a>
+                            <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">
+                                                {{ trans('laravel-filemanager::lfm.title-upload') }}</h4>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span aia-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('unisharp.lfm.upload') }}" role='form' id='uploadForm'
+                                                name='uploadForm' method='post' enctype='multipart/form-data'
+                                                class="dropzone">
+                                                <div class="form-group" id="attachment">
+                                                    <div class="controls text-center">
+                                                        <div class="input-group w-100">
+                                                            <a class="btn btn-primary w-100 text-white"
+                                                                id="upload-button">{{ trans('laravel-filemanager::lfm.message-choose') }}</a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <input type='hidden' name='working_dir' id='working_dir'>
-                                            <input type='hidden' name='type' id='type' value='{{ request('type') }}'>
-                                            <input type='hidden' name='_token' value='{{ csrf_token() }}'>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary w-100"
-                                            data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-close') }}</button>
+                                                <input type='hidden' name='working_dir' id='working_dir'>
+                                                <input type='hidden' name='type' id='type' value='{{ request('type') }}'>
+                                                <input type='hidden' name='_token' value='{{ csrf_token() }}'>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary w-100"
+                                                data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-close') }}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {{-- <div class="modal fade" id="notify" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-body"></div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary w-100"
-                                            data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-close') }}</button>
-                                        <button type="button" class="btn btn-primary w-100"
-                                            data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-confirm') }}</button>
+                            <!-- <div class="modal fade" id="notify" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-body"></div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary w-100"
+                                                data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-close') }}</button>
+                                            <button type="button" class="btn btn-primary w-100"
+                                                data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-confirm') }}</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> --}}
+                            </div> -->
 
-                        <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title"></h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary w-100"
-                                            data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-close') }}</button>
-                                        <button type="button" class="btn btn-primary w-100"
-                                            data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-confirm') }}</button>
+                            <div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title"></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" class="form-control">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary w-100"
+                                                data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-close') }}</button>
+                                            <button type="button" class="btn btn-primary w-100"
+                                                data-dismiss="modal">{{ trans('laravel-filemanager::lfm.btn-confirm') }}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div id="carouselTemplate" class="d-none carousel slide bg-light" data-ride="carousel">
-                            <ol class="carousel-indicators">
-                                <li data-target="#previewCarousel" data-slide-to="0" class="active"></li>
-                            </ol>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <a class="carousel-label"></a>
-                                    <div class="carousel-image"></div>
+                            <div id="carouselTemplate" class="d-none carousel slide bg-light" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#previewCarousel" data-slide-to="0" class="active"></li>
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <a class="carousel-label"></a>
+                                        <div class="carousel-image"></div>
+                                    </div>
                                 </div>
+                                <a class="carousel-control-prev" href="#previewCarousel" role="button" data-slide="prev">
+                                    <div class="carousel-control-background" aria-hidden="true">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </div>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#previewCarousel" role="button" data-slide="next">
+                                    <div class="carousel-control-background" aria-hidden="true">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
-                            <a class="carousel-control-prev" href="#previewCarousel" role="button" data-slide="prev">
-                                <div class="carousel-control-background" aria-hidden="true">
-                                    <i class="fas fa-chevron-left"></i>
-                                </div>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#previewCarousel" role="button" data-slide="next">
-                                <div class="carousel-control-background" aria-hidden="true">
-                                    <i class="fas fa-chevron-right"></i>
-                                </div>
-                                <span class="sr-only">Next</span>
-                            </a>
                         </div>
                     </div>
+                    <!-- End Modal content-->
                 </div>
-                <!-- End Modal content-->
-            </div>
-        </div> --}}
-        <!-- End Modal -->
+            </div> --}}
+        {{-- End Modal --}}
 
