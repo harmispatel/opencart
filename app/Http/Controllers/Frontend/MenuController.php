@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\CategoryDetail;
 use App\Models\CategorytoStore;
 use App\Models\Coupon;
 use App\Models\DeliverySettings;
@@ -59,9 +60,9 @@ class MenuController extends Controller
             }
         }
 
-        $category = Category::with(['hasOneCategoryToStore'])->whereHas('hasOneCategoryToStore', function ($query) use ($front_store_id) {
+        $category = CategoryDetail::with(['hasManyCategoryStore','hasOneCategory'])->whereHas('hasManyCategoryStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
-        })->get();
+        })->orderBy('sort_order', 'ASC')->get();
 
         $data['category'] = $category;
 

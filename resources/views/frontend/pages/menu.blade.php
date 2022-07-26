@@ -252,11 +252,11 @@ It's used for View Menu.
                                                     $demo = $category->category_id;
                                                     $productcount = getproductcount($demo);
 
-                                                    $catname = strtolower($category->name);
+                                                    $catname = strtolower($category->hasOneCategory->name);
                                                 @endphp
                                                 <li>
                                                     <a href="#{{ str_replace(' ', '', $catname) }}"
-                                                        class="active">{{ $category->name }}
+                                                        class="active">{{ $category->hasOneCategory->name }}
                                                         ({{ $productcount }})
                                                     </a>
                                                 </li>
@@ -280,13 +280,13 @@ It's used for View Menu.
                                             @php
                                                 $cat_id = $value->category_id;
                                                 $product = getproduct($front_store_id, $cat_id);
-                                                $catvalue = strtolower($value->name);
+                                                $catvalue = strtolower($value->hasOneCategory->name);
                                             @endphp
                                             <div class="accordion" id="accordionExample">
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header" id="headingOne">
                                                         <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
-                                                            <span>{{ $value->name }}</span>
+                                                            <span>{{ $value->hasOneCategory->name }}</span>
                                                             <i class="fa fa-angle-down"></i>
                                                         </button>
                                                     </h2>
