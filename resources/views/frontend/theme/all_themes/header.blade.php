@@ -8,8 +8,8 @@
 
 @php
     
-   // Current URL
-   $currentURL = URL::to("/");
+    // Current URL
+    $currentURL = URL::to("/");
 
     // Get Store Settings & Other Settings
     $store_data = frontStoreID($currentURL);

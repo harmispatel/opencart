@@ -52,14 +52,14 @@ class SettingsController extends Controller
 
 
     private $days = array(
-        '0' => "Every day",
-        '1' => 'Monday',
-        '2' => 'Tuesday',
-        '3' => 'Wednesday',
-        '4' => 'Thursday',
-        '5' => 'Friday',
-        '6' => 'Saturday',
-        '7' => 'Sunday',
+        'Everyday' => "Everyday",
+        'Monday' => 'Monday',
+        'Tuesday' => 'Tuesday',
+        'Wedensday' => 'Wednesday',
+        'Thursday' => 'Thursday',
+        'Friday' => 'Friday',
+        'Saturday' => 'Saturday',
+        'Sunday' => 'Sunday',
     );
 
 
@@ -1475,189 +1475,6 @@ class SettingsController extends Controller
             }
         }
 
-
-        // time bussiness
-        $opening_time_bussiness = $opening_time_delivery = $opening_time_collection = '';
-        $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
-
-        $timesetting = $request->all();
-        if (isset($timesetting['bussines']['day']) && count($timesetting['bussines']['day'])) {
-            foreach ($this->days as $keyday => $day) {
-                foreach ($timesetting['bussines']['day'] as $keybussines => $bussinesday) {
-                    if (in_array($keyday, $bussinesday)) {
-                        switch ($keyday) {
-                            case 0:
-                                $Everyday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 1:
-                                $Monday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 2:
-                                $Tuesday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 3:
-                                $Wednesday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 4:
-                                $Thursday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 5:
-                                $Friday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 6:
-                                $Saturday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                            case 7:
-                                $Sunday[] = $timesetting['bussines']['from'][$keybussines] . '-' . $timesetting['bussines']['to'][$keybussines];
-                                break;
-                        }
-                    }
-                }
-            }
-            if (count($Monday) || count($Everyday)) $opening_time_bussiness .= ' Monday,' . implode('|', array_merge($Monday, $Everyday));
-            if (count($Tuesday) || count($Everyday)) $opening_time_bussiness .= ' Tuesday,' . implode('|', array_merge($Tuesday, $Everyday));
-            if (count($Wednesday) || count($Everyday)) $opening_time_bussiness .= ' Wednesday,' . implode('|', array_merge($Wednesday, $Everyday));
-            if (count($Thursday) || count($Everyday)) $opening_time_bussiness .= ' Thursday,' . implode('|', array_merge($Thursday, $Everyday));
-            if (count($Friday) || count($Everyday)) $opening_time_bussiness .= ' Friday,' . implode('|', array_merge($Friday, $Everyday));
-            if (count($Saturday) || count($Everyday)) $opening_time_bussiness .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
-            if (count($Sunday) || count($Everyday)) $opening_time_bussiness .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
-        }
-        /** time delivery */
-        $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
-        if (isset($timesetting['delivery_same_bussiness']) && $timesetting['delivery_same_bussiness'] == 1) {
-            $opening_time_delivery = $opening_time_bussiness;
-        } else if (isset($timesetting['delivery']['day']) && count($timesetting['delivery']['day'])) {
-            foreach ($this->days as $keyday => $day) {
-                foreach ($timesetting['delivery']['day'] as $keydelivery => $deliveryday) {
-                    if (in_array($keyday, $deliveryday)) {
-                        switch ($keyday) {
-                            case 0:
-                                $Everyday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 1:
-                                $Monday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 2:
-                                $Tuesday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 3:
-                                $Wednesday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 4:
-                                $Thursday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 5:
-                                $Friday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 6:
-                                $Saturday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                            case 7:
-                                $Sunday[] = $timesetting['delivery']['from'][$keydelivery] . '-' . $timesetting['delivery']['to'][$keydelivery];
-                                break;
-                        }
-                    }
-                }
-            }
-            if (count($Monday) || count($Everyday)) $opening_time_delivery .= ' Monday,' . implode('|', array_merge($Monday, $Everyday));
-            if (count($Tuesday) || count($Everyday)) $opening_time_delivery .= ' Tuesday,' . implode('|', array_merge($Tuesday, $Everyday));
-            if (count($Wednesday) || count($Everyday)) $opening_time_delivery .= ' Wednesday,' . implode('|', array_merge($Wednesday, $Everyday));
-            if (count($Thursday) || count($Everyday)) $opening_time_delivery .= ' Thursday,' . implode('|', array_merge($Thursday, $Everyday));
-            if (count($Friday) || count($Everyday)) $opening_time_delivery .= ' Friday,' . implode('|', array_merge($Friday, $Everyday));
-            if (count($Saturday) || count($Everyday)) $opening_time_delivery .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
-            if (count($Sunday) || count($Everyday)) $opening_time_delivery .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
-        }
-        //time collection
-        $Everyday = $Monday = $Tuesday = $Wednesday = $Thursday = $Friday = $Saturday = $Sunday = array();
-        if (isset($timesetting['collection_same_bussiness']) && $timesetting['collection_same_bussiness'] == 1) {
-            $opening_time_collection = $opening_time_bussiness;
-        } else if (isset($timesetting['collection']['day']) && count($timesetting['collection']['day'])) {
-            foreach ($this->days as $keyday => $day) {
-                foreach ($timesetting['collection']['day'] as $keycollection => $collectionday) {
-                    if (in_array($keyday, $collectionday)) {
-                        switch ($keyday) {
-                            case 0:
-                                $Everyday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 1:
-                                $Monday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 2:
-                                $Tuesday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 3:
-                                $Wednesday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 4:
-                                $Thursday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 5:
-                                $Friday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 6:
-                                $Saturday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                            case 7:
-                                $Sunday[] = $timesetting['collection']['from'][$keycollection] . '-' . $timesetting['collection']['to'][$keycollection];
-                                break;
-                        }
-                    }
-                }
-            }
-            if (count($Monday) || count($Everyday)) $opening_time_collection .= ' Monday,' . implode('|', array_merge($Monday, $Everyday));
-            if (count($Tuesday) || count($Everyday)) $opening_time_collection .= ' Tuesday,' . implode('|', array_merge($Tuesday, $Everyday));
-            if (count($Wednesday) || count($Everyday)) $opening_time_collection .= ' Wednesday,' . implode('|', array_merge($Wednesday, $Everyday));
-            if (count($Thursday) || count($Everyday)) $opening_time_collection .= ' Thursday,' . implode('|', array_merge($Thursday, $Everyday));
-            if (count($Friday) || count($Everyday)) $opening_time_collection .= ' Friday,' . implode('|', array_merge($Friday, $Everyday));
-            if (count($Saturday) || count($Everyday)) $opening_time_collection .= ' Saturday,' . implode('|', array_merge($Saturday, $Everyday));
-            if (count($Sunday) || count($Everyday)) $opening_time_collection .= ' Sunday,' . implode('|', array_merge($Sunday, $Everyday));
-        }
-
-
-        //Closing Dates
-        if (isset($timesetting['closing_dates'])) {
-            $closing_dates = implode(',', array_filter($timesetting['closing_dates']));
-            $data['business_closing_dates'] = trim($closing_dates);
-        }
-
-
-        $data['opening_time_bussness'] = trim($opening_time_bussiness);
-        $data['opening_time_delivery'] = trim($opening_time_delivery);
-        $data['opening_time_collection'] = trim($opening_time_collection);
-
-        foreach ($data as $key => $new)
-        {
-            if($user_group_id == 1)
-            {
-                $query = Settings::where('store_id', $current_store_id)->where('key', $key)->first();
-            }
-            else
-            {
-                $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
-            }
-            $setting_id = isset($query->setting_id) ? $query->setting_id : '';
-
-            if (!empty($setting_id) || $setting_id != '') {
-                $timesetting = Settings::find($setting_id);
-                $timesetting->value = $new;
-                $timesetting->update();
-            } else {
-                $timesetting = new Settings();
-                if($user_group_id == 1)
-                {
-                    $timesetting->store_id = $current_store_id;
-                }
-                else
-                {
-                    $timesetting->store_id = $user_shop_id;
-                }
-                $timesetting->group = 'config_time';
-                $timesetting->key = $key;
-                $timesetting->value = $new;
-                $timesetting->serialized = 1;
-                $timesetting->save();
-            }
-        }
         return redirect()->route('openclosetime')->with('success', 'Open/Close time Updated..');
     }
 

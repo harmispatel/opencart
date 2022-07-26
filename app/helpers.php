@@ -2245,51 +2245,30 @@ function fetch_subof_sub($id)
 // Function for Open-Close Time
 function openclosetime()
 {
+    date_default_timezone_set("Asia/Kolkata");
+    echo '<pre>';
+
+    // exit();
     // Get Current Theme ID & Store ID
     $currentURL = URL::to("/");
-    $current_theme_id = layoutID($currentURL,'header_id');
-    $theme_id = $current_theme_id['header_id'];
-    $front_store_id =  $current_theme_id['store_id'];
-    // Get Current Theme ID & Store ID
 
-    $days = array(
-        '0' => "Every day",
-        '1' => 'Monday',
-        '2' => 'Tuesday',
-        '3' => 'Wednesday',
-        '4' => 'Thursday',
-        '5' => 'Friday',
-        '6' => 'Saturday',
-        '7' => 'Sunday',
-    );
+    // Get Store Settings & Other Settings
+    $store_data = frontStoreID($currentURL);
 
-    $times = array(
-        '00:00' => 'Start day',
-        '01:00' => "1:00 AM",
-        '02:00' => "2:00 AM",
-        '03:00' => "3:00 AM",
-        '04:00' => "4:00 AM",
-        '05:00' => "5:00 AM",
-        '06:00' => "6:00 AM",
-        '07:00' => "7:00 AM",
-        '08:00' => "8:00 AM",
-        '09:00' => "9:00 AM",
-        '10:00' => "10:00 AM",
-        '11:00' => "11:00 AM",
-        '12:00' => "12:00 AM",
-        '13:00' => "1:00 PM",
-        '14:00' => "2:00 PM",
-        '15:00' => "3:00 PM",
-        '16:00' => "4:00 PM",
-        '17:00' => "5:00 PM",
-        '18:00' => "6:00 PM",
-        '19:00' => "7:00 PM",
-        '20:00' => "8:00 PM",
-        '21:00' => "9:00 PM",
-        '22:00' => "10:00 PM",
-        '23:00' => "11:00 PM",
-        '23:59' => 'End day'
-    );
+    // Get Current Front Store ID
+    $front_store_id =  $store_data['store_id'];
+
+    // Current Date
+    $curr_date = date('d-m-Y');
+
+    // StrTo Close date
+    $str_to_close_date = strtotime(date('Y-m-d'));
+
+    // Current Time
+    $curr_time =  time();
+
+    // Get Current Day
+    $curr_day = date("l",strtotime($curr_date));
 
     $key = ([
         'opening_time_collection',
@@ -2307,131 +2286,107 @@ function openclosetime()
         'bussines',
     ]);
 
-    $minitunes = array('00', '10', '20', '30', '40', '50');
-    $timearray = array();
-    $timearray['00:00'] = '00:00';
-    for ($i = 0; $i <= 23; $i++)
+
+    $time_data = [];
+    $data = [];
+
+    foreach($key as $newkey)
     {
-        foreach ($minitunes as $phut) {
-            $timearray[$i . ':' . $phut] = $i . ':' . $phut;
-        }
+        $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $newkey)->first();
+        $time_data[$newkey] = isset($query->value) ? $query->value : '';
     }
-    $timearray['23:59'] = '23:59';
-    $times = $times = $timearray;
 
+    $get_business_days = isset($time_data['bussines']) ? unserialize($time_data['bussines']) : '';
 
-    $open_close = [];
+    $get_closing_dates = isset($time_data['closing_dates']) ? unserialize($time_data['closing_dates']) : '';
 
-    foreach ($key as $row)
+    $delivery_same_bussiness = isset($time_data['delivery_same_bussiness']) ? $time_data['delivery_same_bussiness'] : 0;
+
+    if(!empty($get_business_days['day']) ||  isset($get_business_days['day']))
     {
-        $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+        foreach($get_business_days['day'] as $key => $bdays)
+        {
+            $bdays_array = $bdays;
 
-        $open_close[$row] = isset($query->value) ? $query->value : '';
+            if(!empty(array_filter($get_closing_dates)))
+            {
+                foreach($get_closing_dates as $key => $cdate)
+                {
+                    $new_c_date = strtotime($cdate);
+
+                    if($str_to_close_date == $new_c_date)
+                    {
+                        $data['store_open_close'] = 'close';
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if(in_array('Everyday',$bdays_array))
+                {
+                    $data['day'] = 'Everyday';
+                    $data['from_time'] = strtotime($get_business_days['from'][$key]);
+                    $data['to_time'] = strtotime($get_business_days['to'][$key]);
+
+                    if($curr_time >= $data['from_time'] && $curr_time <= $data['to_time'])
+                    {
+                        $data['store_open_close'] = 'open';
+                    }
+                    else
+                    {
+                        $data['store_open_close'] = 'close';
+                    }
+
+                    break;
+                }
+                elseif(in_array($curr_day,$bdays_array))
+                {
+                    $data['day'] = $curr_day;
+                    $data['from_time'] = strtotime($get_business_days['from'][$key]);
+                    $data['to_time'] = strtotime($get_business_days['to'][$key]);
+
+                    if($curr_time >= $data['from_time'] && $curr_time <= $data['to_time'])
+                    {
+                        $data['store_open_close'] = 'open';
+                    }
+                    else
+                    {
+                        $data['store_open_close'] = 'close';
+                    }
+
+                    break;
+                }
+            }
+
+        }
+
+    }
+    else
+    {
+        $data['store_open_close'] = 'close';
     }
 
-    $delivery = unserialize($open_close['delivery']);
-    $collection = unserialize($open_close['collection']);
-    $bussines = unserialize($open_close['bussines']);
-    $days = $days;
-    $times = $times;
 
-    // bussines Time
-    $openday = array();
-    $fromtime = array();
-    $totime = array();
-    if (isset($bussines['day']) && count($bussines['day'])) {
-        foreach ($bussines['day'] as $keyday => $daytime) {
-            $day2 = array();
-            foreach ($days as $key => $day) {
-                if (in_array($key, $daytime)) {
-                   $day2[] = $day;
-                }
-            }
-            $openday[]=$day2;
-            foreach ($times as $key => $time) {
-                if (isset($bussines['from'][$keyday]) && $bussines['from'][$keyday] == $key) {
-                    $fromtime[] = $time;
-                }
-            }
-            foreach ($times as $key => $time) {
-                if (isset($bussines['to'][$keyday]) && $bussines['to'][$keyday] == $key) {
-                    $totime[] = $time;
-                }
-            }
+    // Delivery Hours
+    if(!empty($delivery_same_bussiness) ||  isset($delivery_same_bussiness))
+    {
+        if($delivery_same_bussiness == 1)
+        {
+            $data['delivery_same_business'] = 'yes';
+        }
+        else
+        {
+            $data['delivery_same_business'] = 'no';
+
+
+
         }
     }
 
-    // Collection Time
-    $collectiondays = array();
-    $collectionfrom = array();
-    $collectionto = array();
-    if (isset($collection['day']) && count($collection['day'])) {
-        foreach ($collection['day'] as $keyday => $daytime) {
-            $collectionday = array();
-            foreach ($days as $key => $day) {
-                if (in_array($key, $daytime)) {
-                   $collectionday[] = $day;
-                }
-            }
-            $collectiondays[]=$collectionday;
-            foreach ($times as $key => $time) {
-                if (isset($collection['from'][$keyday]) && $collection['from'][$keyday] == $key) {
-                    $collectionfrom[] = $time;
-                }
-            }
-            foreach ($times as $key => $time) {
-                if (isset($collection['to'][$keyday]) && $collection['to'][$keyday] == $key) {
-                    $collectionto[] = $time;
-                }
-            }
-        }
-    }
-
-    // delivery Time
-    $deliverydays = array();
-    $deliveryfrom = array();
-    $deliveryto = array();
-    if (isset($delivery['day']) && count($delivery['day'])) {
-        foreach ($delivery['day'] as $keyday => $daytime) {
-            $deliveryday = array();
-            foreach ($days as $key => $day) {
-                if (in_array($key, $daytime)) {
-                   $deliveryday[] = $day;
-                }
-            }
-            $deliverydays[]=$deliveryday;
-            foreach ($times as $key => $time) {
-                if (isset($delivery['from'][$keyday]) && $delivery['from'][$keyday] == $key) {
-                    $deliveryfrom[] = $time;
-                }
-            }
-            foreach ($times as $key => $time) {
-                if (isset($delivery['to'][$keyday]) && $delivery['to'][$keyday] == $key) {
-                    $deliveryto[] = $time;
-                }
-            }
-        }
-    }
-    $data['deliverydays'] = $deliverydays;
-    $data['deliveryfrom'] = $deliveryfrom;
-    $data['deliveryto'] = $deliveryto;
-
-    $data['collectiondays'] = $collectiondays;
-    $data['collectionfrom'] = $collectionfrom;
-    $data['collectionto'] = $collectionto;
-
-    $data['openday'] = $openday;
-    $data['fromtime'] = $fromtime;
-    $data['totime'] = $totime;
-
-    $data['collection_same_bussiness'] = $open_close['collection_same_bussiness'];
-    $data['delivery_same_bussiness'] = $open_close['delivery_same_bussiness'];
-
-    $data['collection_gaptime'] = $open_close['collection_gaptime'];
-    $data['delivery_gaptime'] = $open_close['delivery_gaptime'];
-    $data['close_date'] = $open_close['business_closing_dates'];
-
-    return $data;
+    echo '<pre>';
+    print_r($data);
+    exit();
 }
 
 
