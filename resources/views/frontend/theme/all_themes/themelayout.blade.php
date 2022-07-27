@@ -2219,29 +2219,11 @@
                 <div class="_divider"></div>
                 <a href="tel:{{ isset($store_setting['config_telephone']) ? $store_setting['config_telephone'] : '' }}">TEL: {{ isset($store_setting['config_telephone']) ? $store_setting['config_telephone'] : '' }}</a>
                 <h3 class="title text-uppercase __divider">hours</h3>
-                
-                @php
-                    $openday =$openclose['openday'];
-                    $fromtime = $openclose['fromtime'];
-                    $totime = $openclose['totime'];
-                @endphp
-
-                @foreach ($openday as $key => $item)
-                    @php
-                        $t = count($item)-1;
-                        $firstday = $item[0];
-                        $lastday = $item[$t];
-                    @endphp
-                    <div class="__time">
-                        @if ($firstday == $lastday)
-                            <span>{{ $firstday }}</span>
-                        @else
-                            <span>{{ $firstday }}-{{ $lastday }}</span>
-                        @endif
-                            <span>{{ $fromtime[$key] }}-{{ $totime[$key] }}</span>
-                    </div>
-                    <br>
-                @endforeach
+                <div class="__time">
+                    <span>demo - day</span>
+                    <span>00 - 00</span>
+                </div>
+                <br>
             </div>
         </section>
     @endif
@@ -2255,31 +2237,12 @@
                 <div class="default-title-v3 text-center">
                     <h3 class="title text-capitalize">opening hours</h3>
                 </div>
-        
-                @php
-                    $openday =$openclose['openday'];
-                    $fromtime = $openclose['fromtime'];
-                    $totime = $openclose['totime'];
-                @endphp
-
-                @foreach ($openday as $key => $item)
-                    @php
-                        $t = count($item)-1;
-                        $firstday = $item[0];
-                        $lastday = $item[$t];
-                    @endphp
-
-                    <div class="__time">
-                        <div class="__time-item">
-                            @if ($firstday == $lastday)
-                                <strong>{{ $firstday }}</strong>
-                            @else
-                                <strong>{{ $firstday }} - {{ $lastday }}</strong>
-                            @endif
-                            <span>{{ $fromtime[$key] }} - {{ $totime[$key] }}</span>
-                        </div>
-                    </div><br>
-                @endforeach               
+                <div class="__time">
+                    <div class="__time-item">
+                        <strong>demo - day</strong>
+                        <span>00 - 00</span>
+                    </div>
+                </div><br>
             </div>
         </section>
     @endif
@@ -2294,30 +2257,13 @@
                     <h3 class="title text-capitalize">opening hours</h3>
                 </div>
                 <div class="__time">
-                    @php
-                        $openday =$openclose['openday'];
-                        $fromtime = $openclose['fromtime'];
-                        $totime = $openclose['totime'];
-                    @endphp
-                    @foreach ($openday as $key => $item)
-                        @php
-                            $t = count($item)-1;
-                            $firstday = $item[0];
-                            $lastday = $item[$t];
-                        @endphp
-
-                        <div class="__time-item">
-                            @if ($firstday == $lastday)
-                                <strong>{{ $firstday }}</strong>
-                            @else
-                                <strong>{{ $firstday }} - {{ $lastday }}</strong>
-                            @endif
-                            <div>
-                                <span>{{ $fromtime[$key] }}</span>
-                                <span>{{ $totime[$key] }}</span>
-                            </div>
+                    <div class="__time-item">
+                        <strong>demo - day</strong>
+                        <div>
+                            <span>00</span>
+                            <span>00</span>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             </div>
         </section>
@@ -2335,33 +2281,15 @@
                 <div class="__container">
                     <img class="img-fluid mb-3" src="{{ get_css_url().'public/assets/theme5/img/icon/time-top-flower.svg' }}" />
                     <strong class="__time-title">OPEN NOW</strong>
-        
-                    @php
-                        $openday =$openclose['openday'];
-                        $fromtime = $openclose['fromtime'];
-                        $totime = $openclose['totime'];
-                    @endphp
-
-                    @foreach ($openday as $key => $item)
-                        @php
-                            $t = count($item)-1;
-                            $firstday = $item[0];
-                            $lastday = $item[$t];
-                        @endphp
-                            <div class="__time">
-                                @if ($firstday == $lastday)
-                                    <strong>{{ $firstday }}</strong>
-                                @else
-                                    <strong>{{ $firstday }} - {{ $lastday }}</strong>
-                                @endif
-                                <div class="__time-box">
-                                    <div class="__left-time"><span>{{  date('H',strtotime($fromtime[$key])) }}</span></div>
-                                    <div class="__time-divier"></div>
-                                    <div class="__right-time"><span>{{ date('H',strtotime($totime[$key])) }}</span></div>
-                                </div>
-                            </div>
-                        <br>
-                    @endforeach
+                    <div class="__time">
+                        <strong>demo - day</strong>
+                        <div class="__time-box">
+                            <div class="__left-time"><span>00</span></div>
+                            <div class="__time-divier"></div>
+                            <div class="__right-time"><span>00</span></div>
+                        </div>
+                    </div>
+                    <br>
                 </div>
             </div>
         </section>
@@ -2381,31 +2309,16 @@
                     <div class="__divider"></div>
                     <strong class="__time-title">OPEN NOW</strong>
                     <div class="__divider"></div>
-                    @php
-                        $openday =$openclose['openday'];
-                        $fromtime = $openclose['fromtime'];
-                        $totime = $openclose['totime'];
-                    @endphp
-                    @foreach ($openday as $key => $item)
-                        @php
-                            $t = count($item)-1;
-                            $firstday = $item[0];
-                            $lastday = $item[$t];
-                        @endphp
-                        <div class="__time">
-                            @if ($firstday == $lastday)
-                                <strong>{{ $firstday }}</strong>
-                            @else
-                                <strong>{{ $firstday }} - {{ $lastday }}</strong>
-                            @endif
-                            <div class="__time-box">
-                                <div class="__left-time"><span>{{ $fromtime[$key] }}</span></div>
-                                <div class="__time-divier"></div>
-                                <div class="__right-time"><span>{{ $totime[$key] }}</span></div>
-                            </div>
+                    <div class="__time">
+                        <strong>demo - day</strong>
+                        @endif
+                        <div class="__time-box">
+                            <div class="__left-time"><span>00</span></div>
+                            <div class="__time-divier"></div>
+                            <div class="__right-time"><span>00</span></div>
                         </div>
-                        <br>
-                    @endforeach
+                    </div>
+                    <br>
                 </div>
             </div>
         </section>
