@@ -2246,7 +2246,6 @@ function fetch_subof_sub($id)
 function openclosetime()
 {
     date_default_timezone_set("Asia/Kolkata");
-    echo '<pre>';
 
     // exit();
     // Get Current Theme ID & Store ID
@@ -2296,11 +2295,31 @@ function openclosetime()
         $time_data[$newkey] = isset($query->value) ? $query->value : '';
     }
 
+    // Get Days from DB
     $get_business_days = isset($time_data['bussines']) ? unserialize($time_data['bussines']) : '';
 
+    // Get Closing Date from DB
     $get_closing_dates = isset($time_data['closing_dates']) ? unserialize($time_data['closing_dates']) : '';
 
+    // Get Delivery Same Business
     $delivery_same_bussiness = isset($time_data['delivery_same_bussiness']) ? $time_data['delivery_same_bussiness'] : 0;
+
+    // Get Collection Same Business
+    $collection_same_bussiness = isset($time_data['collection_same_bussiness']) ? $time_data['collection_same_bussiness'] : 0;
+
+
+    // Get Delivery Gap Time
+    $get_delivery_gap_time = (isset($time_data['delivery_gaptime']) && !empty($time_data['delivery_gaptime'])) ? $time_data['delivery_gaptime'] : 1;
+
+    // Get Collection Gap Time
+    $get_collection_gap_time = (isset($time_data['collection_gaptime']) && !empty($time_data['collection_gaptime'])) ? $time_data['collection_gaptime'] : 1;
+
+    // Get Delivery Days from DB
+    $get_delivery_days = isset($time_data['delivery']) ? unserialize($time_data['delivery']) : '';
+
+    // Get Collection Days from DB
+    $get_collection_days = isset($time_data['collection']) ? unserialize($time_data['collection']) : '';
+
 
     if(!empty($get_business_days['day']) ||  isset($get_business_days['day']))
     {
@@ -2374,19 +2393,190 @@ function openclosetime()
         if($delivery_same_bussiness == 1)
         {
             $data['delivery_same_business'] = 'yes';
+
+            $delivery_business_from_time = isset($data['from_time']) ? $data['from_time'] : '';
+            $delivery_business_to_time = isset($data['to_time']) ? $data['to_time'] : '';
+
+            $manghour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
+            $mangminus = array('00', '15', '30', '45');
+
+            $delivery_time_result = array();
+            $timebetween = date('H:i', ($curr_time + $get_delivery_gap_time * 60));
+
+            foreach ($manghour as $hour)
+            {
+                foreach ($mangminus as $minus)
+                {
+                    $temptime = $hour . ':' . $minus;
+                    if (strtotime($timebetween) < strtotime($temptime) && $delivery_business_from_time <= strtotime($temptime) && strtotime($temptime) <= $delivery_business_to_time) {
+                        if (!in_array($temptime, $delivery_time_result))
+                            $delivery_time_result[] = $temptime . '-' . date('H:i', (strtotime($temptime) + 15 * 60));
+                    }
+                }
+            }
+
+            $data['delivery_gap_time_array'] = $delivery_time_result;
+
         }
         else
         {
             $data['delivery_same_business'] = 'no';
 
+            if(!empty($get_delivery_days['day']) ||  isset($get_delivery_days['day']))
+            {
+                foreach($get_delivery_days['day'] as $key => $ddays)
+                {
+                    $ddays_array = $ddays;
 
+                    if(in_array('Everyday',$ddays_array))
+                    {
+                        $data['delivry_day'] = 'Everyday';
+                        $data['delivery_from_time'] = strtotime($get_delivery_days['from'][$key]);
+                        $data['delivery_to_time'] = strtotime($get_delivery_days['to'][$key]);
+
+                        break;
+                    }
+                    elseif(in_array($curr_day,$ddays_array))
+                    {
+                        $data['delivry_day'] = $curr_day;
+                        $data['delivery_from_time'] = strtotime($get_delivery_days['from'][$key]);
+                        $data['delivery_to_time'] = strtotime($get_delivery_days['to'][$key]);
+
+                        break;
+                    }
+                }
+            }
+
+            $delivery_from_time = isset($data['delivery_from_time']) ? $data['delivery_from_time'] : '';
+            $delivery_to_time = isset($data['delivery_to_time']) ? $data['delivery_to_time'] : '';
+
+            $manghour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
+            $mangminus = array('00', '15', '30', '45');
+
+            $delivery_time_result = array();
+
+            if ($delivery_from_time <= $curr_time && $curr_time <= $delivery_to_time)
+            {
+                $delivery_time_result[] = 'ASAP';
+            }
+
+            $timebetween = date('H:i', ($curr_time + $get_delivery_gap_time * 60));
+
+            foreach ($manghour as $hour)
+            {
+                foreach ($mangminus as $minus)
+                {
+                    $temptime = $hour . ':' . $minus;
+                    if (strtotime($timebetween) < strtotime($temptime) && $delivery_from_time <= strtotime($temptime) && strtotime($temptime) <= $delivery_to_time)
+                    {
+                        if (!in_array($temptime, $delivery_time_result))
+                        {
+                            $delivery_time_result[] = $temptime . '-' . date('H:i', (strtotime($temptime) + 15 * 60));
+                        }
+                    }
+                }
+            }
+
+            $data['delivery_gap_time_array'] = $delivery_time_result;
 
         }
     }
 
-    echo '<pre>';
-    print_r($data);
-    exit();
+
+    // Collection Hours
+    if(!empty($collection_same_bussiness) ||  isset($collection_same_bussiness))
+    {
+        if($collection_same_bussiness == 1)
+        {
+            $data['collection_same_business'] = 'yes';
+
+            $collection_business_from_time = isset($data['from_time']) ? $data['from_time'] : '';
+            $collection_business_to_time = isset($data['to_time']) ? $data['to_time'] : '';
+
+            $manghour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
+            $mangminus = array('00', '15', '30', '45');
+
+            $collection_time_result = array();
+            $timebetween = date('H:i', ($curr_time + $get_collection_gap_time * 60));
+
+            foreach ($manghour as $hour)
+            {
+                foreach ($mangminus as $minus)
+                {
+                    $temptime = $hour . ':' . $minus;
+                    if (strtotime($timebetween) < strtotime($temptime) && $collection_business_from_time <= strtotime($temptime) && strtotime($temptime) <= $collection_business_to_time) {
+                        if (!in_array($temptime, $collection_time_result))
+                            $collection_time_result[] = $temptime . '-' . date('H:i', (strtotime($temptime) + 15 * 60));
+                    }
+                }
+            }
+
+            $data['collection_gap_time_array'] = $collection_time_result;
+
+        }
+        else
+        {
+            if(!empty($get_collection_days['day']) ||  isset($get_collection_days['day']))
+            {
+                foreach($get_collection_days['day'] as $key => $cdays)
+                {
+                    $cdays_array = $cdays;
+
+                    if(in_array('Everyday',$cdays_array))
+                    {
+                        $data['collection_day'] = 'Everyday';
+                        $data['collection_from_time'] = strtotime($get_collection_days['from'][$key]);
+                        $data['collection_to_time'] = strtotime($get_collection_days['to'][$key]);
+
+                        break;
+                    }
+                    elseif(in_array($curr_day,$cdays_array))
+                    {
+                        $data['collection_day'] = $curr_day;
+                        $data['collection_from_time'] = strtotime($get_collection_days['from'][$key]);
+                        $data['collection_to_time'] = strtotime($get_collection_days['to'][$key]);
+
+                        break;
+                    }
+                }
+            }
+
+            $collection_from_time = isset($data['collection_from_time']) ? $data['collection_from_time'] : '';
+            $collection_to_time = isset($data['collection_to_time']) ? $data['collection_to_time'] : '';
+
+            $manghour = array('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23');
+            $mangminus = array('00', '15', '30', '45');
+
+            $collection_time_result = array();
+
+            if ($collection_from_time <= $curr_time && $curr_time <= $collection_to_time)
+            {
+                $collection_time_result[] = 'ASAP';
+            }
+
+            $timebetween = date('H:i', ($curr_time + $get_collection_gap_time * 60));
+
+            foreach ($manghour as $hour)
+            {
+                foreach ($mangminus as $minus)
+                {
+                    $temptime = $hour . ':' . $minus;
+                    if (strtotime($timebetween) < strtotime($temptime) && $collection_from_time <= strtotime($temptime) && strtotime($temptime) <= $collection_to_time)
+                    {
+                        if (!in_array($temptime, $collection_time_result))
+                        {
+                            $collection_time_result[] = $temptime . '-' . date('H:i', (strtotime($temptime) + 15 * 60));
+                        }
+                    }
+                }
+            }
+
+            $data['collection_gap_time_array'] = $collection_time_result;
+
+        }
+    }
+
+    return $data;
 }
 
 

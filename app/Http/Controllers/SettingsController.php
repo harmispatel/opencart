@@ -55,7 +55,7 @@ class SettingsController extends Controller
         'Everyday' => "Everyday",
         'Monday' => 'Monday',
         'Tuesday' => 'Tuesday',
-        'Wedensday' => 'Wednesday',
+        'Wednesday' => 'Wednesday',
         'Thursday' => 'Thursday',
         'Friday' => 'Friday',
         'Saturday' => 'Saturday',

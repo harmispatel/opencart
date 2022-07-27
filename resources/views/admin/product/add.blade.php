@@ -135,39 +135,34 @@
 
                                             <div class="mb-3">
                                                 <label for="category" class="form-label"><span
-                                                        class="text-danger">*</span>Product Icon</label>
+                                                        class="text-danger"></span>Product Icon</label>
                                                 <select name="product_icons[]" id="product_icon"
-                                                    class="form-control {{ $errors->has('product_icons') ? 'is-invalid' : '' }}"
+                                                    class="form-control"
                                                     multiple>
                                                     @foreach ($result['product_icon'] as $productIcon)
                                                         <option value="{{ $productIcon->id }}">
                                                             {{ $productIcon->icon_name }}</option>
                                                     @endforeach
                                                 </select>
-                                                @if ($errors->has('product_icons'))
-                                                    <div class="invalid-feedback">
-                                                        {{ $errors->first('product_icons') }}
-                                                    </div>
-                                                @endif
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">select the days
                                                     availiable</label>
                                                 <div>
-                                                    <input type="checkbox" name="day[]" value="2"> Mon
+                                                    <input type="checkbox" name="day[]" value="1"> Mon
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="3"> Tue
+                                                    <input type="checkbox" name="day[]" value="2"> Tue
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="4"> Wed
+                                                    <input type="checkbox" name="day[]" value="3"> Wed
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="5"> Thu
+                                                    <input type="checkbox" name="day[]" value="4"> Thu
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="6"> Fir
+                                                    <input type="checkbox" name="day[]" value="5"> Fir
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="7"> Sat
+                                                    <input type="checkbox" name="day[]" value="6"> Sat
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="checkbox" name="day[]" value="8"> Sun
+                                                    <input type="checkbox" name="day[]" value="0"> Sun
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>

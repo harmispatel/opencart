@@ -35,7 +35,27 @@
 
     // Get Open-Close Time
     $openclose = openclosetime();
-    // End Open-Close Time
+
+    // Collection Times Array
+    $collection_array = isset($openclose['collection_gap_time_array']) ? $openclose['collection_gap_time_array'] : '';
+
+    // Delivery Times Array
+    $delivery_array = isset($openclose['delivery_gap_time_array']) ? $openclose['delivery_gap_time_array'] : '';
+
+    // Store Open / Close
+    $store_open_close = $openclose['store_open_close'];
+
+    // Get Working Time
+    if($store_open_close == 'open')
+    {
+        $working_from_time = isset($openclose['from_time']) ? date('H:i',$openclose['from_time']) : '0:00';
+        $working_to_time = isset($openclose['to_time']) ? date('H:i',$openclose['to_time']) : '0:00';
+        $working_time = $working_from_time.' - '.$working_to_time;
+    }
+    else
+    {
+        $working_time = '0:00 - 0:00';
+    }
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
@@ -82,6 +102,22 @@
     $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
     $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
     $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
+
+
+    // Get time Method
+    if(session()->has('time_method'))
+    {
+        $time_method = session()->get('time_method');
+    }
+    else
+    {
+        $time_method = '';
+    }
+
+    // echo '<pre>';
+    // print_r($time_method);
+    // exit();
+
 
 @endphp
 
@@ -371,7 +407,6 @@
         {{-- Checkout Step 2 --}}
         <section class="check-main" id="checkout2">
             <div class="container">
-            {{-- <div class="alert alert-danger">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae eum tempore accusantium possimus quo nobis.</div> --}}
                 @if(\Session::has('error'))
                     <div class="alert alert-danger">{{ \Session::get('error') }}</div>
                     {{ \Session::forget('error') }}
@@ -435,7 +470,11 @@
 
                                     <div class="accordion-item" id="colloctiontime">
                                         <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                                            <span>Collection Time</span>
+                                            @if ($userdeliverytype == 'delivery')
+                                                <span>Delivery Time</span>
+                                            @else
+                                                <span>Collection Time</span>
+                                            @endif
                                         </h2>
                                         <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
@@ -446,37 +485,15 @@
                                                                 <div class="login-details-inr fa fa-sort-up w-100">
                                                                     <select class="time_select w-100"
                                                                         name="time_method" id="col_time">
-                                                                        <option value="ASAP" selected>ASAP</option>
-                                                                        @foreach ($collectionresult as $key => $colecttime)
-                                                                            <option id="time_{{ $key }}" value="{{ $colecttime }}">
-                                                                            {{ $colecttime }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="accordion-item" id="dileverytime" style="display: none">
-                                        <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
-                                            <span>Dilevery Time</span>
-                                        </h2>
-                                        <div id="collapsetwo" class="accordion-collapse collapse show" aria-labelledby="headingtwo" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <div class="row justify-content-center">
-                                                    <div class="col-md-4">
-                                                        <div class="login-main text-center">
-                                                            <div class="login-details w-100">
-                                                                <div class="login-details-inr fa fa-sort-up w-100">
-                                                                    <select class="time_select w-100" name="time_method" id="del_time">
-                                                                        <option value="ASAP" selected>ASAP</option>
-                                                                        @foreach ($dileveryresult as $key => $deliverytime)
-                                                                            <option id="time_{{ $key }}" value="{{ $deliverytime }}"> {{ $deliverytime }}</option>
-                                                                        @endforeach
+                                                                        @if ($userdeliverytype == 'delivery')
+                                                                            @foreach ($delivery_array as $delArray)
+                                                                                <option value="{{ $delArray }}" {{ ($time_method == $delArray) ? 'selected' : '' }}>{{ $delArray }}</option>
+                                                                            @endforeach
+                                                                        @else
+                                                                            @foreach ($collection_array as $collArray)
+                                                                                <option value="{{ $collArray }}" {{ ($time_method == $collArray) ? 'selected' : '' }}>{{ $collArray }}</option>
+                                                                            @endforeach
+                                                                        @endif
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -850,7 +867,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="accordion-item" id="dileverytime">
+                        <div class="accordion-item" id="paymentoption">
                             <h2 class="accordion-header accordion-button" id="headingtwo" type="button">
                                 <span>Payment Options</span>
                             </h2>
@@ -932,24 +949,73 @@
         // Document Script
         $('document').ready(function()
         {
-            var d_type = $('input[name="order"]:checked').val();
 
+            var d_type = $('input[name="order"]:checked').val();
             if (d_type == 'delivery')
             {
-                $('#colloctiontime').hide();
-                $('#dileverytime').show();
                 $('#deliveryaddress').show();
             }
 
             if (d_type == 'collection')
             {
-                $('#colloctiontime').show();
-                $('#dileverytime').hide();
                 $('#deliveryaddress').hide();
             }
 
+
+            // Time Method
+            var time = $('.time_select :selected').val();
+            $.ajax({
+                type: "post",
+                url: "{{ url('setTimeMethod') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'time': time,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+                    if(response.success == 1)
+                    {
+                        console.log('time set successfully....');
+                    }
+
+                    if(response.error == 1)
+                    {
+                        console.log('Error : Time not set');
+                    }
+                }
+            });
+
         });
         // End Document Script
+
+
+        // Time Mehod
+        $('.time_select').on('change',function(){
+
+            var time = $('.time_select :selected').val();
+            $.ajax({
+                type: "post",
+                url: "{{ url('setTimeMethod') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'time': time,
+                },
+                dataType: "json",
+                success: function(response)
+                {
+                    if(response.success == 1)
+                    {
+                        console.log('time set successfully....');
+                    }
+
+                    if(response.error == 1)
+                    {
+                        console.log('Error : Time not set');
+                    }
+                }
+            });
+        });
 
 
         // Guest Checkout

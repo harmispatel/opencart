@@ -33,9 +33,23 @@
     // Get Currency Details
     $currency = getCurrencySymbol($store_setting['config_currency']);
 
-    // Get Open-Close Time
-    $openclose = openclosetime();
-    // End Open-Close Time
+     // Get Open-Close Time
+     $openclose = openclosetime();
+
+    // Store Open / Close
+    $store_open_close = $openclose['store_open_close'];
+
+    // Get Working Time
+    if($store_open_close == 'open')
+    {
+        $working_from_time = isset($openclose['from_time']) ? date('H:i',$openclose['from_time']) : '0:00';
+        $working_to_time = isset($openclose['to_time']) ? date('H:i',$openclose['to_time']) : '0:00';
+        $working_time = $working_from_time.' - '.$working_to_time;
+    }
+    else
+    {
+        $working_time = '0:00 - 0:00';
+    }
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
@@ -226,7 +240,11 @@
                     </div>
                     <div class="basket-bt">
                         <a href="{{ route('menu') }}"> <button class="btn">Continue Shopping</button></a>
-                        <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
+                        @if ($store_open_close == 'open')
+                            <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
+                        @else
+                            <button class="btn" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                        @endif
                     </div>
                 @else
                     <div class="pb-4">

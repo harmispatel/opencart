@@ -241,7 +241,7 @@
                                                                 </div>
                                                                 <div class="form-group px-3">
                                                                     <select class="selectday" name="collection[to][{{ $key_collection }}]" class="form-control" style="width: 100% !importent;">
-                                                                        @foreach($times as $key => $time){ }}
+                                                                        @foreach($times as $key => $time)
                                                                         <option @if (isset($collection['to'][$keyday]) && $collection['to'][$keyday] == $key)  {{'selected'}} @endif value="{{ $key }}">{{ $time }}</option>
                                                                         @endforeach
                                                                     </select>

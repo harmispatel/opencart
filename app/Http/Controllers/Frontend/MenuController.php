@@ -552,6 +552,7 @@ class MenuController extends Controller
 
         $d_type = $request->d_type;
 
+
         // Check User ID
         if (session()->has('userid')) {
             $userid = session()->get('userid');
@@ -730,7 +731,9 @@ class MenuController extends Controller
 
         $total_pay = $sub_total - $coupontotal;
 
-        session()->put('flag_post_code','collection');
+
+        session()->put('flag_post_code',$d_type);
+
 
         return response()->json([
             'success' => 1,

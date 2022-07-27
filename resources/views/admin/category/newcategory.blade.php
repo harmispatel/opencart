@@ -87,25 +87,25 @@
                                     <div class="form-group">
                                         <label for="days" class="form-label">Days Available</label><br>
                                         <div class="p-2 rounded" style="border: 1px solid rgb(197, 197, 197)">
-                                            <input type="checkbox" id="inlineCheckbox1" value="1" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox1" value="0" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox1">Sunday</label>
 
-                                            <input type="checkbox" id="inlineCheckbox2" value="2" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox2" value="1" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox2">Monday</label>
 
-                                            <input type="checkbox" id="inlineCheckbox3" value="3" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox3" value="2" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox3">Tuesday</label>
 
-                                            <input type="checkbox" id="inlineCheckbox4" value="4" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox4" value="3" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox4">Wedensday</label>
 
-                                            <input type="checkbox" id="inlineCheckbox5" value="5" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox5" value="4" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox5">Thursday</label>
 
-                                            <input type="checkbox" id="inlineCheckbox6" value="6" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox6" value="5" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox6">Friday</label>
 
-                                            <input type="checkbox" id="inlineCheckbox7" value="7" name="availibleday[]" checked>
+                                            <input type="checkbox" id="inlineCheckbox7" value="6" name="availibleday[]" checked>
                                             <label class="form-check-label pr-3" for="inlineCheckbox7">Saturday</label>
                                         </div>
                                     </div>

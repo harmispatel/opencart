@@ -27,14 +27,29 @@ It's used for View Menu.
     // Store Settings
     $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
-
-
     // Get Currency Details
     $currency = getCurrencySymbol($store_setting['config_currency']);
 
     // Get Open-Close Time
     $openclose = openclosetime();
-    // End Open-Close Time
+
+    // Store Open / Close
+    $store_open_close = $openclose['store_open_close'];
+
+    // Get Current Day
+    $current_day = date("N");
+
+    // Get Working Time
+    if($store_open_close == 'open')
+    {
+        $working_from_time = isset($openclose['from_time']) ? date('H:i',$openclose['from_time']) : '0:00';
+        $working_to_time = isset($openclose['to_time']) ? date('H:i',$openclose['to_time']) : '0:00';
+        $working_time = $working_from_time.' - '.$working_to_time;
+    }
+    else
+    {
+        $working_time = '0:00 - 0:00';
+    }
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
@@ -131,37 +146,8 @@ It's used for View Menu.
         </div>
         <div class="bottom">
             <div class="working-time">
-                <strong class="text-uppercase">Working Time:</strong>
-                @php
-                    $openday = $openclose['openday'];
-                    $fromtime = $openclose['fromtime'];
-                    $totime = $openclose['totime'];
-                    $closedate = $openclose['close_date'];
-                    $closedates = explode(',',$closedate);
-                    $currentdate = strtotime(date("Y-m-d"));
-                    $date_close1 = array();
-                    foreach ($closedates as $value) {
-                        $date_close = strtotime($value);
-                        $date_close1[] = $date_close;
-                    }
-                @endphp
-                @foreach ($openday as $key => $item)
-                    @foreach ($item as $value)
-                        @php
-                            $t = count($item) - 1;
-                            $firstday = $item[0];
-                            $lastday = $item[$t];
-                            $today = time();
-                        @endphp
-                        @if (in_array($currentdate,$date_close1))
-                            <strong>Close</strong>
-                        @else
-                            @if ($today == $value || $firstday == "Every day")
-                                <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                            @endif
-                        @endif
-                    @endforeach
-                @endforeach
+                <strong class="text-uppercase"> Working Time : </strong>
+                <strong>{{ $working_time }}</strong>
             </div>
             <ul class="social-links">
                 <li>
@@ -240,7 +226,7 @@ It's used for View Menu.
                 <div class="row">
                     <div class="col-md-7 col-lg-8">
                         <div class="row">
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div class="cate-part wow animate__fadeInUp cate-list-part" data-wow-duration="1s">
                                     <div class="category-title">
                                         <h2>Categories</h2>
@@ -249,17 +235,22 @@ It's used for View Menu.
                                         <ul class="box-category">
                                             @foreach ($data['category'] as $category)
                                                 @php
+                                                    $available_day = isset($category->availibleday) ? explode(',',$category->availibleday) : '';
                                                     $demo = $category->category_id;
                                                     $productcount = getproductcount($demo);
-
                                                     $catname = strtolower($category->hasOneCategory->name);
                                                 @endphp
-                                                <li>
-                                                    <a href="#{{ str_replace(' ', '', $catname) }}"
-                                                        class="active">{{ $category->hasOneCategory->name }}
-                                                        ({{ $productcount }})
-                                                    </a>
-                                                </li>
+
+                                                @if(!empty($available_day) || $available_day != '')
+                                                    @if (in_array($current_day,$available_day))
+                                                        <li>
+                                                            <a href="#{{ str_replace(' ', '', $catname) }}"
+                                                                class="active">{{ $category->hasOneCategory->name }}
+                                                                ({{ $productcount }})
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endif
                                             @endforeach
                                         </ul>
                                     </div>
@@ -273,169 +264,133 @@ It's used for View Menu.
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-8">
+                            <div class="col-lg-9">
                                 <div class="product-list wow animate__fadeInUp" data-wow-duration="1s">
                                     <div class="product-list-innr">
                                         @foreach ($data['category'] as $key => $value)
                                             @php
+                                                $available_day = isset($value->availibleday) ? explode(',',$value->availibleday) : '';
                                                 $cat_id = $value->category_id;
                                                 $product = getproduct($front_store_id, $cat_id);
                                                 $catvalue = strtolower($value->hasOneCategory->name);
                                             @endphp
-                                            <div class="accordion" id="accordionExample">
-                                                <div class="accordion-item">
-                                                    <h2 class="accordion-header" id="headingOne">
-                                                        <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
-                                                            <span>{{ $value->hasOneCategory->name }}</span>
-                                                            <i class="fa fa-angle-down"></i>
-                                                        </button>
-                                                    </h2>
-                                                    <div id="collapse1{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                        @foreach ($product as $values)
-                                                            <div class="accordion-body">
-                                                                <div class="acc-body-inr">
-                                                                    <div class="row">
-                                                                        <div class="col-md-7">
-                                                                            <div class="acc-body-inr-title">
-                                                                                <h4>
-                                                                                    {{ $values->hasOneDescription['name'] }}
-                                                                                </h4>
-                                                                                @php
-                                                                                    $prodesc = html_entity_decode($values->hasOneDescription['description']);
-                                                                                @endphp
-                                                                                <p>
-                                                                                    {{ strip_tags($prodesc) }}
-                                                                                </p>
-                                                                                <img src="{{  $values->hasOneProduct['image'] }}" width="80" height="80" class="mt-2 mb-2">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-5">
-                                                                            <div class="options-bt-main">
-                                                                                @php
-                                                                                    $sizes = getsize($values->product_id);
-                                                                                @endphp
-                                                                                @if (count($sizes) > 0)
-                                                                                    @foreach ($sizes as $size)
-                                                                                        @php
-                                                                                            $sizeprice = $size->id_product_price_size;
-                                                                                            $productsize = $values->hasOneProduct['product_id'];
-                                                                                            $setsizeprice = $size->price;
-                                                                                        @endphp
-                                                                                        <div class="options-bt">
-                                                                                            <div class="row align-items-center">
-                                                                                                <div class="col-md-5">
-                                                                                                    <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
-                                                                                                </div>
-                                                                                                <div class="col-md-7">
-                                                                                                    @if (in_array($currentdate,$date_close1) )
-                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                            <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
-                                                                                                        </a>
-                                                                                                    @else
-                                                                                                        @foreach ($openday as $key => $item)
-                                                                                                            @foreach ($item as $value)
-                                                                                                                @php
-                                                                                                                    $firsttime = strtotime($fromtime[$key]);
-                                                                                                                    $lasttime = strtotime($totime[$key]);
-                                                                                                                    $today = time();
-                                                                                                                    $date = date('Y-m-d');
-                                                                                                                    $currentday = date('l');
-                                                                                                                @endphp
-                                                                                                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                                        @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                            @if ($setsizeprice == 0)
-                                                                                                                                <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;" disabled>
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                    <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                                </button>
-                                                                                                                            @else
-                                                                                                                                <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
-                                                                                                                                    class="btn options-btn">
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                    <span class="show-carttext sizeprice text-white" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                                </a>
-                                                                                                                            @endif
-                                                                                                                        @endif
-                                                                                                                    @else
-                                                                                                                        @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                            <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }} {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                            </a>
-                                                                                                                        @endif
-                                                                                                                    @endif
-                                                                                                            @endforeach
-                                                                                                        @endforeach
-                                                                                                    @endif
-                                                                                                    @if ($currentday != $value && $firstday != "Every day")
-                                                                                                        <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }} {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                        </a>
-                                                                                                    @endif
-                                                                                                </div>
+
+                                            @if(!empty($available_day) || $available_day != '')
+                                                @if (in_array($current_day,$available_day))
+                                                    <div class="accordion" id="accordionExample">
+                                                        <div class="accordion-item">
+                                                            <h2 class="accordion-header" id="headingOne">
+                                                                <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
+                                                                    <span>{{ $value->hasOneCategory->name }}</span>
+                                                                    <i class="fa fa-angle-down"></i>
+                                                                </button>
+                                                            </h2>
+                                                            <div id="collapse1{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                                @foreach ($product as $values)
+                                                                    @php
+                                                                        $product_available_day = isset($values->hasOneProduct['availibleday']) ? explode(',',$values->hasOneProduct['availibleday']) : '';
+                                                                    @endphp
+
+                                                                    @if (!empty($product_available_day) || $product_available_day != '')
+                                                                        @if (in_array($current_day,$product_available_day))
+                                                                            <div class="accordion-body">
+                                                                                <div class="acc-body-inr">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-7">
+                                                                                            <div class="acc-body-inr-title">
+                                                                                                <h4>
+                                                                                                    {{ $values->hasOneDescription['name'] }}
+                                                                                                </h4>
+                                                                                                @php
+                                                                                                    $prodesc = html_entity_decode($values->hasOneDescription['description']);
+                                                                                                @endphp
+                                                                                                <p>
+                                                                                                    {{ strip_tags($prodesc) }}
+                                                                                                </p>
+                                                                                                <img src="{{  $values->hasOneProduct['image'] }}" width="80" height="80" class="mt-2 mb-2">
                                                                                             </div>
                                                                                         </div>
-                                                                                    @endforeach
-                                                                                @else
-                                                                                    <div class="options-bt">
-                                                                                        <div class="row align-items-center">
-                                                                                            <div class="col-md-5">
-                                                                                                <span>price</span>
-                                                                                            </div>
-                                                                                            <div class="col-md-7">
-                                                                                                @if (in_array($currentdate,$date_close1))
-                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                        <span class="sizeprice hide-carttext text-white">Close<i class="fa fa-shopping-basket"></i></span>
-                                                                                                    </a>
-                                                                                                @else
-                                                                                                    @foreach ($openday as $key => $item)
-                                                                                                        @foreach ($item as $value)
-                                                                                                            @php
-                                                                                                                $firsttime = strtotime($fromtime[$key]);
-                                                                                                                $lasttime = strtotime($totime[$key]);
-                                                                                                                $today = time();
-                                                                                                                $currentday = date('l');
-                                                                                                                $setprice = $values->hasOneProduct['price'];
-                                                                                                                $currentdate = strtotime(date("Y-m-d"));
-                                                                                                            @endphp
-                                                                                                                @if ($today >= $firsttime && $today <= $lasttime)
-                                                                                                                    @if ($currentday == $value || $firstday == "Every day")
-                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                                        </a>
-                                                                                                                    @endif
-                                                                                                                @else
-                                                                                                                    @if ($currentday == $value || $firstday == "Every day")
+                                                                                        <div class="col-md-5">
+                                                                                            <div class="options-bt-main">
+
+                                                                                                @php
+                                                                                                    $sizes = getsize($values->product_id);
+                                                                                                @endphp
+
+                                                                                                @if (count($sizes) > 0)
+                                                                                                    @foreach ($sizes as $size)
+
+                                                                                                        @php
+                                                                                                            $sizeprice = $size->id_product_price_size;
+                                                                                                            $productsize = $values->hasOneProduct['product_id'];
+                                                                                                            $setsizeprice = $size->price;
+                                                                                                        @endphp
+
+                                                                                                        <div class="options-bt">
+                                                                                                            <div class="row align-items-center">
+                                                                                                                <div class="col-md-5">
+                                                                                                                    <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
+                                                                                                                </div>
+                                                                                                                <div class="col-md-7">
+                                                                                                                    @if($store_open_close == 'open')
+                                                                                                                        @if ($setsizeprice == 0)
+                                                                                                                            <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;" disabled>
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            </button>
+                                                                                                                        @else
+                                                                                                                            <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                                class="btn options-btn">
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @endif
+                                                                                                                    @else
                                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }} {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a>
                                                                                                                     @endif
-                                                                                                                @endif
-                                                                                                        @endforeach
+
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
                                                                                                     @endforeach
-                                                                                                @endif
-                                                                                                @if ($currentday != $value && $firstday != "Every day")
-                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                        <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
-                                                                                                    </a>
+                                                                                                @else
+                                                                                                    @php
+                                                                                                        $setprice = $values->hasOneProduct['price'];
+                                                                                                    @endphp
+                                                                                                    <div class="options-bt">
+                                                                                                        <div class="row align-items-center">
+                                                                                                            <div class="col-md-5">
+                                                                                                                <span>price</span>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-7">
+                                                                                                                @if($store_open_close == 'open')
+                                                                                                                    <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    </a>
+                                                                                                                @else
+                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                    </a>
+                                                                                                                @endif
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 @endif
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                @endif
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                                        @endif
+                                                                    @endif
+                                                                @endforeach
                                                             </div>
-                                                        @endforeach
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                @endif
+                                            @endif
+
                                         @endforeach
                                     </div>
                                 </div>
@@ -444,44 +399,18 @@ It's used for View Menu.
                     </div>
                     <div class="col-md-5 col-lg-4">
                         <div class="cart-part wow animate__fadeInUp" data-wow-duration="1s">
-                            @if (in_array($currentdate,$date_close1))
-                            <div class="close-shop">
-                                <h2 class="m-0">Sorry we are closed now!</h2>
-                            </div>
+
+                            @if($store_open_close == 'open')
+                                <div class="alert p-1 text-center" style="background: green;">
+                                    <h2 class="p-1 text-white mb-0">We are open now.</h2>
+                                </div>
                             @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $firsttime = strtotime($fromtime[$key]);
-                                            $lasttime = strtotime($totime[$key]);
-                                            $today = time();
-                                            $currentday = date('l');
-                                            $firstday = $item[0];
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="alert p-1 text-center" style="background: green;">
-                                                    <h2 class="p-1 text-white mb-0">We are open now!</h2>
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="close-shop">
-                                                    <h2>Sorry we are closed now!</h2>
-                                                    <span>We will be opening back at {{ $fromtime[$key] }} Today</span>
-                                                </div>
-                                                @break
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
-                            @if ($currentday != $value && $firstday != "Every day")
-                                <div class="close-shop">
-                                    <h2 class="mb-0">Sorry we are closed now!</h2>
+                                <div class="close-shop text-center">
+                                    <h2>Sorry, We are closed now !</h2>
+                                    <span>We will be opening back at demo Today</span>
                                 </div>
                             @endif
+
                             <div class="mob-view-main">
                                 <div class="mob-view" id="mob-view">
                                     <span class="tg-icon" id="tg-icon"><i class="fas fa-angle-double-up"></i></span>
@@ -664,34 +593,7 @@ It's used for View Menu.
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
                                                     </label><br>
-                                                    @php
-                                                        $collectiondays = $openclose['collectiondays'];
-                                                        $collectionfrom = $openclose['collectionfrom'];
-                                                        $collection_same_bussiness = isset($openclose['collection_same_bussiness']) ? $openclose['collection_same_bussiness'] : '';
-                                                    @endphp
-                                                    @if ($collection_same_bussiness == 1)
-                                                        <span>{{ $openclose['collection_gaptime'] ? $openclose['collection_gaptime'] : 'Select' }}
-                                                            Min</span>
-                                                    @else
-                                                        @foreach ($collectiondays as $key => $item)
-                                                            @foreach ($item as $value)
-                                                                @php
-                                                                    $t = count($item) - 1;
-                                                                    $firstday = $item[0];
-                                                                    $lastday = $item[$t];
-                                                                    $today = date('l');
-                                                                    // $currentdate = strtotime(date("Y-m-d"));
-                                                                @endphp
-                                                                @if (in_array($currentdate,$date_close1))
-                                                                    <span>Close</span>
-                                                                @else
-                                                                    @if ($today == $value || $firstday == "Every day")
-                                                                        <span>Starts at - <b>{{ $collectionfrom[$key] }}</b></span>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
-                                                        @endforeach
-                                                    @endif
+                                                    <span>10  Min</span>
                                                 </div>
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -700,91 +602,31 @@ It's used for View Menu.
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
-                                                    @php
-                                                        $deliverydays = $openclose['deliverydays'];
-                                                        $deliveryfrom = $openclose['deliveryfrom'];
-                                                        $delivery_same_bussiness = isset($openclose['delivery_same_bussiness']) ? $openclose['delivery_same_bussiness'] : '';
-                                                    @endphp
-                                                    @if ($delivery_same_bussiness == 1)
-                                                        <span>{{ $openclose['delivery_gaptime'] ? $openclose['delivery_gaptime'] : 'Select' }} Min</b></span>
-                                                    @else
-                                                        @foreach ($deliverydays as $key => $item)
-                                                            @foreach ($item as $value)
-                                                                @php
-                                                                    $t = count($item) - 1;
-                                                                    $firstday = $item[0];
-                                                                    $lastday = $item[$t];
-                                                                    $today = date('l');
-                                                                    // $currentdate = strtotime(date("Y-m-d"));
-                                                                @endphp
-                                                                @if (in_array($currentdate,$date_close1))
-                                                                    <span>Close</span>
-                                                                @else
-                                                                    @if ($today == $value || $firstday == "Every day")
-                                                                       <span>Starts at - <b>{{ $deliveryfrom[$key] }}</b></span>
-                                                                    @endif
-                                                                @endif
-                                                            @endforeach
-                                                        @endforeach
-                                                    @endif
+                                                    <span>0 Min</b></span>
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            @if (in_array($currentdate,$date_close1))
-                                <div class="closed-now">
-                                    <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+
+                            @if($store_open_close == 'open')
+                                @if (!empty($mycart['size']))
+                                    <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
                                     <div class="closed-now">
-                                        <span class="closing-text">We are closed now!</span>
+                                        <span class="closing-text" style="color: green !important;">We are open now!</span>
                                     </div>
-                                </div>
+                                @else
+                                    <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
+                                    <div class="closed-now">
+                                        <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                    </div>
+                                @endif
                             @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $firsttime = strtotime($fromtime[$key]);
-                                            $lasttime = strtotime($totime[$key]);
-                                            $today = time();
-                                            $currentday = date('l');
-                                            $firstday = $item[0];
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-                                            @if ($today >= $firsttime && $today <= $lasttime)
-                                                @if ($currentday == $value || $firstday == "Every day")
-                                                    @if (!empty($mycart['size']))
-                                                        <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                                        <div class="closed-now">
-                                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
-                                                        </div>
-                                                    @else
-                                                        <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                                        <div class="closed-now">
-                                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
-                                                        </div>
-                                                    @endif
-                                                @endif
-                                                @break
-                                            @else
-                                                @if ($currentday == $value || $firstday == "Every day")
-                                                    <div class="closed-now">
-                                                        <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
-                                                        <div class="closed-now">
-                                                            <span class="closing-text">We are closed now!</span>
-                                                        </div>
-                                                    </div>
-                                                @break
-                                                @endif
-                                            @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
-                            @if ($currentday != $value && $firstday != "Every day")
                                 <div class="closed-now">
                                     <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
                                     <div class="closed-now">
-                                        <span class="closing-text">We are closed now!</span>
+                                        <span class="closing-text">We are closed now !</span>
                                     </div>
                                 </div>
                             @endif

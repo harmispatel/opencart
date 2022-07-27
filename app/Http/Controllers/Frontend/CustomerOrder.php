@@ -79,10 +79,33 @@ class CustomerOrder extends Controller
 
 
 
+
+    // Set time Method
+    public function setTimeMethod(Request $request)
+    {
+        $time = $request->time;
+
+        if(!empty($time) || $time != '')
+        {
+            session()->put('time_method',$time);
+            return response([
+                'success' => 1,
+            ]);
+        }
+        else
+        {
+            return response([
+                'error' => 1,
+            ]);
+        }
+    }
+
+
+
+
     // Function For  Confirm Order
     function confirmorder(Request $request)
     {
-
        // Get Current URL
        $currentURL = URL::to("/");
 
@@ -134,10 +157,13 @@ class CustomerOrder extends Controller
         // End Customer Details
 
         // Get Time Method
-        if (session()->has('time_method')) {
+        if (session()->has('time_method'))
+        {
             $time_method = session()->get('time_method');
-        } else {
-            $time_method = 'ASAP';
+        }
+        else
+        {
+            $time_method = '';
         }
         // End Time Method
 
@@ -770,11 +796,12 @@ class CustomerOrder extends Controller
                             'success_url' => $new_url,
                         ]);
                     }
-                } else //Customer
+                }
+                else //Customer
                 {
                     $usercart = getuserCart($user_id);
-
-                    if (!empty($usercart)) {
+                    if (!empty($usercart))
+                    {
                         // New Order
                         $order = new Orders;
                         $order->invoice_no = 0;
@@ -958,7 +985,7 @@ class CustomerOrder extends Controller
                         $ordertotal->order_id = $order->order_id;
                         $ordertotal->code = 'total';
                         $ordertotal->title = 'Total to Pay';
-                        $ordertotal->text = $$total;
+                        $ordertotal->text = $total;
                         $ordertotal->value = $total;
                         $ordertotal->sort_order = 0;
                         $ordertotal->save();
@@ -1010,15 +1037,7 @@ class CustomerOrder extends Controller
         $additional_directions = isset($request->additional_directions) ? $request->additional_directions : '';
         $area = $request->area;
 
-        $time_method = $request->time_method;
-
         $address = $request->address;
-
-        if (!empty($time_method)) {
-            session()->put('time_method', $time_method);
-        } else {
-            session()->put('time_method', 'ASAP');
-        }
 
         if ($request->has('city')) {
             $request->validate([

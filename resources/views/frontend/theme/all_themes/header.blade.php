@@ -44,6 +44,21 @@
     // Get Open-Close Time
     $openclose = openclosetime();
 
+    // Store Open / Close
+    $store_open_close = $openclose['store_open_close'];
+
+    // Get Working Time
+    if($store_open_close == 'open')
+    {
+        $working_from_time = isset($openclose['from_time']) ? date('H:i',$openclose['from_time']) : '0:00';
+        $working_to_time = isset($openclose['to_time']) ? date('H:i',$openclose['to_time']) : '0:00';
+        $working_time = $working_from_time.' - '.$working_to_time;
+    }
+    else 
+    {
+        $working_time = '0:00 - 0:00';
+    }
+
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
@@ -404,79 +419,9 @@
                     {{-- Topbar Left --}}
                     @if ($menu_topbar_left == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $closedates = explode(',',$closedate);
-                                $currentdate = strtotime(date("Y-m-d"));   
-                                $date_close1 = array();
-                                foreach ($closedates as $value) {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                            @if (in_array($currentdate,$date_close1))
-                                &nbsp;<strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');                         
-                                        @endphp
-                                            @if ($today == $value || $firstday == "Every day")
-                                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @elseif ($firstday == "Every day")
-                                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
-                            
+                            <strong class="text-uppercase">Working Time : </strong>
+                            &nbsp;<strong>{{ $working_time }}</strong>
                         </div>
-                        
-                        {{-- @if (in_array($currentdate,$date_close1))
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                               @if ($menu_topbar_open_close_permission == 1)
-                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                               @endif
-                            </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        @endif --}}
                     @elseif ($menu_topbar_left == 'social_media_links')
                         <ul class="social-links">
                             <li>
@@ -526,78 +471,9 @@
                     {{-- Topbar Center --}}
                     @if ($menu_topbar_center == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $closedates = explode(',',$closedate);
-                                $currentdate = strtotime(date("Y-m-d"));   
-                                $date_close1 = array();
-                                foreach ($closedates as $value) {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                            @if (in_array($currentdate,$date_close1))
-                                &nbsp;<strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');                         
-                                        @endphp
-                                            @if ($today == $value || $firstday == "Every day")
-                                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @elseif ($firstday == "Every day")
-                                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
-                            
+                            <strong class="text-uppercase">Working Time : </strong>
+                            &nbsp;<strong>{{ $working_time }}</strong>
                         </div>
-                        @if (in_array($currentdate,$date_close1))
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                               @if ($menu_topbar_open_close_permission == 1)
-                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                               @endif
-                            </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        @endif
                     @elseif ($menu_topbar_center == 'social_media_links')
                         <ul class="social-links">
                             <li>
@@ -647,78 +523,9 @@
                     {{-- Topbar Right --}}
                     @if ($menu_topbar_right == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $closedates = explode(',',$closedate);
-                                $currentdate = strtotime(date("Y-m-d"));   
-                                $date_close1 = array();
-                                foreach ($closedates as $value) {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                            @if (in_array($currentdate,$date_close1))
-                                &nbsp;<strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');                         
-                                        @endphp
-                                            @if ($today == $value || $firstday == "Every day")
-                                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @elseif ($firstday == "Every day")
-                                                &nbsp;<strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
-                            
+                            <strong class="text-uppercase">Working Time : </strong>
+                            &nbsp;<strong>{{ $working_time }}</strong>
                         </div>
-                        @if (in_array($currentdate,$date_close1))
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                               @if ($menu_topbar_open_close_permission == 1)
-                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                               @endif
-                            </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        @endif
                     @elseif ($menu_topbar_right == 'social_media_links')
                         <ul class="social-links">
                             <li>
@@ -821,232 +628,72 @@
         <header class="header-v2">
             <div class="header-top wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    @php
-                        $openday =$openclose['openday'];
-                        $fromtime = $openclose['fromtime'];
-                        $totime = $openclose['totime'];
-                        $closedate = $openclose['close_date'];
-                        $currentdate = strtotime(date("Y-m-d"));
-                        $closedates = explode(',',$closedate);
-                        $date_close1 = array();
 
-                        foreach ($closedates as $value) 
-                        {
-                            $date_close = strtotime($value);
-                            $date_close1[] = $date_close;
-                        }
-                    @endphp
-
-                    
                     {{-- topbar left --}}
                     @if ($menu_topbar_left == 'open_close_image')
-                        @if (in_array($currentdate,$date_close1))
-                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                @if ($menu_topbar_open_close_permission == 1)
+                        <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                            @if ($menu_topbar_open_close_permission == 1)
+                                @if($store_open_close == 'open')
+                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                                @else
                                     <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                                 @endif
-                            </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firstday = $item[0];
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-            
-                                    @endphp
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @endif
-                                @endforeach
-                            @endforeach
-                        @endif
+                            @endif
+                        </div>                        
                     @elseif ($menu_topbar_left == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
                             <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
                         </a>
                     @else
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-
-                                        @if ($today == $value)
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif                        
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @endif
 
 
                     {{-- topbar center --}}
-                    @if ($menu_topbar_center == 'open_close_image')
-                        @if (in_array($currentdate,$date_close1))
+                    @if ($menu_topbar_center == 'open_close_image')                       
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                                 @if ($menu_topbar_open_close_permission == 1)
-                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @if($store_open_close == 'open')
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @else
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @endif
                                 @endif
-                            </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firstday = $item[0];
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-            
-                                    @endphp
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @endif
-                                @endforeach
-                            @endforeach
-                        @endif
+                            </div>                        
                     @elseif ($menu_topbar_center == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
                             <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
                         </a>
                     @else
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-
-                                        @if ($today == $value)
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif                        
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @endif
 
 
                     {{-- topbar right --}}
                     @if ($menu_topbar_right == 'open_close_image')
-                        @if (in_array($currentdate,$date_close1))
                             <div class="open wow animate__bounceInDown" data-wow-duration="1s">
                                 @if ($menu_topbar_open_close_permission == 1)
-                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @if($store_open_close == 'open')
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @else
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @endif
                                 @endif
                             </div>
-                        @else
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-                                        $firstday = $item[0];
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-            
-                                    @endphp
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @endif
-                                @endforeach
-                            @endforeach
-                        @endif
                     @elseif ($menu_topbar_right == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
                             <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
                         </a>
                     @else
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-
-                                        @if ($today == $value)
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif                        
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @endif
         
@@ -1139,43 +786,8 @@
                     {{-- Topbar left --}}
                     @if ($menu_topbar_left == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-            
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                        @endphp
-
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                @endforeach
-                            @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @elseif ($menu_topbar_left == 'customer_login')
                         @if (!empty($userlogin))
@@ -1217,43 +829,8 @@
                     {{-- Topbar center --}}
                     @if ($menu_topbar_center == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-            
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                        @endphp
-
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                @endforeach
-                            @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @elseif ($menu_topbar_center == 'customer_login')
                         @if (!empty($userlogin))
@@ -1295,43 +872,8 @@
                     {{-- Topbar right --}}
                     @if ($menu_topbar_right == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-            
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                        @endphp
-
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                @endforeach
-                            @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @elseif ($menu_topbar_right == 'customer_login')
                         @if (!empty($userlogin))
@@ -1401,45 +943,18 @@
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
                     </ul>
-                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
-                    @if (in_array($currentdate,$date_close1))
-                        <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                            @if ($menu_topbar_open_close_permission == 1)
-                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
+                    
+                    
+                    <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                        @if ($menu_topbar_open_close_permission == 1)
+                            @if($store_open_close == 'open')
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                            @else
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                             @endif
-                        </div>
-                    @else
-                        @foreach ($openday as $key => $item)
-                            @foreach ($item as $value)
-                                @php
-    
-                                $firsttime = strtotime($fromtime[$key]);
-                                $lasttime = strtotime($totime[$key]);
-                                $today = time();
-                                $currentday = date('l');
-                                $firstday = $item[0];
-    
-                                @endphp
-                                    @if ($today >= $firsttime && $today <= $lasttime)
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @else
-                                        @if ($currentday == $value || $firstday == "Every day")
-                                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;" />
-                                                @endif
-                                            </div>
-                                        @endif
-                                    @endif
-                            @endforeach
-                        @endforeach
-                    @endif
+                        @endif
+                    </div>
+
                     <a class="open-mobile-menu" href="javascript:void(0)"><span class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
                 </div>
             </div>
@@ -1464,81 +979,20 @@
                         </div>
                     @elseif ($menu_topbar_left == 'open_close_image')
                         <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                            @if (in_array($currentdate,$date_close1))
-                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                    @if ($menu_topbar_open_close_permission == 1)
-                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    @if($store_open_close == 'open')
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @else
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                                     @endif
-                                </div>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $firsttime = strtotime($fromtime[$key]);
-                                            $lasttime = strtotime($totime[$key]);
-                                            $today = time();
-                                            $currentday = date('l');
-                                            $firstday = $item[0];
-                                        @endphp                
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     @else
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                    @php
-                                        $t = count($item)-1;
-                                        $firstday = $item[0];
-                                        $lastday = $item[$t];
-                                        $today = date('l');
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @endif
 
@@ -1552,82 +1006,21 @@
                             <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
                         </div>
                     @elseif ($menu_topbar_center == 'open_close_image')
-                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                            @if (in_array($currentdate,$date_close1))
-                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                    @if ($menu_topbar_open_close_permission == 1)
-                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">                            
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    @if($store_open_close == 'open')
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @else
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                                     @endif
-                                </div>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $firsttime = strtotime($fromtime[$key]);
-                                            $lasttime = strtotime($totime[$key]);
-                                            $today = time();
-                                            $currentday = date('l');
-                                            $firstday = $item[0];
-                                        @endphp                
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     @else
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                    @php
-                                        $t = count($item)-1;
-                                        $firstday = $item[0];
-                                        $lastday = $item[$t];
-                                        $today = date('l');
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @endif
 
@@ -1641,82 +1034,21 @@
                             <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}"></a>
                         </div>
                     @elseif ($menu_topbar_right == 'open_close_image')
-                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                            @if (in_array($currentdate,$date_close1))
-                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                    @if ($menu_topbar_open_close_permission == 1)
-                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
+                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;!important">                            
+                            <div class="open wow animate__bounceInDown" data-wow-duration="1s">
+                                @if ($menu_topbar_open_close_permission == 1)
+                                    @if($store_open_close == 'open')
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                                    @else
+                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                                     @endif
-                                </div>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $firsttime = strtotime($fromtime[$key]);
-                                            $lasttime = strtotime($totime[$key]);
-                                            $today = time();
-                                            $currentday = date('l');
-                                            $firstday = $item[0];
-                                        @endphp                
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 120px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                <div class="open wow animate__bounceInDown" data-wow-duration="1s">
-                                                    @if ($menu_topbar_open_close_permission == 1)
-                                                        <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 120px;" />
-                                                    @endif
-                                                </div>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     @else
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                    @php
-                                        $t = count($item)-1;
-                                        $firstday = $item[0];
-                                        $lastday = $item[$t];
-                                        $today = date('l');
-                                        $currentdate = strtotime(date("Y-m-d"));
-                                    @endphp
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @elseif ($firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @endif
 
@@ -1786,41 +1118,8 @@
                     {{-- Topbar left --}}
                     @if ($menu_topbar_left == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @elseif ($menu_topbar_left == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
@@ -1857,41 +1156,8 @@
                     {{-- Topbar center --}}
                     @if ($menu_topbar_center == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @elseif ($menu_topbar_center == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
@@ -1928,41 +1194,8 @@
                     {{-- Topbar right --}}
                     @if ($menu_topbar_right == 'opening_times')
                         <div class="working-time">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-                
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                            $currentdate = strtotime(date("Y-m-d"));
-                                        @endphp
-                                        @if ($today == $value || $firstday == "Every day")
-                                            <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>
                     @elseif ($menu_topbar_right == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
@@ -1998,44 +1231,20 @@
 
                 </div>
             </div>
+
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
-                    {{-- restaurant açık ise open kapalı ise closed clas'ını kullanın--}}
-                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                            @foreach ($openday as $key => $item)
-                                @foreach ($item as $value)
-                                    @php
-            
-                                        $firsttime = strtotime($fromtime[$key]);
-                                        $lasttime = strtotime($totime[$key]);
-                                        $today = time();
-                                        $currentday = date('l');
-                                        $firstday = $item[0];
-                                    @endphp
-
-                                    @if (in_array($currentdate,$date_close1))
-                                        @if ($menu_topbar_open_close_permission == 1)
-                                            <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
-                                        @endif
-                                    @else
-                                        @if ($today >= $firsttime && $today <= $lasttime)
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
-                                                @endif
-                                            @endif
-                                        @else
-                                            @if ($currentday == $value || $firstday == "Every day")
-                                                @if ($menu_topbar_open_close_permission == 1)
-                                                    <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
-                                                @endif
-                                            @endif
-                                        @endif
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        </div>
-                        <ul class="menu">
+                    <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
+                        @if ($menu_topbar_open_close_permission == 1)
+                            @if($store_open_close == 'open')
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                            @else
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
+                            @endif
+                        @endif
+                    </div>
+                    
+                    <ul class="menu">
                         <li class="{{ (request()->is('/')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('home') }}">Home</a>
                         </li>
@@ -2057,14 +1266,17 @@
                         <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
-                        </ul>
-                        <a class="menu-shopping-cart" href="{{ route('cart') }}">
-                        <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
+                    </ul>
+
+                    <a class="menu-shopping-cart" href="{{ route('cart') }}">
+                        <div class="number">
+                            <i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span>
+                        </div>
                         <div class="price-box"><strong>Shopping Cart:</strong>
                             <div class="price"><i class="fas fa-pound-sign"></i><span class="pirce-value">{{ $headertotal }}</span></div>
                         </div>
-                        </a>
-                        <a class="open-mobile-menu" href="javascript:void(0)"><span class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
+                    </a>
+                    <a class="open-mobile-menu" href="javascript:void(0)"><span class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
                 </div>
             </div>
         </header>
@@ -2183,87 +1395,25 @@
                 <div class="container">
                     <div class="working-time"><i class="far fa-clock"></i>
                         <div class="work-innr">
-                            <strong class="text-uppercase">Working Time:</strong>
-                            @php
-                                $openday =$openclose['openday'];
-                                $fromtime = $openclose['fromtime'];
-                                $totime = $openclose['totime'];
-                                $closedate = $openclose['close_date'];
-                                $currentdate = strtotime(date("Y-m-d"));
-                                $closedates = explode(',',$closedate);
-                                $date_close1 = array();
-
-                                foreach ($closedates as $value) 
-                                {
-                                    $date_close = strtotime($value);
-                                    $date_close1[] = $date_close;
-                                }
-                            @endphp
-
-                            @if (in_array($currentdate,$date_close1))
-                                <strong>Close</strong>
-                            @else
-                                @foreach ($openday as $key => $item)
-                                    @foreach ($item as $value)
-                                        @php
-                                            $t = count($item)-1;
-                                            $firstday = $item[0];
-                                            $lastday = $item[$t];
-                                            $today = date('l');
-                                        @endphp
-                                            @if ($today == $value || $firstday == "Every day")
-                                                <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }} </strong>
-                                            @elseif ($firstday == "Every day")
-                                                <strong>{{ $fromtime[$key] }} - {{ $totime[$key] }}</strong>
-                                            @elseif ($value == "")
-                                                <strong>Close</strong>
-                                            @endif
-                                    @endforeach
-                                @endforeach
-                            @endif
+                            <strong class="text-uppercase">Working Time : </strong>
+                            <strong>{{ $working_time }}</strong>
                         </div>        
                     </div>
 
                     <a class="logo" href="{{ route('home') }}">
                         <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
-
-                    @if (in_array($currentdate,$date_close1))
-                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                            @if ($menu_topbar_open_close_permission == 1)
-                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
+                   
+                    <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
+                        @if ($menu_topbar_open_close_permission == 1)
+                            @if($store_open_close == 'open')
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" style="max-width: 80px;"/>
+                            @else
+                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" style="max-width: 80px;"/>
                             @endif
-                        </div>
-                    @else
-                        @foreach ($openday as $key => $item)
-                            @foreach ($item as $value)
-                                @php
-                                    $firsttime = strtotime($fromtime[$key]);
-                                    $lasttime = strtotime($totime[$key]);
-                                    $today = time();
-                                    $currentday = date('l');
-                                    $firstday = $item[0];
-                                @endphp
-                                @if ($today >= $firsttime && $today <= $lasttime)
-                                    @if ($currentday == $value || $firstday == "Every day")
-                                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                                            @if ($menu_topbar_open_close_permission == 1)
-                                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_open_banner']) ? $store_header_settings['menu_topbar_open_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
-                                            @endif
-                                        </div>
-                                    @endif
-                                @else
-                                    @if ($currentday == $value || $firstday == "Every day")
-                                        <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
-                                            @if ($menu_topbar_open_close_permission == 1)
-                                                <img class="img-fluid" src="{{ isset($store_header_settings['menu_topbar_close_banner']) ? $store_header_settings['menu_topbar_close_banner'] : '' }}" alt="banner" style="max-width: 100px;"/>
-                                            @endif
-                                        </div>
-                                    @endif                   
-                                @endif
-                            @endforeach
-                        @endforeach
-                    @endif
+                        @endif
+                    </div>
+
                     <a class="open-mobile-menu" href="javascript:void(0)">
                         <span class="text-uppercase">menu</span>
                         <i class="fas fa-bars"></i>

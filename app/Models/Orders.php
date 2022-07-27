@@ -125,7 +125,7 @@ class Orders extends Model
      if (session()->has('time_method')) {
          $time_method = session()->get('time_method');
      } else {
-         $time_method = 'ASAP';
+         $time_method = '';
      }
      // End Time Method
 
@@ -1152,7 +1152,7 @@ class Orders extends Model
      if (session()->has('time_method')) {
          $time_method = session()->get('time_method');
      } else {
-         $time_method = 'ASAP';
+         $time_method = '';
      }
      // End Time Method
 

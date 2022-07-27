@@ -73,9 +73,9 @@
                                     <div>
                                         <div class="form-group float-right">
                                             <div class="btn-group">
-                                                <input type="radio" class="radioenable" id="cod_enable" name="cod_status" value="1" {{ $paymentstatus['cod_status'] == 1 ? 'checked': '' }}>
+                                                <input type="radio" class="radioenable p_status" id="cod_enable" name="cod_status" value="1" {{ $paymentstatus['cod_status'] == 1 ? 'checked': '' }}>
                                                 <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="cod_enable">Enable</label>
-                                                <input type="radio" class="radiodisable" id="cod_disable" name="cod_status" value="0" {{ $paymentstatus['cod_status'] == 0 ? 'checked': '' }}>
+                                                <input type="radio" class="radiodisable p_status" id="cod_disable" name="cod_status" value="0" {{ $paymentstatus['cod_status'] == 0 ? 'checked': '' }}>
                                                 <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="cod_disable">Disable</label>
                                             </div>
                                         </div>
@@ -85,9 +85,9 @@
                                     <div>
                                         <div class="form-group float-right">
                                             <div class="btn-group">
-                                                <input type="radio" class="radioenable" id="enable_paypal" name="paypal_status" value="1" {{ $paymentstatus['pp_express_status'] == 1 ? 'checked': '' }}>
+                                                <input type="radio" class="radioenable p_status" id="enable_paypal" name="paypal_status" value="1" {{ $paymentstatus['pp_express_status'] == 1 ? 'checked': '' }}>
                                                 <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="enable_paypal">Enable</label>
-                                                <input type="radio" class="radiodisable" id="disable_paypal" name="paypal_status" value="0" {{ $paymentstatus['pp_express_status'] == 0 ? 'checked': '' }}>
+                                                <input type="radio" class="radiodisable p_status" id="disable_paypal" name="paypal_status" value="0" {{ $paymentstatus['pp_express_status'] == 0 ? 'checked': '' }}>
                                                 <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="disable_paypal">Disable</label>
                                             </div>
                                         </div>
@@ -96,9 +96,9 @@
                                     <div>
                                         <div class="form-group float-right">
                                             <div class="btn-group">
-                                                <input type="radio" class="radioenable" id="enable_stripe" name="stripe_status" value="1" {{ $paymentstatus['stripe_status'] == 1 ? 'checked': '' }}>
+                                                <input type="radio" class="radioenable p_status" id="enable_stripe" name="stripe_status" value="1" {{ $paymentstatus['stripe_status'] == 1 ? 'checked': '' }}>
                                                 <label class="btn btn-sm" style="width: 80px; background: black;color:white;" for="enable_stripe">Enable</label>
-                                                <input type="radio" class="radiodisable" id="disable_stripe" name="stripe_status" value="0" {{ $paymentstatus['stripe_status'] == 0 ? 'checked': '' }}>
+                                                <input type="radio" class="radiodisable p_status" id="disable_stripe" name="stripe_status" value="0" {{ $paymentstatus['stripe_status'] == 0 ? 'checked': '' }}>
                                                 <label class="btn btn-sm" style="width: 80px; background: black;color: white;" for="disable_stripe">Disable</label>
                                             </div>
                                         </div>
@@ -126,7 +126,7 @@
 
 <script>
     // Change payment Status
-    $(".radio").on('click', function()
+    $(".p_status").on('click', function()
     {
         let p_status = $(this).val();
         var p_type = $(this).attr("name");

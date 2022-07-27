@@ -159,26 +159,26 @@
                                                                     $days = isset($product->availibleday) ? $product->availibleday : '';
                                                                     $arr = explode(',', $days);
                                                                 @endphp
+                                                                <input type="checkbox" name="day[]" value="1"
+                                                                    {{ in_array(1, $arr) ? 'checked' : '' }}> Mon
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="checkbox" name="day[]" value="2"
-                                                                    {{ in_array(2, $arr) ? 'checked' : '' }}> Mon
+                                                                    {{ in_array(2, $arr) ? 'checked' : '' }}> Tue
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="checkbox" name="day[]" value="3"
-                                                                    {{ in_array(3, $arr) ? 'checked' : '' }}> Tue
+                                                                    {{ in_array(3, $arr) ? 'checked' : '' }}> Wed
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="checkbox" name="day[]" value="4"
-                                                                    {{ in_array(4, $arr) ? 'checked' : '' }}> Wed
+                                                                    {{ in_array(4, $arr) ? 'checked' : '' }}> Thu
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="checkbox" name="day[]" value="5"
-                                                                    {{ in_array(5, $arr) ? 'checked' : '' }}> Thu
+                                                                    {{ in_array(5, $arr) ? 'checked' : '' }}> Fir
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <input type="checkbox" name="day[]" value="6"
-                                                                    {{ in_array(6, $arr) ? 'checked' : '' }}> Fir
+                                                                    {{ in_array(6, $arr) ? 'checked' : '' }}> Sat
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="checkbox" name="day[]" value="7"
-                                                                    {{ in_array(7, $arr) ? 'checked' : '' }}> Sat
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="checkbox" name="day[]" value="8"
-                                                                    {{ in_array(8, $arr) ? 'checked' : '' }}> Sun
+                                                                <input type="checkbox" name="day[]" value="0"
+                                                                    {{ in_array(0, $arr) ? 'checked' : '' }}> Sun
                                                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                                             </div>
                                                         </div>

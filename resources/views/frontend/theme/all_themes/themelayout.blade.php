@@ -78,7 +78,7 @@
     $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
     // Get Open-Close Time
-    $openclose = openclosetime();
+    $open_close_data = openclosetime();
 
 
     // User Delivery Type (Collection/Delivery)
@@ -2204,25 +2204,7 @@
                 <h3 class="sub-title">Opening Hours</h3>
                 <img class="img-fluid" src="{{ get_css_url().'public/assets/theme1/img/icon/opening-hours.svg' }}"/>
 
-                @php
-                    $openday =$openclose['openday'];
-                    $fromtime = $openclose['fromtime'];
-                    $totime = $openclose['totime'];
-                @endphp
-
-                @foreach ($openday as $key => $item)
-                    @php
-                        $t = count($item)-1;
-                        $firstday = $item[0];
-                        $lastday = $item[$t];
-                    @endphp
-                    
-                    @if ($firstday == $lastday)
-                        <p>{{ $firstday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
-                    @else
-                        <p>{{ $firstday }} to {{ $lastday }} {{ $fromtime[$key] }} - {{ $totime[$key] }}</p>
-                    @endif
-                @endforeach
+                <p>DAY 1 - 1</p>
             </div>
         </section>
     @endif
