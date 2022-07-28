@@ -2879,7 +2879,4 @@ function paymentdetails()
 
         return compact('cod', 'stripe', 'paypal');
 }
-
-
-
 ?>

@@ -5,7 +5,10 @@
     This for Edit VoucherTheme
     ----------------------------------------------------------------------------------------------
 -->
-
+@php
+$demo = gallary_redirect_url();
+@endphp
+<input type="hidden" id="gallary" value="{{$demo.'/filemanager'}}">
 {{-- Hedaer --}}
 @include('header')
 {{-- End Header --}}
@@ -130,7 +133,8 @@
 <script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
 
 <script>
-    $('#lfm').filemanager('file');
-   var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
-   $('#lfm').filemanager('image', {prefix: route_prefix});
+    var data = $('#gallary').val();
+     $('#lfm').filemanager('file');
+    var route_prefix =data;
+    $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
