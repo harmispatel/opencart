@@ -34,7 +34,7 @@ It's used for View Menu.
     $openclose = openclosetime();
 
     // Store Open / Close
-    $store_open_close = $openclose['store_open_close'];
+    $store_open_close = isset($openclose['store_open_close']) ? $openclose['store_open_close'] : 'close';
 
     // Get Current Day
     $current_day = date("N");
