@@ -45,7 +45,7 @@
     $openclose = openclosetime();
 
     // Store Open / Close
-    $store_open_close = $openclose['store_open_close'];
+    $store_open_close = isset($openclose['store_open_close']) ? $openclose['store_open_close'] : 'close';
 
     // Get Working Time
     if($store_open_close == 'open')
