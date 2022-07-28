@@ -15,6 +15,9 @@
     $currentURL = URL::to("/");
 
 
+$gallary = gallary_redirect_url();
+
+
     // Get Store Settings & Other Settings
     $store_data = frontStoreID($currentURL);
 
@@ -26,7 +29,7 @@
 @endphp
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-
+<input type="hidden" id="gallary" value="{{$gallary.'/filemanager'}}">
 {{-- Section of List Gallary Setting --}}
 <section>
     <div class="content-wrapper">
@@ -272,11 +275,9 @@
 </script>
 <script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
 <script>
+    var data = $('#gallary').val();
      $('#lfm').filemanager('file');
-    var getUrl = window.location;
-    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]+'/index.php/filemanager';
-    // alert(baseUrl)
-//    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
-   $('#lfm').filemanager('image', {prefix: baseUrl});
+    var route_prefix =data;
+    $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
 {{-- END SCRIPT --}}

@@ -1,3 +1,8 @@
+
+@php
+$demo = gallary_redirect_url();
+@endphp
+<input type="hidden" id="gallary" value="{{$demo.'/filemanager'}}">
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -205,11 +210,11 @@
 <script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
 
 <script>
+    var data = $('#gallary').val();
      $('#lfm').filemanager('file');
-    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+    var route_prefix =data;
     $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
-
 {{--End Script Section --}}
 
 

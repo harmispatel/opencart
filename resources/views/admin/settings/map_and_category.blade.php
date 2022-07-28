@@ -9,7 +9,10 @@
     - Suspend Tab
     ----------------------------------------------------------------------------------------------
 -->
-
+@php
+$demo = gallary_redirect_url();
+@endphp
+<input type="hidden" id="gallary" value="{{$demo.'/filemanager'}}">
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
@@ -343,12 +346,22 @@
                                                     <div class="form-group">
                                                         <label>Logo</label>
                                                         {{-- <input type="file" class="form-control p-1" name="config_logo" id="config_logo"> --}}
-                                                        <input class="form-control p-1   {{ $errors->has('config_logo') ? 'is-invalid' : '' }}" name="config_logo" id="config_logo" type="file">
+                                                        {{-- <input class="form-control p-1   {{ $errors->has('config_logo') ? 'is-invalid' : '' }}" name="config_logo" id="config_logo" type="file">
                                                         @if ($errors->has('config_logo'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('config_logo') }}
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                              <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                                <i class="fa fa-picture-o"></i> Choose
+                                                              </a>
+                                                            </span>
+                                                            <input id="thumbnail" class="form-control" type="text" name="config_logo">
+                                                          </div>
+                                                          <img id="holder" style="margin-top:15px;max-height:100px;">
+
                                                         @if(!empty($map_category['config_logo']) || $map_category['config_logo'] != '')
                                                             <img src="{{ $map_category['config_logo'] }}" width="60">
                                                         @else
@@ -359,12 +372,21 @@
                                                     <div class="form-group">
                                                         <label>Icon</label>
                                                         {{-- <input type="file" class="form-control p-1" name="config_icon" id="config_icon"> --}}
-                                                        <input class="form-control p-1   {{ $errors->has('config_icon') ? 'is-invalid' : '' }}" name="config_icon" id="config_icon" type="file">
+                                                        {{-- <input class="form-control p-1   {{ $errors->has('config_icon') ? 'is-invalid' : '' }}" name="config_icon" id="config_icon" type="file">
                                                         @if ($errors->has('config_icon'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('config_icon') }}
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                                <a id="lfm2" data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white">
+                                                                    <i class="fa fa-picture-o"></i> Choose
+                                                                </a>
+                                                            </span>
+                                                            <input id="thumbnail2" class="form-control" type="text" name="config_icon">
+                                                        </div>
+                                                         <div id="holder2"  style="margin-top:15px;max-height:100px;"></div>
                                                         <code class="text-muted">
                                                             The icon should be a PNG that is 16px x 16px.
                                                         </code><br>
@@ -585,12 +607,21 @@
                                                     <div class="form-group">
                                                         <label>Icon</label>
                                                         {{-- <input type="file" class="form-control p-1" id="suspend_logo" name="suspend_logo"> --}}
-                                                        <input class="form-control p-1   {{ $errors->has('suspend_logo') ? 'is-invalid' : '' }}" name="suspend_logo" id="suspend_logo" type="file">
+                                                        {{-- <input class="form-control p-1   {{ $errors->has('suspend_logo') ? 'is-invalid' : '' }}" name="suspend_logo" id="suspend_logo" type="file">
                                                         @if ($errors->has('suspend_logo'))
                                                             <div class="invalid-feedback">
                                                                 {{ $errors->first('suspend_logo') }}
                                                             </div>
-                                                        @endif
+                                                        @endif --}}
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                                <a id="lfm3" data-input="thumbnail3" data-preview="holder3" class="btn btn-primary text-white">
+                                                                    <i class="fa fa-picture-o"></i> Choose
+                                                                </a>
+                                                            </span>
+                                                            <input id="thumbnail3" class="form-control" type="text" name="suspend_logo">
+                                                        </div>
+                                                        <div id="holder3" style="margin-top:15px;max-height:100px;"></div>
                                                         @if(!empty($map_category['suspend_logo']) || $map_category['suspend_logo'] != '')
                                                             <img src="{{ $map_category['suspend_logo'] }}" width="60">
                                                         @else
@@ -679,6 +710,58 @@
     }
     // End Get Region By Country ID
 
+
+</script>
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+<script>
+    var data = $('#gallary').val();
+     $('#lfm').filemanager('file');
+    var route_prefix =data;
+    $('#lfm').filemanager('image', {prefix: route_prefix});
+</script>
+<script>
+    var lfm = function(id, type, options) {
+        let button = document.getElementById(id);
+
+        button.addEventListener('click', function() {
+            var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
+            var target_input = document.getElementById(button.getAttribute('data-input'));
+            var target_preview = document.getElementById(button.getAttribute('data-preview'));
+
+            window.open(route_prefix + '?type=' +  'image' || 'file', 'FileManager',
+                'width=900,height=600');
+            window.SetUrl = function(items) {
+                var file_path = items.map(function(item) {
+                    return item.url;
+                }).join(',');
+
+                // set the value of the desired input to image url
+                target_input.value = file_path;
+                target_input.dispatchEvent(new Event('change'));
+
+                // clear previous preview
+                target_preview.innerHtml = '';
+
+                // set or change the preview image src
+                items.forEach(function(item) {
+                    let img = document.createElement('img')
+                    img.setAttribute('style', 'display : none')
+                    img.setAttribute('src', item.thumb_url)
+                    target_preview.appendChild(img);
+                });
+
+                // trigger change event
+                target_preview.dispatchEvent(new Event('change'));
+            };
+        });
+    };
+
+    lfm('lfm2', 'file', {
+        prefix: route_prefix
+    });
+    lfm('lfm3', 'image', {
+            prefix: route_prefix
+    });
 
 </script>
 {{-- END SCRIPT --}}
