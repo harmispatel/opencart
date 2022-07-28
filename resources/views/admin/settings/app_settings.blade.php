@@ -117,7 +117,16 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="menu_background_image">Menu Background Image</label>
-                                                    <input type="file" name="menu_background_image" id="menu_background_image" class="form-control p-1 mb-1">
+                                                    {{-- <input type="file" name="menu_background_image" id="menu_background_image" class="form-control p-1 mb-1"> --}}
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                          <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                                                            <i class="fa fa-picture-o"></i> Choose
+                                                          </a>
+                                                        </span>
+                                                        <input id="thumbnail" class="form-control" type="text" name="menu_background_image">
+                                                      </div>
+                                                      <img id="holder" style="margin-top:15px;max-height:100px;">
                                                     @if(!empty($map_category['menu_background_image']) || $map_category['menu_background_image'] != '')
                                                         <img src="{{ $map_category['menu_background_image'] }}" width="70">
                                                     @else
@@ -171,3 +180,11 @@
 {{-- Footer --}}
 @include('footer')
 {{-- End Footer --}}
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+
+
+<script>
+     $('#lfm').filemanager('file');
+    var route_prefix = "filemanager";
+    $('#lfm').filemanager('image', {prefix: route_prefix});
+</script>

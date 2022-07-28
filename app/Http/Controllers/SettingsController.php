@@ -316,7 +316,7 @@ class SettingsController extends Controller
             'config_name' => 'required',
             'config_owner' => 'required',
             'config_address' => 'required',
-            'config_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'config_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'map_post_code' => 'required',
             'config_country_id' => 'required',
             'config_zone_id' => 'required',
@@ -324,8 +324,8 @@ class SettingsController extends Controller
             'config_title' => 'required',
             'file_directory_url' => 'required',
             'config_email' => 'required|email',
-            'config_icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'suspend_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'config_icon' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'suspend_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
@@ -358,54 +358,59 @@ class SettingsController extends Controller
         $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
         $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
         $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-        if ($request->hasFile('config_logo'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_logo')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_logo')->first();
-            }
+        // if ($request->hasFile('config_logo'))
+        // {
+        //     if($user_group_id == 1)
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_logo')->first();
+        //     }
+        //     else
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_logo')->first();
+        //     }
 
-            $old_name = isset($old->value) ? $old->value : '';
+        //     $old_name = isset($old->value) ? $old->value : '';
 
-            if (!empty($old_name) || $old_name != '') {
-                if (file_exists($old_name)) {
-                    unlink($old_name);
-                }
-            }
+        //     if (!empty($old_name) || $old_name != '') {
+        //         if (file_exists($old_name)) {
+        //             unlink($old_name);
+        //         }
+        //     }
 
-            $logo_name = time() . '.' . $request->file('config_logo')->getClientOriginalExtension();
-            $request->file('config_logo')->move(public_path('admin/store_images/logo'), $logo_name);
-            $data['config_logo'] = 'public/admin/store_images/logo/' . $logo_name;
-        }
+        //     $logo_name = time() . '.' . $request->file('config_logo')->getClientOriginalExtension();
+        //     $request->file('config_logo')->move(public_path('admin/store_images/logo'), $logo_name);
+        //     $data['config_logo'] = 'public/admin/store_images/logo/' . $logo_name;
+        // }
+         if($request->config_logo != ''){
+            $data['config_logo'] = $request->config_logo;
+         }
+         if($request->config_icon != ''){
+            $data['config_icon'] = $request->config_icon;
+         }
 
+        // if ($request->hasFile('config_icon'))
+        // {
+        //     if($user_group_id == 1)
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_icon')->first();
+        //     }
+        //     else
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_icon')->first();
+        //     }
 
-        if ($request->hasFile('config_icon'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_icon')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_icon')->first();
-            }
+        //     $old_name = isset($old->value) ? $old->value : '';
 
-            $old_name = isset($old->value) ? $old->value : '';
+        //     if (!empty($old_name) || $old_name != '') {
+        //         if (file_exists($old_name)) {
+        //             unlink($old_name);
+        //         }
+        //     }
 
-            if (!empty($old_name) || $old_name != '') {
-                if (file_exists($old_name)) {
-                    unlink($old_name);
-                }
-            }
-
-            $icon_name = time() . '.' . $request->file('config_icon')->getClientOriginalExtension();
-            $request->file('config_icon')->move(public_path('admin/store_images/icon'), $icon_name);
-            $data['config_icon'] = 'public/admin/store_images/icon/' . $logo_name;
-        }
+        //     $icon_name = time() . '.' . $request->file('config_icon')->getClientOriginalExtension();
+        //     $request->file('config_icon')->move(public_path('admin/store_images/icon'), $icon_name);
+        //     $data['config_icon'] = 'public/admin/store_images/icon/' . $logo_name;
+        // }
 
 
         $data['grecaptcha'] = isset($request->grecaptcha) ? $request->grecaptcha : '';
@@ -428,29 +433,32 @@ class SettingsController extends Controller
         $data['suspend_for'] = isset($request->suspend_for) ? $request->suspend_for : '';
         $data['suspend_time'] = isset($request->suspend_time) ? $request->suspend_time : '';
 
-        if ($request->hasFile('suspend_logo'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'suspend_logo')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'suspend_logo')->first();
-            }
+        if($request->suspend_logo != ''){
+            $data['suspend_logo'] = $request->suspend_logo;
+         }
+        // if ($request->hasFile('suspend_logo'))
+        // {
+        //     if($user_group_id == 1)
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'suspend_logo')->first();
+        //     }
+        //     else
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'suspend_logo')->first();
+        //     }
 
-            $old_name = isset($old->value) ? $old->value : '';
+        //     $old_name = isset($old->value) ? $old->value : '';
 
-            if (!empty($old_name) || $old_name != '') {
-                if (file_exists($old_name)) {
-                    unlink($old_name);
-                }
-            }
+        //     if (!empty($old_name) || $old_name != '') {
+        //         if (file_exists($old_name)) {
+        //             unlink($old_name);
+        //         }
+        //     }
 
-            $suspend_logo_name = time() . '.' . $request->file('suspend_logo')->getClientOriginalExtension();
-            $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'), $suspend_logo_name);
-            $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/' . $suspend_logo_name;
-        }
+        //     $suspend_logo_name = time() . '.' . $request->file('suspend_logo')->getClientOriginalExtension();
+        //     $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'), $suspend_logo_name);
+        //     $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/' . $suspend_logo_name;
+        // }
 
         $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
         $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
@@ -817,30 +825,30 @@ class SettingsController extends Controller
         $data['apple_app_id'] = isset($request->apple_app_id) ? $request->apple_app_id : '';
         $data['app_available'] = isset($request->app_available) ? $request->app_available : '';
         $data['home_bg_color'] = isset($request->home_bg_color) ? $request->home_bg_color : '';
+        $data['menu_background_image'] =$request->menu_background_image;
+        // if ($request->hasFile('menu_background_image'))
+        // {
+        //     if($user_group_id == 1)
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'menu_background_image')->first();
+        //     }
+        //     else
+        //     {
+        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'menu_background_image')->first();
+        //     }
 
-        if ($request->hasFile('menu_background_image'))
-        {
-            if($user_group_id == 1)
-            {
-                $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'menu_background_image')->first();
-            }
-            else
-            {
-                $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'menu_background_image')->first();
-            }
+        //     $old_name = isset($old->value) ? $old->value : '';
 
-            $old_name = isset($old->value) ? $old->value : '';
+        //     if (!empty($old_name) || $old_name != '') {
+        //         if (file_exists($old_name)) {
+        //             unlink($old_name);
+        //         }
+        //     }
 
-            if (!empty($old_name) || $old_name != '') {
-                if (file_exists($old_name)) {
-                    unlink($old_name);
-                }
-            }
-
-            $menu_background_image = time() . '.' . $request->file('menu_background_image')->getClientOriginalExtension();
-            $request->file('menu_background_image')->move(public_path('admin/app_backgrounds'), $menu_background_image);
-            $data['menu_background_image'] = 'public/admin/app_backgrounds/' . $menu_background_image;
-        }
+        //     $menu_background_image = time() . '.' . $request->file('menu_background_image')->getClientOriginalExtension();
+        //     $request->file('menu_background_image')->move(public_path('admin/app_backgrounds'), $menu_background_image);
+        //     $data['menu_background_image'] = 'public/admin/app_backgrounds/' . $menu_background_image;
+        // }
 
         $data['polianna_logo_bg_color'] = isset($request->polianna_logo_bg_color) ? $request->polianna_logo_bg_color : '';
         $data['polianna_menu_cross_color'] = isset($request->polianna_menu_cross_color) ? $request->polianna_menu_cross_color : '';

@@ -6,10 +6,13 @@
     ----------------------------------------------------------------------------------------------
 -->
 
+@php
+$demo = gallary_redirect_url();
+@endphp
+<input type="hidden" id="gallary" value="{{$demo.'/filemanager'}}">
 {{-- Header --}}
 @include('header')
 {{-- End Header --}}
-
 {{-- Section of Edit Category --}}
 <section>
     <div class="content-wrapper">
@@ -364,29 +367,38 @@
                                           <img id="holder" style="margin-top:15px;max-height:100px;">
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->image))
-                                                <img src="{{ $data->image }}" alt="Not Found" width="60">
+                                                <img src="{{ isset($data->image) ? $data->image : '' }}" alt="Not Found" width="60">
                                             @else
                                                 <h3 class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i></h3>
                                             @endif
                                         </div>
                                     </div>
 
-                                    {{-- <div class="form-group">
+                                    <div class="form-group">
                                         <label for="banner">Banner</label>
-                                        <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="banner" id="banner" type="file">
+                                        {{-- <input class="form-control {{ $errors->has('image') ? 'is-invalid' : '' }}" style="padding:3px;" name="banner" id="banner" type="file">
                                         @if ($errors->has('banner'))
                                             <div class="invalid-feedback">
                                                 {{ $errors->first('banner') }}
                                             </div>
-                                        @endif
+                                        @endif --}}
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <a id="lfm2" data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white">
+                                                    <i class="fa fa-picture-o"></i> Choose
+                                                </a>
+                                            </span>
+                                            <input id="thumbnail2" class="form-control" type="text" name="banner">
+                                        </div>
+                                         <div id="holder2"  style="margin-top:15px;max-height:100px;"></div>
                                         <div class="div mt-3 p-2 text-center" style="border: 2px solid black;width:90px;box-shadow: inset -3px -3px 5px rgb(17, 15, 15);">
                                             @if(!empty($data->img_banner))
-                                                <img src="{{ $data->img_banner }}" alt="Not Found" width="60">
+                                                <img src="{{ isset($data->img_banner) ? $data->img_banner : '' }}" alt="Not Found" width="60">
                                             @else
                                                 <h3 class="text-danger"><i class="fa fa-ban" aria-hidden="true"></i></h3>
                                             @endif
                                         </div>
-                                    </div> --}}
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="sortorder" class="form-label">Sort Order</label>
@@ -541,16 +553,65 @@ function deleteOptionSize(id)
 // End Delete Option Size
 
 </script>
+{{--
+    <script>
+        $('#lfm').filemanager('file');
+        var getUrl = window.location;
+        var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]+'/index.php/filemanager';
+        // alert(baseUrl)
+        //    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
+        $('#lfm').filemanager('image', {prefix: baseUrl});
+    </script> --}}
 <script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
-
 <script>
-    $('#lfm').filemanager('file');
-    var getUrl = window.location;
-    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]+'/index.php/filemanager';
-    // alert(baseUrl)
-//    var route_prefix = "http://192.168.1.3/opencart/index.php/filemanager";
-   $('#lfm').filemanager('image', {prefix: baseUrl});
+    var data = $('#gallary').val();
+     $('#lfm').filemanager('file');
+    var route_prefix =data;
+    $('#lfm').filemanager('image', {prefix: route_prefix});
 </script>
+<script>
+    var lfm = function(id, type, options) {
+        let button = document.getElementById(id);
+
+        button.addEventListener('click', function() {
+            var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
+            var target_input = document.getElementById(button.getAttribute('data-input'));
+            var target_preview = document.getElementById(button.getAttribute('data-preview'));
+
+            window.open(route_prefix + '?type=' +  options.type || 'file', 'FileManager',
+                'width=900,height=600');
+            window.SetUrl = function(items) {
+                var file_path = items.map(function(item) {
+                    return item.url;
+                }).join(',');
+
+                // set the value of the desired input to image url
+                target_input.value = file_path;
+                target_input.dispatchEvent(new Event('change'));
+
+                // clear previous preview
+                target_preview.innerHtml = '';
+
+                // set or change the preview image src
+                items.forEach(function(item) {
+                    let img = document.createElement('img')
+                    img.setAttribute('style', 'display : none')
+                    img.setAttribute('src', item.thumb_url)
+                    target_preview.appendChild(img);
+                });
+
+                // trigger change event
+                target_preview.dispatchEvent(new Event('change'));
+            };
+        });
+    };
+
+    lfm('lfm2', 'file', {
+        prefix: route_prefix
+    });
+
+</script>
+
 {{-- END SCRIPT --}}
 
 

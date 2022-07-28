@@ -302,6 +302,7 @@ class CategoryController extends Controller
         //     $bannerurl = $currentURL . '/public/admin/category/banner/';
         //     $catdetail->img_banner = $bannerurl . $bannerimgname;
         // }
+        $catdetail->img_banner = $request->banner;
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0) {
             $availibleday = implode(",", $days);
@@ -414,6 +415,7 @@ class CategoryController extends Controller
             $enable_comment = $cat['enable_comment'];
             $numbercharacter = $cat['numbercharacter'];
             $image = isset($cat['image']) ? $cat['image'] : '';
+
 
             // Insert Category
             $catdetail = new CategoryDetail;
@@ -589,8 +591,16 @@ class CategoryController extends Controller
         //     $request->file('image')->move(public_path('admin/category/'), $imgname);
         //     $categoryurl = $currentURL . '/public/admin/category/';
         // }
-        $catdetail->image =$request->image;
-
+        if($request->image !=''){
+            $catdetail->image =isset($request->image) ? $request->image : '';
+        }
+        if($request->banner !=''){
+            $catdetail->img_banner =isset($request->banner) ? $request->banner : '';
+        }
+//   echo '<pre>';
+//   print_r($request->image);
+//   print_r($request->banner);
+//   exit();
         // Insert Banner Image
         // if ($request->hasFile('banner')) {
         //     $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
@@ -604,7 +614,6 @@ class CategoryController extends Controller
         //     $bannerurl = $currentURL . '/public/admin/category/banner/';
         //     $catdetail->img_banner = $bannerurl . $bannerimgname;
         // }
-
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0) {
             $availibleday = implode(",", $days);

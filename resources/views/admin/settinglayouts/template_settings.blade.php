@@ -618,7 +618,7 @@ $openhour_data = openhoursActive();
                                                                 alt="Not Found" class="w-100">
                                                         </td>
                                                     </tr>
-
+                                                    @if ($slider_id !=2)
                                                     <tr>
                                                         <th class="align-middle">
                                                             <label>Order Online Search</label>
@@ -663,6 +663,8 @@ $openhour_data = openhoursActive();
                                                                 class="form-control">
                                                         </td>
                                                     </tr>
+                                                    @endif
+
 
                                                     <tr>
                                                         <th class="align-middle">
@@ -1217,7 +1219,7 @@ $openhour_data = openhoursActive();
                                                                 class="form-control">
                                                         </td>
                                                     </tr>
-
+                                                    @if ($popularfood_id != 4)
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Description</label>
@@ -1226,6 +1228,8 @@ $openhour_data = openhoursActive();
                                                             <textarea name="popularfood_setting[popularfood_description]" class="form-control">{{ isset($get_popularfood_settings['popularfood_description']) ? $get_popularfood_settings['popularfood_description'] : '' }}</textarea>
                                                         </td>
                                                     </tr>
+                                                    @endif
+
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1407,7 +1411,7 @@ $openhour_data = openhoursActive();
                                                                 class="form-control">
                                                         </td>
                                                     </tr>
-
+                                                    @if ($bestcategory_id != 4)
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Description</label>
@@ -1416,6 +1420,8 @@ $openhour_data = openhoursActive();
                                                             <textarea name="bestcategory_setting[bestcategory_description]" class="form-control">{{ isset($get_bestcategory_settings['bestcategory_description']) ? $get_bestcategory_settings['bestcategory_description'] : '' }}</textarea>
                                                         </td>
                                                     </tr>
+                                                    @endif
+
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1716,7 +1722,7 @@ $openhour_data = openhoursActive();
                                                                 class="form-control">
                                                         </td>
                                                     </tr>
-
+                                                    @if ($reservation_id != 4)
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Description</label>
@@ -1725,6 +1731,8 @@ $openhour_data = openhoursActive();
                                                             <textarea name="reservation_setting[reservation_description]" class="form-control">{{ isset($get_reservation_settings['reservation_description']) ? $get_reservation_settings['reservation_description'] : '' }}</textarea>
                                                         </td>
                                                     </tr>
+                                                    @endif
+
 
                                                 </table>
                                             </div>
