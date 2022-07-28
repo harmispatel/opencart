@@ -114,15 +114,30 @@
                                 <tbody>
                                     @php
                                         $subtotal = 0;
-                                        $delivery_charge = 0;
                                     @endphp
 
                                     @if (isset($mycart['size']))
                                         @foreach ($mycart['size'] as $key => $cart)
                                             @php
-                                                $price = ($cart['main_price']) * ($cart['quantity']);
-                                                $subtotal += $price;
-                                                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0;
+                                                // Price
+                                                if($userdeliverytype == 'delivery')
+                                                {
+                                                    $price = $cart['del_price'];
+                                                    $qty_price = ($cart['del_price']) * ($cart['quantity']);
+                                                }
+                                                elseif($userdeliverytype == 'collection')
+                                                {
+                                                    $price = $cart['col_price'];
+                                                    $qty_price = ($cart['col_price']) * ($cart['quantity']);
+                                                }
+                                                else
+                                                {
+                                                    $price = $cart['main_price'];
+                                                    $qty_price = ($cart['main_price']) * ($cart['quantity']);
+                                                }
+
+                                                $subtotal += $qty_price;
+
                                             @endphp
 
                                             <tr>
@@ -145,10 +160,10 @@
                                                     </div>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ $cart['main_price'] }}</b>
+                                                    <b>{{ $price }}</b>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ number_format($price, 2) }}</b>
+                                                    <b>{{ number_format($qty_price, 2) }}</b>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -157,9 +172,26 @@
                                     @if (isset($mycart['withoutSize']))
                                         @foreach ($mycart['withoutSize'] as $key => $cart)
                                             @php
-                                                $price = $cart['main_price'] * $cart['quantity'];
-                                                $subtotal += $price;
-                                                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0;
+
+                                                // Price
+                                                if($userdeliverytype == 'delivery')
+                                                {
+                                                    $price = $cart['del_price'];
+                                                    $qty_price = $cart['del_price'] * $cart['quantity'];
+                                                }
+                                                elseif($userdeliverytype == 'collection')
+                                                {
+                                                    $price = $cart['col_price'];
+                                                    $qty_price = $cart['col_price'] * $cart['quantity'];
+                                                }
+                                                else
+                                                {
+                                                    $price = $cart['main_price'];
+                                                    $qty_price = $cart['main_price'] * $cart['quantity'];
+                                                }
+
+                                                $subtotal += $qty_price;
+
                                             @endphp
 
                                             <tr>
@@ -182,10 +214,10 @@
                                                     </div>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ $cart['main_price'] }}</b>
+                                                    <b>{{ $price }}</b>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ number_format($price, 2) }}</b>
+                                                    <b>{{ number_format($qty_price, 2) }}</b>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -202,11 +234,11 @@
                                             {
                                                 $couponcode = $subtotal - $Coupon['discount'];
                                             }
-                                            $total = $subtotal - $couponcode + $delivery_charge;
+                                            $total = $subtotal - $couponcode;
                                         }
                                         else
                                         {
-                                            $total = $subtotal + $delivery_charge;
+                                            $total = $subtotal;
                                         }
                                     @endphp
 
@@ -220,10 +252,6 @@
                                 <tr>
                                     <td><b>Sub-Total:</b></td>
                                     <td><span><b>{{ $currency }}{{ $subtotal }}</b></span></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Delivery Charge:</b></td>
-                                    <td><span><b>{{ $currency }}{{ $delivery_charge }}</b></span></td>
                                 </tr>
                                 <tr>
                                     @if(!empty($Coupon) || $Coupon != '')

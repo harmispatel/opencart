@@ -320,6 +320,7 @@
                             $('.store_list').css('color','red');
                             $('div.enter_postcode p').css('display','none');
                             $('.store_list').removeClass('wrap_row');
+                            $('#loading_icon1').css('display','none');
                             setTimeout(function ()
                             {
                                 $('div.enter_postcode p').css('display','block');
@@ -328,8 +329,7 @@
                         }
                         else
                         {
-                            var catpath = location.href;
-                            window.location = catpath;
+                            location.reload();
                         }
                     },
                     error: function()

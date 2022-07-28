@@ -18,6 +18,8 @@ use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
 use App\Models\Footers;
+use App\Models\FreeItem;
+use App\Models\FreeItemadd;
 use App\Models\GallaryLayouts;
 use App\Models\Headers;
 use App\Models\OpenhourLayouts;
@@ -2309,10 +2311,10 @@ function openclosetime()
 
 
     // Get Delivery Gap Time
-    $get_delivery_gap_time = (isset($time_data['delivery_gaptime']) && !empty($time_data['delivery_gaptime'])) ? $time_data['delivery_gaptime'] : 1;
+    $get_delivery_gap_time = (isset($time_data['delivery_gaptime']) && !empty($time_data['delivery_gaptime'])) ? $time_data['delivery_gaptime'] : 0;
 
     // Get Collection Gap Time
-    $get_collection_gap_time = (isset($time_data['collection_gaptime']) && !empty($time_data['collection_gaptime'])) ? $time_data['collection_gaptime'] : 1;
+    $get_collection_gap_time = (isset($time_data['collection_gaptime']) && !empty($time_data['collection_gaptime'])) ? $time_data['collection_gaptime'] : 0;
 
     // Get Delivery Days from DB
     $get_delivery_days = isset($time_data['delivery']) ? unserialize($time_data['delivery']) : '';
@@ -2386,6 +2388,8 @@ function openclosetime()
         $data['store_open_close'] = 'close';
     }
 
+    $data['delivery_gap'] = $get_delivery_gap_time;
+    $data['collection_gap'] = $get_collection_gap_time;
 
     // Delivery Hours
     if(!empty($delivery_same_bussiness) ||  isset($delivery_same_bussiness))
@@ -2576,6 +2580,47 @@ function openclosetime()
         }
     }
 
+
+    // Opening Hours
+    if(!empty($get_business_days['day']) ||  isset($get_business_days['day']))
+    {
+        foreach($get_business_days['day'] as $key => $bdays)
+        {
+            $bdays_array = $bdays;
+
+            if(in_array('Everyday',$bdays_array))
+            {
+                $openHours = array();
+                $data['opning_hours'] = '';
+                $openHours['days'][] = 'Everyday';
+                $openHours['from'][] = $get_business_days['from'][$key];
+                $openHours['to'][] = $get_business_days['to'][$key];
+                break;
+            }
+            else
+            {
+                if(count($bdays_array) == 1)
+                {
+                    $openHours['days'][] = $bdays_array[0];
+                    $openHours['from'][] = $get_business_days['from'][$key];
+                    $openHours['to'][] = $get_business_days['to'][$key];
+                }
+                else
+                {
+                    $ckey = count($bdays_array) - 1;
+                    $days_from = $bdays_array[0];
+                    $bday_to = $bdays_array[$ckey];
+
+                    $openHours['days'][] =  $days_from.' to '.$bday_to;
+                    $openHours['from'][] = $get_business_days['from'][$key];
+                    $openHours['to'][] = $get_business_days['to'][$key];
+                }
+            }
+        }
+    }
+
+    $data['opning_hours'] = $openHours;
+
     return $data;
 }
 
@@ -2719,6 +2764,11 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
             $del_price = isset($product->hasOneToppingProductPriceSize['delivery_price']) ? $product->hasOneToppingProductPriceSize['delivery_price'] : 0.00;
             $data['del_price'] = $del_price;
         }
+        elseif($delivery_type == 'collection')
+        {
+            $col_price = isset($product->hasOneToppingProductPriceSize['collection_price']) ? $product->hasOneToppingProductPriceSize['collection_price'] : 0.00;
+            $data['col_price'] = $col_price;
+        }
 
         $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
         $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
@@ -2731,6 +2781,11 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
         {
             $del_price = isset($product->delivery_price) ? $product->delivery_price : 0.00;
             $data['del_price'] = $del_price;
+        }
+        elseif($delivery_type == 'collection')
+        {
+            $col_price = isset($product->collection_price) ? $product->collection_price : 0.00;
+            $data['col_price'] = $col_price;
         }
         $data['main_price'] = $product->price;
     }
@@ -2846,6 +2901,11 @@ function addtoCart($request,$productid,$sizeid)
             $del_price = isset($product->hasOneToppingProductPriceSize['delivery_price']) ? $product->hasOneToppingProductPriceSize['delivery_price'] : 0.00;
             $data['del_price'] = $del_price;
         }
+        elseif($delivery_type == 'collection')
+        {
+            $col_price = isset($product->hasOneToppingProductPriceSize['collection_price']) ? $product->hasOneToppingProductPriceSize['collection_price'] : 0.00;
+            $data['col_price'] = $col_price;
+        }
         $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
         $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
     }
@@ -2857,6 +2917,11 @@ function addtoCart($request,$productid,$sizeid)
         {
             $del_price = isset($product->delivery_price) ? $product->delivery_price : 0.00;
             $data['del_price'] = $del_price;
+        }
+        elseif($delivery_type == 'collection')
+        {
+            $col_price = isset($product->collection_price) ? $product->collection_price : 0.00;
+            $data['col_price'] = $col_price;
         }
         $data['main_price'] = $product->price;
     }
@@ -3034,6 +3099,28 @@ function gallary_redirect_url()
     $url = url('/');
     return  $url;
 }
+
+
+
+
+
+// Get Free Items
+function getFreeItems($freeIds)
+{
+    $freeItems = [];
+    if(!empty($freeIds) || $freeIds != '')
+    {
+        foreach($freeIds as $id)
+        {
+            $free_item = FreeItemadd::select('name_item')->where('id_free_item',$id)->first();
+
+            $freeItems[$id] = isset($free_item->name_item) ? $free_item->name_item : '';
+        }
+    }
+
+    return $freeItems;
+}
+
 
 
 

@@ -85,6 +85,25 @@ class Orders extends Model
     // Store Settings
     $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
+    // Free Item
+    $f_item = $request->free_item;
+
+    if(!empty($f_item) || $f_item != '')
+    {
+        $free_item = $f_item;
+    }
+    else
+    {
+        if(session()->has('free_item'))
+        {
+            $free_item = session()->get('free_item');
+        }
+        else
+        {
+            $free_item = '';
+        }
+    }
+
      // Get Currency Details
      $currency_code = $store_setting['config_currency'];
      $currency_details = Currency::where('code',$currency_code)->first();
@@ -207,7 +226,7 @@ class Orders extends Model
                      $gorder->date_added = date('Y-m-d h:i:s');
                      $gorder->date_modified = date('Y-m-d h:i:s');
                      $gorder->flag_post_code = session()->get('flag_post_code');
-                     $gorder->free_item = '';
+                     $gorder->free_item = $free_item;
                      $gorder->timedelivery = $time_method;
                      $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
                      $gorder->clear_history = 0;
@@ -335,8 +354,10 @@ class Orders extends Model
 
                      session()->forget('cart1');
                      session()->forget('guest_user');
+                     session()->forget('free_item');
                  }
-             } else // Customer
+             }
+             else // Customer
              {
                  $usercart = getuserCart($user_id);
 
@@ -402,7 +423,7 @@ class Orders extends Model
                  $order->date_added = date('Y-m-d h:i:s');
                  $order->date_modified = date('Y-m-d h:i:s');
                  $order->flag_post_code = session()->get('flag_post_code');
-                 $order->free_item = '';
+                 $order->free_item = $free_item;
                  $order->timedelivery = $time_method;
                  $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                  $order->clear_history = 0;
@@ -412,6 +433,7 @@ class Orders extends Model
                  $last_order_id = $order->order_id;
 
                  session()->put('last_order_id',$order->order_id);
+                 session()->forget('free_item');
 
                  // Order Product
                  if (isset($usercart)) {
@@ -669,7 +691,7 @@ class Orders extends Model
                      $gorder->date_added = date('Y-m-d h:i:s');
                      $gorder->date_modified = date('Y-m-d h:i:s');
                      $gorder->flag_post_code = session()->get('flag_post_code');
-                     $gorder->free_item = '';
+                     $gorder->free_item = $free_item;
                      $gorder->timedelivery = $time_method;
                      $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
                      $gorder->clear_history = 0;
@@ -830,8 +852,10 @@ class Orders extends Model
                      session()->forget('cart1');
                      session()->forget('guest_user');
                      session()->forget('guest_user_address');
+                     session()->forget('free_item');
                  }
-             } else //Customer
+             }
+             else //Customer
              {
                  $usercart = getuserCart($user_id);
 
@@ -898,14 +922,16 @@ class Orders extends Model
                      $order->date_added = date('Y-m-d h:i:s');
                      $order->date_modified = date('Y-m-d h:i:s');
                      $order->flag_post_code = session()->get('flag_post_code');
-                     $order->free_item = '';
+                     $order->free_item = $free_item;
                      $order->timedelivery = $time_method;
                      $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                      $order->clear_history = 0;
                      $order->is_delete = 0;
                      $order->save();
                      $last_order_id = $order->order_id;
+
                      session()->put('last_order_id', $last_order_id);
+                     session()->forget('free_item');
 
                      // Order Product
                      if (isset($usercart)) {
@@ -1104,6 +1130,25 @@ class Orders extends Model
     // Get Current Front Store ID
     $front_store_id =  $store_data['store_id'];
 
+    // Free Item
+    $f_item = $request->free_item;
+
+    if(!empty($f_item) || $f_item != '')
+    {
+        $free_item = $f_item;
+    }
+    else
+    {
+        if(session()->has('free_item'))
+        {
+            $free_item = session()->get('free_item');
+        }
+        else
+        {
+            $free_item = '';
+        }
+    }
+
     // Store Settings
     $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
@@ -1234,7 +1279,7 @@ class Orders extends Model
                      $gorder->date_added = date('Y-m-d h:i:s');
                      $gorder->date_modified = date('Y-m-d h:i:s');
                      $gorder->flag_post_code = session()->get('flag_post_code');
-                     $gorder->free_item = '';
+                     $gorder->free_item =  $free_item;
                      $gorder->timedelivery = $time_method;
                      $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
                      $gorder->clear_history = 0;
@@ -1361,8 +1406,10 @@ class Orders extends Model
 
                      session()->forget('cart1');
                      session()->forget('guest_user');
+                     session()->forget('free_item');
                  }
-             } else // Customer
+             }
+             else // Customer
              {
                  $usercart = getuserCart($user_id);
 
@@ -1428,7 +1475,7 @@ class Orders extends Model
                  $order->date_added = date('Y-m-d h:i:s');
                  $order->date_modified = date('Y-m-d h:i:s');
                  $order->flag_post_code = session()->get('flag_post_code');
-                 $order->free_item = '';
+                 $order->free_item =  $free_item;
                  $order->timedelivery = $time_method;
                  $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                  $order->clear_history = 0;
@@ -1438,6 +1485,7 @@ class Orders extends Model
                  $last_order_id = $order->order_id;
 
                  session()->put('last_order_id',$order->order_id);
+                 session()->forget('free_item');
 
                  // Order Product
                  if (isset($usercart)) {
@@ -1661,7 +1709,7 @@ class Orders extends Model
                      $gorder->date_added = date('Y-m-d h:i:s');
                      $gorder->date_modified = date('Y-m-d h:i:s');
                      $gorder->flag_post_code = session()->get('flag_post_code');
-                     $gorder->free_item = '';
+                     $gorder->free_item =  $free_item;
                      $gorder->timedelivery = $time_method;
                      $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
                      $gorder->clear_history = 0;
@@ -1788,6 +1836,7 @@ class Orders extends Model
                      session()->forget('cart1');
                      session()->forget('guest_user');
                      session()->forget('guest_user_address');
+                     session()->forget('free_item');
                  }
              } else //Customer
              {
@@ -1856,14 +1905,17 @@ class Orders extends Model
                      $order->date_added = date('Y-m-d h:i:s');
                      $order->date_modified = date('Y-m-d h:i:s');
                      $order->flag_post_code = session()->get('flag_post_code');
-                     $order->free_item = '';
+                     $order->free_item =  $free_item;
                      $order->timedelivery = $time_method;
                      $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                      $order->clear_history = 0;
                      $order->is_delete = 0;
                      $order->save();
+
                      $last_order_id = $order->order_id;
+
                      session()->put('last_order_id', $last_order_id);
+                     session()->forget('free_item');
 
                      // Order Product
                      if (isset($usercart)) {
