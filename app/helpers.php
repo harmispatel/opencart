@@ -3027,4 +3027,14 @@ function paymentdetails()
 
 
 
+
+// Gallary Path
+function gallary_redirect_url()
+{
+    $url = url('/');
+    return  $url;
+}
+
+
+
 ?>

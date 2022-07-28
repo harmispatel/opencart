@@ -2311,7 +2311,6 @@
                     <div class="__divider"></div>
                     <div class="__time">
                         <strong>demo - day</strong>
-                        @endif
                         <div class="__time-box">
                             <div class="__left-time"><span>00</span></div>
                             <div class="__time-divier"></div>
