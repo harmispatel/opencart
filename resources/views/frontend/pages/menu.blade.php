@@ -213,8 +213,8 @@ It's used for View Menu.
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" id="item-modal">
-                {{-- <div class="modal-header">
-                    <h5 class="modal-title" id="FreeitemLabel">1/4 Pounder</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="FreeitemLabel"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -237,13 +237,13 @@ It's used for View Menu.
                         </div>
                         <div class="">
                             <b>Add your special request?</b><br>
-                            <textarea  name="request" rows="5" style="width: 465px"></textarea> <!-- cols="50" -->
+                            <textarea  name="request" rows="5" style="width: 465px"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>

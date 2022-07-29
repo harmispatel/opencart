@@ -578,41 +578,15 @@ class CategoryController extends Controller
         // update Category Details
         $catdetail = CategoryDetail::find($request->id);
 
-        // update Category Image
-        // if ($request->hasFile('image')) {
-        //     $image = isset($catdetail['image']) ? $catdetail['image'] : '';
-        //     if (!empty($image) || $image != '') {
-        //         if (file_exists('public/admin/category/' . $image)) {
-        //             unlink('public/admin/category/' . $image);
-        //         }
-        //     }
-        //     $imgname = time() . "." . $request->file('image')->getClientOriginalExtension();
-        //     $request->file('image')->move(public_path('admin/category/'), $imgname);
-        //     $categoryurl = $currentURL . '/public/admin/category/';
-        // }
+
         if($request->image !=''){
             $catdetail->image =isset($request->image) ? $request->image : '';
         }
         if($request->banner !=''){
             $catdetail->img_banner =isset($request->banner) ? $request->banner : '';
         }
-//   echo '<pre>';
-//   print_r($request->image);
-//   print_r($request->banner);
-//   exit();
-        // Insert Banner Image
-        // if ($request->hasFile('banner')) {
-        //     $banner = isset($catdetail['img_banner']) ? $catdetail['img_banner'] : '';
-        //     if (!empty($banner) || $banner != '') {
-        //         if (file_exists('public/admin/category/banner/' . $banner)) {
-        //             unlink('public/admin/category/banner/' . $banner);
-        //         }
-        //     }
-        //     $bannerimgname = time() . "." . $request->file('banner')->getClientOriginalExtension();
-        //     $request->file('banner')->move(public_path('admin/category/banner'), $bannerimgname);
-        //     $bannerurl = $currentURL . '/public/admin/category/banner/';
-        //     $catdetail->img_banner = $bannerurl . $bannerimgname;
-        // }
+
+
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0) {
             $availibleday = implode(",", $days);
