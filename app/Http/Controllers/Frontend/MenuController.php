@@ -24,6 +24,7 @@ use App\Models\Topping;
 use App\Models\ToppingOption;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Arr;
 
 class MenuController extends Controller
 {
@@ -88,8 +89,14 @@ class MenuController extends Controller
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
+        // minimum spend
+        $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        $deliverysettings = $deliverysettings->toArray();
+        $countdeliverysettings = count($deliverysettings)-1;
+        $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
+        $minimum_spend = $deliverysettings_last_array[$countdeliverysettings];
 
-        return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
+        return view('frontend.pages.menu', ['minimum_spend' => $minimum_spend,'data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
     }
 
 
@@ -142,6 +149,13 @@ class MenuController extends Controller
         $toppingType = ToppingCatOption::where('id_category', $cat_id->category_id)->first();
         $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
         unset($group['number_group']);
+
+        // minimum spend
+        $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        $deliverysettings = $deliverysettings->toArray();
+        $countdeliverysettings = count($deliverysettings)-1;
+        $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
+        $minimum_spend = $deliverysettings_last_array[$countdeliverysettings];
 
         $delivery_type = session()->get('flag_post_code');
 
@@ -430,6 +444,14 @@ class MenuController extends Controller
         $total_html .= '<label><b>Total to pay:</b></label><span>'.$currency.' '. $total . '</span>';
         $headertotal += $total;
 
+
+        if ($minimum_spend['min_spend'] <= $total) {
+            $min_spend = 'true';
+        }
+        else{
+            $min_spend = 'false';
+        }
+
         return response()->json([
             'html' => $html,
             'subtotal' => $subtotl_html,
@@ -438,6 +460,7 @@ class MenuController extends Controller
             'total' => $total_html,
             'couponcode' => $coupon_html,
             'cart_rule_html' => $cart_rule_html,
+            'min_spend' => $min_spend,
         ]);
     }
 

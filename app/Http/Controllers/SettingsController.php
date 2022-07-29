@@ -953,6 +953,7 @@ class SettingsController extends Controller
             $data['deliveryareas'] = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $user_shop_id)->where('delivery_type', 'area')->get();
         }
 
+
         return view('admin.settings.delivery_collection_setting', $data);
     }
 

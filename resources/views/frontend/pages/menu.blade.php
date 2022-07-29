@@ -381,7 +381,7 @@ It's used for View Menu.
                                                                                                                             </button>
                                                                                                                         @else
                                                                                                                             <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
-                                                                                                                                class="btn options-btn">
+                                                                                                                                class="btn options-btn cartstatus">
                                                                                                                                 <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
@@ -419,7 +419,7 @@ It's used for View Menu.
                                                                                                             <div class="col-md-7">
                                                                                                                 @if($store_open_close == 'open')
                                                                                                                     @if ($setprice != 0)
-                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
                                                                                                                             <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         </a>
                                                                                                                     @else
@@ -704,15 +704,30 @@ It's used for View Menu.
 
                             @if($store_open_close == 'open')
                                 @if (!empty($mycart['size']))
-                                    <a href="{{ route('checkout') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                    <div class="closed-now">
-                                        <span class="closing-text" style="color: green !important;">We are open now!</span>
-                                    </div>
+                                    {{-- <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a> --}}
+                                    @if ($userdeliverytype == 'delivery')
+                                        <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
+                                        <div class="closed-now minimum_spend">
+                                                <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}</span>
+                                        </div>
+                                    @else
+                                        <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
+                                        <div class="closed-now">
+                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                        </div>
+                                    @endif
                                 @else
-                                    <a href="{{ route('cart') }}" class="btn checkbt" style="background-color: green; color:white;">Checkout</a>
-                                    <div class="closed-now">
-                                        <span class="closing-text" style="color: green !important;">We are open now!</span>
-                                    </div>
+                                    @if ($userdeliverytype == 'delivery')
+                                        <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
+                                        <div class="closed-now minimum_spend">
+                                                <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}</span>
+                                        </div>
+                                    @else
+                                        <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
+                                        <div class="closed-now">
+                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                        </div>
+                                    @endif
                                 @endif
                             @else
                                 <div class="closed-now">
@@ -763,6 +778,7 @@ It's used for View Menu.
                 <form action="">
                     <div class="modal-body">
                         <h5 class="modal-title" id="ModalLabel">Please Enter Your Post Code</h5>
+                        <span>Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}</span>
                         <div class="controls">
                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                 <div class="srch-input">
@@ -913,6 +929,12 @@ It's used for View Menu.
                     // Free Items
                     $('#freeItem').html('');
                     $('#freeItem').append(result.cart_rule_html);
+
+                    if (result.min_spend == 'true') {
+                        // checkeout button status
+                        $('.disabled_checkout_btn').removeClass('disabled');
+                        $('.minimum_spend').html('');
+                    }
                 }
             });
         }
