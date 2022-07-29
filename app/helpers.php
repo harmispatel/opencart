@@ -34,10 +34,12 @@ use App\Models\Product_to_category;
 use App\Models\PhotoGallry;
 use App\Models\PopularFoodsLayouts;
 use App\Models\Product;
+use App\Models\ProductToppingType;
 use App\Models\RecentReviewsLayouts;
 use App\Models\ReservationLayouts;
 use App\Models\Reviews;
 use App\Models\SlidersLayouts;
+use App\Models\ToppingCatOption;
 use Illuminate\Support\Facades\URL;
 
 
@@ -3121,6 +3123,42 @@ function getFreeItems($freeIds)
     return $freeItems;
 }
 
+
+
+function getCatTopping($catID)
+{
+    $get_cat_top = ToppingCatOption::where('id_category',$catID)->first();
+    $get_group = isset($get_cat_top->group) ?  unserialize($get_cat_top->group) : '';
+
+    $data = [];
+    $topparr = [];
+
+    if(!empty($get_group) || $get_group != '')
+    {
+        foreach($get_group as $group)
+        {
+            $id_group_option = $group['id_group_option'];
+            $get_topping = Topping::select('id_topping','name_topping')->where('id_topping',$id_group_option)->first();
+            $data['id_topping'] = isset($get_topping->id_topping) ? $get_topping->id_topping : '';
+            $data['name_topping'] = isset($get_topping->name_topping) ? $get_topping->name_topping : '';
+            $topparr[] = $data;
+        }
+    }
+
+    return $topparr;
+}
+
+
+
+// Get getEditTopping
+function getEditTopping($tid, $pid)
+{
+    if(!empty($tid) && !empty($pid))
+    {
+        $get = ProductToppingType::where('id_product',$pid)->where('id_group_topping',$tid)->first();
+        return $get;
+    }
+}
 
 
 

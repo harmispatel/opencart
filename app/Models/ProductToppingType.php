@@ -9,7 +9,7 @@ class ProductToppingType extends Model
 {
     use HasFactory;
     protected $table='oc_product_topping_type';
-    protected $primaryKey = 'id_product';
+    protected $primaryKey = 'id';
     public $timestamps=false;
 
 }

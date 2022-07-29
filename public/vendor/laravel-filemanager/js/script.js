@@ -455,8 +455,6 @@ function loadItems(page) {
               }
             });
 
-
-
           if (item.thumb_url) {
             var image = $('<div onclick="getImageUrl(\''+item.thumb_url+'\')">').css('background-image', 'url("' + item.thumb_url + '?timestamp=' + item.time + '")');
           } else {
