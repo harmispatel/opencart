@@ -127,7 +127,19 @@ class ProductController extends Controller
             }
         }
 
-        $html .= '<td style="vertical-align: middle;"><input type="file" name="product[' . $lastid . '][image]" class="form-control"></td>';
+        // $html .= '<td style="vertical-align: middle;"><input type="file" name="product[' . $lastid . '][image]" class="form-control"></td>';
+        $html .= '<td class="align-middle">';
+        $html .='<div class="input-group">';
+        $html .='<span class="input-group-btn">';
+        $html .='<a id="lfm[' . $lastid . ']" data-input="thumbnail[' . $lastid . ']" data-preview="holder[' . $lastid . ']" onclick="setimage(this)" class="btn btn-primary" style="padding: 7px">';
+        $html .='<i class="fa fa-picture-o"></i>';
+        $html .='Choose';
+        $html .='</a>';
+        $html .='</span>';
+        $html .='<input id="thumbnail[' . $lastid . ']" class="form-control" type="text" name="product[' . $lastid . '][image]">';
+        $html .='</div>';
+        $html .='<img id="holder[' . $lastid . ']" style="margin-top:15px;max-height:100px;">';
+        $html .= '</td>';
 
         if (isset($data->product_id)) {
             $toppingType = ToppingCatOption::select('group')->where('id_category', $category_id)->first();
@@ -223,7 +235,6 @@ class ProductController extends Controller
             $enable = isset($prod['enable']) ? $prod['enable'] : '';
             $renamegroup = isset($prod['renamegroup']) ? $prod['renamegroup'] : '';
 
-
             $product = new Product();
 
             $product->model = isset($request->model) ? $request->model : 0;
@@ -254,11 +265,12 @@ class ProductController extends Controller
             // $day = $request['day'];
             // $days = implode(',', $day);
             $product->availibleday = isset($request->days) ? $request->days : 0;
-            if (!empty($image) || $image != '') {
-                $imgname = time() . "." . $image->getClientOriginalExtension();
-                $image->move(public_path('admin/product'), $imgname);
-                $product->image = $imgname;
-            }
+            // if (!empty($image) || $image != '') {
+            //     $imgname = time() . "." . $image->getClientOriginalExtension();
+            //     $image->move(public_path('admin/product'), $imgname);
+            //     $product->image = $imgname;
+            // }
+            $product->image = $image;
             $product->save();
 
             $product_description = new ProductDescription();

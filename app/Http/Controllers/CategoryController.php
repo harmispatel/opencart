@@ -416,16 +416,15 @@ class CategoryController extends Controller
             $numbercharacter = $cat['numbercharacter'];
             $image = isset($cat['image']) ? $cat['image'] : '';
 
-
             // Insert Category
             $catdetail = new CategoryDetail;
 
             // Insert Category Image
-            if (!empty($image) || $image != '') {
-                $imgname = time() . "." . $image->getClientOriginalExtension();
-                $image->move(public_path('admin/category'), $imgname);
-                $catdetail->image = $imgname;
-            }
+            // if (!empty($image) || $image != '') {
+            //     $imgname = time() . "." . $image->getClientOriginalExtension();
+            //     $image->move(public_path('admin/category'), $imgname);
+            // }
+            $catdetail->image = $image;
 
             $catdetail->img_banner = '';
             $availibleday = '';

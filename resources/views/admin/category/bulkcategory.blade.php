@@ -93,7 +93,16 @@
                                                         <textarea name="category[0][description]" placeholder="Description" class="form-control"></textarea>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <input type="file" name="category[0][image]" class=" p-1 form-control" required>
+                                                        {{-- <input type="file" name="category[0][image]" class=" p-1 form-control" required> --}}
+                                                        <div class="input-group">
+                                                            <span class="input-group-btn">
+                                                              <a id="lfm" data-input="thumbnail" onclick="setimage(this)" data-preview="holder" class="btn btn-primary" style="padding: 7px">
+                                                                <i class="fa fa-picture-o"></i> Choose
+                                                              </a>
+                                                            </span>
+                                                            <input id="thumbnail" class="form-control" type="text" name="category[0][image]">
+                                                        </div>
+                                                          <img id="holder" style="margin-top:15px;max-height:100px;">
                                                     </td>
                                                     <td id="option_0">
                                                         <div id="tab-pizza">
@@ -213,7 +222,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <td class="text-right" colspan="5">
-                                                        <a id="addcatbulk" style="display: inline-block" onclick="addnewBulkCat()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> ADD NEW</a>
+                                                        <a id="addcatbulk" style="display: inline-block " onclick="addnewBulkCat()" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> ADD NEW</a>
                                                     </td>
                                                 </tr>
                                             </tfoot>
@@ -257,11 +266,13 @@
 <script type="text/javascript">
 
     var cat_row = 0;
+    var lfm1 = 0;
+
     // Add BulkCategory
     function addnewBulkCat()
     {
         cat_row ++;
-
+        lfm1 ++;
         $html = '<tr class="ybc_cat_'+cat_row+'">';
 
 
@@ -274,9 +285,18 @@
         $html += '</td>';
 
         $html += '<td class="align-middle">';
-        $html += '<input type="file" name="category['+cat_row+'][image]" class=" p-1 form-control" required>';
+        // $html += '<input type="file" name="category['+cat_row+'][image]" class=" p-1 form-control" required>';
+        $html +='<div class="input-group">';
+        $html +='<span class="input-group-btn">';
+        $html +='<a id="lfm['+lfm1+']" data-input="thumbnail['+lfm1+']" data-preview="holder['+lfm1+']" onclick="setimage(this)" class="btn btn-primary" style="padding: 7px">';
+        $html +='<i class="fa fa-picture-o"></i>';
+        $html +='Choose';
+        $html +='</a>';
+        $html +='</span>';
+        $html +='<input id="thumbnail['+lfm1+']" class="form-control" type="text" name="category['+cat_row+'][image]">';
+        $html +='</div>';
+        $html +='<img id="holder['+lfm1+']" style="margin-top:15px;max-height:100px;">';
         $html += '</td>';
-
 
         $html += '<td id="option_0">';
 
@@ -391,6 +411,16 @@
 
         $('#bulkcat').append($html);
 
+
+
+//    $('#lfm'[1]).click(function () {
+//         alert('hello')
+
+//     });;
+//    var route_prefix = "filemanager";
+//    $('#lfm'.lfm1).filemanager('image', {prefix: route_prefix});
+
+
     }
 
 
@@ -447,5 +477,54 @@
     }
 
 </script>
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+<script>
+    var lfm = function(id, type, options) {
+    let button = document.getElementById(id);
 
+    // button.addEventListener('click', function() {
+    var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
+    var target_input = document.getElementById(button.getAttribute('data-input'));
+    var target_preview = document.getElementById(button.getAttribute('data-preview'));
+
+    window.open(route_prefix + '?type=' + 'image' || 'file', 'FileManager',
+        'width=900,height=600');
+    window.SetUrl = function(items) {
+        var file_path = items.map(function(item) {
+            return item.url;
+        }).join(',');
+
+        // set the value of the desired input to image url
+        target_input.value = file_path;
+        target_input.dispatchEvent(new Event('change'));
+
+        // clear previous preview
+        target_preview.innerHtml = '';
+
+        // set or change the preview image src
+        items.forEach(function(item) {
+            let img = document.createElement('img')
+            img.setAttribute('style', 'display : none')
+            img.setAttribute('src', item.thumb_url)
+            target_preview.appendChild(img);
+        });
+
+        // trigger change event
+        target_preview.dispatchEvent(new Event('change'));
+    };
+    // });
+};
+
+function setimage(image) {
+    var id = $(image).attr("id");
+    console.log(id);
+    var route_prefix = "filemanager";
+    $(id).filemanager('image', {
+        prefix: route_prefix
+    });
+    lfm(id, 'file', {
+        prefix: route_prefix
+    });
+}
+</script>
 {{-- End Script Section --}}

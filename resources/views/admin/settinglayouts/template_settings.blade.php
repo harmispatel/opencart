@@ -528,11 +528,19 @@ $openhour_data = openhoursActive();
                                                                 </select>
                                                                 <hr class="bg-dark">
                                                                 <div class="form-group">
-                                                                    <label class="form-label text-success">Open
-                                                                        Banner</label>
-                                                                    <input type="file"
+                                                                    <label class="form-label text-success">Open Banner</label>
+                                                                    {{-- <input type="file"
                                                                         name="header_setting[menu_topbar_open_banner]"
-                                                                        class="form-control p-1">
+                                                                        class="form-control p-1"> --}}
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-btn">
+                                                                              <a id="lfm" data-input="thumbnail" onclick="setimage(this)" data-preview="holder" class="btn btn-primary" style="padding: 7px">
+                                                                                <i class="fa fa-picture-o"></i> Choose
+                                                                              </a>
+                                                                            </span>
+                                                                            <input id="thumbnail" class="form-control" type="text" name="header_setting[menu_topbar_open_banner]">
+                                                                        </div>
+                                                                          <img id="holder" style="margin-top:15px;max-height:100px;">
                                                                     <img class="mt-2"
                                                                         src="{{ isset($get_header_settings['menu_topbar_open_banner']) ? $get_header_settings['menu_topbar_open_banner'] : '' }}"
                                                                         width="120" height="80"
@@ -540,11 +548,20 @@ $openhour_data = openhoursActive();
                                                                 </div>
                                                                 <hr class="bg-dark">
                                                                 <div class="form-group">
-                                                                    <label class="form-label text-danger">Close
-                                                                        Banner</label>
-                                                                    <input type="file"
+                                                                    <label class="form-label text-danger">Close Banner</label>
+                                                                    {{-- <input type="file"
                                                                         name="header_setting[menu_topbar_close_banner]"
-                                                                        class="form-control p-1">
+                                                                        class="form-control p-1"> --}}
+                                                                        <div class="input-group">
+                                                                            <span class="input-group-btn">
+                                                                                <a id="lfm2" data-input="thumbnail2" data-preview="holder2" onclick="setimage(this)"
+                                                                                    class="btn btn-primary text-white photo">
+                                                                                    <i class="fa fa-picture-o"></i> Choose
+                                                                                </a>
+                                                                            </span>
+                                                                            <input id="thumbnail2" class="form-control" type="text" name="header_setting[menu_topbar_close_banner]">
+                                                                        </div>
+                                                                        <div id="holder2" style="margin-top:15px;max-height:100px;"></div>
                                                                     <img class="mt-2"
                                                                         src="{{ isset($get_header_settings['menu_topbar_close_banner']) ? $get_header_settings['menu_topbar_close_banner'] : '' }}"
                                                                         width="120" height="80"
@@ -732,20 +749,22 @@ $openhour_data = openhoursActive();
                                                                 <tr>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <label class="form-label">Slider
-                                                                                Image</label>
-                                                                            <input type="hidden"
-                                                                                name="slider[{{ $loop->iteration }}][edit]"
-                                                                                value="{{ $slider->id }}">
-                                                                            <input type="file"
-                                                                                name="slider[{{ $loop->iteration }}][image]"
-                                                                                id=""
-                                                                                class="form-control p-1">
+                                                                            <label class="form-label">Slider Image</label>
+                                                                            <input type="hidden" name="slider[{{ $loop->iteration }}][edit]" value="{{ $slider->id }}">
+                                                                            {{-- <input type="file" name="slider[{{ $loop->iteration }}][image]" id="" class="form-control p-1"> --}}
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-btn">
+                                                                                    <a id="lfmimage-{{ $loop->iteration }}" data-input="slider-{{ $loop->iteration }}" data-preview="sliderholder{{ $loop->iteration }}" onclick="setimage(this)"
+                                                                                        class="btn btn-primary text-white photo">
+                                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                                    </a>
+                                                                                </span>
+                                                                                <input id="slider-{{ $loop->iteration }}" class="form-control" type="text" name="slider[{{ $loop->iteration }}][image]">
+                                                                            </div>
+                                                                            <div id="sliderholder{{ $loop->iteration }}" style="margin-top:15px;max-height:100px;"></div>
                                                                             <br>
                                                                             @if (isset($slider->image))
-                                                                                <img src="{{ $slider->image }}"
-                                                                                    width="70"
-                                                                                    alt="img_{{ $loop->iteration }}">
+                                                                                <img src="{{ $slider->image }}" width="70" alt="img_{{ $loop->iteration }}">
                                                                             @else
                                                                                 <h6><code>Image Not Selected</code></h6>
                                                                             @endif
@@ -753,17 +772,32 @@ $openhour_data = openhoursActive();
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group">
-                                                                            <label class="form-label">Slider
-                                                                                Logo</label>
-                                                                            <input type="file"
-                                                                                name="slider[{{ $loop->iteration }}][logo]"
-                                                                                id=""
-                                                                                class="form-control p-1">
+                                                                            <label class="form-label">Slider Logo</label>
+                                                                            {{-- <input type="file" name="slider[{{ $loop->iteration }}][logo]" id="" class="form-control p-1"> --}}
+                                                                            {{-- <div class="input-group">
+                                                                                <span class="input-group-btn">
+                                                                                    <a id="lfmlogo-{{ $loop->iteration }}" data-input="logo-{{ $loop->iteration }}" data-preview="logoholder[{{ $loop->iteration }}]" onclick="setimage(this)"
+                                                                                        class="btn btn-primary text-white photo">
+                                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                                    </a>
+                                                                                </span>
+                                                                                <input id="logo-{{ $loop->iteration }}" class="form-control" type="text" name="slider[{{ $loop->iteration }}][logo]">
+                                                                            </div>
+                                                                            <div id="logoholder{{ $loop->iteration }}" style="margin-top:15px;max-height:100px;"></div> --}}
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-btn">
+                                                                                    <a id="lfmlogo_[{{$loop->iteration}}]" data-input="thumbnail__[{{ $loop->iteration }}]" data-preview="holder__[{{ $loop->iteration }}]" onclick="setimage(this)"
+                                                                                        class="btn btn-primary text-white photo">
+                                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                                    </a>
+                                                                                </span>
+                                                                                <input id="thumbnail__[{{ $loop->iteration }}]" class="form-control" type="text" name="slider[{{ $loop->iteration }}][logo]">
+                                                                                <div id="holder__[{{ $loop->iteration }}]" style="margin-top:15px;max-height:100px;"></div>
+                                                                            </div>
+                                                                            <div id="logoholder{{ $loop->iteration }}" style="margin-top:15px;max-height:100px;"></div>
                                                                             <br>
                                                                             @if (isset($slider->logo))
-                                                                                <img src="{{ $slider->logo }}"
-                                                                                    width="70"
-                                                                                    alt="logo_{{ $loop->iteration }}">
+                                                                                <img src="{{ $slider->logo }}" width="70" alt="logo_{{ $loop->iteration }}">
                                                                             @else
                                                                                 <h6><code>Logo Not Selected</code></h6>
                                                                             @endif
@@ -817,39 +851,29 @@ $openhour_data = openhoursActive();
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <label class="form-label">Slider Image</label>
-                                                                        <input type="file" name="slider[1][image]"
-                                                                            id="" class="form-control p-1"
-                                                                            required>
+                                                                        <input type="file" name="slider[1][image]" id="" class="form-control p-1" required>
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <label class="form-label">Slider Logo</label>
-                                                                        <input type="file" name="slider[1][logo]"
-                                                                            id="" class="form-control p-1">
+                                                                        <input type="file" name="slider[1][logo]" id="" class="form-control p-1">
                                                                     </div>
                                                                 </td>
-                                                                <td rowspan="2" class="align-middle"
-                                                                    style="text-align: right;">
-                                                                    <button
-                                                                        class="btn rounded-circle btn-sm btn-danger"
-                                                                        disabled><i
-                                                                            class="fa fa-minus-circle"></i></button>
+                                                                <td rowspan="2" class="align-middle" style="text-align: right;">
+                                                                    <button class="btn rounded-circle btn-sm btn-danger" disabled><i class="fa fa-minus-circle"></i></button>
                                                                 </td>
                                                             </tr>
                                                             <tr>
                                                                 <td>
                                                                     <div class="form-group">
                                                                         <label class="form-label">Slider Title</label>
-                                                                        <input type="text" name="slider[1][title]"
-                                                                            id="" class="form-control"
-                                                                            required>
+                                                                        <input type="text" name="slider[1][title]" id="" class="form-control" required>
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-group">
-                                                                        <label class="form-label">Slider
-                                                                            Description</label>
+                                                                        <label class="form-label">Slider Description</label>
                                                                         <textarea name="slider[1][desc]" id="" class="form-control"></textarea>
                                                                     </div>
                                                                 </td>
@@ -978,13 +1002,20 @@ $openhour_data = openhoursActive();
                                                             <label>Background Image</label>
                                                         </th>
                                                         <td>
-                                                            <input type="file"
+                                                            {{-- <input type="file"
                                                                 name="about_setting[about_background_image]"
-                                                                class="form-control p-1">
-                                                            <img class="mt-2"
-                                                                src="{{ isset($get_about_settings['about_background_image']) ? $get_about_settings['about_background_image'] : '' }}"
-                                                                width="120" height="80"
-                                                                style="border: 2px solid black;">
+                                                                class="form-control p-1"> --}}
+                                                                <div class="input-group">
+                                                                    <span class="input-group-btn">
+                                                                        <a id="lfm3" data-input="thumbnail3" data-preview="holder3" onclick="setimage(this)"
+                                                                            class="btn btn-primary text-white photo">
+                                                                            <i class="fa fa-picture-o"></i> Choose
+                                                                        </a>
+                                                                    </span>
+                                                                    <input id="thumbnail3" class="form-control" type="text" name="about_setting[about_background_image]">
+                                                                </div>
+                                                                <div id="holder3" style="margin-top:15px;max-height:100px;"></div>
+                                                            <img class="mt-2" src="{{ isset($get_about_settings['about_background_image']) ? $get_about_settings['about_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
                                                     </tr>
 
@@ -1043,12 +1074,19 @@ $openhour_data = openhoursActive();
                                                             <label>Image</label>
                                                         </th>
                                                         <td>
-                                                            <input type="file" name="about_setting[about_image]"
-                                                                class="form-control p-1">
-                                                            <img class="mt-2"
-                                                                src="{{ isset($get_about_settings['about_image']) ? $get_about_settings['about_image'] : '' }}"
-                                                                width="120" height="80"
-                                                                style="border: 2px solid black;">
+                                                            {{-- <input type="file" name="about_setting[about_image]"
+                                                                class="form-control p-1"> --}}
+                                                                <div class="input-group">
+                                                                    <span class="input-group-btn">
+                                                                        <a id="lfm4" data-input="thumbnail4" data-preview="holder4" onclick="setimage(this)"
+                                                                            class="btn btn-primary text-white photo">
+                                                                            <i class="fa fa-picture-o"></i> Choose
+                                                                        </a>
+                                                                    </span>
+                                                                    <input id="thumbnail4" class="form-control" type="text" name="about_setting[about_image]">
+                                                                </div>
+                                                                <div id="holder4" style="margin-top:15px;max-height:100px;"></div>
+                                                            <img class="mt-2" src="{{ isset($get_about_settings['about_image']) ? $get_about_settings['about_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -1168,13 +1206,19 @@ $openhour_data = openhoursActive();
                                                             <label>Background Image</label>
                                                         </th>
                                                         <td>
-                                                            <input type="file"
-                                                                name="popularfood_setting[popularfood_background_image]"
-                                                                class="form-control p-1">
-                                                            <img class="mt-2"
-                                                                src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}"
-                                                                width="120" height="80"
-                                                                style="border: 2px solid black;">
+                                                            {{-- <input type="file" name="popularfood_setting[popularfood_background_image]" class="form-control p-1">
+                                                            <img class="mt-2" src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <a id="lfm5" data-input="thumbnail5" data-preview="holder5" onclick="setimage(this)"
+                                                                        class="btn btn-primary text-white photo">
+                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                    </a>
+                                                                </span>
+                                                                <input id="thumbnail5" class="form-control" type="text" name="popularfood_setting[popularfood_background_image]">
+                                                            </div>
+                                                            <div id="holder5" style="margin-top:15px;max-height:100px;"></div>
+                                                        <img class="mt-2" src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
                                                     </tr>
 
@@ -1360,13 +1404,19 @@ $openhour_data = openhoursActive();
                                                             <label>Background Image</label>
                                                         </th>
                                                         <td>
-                                                            <input type="file"
-                                                                name="bestcategory_setting[bestcategory_background_image]"
-                                                                class="form-control p-1">
-                                                            <img class="mt-2"
-                                                                src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}"
-                                                                width="120" height="80"
-                                                                style="border: 2px solid black;">
+                                                            {{-- <input type="file" name="bestcategory_setting[bestcategory_background_image]" class="form-control p-1">
+                                                            <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <a id="lfm6" data-input="thumbnail6" data-preview="holder6" onclick="setimage(this)"
+                                                                        class="btn btn-primary text-white photo">
+                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                    </a>
+                                                                </span>
+                                                                <input id="thumbnail6" class="form-control" type="text" name="bestcategory_setting[bestcategory_background_image]">
+                                                            </div>
+                                                            <div id="holder6" style="margin-top:15px;max-height:100px;"></div>
+                                                            <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
                                                     </tr>
 
@@ -1549,13 +1599,18 @@ $openhour_data = openhoursActive();
                                                             <label>Background Image</label>
                                                         </th>
                                                         <td>
-                                                            <input type="file"
-                                                                name="review_setting[review_background_image]"
-                                                                class="form-control p-1">
-                                                            <img class="mt-2"
-                                                                src="{{ isset($get_review_settings['review_background_image']) ? $get_review_settings['review_background_image'] : '' }}"
-                                                                width="120" height="80"
-                                                                style="border: 2px solid black;">
+                                                            {{-- <input type="file" name="review_setting[review_background_image]" class="form-control p-1"> --}}
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <a id="lfm7" data-input="thumbnail7" data-preview="holder7" onclick="setimage(this)"
+                                                                        class="btn btn-primary text-white photo">
+                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                    </a>
+                                                                </span>
+                                                                <input id="thumbnail7" class="form-control" type="text" name="review_setting[review_background_image]">
+                                                            </div>
+                                                            <div id="holder7" style="margin-top:15px;max-height:100px;"></div>
+                                                            <img class="mt-2" src="{{ isset($get_review_settings['review_background_image']) ? $get_review_settings['review_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
                                                     </tr>
 
@@ -1905,13 +1960,18 @@ $openhour_data = openhoursActive();
                                                             <label>Background Image</label>
                                                         </th>
                                                         <td>
-                                                            <input type="file"
-                                                                name="openhour_setting[openhour_background_image]"
-                                                                class="form-control p-1">
-                                                            <img class="mt-2"
-                                                                src="{{ isset($get_openhour_settings['openhour_background_image']) ? $get_openhour_settings['openhour_background_image'] : '' }}"
-                                                                width="120" height="80"
-                                                                style="border: 2px solid black;">
+                                                            {{-- <input type="file" name="openhour_setting[openhour_background_image]" class="form-control p-1"> --}}
+                                                            <div class="input-group">
+                                                                <span class="input-group-btn">
+                                                                    <a id="lfm8" data-input="thumbnail8" data-preview="holder8" onclick="setimage(this)"
+                                                                        class="btn btn-primary text-white photo">
+                                                                        <i class="fa fa-picture-o"></i> Choose
+                                                                    </a>
+                                                                </span>
+                                                                <input id="thumbnail8" class="form-control" type="text" name="openhour_setting[openhour_background_image]">
+                                                            </div>
+                                                            <div id="holder8" style="margin-top:15px;max-height:100px;"></div>
+                                                            <img class="mt-2" src="{{ isset($get_openhour_settings['openhour_background_image']) ? $get_openhour_settings['openhour_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
                                                     </tr>
 
@@ -2113,13 +2173,31 @@ $openhour_data = openhoursActive();
                                 <td>
                                     <div class="form-group">
                                         <label class="form-label">Slider Image</label>
-                                        <input type="file" name="slider[` + incr + `][image]" id="" class="form-control p-1" required>
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <a id="lfmimage_[` + incr + `]" data-input="thumbnail_[` + incr + `]" data-preview="holder_[` + incr + `]" onclick="setimage(this)"
+                                                    class="btn btn-primary text-white photo">
+                                                    <i class="fa fa-picture-o"></i> Choose
+                                                </a>
+                                            </span>
+                                            <input id="thumbnail_[` + incr + `]" class="form-control" type="text" name="slider[` + incr + `][image]">
+                                            <div id="holder_[` + incr + `]" style="margin-top:15px;max-height:100px;"></div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="form-group">
                                         <label class="form-label">Slider Logo</label>
-                                        <input type="file" name="slider[` + incr + `][logo]" id="" class="form-control p-1">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <a id="lfmlogo_[` + incr + `]" data-input="thumbnail__[` + incr + `]" data-preview="holder__[` + incr + `]" onclick="setimage(this)"
+                                                    class="btn btn-primary text-white photo">
+                                                    <i class="fa fa-picture-o"></i> Choose
+                                                </a>
+                                            </span>
+                                            <input id="thumbnail__[` + incr + `]" class="form-control" type="text" name="slider[` + incr + `][logo]">
+                                            <div id="holder__[` + incr + `]" style="margin-top:15px;max-height:100px;"></div>
+                                        </div>
                                     </div>
                                 </td>
                                 <td rowspan="2" class="align-middle" style="text-align: right;">
@@ -2383,5 +2461,53 @@ $openhour_data = openhoursActive();
     });
 
     // End Copy Template Settings
+</script>
+<script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
+<script>
+    var lfm = function(id, type, options) {
+    let button = document.getElementById(id);
+
+    // button.addEventListener('click', function() {
+    var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
+    var target_input = document.getElementById(button.getAttribute('data-input'));
+    var target_preview = document.getElementById(button.getAttribute('data-preview'));
+
+    window.open(route_prefix + '?type=' + 'image' || 'file', 'FileManager', 'width=900,height=600');
+    window.SetUrl = function(items) {
+        var file_path = items.map(function(item) {
+            return item.url;
+        }).join(',');
+
+        // set the value of the desired input to image url
+        target_input.value = file_path;
+        target_input.dispatchEvent(new Event('change'));
+
+        // clear previous preview
+        target_preview.innerHtml = '';
+
+        // set or change the preview image src
+        items.forEach(function(item) {
+            let img = document.createElement('img')
+            img.setAttribute('style', 'display : none')
+            img.setAttribute('src', item.thumb_url)
+            target_preview.appendChild(img);
+        });
+
+        // trigger change event
+        target_preview.dispatchEvent(new Event('change'));
+    };
+    // });
+};
+
+function setimage(image) {
+    var id = $(image).attr("id");
+    var route_prefix = "filemanager";
+    $(id).filemanager('image', {
+        prefix: route_prefix
+    });
+    lfm(id, 'file', {
+        prefix: route_prefix
+    });
+}
 </script>
 {{-- End Script --}}
