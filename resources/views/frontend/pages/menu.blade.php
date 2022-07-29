@@ -10,7 +10,6 @@ It's used for View Menu.
 
 @php
 
-
     // Get Current URL
     $currentURL = URL::to("/");
 
@@ -32,6 +31,10 @@ It's used for View Menu.
 
     // Get Open-Close Time
     $openclose = openclosetime();
+
+    // delivery gap
+    $delivery_gap = isset($openclose['delivery_gap']) ? $openclose['delivery_gap'] : '';
+    $collection_gap = isset($openclose['collection_gap']) ? $openclose['collection_gap'] : '';
 
     // Store Open / Close
     $store_open_close = isset($openclose['store_open_close']) ? $openclose['store_open_close'] : 'close';
@@ -67,6 +70,34 @@ It's used for View Menu.
         $mycart = session()->get('cart1');
     }
     // End Get Customer Cart
+
+    if(session()->has('subtotal'))
+    {
+        $get_sub_total = session()->get('subtotal');
+    }
+    else
+    {
+        $get_sub_total = 0;
+    }
+
+    if(isset($cart_rule) && !empty($cart_rule))
+    {
+        $cart_rule_total = $cart_rule['min_total'];
+    }
+    else
+    {
+        $cart_rule_total = '';
+    }
+
+
+    if(session()->has('free_item'))
+    {
+        $session_free_item = session()->get('free_item');
+    }
+    else
+    {
+        $session_free_item = '';
+    }
 
 @endphp
 
@@ -319,11 +350,22 @@ It's used for View Menu.
 
                                                                                                 @if (count($sizes) > 0)
                                                                                                     @foreach ($sizes as $size)
-
                                                                                                         @php
-                                                                                                            $sizeprice = $size->id_product_price_size;
+                                                                                                            $sizeprice_id = $size->id_product_price_size;
                                                                                                             $productsize = $values->hasOneProduct['product_id'];
-                                                                                                            $setsizeprice = $size->price;
+
+                                                                                                            if($userdeliverytype == 'delivery')
+                                                                                                            {
+                                                                                                                $setsizeprice = $size->delivery_price;
+                                                                                                            }
+                                                                                                            elseif ($userdeliverytype == 'collection')
+                                                                                                            {
+                                                                                                                $setsizeprice = $size->collection_price;
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                $setsizeprice = $size->price;
+                                                                                                            }
                                                                                                         @endphp
 
                                                                                                         <div class="options-bt">
@@ -334,11 +376,11 @@ It's used for View Menu.
                                                                                                                 <div class="col-md-7">
                                                                                                                     @if($store_open_close == 'open')
                                                                                                                         @if ($setsizeprice == 0)
-                                                                                                                            <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;" disabled>
+                                                                                                                            <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
                                                                                                                                 <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             </button>
                                                                                                                         @else
-                                                                                                                            <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice }},{{ $userid }});"
+                                                                                                                            <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
                                                                                                                                 class="btn options-btn">
                                                                                                                                 <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             </a>
@@ -356,7 +398,18 @@ It's used for View Menu.
                                                                                                     @endforeach
                                                                                                 @else
                                                                                                     @php
-                                                                                                        $setprice = $values->hasOneProduct['price'];
+                                                                                                        if($userdeliverytype == 'delivery')
+                                                                                                        {
+                                                                                                            $setprice = $values->hasOneProduct['delivery_price'];
+                                                                                                        }
+                                                                                                        elseif ($userdeliverytype == 'collection')
+                                                                                                        {
+                                                                                                            $setprice = $values->hasOneProduct['collection_price'];
+                                                                                                        }
+                                                                                                        else
+                                                                                                        {
+                                                                                                            $setprice = $values->hasOneProduct['price'];
+                                                                                                        }
                                                                                                     @endphp
                                                                                                     <div class="options-bt">
                                                                                                         <div class="row align-items-center">
@@ -365,9 +418,15 @@ It's used for View Menu.
                                                                                                             </div>
                                                                                                             <div class="col-md-7">
                                                                                                                 @if($store_open_close == 'open')
-                                                                                                                    <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
-                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                    </a>
+                                                                                                                    @if ($setprice != 0)
+                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn">
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        </a>
+                                                                                                                    @else
+                                                                                                                        <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        </a>
+                                                                                                                    @endif
                                                                                                                 @else
                                                                                                                     <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                         <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
@@ -426,19 +485,27 @@ It's used for View Menu.
                                             <table class="table">
                                                 @php
                                                     $subtotal = 0;
-                                                    $delivery_charge = 0;
                                                 @endphp
                                                 @if (!empty($mycart['size']) || !empty($mycart['withoutSize']))
                                                     @if (isset($mycart['size']))
                                                         @foreach ($mycart['size'] as $key => $cart)
                                                             @php
-                                                                $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
+                                                                // Price
+                                                                if($userdeliverytype == 'delivery')
+                                                                {
+                                                                    $price = isset($cart['del_price']) ? $cart['del_price'] * $cart['quantity'] : 0 * $cart['quantity'];
+                                                                }
+                                                                else if($userdeliverytype == 'collection')
+                                                                {
+                                                                    $price = isset($cart['col_price']) ? $cart['col_price'] * $cart['quantity'] : 0 * $cart['quantity'];
+                                                                }
+                                                                else
+                                                                {
+                                                                    $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
+                                                                }
+
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
-                                                                {
-                                                                    $delivery_charge += $cart['del_price'];
-                                                                }
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -451,16 +518,27 @@ It's used for View Menu.
                                                             </tr>
                                                         @endforeach
                                                     @endif
+
                                                     @if (isset($mycart['withoutSize']))
                                                         @foreach ($mycart['withoutSize'] as $cart)
                                                             @php
-                                                                $price = $cart['main_price'] * $cart['quantity'];
+
+                                                                // Price
+                                                                if($userdeliverytype == 'delivery')
+                                                                {
+                                                                    $price = $cart['del_price'] * $cart['quantity'];
+                                                                }
+                                                                elseif($userdeliverytype == 'collection')
+                                                                {
+                                                                    $price = $cart['col_price'] * $cart['quantity'];
+                                                                }
+                                                                else
+                                                                {
+                                                                    $price = $cart['main_price'] * $cart['quantity'];
+                                                                }
+
                                                                 $subtotal += $price;
 
-                                                                if (isset($cart['del_price']) && !empty($cart['del_price']))
-                                                                {
-                                                                    $delivery_charge += $cart['del_price'];
-                                                                }
                                                             @endphp
                                                             <tr>
                                                                 <td>
@@ -488,11 +566,11 @@ It's used for View Menu.
                                                 {
                                                     $couponcode = $Coupon['discount'];
                                                 }
-                                                $total = $subtotal - $couponcode + $delivery_charge;
+                                                $total = $subtotal - $couponcode;
                                             }
                                             else
                                             {
-                                                $total = $subtotal + $delivery_charge;
+                                                $total = $subtotal;
                                             }
                                         @endphp
                                         <div class="minicart-total">
@@ -505,12 +583,6 @@ It's used for View Menu.
                                                         @else
                                                             <span>{{ $currency }} {{ $subtotal }}</span>
                                                         @endif
-                                                    </div>
-                                                </li>
-                                                <li class="minicart-list-item">
-                                                    <div class="minicart-list-item-innr del_charge">
-                                                        <label>Delivery Charge</label>
-                                                        <span>{{ $currency }} {{ $delivery_charge }}</span>
                                                     </div>
                                                 </li>
                                                 @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
@@ -575,6 +647,26 @@ It's used for View Menu.
                                                         <span>{{ $currency }} {{ isset($total) ? $total : '' }}</span>
                                                     </div>
                                                 </li>
+                                                <li class="minicart-list-item" id="freeItem">
+                                                    @if(!empty($cart_rule_total) || $cart_rule_total != '')
+                                                        @if ($get_sub_total >= $cart_rule_total)
+                                                            @php
+                                                                $free_explode = isset($cart_rule['id_item']) ? explode(':',$cart_rule['id_item']) : '';
+                                                                $free_items = getFreeItems($free_explode);
+                                                            @endphp
+                                                            <div class="form-group">
+                                                                <label>Please Choose Your Free Items</label>
+                                                                <select name="free_item" id="free_item" class="form-control mt-1" onchange="changeFreeItem()">
+                                                                    @if (!empty($free_items) || $free_items != '')
+                                                                        @foreach ($free_items as $key => $fitem)
+                                                                            <option value="{{ $fitem }}" {{ ($session_free_item == $fitem) ? 'selected' : '' }}>{{ $fitem }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                            </div>
+                                                        @endif
+                                                    @endif
+                                                </li>
                                             </ul>
                                         </div>
                                         <div id="order_type_top" class="order-type">
@@ -593,7 +685,7 @@ It's used for View Menu.
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
                                                     </label><br>
-                                                    <span>10  Min</span>
+                                                    <span>{{ $collection_gap }}  Min</span>
                                                 </div>
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
@@ -602,7 +694,7 @@ It's used for View Menu.
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
-                                                    <span>0 Min</b></span>
+                                                    <span>{{ $delivery_gap }} Min</b></span>
                                                 </div>
                                             @endif
                                         </div>
@@ -676,7 +768,7 @@ It's used for View Menu.
                                 <div class="srch-input">
                                     @if ($delivery_setting['delivery_option'] == 'area')
                                         <select name="search_input2" class="form-control" id="search_store">
-                                            <option value="">Select Area</option>
+                                            <option value="">Select Areas</option>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area }}">{{ $area }}</option>
                                             @endforeach
@@ -798,10 +890,6 @@ It's used for View Menu.
                     $('.sub-total').html('');
                     $('.sub-total').append(result.subtotal);
 
-                    // Delivery Charge
-                    $('.del_charge').html('');
-                    $('.del_charge').append(result.delivery_charge);
-
                     // Cart Products
                     $('#cart_products').html('');
                     $('#cart_products').append(result.cart_products);
@@ -821,6 +909,10 @@ It's used for View Menu.
                     // Modal
                     $('#item-modal').html('');
                     $('#item-modal').append(result.modal);
+
+                    // Free Items
+                    $('#freeItem').html('');
+                    $('#freeItem').append(result.cart_rule_html);
                 }
             });
         }
@@ -971,6 +1063,35 @@ It's used for View Menu.
             } else {
                 $("#tg-icon").html('<i class="fas fa-angle-double-up"></i>');
             }
+        }
+
+
+
+        // Change Free Item
+        function changeFreeItem(){
+            var item = $('#free_item :selected').val();
+
+            $.ajax({
+                type: 'post',
+                url: '{{ url("changeFreeItem") }}',
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'item': item,
+                },
+                dataType: 'json',
+                success: function(result)
+                {
+                    if(result.success == 1)
+                    {
+                        console.log('Free Item Change Successfully..');
+                    }
+
+                    if(result.error == 0)
+                    {
+                        console.log('Free Item Change Successfully..');
+                    }
+                }
+            });
         }
 
 

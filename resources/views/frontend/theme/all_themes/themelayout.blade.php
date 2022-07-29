@@ -80,6 +80,16 @@
     // Get Open-Close Time
     $open_close_data = openclosetime();
 
+    // Store Open / Close
+    $store_open_close = isset($openclose['store_open_close']) ? $openclose['store_open_close'] : 'close';
+
+    // get opning_hours_setting
+    $opning_hours = isset($open_close_data['opning_hours']) ? $open_close_data['opning_hours'] : '';
+    
+    // get Opening Hours & Days
+    $opning_days = isset($open_close_data['opning_hours']['days']) ? $open_close_data['opning_hours']['days'] : '';
+    $opning_from = isset($open_close_data['opning_hours']['from']) ? $open_close_data['opning_hours']['from'] : '';
+    $opning_to = isset($open_close_data['opning_hours']['to']) ? $open_close_data['opning_hours']['to'] : '';
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
@@ -2204,7 +2214,16 @@
                 <h3 class="sub-title">Opening Hours</h3>
                 <img class="img-fluid" src="{{ get_css_url().'public/assets/theme1/img/icon/opening-hours.svg' }}"/>
 
-                <p>DAY 1 - 1</p>
+                @if(!empty($opning_days) || $opning_days != '')
+                    @foreach ($opning_days as $key => $oday)
+                        @php
+                            $day = $oday;
+                            $from = $opning_from[$key];
+                            $to = $opning_to[$key];
+                        @endphp
+                        <p>{{ $day }}  {{ $from }} - {{ $to }}</p>
+                    @endforeach
+                @endif
             </div>
         </section>
     @endif
@@ -2218,12 +2237,21 @@
                 <h3 class="title text-uppercase">opening hours</h3>
                 <div class="_divider"></div>
                 <a href="tel:{{ isset($store_setting['config_telephone']) ? $store_setting['config_telephone'] : '' }}">TEL: {{ isset($store_setting['config_telephone']) ? $store_setting['config_telephone'] : '' }}</a>
+
                 <h3 class="title text-uppercase __divider">hours</h3>
-                <div class="__time">
-                    <span>demo - day</span>
-                    <span>00 - 00</span>
-                </div>
-                <br>
+                @if(!empty($opning_days) || $opning_days != '')
+                    @foreach ($opning_days as $key => $oday)
+                        @php
+                            $day = $oday;
+                            $from = $opning_from[$key];
+                            $to = $opning_to[$key];
+                        @endphp
+                        <div class="__time" style="max-width: 500px!important;">
+                            <span>{{ $day }}</span>
+                            <span>{{ $from }} - {{ $to }}</span>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </section>
     @endif
@@ -2238,10 +2266,19 @@
                     <h3 class="title text-capitalize">opening hours</h3>
                 </div>
                 <div class="__time">
-                    <div class="__time-item">
-                        <strong>demo - day</strong>
-                        <span>00 - 00</span>
-                    </div>
+                    @foreach ($opning_days as $key => $oday)
+                        @php
+                            $day = $oday;
+                            $from = $opning_from[$key];
+                            $to = $opning_to[$key];
+                        @endphp
+
+                        <div class="__time-item">
+                            <span>{{ $day }}</span>
+                            <span>{{ $from }} - {{ $to }}</span>
+                        </div>
+                    @endforeach
+                    
                 </div><br>
             </div>
         </section>
@@ -2257,13 +2294,19 @@
                     <h3 class="title text-capitalize">opening hours</h3>
                 </div>
                 <div class="__time">
-                    <div class="__time-item">
-                        <strong>demo - day</strong>
-                        <div>
-                            <span>00</span>
-                            <span>00</span>
+                    @foreach ($opning_days as $key => $oday)
+                        @php
+                            $day = $oday;
+                            $from = $opning_from[$key];
+                            $to = $opning_to[$key];
+                        @endphp
+
+                        <div class="__time-item">
+                            <strong>{{ $day }}</strong>
+                            <span>{{ $from }}</span>
+                            <span>{{ $to }}</span>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </section>
@@ -2280,14 +2323,26 @@
             <div class="__info">
                 <div class="__container">
                     <img class="img-fluid mb-3" src="{{ get_css_url().'public/assets/theme5/img/icon/time-top-flower.svg' }}" />
-                    <strong class="__time-title">OPEN NOW</strong>
-                    <div class="__time">
-                        <strong>demo - day</strong>
-                        <div class="__time-box">
-                            <div class="__left-time"><span>00</span></div>
-                            <div class="__time-divier"></div>
-                            <div class="__right-time"><span>00</span></div>
-                        </div>
+                    @if ($store_open_close == 'open')
+                        <strong class="__time-title">OPEN NOW</strong>
+                    @else
+                        <strong class="__time-title">CLOSE NOW</strong>
+                    @endif
+                    <div class="__time" style="display: block;">
+                        @foreach ($opning_days as $key => $oday)
+                            @php
+                                $day = $oday;
+                                $from = $opning_from[$key];
+                                $to = $opning_to[$key];
+                            @endphp
+
+                            <strong>{{ $day }}</strong>
+                            <div class="__time-box">
+                                <div class="__left-time"><span>{{ $from }}</span></div>
+                                <div class="__time-divier"></div>
+                                <div class="__right-time"><span>{{ $to }}</span></div>
+                            </div>
+                        @endforeach
                     </div>
                     <br>
                 </div>
@@ -2301,21 +2356,33 @@
     @if ($openhour_id == 6)
         <section class="opening-hours-v6 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
             <div class="default-title-v6 text-center">
-                <strong class="sub-title text-capitalize">opening hourse</strong>
+                <strong class="sub-title text-capitalize">opening hours</strong>
             </div>
             <div class="__info">
                 <div class="__container">
                     <img class="img-fluid mb-3" src="{{ get_css_url().'public/assets/theme6/img/icon/time-clock.svg' }}" />
                     <div class="__divider"></div>
-                    <strong class="__time-title">OPEN NOW</strong>
+                    @if ($store_open_close == 'open')
+                        <strong class="__time-title">OPEN NOW</strong>
+                    @else
+                        <strong class="__time-title">CLOSE NOW</strong>
+                    @endif
                     <div class="__divider"></div>
                     <div class="__time">
-                        <strong>demo - day</strong>
-                        <div class="__time-box">
-                            <div class="__left-time"><span>00</span></div>
-                            <div class="__time-divier"></div>
-                            <div class="__right-time"><span>00</span></div>
-                        </div>
+                        @foreach ($opning_days as $key => $oday)
+                            @php
+                                $day = $oday;
+                                $from = $opning_from[$key];
+                                $to = $opning_to[$key];
+                            @endphp
+
+                            <strong>{{ $day }}</strong>
+                            <div class="__time-box">
+                                <div class="__left-time"><span>{{ $from }}</span></div>
+                                <div class="__time-divier"></div>
+                                <div class="__right-time"><span>{{ $to }}</span></div>
+                            </div>
+                        @endforeach
                     </div>
                     <br>
                 </div>

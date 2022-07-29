@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
 use App\Models\Coupon;
 use App\Models\DeliverySettings;
+use App\Models\FreeRule;
 use App\Models\Settings;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\URL;
@@ -33,6 +34,9 @@ class CheckoutController extends Controller
 
         // Store Settings
         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+        // Get Cart Rule
+        $cart_rule = FreeRule::where('id_store',$front_store_id)->first();
 
         $delivery_setting = [];
 
@@ -75,7 +79,7 @@ class CheckoutController extends Controller
             }
         }
 
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas'));
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule'));
     }
 
 

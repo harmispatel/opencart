@@ -114,10 +114,33 @@
         $time_method = '';
     }
 
-    // echo '<pre>';
-    // print_r($time_method);
-    // exit();
+    if(session()->has('subtotal'))
+    {
+        $get_sub_total = session()->get('subtotal');
+    }
+    else
+    {
+        $get_sub_total = 0;
+    }
 
+    if(isset($cart_rule) && !empty($cart_rule))
+    {
+        $cart_rule_total = number_format($cart_rule['min_total'],0);
+    }
+    else
+    {
+        $cart_rule_total = '';
+    }
+
+
+    if(session()->has('free_item'))
+    {
+        $session_free_item = session()->get('free_item');
+    }
+    else
+    {
+        $session_free_item = '';
+    }
 
 @endphp
 
@@ -635,7 +658,6 @@
                                                                             @php
 
                                                                                 $subtotal = 0;
-                                                                                $delivery_charge = 0;
                                                                                 $current_date = strtotime(date('Y-m-d'));
                                                                                 $start_date = isset($Coupon['date_start']) ? strtotime($Coupon['date_start']) : '';
                                                                                 $end_date = isset($Coupon['date_end']) ? strtotime($Coupon['date_end']) : '';
@@ -644,11 +666,21 @@
                                                                             @if (isset($mycart['size']))
                                                                                 @foreach ($mycart['size'] as $key => $cart)
                                                                                     @php
-                                                                                        $price = (isset($cart['main_price']) ? $cart['main_price'] : 0) * $cart['quantity'];
-
-                                                                                        if (isset($cart['del_price']) && !empty($cart['del_price']))
+                                                                                        // Price
+                                                                                        if($userdeliverytype == 'delivery')
                                                                                         {
-                                                                                            $delivery_charge += $cart['del_price'];
+                                                                                            $price = isset($cart['del_price']) ? $cart['del_price'] : 0;
+                                                                                            $qty_price = (isset($cart['del_price']) ? $cart['del_price'] : 0) * $cart['quantity'];
+                                                                                        }
+                                                                                        elseif($userdeliverytype == 'collection')
+                                                                                        {
+                                                                                            $price = isset($cart['col_price']) ? $cart['col_price'] : 0;
+                                                                                            $qty_price = (isset($cart['col_price']) ? $cart['col_price'] : 0) * $cart['quantity'];
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            $price = isset($cart['main_price']) ? $cart['main_price'] : 0;
+                                                                                            $qty_price = (isset($cart['main_price']) ? $cart['main_price'] : 0) * $cart['quantity'];
                                                                                         }
                                                                                     @endphp
                                                                                     <tr>
@@ -674,14 +706,14 @@
                                                                                             </div>
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <b>{{ isset($cart['main_price']) ? $cart['main_price'] : 0 }}</b>
+                                                                                            <b>{{ $price }}</b>
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <b>{{ number_format($price, 2) }}</b>
+                                                                                            <b>{{ number_format($qty_price, 2) }}</b>
                                                                                         </td>
                                                                                     </tr>
                                                                                     @php
-                                                                                        $subtotal += $price;
+                                                                                        $subtotal += $qty_price;
 
                                                                                         if ($current_date >= $start_date && $current_date < $end_date) {
                                                                                             if (!empty($Coupon) || $Coupon != '') {
@@ -691,12 +723,10 @@
                                                                                                 if ($Coupon['type'] == 'F') {
                                                                                                     $couponcode = $Coupon['discount'];
                                                                                                 }
-                                                                                                $total = $subtotal - $couponcode + $delivery_charge;
-                                                                                                // session()->push('total');
-                                                                                                // session()->save();
+                                                                                                $total = $subtotal - $couponcode;
                                                                                             }
                                                                                         } else {
-                                                                                            $total = $subtotal + $delivery_charge;
+                                                                                            $total = $subtotal;
                                                                                         }
 
                                                                                     @endphp
@@ -706,9 +736,21 @@
                                                                             @if (isset($mycart['withoutSize']))
                                                                                 @foreach ($mycart['withoutSize'] as $key => $cart)
                                                                                     @php
-                                                                                        $price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
-                                                                                        if (isset($cart['del_price']) && !empty($cart['del_price'])) {
-                                                                                            $delivery_charge += $cart['del_price'];
+                                                                                        // Price
+                                                                                        if($userdeliverytype == 'delivery')
+                                                                                        {
+                                                                                            $price = isset($cart['del_price']) ? $cart['del_price'] : 0;
+                                                                                            $qty_price = isset($cart['del_price']) ? $cart['del_price'] * $cart['quantity'] : 0 * $cart['quantity'];
+                                                                                        }
+                                                                                        elseif($userdeliverytype == 'collection')
+                                                                                        {
+                                                                                            $price = isset($cart['col_price']) ? $cart['col_price'] : 0;
+                                                                                            $qty_price = isset($cart['col_price']) ? $cart['col_price'] * $cart['quantity'] : 0 * $cart['quantity'];
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            $price = isset($cart['main_price']) ? $cart['main_price'] : 0;
+                                                                                            $qty_price = isset($cart['main_price']) ? $cart['main_price'] * $cart['quantity'] : 0 * $cart['quantity'];
                                                                                         }
                                                                                     @endphp
                                                                                     <tr>
@@ -732,14 +774,14 @@
                                                                                             </div>
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <b>{{ isset($cart['main_price']) ? $cart['main_price'] : 0 }}</b>
+                                                                                            <b>{{ $price }}</b>
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <b>{{ number_format($price, 2) }}</b>
+                                                                                            <b>{{ number_format($qty_price, 2) }}</b>
                                                                                         </td>
                                                                                     </tr>
                                                                                     @php
-                                                                                        $subtotal += $price;
+                                                                                        $subtotal += $qty_price;
                                                                                         if (!empty($Coupon) || $Coupon != '')
                                                                                         {
                                                                                             if ($Coupon['type'] == 'P')
@@ -750,11 +792,11 @@
                                                                                             {
                                                                                                 $couponcode = $Coupon['discount'];
                                                                                             }
-                                                                                            $total = $subtotal - $couponcode + $delivery_charge;
+                                                                                            $total = $subtotal - $couponcode;
                                                                                         }
                                                                                         else
                                                                                         {
-                                                                                            $total = $subtotal + $delivery_charge;
+                                                                                            $total = $subtotal;
                                                                                         }
 
                                                                                     @endphp
@@ -763,6 +805,43 @@
                                                                         </tbody>
                                                                     </table>
                                                                 </form>
+                                                            </div>
+                                                            <div class="row mb-2" id="free_item">
+                                                                @if (!empty($session_free_item) || $session_free_item != '')
+                                                                    <div class="col-md-4" style="text-align: right">
+                                                                        <a class="btn mt-1" style="background: red!important; color:white;">Free Item</a>
+                                                                    </div>
+                                                                    <div class="col-md-8">
+                                                                        <div class="form-group">
+                                                                            <select class="form-control mt-1" disabled>
+                                                                                <option>{{ $session_free_item }}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    @if(!empty($cart_rule_total) || $cart_rule_total != '')
+                                                                        @if ($get_sub_total >= $cart_rule_total)
+                                                                            @php
+                                                                                $free_explode = isset($cart_rule['id_item']) ? explode(':',$cart_rule['id_item']) : '';
+                                                                                $free_items = getFreeItems($free_explode);
+                                                                            @endphp
+                                                                            <div class="col-md-4" style="text-align: right">
+                                                                                <a class="btn mt-1" style="background: red!important; color:white;">Free Item</a>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <select name="free_item" id="free_item" class="form-control mt-1" onchange="changeFreeItem()">
+                                                                                        @if (!empty($free_items) || $free_items != '')
+                                                                                            @foreach ($free_items as $key => $fitem)
+                                                                                                <option value="{{ $fitem }}" {{ ($session_free_item == $fitem) ? 'selected' : '' }}>{{ $fitem }}</option>
+                                                                                            @endforeach
+                                                                                        @endif
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                    @endif
+                                                                @endif
                                                             </div>
                                                             <div class="basket-total">
                                                                 <table class="table table-responsive">
@@ -780,17 +859,11 @@
                                                                             </td>
                                                                         </tr>
                                                                         <tr class="voucher"></tr>
-                                                                        <tr>
-                                                                            <td><b>Delivery Charge :</b></td>
-                                                                            <td><span><b id="del_charge">{{ $currency }}
-                                                                                        {{ $delivery_charge }}</b></span>
-                                                                            </td>
-                                                                        </tr>
                                                                         <tr id="servicecharge" style="display: none">
                                                                             <td><b>Service Charge :</b></td>
                                                                             <td>
                                                                                 <span id="servicechargeammout">
-                                                                                    {{-- <b id="del_charge">{{ $currency }} {{ $cashondelivery['cod_charge_payment'] ? $cashondelivery['cod_charge_payment'] : '0.00' }}</b> --}}
+
                                                                                 </span>
                                                                             </td>
                                                                         </tr>
@@ -916,7 +989,6 @@
                              <form action="{{ route('processTransaction') }}" method="post">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
-                                <input type="hidden" name="delivery_charge" id="delivery_charge" value="{{ isset($delivery_charge) ? $delivery_charge : '' }}">
                                 <input type="hidden" name="service_charge" id="service_charge">
                                 <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
                                 <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
@@ -1249,8 +1321,6 @@
                 {
                     if (response.success == 1)
                     {
-                        $('#del_charge').text('');
-                        $('#del_charge').text(response.delivery_charge);
                         $('#total_pay').text('');
                         $('#total_pay').text(response.total_pay);
                         location.reload();
@@ -1369,10 +1439,10 @@
             // return false;
             var total = $('#total').val();
             var subtotal = $('#subtotal').val();
-            var delivery_charge = $('#delivery_charge').val();
             var service_charge = $('#service_charge').val();
             var couponcode = $('#couponcode').val();
             var couponname = $('#couponname').val();
+            var free_item = $('#free_item :selected').val();
 
             if (method_type == 1) {
                 window.location.href = "{{ route('stripe') }}";
@@ -1388,7 +1458,6 @@
             //             'p_method': method_type,
             //             'total': total,
             //             'subtotal': subtotal,
-            //             'delivery_charge': delivery_charge,
             //             'couponcode': couponcode,
             //             'couponname': couponname,
             //         },
@@ -1433,10 +1502,10 @@
                         'p_method': method_type,
                         'total': total,
                         'subtotal': subtotal,
-                        'delivery_charge': delivery_charge,
                         'service_charge': service_charge,
                         'couponcode': couponcode,
                         'couponname': couponname,
+                        'free_item': free_item,
                     },
                     dataType: "json",
                     success: function(response)

@@ -394,6 +394,7 @@ Route::get('filemanager',[FilemanagerController::class,'index'])->name('filemana
 // FRONTEND
 Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
 Route::get('menu', [MenuController::class, 'index'])->name('menu');
+Route::post('changeFreeItem', [MenuController::class, 'changeFreeItem'])->name('changeFreeItem');
 Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
 Route::post('getid', [MenuController::class, 'addToCart'])->name('getid');
 Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');

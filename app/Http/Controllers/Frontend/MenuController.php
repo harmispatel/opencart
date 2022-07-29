@@ -15,6 +15,8 @@ use App\Models\Settings;
 use App\Models\ToppingSize;
 use App\Models\CouponProduct;
 use App\Models\Customer;
+use App\Models\FreeItem;
+use App\Models\FreeRule;
 use App\Models\ProductDescription;
 use App\Models\ToppingProductPriceSize;
 use App\Models\ToppingCatOption;
@@ -39,6 +41,9 @@ class MenuController extends Controller
 
         // Store Settings
         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+        // Get Cart Rule
+        $cart_rule = FreeRule::where('id_store',$front_store_id)->first();
 
         $current_date = strtotime(date('Y-m-d'));
         $Coupon = '';
@@ -84,7 +89,29 @@ class MenuController extends Controller
         }
 
 
-        return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon]);
+        return view('frontend.pages.menu', ['data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
+    }
+
+
+
+
+    // Chnage Free Item
+    function changeFreeItem(Request $request)
+    {
+        $item = $request->item;
+
+        if(!empty($item) || $item != '')
+        {
+            session()->put('free_item',$item);
+            return response()->json([
+                'success' => 1,
+            ]);
+        }
+
+        return response()->json([
+            'error' => 0,
+        ]);
+
     }
 
 
@@ -116,6 +143,7 @@ class MenuController extends Controller
         $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
         unset($group['number_group']);
 
+        $delivery_type = session()->get('flag_post_code');
 
         $sizeid = $request->size_id;
         $userid = $request->user_id;
@@ -123,59 +151,85 @@ class MenuController extends Controller
 
         $current_date = strtotime(date('Y-m-d'));
 
-        if (session()->has('currentcoupon')) {
+        if (session()->has('currentcoupon'))
+        {
             $Coupon = session()->get('currentcoupon');
-        } else {
+        }
+        else
+        {
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
 
-            if (!empty($get_coupon) || $get_coupon != '') {
+            if (!empty($get_coupon) || $get_coupon != '')
+            {
                 $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
                 $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
 
-                if ($current_date >= $start_date && $current_date < $end_date) {
+                if ($current_date >= $start_date && $current_date < $end_date)
+                {
                     $Coupon = $get_coupon;
-                } else {
+                }
+                else
+                {
                     $Coupon = '';
                 }
             }
-            else {
+            else
+            {
                 $Coupon = '';
             }
         }
 
-        if (!empty($loopid) || $loopid != '') {
-            if ($loopid <= 0) {
+        if (!empty($loopid) || $loopid != '')
+        {
+            if ($loopid <= 0)
+            {
                 return response()->json([
                     'required_1' => 1,
                 ]);
-            } else {
-                if ($loopid <= 50) {
-                    if ($userid == 0) {
-                        if ($sizeid == 0) {
+            }
+            else
+            {
+                if ($loopid <= 50)
+                {
+                    if ($userid == 0)
+                    {
+                        if ($sizeid == 0)
+                        {
                             session()->forget('cart1.withoutSize.' . $productid);
-                            for ($i = 1; $i <= $loopid; $i++) {
-                                addtoCart($request, $productid, $sizeid);
-                            }
-                        } else {
-                            session()->forget('cart1.size.' . $sizeid);
-                            for ($i = 1; $i <= $loopid; $i++) {
+                            for ($i = 1; $i <= $loopid; $i++)
+                            {
                                 addtoCart($request, $productid, $sizeid);
                             }
                         }
-                    } else {
+                        else
+                        {
+                            session()->forget('cart1.size.' . $sizeid);
+                            for ($i = 1; $i <= $loopid; $i++)
+                            {
+                                addtoCart($request, $productid, $sizeid);
+                            }
+                        }
+                    }
+                    else
+                    {
                         $cart = getuserCart($userid);
-                        if ($sizeid == 0) {
+                        if ($sizeid == 0)
+                        {
                             unset($cart['withoutSize'][$productid]);
                             $serial = serialize($cart);
                             $base64 = base64_encode($serial);
                             $user = Customer::find($userid);
                             $user->cart = $base64;
                             $user->update();
-                            for ($i = 1; $i <= $loopid; $i++) {
+
+                            for ($i = 1; $i <= $loopid; $i++)
+                            {
                                 $newcart = getuserCart($userid);
                                 addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
                             }
-                        } else {
+                        }
+                        else
+                        {
                             unset($cart['size'][$sizeid]);
                             unset($cart['withoutSize'][$productid]);
                             $serial = serialize($cart);
@@ -183,30 +237,41 @@ class MenuController extends Controller
                             $user = Customer::find($userid);
                             $user->cart = $base64;
                             $user->update();
-                            for ($i = 1; $i <= $loopid; $i++) {
+                            for ($i = 1; $i <= $loopid; $i++)
+                            {
                                 $newcart = getuserCart($userid);
                                 addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
                             }
                         }
                     }
-                } else {
+                }
+                else
+                {
                     return response()->json([
                         'max_limit' => 1,
                     ]);
                 }
             }
-        } else {
-            if ($userid == 0) {
+        }
+        else
+        {
+            if ($userid == 0)
+            {
                 addtoCart($request, $productid, $sizeid);
-            } else {
+            }
+            else
+            {
                 $cart = getuserCart($userid);
                 addtoCartUser($request, $productid, $sizeid, $cart, $userid);
             }
         }
 
-        if ($userid == 0) {
+        if ($userid == 0)
+        {
             $mycart = $request->session()->get('cart1');
-        } else {
+        }
+        else
+        {
             $mycart = getuserCart($userid);
         }
 
@@ -220,9 +285,26 @@ class MenuController extends Controller
 
         $html .= '<table class="table">';
 
-        if (isset($mycart['size'])) {
-            foreach ($mycart['size'] as $key => $cart) {
-                $price = $cart['main_price'] * $cart['quantity'];
+        if (isset($mycart['size']))
+        {
+            foreach ($mycart['size'] as $key => $cart)
+            {
+
+                // price
+                if($delivery_type == 'delivery')
+                {
+                    $price = $cart['del_price'] * $cart['quantity'];
+                }
+                elseif($delivery_type == 'collection')
+                {
+                    $price = $cart['col_price'] * $cart['quantity'];
+                }
+                else
+                {
+                    $price = $cart['main_price'] * $cart['quantity'];
+                }
+
+
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $key . ',' . $userid . ')" style="cursor:pointer;"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
@@ -230,9 +312,6 @@ class MenuController extends Controller
                 $html .= '<td>' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">'.$currency.' '.$price.'</td>';
                 $html .= '</tr>';
-
-                // Delivery Charge
-                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
 
                 // Sub Total
                 $subtotal += $price;
@@ -242,19 +321,31 @@ class MenuController extends Controller
             }
         }
 
-        if (isset($mycart['withoutSize'])) {
+        if (isset($mycart['withoutSize']))
+        {
             $sizeid = 0;
-            foreach ($mycart['withoutSize'] as $cart) {
-                $price = $cart['main_price'] * $cart['quantity'];
+            foreach ($mycart['withoutSize'] as $cart)
+            {
+                // price
+                if($delivery_type == 'delivery')
+                {
+                    $price = $cart['del_price'] * $cart['quantity'];
+                }
+                elseif($delivery_type == 'collection')
+                {
+                    $price = $cart['col_price'] * $cart['quantity'];
+                }
+                else
+                {
+                    $price = $cart['main_price'] * $cart['quantity'];
+                }
+
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
                 $html .= '<td colspan="2">' . $cart['name'] . '</td>';
                 $html .= '<td style="width: 80px;">'.$currency.' '. $price . '</td>';
                 $html .= '</tr>';
-
-                // Delivery Charge
-                $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
 
                 // Subtotal
                 $subtotal += $price;
@@ -288,27 +379,65 @@ class MenuController extends Controller
         $sessioncouponcode = session()->put('couponcode',isset($couponcode) ? $couponcode : '');
         $sessioncouponname = session()->put('couponname',isset($Coupon['code']) ? $Coupon['code'] : '');
         $sessioncurrency = session()->put('currency',$store_setting['config_currency']);
-        $sessiondelivery_charge = session()->put('delivery_charge',$delivery_charge);
+
+        // Get Cart Rule
+        $cart_rule = FreeRule::where('id_store',$front_store_id)->first();
+
+        if(isset($cart_rule) && !empty($cart_rule))
+        {
+            $cart_rule_total = $cart_rule['min_total'];
+        }
+        else
+        {
+            $cart_rule_total = '';
+        }
+
+        $cart_rule_html = '';
+
+        if(!empty($cart_rule_total) || $cart_rule_total != '')
+        {
+            if ($subtotal >= $cart_rule_total)
+            {
+                $free_explode = isset($cart_rule['id_item']) ? explode(':',$cart_rule['id_item']) : '';
+                $free_items = getFreeItems($free_explode);
+
+                $cart_rule_html .= '<div class="form-group">';
+                $cart_rule_html .= '<label>Please Choose Your Free Items</label>';
+                $cart_rule_html .= '<select name="free_item" id="free_item" class="form-control mt-1" onchange="changeFreeItem()">';
+
+                if (!empty($free_items) || $free_items != '')
+                {
+                    foreach ($free_items as $key => $fitem)
+                    {
+                        if($key == 0)
+                        {
+                            session()->put('free_item',$fitem);
+                        }
+                        $cart_rule_html .= '<option value="'.$fitem.'">'.$fitem.'</option>';
+                    }
+                }
+
+                $cart_rule_html .= '</select>';
+                $cart_rule_html .= '</div>';
+            }
+        }
 
         $subtotl_html = '';
-        $deliverycharge_html = '';
         $headertotal = 0;
         $total_html = '';
 
         $subtotl_html .= '<label>Sub-Total</label><span>'.$currency.' '.$subtotal . '</span>';
-        $deliverycharge_html .= '<label><b>Delivery Charge:</b></label><span>'.$currency.' '.$delivery_charge . '</span>';
         $total_html .= '<label><b>Total to pay:</b></label><span>'.$currency.' '. $total . '</span>';
         $headertotal += $total;
 
         return response()->json([
             'html' => $html,
             'subtotal' => $subtotl_html,
-            'delivery_charge' => $deliverycharge_html,
             'cart_products' => $cart_products,
             'headertotal' => number_format($headertotal, 2),
             'total' => $total_html,
             'couponcode' => $coupon_html,
-            // 'modal' => $modal,
+            'cart_rule_html' => $cart_rule_html,
         ]);
     }
 
@@ -527,9 +656,13 @@ class MenuController extends Controller
 
         $current_date = strtotime(date('Y-m-d'));
 
-        if (session()->has('currentcoupon')) {
+
+        if (session()->has('currentcoupon'))
+        {
             $Coupon = session()->get('currentcoupon');
-        } else {
+        }
+        else
+        {
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
 
             if (!empty($get_coupon) || $get_coupon != '') {
@@ -554,22 +687,31 @@ class MenuController extends Controller
 
 
         // Check User ID
-        if (session()->has('userid')) {
+        if (session()->has('userid'))
+        {
             $userid = session()->get('userid');
-        } else {
+        }
+        else
+        {
             $userid = 0;
         }
 
         // Guest User
-        if ($userid == 0) {
-            if (session()->has('cart1')) {
+        if ($userid == 0)
+        {
+            if (session()->has('cart1'))
+            {
                 $cart = session()->get('cart1');
 
-                if (!empty($cart) || isset($cart)) {
+                if (!empty($cart) || isset($cart))
+                {
                     // For Delivery Price
-                    if ($d_type == 'delivery') {
-                        if (isset($cart['size']) && !empty($cart['size'])) {
-                            foreach ($cart['size'] as $key => $value) {
+                    if ($d_type == 'delivery')
+                    {
+                        if (isset($cart['size']) && !empty($cart['size']))
+                        {
+                            foreach ($cart['size'] as $key => $value)
+                            {
                                 $size_id = $key;
                                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
@@ -578,8 +720,10 @@ class MenuController extends Controller
                             }
                         }
 
-                        if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                            foreach ($cart['withoutSize'] as $key => $value) {
+                        if (isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                        {
+                            foreach ($cart['withoutSize'] as $key => $value)
+                            {
                                 $prod_id = $key;
                                 $prod = Product::where('product_id', $prod_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
@@ -587,32 +731,51 @@ class MenuController extends Controller
                                 session()->put('cart1', $cart);
                             }
                         }
-                    } else {
-                        if (isset($cart['size']) && !empty($cart['size'])) {
-                            foreach ($cart['size'] as $key => $value) {
-                                $cart['size'][$key]['del_price'] = 0.00;
+                    }
+                    elseif($d_type == 'collection')
+                    {
+                        if (isset($cart['size']) && !empty($cart['size']))
+                        {
+                            foreach ($cart['size'] as $key => $value)
+                            {
+                                $size_id = $key;
+                                $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                                $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                                $cart['size'][$key]['col_price'] = $col_price;
                                 session()->put('cart1', $cart);
                             }
                         }
 
-                        if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                            foreach ($cart['withoutSize'] as $key => $value) {
-                                $cart['withoutSize'][$key]['del_price'] = 0.00;
+                        if (isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                        {
+                            foreach ($cart['withoutSize'] as $key => $value)
+                            {
+                                $prod_id = $key;
+                                $prod = Product::where('product_id', $prod_id)->first();
+                                $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                                $cart['withoutSize'][$key]['col_price'] = $col_price;
                                 session()->put('cart1', $cart);
                             }
                         }
                     }
                 }
             }
-        } else {
-            if (!empty($userid)) {
+        }
+        else
+        {
+            if (!empty($userid))
+            {
                 $customer_cart = getuserCart($userid);
 
-                if (isset($customer_cart) && !empty($customer_cart)) {
+                if (isset($customer_cart) && !empty($customer_cart))
+                {
                     // For Delivery Price
-                    if ($d_type == 'delivery') {
-                        if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                            foreach ($customer_cart['size'] as $key => $value) {
+                    if ($d_type == 'delivery')
+                    {
+                        if (isset($customer_cart['size']) && !empty($customer_cart['size']))
+                        {
+                            foreach ($customer_cart['size'] as $key => $value)
+                            {
                                 $size_id = $key;
                                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
@@ -626,8 +789,10 @@ class MenuController extends Controller
                             }
                         }
 
-                        if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                            foreach ($customer_cart['withoutSize'] as $key => $value) {
+                        if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                        {
+                            foreach ($customer_cart['withoutSize'] as $key => $value)
+                            {
                                 $prod_id = $key;
                                 $prod = Product::where('product_id', $prod_id)->first();
                                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
@@ -640,10 +805,17 @@ class MenuController extends Controller
                                 $user->update();
                             }
                         }
-                    } else {
-                        if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                            foreach ($customer_cart['size'] as $key => $value) {
-                                $customer_cart['size'][$key]['del_price'] = 0.00;
+                    }
+                    elseif($d_type == 'collection')
+                    {
+                        if (isset($customer_cart['size']) && !empty($customer_cart['size']))
+                        {
+                            foreach ($customer_cart['size'] as $key => $value)
+                            {
+                                $size_id = $key;
+                                $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                                $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                                $customer_cart['size'][$key]['col_price'] = $col_price;
 
                                 $serial = serialize($customer_cart);
                                 $base64 = base64_encode($serial);
@@ -653,9 +825,14 @@ class MenuController extends Controller
                             }
                         }
 
-                        if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                            foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                $customer_cart['withoutSize'][$key]['del_price'] = 0.00;
+                        if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                        {
+                            foreach ($customer_cart['withoutSize'] as $key => $value)
+                            {
+                                $prod_id = $key;
+                                $prod = Product::where('product_id', $prod_id)->first();
+                                $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                                $customer_cart['withoutSize'][$key]['col_price'] = $col_price;
 
                                 $serial = serialize($customer_cart);
                                 $base64 = base64_encode($serial);
@@ -671,45 +848,55 @@ class MenuController extends Controller
 
 
         // Get New Delivery Total & Total
-        $del_total = 0;
         $coupontotal = 0;
         $sub_total = 0;
 
-        if ($userid == 0) {
-            if (session()->has('cart1')) {
+        if ($userid == 0)
+        {
+            if (session()->has('cart1'))
+            {
                 $cart = session()->get('cart1');
 
-                if (!empty($cart) || isset($cart)) {
-                    if (isset($cart['size']) && !empty($cart['size'])) {
-                        foreach ($cart['size'] as $key => $value) {
-                            $del_total += $value['del_price'];
+                if (!empty($cart) || isset($cart))
+                {
+                    if (isset($cart['size']) && !empty($cart['size']))
+                    {
+                        foreach ($cart['size'] as $key => $value)
+                        {
                             $sub_total += $value['main_price'] * $value['quantity'];
                         }
                     }
 
-                    if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                        foreach ($cart['withoutSize'] as $key => $value) {
-                            $del_total += $value['del_price'];
+                    if (isset($cart['withoutSize']) && !empty($cart['withoutSize']))
+                    {
+                        foreach ($cart['withoutSize'] as $key => $value)
+                        {
                             $sub_total += $value['main_price'] * $value['quantity'];
                         }
                     }
                 }
             }
-        } else {
-            if (!empty($userid)) {
+        }
+        else
+        {
+            if (!empty($userid))
+            {
                 $customer_cart = getuserCart($userid);
 
-                if (isset($customer_cart) && !empty($customer_cart)) {
-                    if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                        foreach ($customer_cart['size'] as $key => $value) {
-                            $del_total += $value['del_price'];
+                if (isset($customer_cart) && !empty($customer_cart))
+                {
+                    if (isset($customer_cart['size']) && !empty($customer_cart['size']))
+                    {
+                        foreach ($customer_cart['size'] as $key => $value)
+                        {
                             $sub_total += $value['main_price'] * $value['quantity'];
                         }
                     }
 
-                    if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                        foreach ($customer_cart['withoutSize'] as $key => $value) {
-                            $del_total += $value['del_price'];
+                    if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize']))
+                    {
+                        foreach ($customer_cart['withoutSize'] as $key => $value)
+                        {
                             $sub_total += $value['main_price'] * $value['quantity'];
                         }
                     }
@@ -717,12 +904,16 @@ class MenuController extends Controller
             }
         }
 
+
         if (!empty($Coupon) || $Coupon != '')
         {
-            if ($Coupon->type == 'P') {
-            $coupontotal = ($sub_total * $Coupon->discount) / 100;
+            if ($Coupon->type == 'P')
+            {
+                $coupontotal = ($sub_total * $Coupon->discount) / 100;
             }
-            if ($Coupon->type == 'F') {
+
+            if ($Coupon->type == 'F')
+            {
                 $coupontotal = $sub_total - $Coupon->discount;
             }
         }
@@ -737,7 +928,6 @@ class MenuController extends Controller
 
         return response()->json([
             'success' => 1,
-            'delivery_charge' => '£ ' . $del_total,
             'total_pay' => '£ ' . $total_pay,
         ]);
     }

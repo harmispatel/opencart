@@ -106,6 +106,7 @@ class CustomerOrder extends Controller
     // Function For  Confirm Order
     function confirmorder(Request $request)
     {
+
        // Get Current URL
        $currentURL = URL::to("/");
 
@@ -127,9 +128,29 @@ class CustomerOrder extends Controller
         $delivery_type = session()->get('flag_post_code');
 
 
+        // Free Item
+        $f_item = $request->free_item;
+
+        if(!empty($f_item) || $f_item != '')
+        {
+            $free_item = $f_item;
+        }
+        else
+        {
+            if(session()->has('free_item'))
+            {
+                $free_item = session()->get('free_item');
+            }
+            else
+            {
+                $free_item = '';
+            }
+        }
+
+
         $subtotal = $request->subtotal;
         $total = $request->total;
-        $delivery_charge = $request->delivery_charge;
+        $delivery_charge = 0.00;
         $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
         $servicecharge = $request->service_charge;
         $couponname = $request->couponname;
@@ -245,7 +266,7 @@ class CustomerOrder extends Controller
                         $gorder->date_added = date('Y-m-d h:i:s');
                         $gorder->date_modified = date('Y-m-d h:i:s');
                         $gorder->flag_post_code = session()->get('flag_post_code');
-                        $gorder->free_item = '';
+                        $gorder->free_item = $free_item;
                         $gorder->timedelivery = $time_method;
                         $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
                         $gorder->clear_history = 0;
@@ -373,6 +394,7 @@ class CustomerOrder extends Controller
 
                         session()->forget('cart1');
                         session()->forget('guest_user');
+                        session()->forget('free_item');
 
                         $new_url = $currentURL . '/success';
 
@@ -381,7 +403,8 @@ class CustomerOrder extends Controller
                             'success_url' => $new_url,
                         ]);
                     }
-                } else // Customer
+                }
+                else // Customer
                 {
                     $usercart = getuserCart($user_id);
 
@@ -447,7 +470,7 @@ class CustomerOrder extends Controller
                     $order->date_added = date('Y-m-d h:i:s');
                     $order->date_modified = date('Y-m-d h:i:s');
                     $order->flag_post_code = session()->get('flag_post_code');
-                    $order->free_item = '';
+                    $order->free_item = $free_item;
                     $order->timedelivery = $time_method;
                     $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                     $order->clear_history = 0;
@@ -457,6 +480,7 @@ class CustomerOrder extends Controller
                     $last_order_id = $order->order_id;
 
                     session()->put('last_order_id',$order->order_id);
+                    session()->forget('free_item');
 
                     // Order Product
                     if (isset($usercart)) {
@@ -660,7 +684,7 @@ class CustomerOrder extends Controller
                         $gorder->date_added = date('Y-m-d h:i:s');
                         $gorder->date_modified = date('Y-m-d h:i:s');
                         $gorder->flag_post_code = session()->get('flag_post_code');
-                        $gorder->free_item = '';
+                        $gorder->free_item = $free_item;
                         $gorder->timedelivery = $time_method;
                         $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
                         $gorder->clear_history = 0;
@@ -788,6 +812,7 @@ class CustomerOrder extends Controller
                         session()->forget('cart1');
                         session()->forget('guest_user');
                         session()->forget('guest_user_address');
+                        session()->forget('free_item');
 
                         $new_url = $currentURL . '/success';
 
@@ -864,7 +889,7 @@ class CustomerOrder extends Controller
                         $order->date_added = date('Y-m-d h:i:s');
                         $order->date_modified = date('Y-m-d h:i:s');
                         $order->flag_post_code = session()->get('flag_post_code');
-                        $order->free_item = '';
+                        $order->free_item = $free_item;
                         $order->timedelivery = $time_method;
                         $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
                         $order->clear_history = 0;
@@ -872,6 +897,7 @@ class CustomerOrder extends Controller
                         $order->save();
 
                         session()->put('last_order_id',$order->order_id);
+                        session()->forget('free_item');
 
                         // Order Product
                         if (isset($usercart)) {
