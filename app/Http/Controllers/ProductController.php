@@ -822,7 +822,8 @@ class ProductController extends Controller
             $query->where('store_id', $current_store_id);
         })->orderBy('category_id','DESC')->get();
         $product_icon = ProductIcons::select('*')->get();
-        $toppingType = Topping::join('oc_product_topping_type', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $prod_id)->first();
+        $toppingType = ProductToppingType::leftJoin('oc_topping', 'oc_topping.id_topping', '=', 'oc_product_topping_type.id_group_topping')->where('oc_product_topping_type.id_product', $id)->first();
+
 
         $result['category'] = $category;
         $result['product_icon'] = $product_icon;
@@ -839,7 +840,6 @@ class ProductController extends Controller
     // Update Products
     public function update(Request $request)
     {
-
         $request->validate([
             'product' => 'required',
             // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
@@ -900,7 +900,9 @@ class ProductController extends Controller
         //     $producturl = $currentURL.'public/admin/product/';
         //     $product->image = $producturl.$imgname;
         // }
-        $product->image = $request->image;
+        if($request->image != ''){
+            $product->image = $request->image;
+        }
         $product->update();
 
         $product_description = ProductDescription::find($product_id);
@@ -916,20 +918,57 @@ class ProductController extends Controller
         $product_category->category_id = isset($request->category) ? $request->category : 0;
         $product_category->update();
 
-        $type_topping = isset($request->typetopping) ? $request->typetopping : 0;
+        $type_topping = isset($request->topping) ? $request->topping : '';
 
-        // if (!empty($type_topping) || $type_topping != '')
-        // {
-        //     $toppingtype = ProductToppingType::find($product_id);
-        //     // $toppingtype->typetopping =  $type_topping;
-        //     $toppingtype->min_check = isset($request->minimum) ? $request->minimum : 0;
-        //     $toppingtype->max_check = isset($request->maximum) ? $request->maximum : 0;;
-        //     $toppingtype->choose = isset($request->choose) ? $request->choose : '';
-        //     $toppingtype->enable = $request->enable;
-        //     $toppingtype->renamegroup = $request->renamegroup;
-        //     $toppingtype->topping_sort_order = $request->topping_sort_order;
-        //     $toppingtype->update();
-        // }
+
+        if (!empty($type_topping) || $type_topping != '')
+        {
+
+            foreach($type_topping as $topping)
+            {
+                $id_group_topping = isset($topping['id']) ? $topping['id'] : '';
+                $typetopping = isset($topping['typetopping']) ? $topping['typetopping'] : '';
+                $maximum = isset($topping['maximum']) ? $topping['maximum'] : '';
+                $minimum = isset($topping['minimum']) ? $topping['minimum'] : '';
+                $status = isset($topping['status']) ? $topping['status'] : 1;
+                $rename = isset($topping['rename']) ? $topping['rename'] : 1;
+                $sortorder = isset($topping['sortorder']) ? $topping['sortorder'] : 1;
+
+
+                $toppingtype = ProductToppingType::where('id_group_topping',$id_group_topping)->where('id_product',$product_id)->first();
+
+                $id_topping = isset($toppingtype['id']) ? $toppingtype['id'] : '';
+
+                if(!empty($id_topping) || $id_topping != '')
+                {
+                    $edit_toppingtype = ProductToppingType::find($id_topping);
+                    $edit_toppingtype->typetopping =  $typetopping;
+                    $edit_toppingtype->min_check = $minimum;
+                    $edit_toppingtype->max_check = $maximum;
+                    $edit_toppingtype->choose = isset($request->choose) ? $request->choose : '';
+                    $edit_toppingtype->enable = $status;
+                    $edit_toppingtype->renamegroup = $rename;
+                    $edit_toppingtype->topping_sort_order = $sortorder;
+                    $edit_toppingtype->update();
+                }
+                else
+                {
+                    $new_toppingtype = new ProductToppingType;
+                    $new_toppingtype->id_product =  $product_id;
+                    $new_toppingtype->id_group_topping = $id_group_topping;
+                    $new_toppingtype->typetopping =  $typetopping;
+                    $new_toppingtype->min_check = $minimum;
+                    $new_toppingtype->max_check = $maximum;
+                    $new_toppingtype->choose = isset($request->choose) ? $request->choose : '';
+                    $new_toppingtype->enable = $status;
+                    $new_toppingtype->renamegroup = $rename;
+                    $new_toppingtype->topping_sort_order = $sortorder;
+                    $new_toppingtype->save();
+                }
+
+            }
+
+        }
 
         $mainprice = isset($request->mainprices) ? $request->mainprices : "";
         $mainprice = $request->mainprices;

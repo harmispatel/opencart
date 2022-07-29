@@ -287,14 +287,7 @@
 
                                                         <div class="form-group">
                                                             <label for="image" class="form-label">Image</label>
-                                                            {{-- <input
-                                                                class="form-control p-1   {{ $errors->has('image') ? 'is-invalid' : '' }}"
-                                                                name="image" id="image" type="file">
-                                                            @if ($errors->has('image'))
-                                                                <div class="invalid-feedback">
-                                                                    {{ $errors->first('image') }}
-                                                                </div>
-                                                            @endif --}}
+
                                                             <div class="input-group">
                                                                 <span class="input-group-btn">
                                                                   <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
@@ -321,51 +314,90 @@
                                                         @php
                                                             $t_type_prod_id = isset($result['toppingType']->id_product) ? $result['toppingType']->id_product : '';
                                                             $t_type_name_topping = isset($result['toppingType']->name_topping) ? $result['toppingType']->name_topping : '';
+
+                                                            $cat_id = $product['category_id'];
+
+                                                            $get_cat_topping = getCatTopping($cat_id);
+
                                                         @endphp
 
-                                                        @if (isset($product->product_id) ? $product->product_id : '' == $t_type_prod_id)
-                                                            <h2>{{ $t_type_name_topping }}</h2>
-                                                            <div style="margin-bottom: 10px;">
-                                                                <input type="radio" name="typetopping" class="avtive"
-                                                                    value="select"
-                                                                    {{ (isset($result['toppingType']->typetopping) ? $result['toppingType']->typetopping : '' == 'select') ? 'checked' : '' }}
-                                                                    onclick="radiocheck()">
-                                                                Dropdown
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                        @if (isset($get_cat_topping) && !empty($get_cat_topping))
+                                                            @foreach ($get_cat_topping as $key => $topping)
 
-                                                                <input type="radio" name="typetopping" value="checkbox"
-                                                                    {{ (isset($result['toppingType']->typetopping) ? $result['toppingType']->typetopping : '' == 'checkbox') ? 'checked' : '' }}
-                                                                    onclick="radiocheck()">
-                                                                Checkbox
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                @php
+                                                                    $get_edit_topping = getEditTopping($topping['id_topping'],$product->product_id);
 
-                                                            </div>
+                                                                    $typetopping = isset($get_edit_topping['typetopping']) ? $get_edit_topping['typetopping'] : '';
 
-                                                            <div id="text"></div>
+                                                                    $max = isset($get_edit_topping['max_check']) ? $get_edit_topping['max_check'] : 0;
 
-                                                            <div style="margin-bottom: 10px;">
-                                                                <input type="radio" name="enable[]" value="1"
-                                                                    {{ (isset($result['toppingType']->enable) ? $result['toppingType']->enable : '' == 1) ? 'checked' : '' }}>
-                                                                Enable
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="radio" name="enable[]" value="0"
-                                                                    {{ (isset($result['toppingType']->enable) ? $result['toppingType']->enable : '' == 0) ? 'checked' : '' }}>
-                                                                Disable
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                            </div>
-                                                            <div class="form-floating">
-                                                                <label for="rename" class="form-label">Rename to</label>
-                                                                <input type="text" name="renamegroup" class="form-control">
-                                                            </div>
-                                                            <div class="form-floating"
-                                                                style="padding-bottom:20px;border-bottom: 1px solid #000000;margin-bottom:10px;">
-                                                                <label for="sort_order" class="form-label">Sort Order</label>
-                                                                <input type="text" name="topping_sort_order" value="0"
-                                                                    class="form-control">
-                                                            </div>
+                                                                    $min = isset($get_edit_topping['min_check']) ? $get_edit_topping['min_check'] : 0;
+
+                                                                    $status = isset($get_edit_topping['enable']) ? $get_edit_topping['enable'] : '';
+
+                                                                    $renamegroup = isset($get_edit_topping['renamegroup']) ? $get_edit_topping['renamegroup'] : '';
+
+                                                                    $topping_sort_order = isset($get_edit_topping['topping_sort_order']) ? $get_edit_topping['topping_sort_order'] : '';
+                                                                @endphp
+
+                                                                <h2>{{ isset($topping['name_topping']) ? $topping['name_topping'] : '' }}</h2>
+
+
+                                                                <input type="hidden" name="topping[{{$topping['id_topping']}}][id]" value="{{$topping['id_topping']}}">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label>Dropdown</label>
+                                                                            <input type="radio" name="topping[{{$topping['id_topping']}}][typetopping]" value="select" onclick="radiocheck('{{$topping['id_topping']}}')" {{ ($typetopping == 'select') ? 'checked' : '' }}>
+
+                                                                            <label>Checkbox</label>
+                                                                            <input type="radio" name="topping[{{$topping['id_topping']}}][typetopping]" value="checkbox" onclick="radiocheck('{{$topping['id_topping']}}')" {{ ($typetopping == 'checkbox') ? 'checked' : '' }}>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row mt-2" id="minmax_{{$topping['id_topping']}}" style="display: {{ ($typetopping == 'checkbox') ? 'block' : 'none' }};">
+                                                                    <div class="col-md-12">
+                                                                        <label>Maximum</label>
+                                                                        <input type="text" name="topping[{{$topping['id_topping']}}][maximum]" value="{{ $max }}" class="form-control">
+
+                                                                        <label>Minimum</label>
+                                                                        <input type="text" name="topping[{{$topping['id_topping']}}][minimum]" value="{{ $min }}" class="form-control">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label>Enable</label>
+                                                                            <input type="radio" name="topping[{{$topping['id_topping']}}][status]" value="1" {{ ($status == 1) ? 'checked' : '' }}>
+
+                                                                            <label>Disable</label>
+                                                                            <input type="radio" name="topping[{{$topping['id_topping']}}][status]" value="0" {{ ($status == 0) ? 'checked' : '' }}>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mt-2">
+                                                                        <div class="form-group">
+                                                                            <label>Rename to</label>
+                                                                            <input type="text" name="topping[{{$topping['id_topping']}}][rename]" class="form-control" value="{{$renamegroup}}">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mt-2">
+                                                                        <div class="form-group">
+                                                                            <label>Sort Order</label>
+                                                                            <input type="number" name="topping[{{$topping['id_topping']}}][sortorder]" class="form-control" value="{{$topping_sort_order}}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                            @endforeach
                                                         @else
-                                                            {{ 'No Topping' }}
+                                                            <h3> No Topping Available !</h3>
                                                         @endif
+
+
 
                                                         <hr>
 
@@ -373,13 +405,8 @@
                                                         <div class="form-floating">
                                                             <label for="status" class="form-label">Status</label>
                                                             <select name="status" id="status" class="form-control">
-                                                                <option
-                                                                    value="{{ isset($product->status) ? $product->status : '' }}"
-                                                                    style="display: none">
-                                                                    {{ isset($product->status) ? $product->status : '' }}
-                                                                </option>
-                                                                <option value="1">Enabled</option>
-                                                                <option value="0">Deabled</option>
+                                                                <option value="1" {{ ($product->status == 1) ? 'selected' : '' }}>Enabled</option>
+                                                                <option value="0" {{ ($product->status == 0) ? 'selected' : '' }}>Deabled</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-floating">
@@ -412,33 +439,24 @@
 <script>
     //  Show Checkbox
     $(document).ready(function() {
-
-        var data = $('input[name=typetopping]:checked').val();
-        var html = '';
-        if (data == 'checkbox') {
-            html = '<div><lable>Minimum</lable></div>';
-            html += '<div><input type="text" name="minimum" value="0" class="form-control"></div>';
-            html += '<div><lable>Maximum</lable></div>';
-            html += '<div><input type="text" name="maximum" value="0" class="form-control"></div>';
-        }
-        $("#text").append(html);
+       radiocheck();
     });
 
       //  Show Dropdown
-    function radiocheck() {
-        var data = $('input[name=typetopping]:checked').val();
+    function radiocheck(tid)
+    {
+        var name = 'topping['+tid+'][typetopping]';
+        var data = $('input[name="'+name+'"]:checked').val();
 
-        var html = '';
-        if (data == 'select') {
-            $("#text").html('');
+        if(data == 'checkbox')
+        {
+            $('#minmax_'+tid).show();
         }
-        if (data == 'checkbox') {
-            html += '<div><lable>Minimum</lable></div>';
-            html += '<div><input type="text" name="minimum" value="0" class="form-control"></div>';
-            html += '<div><lable>Maximum</lable></div>';
-            html += '<div><input type="text" name="maximum" value="0" class="form-control"></div>';
+        else
+        {
+            $('#minmax_'+tid).hide();
         }
-        $("#text").append(html);
+
     }
 </script>
 <script src="{{asset('public/vendor/laravel-filemanager/js/stand-alone-button.js')}}"></script>
