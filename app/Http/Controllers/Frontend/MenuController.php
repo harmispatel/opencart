@@ -89,8 +89,15 @@ class MenuController extends Controller
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
+
         // minimum spend
-        $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        if ($delivery_setting['delivery_option'] == 'area') {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+        }
+        else{
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        }
+
         $deliverysettings = $deliverysettings->toArray();
         $countdeliverysettings = count($deliverysettings)-1;
         $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
