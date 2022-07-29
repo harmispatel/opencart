@@ -475,18 +475,27 @@ class MenuController extends Controller
         $userid = $request->user_id;
 
         if ($userid == 0) {
-            if ($sizeid == 0) {
+            if ($sizeid == 0)
+            {
                 session()->forget('cart1.withoutSize.' . $productid);
-            } else {
+            }
+            else
+            {
                 session()->forget('cart1.size.' . $sizeid);
             }
-        } else {
+        }
+        else
+        {
             $cart = getuserCart($userid);
 
-            if (isset($cart)) {
-                if ($sizeid == 0) {
+            if (isset($cart))
+            {
+                if ($sizeid == 0)
+                {
                     unset($cart['withoutSize'][$productid]);
-                } else {
+                }
+                else
+                {
                     unset($cart['size'][$sizeid]);
                 }
             }

@@ -63,11 +63,30 @@ It's used for View Menu.
     {
         $userid = session()->get('userid');
         $mycart = getuserCart(session()->get('userid'));
+
+        // if(isset($mycart))
+        // {
+        //     if( ( isset($mycart['withoutSize']) && count($mycart['withoutSize']) == 0) && ( isset($mycart['size']) && count($mycart['size']) == 0 ) )
+        //     {
+        //         session()->forget('subtotal');
+        //         session()->forget('free_item');
+        //     }
+        // }
     }
     else
     {
         $userid = 0;
         $mycart = session()->get('cart1');
+
+        // if(isset($mycart))
+        // {
+        //     if( ( isset($mycart['withoutSize']) && count($mycart['withoutSize']) == 0) && ( isset($mycart['size']) && count($mycart['size']) == 0 ) )
+        //     {
+        //         session()->forget('subtotal');
+        //         session()->forget('free_item');
+        //     }
+        // }
+
     }
     // End Get Customer Cart
 
