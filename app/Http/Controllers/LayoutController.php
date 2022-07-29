@@ -234,7 +234,7 @@ class LayoutController extends Controller
                     $header_settings['menu_topbar_open_banner'] = $open_banner;
                 }
                 else {
-                    $header_settings['menu_topbar_open_banner'] = $old_header_setting['menu_topbar_open_banner'];
+                    $header_settings['menu_topbar_open_banner'] = isset($old_header_setting['menu_topbar_open_banner']) ? $old_header_setting['menu_topbar_open_banner'] : '';
                 }
 
                 if($header_settings['menu_topbar_close_banner'] != '')
@@ -243,7 +243,7 @@ class LayoutController extends Controller
                     $header_settings['menu_topbar_close_banner'] = $close_banner;
                 }
                 else{
-                    $header_settings['menu_topbar_close_banner'] = $old_header_setting['menu_topbar_close_banner'];
+                    $header_settings['menu_topbar_close_banner'] = isset($old_header_setting['menu_topbar_close_banner']) ? $old_header_setting['menu_topbar_close_banner'] : '';
                 }
 
                 $update_serial_header_setting = serialize($header_settings);
@@ -259,7 +259,7 @@ class LayoutController extends Controller
                     $header_settings['menu_topbar_open_banner'];
                 }
                 else {
-                    $header_settings['menu_topbar_open_banner'] = $old_header_setting['menu_topbar_open_banner'];
+                    $header_settings['menu_topbar_open_banner'] = isset($old_header_setting['menu_topbar_open_banner']) ? $old_header_setting['menu_topbar_open_banner'] : '';
                 }
 
                 if($header_settings['menu_topbar_close_banner'] != '')
@@ -267,7 +267,7 @@ class LayoutController extends Controller
                     $header_settings['menu_topbar_close_banner'];
                 }
                 else{
-                    $header_settings['menu_topbar_close_banner'] = $old_header_setting['menu_topbar_close_banner'];
+                    $header_settings['menu_topbar_close_banner'] = isset($old_header_setting['menu_topbar_close_banner']) ? $old_header_setting['menu_topbar_close_banner'] : '';
                 }
 
                 $serial_header_setting = serialize($header_settings);
@@ -341,13 +341,13 @@ class LayoutController extends Controller
                     $about_settings['about_background_image'];
                 }
                 else{
-                    $about_settings['about_background_image'] = $old_about_setting['about_background_image'];
+                    $about_settings['about_background_image'] = isset($old_about_setting['about_background_image']) ? $old_about_setting['about_background_image'] : '';
                 }
                 if( $about_settings['about_image'] != ''){
                     $about_settings['about_image'];
                 }
                 else{
-                    $about_settings['about_image'] = $old_about_setting['about_image'];
+                    $about_settings['about_image'] = isset($old_about_setting['about_image']) ? $old_about_setting['about_image'] :"";
                 }
 
                 // if(!empty($about_background_image) || $about_background_image != '')
@@ -412,13 +412,13 @@ class LayoutController extends Controller
                     $about_settings['about_background_image'];
                 }
                 else{
-                    $about_settings['about_background_image'] = $old_about_setting['about_background_image'];
+                    $about_settings['about_background_image'] = isset($old_about_setting['about_background_image']) ? $old_about_setting['about_background_image'] : '';
                 }
                 if( $about_settings['about_image'] != ''){
                     $about_settings['about_image'];
                 }
                 else{
-                    $about_settings['about_image'] = $old_about_setting['about_image'];
+                    $about_settings['about_image'] = isset($old_about_setting['about_image']) ? $old_about_setting['about_image'] : '';
                 }
 
                 // $about_background_image = isset($about_settings['about_background_image']) ? $about_settings['about_background_image'] : '';
@@ -476,11 +476,14 @@ class LayoutController extends Controller
                     $popularfood_settings['popularfood_background_image'];
                 }
                 else{
-                    $popularfood_settings['popularfood_background_image'] = $old_popularfood_setting['popularfood_background_image'];
+                    $popularfood_settings['popularfood_background_image'] = isset($old_popularfood_setting['popularfood_background_image']) ? $old_popularfood_setting['popularfood_background_image'] : '';
                 }
 
 
                 $update_serial_popularfood_setting = serialize($popularfood_settings);
+                // echo '<pre>';
+                // print_r($update_serial_popularfood_setting);
+                // exit();
 
                 $popularfood_setting_update = Settings::find($popularfood_setting_id);
                 $popularfood_setting_update->value = $update_serial_popularfood_setting;
@@ -491,7 +494,7 @@ class LayoutController extends Controller
                     $popularfood_settings['popularfood_background_image'];
                 }
                 else{
-                    $popularfood_settings['popularfood_background_image'] = $old_popularfood_setting['popularfood_background_image'];
+                    $popularfood_settings['popularfood_background_image'] = isset($old_popularfood_setting['popularfood_background_image']) ? $old_popularfood_setting['popularfood_background_image'] : '';
                 }
                 $serial_popularfood_setting = serialize($popularfood_settings);
 
@@ -589,7 +592,7 @@ class LayoutController extends Controller
                     $bestcategory_settings['bestcategory_background_image'];
                 }
                 else{
-                    $bestcategory_settings['bestcategory_background_image'] = $old_bestcategory_setting['bestcategory_background_image'];
+                    $bestcategory_settings['bestcategory_background_image'] = isset($old_bestcategory_setting['bestcategory_background_image']) ? $old_bestcategory_setting['bestcategory_background_image'] : '';
                 }
 
                 $update_serial_bestcategory_setting = serialize($bestcategory_settings);
@@ -604,7 +607,7 @@ class LayoutController extends Controller
                     $bestcategory_settings['bestcategory_background_image'];
                 }
                 else{
-                    $bestcategory_settings['bestcategory_background_image'] = $old_bestcategory_setting['bestcategory_background_image'];
+                    $bestcategory_settings['bestcategory_background_image'] = isset($old_bestcategory_setting['bestcategory_background_image']) ? $old_bestcategory_setting['bestcategory_background_image'] : '';
                 }
 
                 $serial_bestcategory_setting = serialize($bestcategory_settings);
@@ -700,7 +703,7 @@ class LayoutController extends Controller
                 if ($review_settings['review_background_image'] != "") {
                     $review_settings['review_background_image'];
                 } else {
-                    $review_settings['review_background_image'] = $old_review_setting['review_background_image'];
+                    $review_settings['review_background_image'] = isset($old_review_setting['review_background_image']) ? $old_review_setting['review_background_image'] : '';
                 }
 
                 $update_serial_review_setting = serialize($review_settings);
@@ -713,7 +716,7 @@ class LayoutController extends Controller
                 if ($review_settings['review_background_image'] != "") {
                     $review_settings['review_background_image'];
                 } else {
-                    $review_settings['review_background_image'] = $old_review_setting['review_background_image'];
+                    $review_settings['review_background_image'] = isset($old_review_setting['review_background_image']) ? $old_review_setting['review_background_image'] : '';
                 }
 
                 $serial_review_setting = serialize($review_settings);
@@ -926,7 +929,7 @@ class LayoutController extends Controller
                     if ($openhour_settings['openhour_background_image'] != '') {
                         $openhour_settings['openhour_background_image'];
                     } else {
-                        $openhour_settings['openhour_background_image'] = $old_openhour_setting['openhour_background_image'];
+                        $openhour_settings['openhour_background_image'] = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
                     }
 
 
@@ -941,7 +944,7 @@ class LayoutController extends Controller
                 if ($openhour_settings['openhour_background_image'] != '') {
                     $openhour_settings['openhour_background_image'];
                 } else {
-                    $openhour_settings['openhour_background_image'] = $old_openhour_setting['openhour_background_image'];
+                    $openhour_settings['openhour_background_image'] = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
                 }
 
                 $serial_openhour_setting = serialize($openhour_settings);
