@@ -118,6 +118,9 @@ It's used for View Menu.
         $session_free_item = '';
     }
 
+    // echo '<pre>';
+    // print_r(session()->all());
+    // exit();
 @endphp
 
 
@@ -223,52 +226,6 @@ It's used for View Menu.
     <!-- End Mobile View -->
 
 
-    <!-- Free Item Modal -->
-    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Freeitem">
-        Launch demo modal
-    </button> --}}
-
-    <div class="modal fade free-item-modal" id="Freeitem" tabindex="-1" aria-labelledby="FreeitemLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content" id="item-modal">
-                <div class="modal-header">
-                    <h5 class="modal-title text-center" id="FreeitemLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="accordion" id="accordionExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapsefree" aria-expanded="true" aria-controls="collapsefree">
-                                    <span>Accordion Item #1</span>
-                                </button>
-                            </h2>
-                            <div id="collapsefree" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                                data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
-                                  <select style="width: 200px">
-                                      <option style="display: none" selected>--</option>
-                                  </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="">
-                            <b>Add your special request?</b><br>
-                            <textarea  name="request" rows="5" style="width: 465px"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="" style="width:665px;background-color: #C1FF47;">Add To Cart</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Free Item Modal -->
-
-
     <!-- Main Section -->
     <section class="main-innr">
         <div class="container">
@@ -323,6 +280,7 @@ It's used for View Menu.
                                                 $cat_id = $value->category_id;
                                                 $product = getproduct($front_store_id, $cat_id);
                                                 $catvalue = strtolower($value->hasOneCategory->name);
+                                                $get_cat_top_status = getCatTopStatus($cat_id);
                                             @endphp
 
                                             @if(!empty($available_day) || $available_day != '')
@@ -339,6 +297,15 @@ It's used for View Menu.
                                                                 @foreach ($product as $values)
                                                                     @php
                                                                         $product_available_day = isset($values->hasOneProduct['availibleday']) ? explode(',',$values->hasOneProduct['availibleday']) : '';
+                                                                        if($get_cat_top_status == 1)
+                                                                        {
+                                                                            $proID = isset($values->product_id) ? $values->product_id : 0;
+                                                                            $get_product_top_opt = getProductTopOpt($proID);
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $get_product_top_opt = '';
+                                                                        }
                                                                     @endphp
 
                                                                     @if (!empty($product_available_day) || $product_available_day != '')
@@ -394,15 +361,107 @@ It's used for View Menu.
                                                                                                                 </div>
                                                                                                                 <div class="col-md-7">
                                                                                                                     @if($store_open_close == 'open')
-                                                                                                                        @if ($setsizeprice == 0)
-                                                                                                                            <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
-                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            </button>
+                                                                                                                        @if ($get_cat_top_status == 1)
+                                                                                                                            @if ($setsizeprice == 0)
+                                                                                                                                <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                </button>
+                                                                                                                            @else
+                                                                                                                                @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
+                                                                                                                                    <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
+                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+
+                                                                                                                                    {{-- Dynamic Model --}}
+                                                                                                                                    <div class="modal fade free-item-modal_{{ $sizeprice_id }}" id="freeItem_{{ $sizeprice_id }}" tabindex="-1" aria-labelledby="freeItem_{{ $sizeprice_id }}Label" aria-hidden="true">
+                                                                                                                                        <div class="modal-dialog">
+                                                                                                                                            <div class="modal-content" id="item-modal">
+                                                                                                                                                <div class="modal-header">
+                                                                                                                                                    <h5 class="modal-title text-center" id="freeItem_{{ $sizeprice_id }}Label">{{ $values->hasOneDescription['name'] }}</h5>
+                                                                                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="modal-body">
+                                                                                                                                                    <form id="top_form_{{ $sizeprice_id }}">
+                                                                                                                                                        @csrf
+                                                                                                                                                        @foreach ($get_product_top_opt as $proTop)
+                                                                                                                                                            @php
+                                                                                                                                                                $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
+                                                                                                                                                                $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
+                                                                                                                                                                $top_pro_id = $proTop->id;
+                                                                                                                                                                $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
+
+                                                                                                                                                                $get_sub_topping = getSubTopping($id_group_topping);
+
+                                                                                                                                                            @endphp
+
+                                                                                                                                                            <div class="accordion{{ $top_pro_id }}" id="accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                <div class="accordion-item{{ $top_pro_id }}">
+                                                                                                                                                                    <h2 class="accordion-header{{ $top_pro_id }}" id="headingOne{{ $top_pro_id }}">
+                                                                                                                                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree{{ $top_pro_id }}" aria-expanded="true" aria-controls="collapsefree{{ $top_pro_id }}">
+                                                                                                                                                                            <span style="width: 100%!important">{{ $tName }}</span>
+                                                                                                                                                                        </button>
+                                                                                                                                                                    </h2>
+                                                                                                                                                                    <div id="collapsefree{{ $top_pro_id }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ $top_pro_id }}"
+                                                                                                                                                                        data-bs-parent="#accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                        <div class="accordion-body">
+                                                                                                                                                                            @if ($typeTopping == 'select')
+                                                                                                                                                                                <select class="form-control" name="select_top">
+                                                                                                                                                                                    @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                        <option value=""> -- --</option>
+                                                                                                                                                                                        @foreach ($get_sub_topping as $stop)
+                                                                                                                                                                                            <option value="{{ $stop->name }}">{{ $stop->name }}</option>
+                                                                                                                                                                                        @endforeach
+                                                                                                                                                                                    @endif
+                                                                                                                                                                                </select>
+                                                                                                                                                                            @else
+                                                                                                                                                                                <div class="row">
+                                                                                                                                                                                    @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                        @foreach ($get_sub_topping as $key=> $stop)
+                                                                                                                                                                                            <div class="col-md-6">
+                                                                                                                                                                                                <label>{{ $stop->name }}</label>
+                                                                                                                                                                                                <input type="checkbox" name="check_top" id="{{ $stop->name }}" value="{{ $stop->name }}">
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                        @endforeach
+                                                                                                                                                                                    @endif
+                                                                                                                                                                                </div>
+                                                                                                                                                                            @endif
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </div>
+                                                                                                                                                                </div>
+                                                                                                                                                                {{-- <div class="">
+                                                                                                                                                                    <b>Add your special request?</b><br>
+                                                                                                                                                                    <textarea  name="request" rows="5" style="width: 465px"></textarea>
+                                                                                                                                                                </div> --}}
+                                                                                                                                                            </div>
+                                                                                                                                                        @endforeach
+                                                                                                                                                    </form>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="modal-footer text-center">
+                                                                                                                                                    <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }},'model');" class="btn">Add To Cart</a>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                    {{-- End Dynamic Model --}}
+
+                                                                                                                                @else
+                                                                                                                                    <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
+                                                                                                                                        class="btn options-btn cartstatus">
+                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+                                                                                                                                @endif
+                                                                                                                            @endif
                                                                                                                         @else
-                                                                                                                            <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
-                                                                                                                                class="btn options-btn cartstatus">
-                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            </a>
+                                                                                                                            @if ($setsizeprice == 0)
+                                                                                                                                <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                </button>
+                                                                                                                            @else
+                                                                                                                                <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
+                                                                                                                                    class="btn options-btn cartstatus">
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                </a>
+                                                                                                                            @endif
                                                                                                                         @endif
                                                                                                                     @else
                                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
@@ -437,14 +496,106 @@ It's used for View Menu.
                                                                                                             </div>
                                                                                                             <div class="col-md-7">
                                                                                                                 @if($store_open_close == 'open')
-                                                                                                                    @if ($setprice != 0)
-                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        </a>
+                                                                                                                    @if ($get_cat_top_status == 1)
+                                                                                                                        @if ($setprice != 0)
+                                                                                                                            @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
+
+                                                                                                                                <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus">
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                </a>
+
+                                                                                                                                {{-- Dynamic Model --}}
+                                                                                                                                <div class="modal fade newfree-item-modal_{{ $proID }}" id="newfreeItem_{{ $proID }}" tabindex="-1" aria-labelledby="newfreeItem_{{ $proID }}Label" aria-hidden="true">
+                                                                                                                                    <div class="modal-dialog">
+                                                                                                                                        <div class="modal-content" id="item-modal">
+                                                                                                                                            <div class="modal-header">
+                                                                                                                                                <h5 class="modal-title text-center" id="newfreeItem_{{ $proID }}Label">{{ $values->hasOneDescription['name'] }}</h5>
+                                                                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="modal-body">
+                                                                                                                                                <form id="new_top_form_{{ $proID }}">
+                                                                                                                                                    @csrf
+                                                                                                                                                    @foreach ($get_product_top_opt as $proTop)
+                                                                                                                                                        @php
+                                                                                                                                                            $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
+                                                                                                                                                            $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
+                                                                                                                                                            $top_pro_id = $proTop->id;
+                                                                                                                                                            $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
+
+                                                                                                                                                            $get_sub_topping = getSubTopping($id_group_topping);
+
+                                                                                                                                                        @endphp
+
+                                                                                                                                                        <div class="accordion{{ $top_pro_id }}" id="accordionExample{{ $top_pro_id }}">
+                                                                                                                                                            <div class="accordion-item{{ $top_pro_id }}">
+                                                                                                                                                                <h2 class="accordion-header{{ $top_pro_id }}" id="headingOne{{ $top_pro_id }}">
+                                                                                                                                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree{{ $top_pro_id }}" aria-expanded="true" aria-controls="collapsefree{{ $top_pro_id }}">
+                                                                                                                                                                        <span style="width: 100%!important">{{ $tName }}</span>
+                                                                                                                                                                    </button>
+                                                                                                                                                                </h2>
+                                                                                                                                                                <div id="collapsefree{{ $top_pro_id }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ $top_pro_id }}"
+                                                                                                                                                                    data-bs-parent="#accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                    <div class="accordion-body">
+                                                                                                                                                                        @if ($typeTopping == 'select')
+                                                                                                                                                                            <select class="form-control" name="select_top">
+                                                                                                                                                                                @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                    <option value=""> -- --</option>
+                                                                                                                                                                                    @foreach ($get_sub_topping as $stop)
+                                                                                                                                                                                        <option value="{{ $stop->name }}">{{ $stop->name }}</option>
+                                                                                                                                                                                    @endforeach
+                                                                                                                                                                                @endif
+                                                                                                                                                                            </select>
+                                                                                                                                                                        @else
+                                                                                                                                                                            <div class="row">
+                                                                                                                                                                                @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                    @foreach ($get_sub_topping as $key=> $stop)
+                                                                                                                                                                                        <div class="col-md-6">
+                                                                                                                                                                                            <label>{{ $stop->name }}</label>
+                                                                                                                                                                                            <input type="checkbox" name="check_top" id="{{ $stop->name }}" value="{{ $stop->name }}">
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                    @endforeach
+                                                                                                                                                                                @endif
+                                                                                                                                                                            </div>
+                                                                                                                                                                        @endif
+                                                                                                                                                                    </div>
+                                                                                                                                                                </div>
+                                                                                                                                                            </div>
+                                                                                                                                                            {{-- <div class="">
+                                                                                                                                                                <b>Add your special request?</b><br>
+                                                                                                                                                                <textarea  name="request" rows="5" style="width: 465px"></textarea>
+                                                                                                                                                            </div> --}}
+                                                                                                                                                        </div>
+                                                                                                                                                    @endforeach
+                                                                                                                                                </form>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="modal-footer text-center">
+                                                                                                                                                <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }},'model');" class="btn">Add To Cart</a>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                                {{-- End Dynamic Model --}}
+
+                                                                                                                            @else
+                                                                                                                                <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
+                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                </a>
+                                                                                                                            @endif
+                                                                                                                        @else
+                                                                                                                            <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @endif
                                                                                                                     @else
-                                                                                                                        <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                        </a>
+                                                                                                                        @if ($setprice != 0)
+                                                                                                                            <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @else
+                                                                                                                            <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @endif
                                                                                                                     @endif
                                                                                                                 @else
                                                                                                                     <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
@@ -532,7 +683,13 @@ It's used for View Menu.
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
-                                                                <td>{{ $cart['name'] }}</td>
+                                                                <td>{{ $cart['name'] }} <br>
+                                                                    @if (isset($cart['topping']) && !empty($cart['topping']))
+                                                                        @foreach ($cart['topping'] as $ctop)
+                                                                            <span>- {{ $ctop }}</span><br>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </td>
                                                                 <td>{{ $currency }}{{ $price }}</td>
                                                             </tr>
                                                         @endforeach
@@ -564,7 +721,13 @@ It's used for View Menu.
                                                                     <i class="fa fa-times-circle text-danger" onclick="deletecartproduct({{ $cart['product_id'] }},0,{{ $userid }})" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
-                                                                <td colspan="2">{{ $cart['name'] }}</td>
+                                                                <td colspan="2">{{ $cart['name'] }}<br>
+                                                                    @if (isset($cart['topping']) && !empty($cart['topping']))
+                                                                        @foreach ($cart['topping'] as $ctop)
+                                                                            <span>- {{ $ctop }}</span><br>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </td>
                                                                 <td>{{ $currency }}{{ $price }}</td>
                                                             </tr>
                                                         @endforeach
@@ -884,13 +1047,169 @@ It's used for View Menu.
 
 
         // Add to Cart
-        function addToCart(product, sizeprice, uid)
+        function addToCart(product, sizeprice, uid ,str)
         {
+            var model = str;
             var sizeid = sizeprice;
             var productid = product;
             var userid = uid;
             var status = $('#user_delivery_val').val();
             var coll = $("input[name='delivery_type']:checked").val();
+
+            if(model == 'model')
+            {
+                if(sizeprice != 0)
+                {
+                    var form_data = new FormData(document.getElementById('top_form_'+sizeprice));
+
+                    var chckbox = form_data.getAll('check_top');
+                    var drpdwn = form_data.get('select_top');
+
+                    if(chckbox != '' || drpdwn != '')
+                    {
+                        $.ajax({
+                            type: 'post',
+                            url: '{{ route("getid") }}',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'size_id': sizeid,
+                                'product_id': productid,
+                                'user_id': userid,
+                                'checkbox': chckbox,
+                                'drpdwn': drpdwn,
+                                'topping': 1,
+                            },
+                            dataType: 'json',
+                            success: function(result)
+                            {
+                                // Cart Data
+                                $('.empty-box').html('');
+                                $('.empty-box').append(result.html);
+
+                                // Sub Total
+                                $('.sub-total').html('');
+                                $('.sub-total').append(result.subtotal);
+
+                                // Cart Products
+                                $('#cart_products').html('');
+                                $('#cart_products').append(result.cart_products);
+
+                                // Total Amount
+                                $('.total').html('');
+                                $('.total').append(result.total);
+
+                                // Header Total
+                                $('.pirce-value').text('');
+                                $('.pirce-value').append(result.headertotal);
+
+                                // Coupon
+                                $('.coupon_code').html('');
+                                $('.coupon_code').append(result.couponcode);
+
+                                // Modal
+                                $('#item-modal').html('');
+                                $('#item-modal').append(result.modal);
+
+                                // Free Items
+                                $('#freeItem').html('');
+                                $('#freeItem').append(result.cart_rule_html);
+
+                                $('#top_form_'+sizeprice).trigger("reset");
+                                $('#freeItem_'+sizeprice).modal('hide');
+
+                                if (result.min_spend == 'true') {
+                                    // checkeout button status
+                                    $('.disabled_checkout_btn').removeClass('disabled');
+                                    $('.minimum_spend').html('');
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $('#top_form_'+sizeprice).trigger("reset");
+                        $('#freeItem_'+sizeprice).modal('hide');
+                    }
+
+                    return false;
+                }
+                else
+                {
+                    var form_data = new FormData(document.getElementById('new_top_form_'+product));
+
+                    var chckbox = form_data.getAll('check_top');
+                    var drpdwn = form_data.get('select_top');
+
+                    if(chckbox != '' || drpdwn != '')
+                    {
+                        $.ajax({
+                            type: 'post',
+                            url: '{{ route("getid") }}',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                'size_id': sizeid,
+                                'product_id': productid,
+                                'user_id': userid,
+                                'checkbox': chckbox,
+                                'drpdwn': drpdwn,
+                                'topping': 1,
+                            },
+                            dataType: 'json',
+                            success: function(result)
+                            {
+                                // Cart Data
+                                $('.empty-box').html('');
+                                $('.empty-box').append(result.html);
+
+                                // Sub Total
+                                $('.sub-total').html('');
+                                $('.sub-total').append(result.subtotal);
+
+                                // Cart Products
+                                $('#cart_products').html('');
+                                $('#cart_products').append(result.cart_products);
+
+                                // Total Amount
+                                $('.total').html('');
+                                $('.total').append(result.total);
+
+                                // Header Total
+                                $('.pirce-value').text('');
+                                $('.pirce-value').append(result.headertotal);
+
+                                // Coupon
+                                $('.coupon_code').html('');
+                                $('.coupon_code').append(result.couponcode);
+
+                                // Modal
+                                $('#item-modal').html('');
+                                $('#item-modal').append(result.modal);
+
+                                // Free Items
+                                $('#freeItem').html('');
+                                $('#freeItem').append(result.cart_rule_html);
+
+                                $('#new_top_form_'+product).trigger("reset");
+                                $('#newfreeItem_'+product).modal('hide');
+
+                                if (result.min_spend == 'true') {
+                                    // checkeout button status
+                                    $('.disabled_checkout_btn').removeClass('disabled');
+                                    $('.minimum_spend').html('');
+                                }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $('#new_top_form_'+product).trigger("reset");
+                        $('#newfreeItem_'+product).modal('hide');
+                    }
+
+                    return false;
+                }
+
+            }
 
             if (coll == 'collection')
             {
