@@ -135,6 +135,23 @@ class MenuController extends Controller
     public function addToCart(Request $request)
     {
 
+        $is_topping = isset($request->topping) ? $request->topping : 0;
+        $checkbox = isset($request->checkbox) ? $request->checkbox : '';
+        $drpdwn = isset($request->drpdwn) ? $request->drpdwn : '';
+
+        if(!empty($checkbox) || $checkbox != '')
+        {
+            if(!empty($drpdwn) || $drpdwn != '')
+            {
+                $checkbox[] = $drpdwn;
+            }
+        }
+        else
+        {
+            $new_drp = ','.$drpdwn;
+            $checkbox = array_filter(explode(',',$new_drp));
+        }
+
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -226,7 +243,7 @@ class MenuController extends Controller
                             session()->forget('cart1.withoutSize.' . $productid);
                             for ($i = 1; $i <= $loopid; $i++)
                             {
-                                addtoCart($request, $productid, $sizeid);
+                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
                             }
                         }
                         else
@@ -234,7 +251,7 @@ class MenuController extends Controller
                             session()->forget('cart1.size.' . $sizeid);
                             for ($i = 1; $i <= $loopid; $i++)
                             {
-                                addtoCart($request, $productid, $sizeid);
+                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
                             }
                         }
                     }
@@ -253,7 +270,7 @@ class MenuController extends Controller
                             for ($i = 1; $i <= $loopid; $i++)
                             {
                                 $newcart = getuserCart($userid);
-                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
+                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid, $is_topping, $checkbox);
                             }
                         }
                         else
@@ -268,7 +285,7 @@ class MenuController extends Controller
                             for ($i = 1; $i <= $loopid; $i++)
                             {
                                 $newcart = getuserCart($userid);
-                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid);
+                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid, $is_topping, $checkbox);
                             }
                         }
                     }
@@ -285,12 +302,12 @@ class MenuController extends Controller
         {
             if ($userid == 0)
             {
-                addtoCart($request, $productid, $sizeid);
+                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
             }
             else
             {
                 $cart = getuserCart($userid);
-                addtoCartUser($request, $productid, $sizeid, $cart, $userid);
+                addtoCartUser($request, $productid, $sizeid, $cart, $userid, $is_topping, $checkbox);
             }
         }
 
@@ -337,9 +354,20 @@ class MenuController extends Controller
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $key . ',' . $userid . ')" style="cursor:pointer;"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
                 $html .= '<td>' . $cart['size'] . '</td>';
-                $html .= '<td>' . $cart['name'] . '</td>';
+                $html .= '<td>' . $cart['name'] .'<br>';
+
+                if(isset($cart['topping']) && !empty($cart['topping']))
+                {
+                    foreach($cart['topping'] as $topp)
+                    {
+                        $html .= '<span>- '.$topp.'</span></br>';
+                    }
+                }
+
+                $html .= '</td>';
                 $html .= '<td style="width: 80px;">'.$currency.' '.$price.'</td>';
                 $html .= '</tr>';
+
 
                 // Sub Total
                 $subtotal += $price;
@@ -371,7 +399,17 @@ class MenuController extends Controller
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
-                $html .= '<td colspan="2">' . $cart['name'] . '</td>';
+                $html .= '<td>' . $cart['name'] .'<br>';
+
+                if(isset($cart['topping']) && !empty($cart['topping']))
+                {
+                    foreach($cart['topping'] as $topp)
+                    {
+                        $html .= '<span>- '.$topp.'</span></br>';
+                    }
+                }
+
+                $html .= '</td>';
                 $html .= '<td style="width: 80px;">'.$currency.' '. $price . '</td>';
                 $html .= '</tr>';
 

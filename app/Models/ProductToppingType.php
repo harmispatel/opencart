@@ -12,4 +12,9 @@ class ProductToppingType extends Model
     protected $primaryKey = 'id';
     public $timestamps=false;
 
+    function hasOneTopping()
+    {
+        return $this->hasOne(Topping::class,'id_topping','id_group_topping');
+    }
+
 }

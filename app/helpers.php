@@ -40,6 +40,7 @@ use App\Models\ReservationLayouts;
 use App\Models\Reviews;
 use App\Models\SlidersLayouts;
 use App\Models\ToppingCatOption;
+use App\Models\ToppingOption;
 use Illuminate\Support\Facades\URL;
 
 
@@ -2742,7 +2743,7 @@ function getuserCart($userId)
 
 
 // Function for Add to Cart Login User
-function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
+function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping, $checkbox)
 {
     $delivery_type = session()->get('flag_post_code');
 
@@ -2774,6 +2775,14 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
 
         $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
         $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+
+        if($is_topping == 1)
+        {
+            if(!empty($checkbox) || $checkbox != '')
+            {
+                $data['topping'] = $checkbox;
+            }
+        }
     }
     else
     {
@@ -2790,6 +2799,15 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid)
             $data['col_price'] = $col_price;
         }
         $data['main_price'] = $product->price;
+
+        if($is_topping == 1)
+        {
+            if(!empty($checkbox) || $checkbox != '')
+            {
+                $data['topping'] = $checkbox;
+            }
+        }
+
     }
     $data['name'] = $product->hasOneProductDescription['name'];
     $data['description'] = $product->hasOneProductDescription['description'];
@@ -2879,8 +2897,9 @@ function getCoupon()
 
 
 // Function for Add to Cart
-function addtoCart($request,$productid,$sizeid)
+function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
 {
+
     $delivery_type = session()->get('flag_post_code');
 
     if(session()->has('cart1'))
@@ -2910,6 +2929,15 @@ function addtoCart($request,$productid,$sizeid)
         }
         $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
         $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+
+        if($is_topping == 1)
+        {
+            if(!empty($checkbox) || $checkbox != '')
+            {
+                $data['topping'] = $checkbox;
+            }
+        }
+
     }
     else
     {
@@ -2926,6 +2954,14 @@ function addtoCart($request,$productid,$sizeid)
             $data['col_price'] = $col_price;
         }
         $data['main_price'] = $product->price;
+
+        if($is_topping == 1)
+        {
+            if(!empty($checkbox) || $checkbox != '')
+            {
+                $data['topping'] = $checkbox;
+            }
+        }
     }
     $data['name'] = $product->hasOneProductDescription['name'];
     $data['description'] = $product->hasOneProductDescription['description'];
@@ -3160,6 +3196,51 @@ function getEditTopping($tid, $pid)
     }
 }
 
+
+
+// getCatTopStatus
+function getCatTopStatus($catId)
+{
+    $enable_option = 0;
+    if(!empty($catId) || $catId != '')
+    {
+        $get_cat_top = ToppingCatOption::where('id_category',$catId)->first();
+        $enable_option = isset($get_cat_top['enable_option']) ? $get_cat_top['enable_option'] : 0;
+        return $enable_option;
+    }
+
+    return $enable_option;
+}
+
+
+
+// getProductTopOpt
+function getProductTopOpt($proID)
+{
+    $get_pro_top = '';
+    if(!empty($proID) || $proID != '')
+    {
+        $get_pro_top = ProductToppingType::with(['hasOneTopping'])->where('id_product',$proID)->where('enable','=',1)->get();
+        return $get_pro_top;
+    }
+    return $get_pro_top;
+}
+
+
+
+
+// getSubTopping
+function getSubTopping($id)
+{
+    $get_sub_top = '';
+
+    if(!empty($id) || $id != '')
+    {
+        $get_sub_top = ToppingOption::where('id_group_topping',$id)->get();
+        return $get_sub_top;
+    }
+    return $get_sub_top;
+}
 
 
 ?>
