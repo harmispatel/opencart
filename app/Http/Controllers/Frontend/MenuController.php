@@ -158,7 +158,14 @@ class MenuController extends Controller
         unset($group['number_group']);
 
         // minimum spend
-        $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        $DeliveryCollectionSettings = Settings::select('value')->where('store_id', $front_store_id)->where('key', 'delivery_option')->first();
+
+        if ($DeliveryCollectionSettings['value'] == 'area') {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+        }
+        else{
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        }
         $deliverysettings = $deliverysettings->toArray();
         $countdeliverysettings = count($deliverysettings)-1;
         $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
@@ -451,6 +458,9 @@ class MenuController extends Controller
         $total_html .= '<label><b>Total to pay:</b></label><span>'.$currency.' '. $total . '</span>';
         $headertotal += $total;
 
+        // echo '<pre>';
+        // print_r($total .'<br>'.$minimum_spend['min_spend'] );
+        // exit();
 
         if ($minimum_spend['min_spend'] <= $total) {
             $min_spend = 'true';
