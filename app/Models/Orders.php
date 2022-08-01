@@ -451,7 +451,11 @@ class Orders extends Model
                              $order_product->tax = 0.00;
                              $order_product->reward = 0;
                              $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $order_product->toppings = '';
+                             $toppings = [];
+                             foreach ($cart['topping'] as $topping) {
+                                 $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                             }
+                             $order_product->toppings = implode('', $toppings);
                              $order_product->request = '';
                              $order_product->save();
 
@@ -467,7 +471,11 @@ class Orders extends Model
                              $order_product->tax = 0.00;
                              $order_product->reward = 0;
                              $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $order_product->toppings = '';
+                             $toppings = [];
+                             foreach ($cart['topping'] as $topping) {
+                                 $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                             }
+                             $order_product->toppings = implode('', $toppings);
                              $order_product->request = '';
                              $order_product->save();
                          }
@@ -487,7 +495,11 @@ class Orders extends Model
                              $order_product->tax = 0.00;
                              $order_product->reward = 0;
                              $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $order_product->toppings = '';
+                             $toppings = [];
+                             foreach ($cart['topping'] as $topping) {
+                                 $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                             }
+                             $order_product->toppings = implode('', $toppings);
                              $order_product->request = '';
                              $order_product->save();
 
@@ -949,7 +961,11 @@ class Orders extends Model
                                  $order_product->tax = 0.00;
                                  $order_product->reward = 0;
                                  $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $order_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $order_product->toppings = implode('', $toppings);
                                  $order_product->request = '';
                                  $order_product->save();
 
@@ -985,7 +1001,11 @@ class Orders extends Model
                                  $order_product->tax = 0.00;
                                  $order_product->reward = 0;
                                  $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $order_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $order_product->toppings = implode('', $toppings);
                                  $order_product->request = '';
                                  $order_product->save();
 
@@ -1502,7 +1522,11 @@ class Orders extends Model
                              $order_product->tax = 0.00;
                              $order_product->reward = 0;
                              $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $order_product->toppings = '';
+                             $toppings = [];
+                             foreach ($cart['topping'] as $topping) {
+                                 $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                             }
+                             $order_product->toppings = implode('', $toppings);
                              $order_product->request = '';
                              $order_product->save();
                          }
@@ -1521,7 +1545,11 @@ class Orders extends Model
                              $order_product->tax = 0.00;
                              $order_product->reward = 0;
                              $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $order_product->toppings = '';
+                             $toppings = [];
+                             foreach ($cart['topping'] as $topping) {
+                                 $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                             }
+                             $order_product->toppings = implode('', $toppings);
                              $order_product->request = '';
                              $order_product->save();
                          }
@@ -1932,7 +1960,11 @@ class Orders extends Model
                                  $order_product->tax = 0.00;
                                  $order_product->reward = 0;
                                  $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $order_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $order_product->toppings = implode('', $toppings);
                                  $order_product->request = '';
                                  $order_product->save();
                              }
@@ -1951,7 +1983,11 @@ class Orders extends Model
                                  $order_product->tax = 0.00;
                                  $order_product->reward = 0;
                                  $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $order_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $order_product->toppings = implode('', $toppings);
                                  $order_product->request = '';
                                  $order_product->save();
                              }

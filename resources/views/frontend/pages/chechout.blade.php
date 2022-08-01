@@ -685,18 +685,19 @@
                                                                                     @endphp
                                                                                     <tr>
                                                                                         <td>
-                                                                                            <img src="{{ $cart['image'] }}"
-                                                                                                width="80" height="80">
+                                                                                            <img src="{{ $cart['image'] }}" width="80" height="80">
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <b>{{ $cart['size'] }} -
-                                                                                                {{ $cart['name'] }}</b>
+                                                                                            <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b><br>
+                                                                                            @if (isset($cart['topping']) && !empty($cart['topping']))
+                                                                                                @foreach ($cart['topping'] as $ctop)
+                                                                                                    <span>- {{ $ctop }}</span><br>
+                                                                                                @endforeach
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <div
-                                                                                                class="qu-inr">
-                                                                                                <input type="number" name="qty" id="qty_size_{{ $key }}"
-                                                                                                value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
+                                                                                            <div class="qu-inr">
+                                                                                                <input type="number" name="qty" id="qty_size_{{ $key }}" value="{{ $cart['quantity'] }}" style="max-width: 65px!important;">
                                                                                                 <a onclick="updatecart({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="px-2">
                                                                                                     <img src="{{ get_css_url().'public/images/update.png' }}">
                                                                                                 </a>
@@ -759,7 +760,12 @@
                                                                                                 width="80" height="80">
                                                                                         </td>
                                                                                         <td class="align-middle">
-                                                                                            <b>{{ $cart['name'] }}</b>
+                                                                                            <b>{{ $cart['name'] }}</b><br>
+                                                                                            @if (isset($cart['topping']) && !empty($cart['topping']))
+                                                                                                @foreach ($cart['topping'] as $ctop)
+                                                                                                    <span>- {{ $ctop }}</span><br>
+                                                                                                @endforeach
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td class="align-middle">
                                                                                             <div
