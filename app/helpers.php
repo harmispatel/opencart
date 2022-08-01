@@ -2250,7 +2250,7 @@ function fetch_subof_sub($id)
 // Function for Open-Close Time
 function openclosetime()
 {
-    date_default_timezone_set("Asia/Kolkata");
+    // date_default_timezone_set("Asia/Kolkata");
 
     // exit();
     // Get Current Theme ID & Store ID

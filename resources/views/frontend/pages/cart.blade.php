@@ -200,6 +200,11 @@
                                                 </td>
                                                 <td class="align-middle">
                                                     <b>{{ $cart['name'] }}</b>
+                                                    @if (isset($cart['topping']) && !empty($cart['topping']))
+                                                    @foreach ($cart['topping'] as $ctop)
+                                                        <span>- {{ $ctop }}</span><br>
+                                                    @endforeach
+                                                @endif
                                                 </td>
                                                 <td class="align-middle">
                                                     <div class="qu-inr">

@@ -636,7 +636,7 @@ It's used for View Menu.
                             @else
                                 <div class="close-shop text-center">
                                     <h2>Sorry, We are closed now !</h2>
-                                    <span>We will be opening back at demo Today</span>
+                                    {{-- <span>We will be opening back at demo Today</span> --}}
                                 </div>
                             @endif
 
@@ -908,7 +908,7 @@ It's used for View Menu.
                                     @if ($userdeliverytype == 'delivery')
                                         <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
                                         <div class="closed-now minimum_spend">
-                                                <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} pay karvan che</span>
+                                                <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
                                         </div>
                                     @else
                                         <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
