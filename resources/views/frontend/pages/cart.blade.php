@@ -145,7 +145,12 @@
                                                     <img src="{{ $cart['image'] }}" width="80" height="80">
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b>
+                                                    <b>{{ $cart['size'] }} - {{ $cart['name'] }}</b><br>
+                                                    @if (isset($cart['topping']) && !empty($cart['topping']))
+                                                        @foreach ($cart['topping'] as $ctop)
+                                                            <span>- {{ $ctop }}</span><br>
+                                                        @endforeach
+                                                        @endif
                                                 </td>
                                                 <td class="align-middle">
                                                     <div class="qu-inr">
@@ -199,7 +204,7 @@
                                                     <img src="{{ $cart['image'] }}" width="80" height="80">
                                                 </td>
                                                 <td class="align-middle">
-                                                    <b>{{ $cart['name'] }}</b>
+                                                    <b>{{ $cart['name'] }}</b><br>
                                                     @if (isset($cart['topping']) && !empty($cart['topping']))
                                                     @foreach ($cart['topping'] as $ctop)
                                                         <span>- {{ $ctop }}</span><br>
