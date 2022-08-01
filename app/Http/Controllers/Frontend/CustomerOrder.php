@@ -291,7 +291,11 @@ class CustomerOrder extends Controller
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                    $gorder_product->toppings = '';
+                                    $toppings = [];
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
                                     $gorder_product->request = '';
                                     $gorder_product->save();
                                 }
@@ -310,7 +314,11 @@ class CustomerOrder extends Controller
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                    $gorder_product->toppings = '';
+                                    $toppings = [];
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
                                     $gorder_product->request = '';
                                     $gorder_product->save();
                                 }
@@ -737,7 +745,11 @@ class CustomerOrder extends Controller
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                    $gorder_product->toppings = '';
+                                    $toppings = [];
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
                                     $gorder_product->request = '';
                                     $gorder_product->save();
                                 }

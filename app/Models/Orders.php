@@ -250,7 +250,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
                              }
@@ -269,7 +273,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
                              }
@@ -515,7 +523,11 @@ class Orders extends Model
                              $payment_order_product->tax = 0.00;
                              $payment_order_product->reward = 0;
                              $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $payment_order_product->toppings = '';
+                             $toppings = [];
+                             foreach ($cart['topping'] as $topping) {
+                                 $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                             }
+                             $payment_order_product->toppings = implode('', $toppings);
                              $payment_order_product->request = '';
                              $payment_order_product->save();
                          }
@@ -728,7 +740,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
 
@@ -744,7 +760,11 @@ class Orders extends Model
                                  $payment_gorder_product->tax = 0.00;
                                  $payment_gorder_product->reward = 0;
                                  $payment_gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $payment_gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $payment_gorder_product->toppings = implode('', $toppings);
                                  $payment_gorder_product->request = '';
                                  $payment_gorder_product->save();
                              }
@@ -764,7 +784,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
 
@@ -780,7 +804,11 @@ class Orders extends Model
                                  $payment_gorder_product->tax = 0.00;
                                  $payment_gorder_product->reward = 0;
                                  $payment_gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $payment_gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $payment_gorder_product->toppings = implode('', $toppings);
                                  $payment_gorder_product->request = '';
                                  $payment_gorder_product->save();
                              }
@@ -981,7 +1009,11 @@ class Orders extends Model
                                  $payment_order_product->tax = 0.00;
                                  $payment_order_product->reward = 0;
                                  $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $payment_order_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $payment_order_product->toppings = implode('', $toppings);
                                  $payment_order_product->request = '';
                                  $payment_order_product->save();
                              }
@@ -1021,7 +1053,11 @@ class Orders extends Model
                                  $payment_order_product->tax = 0.00;
                                  $payment_order_product->reward = 0;
                                  $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $payment_order_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $payment_order_product->toppings = implode('', $toppings);
                                  $payment_order_product->request = '';
                                  $payment_order_product->save();
                              }
@@ -1323,7 +1359,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
                              }
@@ -1342,7 +1382,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
                              }
@@ -1761,7 +1805,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
                              }
@@ -1780,7 +1828,11 @@ class Orders extends Model
                                  $gorder_product->tax = 0.00;
                                  $gorder_product->reward = 0;
                                  $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $gorder_product->toppings = '';
+                                 $toppings = [];
+                                 foreach ($cart['topping'] as $topping) {
+                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                 }
+                                 $gorder_product->toppings = implode('', $toppings);
                                  $gorder_product->request = '';
                                  $gorder_product->save();
                              }

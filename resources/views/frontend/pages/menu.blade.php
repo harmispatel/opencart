@@ -36,6 +36,9 @@ It's used for View Menu.
     $delivery_gap = isset($openclose['delivery_gap']) ? $openclose['delivery_gap'] : '';
     $collection_gap = isset($openclose['collection_gap']) ? $openclose['collection_gap'] : '';
 
+    // Store open time
+    $opentime = isset($openclose['from_time']) ? date('H:i',$openclose['from_time']) : '0:00';
+
     // Store Open / Close
     $store_open_close = isset($openclose['store_open_close']) ? $openclose['store_open_close'] : 'close';
 
@@ -465,7 +468,7 @@ It's used for View Menu.
                                                                                                                         @endif
                                                                                                                     @else
                                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }} {{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                         </a>
                                                                                                                     @endif
@@ -636,7 +639,7 @@ It's used for View Menu.
                             @else
                                 <div class="close-shop text-center">
                                     <h2>Sorry, We are closed now !</h2>
-                                    {{-- <span>We will be opening back at demo Today</span> --}}
+                                    {{-- <span>We will be opening back at {{ $opentime }} Today</span> --}}
                                 </div>
                             @endif
 
