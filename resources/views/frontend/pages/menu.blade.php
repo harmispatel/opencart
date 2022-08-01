@@ -831,7 +831,7 @@ It's used for View Menu.
                                                 </li>
                                                 <li class="minicart-list-item" id="freeItem">
                                                     @if(!empty($cart_rule_total) || $cart_rule_total != '')
-                                                        @if ($get_sub_total >= $cart_rule_total)
+                                                        @if ($subtotal >= $cart_rule_total)
                                                             @php
                                                                 $free_explode = isset($cart_rule['id_item']) ? explode(':',$cart_rule['id_item']) : '';
                                                                 $free_items = getFreeItems($free_explode);
