@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS NEW CART PAGE FOR FRONTEND
     ----------------------------------------------------------------------------------------------
     cart.blade.php
     It's used to show customer's cart.
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 
@@ -74,23 +74,23 @@
 <!doctype html>
 <html>
 <head>
-    <!-- CSS -->
+    {{-- CSS --}}
     @include('frontend.include.head')
     <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
-    <!-- End CSS -->
+    {{-- End CSS --}}
 </head>
 <body>
 
-    <!-- User Delivery Type -->
+    {{-- User Delivery Type --}}
     <input type="hidden" name="user_delivery_val" id="user_delivery_val" value="{{ $userdeliverytype }}">
-    <!-- End User Delivery Type -->
+    {{-- End User Delivery Type --}}
 
 
    {{-- Header  --}}
    @include('frontend.theme.all_themes.header')
 
 
-    <!-- Cart Section -->
+    {{-- Cart Section --}}
     <section class="basket-main">
         <div class="container">
             <div class="basket-inr">
@@ -260,7 +260,7 @@
                         <table class="table table-responsive">
                             <tbody>
                                 <tr>
-                                    <td><b>Sub-Total:</b></td>
+                                    <td><b>Sub-Total {{$minimum_spend['min_spend']}}:</b></td>
                                     <td><span><b>{{ $currency }}{{ $subtotal }}</b></span></td>
                                 </tr>
                                 <tr>
@@ -278,7 +278,7 @@
                     </div>
                     <div class="basket-bt">
                         <a href="{{ route('menu') }}"> <button class="btn">Continue Shopping</button></a>
-                        @if ($store_open_close == 'open')
+                        @if ($store_open_close == 'open' && $minimum_spend['min_spend'] <= $total)
                             <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
                         @else
                             <button class="btn" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
@@ -296,19 +296,19 @@
             </div>
         </div>
     </section>
-    <!-- End Cart Section -->
+    {{-- End Cart Section --}}
 
 
     {{-- Footer  --}}
     @include('frontend.theme.all_themes.footer')
 
 
-    <!-- JS -->
+    {{-- JS --}}
     @include('frontend.include.script')
-    <!-- End JS -->
+    {{-- End JS --}}
 
 
-    <!-- Custom JS -->
+    {{-- Custom JS --}}
     <script type="text/javascript">
 
         // Update Customer Cart
@@ -384,7 +384,7 @@
         // End Delete Customer Cart Product
 
     </script>
-    <!-- End Custom JS -->
+    {{-- End Custom JS --}}
 
 </body>
 </html>

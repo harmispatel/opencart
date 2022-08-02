@@ -292,10 +292,15 @@ class CustomerOrder extends Controller
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    if(isset($cart['topping']) && !empty($cart['topping'])){
+                                        foreach ($cart['topping'] as $topping) {
+                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                        }
+                                        $gorder_product->toppings = implode('', $toppings);
                                     }
-                                    $gorder_product->toppings = implode('', $toppings);
+                                    else{
+                                        $gorder_product->toppings = '';
+                                    }
                                     $gorder_product->request = '';
                                     $gorder_product->save();
                                 }
@@ -315,10 +320,15 @@ class CustomerOrder extends Controller
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    if(isset($cart['topping']) && !empty($cart['topping'])){
+                                        foreach ($cart['topping'] as $topping) {
+                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                        }
+                                        $gorder_product->toppings = implode('', $toppings);
                                     }
-                                    $gorder_product->toppings = implode('', $toppings);
+                                    else{
+                                        $gorder_product->toppings = '';
+                                    }
                                     $gorder_product->request = '';
                                     $gorder_product->save();
                                 }
@@ -506,10 +516,15 @@ class CustomerOrder extends Controller
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
-                                foreach ($cart['topping'] as $topping) {
-                                    $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $order_product->toppings = implode('', $toppings);
                                 }
-                                $order_product->toppings = implode('', $toppings);
+                                else{
+                                    $order_product->toppings = '';
+                                }
                                 $order_product->request = '';
                                 $order_product->save();
                             }
@@ -529,10 +544,15 @@ class CustomerOrder extends Controller
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
-                                foreach ($cart['topping'] as $topping) {
-                                    $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $order_product->toppings = implode('', $toppings);
                                 }
-                                $order_product->toppings = implode('', $toppings);
+                                else{
+                                    $order_product->toppings = '';
+                                }
                                 $order_product->request = '';
                                 $order_product->save();
                             }
@@ -724,8 +744,15 @@ class CustomerOrder extends Controller
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                    foreach ($cart['topping'] as $topping) {
-                                        $gorder_product->toppings = '<span>'.$topping.'<span><br>';
+                                    $toppings = [];
+                                    if(isset($cart['topping']) && !empty($cart['topping'])){
+                                        foreach ($cart['topping'] as $topping) {
+                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                        }
+                                        $gorder_product->toppings = implode('', $toppings);
+                                    }
+                                    else{
+                                        $gorder_product->toppings = '';
                                     }
                                     $gorder_product->request = '';
                                     $gorder_product->save();
@@ -746,10 +773,15 @@ class CustomerOrder extends Controller
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    if(isset($cart['topping']) && !empty($cart['topping'])){
+                                        foreach ($cart['topping'] as $topping) {
+                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                        }
+                                        $gorder_product->toppings = implode('', $toppings);
                                     }
-                                    $gorder_product->toppings = implode('', $toppings);
+                                    else{
+                                        $gorder_product->toppings = '';
+                                    }
                                     $gorder_product->request = '';
                                     $gorder_product->save();
                                 }
@@ -940,10 +972,15 @@ class CustomerOrder extends Controller
                                     $order_product->reward = 0;
                                     $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    if(isset($cart['topping']) && !empty($cart['topping'])){
+                                        foreach ($cart['topping'] as $topping) {
+                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                        }
+                                        $order_product->toppings = implode('', $toppings);
                                     }
-                                    $order_product->toppings = implode('', $toppings);
+                                    else{
+                                        $order_product->toppings = '';
+                                    }
                                     $order_product->request = '';
                                     $order_product->save();
                                 }
@@ -963,10 +1000,15 @@ class CustomerOrder extends Controller
                                     $order_product->reward = 0;
                                     $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    if(isset($cart['topping']) && !empty($cart['topping'])){
+                                        foreach ($cart['topping'] as $topping) {
+                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                        }
+                                        $order_product->toppings = implode('', $toppings);
                                     }
-                                    $order_product->toppings = implode('', $toppings);
+                                    else{
+                                        $order_product->toppings = '';
+                                    }
                                     $order_product->request = '';
                                     $order_product->save();
                                 }

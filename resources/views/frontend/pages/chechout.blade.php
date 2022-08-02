@@ -459,19 +459,15 @@
                                                     <div class="login-main text-center">
                                                         <div class="login-details w-100">
                                                             @if ($delivery_setting['enable_delivery'] != 'collection')
-                                                                <div>
-                                                                    <input class="form-check-input collection_type"
-                                                                        type="radio" name="order" id="deliver"
-                                                                        {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}
-                                                                        value="delivery">
-                                                                    <label class="form-check-label" for="deliver">
-                                                                        Deliver to my address
-                                                                    </label>
+                                                                <div class="float-start">
+                                                                    <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery">
+                                                                    <label class="form-check-label" for="deliver">Deliver to my address</label><br>
+                                                                    <span class="text-danger">Minimum delivery is {{ $currency }}{{ $total }}.</span>
                                                                 </div>
                                                             @endif
 
                                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
-                                                                <div class="mb-1">
+                                                                <div class="mb-1 float-start">
                                                                     <input class="form-check-input collection_type"
                                                                         type="radio" name="order" id="collect"
                                                                         {{ $userdeliverytype == 'collection' ? 'checked' : '' }}
@@ -875,9 +871,7 @@
                                                                         </tr>
                                                                         <tr class="total">
                                                                             <td><b>Total to pay:</b></td>
-                                                                            <td><span><b id="total_pay">{{ $currency }}
-                                                                                        {{ $total }}</b></span>
-                                                                            </td>
+                                                                            <td><span><b id="total_pay">{{ $currency }}{{ $total }}</b></span></td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
