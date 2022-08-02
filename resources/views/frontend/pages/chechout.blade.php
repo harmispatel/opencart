@@ -468,10 +468,7 @@
 
                                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
                                                                 <div class="mb-1 float-start">
-                                                                    <input class="form-check-input collection_type"
-                                                                        type="radio" name="order" id="collect"
-                                                                        {{ $userdeliverytype == 'collection' ? 'checked' : '' }}
-                                                                        value="collection">
+                                                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ $userdeliverytype == 'collection' ? 'checked' : '' }} value="collection">
                                                                     <label class="form-check-label" for="collect">
                                                                         I will collect my order
                                                                     </label>
