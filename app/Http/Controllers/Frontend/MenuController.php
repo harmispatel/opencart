@@ -439,9 +439,7 @@ class MenuController extends Controller
         } else {
             $total = $subtotal + $delivery_charge;
         }
-    //   echo '<pre>';
-    //   print_r($subtotal);
-    //   exit();
+
         $sessioncouponcode = session()->put('couponcode',isset($couponcode) ? $couponcode : '');
         $sessioncouponname = session()->put('couponname',isset($Coupon['code']) ? $Coupon['code'] : '');
         $sessioncurrency = session()->put('currency',$store_setting['config_currency']);
