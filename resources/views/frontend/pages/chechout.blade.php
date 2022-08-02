@@ -9,7 +9,6 @@
 
 @php
 
-
     // Get Current URL
     $currentURL = URL::to("/");
 
@@ -95,6 +94,8 @@
 
     $subtotal = 0;
     $total = 0;
+
+    $session_total = session()->get('total');
 
     // cash on delevery setting
     $servicecharge = paymentdetails();
@@ -462,7 +463,11 @@
                                                                 <div class="float-start">
                                                                     <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery">
                                                                     <label class="form-check-label" for="deliver">Deliver to my address</label><br>
-                                                                    <span class="text-danger">Minimum delivery is {{ $currency }}{{ $total }}.</span>
+                                                                    @if ($userdeliverytype == 'delivery')
+                                                                        @if ($store_open_close == 'open' && $session_total <= $minimum_spend['min_spend'])
+                                                                            <span class="text-danger">Minimum delivery is {{ $currency }}{{ $minimum_spend['min_spend'] }}, you must spend {{ $currency }}{{ $minimum_spend['min_spend']-$session_total }} more for the chekout.</span>
+                                                                        @endif
+                                                                    @endif
                                                                 </div>
                                                             @endif
 
@@ -597,7 +602,11 @@
                             <div class="backbtn d-flex justify-content-between">
                                 <button class="btn disabled" disabled><i class="fa fa-angle-left"></i> Back</button>
                                 @if ($userdeliverytype == 'delivery')
-                                    <a class="btn back-bt del_next" onclick="DeliveryAddress();">Next</a>
+                                    @if ($store_open_close == 'open' && $minimum_spend['min_spend'] <= $session_total)
+                                        <a class="btn back-bt del_next" onclick="DeliveryAddress();">Next</a>
+                                    @else
+                                        <button class="btn back-bt del_next" disabled>Next</button>
+                                    @endif
                                 @endif
                                 @if ($userdeliverytype == 'collection')
                                     <a class="btn back-bt coll_next" id="next">Next</a>

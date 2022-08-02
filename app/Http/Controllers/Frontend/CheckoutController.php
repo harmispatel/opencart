@@ -82,7 +82,21 @@ class CheckoutController extends Controller
             }
         }
 
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule'));
+        // minimum spend
+        $DeliveryCollectionSettings = Settings::select('value')->where('store_id', $front_store_id)->where('key', 'delivery_option')->first();
+
+        if ($DeliveryCollectionSettings['value'] == 'area') {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+        }
+        else{
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        }
+        $deliverysettings = $deliverysettings->toArray();
+        $countdeliverysettings = count($deliverysettings)-1;
+        $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
+        $minimum_spend = $deliverysettings_last_array[$countdeliverysettings];
+
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule','minimum_spend'));
     }
 
 
