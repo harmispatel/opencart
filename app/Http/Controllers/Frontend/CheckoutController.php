@@ -18,6 +18,9 @@ class CheckoutController extends Controller
     // Function For Checkout
     public function checkout()
     {
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
         $current_date = strtotime(date('Y-m-d'));
 
 

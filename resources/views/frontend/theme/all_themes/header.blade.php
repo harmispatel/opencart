@@ -216,9 +216,12 @@
         // print_r($delivery_charge);
         // exit();
         }
+
     }
     // End Cart Details
-   
+        $sessiontotal = session()->put('total',$headertotal);
+        $sessionsubtotal = session()->put('subtotal',$price);
+         
 
     $currentdate = strtotime(date("Y-m-d")); 
 @endphp
