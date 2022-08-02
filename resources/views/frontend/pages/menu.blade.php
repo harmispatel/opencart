@@ -894,7 +894,8 @@ It's used for View Menu.
                                         @if ($minimum_spend['min_spend'] >= $total)
                                             <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
                                             <div class="closed-now minimum_spend">
-                                                    <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}</span>
+                                                    <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}.</span>
+                                                    {{-- <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}, you must spend {{ $currency }}{{number_format($minimum_spend['min_spend'],2) - $total}} more for the chekout.</span> --}}
                                             </div>
                                         @else
                                             <div class="closed-now pt-0">
