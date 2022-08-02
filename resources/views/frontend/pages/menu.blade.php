@@ -998,7 +998,7 @@ It's used for View Menu.
                         @if ($delivery_setting['enable_delivery'] != 'collection')
                             <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
                         @endif
-                        <button type="button" class="btn csmodal-btn-close" data-bs-dismiss="modal">Cancel and go back</button>
+                        <button type="button" class="btn csmodal-btn-close" id="tested" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
                 </form>
             </div>
@@ -1315,6 +1315,11 @@ It's used for View Menu.
         });
         // End Delivery Button
 
+        // Cancel and go back
+        $('#tested').click(function() {
+               location.reload();
+        });
+        // End Cancel and go back
 
         // Delete Cart Product
         function deletecartproduct(prod_id, size_id, uid)

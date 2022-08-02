@@ -276,7 +276,7 @@
                 </div>
             </div>
             <a class="f-logo" href="">
-                <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="footer_logo" style="max-width: 125px;" />
+                <img class="img-fluid" src="{{ $store_logo }}" alt="footer_logo" style="max-width: 125px;" />
             </a>
             <ul class="social-links">
                 <li>
@@ -310,7 +310,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-4">
                             <a class="f-logo" href="{{ route('home') }}">
-                                <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="footer_logo" style="max-width: 125px;" />
+                                <img class="img-fluid" src="{{ $store_logo }}" alt="footer_logo" style="max-width: 125px;" />
                             </a>
 
                             <p class="foot_link">Pizza is the topmost liked food in the world. Today you can find pizza in almost every corner of the world.</p>
@@ -447,7 +447,7 @@
                     </div>
                 </div>
                 <a class="f-logo" href="{{ route('home') }}">
-                    <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="footer_logo" style="max-width: 125px;" />
+                    <img class="img-fluid" src="{{$store_logo }}" alt="footer_logo" style="max-width: 125px;" />
                 </a>
             </div>
             <div class="footer-bottom">
@@ -467,7 +467,7 @@
                         <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="footer-about mb-4">
                                 <a class="f-logo" href="{{ route('home') }}">
-                                    <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="footer_logo" style="max-width: 125px;" />
+                                    <img class="img-fluid" src="{{ $store_logo }}" alt="footer_logo" style="max-width: 125px;" />
                                 </a>
                                 <p>Pizza is the topmost liked food in the world. Today you can find pizza in almost every corner of the world. This traditional Italian dish is made of flattened round dough topped with cheese, and tomatoes, and additionally garnished with basil, olives, and oregano.</p>
                             </div>
@@ -537,7 +537,7 @@
             </div>
             <div class="footer-bottom">
                 <a class="f-logo">
-                    <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="footer_logo" style="max-width: 125px;"/>
+                    <img class="img-fluid" src="{{ $store_logo }}" alt="footer_logo" style="max-width: 125px;"/>
                 </a>
                 <div class="__social-links">
                     <a href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}" target="_blank" class="fab fa-facebook"></a>

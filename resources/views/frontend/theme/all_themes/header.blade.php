@@ -62,8 +62,11 @@
 
     // User Delivery Type (Collection/Delivery)
     $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    // echo '<pre>';
+    // print_r($userdeliverytype);
+    // exit();
 
-  
+    $delivery_type = session()->get('flag_post_code');
     // User Details
     $userlogin = session('username');
 
@@ -88,8 +91,20 @@
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                // $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                if($userdeliverytype == 'delivery')
+                {
+                    $price += $mycart['del_price'] * $mycart['quantity'];
+                }
+                elseif($userdeliverytype == 'collection')
+                {
+                    $price += $mycart['col_price'] * $mycart['quantity'];
+                }
+                else
+                {
+                    $price += $mycart['main_price'] * $mycart['quantity'];
+                }
                 $cart_products += $mycart['quantity'];
             }
         }
@@ -97,8 +112,20 @@
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
-                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                if($userdeliverytype == 'delivery')
+                {
+                    $price += $mycart['del_price'] * $mycart['quantity'];
+                }
+                elseif($userdeliverytype == 'collection')
+                {
+                    $price += $mycart['col_price'] * $mycart['quantity'];
+                }
+                else
+                {
+                    $price += $mycart['main_price'] * $mycart['quantity'];
+                }
+                // $price += isset($mycart['main_price']) ? $mycart['main_price'] : 0 * $mycart['quantity'];
+                // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
         }
@@ -123,14 +150,27 @@
     else 
     {
         $cart = session()->get('cart1');
+      
         $cart_products = 0;
 
         if (isset($cart['size'])) 
         {
             foreach ($cart['size'] as $mycart) 
             {
-                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                // $price += isset($mycart['col_price']) ? $mycart['col_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                if($userdeliverytype == 'delivery')
+                {
+                    $price += $mycart['del_price'] * $mycart['quantity'];
+                }
+                elseif($userdeliverytype == 'collection')
+                {
+                    $price += $mycart['col_price'] * $mycart['quantity'];
+                }
+                else
+                {
+                    $price += $mycart['main_price'] * $mycart['quantity'];
+                }
+                // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
         }
@@ -138,12 +178,25 @@
         {
             foreach ($cart['withoutSize'] as $mycart) 
             {
-                $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
-                $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                if($userdeliverytype == 'delivery')
+                {
+                    $price = $mycart['del_price'] * $mycart['quantity'];
+                }
+                elseif($userdeliverytype == 'collection')
+                {
+                    $price += $mycart['col_price'] * $mycart['quantity'];
+                }
+                else
+                {
+                    $price += $mycart['main_price'] * $mycart['quantity'];
+                }
+                // $price += isset($mycart['main_price']) ? $mycart['main_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
+                // $delivery_charge =0;
                 $cart_products += $mycart['quantity'];
             }
         }
-       
+          
         if (!empty($Coupon) || $Coupon != '')
         {
             if ($Coupon['type'] == 'P')
@@ -154,11 +207,14 @@
             {
                 $couponcode = $Coupon['discount'];
             }
-            $headertotal += $price - $couponcode + $delivery_charge;
+            $headertotal = $price - $couponcode + $delivery_charge;
         }
         else
         {
-            $headertotal += $price + $delivery_charge;
+            $headertotal = $price + $delivery_charge;
+        //     echo '<pre>';
+        // print_r($delivery_charge);
+        // exit();
         }
     }
     // End Cart Details
@@ -644,7 +700,7 @@
                         </div>                        
                     @elseif ($menu_topbar_left == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
-                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
+                            <img class="img-fluid" src="{{ $store_logo }}" alt="logo" style="max-width: 130px;" />
                         </a>
                     @else
                         <div class="working-time">
@@ -667,7 +723,7 @@
                             </div>                        
                     @elseif ($menu_topbar_center == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
-                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
+                            <img class="img-fluid" src="{{ $store_logo }}" alt="logo" style="max-width: 130px;" />
                         </a>
                     @else
                         <div class="working-time">
@@ -690,7 +746,7 @@
                             </div>
                     @elseif ($menu_topbar_right == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
-                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" style="max-width: 130px;" />
+                            <img class="img-fluid" src="{{ $store_logo }}" alt="logo" style="max-width: 130px;" />
                         </a>
                     @else
                         <div class="working-time">
