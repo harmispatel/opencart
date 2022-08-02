@@ -459,8 +459,17 @@
                                                 <div class="col-md-4">
                                                     <div class="login-main text-center">
                                                         <div class="login-details w-100">
+                                                            @if ($delivery_setting['enable_delivery'] != 'delivery')
+                                                                <div class="mb-1">
+                                                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ $userdeliverytype == 'collection' ? 'checked' : '' }} value="collection">
+                                                                    <label class="form-check-label" for="collect">
+                                                                        I will collect my order
+                                                                    </label>
+                                                                </div>
+                                                            @endif
+
                                                             @if ($delivery_setting['enable_delivery'] != 'collection')
-                                                                <div class="float-start">
+                                                                <div>
                                                                     <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery">
                                                                     <label class="form-check-label" for="deliver">Deliver to my address</label><br>
                                                                     @if ($userdeliverytype == 'delivery')
@@ -468,15 +477,6 @@
                                                                             <span class="text-danger">Minimum delivery is {{ $currency }}{{ $minimum_spend['min_spend'] }}, you must spend {{ $currency }}{{ $minimum_spend['min_spend']-$session_total }} more for the chekout.</span>
                                                                         @endif
                                                                     @endif
-                                                                </div>
-                                                            @endif
-
-                                                            @if ($delivery_setting['enable_delivery'] != 'delivery')
-                                                                <div class="mb-1 float-start">
-                                                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ $userdeliverytype == 'collection' ? 'checked' : '' }} value="collection">
-                                                                    <label class="form-check-label" for="collect">
-                                                                        I will collect my order
-                                                                    </label>
                                                                 </div>
                                                             @endif
                                                         </div>
