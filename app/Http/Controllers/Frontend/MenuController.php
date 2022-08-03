@@ -97,11 +97,7 @@ class MenuController extends Controller
         else{
             $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
         }
-
-        $deliverysettings = $deliverysettings->toArray();
-        $countdeliverysettings = count($deliverysettings)-1;
-        $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
-        $minimum_spend = $deliverysettings_last_array[$countdeliverysettings];
+        $minimum_spend = $deliverysettings->last()->toArray();
 
         return view('frontend.pages.menu', ['minimum_spend' => $minimum_spend,'data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
     }
@@ -183,10 +179,7 @@ class MenuController extends Controller
         else{
             $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
         }
-        $deliverysettings = $deliverysettings->toArray();
-        $countdeliverysettings = count($deliverysettings)-1;
-        $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
-        $minimum_spend = $deliverysettings_last_array[$countdeliverysettings];
+        $minimum_spend = $deliverysettings->last()->toArray();
 
         $delivery_type = session()->get('flag_post_code');
 
