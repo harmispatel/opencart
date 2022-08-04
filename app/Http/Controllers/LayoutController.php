@@ -230,8 +230,7 @@ class LayoutController extends Controller
             if (!empty($header_setting_id) || $header_setting_id != '')
             {
                 if($header_settings['menu_topbar_open_banner'] != ''){
-                    $open_banner =$header_settings['menu_topbar_open_banner'];
-                    $header_settings['menu_topbar_open_banner'] = $open_banner;
+                    $header_settings['menu_topbar_open_banner'];
                 }
                 else {
                     $header_settings['menu_topbar_open_banner'] = isset($old_header_setting['menu_topbar_open_banner']) ? $old_header_setting['menu_topbar_open_banner'] : '';
