@@ -57,11 +57,7 @@ class Cartcontroller extends Controller
         else{
             $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
         }
-        $deliverysettings = $deliverysettings->toArray();
-        $countdeliverysettings = count($deliverysettings)-1;
-        $deliverysettings_last_array =  array_slice($deliverysettings, -1, 1, true);
-        $minimum_spend = $deliverysettings_last_array[$countdeliverysettings];
-
+        $minimum_spend = $deliverysettings->last()->toArray();
         return view('frontend.pages.cart', ['Coupon' => $Coupon,'minimum_spend' => $minimum_spend]);
     }
 }

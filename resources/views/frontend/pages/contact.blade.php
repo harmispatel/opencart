@@ -125,14 +125,14 @@ $openclose = openclosetime();
                     <div class="row">
                         <div class="col-md-6 contact-info-left">
                             <div class="map-info">
-                                <h3>Get Directions</h3>
+                                {{-- <h3>Get Directions</h3>
                                 <form>
                                     <div class="login-details-inr fa fa-crosshairs w-100">
                                         <input placeholder="Enter your location" type="text" name="map" value=""
                                             class="w-100">
                                     </div>
                                     <button class="btn map-bt w-100">GET DIRECTIONS</button>
-                                </form>
+                                </form> --}}
                                 <div class="shop-location text-center" style="padding: 45px">
                                     <h2>{{ $store_setting['config_name'] }}</h2>
                                     <p>{{ $store_setting['config_address'] }}</p>
