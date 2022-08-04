@@ -69,7 +69,7 @@ class ProductController extends Controller
 
 
 
-    // Get All Product
+    // Get All bulk Product
     function getcategoryproduct(Request $request)
     {
 
