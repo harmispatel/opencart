@@ -298,8 +298,10 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // Layouts
     Route::get('templatesettings', [LayoutController::class, 'templatesettings'])->name('templatesettings');
     Route::post('updateTemplateSetting', [LayoutController::class, 'updateTemplateSetting'])->name('updateTemplateSetting');
+    // Route::post('updateTemplateSettingajax', [LayoutController::class, 'updateTemplateSettingajax'])->name('updateTemplateSettingajax');
     Route::post('deleteSlider', [LayoutController::class, 'deleteSlider'])->name('deleteSlider');
 
+    // Route::post('setbackground', [LayoutController::class, 'setbackground'])->name('setbackground');
     Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
     Route::get('bannerandblocks', [LayoutController::class, 'bannerandblocks'])->name('bannerandblocks');
     Route::get('activetheme/{id}', [LayoutController::class, 'activetheme'])->name('activetheme');

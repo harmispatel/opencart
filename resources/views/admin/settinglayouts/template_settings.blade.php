@@ -60,6 +60,13 @@ $openhour_data = openhoursActive();
     [data-toggle="collapse"].collapsed .fa:before {
         content: "\f139";
     }
+
+    .fix-bt{
+        position:fixed;
+        bottom:30px;
+        right:40px;
+        z-index: 9;
+    }
 </style>
 {{-- End Custom CSS --}}
 
@@ -122,13 +129,13 @@ $openhour_data = openhoursActive();
                 <div class="row">
                     <div class="col-md-6">
                         @if (check_user_role(74) == 1)
-                            <button type="submit" form="templateSetting" class="btn btn-success">
+                            <a onclick="backgroundOption(this)" class="btn btn-primary fix-bt">
                                 <i class="fa fa-save"></i> UPDATE
-                            </button>
+                            </a>
                         @else
-                            <button class="btn btn-success" disabled>
+                            <a class="btn btn-success fix-bt" disabled>
                                 <i class="fa fa-save"></i> UPDATE
-                            </button>
+                            </a>
                         @endif
                     </div>
                     <div class="col-md-6">
@@ -151,7 +158,6 @@ $openhour_data = openhoursActive();
                 <form action="{{ route('updateTemplateSetting') }}" id="templateSetting" method="POST"
                     enctype="multipart/form-data">
                     {{ csrf_field() }}
-
 
                     {{-- General Settings --}}
                     <hr class="bg-dark" style="height: 2px;">
@@ -912,8 +918,7 @@ $openhour_data = openhoursActive();
                                         HTML BOX
                                     </h3>
                                     <div class="container" style="text-align: right">
-                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse"
-                                            data-target="#coll4" aria-expanded="true" aria-controls="coll4">
+                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll4" aria-expanded="true" aria-controls="coll4">
                                             <i class="fa" aria-hidden="true"></i>
                                         </button>
                                     </div>
@@ -923,7 +928,6 @@ $openhour_data = openhoursActive();
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <table class="table table-bordered table-striped">
-
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Select HTML Layout</label>
@@ -958,21 +962,16 @@ $openhour_data = openhoursActive();
                                                             <label>Background Option</label>
                                                         </th>
                                                         <td>
-                                                            <select name="about_setting[about_background_option]"
-                                                                class="form-control">
+                                                            <select name="about_setting[about_background_option]" class="form-control" onchange="backgroundOption(this);">
                                                                 @php
                                                                     $about_background_option = isset($get_about_settings['about_background_option']) ? $get_about_settings['about_background_option'] : '';
                                                                 @endphp
-                                                                <option value="1"
-                                                                    {{ $about_background_option == 1 ? 'selected' : '' }}>
-                                                                    Image</option>
-                                                                <option value="2"
-                                                                    {{ $about_background_option == 2 ? 'selected' : '' }}>
-                                                                    Color</option>
+                                                                <option value="1" {{ $about_background_option == 1 ? 'selected' : '' }}>Image</option>
+                                                                <option value="2" {{ $about_background_option == 2 ? 'selected' : '' }}>Color</option>
                                                             </select>
                                                         </td>
                                                     </tr>
-
+                                                    @if ($about_background_option == 2)
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Color</label>
@@ -996,7 +995,8 @@ $openhour_data = openhoursActive();
                                                                 class="form-control">
                                                         </td>
                                                     </tr>
-
+                                                    @endif
+                                                    @if ($about_background_option == 1)
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Image</label>
@@ -1048,6 +1048,7 @@ $openhour_data = openhoursActive();
                                                             </select>
                                                         </td>
                                                     </tr>
+                                                    @endif
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1161,96 +1162,93 @@ $openhour_data = openhoursActive();
                                                             <label>Background Option</label>
                                                         </th>
                                                         <td>
-                                                            <select
-                                                                name="popularfood_setting[popularfood_background_option]"
-                                                                class="form-control">
+                                                            <select name="popularfood_setting[popularfood_background_option]" class="form-control" onchange="backgroundOption(this);">
                                                                 @php
                                                                     $popularfood_background_option = isset($get_popularfood_settings['popularfood_background_option']) ? $get_popularfood_settings['popularfood_background_option'] : '';
                                                                 @endphp
-                                                                <option value="1"
-                                                                    {{ $popularfood_background_option == 1 ? 'selected' : '' }}>
-                                                                    Image</option>
-                                                                <option value="2"
-                                                                    {{ $popularfood_background_option == 2 ? 'selected' : '' }}>
-                                                                    Color</option>
+                                                                <option value="1" {{ $popularfood_background_option == 1 ? 'selected' : '' }}>Image</option>
+                                                                <option value="2" {{ $popularfood_background_option == 2 ? 'selected' : '' }}>Color</option>
                                                             </select>
                                                         </td>
                                                     </tr>
+                                                    @if($popularfood_background_option == 2)
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Color</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="color"
+                                                                    name="popularfood_setting[popularfood_background_color]"
+                                                                    value="{{ isset($get_popularfood_settings['popularfood_background_color']) ? $get_popularfood_settings['popularfood_background_color'] : '' }}"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color"
-                                                                name="popularfood_setting[popularfood_background_color]"
-                                                                value="{{ isset($get_popularfood_settings['popularfood_background_color']) ? $get_popularfood_settings['popularfood_background_color'] : '' }}"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Hover Color</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="color"
+                                                                    name="popularfood_setting[popularfood_background_hover_color]"
+                                                                    value="{{ isset($get_popularfood_settings['popularfood_background_hover_color']) ? $get_popularfood_settings['popularfood_background_hover_color'] : '' }}"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Hover Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color"
-                                                                name="popularfood_setting[popularfood_background_hover_color]"
-                                                                value="{{ isset($get_popularfood_settings['popularfood_background_hover_color']) ? $get_popularfood_settings['popularfood_background_hover_color'] : '' }}"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
+                                                    @if ($popularfood_background_option == 1)
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image</label>
+                                                            </th>
+                                                            <td>
+                                                                {{-- <input type="file" name="popularfood_setting[popularfood_background_image]" class="form-control p-1">
+                                                                <img class="mt-2" src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
+                                                                <div class="input-group">
+                                                                    <span class="input-group-btn">
+                                                                        <a id="lfm5" data-input="thumbnail5" data-preview="holder5" onclick="setimage(this)"
+                                                                            class="btn btn-primary text-white photo">
+                                                                            <i class="fa fa-picture-o"></i> Choose
+                                                                        </a>
+                                                                    </span>
+                                                                    <input id="thumbnail5" class="form-control" type="text" name="popularfood_setting[popularfood_background_image]">
+                                                                </div>
+                                                                <div id="holder5" style="margin-top:15px;max-height:100px;"></div>
+                                                            <img class="mt-2" src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                            </td>
+                                                        </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image</label>
-                                                        </th>
-                                                        <td>
-                                                            {{-- <input type="file" name="popularfood_setting[popularfood_background_image]" class="form-control p-1">
-                                                            <img class="mt-2" src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
-                                                            <div class="input-group">
-                                                                <span class="input-group-btn">
-                                                                    <a id="lfm5" data-input="thumbnail5" data-preview="holder5" onclick="setimage(this)"
-                                                                        class="btn btn-primary text-white photo">
-                                                                        <i class="fa fa-picture-o"></i> Choose
-                                                                    </a>
-                                                                </span>
-                                                                <input id="thumbnail5" class="form-control" type="text" name="popularfood_setting[popularfood_background_image]">
-                                                            </div>
-                                                            <div id="holder5" style="margin-top:15px;max-height:100px;"></div>
-                                                        <img class="mt-2" src="{{ isset($get_popularfood_settings['popularfood_background_image']) ? $get_popularfood_settings['popularfood_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
-                                                        </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image Position</label>
-                                                        </th>
-                                                        <td>
-                                                            <select
-                                                                name="popularfood_setting[popularfood_background_image_position]"
-                                                                class="form-control">
-                                                                @php
-                                                                    $popularfood_background_image_position = isset($get_popularfood_settings['popularfood_background_image_position']) ? $get_popularfood_settings['popularfood_background_image_position'] : '';
-                                                                @endphp
-                                                                <option value="top"
-                                                                    {{ $popularfood_background_image_position == 'top' ? 'selected' : '' }}>
-                                                                    Top</option>
-                                                                <option value="bottom"
-                                                                    {{ $popularfood_background_image_position == 'bottom' ? 'selected' : '' }}>
-                                                                    Bottom</option>
-                                                                <option value="left"
-                                                                    {{ $popularfood_background_image_position == 'left' ? 'selected' : '' }}>
-                                                                    Left</option>
-                                                                <option value="right"
-                                                                    {{ $popularfood_background_image_position == 'right' ? 'selected' : '' }}>
-                                                                    Right</option>
-                                                                <option value="center"
-                                                                    {{ $popularfood_background_image_position == 'center' ? 'selected' : '' }}>
-                                                                    Center</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image Position</label>
+                                                            </th>
+                                                            <td>
+                                                                <select
+                                                                    name="popularfood_setting[popularfood_background_image_position]"
+                                                                    class="form-control">
+                                                                    @php
+                                                                        $popularfood_background_image_position = isset($get_popularfood_settings['popularfood_background_image_position']) ? $get_popularfood_settings['popularfood_background_image_position'] : '';
+                                                                    @endphp
+                                                                    <option value="top"
+                                                                        {{ $popularfood_background_image_position == 'top' ? 'selected' : '' }}>
+                                                                        Top</option>
+                                                                    <option value="bottom"
+                                                                        {{ $popularfood_background_image_position == 'bottom' ? 'selected' : '' }}>
+                                                                        Bottom</option>
+                                                                    <option value="left"
+                                                                        {{ $popularfood_background_image_position == 'left' ? 'selected' : '' }}>
+                                                                        Left</option>
+                                                                    <option value="right"
+                                                                        {{ $popularfood_background_image_position == 'right' ? 'selected' : '' }}>
+                                                                        Right</option>
+                                                                    <option value="center"
+                                                                        {{ $popularfood_background_image_position == 'center' ? 'selected' : '' }}>
+                                                                        Center</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1359,22 +1357,16 @@ $openhour_data = openhoursActive();
                                                             <label>Background Option</label>
                                                         </th>
                                                         <td>
-                                                            <select
-                                                                name="bestcategory_setting[bestcategory_background_option]"
-                                                                class="form-control">
+                                                            <select name="bestcategory_setting[bestcategory_background_option]" class="form-control" onchange="backgroundOption(this)">
                                                                 @php
                                                                     $bestcategory_background_option = isset($get_bestcategory_settings['bestcategory_background_option']) ? $get_bestcategory_settings['bestcategory_background_option'] : '';
                                                                 @endphp
-                                                                <option value="1"
-                                                                    {{ $bestcategory_background_option == 1 ? 'selected' : '' }}>
-                                                                    Image</option>
-                                                                <option value="2"
-                                                                    {{ $bestcategory_background_option == 2 ? 'selected' : '' }}>
-                                                                    Color</option>
+                                                                <option value="1" {{ $bestcategory_background_option == 1 ? 'selected' : '' }}>Image</option>
+                                                                <option value="2" {{ $bestcategory_background_option == 2 ? 'selected' : '' }}>Color</option>
                                                             </select>
                                                         </td>
                                                     </tr>
-
+                                                    @if($bestcategory_background_option == 2)
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Color</label>
@@ -1398,57 +1390,60 @@ $openhour_data = openhoursActive();
                                                                 class="form-control">
                                                         </td>
                                                     </tr>
+                                                    @endif
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image</label>
-                                                        </th>
-                                                        <td>
-                                                            {{-- <input type="file" name="bestcategory_setting[bestcategory_background_image]" class="form-control p-1">
-                                                            <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
-                                                            <div class="input-group">
-                                                                <span class="input-group-btn">
-                                                                    <a id="lfm6" data-input="thumbnail6" data-preview="holder6" onclick="setimage(this)"
-                                                                        class="btn btn-primary text-white photo">
-                                                                        <i class="fa fa-picture-o"></i> Choose
-                                                                    </a>
-                                                                </span>
-                                                                <input id="thumbnail6" class="form-control" type="text" name="bestcategory_setting[bestcategory_background_image]">
-                                                            </div>
-                                                            <div id="holder6" style="margin-top:15px;max-height:100px;"></div>
-                                                            <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
-                                                        </td>
-                                                    </tr>
+                                                    @if ($bestcategory_background_option == 1)
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image</label>
+                                                            </th>
+                                                            <td>
+                                                                {{-- <input type="file" name="bestcategory_setting[bestcategory_background_image]" class="form-control p-1">
+                                                                <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
+                                                                <div class="input-group">
+                                                                    <span class="input-group-btn">
+                                                                        <a id="lfm6" data-input="thumbnail6" data-preview="holder6" onclick="setimage(this)"
+                                                                            class="btn btn-primary text-white photo">
+                                                                            <i class="fa fa-picture-o"></i> Choose
+                                                                        </a>
+                                                                    </span>
+                                                                    <input id="thumbnail6" class="form-control" type="text" name="bestcategory_setting[bestcategory_background_image]">
+                                                                </div>
+                                                                <div id="holder6" style="margin-top:15px;max-height:100px;"></div>
+                                                                <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                            </td>
+                                                        </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image Position</label>
-                                                        </th>
-                                                        <td>
-                                                            <select
-                                                                name="bestcategory_setting[bestcategory_background_image_position]"
-                                                                class="form-control">
-                                                                @php
-                                                                    $bestcategory_background_image_position = isset($get_bestcategory_settings['bestcategory_background_image_position']) ? $get_bestcategory_settings['bestcategory_background_image_position'] : '';
-                                                                @endphp
-                                                                <option value="top"
-                                                                    {{ $bestcategory_background_image_position == 'top' ? 'selected' : '' }}>
-                                                                    Top</option>
-                                                                <option value="bottom"
-                                                                    {{ $bestcategory_background_image_position == 'bottom' ? 'selected' : '' }}>
-                                                                    Bottom</option>
-                                                                <option value="left"
-                                                                    {{ $bestcategory_background_image_position == 'left' ? 'selected' : '' }}>
-                                                                    Left</option>
-                                                                <option value="right"
-                                                                    {{ $bestcategory_background_image_position == 'right' ? 'selected' : '' }}>
-                                                                    Right</option>
-                                                                <option value="center"
-                                                                    {{ $bestcategory_background_image_position == 'center' ? 'selected' : '' }}>
-                                                                    Center</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image Position</label>
+                                                            </th>
+                                                            <td>
+                                                                <select
+                                                                    name="bestcategory_setting[bestcategory_background_image_position]"
+                                                                    class="form-control">
+                                                                    @php
+                                                                        $bestcategory_background_image_position = isset($get_bestcategory_settings['bestcategory_background_image_position']) ? $get_bestcategory_settings['bestcategory_background_image_position'] : '';
+                                                                    @endphp
+                                                                    <option value="top"
+                                                                        {{ $bestcategory_background_image_position == 'top' ? 'selected' : '' }}>
+                                                                        Top</option>
+                                                                    <option value="bottom"
+                                                                        {{ $bestcategory_background_image_position == 'bottom' ? 'selected' : '' }}>
+                                                                        Bottom</option>
+                                                                    <option value="left"
+                                                                        {{ $bestcategory_background_image_position == 'left' ? 'selected' : '' }}>
+                                                                        Left</option>
+                                                                    <option value="right"
+                                                                        {{ $bestcategory_background_image_position == 'right' ? 'selected' : '' }}>
+                                                                        Right</option>
+                                                                    <option value="center"
+                                                                        {{ $bestcategory_background_image_position == 'center' ? 'selected' : '' }}>
+                                                                        Center</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1555,94 +1550,94 @@ $openhour_data = openhoursActive();
                                                             <label>Background Option</label>
                                                         </th>
                                                         <td>
-                                                            <select name="review_setting[review_background_option]"
-                                                                class="form-control">
+                                                            <select name="review_setting[review_background_option]" class="form-control" onchange="backgroundOption(this)">
                                                                 @php
                                                                     $review_background_option = isset($get_review_settings['review_background_option']) ? $get_review_settings['review_background_option'] : '';
                                                                 @endphp
-                                                                <option value="1"
-                                                                    {{ $review_background_option == 1 ? 'selected' : '' }}>
-                                                                    Image</option>
-                                                                <option value="2"
-                                                                    {{ $review_background_option == 2 ? 'selected' : '' }}>
-                                                                    Color</option>
+                                                                <option value="1" {{ $review_background_option == 1 ? 'selected' : '' }}>Image</option>
+                                                                <option value="2" {{ $review_background_option == 2 ? 'selected' : '' }}>Color</option>
                                                             </select>
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color"
-                                                                name="review_setting[review_background_color]"
-                                                                value="{{ isset($get_review_settings['review_background_color']) ? $get_review_settings['review_background_color'] : '' }}"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
+                                                    @if ($review_background_option == 2)
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Color</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="color"
+                                                                    name="review_setting[review_background_color]"
+                                                                    value="{{ isset($get_review_settings['review_background_color']) ? $get_review_settings['review_background_color'] : '' }}"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Hover Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color"
-                                                                name="review_setting[review_background_hover_color]"
-                                                                value="{{ isset($get_review_settings['review_background_hover_color']) ? $get_review_settings['review_background_hover_color'] : '' }}"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Hover Color</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="color"
+                                                                    name="review_setting[review_background_hover_color]"
+                                                                    value="{{ isset($get_review_settings['review_background_hover_color']) ? $get_review_settings['review_background_hover_color'] : '' }}"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image</label>
-                                                        </th>
-                                                        <td>
-                                                            {{-- <input type="file" name="review_setting[review_background_image]" class="form-control p-1"> --}}
-                                                            <div class="input-group">
-                                                                <span class="input-group-btn">
-                                                                    <a id="lfm7" data-input="thumbnail7" data-preview="holder7" onclick="setimage(this)"
-                                                                        class="btn btn-primary text-white photo">
-                                                                        <i class="fa fa-picture-o"></i> Choose
-                                                                    </a>
-                                                                </span>
-                                                                <input id="thumbnail7" class="form-control" type="text" name="review_setting[review_background_image]">
-                                                            </div>
-                                                            <div id="holder7" style="margin-top:15px;max-height:100px;"></div>
-                                                            <img class="mt-2" src="{{ isset($get_review_settings['review_background_image']) ? $get_review_settings['review_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
-                                                        </td>
-                                                    </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image Position</label>
-                                                        </th>
-                                                        <td>
-                                                            <select
-                                                                name="review_setting[review_background_image_position]"
-                                                                class="form-control">
-                                                                @php
-                                                                    $review_background_image_position = isset($get_review_settings['review_background_image_position']) ? $get_review_settings['review_background_image_position'] : '';
-                                                                @endphp
-                                                                <option value="top"
-                                                                    {{ $review_background_image_position == 'top' ? 'selected' : '' }}>
-                                                                    Top</option>
-                                                                <option value="bottom"
-                                                                    {{ $review_background_image_position == 'bottom' ? 'selected' : '' }}>
-                                                                    Bottom</option>
-                                                                <option value="left"
-                                                                    {{ $review_background_image_position == 'left' ? 'selected' : '' }}>
-                                                                    Left</option>
-                                                                <option value="right"
-                                                                    {{ $review_background_image_position == 'right' ? 'selected' : '' }}>
-                                                                    Right</option>
-                                                                <option value="center"
-                                                                    {{ $review_background_image_position == 'center' ? 'selected' : '' }}>
-                                                                    Center</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
+                                                    @if ($review_background_option == 1)
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image</label>
+                                                            </th>
+                                                            <td>
+                                                                {{-- <input type="file" name="review_setting[review_background_image]" class="form-control p-1"> --}}
+                                                                <div class="input-group">
+                                                                    <span class="input-group-btn">
+                                                                        <a id="lfm7" data-input="thumbnail7" data-preview="holder7" onclick="setimage(this)"
+                                                                            class="btn btn-primary text-white photo">
+                                                                            <i class="fa fa-picture-o"></i> Choose
+                                                                        </a>
+                                                                    </span>
+                                                                    <input id="thumbnail7" class="form-control" type="text" name="review_setting[review_background_image]">
+                                                                </div>
+                                                                <div id="holder7" style="margin-top:15px;max-height:100px;"></div>
+                                                                <img class="mt-2" src="{{ isset($get_review_settings['review_background_image']) ? $get_review_settings['review_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image Position</label>
+                                                            </th>
+                                                            <td>
+                                                                <select
+                                                                    name="review_setting[review_background_image_position]"
+                                                                    class="form-control">
+                                                                    @php
+                                                                        $review_background_image_position = isset($get_review_settings['review_background_image_position']) ? $get_review_settings['review_background_image_position'] : '';
+                                                                    @endphp
+                                                                    <option value="top"
+                                                                        {{ $review_background_image_position == 'top' ? 'selected' : '' }}>
+                                                                        Top</option>
+                                                                    <option value="bottom"
+                                                                        {{ $review_background_image_position == 'bottom' ? 'selected' : '' }}>
+                                                                        Bottom</option>
+                                                                    <option value="left"
+                                                                        {{ $review_background_image_position == 'left' ? 'selected' : '' }}>
+                                                                        Left</option>
+                                                                    <option value="right"
+                                                                        {{ $review_background_image_position == 'right' ? 'selected' : '' }}>
+                                                                        Right</option>
+                                                                    <option value="center"
+                                                                        {{ $review_background_image_position == 'center' ? 'selected' : '' }}>
+                                                                        Center</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -2251,7 +2246,42 @@ $openhour_data = openhoursActive();
 
     }
     // End Delete Slider
+    function backgroundOption(elem) {
+        var form_data = new FormData(document.getElementById("templateSetting"));
+        $.ajax({
+            url: "{{ url('updateTemplateSetting') }}",
+            type: "POST",
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(response){
+                location.reload();
+            }
+        });
+    }
 
+
+    // // change backgroundOption
+    // function backgroundOption(elem) {
+    //     let itemname = elem.name;
+    //     let itemvalue = $("select[name='"+itemname+"']").val();
+
+    //     // alert(itemvalue);
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "{{ url('setbackground') }}",
+    //         data: {
+    //             itemname : itemname,
+    //             itemvalue : itemvalue,
+    //         },
+    //         dataType: "json",
+    //         success: function (response) {
+    //             location.reload();
+    //         }
+    //     });
+    // }
+    // // change backgroundOption end
 
     // Change Active Header
     function changeActiveHeader() {

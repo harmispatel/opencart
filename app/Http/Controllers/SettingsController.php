@@ -805,6 +805,9 @@ class SettingsController extends Controller
     // Update App Setting
     public function updateappsettings(Request $request)
     {
+        echo '<pre>';
+        print_r($request->all());
+        exit();
         // Check User Permission
         if(check_user_role(84) != 1)
         {
