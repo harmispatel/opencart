@@ -905,200 +905,222 @@ $openhour_data = openhoursActive();
                     {{-- End Slider Options --}}
 
 
-                    {{-- HTML Box --}}
-                    @php
-                        $about_id = isset($about_data['about_id']) ? $about_data['about_id'] : '';
-                        $get_about_settings = getLayouts('about_settings', $about_id, 'about_id');
-                    @endphp
-                    <div class="row mt-4">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header bg-success">
-                                    <h3 class="card-title pt-2">
-                                        HTML BOX
-                                    </h3>
-                                    <div class="container" style="text-align: right">
-                                        <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse" data-target="#coll4" aria-expanded="true" aria-controls="coll4">
-                                            <i class="fa" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="collapse show" id="coll4">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <table class="table table-bordered table-striped">
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Select HTML Layout</label>
-                                                        </th>
-                                                        <td>
-                                                            <select name="about_setting[about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
-                                                                <option value=""> - Select HTML Box - </option>
-                                                                @foreach ($about_layouts as $about)
-                                                                    <option value="{{ $about->about_id }}"
-                                                                        {{ $about->about_id == $about_id ? 'selected' : '' }}>
-                                                                        {{ $about->about_name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </td>
-                                                    </tr>
+                     {{-- HTML Box --}}
+                     @php
+                     $about_id = isset($about_data['about_id']) ? $about_data['about_id'] : '';
+                     $get_about_settings = getLayouts('about_settings', $about_id, 'about_id');
+                 @endphp
+                 <div class="row mt-4">
+                     <div class="col-md-12" >
+                         <div class="card">
+                             <div class="card-header bg-success">
+                                 <h3 class="card-title pt-2">
+                                     HTML BOX
+                                 </h3>
+                                 <div class="container" style="text-align: right">
+                                     <button type="button" class="btn btn-sm btn-dark" data-toggle="collapse"
+                                         data-target="#coll4" aria-expanded="true" aria-controls="coll4">
+                                         <i class="fa" aria-hidden="true"></i>
+                                     </button>
+                                 </div>
+                             </div>
+                             <div class="collapse show" id="coll4">
+                                 <div class="card-body pb-0" id="htmlbox">
+                                     <div class="htmlbox-inr">
+                                         <h2>HTML 1</h2>
+                                         <div class="row align-items-center" >
+                                             <div class="col-md-11">
+                                                 <table class="table table-bordered table-striped">
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Preview</label>
-                                                        </th>
-                                                        <td id="about-preview" class="bg-light">
-                                                            @php
-                                                                $about_image = isset($about_data['about_image']) ? $about_data['about_image'] : '';
-                                                            @endphp
-                                                            <img src="{{ asset('public/admin/about_view/' . $about_image) }}"
-                                                                alt="Not Found" class="w-100">
-                                                        </td>
-                                                    </tr>
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Select HTML Layout</label>
+                                                         </th>
+                                                         <td>
+                                                             <select name="about_setting[about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
+                                                                 <option value=""> - Select HTML Box - </option>
+                                                                 @foreach ($about_layouts as $about)
+                                                                     <option value="{{ $about->about_id }}"
+                                                                         {{ $about->about_id == $about_id ? 'selected' : '' }}>
+                                                                         {{ $about->about_name }}</option>
+                                                                 @endforeach
+                                                             </select>
+                                                         </td>
+                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Option</label>
-                                                        </th>
-                                                        <td>
-                                                            <select name="about_setting[about_background_option]" class="form-control" onchange="backgroundOption(this);">
-                                                                @php
-                                                                    $about_background_option = isset($get_about_settings['about_background_option']) ? $get_about_settings['about_background_option'] : '';
-                                                                @endphp
-                                                                <option value="1" {{ $about_background_option == 1 ? 'selected' : '' }}>Image</option>
-                                                                <option value="2" {{ $about_background_option == 2 ? 'selected' : '' }}>Color</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    @if ($about_background_option == 2)
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color"
-                                                                name="about_setting[about_background_color]"
-                                                                value="{{ isset($get_about_settings['about_background_color']) ? $get_about_settings['about_background_color'] : '' }}"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Preview</label>
+                                                         </th>
+                                                         <td id="about-preview" class="bg-light">
+                                                             @php
+                                                                 $about_image = isset($about_data['about_image']) ? $about_data['about_image'] : '';
+                                                             @endphp
+                                                             <img src="{{ asset('public/admin/about_view/' . $about_image) }}"
+                                                                 alt="Not Found" class="w-100">
+                                                         </td>
+                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Hover Color</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="color"
-                                                                value="{{ isset($get_about_settings['about_background_hover_color']) ? $get_about_settings['about_background_hover_color'] : '' }}"
-                                                                name="about_setting[about_background_hover_color]"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
-                                                    @endif
-                                                    @if ($about_background_option == 1)
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image</label>
-                                                        </th>
-                                                        <td>
-                                                            {{-- <input type="file"
-                                                                name="about_setting[about_background_image]"
-                                                                class="form-control p-1"> --}}
-                                                                <div class="input-group">
-                                                                    <span class="input-group-btn">
-                                                                        <a id="lfm3" data-input="thumbnail3" data-preview="holder3" onclick="setimage(this)"
-                                                                            class="btn btn-primary text-white photo">
-                                                                            <i class="fa fa-picture-o"></i> Choose
-                                                                        </a>
-                                                                    </span>
-                                                                    <input id="thumbnail3" class="form-control" type="text" name="about_setting[about_background_image]">
-                                                                </div>
-                                                                <div id="holder3" style="margin-top:15px;max-height:100px;"></div>
-                                                            <img class="mt-2" src="{{ isset($get_about_settings['about_background_image']) ? $get_about_settings['about_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
-                                                        </td>
-                                                    </tr>
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Background Option</label>
+                                                         </th>
+                                                         <td>
+                                                             <select name="about_setting[about_background_option]"
+                                                                 class="form-control">
+                                                                 @php
+                                                                     $about_background_option = isset($get_about_settings['about_background_option']) ? $get_about_settings['about_background_option'] : '';
+                                                                 @endphp
+                                                                 <option value="1"
+                                                                     {{ $about_background_option == 1 ? 'selected' : '' }}>
+                                                                     Image</option>
+                                                                 <option value="2"
+                                                                     {{ $about_background_option == 2 ? 'selected' : '' }}>
+                                                                     Color</option>
+                                                             </select>
+                                                         </td>
+                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Background Image Position</label>
-                                                        </th>
-                                                        <td>
-                                                            <select
-                                                                name="about_setting[about_background_image_position]"
-                                                                class="form-control">
-                                                                @php
-                                                                    $about_background_image_position = isset($get_about_settings['about_background_image_position']) ? $get_about_settings['about_background_image_position'] : '';
-                                                                @endphp
-                                                                <option value="top"
-                                                                    {{ $about_background_image_position == 'top' ? 'selected' : '' }}>
-                                                                    Top</option>
-                                                                <option value="bottom"
-                                                                    {{ $about_background_image_position == 'bottom' ? 'selected' : '' }}>
-                                                                    Bottom</option>
-                                                                <option value="left"
-                                                                    {{ $about_background_image_position == 'left' ? 'selected' : '' }}>
-                                                                    Left</option>
-                                                                <option value="right"
-                                                                    {{ $about_background_image_position == 'right' ? 'selected' : '' }}>
-                                                                    Right</option>
-                                                                <option value="center"
-                                                                    {{ $about_background_image_position == 'center' ? 'selected' : '' }}>
-                                                                    Center</option>
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    @endif
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Background Color</label>
+                                                         </th>
+                                                         <td>
+                                                             <input type="color"
+                                                                 name="about_setting[about_background_color]"
+                                                                 value="{{ isset($get_about_settings['about_background_color']) ? $get_about_settings['about_background_color'] : '' }}"
+                                                                 class="form-control">
+                                                         </td>
+                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Title</label>
-                                                        </th>
-                                                        <td>
-                                                            <input type="text" name="about_setting[about_title]"
-                                                                value="{{ isset($get_about_settings['about_title']) ? $get_about_settings['about_title'] : '' }}"
-                                                                class="form-control">
-                                                        </td>
-                                                    </tr>
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Background Hover Color</label>
+                                                         </th>
+                                                         <td>
+                                                             <input type="color"
+                                                                 value="{{ isset($get_about_settings['about_background_hover_color']) ? $get_about_settings['about_background_hover_color'] : '' }}"
+                                                                 name="about_setting[about_background_hover_color]"
+                                                                 class="form-control">
+                                                         </td>
+                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>HTML BOX</label>
-                                                        </th>
-                                                        <td>
-                                                            <textarea name="about_setting[about_description]" id="summernote" class="form-control">{{ isset($get_about_settings['about_description']) ? $get_about_settings['about_description'] : '' }}</textarea>
-                                                        </td>
-                                                    </tr>
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Background Image</label>
+                                                         </th>
+                                                         <td>
+                                                             {{-- <input type="file"
+                                                                 name="about_setting[about_background_image]"
+                                                                 class="form-control p-1"> --}}
+                                                                 <div class="input-group">
+                                                                     <span class="input-group-btn">
+                                                                         <a id="lfm3" data-input="thumbnail3" data-preview="holder3" onclick="setimage(this)"
+                                                                             class="btn btn-primary text-white photo">
+                                                                             <i class="fa fa-picture-o"></i> Choose
+                                                                         </a>
+                                                                     </span>
+                                                                     <input id="thumbnail3" class="form-control" type="text" name="about_setting[about_background_image]">
+                                                                 </div>
+                                                                 <div id="holder3" style="margin-top:15px;max-height:100px;"></div>
+                                                             <img class="mt-2" src="{{ isset($get_about_settings['about_background_image']) ? $get_about_settings['about_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                         </td>
+                                                     </tr>
 
-                                                    <tr>
-                                                        <th width="250" class="align-middle">
-                                                            <label>Image</label>
-                                                        </th>
-                                                        <td>
-                                                            {{-- <input type="file" name="about_setting[about_image]"
-                                                                class="form-control p-1"> --}}
-                                                                <div class="input-group">
-                                                                    <span class="input-group-btn">
-                                                                        <a id="lfm4" data-input="thumbnail4" data-preview="holder4" onclick="setimage(this)"
-                                                                            class="btn btn-primary text-white photo">
-                                                                            <i class="fa fa-picture-o"></i> Choose
-                                                                        </a>
-                                                                    </span>
-                                                                    <input id="thumbnail4" class="form-control" type="text" name="about_setting[about_image]">
-                                                                </div>
-                                                                <div id="holder4" style="margin-top:15px;max-height:100px;"></div>
-                                                            <img class="mt-2" src="{{ isset($get_about_settings['about_image']) ? $get_about_settings['about_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- End HTML Box --}}
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Background Image Position</label>
+                                                         </th>
+                                                         <td>
+                                                             <select
+                                                                 name="about_setting[about_background_image_position]"
+                                                                 class="form-control">
+                                                                 @php
+                                                                     $about_background_image_position = isset($get_about_settings['about_background_image_position']) ? $get_about_settings['about_background_image_position'] : '';
+                                                                 @endphp
+                                                                 <option value="top"
+                                                                     {{ $about_background_image_position == 'top' ? 'selected' : '' }}>
+                                                                     Top</option>
+                                                                 <option value="bottom"
+                                                                     {{ $about_background_image_position == 'bottom' ? 'selected' : '' }}>
+                                                                     Bottom</option>
+                                                                 <option value="left"
+                                                                     {{ $about_background_image_position == 'left' ? 'selected' : '' }}>
+                                                                     Left</option>
+                                                                 <option value="right"
+                                                                     {{ $about_background_image_position == 'right' ? 'selected' : '' }}>
+                                                                     Right</option>
+                                                                 <option value="center"
+                                                                     {{ $about_background_image_position == 'center' ? 'selected' : '' }}>
+                                                                     Center</option>
+                                                             </select>
+                                                         </td>
+                                                     </tr>
+
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Title</label>
+                                                         </th>
+                                                         <td>
+                                                             <input type="text" name="about_setting[about_title]"
+                                                                 value="{{ isset($get_about_settings['about_title']) ? $get_about_settings['about_title'] : '' }}"
+                                                                 class="form-control">
+                                                         </td>
+                                                     </tr>
+
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>HTML BOX</label>
+                                                         </th>
+                                                         <td>
+                                                             <textarea name="about_setting[about_description]" id="summernote" class="form-control">{{ isset($get_about_settings['about_description']) ? $get_about_settings['about_description'] : '' }}</textarea>
+                                                         </td>
+                                                     </tr>
+
+                                                     <tr>
+                                                         <th width="250" class="align-middle">
+                                                             <label>Image</label>
+                                                         </th>
+                                                         <td>
+                                                             {{-- <input type="file" name="about_setting[about_image]"
+                                                                 class="form-control p-1"> --}}
+                                                                 <div class="input-group">
+                                                                     <span class="input-group-btn">
+                                                                         <a id="lfm4" data-input="thumbnail4" data-preview="holder4" onclick="setimage(this)"
+                                                                             class="btn btn-primary text-white photo">
+                                                                             <i class="fa fa-picture-o"></i> Choose
+                                                                         </a>
+                                                                     </span>
+                                                                     <input id="thumbnail4" class="form-control" type="text" name="about_setting[about_image]">
+                                                                 </div>
+                                                                 <div id="holder4" style="margin-top:15px;max-height:100px;"></div>
+                                                             <img class="mt-2" src="{{ isset($get_about_settings['about_image']) ? $get_about_settings['about_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                         </td>
+                                                     </tr>
+                                                 </table>
+
+                                             </div>
+                                             <div class="col-md-1 text-center">
+                                                 <button class="btn rounded-circle btn-sm btn-danger" disabled><i class="fa fa-minus-circle"></i></button>
+                                             </div>
+
+
+                                         </div>
+                                     </div>
+                                 </div>
+
+                                 <div class="row">
+                                     <div class="col-md-12 text-center py-2">
+                                         <a onclick="addHtmlBox()" class="btn btn-sm rounded-circle btn-success">
+                                             <i class="fa fa-plus-circle"></i>
+                                         </a>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 {{-- End HTML Box --}}
 
 
                     {{-- Popular Foods --}}
@@ -2220,6 +2242,201 @@ $openhour_data = openhoursActive();
         $('#slider-images').append(html);
     }
     // End New Slider
+
+    // New Html Box
+
+    function addHtmlBox(){
+        var html ='';
+
+        html +=`
+                                        <div class="htmlbox-inr">
+                                            <h2>HTML 1</h2>
+                                            <div class="row align-items-center" >
+                                                <div class="col-md-11">
+                                                    <table class="table table-bordered table-striped">
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Select HTML Layout</label>
+                                                            </th>
+                                                            <td>
+                                                                <select name="about_setting[about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
+                                                                    <option value=""> - Select HTML Box - </option>
+                                                                    @foreach ($about_layouts as $about)
+                                                                        <option value="{{ $about->about_id }}"
+                                                                            {{ $about->about_id == $about_id ? 'selected' : '' }}>
+                                                                            {{ $about->about_name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Preview</label>
+                                                            </th>
+                                                            <td id="about-preview" class="bg-light">
+                                                                @php
+                                                                    $about_image = isset($about_data['about_image']) ? $about_data['about_image'] : '';
+                                                                @endphp
+                                                                <img src="{{ asset('public/admin/about_view/' . $about_image) }}"
+                                                                    alt="Not Found" class="w-100">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Option</label>
+                                                            </th>
+                                                            <td>
+                                                                <select name="about_setting[about_background_option]"
+                                                                    class="form-control">
+                                                                    @php
+                                                                        $about_background_option = isset($get_about_settings['about_background_option']) ? $get_about_settings['about_background_option'] : '';
+                                                                    @endphp
+                                                                    <option value="1"
+                                                                        {{ $about_background_option == 1 ? 'selected' : '' }}>
+                                                                        Image</option>
+                                                                    <option value="2"
+                                                                        {{ $about_background_option == 2 ? 'selected' : '' }}>
+                                                                        Color</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Color</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="color"
+                                                                    name="about_setting[about_background_color]"
+                                                                    value="{{ isset($get_about_settings['about_background_color']) ? $get_about_settings['about_background_color'] : '' }}"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Hover Color</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="color"
+                                                                    value="{{ isset($get_about_settings['about_background_hover_color']) ? $get_about_settings['about_background_hover_color'] : '' }}"
+                                                                    name="about_setting[about_background_hover_color]"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image</label>
+                                                            </th>
+                                                            <td>
+                                                                {{-- <input type="file"
+                                                                    name="about_setting[about_background_image]"
+                                                                    class="form-control p-1"> --}}
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                            <a id="lfm3" data-input="thumbnail3" data-preview="holder3" onclick="setimage(this)"
+                                                                                class="btn btn-primary text-white photo">
+                                                                                <i class="fa fa-picture-o"></i> Choose
+                                                                            </a>
+                                                                        </span>
+                                                                        <input id="thumbnail3" class="form-control" type="text" name="about_setting[about_background_image]">
+                                                                    </div>
+                                                                    <div id="holder3" style="margin-top:15px;max-height:100px;"></div>
+                                                                <img class="mt-2" src="{{ isset($get_about_settings['about_background_image']) ? $get_about_settings['about_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Background Image Position</label>
+                                                            </th>
+                                                            <td>
+                                                                <select
+                                                                    name="about_setting[about_background_image_position]"
+                                                                    class="form-control">
+                                                                    @php
+                                                                        $about_background_image_position = isset($get_about_settings['about_background_image_position']) ? $get_about_settings['about_background_image_position'] : '';
+                                                                    @endphp
+                                                                    <option value="top"
+                                                                        {{ $about_background_image_position == 'top' ? 'selected' : '' }}>
+                                                                        Top</option>
+                                                                    <option value="bottom"
+                                                                        {{ $about_background_image_position == 'bottom' ? 'selected' : '' }}>
+                                                                        Bottom</option>
+                                                                    <option value="left"
+                                                                        {{ $about_background_image_position == 'left' ? 'selected' : '' }}>
+                                                                        Left</option>
+                                                                    <option value="right"
+                                                                        {{ $about_background_image_position == 'right' ? 'selected' : '' }}>
+                                                                        Right</option>
+                                                                    <option value="center"
+                                                                        {{ $about_background_image_position == 'center' ? 'selected' : '' }}>
+                                                                        Center</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Title</label>
+                                                            </th>
+                                                            <td>
+                                                                <input type="text" name="about_setting[about_title]"
+                                                                    value="{{ isset($get_about_settings['about_title']) ? $get_about_settings['about_title'] : '' }}"
+                                                                    class="form-control">
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>HTML BOX</label>
+                                                            </th>
+                                                            <td>
+                                                                <textarea name="about_setting[about_description]" id="summernote" class="form-control">{{ isset($get_about_settings['about_description']) ? $get_about_settings['about_description'] : '' }}</textarea>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <th width="250" class="align-middle">
+                                                                <label>Image</label>
+                                                            </th>
+                                                            <td>
+                                                                {{-- <input type="file" name="about_setting[about_image]"
+                                                                    class="form-control p-1"> --}}
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                            <a id="lfm4" data-input="thumbnail4" data-preview="holder4" onclick="setimage(this)"
+                                                                                class="btn btn-primary text-white photo">
+                                                                                <i class="fa fa-picture-o"></i> Choose
+                                                                            </a>
+                                                                        </span>
+                                                                        <input id="thumbnail4" class="form-control" type="text" name="about_setting[about_image]">
+                                                                    </div>
+                                                                    <div id="holder4" style="margin-top:15px;max-height:100px;"></div>
+                                                                <img class="mt-2" src="{{ isset($get_about_settings['about_image']) ? $get_about_settings['about_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                </div>
+                                                <div class="col-md-1 text-center">
+                                                    <button class="btn rounded-circle btn-sm btn-danger" disabled><i class="fa fa-minus-circle"></i></button>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                          `;
+        $('#htmlbox').append(html);
+     }
+
+    // End New Html Box
+
 
 
     // Delete Slider
