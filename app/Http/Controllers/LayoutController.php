@@ -159,7 +159,7 @@ class LayoutController extends Controller
         function updateTemplateSetting(Request $request)
         {
             // echo '<pre>';
-            // print_r($request->about_setting);
+            // print_r($request->all());
             // exit();
             // Get Current URL
             $currentURL = public_url();
@@ -325,7 +325,6 @@ class LayoutController extends Controller
             // Add & Update HTML BOX Settings
             $about_settings = $request->about_setting;
 
-
             if(isset($about_settings))
             {
                 foreach($about_settings as $htmlbox_settings)
@@ -334,8 +333,8 @@ class LayoutController extends Controller
                     $data['about_layout_id'] =  isset($htmlbox_settings['about_layout_id']) ? $htmlbox_settings['about_layout_id'] : '';
                     $data['about_background_option'] =  isset($htmlbox_settings['about_background_option']) ? $htmlbox_settings['about_background_option'] : '';
                     $data['about_image'] =  isset($htmlbox_settings['about_image']) ? $htmlbox_settings['about_image'] : '';
-                    $data['about_background_hover_color'] =  isset($htmlbox_settings['about_background_hover_color']) ? $htmlbox_settings['about_background_hover_color'] : '';
                     $data['about_background_image'] =  isset($htmlbox_settings['about_background_image']) ? $htmlbox_settings['about_background_image'] : '';
+                    $data['about_background_hover_color'] =  isset($htmlbox_settings['about_background_hover_color']) ? $htmlbox_settings['about_background_hover_color'] : '';
                     $data['about_background_image_position'] =  isset($htmlbox_settings['about_background_image_position']) ? $htmlbox_settings['about_background_image_position'] : '';
                     $data['about_title'] =  isset($htmlbox_settings['about_title']) ? $htmlbox_settings['about_title'] : '';
                     $data['about_description'] =  isset($htmlbox_settings['about_description']) ? $htmlbox_settings['about_description'] : '';
@@ -356,9 +355,6 @@ class LayoutController extends Controller
                         $about_setting_htmlbox->created_at = date('Y-m-d H:i:s');
                         $about_setting_htmlbox->save();
                     }
-
-
-
 
                 }
             }
