@@ -300,6 +300,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('updateTemplateSetting', [LayoutController::class, 'updateTemplateSetting'])->name('updateTemplateSetting');
     // Route::post('updateTemplateSettingajax', [LayoutController::class, 'updateTemplateSettingajax'])->name('updateTemplateSettingajax');
     Route::post('deleteSlider', [LayoutController::class, 'deleteSlider'])->name('deleteSlider');
+    Route::post('deletehtmlbox', [LayoutController::class, 'deletehtmlbox'])->name('deletehtmlbox');
+
 
     // Route::post('setbackground', [LayoutController::class, 'setbackground'])->name('setbackground');
     Route::get('slidersettings', [LayoutController::class, 'slidersettings'])->name('slidersettings');
