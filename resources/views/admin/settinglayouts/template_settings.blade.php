@@ -916,6 +916,7 @@ $openhour_data = openhoursActive();
                             {{-- PHP CODE --}}
                             @php
                                 $htmlbox_count = count($htmlbox) > 0 ? count($htmlbox) : 1;
+
                             @endphp
                             <input type="hidden" name="htmlbox_count" id="htmlbox_count" value="{{ $htmlbox_count }}">
                             {{-- END PHP CODE --}}
@@ -968,7 +969,8 @@ $openhour_data = openhoursActive();
                                                                     <label>Background Option</label>
                                                                 </th>
                                                                 <td>
-                                                                    <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control">
+                                                                    <select name="about_setting[{{ $loop->iteration }}][about_background_option]" class="form-control">
+                                                                        {{-- <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control"> --}}
                                                                         @php
                                                                             $about_background_option = isset($htmlboxs['about_background_option']) ? $htmlboxs['about_background_option'] : '';
                                                                         @endphp
@@ -1079,9 +1081,15 @@ $openhour_data = openhoursActive();
                                                         </table>
 
                                                     </div>
-                                                    <div class="col-md-1 text-center">
-                                                        <button class="btn rounded-circle btn-sm btn-danger" disabled><i class="fa fa-minus-circle"></i></button>
-                                                    </div>
+                                                    @if ($htmlbox_count == 1)
+                                                        <div class="col-md-1 text-center">
+                                                            <button class="btn rounded-circle btn-sm btn-danger" disabled><i class="fa fa-minus-circle"></i></button>
+                                                        </div>
+                                                    @else
+                                                        <div class="col-md-1 text-center">
+                                                            <button class="btn rounded-circle btn-sm btn-danger" onclick="deletehtmlbox('{{ $htmlboxs->id }}')"><i class="fa fa-minus-circle"></i></button>
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach
@@ -2515,7 +2523,7 @@ $openhour_data = openhoursActive();
                             </table>
                         </div>
                         <div class="col-md-1 text-center">
-                            <button class="btn rounded-circle btn-sm btn-danger" disabled><i class="fa fa-minus-circle"></i></button>
+                            <button class="btn rounded-circle btn-sm btn-danger" onclick="$(\'#about_setting` + incr_htmlbox + `\').remove()"><i class="fa fa-minus-circle"></i></button>
                         </div>
                     </div>
                 </div>
@@ -2551,6 +2559,29 @@ $openhour_data = openhoursActive();
 
     }
     // End Delete Slider
+
+    function deletehtmlbox(id){
+        var d_id = id;
+        if (confirm("Are You Sure You Want to Delete It ?"+ id)) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('deletehtmlbox') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    'htmlbox_id': d_id,
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.success == 1) {
+                        alert("HtmlBox has been deleted Successfully..");
+                        // location.reload();
+                    }
+                }
+            });
+        }
+    }
+
+
     function backgroundOption(elem) {
         var form_data = new FormData(document.getElementById("templateSetting"));
         $.ajax({
