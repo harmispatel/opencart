@@ -22,6 +22,7 @@ use App\Models\FreeItem;
 use App\Models\FreeItemadd;
 use App\Models\GallaryLayouts;
 use App\Models\Headers;
+use App\Models\HtmlBox;
 use App\Models\OpenhourLayouts;
 use App\Models\Orders;
 use App\Models\OrderStatus;
@@ -476,39 +477,40 @@ function reservationActive()
 
 
 
-// Function for Active Current About Layout
-function aboutActive()
-{
-    // User Details
-    $user_details = user_details();
-    if(isset($user_details))
-    {
-        $user_group_id = $user_details['user_group_id'];
-    }
+// // Function for Active Current About Layout
+// function aboutActive()
+// {
+//     // User Details
+//     $user_details = user_details();
+//     if(isset($user_details))
+//     {
+//         $user_group_id = $user_details['user_group_id'];
+//     }
 
 
-    // Current Store ID
-    if($user_group_id == 1)
-    {
-        $current_store_id = currentStoreId();
-    }
-    else
-    {
-        $current_store_id = $user_details['user_shop'];
-    }
+//     // Current Store ID
+//     if($user_group_id == 1)
+//     {
+//         $current_store_id = currentStoreId();
+//     }
+//     else
+//     {
+//         $current_store_id = $user_details['user_shop'];
+//     }
 
 
-    $key = 'about_id';
-    $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+//     $key = 'about_id';
+//     // $setting = Settings::select('value')->where('store_id',$current_store_id)->where('key',$key)->first();
+//     $setting = HtmlBox::select('about_layout_id')->where('store_id',$current_store_id)->first();
 
-    // About ID
-    $about_id = isset($setting->value) ? $setting->value : '';
+//     // About ID
+//     $about_id = isset($setting->value) ? $setting->value : '';
 
-    // About Details
-    $about_deatails = AboutLayouts::where('about_id',$about_id)->first();
+//     // About Details
+//     $about_deatails = AboutLayouts::where('about_id',$about_id)->first();
 
-    return $about_deatails;
-}
+//     return $about_deatails;
+// }
 
 
 

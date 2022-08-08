@@ -18,7 +18,7 @@ $header_data = headerActive();
 $slider_data = sliderActive();
 
 // Get Current Active HTML Layout
-$about_data = aboutActive();
+// $about_data = aboutActive();
 
 // Get Current Active Popular Food Layout
 $popularfood_data = popularfoodActive();
@@ -923,9 +923,13 @@ $openhour_data = openhoursActive();
                                  <div class="card-body pb-0" id="htmlbox">
                                     @if (count($htmlbox) > 0)
                                         @foreach ($htmlbox as $htmlboxs)
-                                            @php
-                                                $html_box_value = unserialize($htmlboxs->value);
-                                            @endphp
+                                        @php
+                                        $test1 = isset($htmlboxs->about_layout_id) ? $htmlboxs->about_layout_id : '';
+                                        $test = explode(' ', $test1);
+                                        // echo '<pre>';
+                                        // print_r($about_data['about_image']);
+                                        // exit();
+                                    @endphp
                                             <div class="htmlbox-inr">
                                                 <h2>HTML {{ $loop->iteration}}</h2>
                                                 <div class="row align-items-center" >
@@ -936,13 +940,12 @@ $openhour_data = openhoursActive();
                                                                     <label>Select HTML Layout</label>
                                                                 </th>
                                                                 <td>
-                                                                    <input type="hidden" name="about_setting[{{ $loop->iteration }}][edit]" value="{{ $htmlboxs->id }}">
-                                                                    <select name="about_setting[{{ $loop->iteration}}][about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
-                                                                        <option value=""> - Select HTML Box - </option>
+                                                                    <input type="hidden" name="about_setting[{{ $loop->iteration }}][edithtmlbox]" value="{{ $htmlboxs->id }}">
+                                                                    {{-- <select name="about_setting[{{ $loop->iteration}}][about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout();"> --}}
+                                                                    <select name="about_setting[{{ $loop->iteration}}][about_layout_id]" id="about_layout" class="form-control" onchange="backgroundOption(this)">
                                                                         @foreach ($about_layouts as $about)
-                                                                            <option value="{{ $about->about_id }}"
-                                                                                {{ $about->about_id == $about_id ? 'selected' : '' }}>
-                                                                                {{ $about->about_name }}</option>
+                                                                            <option value="{{ $about->about_id }}" {{ $htmlboxs->about_layout_id == $about->about_id ? 'selected' : '' }}>{{ $about->about_name }}</option>
+                                                                            {{-- <option value="{{ $about->about_id }}" {{ in_array($about->about_id,$test) == $about->about_id ? 'selected' : '' }}> --}}
                                                                         @endforeach
                                                                     </select>
                                                                 </td>
@@ -954,7 +957,7 @@ $openhour_data = openhoursActive();
                                                                 </th>
                                                                 <td id="about-preview" class="bg-light">
                                                                     @php
-                                                                        $about_image = isset($about_data['about_image']) ? $about_data['about_image'] : '';
+                                                                        $about_image = isset($htmlboxs->hasoneaboutActive->about_image) ? $htmlboxs->hasoneaboutActive->about_image : '';
                                                                     @endphp
                                                                     <img src="{{ asset('public/admin/about_view/' . $about_image) }}" alt="Not Found" class="w-100">
                                                                 </td>
@@ -967,7 +970,7 @@ $openhour_data = openhoursActive();
                                                                 <td>
                                                                     <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control">
                                                                         @php
-                                                                            $about_background_option = isset($html_box_value['about_background_option']) ? $html_box_value['about_background_option'] : '';
+                                                                            $about_background_option = isset($htmlboxs['about_background_option']) ? $htmlboxs['about_background_option'] : '';
                                                                         @endphp
                                                                         <option value="1" {{ $about_background_option == 1 ? 'selected' : '' }}>Image</option>
                                                                         <option value="2" {{ $about_background_option == 2 ? 'selected' : '' }}>Color</option>
@@ -980,7 +983,7 @@ $openhour_data = openhoursActive();
                                                                         <label>Background Color</label>
                                                                     </th>
                                                                     <td>
-                                                                        <input type="color" name="about_setting[{{ $loop->iteration }}][about_background_color]" value="{{ isset($html_box_value['about_background_color']) ? $html_box_value['about_background_color'] : '' }}" class="form-control">
+                                                                        <input type="color" name="about_setting[{{ $loop->iteration }}][about_background_color]" value="{{ isset($htmlboxs['about_background_color']) ? $htmlboxs['about_background_color'] : '' }}" class="form-control">
                                                                     </td>
                                                                 </tr>
 
@@ -989,7 +992,7 @@ $openhour_data = openhoursActive();
                                                                         <label>Background Hover Color</label>
                                                                     </th>
                                                                     <td>
-                                                                        <input type="color" value="{{ isset($html_box_value['about_background_hover_color']) ? $html_box_value['about_background_hover_color'] : '' }}" name="about_setting[0][about_background_hover_color]" class="form-control">
+                                                                        <input type="color" value="{{ isset($htmlboxs['about_background_hover_color']) ? $htmlboxs['about_background_hover_color'] : '' }}" name="about_setting[{{ $loop->iteration }}][about_background_hover_color]" class="form-control">
                                                                     </td>
                                                                 </tr>
                                                             @endif
@@ -1010,7 +1013,7 @@ $openhour_data = openhoursActive();
                                                                             <input id="thumbnaibgimg{{ $loop->iteration }}" class="form-control" type="text" name="about_setting[{{ $loop->iteration}}][about_background_image]">
                                                                         </div>
                                                                         <div id="holderbgimg{{ $loop->iteration }}" style="margin-top:15px;max-height:100px;"></div>
-                                                                        <img class="mt-2" src="{{ isset($html_box_value['about_background_image']) ? $html_box_value['about_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                                        <img class="mt-2" src="{{ isset($htmlboxs['about_background_image']) ? $htmlboxs['about_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                                     </td>
                                                                 </tr>
 
@@ -1023,7 +1026,7 @@ $openhour_data = openhoursActive();
                                                                             name="about_setting[{{ $loop->iteration}}][about_background_image_position]"
                                                                             class="form-control">
                                                                             @php
-                                                                                $about_background_image_position = isset($html_box_value['about_background_image_position']) ? $html_box_value['about_background_image_position'] : '';
+                                                                                $about_background_image_position = isset($htmlboxs['about_background_image_position']) ? $htmlboxs['about_background_image_position'] : '';
                                                                             @endphp
                                                                             <option value="top" {{ $about_background_image_position == 'top' ? 'selected' : '' }}> Top</option>
                                                                             <option value="bottom" {{ $about_background_image_position == 'bottom' ? 'selected' : '' }}> Bottom</option>
@@ -1041,7 +1044,7 @@ $openhour_data = openhoursActive();
                                                                 </th>
                                                                 <td>
                                                                     <input type="text" name="about_setting[{{ $loop->iteration}}][about_title]"
-                                                                        value="{{ isset($html_box_value['about_title']) ? $html_box_value['about_title'] : '' }}"
+                                                                        value="{{ isset($htmlboxs['about_title']) ? $htmlboxs['about_title'] : '' }}"
                                                                         class="form-control">
                                                                 </td>
                                                             </tr>
@@ -1051,7 +1054,7 @@ $openhour_data = openhoursActive();
                                                                     <label>HTML BOX</label>
                                                                 </th>
                                                                 <td>
-                                                                    <textarea name="about_setting[{{ $loop->iteration}}][about_description]"  class="form-control summernote">{{ isset($html_box_value['about_description']) ? $html_box_value['about_description'] : '' }}</textarea>
+                                                                    <textarea name="about_setting[{{ $loop->iteration}}][about_description]"  class="form-control summernote">{{ isset($htmlboxs['about_description']) ? $htmlboxs['about_description'] : '' }}</textarea>
                                                                 </td>
                                                             </tr>
 
@@ -1070,7 +1073,7 @@ $openhour_data = openhoursActive();
                                                                         <input id="aboutimage{{ $loop->iteration }}" class="form-control" type="text" name="about_setting[{{ $loop->iteration}}][about_image]">
                                                                     </div>
                                                                     <div id="aboutholder{{ $loop->iteration }}" style="margin-top:15px;max-height:100px;"></div>
-                                                                    <img class="mt-2" src="{{ isset($html_box_value['about_image']) ? $html_box_value['about_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
+                                                                    <img class="mt-2" src="{{ isset($htmlboxs['about_image']) ? $htmlboxs['about_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -1094,7 +1097,7 @@ $openhour_data = openhoursActive();
                                                         </th>
                                                         <td>
 
-                                                            <select name="about_setting[0][about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
+                                                            <select name="about_setting[0][about_layout_id]" id="about_layout" class="form-control">
                                                                 <option value=""> - Select HTML Box - </option>
                                                                 @foreach ($about_layouts as $about)
                                                                     <option value="{{ $about->about_id }}">{{ $about->about_name }}</option>
@@ -2360,6 +2363,9 @@ $openhour_data = openhoursActive();
 
     // New Html Box
     var incr_htmlbox = $('#htmlbox_count').val();
+    $('.summernote').summernote({
+            minHeight: 300,
+        });
     function addHtmlBox(){
         $('.summernote').summernote({
             minHeight: 300,
@@ -2377,11 +2383,14 @@ $openhour_data = openhoursActive();
                                         <label>Select HTML Layout</label>
                                     </th>
                                     <td>
-                                        <select name="about_setting[` + incr_htmlbox + `][about_layout_id]" id="about_layout" class="form-control" onchange="changeActiveAboutLayout()">
-                                            <option value=""> - Select HTML Box - </option>
-                                            @foreach ($about_layouts as $about)
-                                                <option value="{{ $about->about_id }}" {{ $about->about_name }}</option>
-                                            @endforeach
+                                        <select name="about_setting[` + incr_htmlbox + `][about_layout_id]" id="about_layout" class="form-control" onchange="backgroundOption(this)">
+                                            <option> - Select HTML Box - </option>
+                                            <option value="1">HTML Layout 1</option>
+                                            <option value="2">HTML Layout 2</option>
+                                            <option value="3">HTML Layout 3</option>
+                                            <option value="4">HTML Layout 4</option>
+                                            <option value="5">HTML Layout 5</option>
+                                            <option value="6">HTML Layout 6</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -2543,7 +2552,6 @@ $openhour_data = openhoursActive();
     }
     // End Delete Slider
     function backgroundOption(elem) {
-        alert('Hi')
         var form_data = new FormData(document.getElementById("templateSetting"));
         $.ajax({
             url: "{{ url('updateTemplateSetting') }}",
@@ -2600,9 +2608,11 @@ $openhour_data = openhoursActive();
     function changeActiveAboutLayout() {
         var about_id = $('#about_layout :selected').val();
 
+         $htmlbox =$('#htmlbox_count').val();
         $.ajax({
             type: "GET",
             url: "{{ url('activeabout') }}/" + about_id,
+
             dataType: "json",
             success: function(response) {
                 if (response.success == 1) {
