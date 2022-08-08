@@ -924,6 +924,11 @@ $openhour_data = openhoursActive();
                                  <div class="card-body pb-0" id="htmlbox">
                                     @if (count($htmlbox) > 0)
                                         @foreach ($htmlbox as $htmlboxs)
+                                        @php
+                                            // echo '<pre>';
+                                            // print_r($htmlboxs->about_background_color);
+                                            // exit();
+                                        @endphp
                                             <div class="htmlbox-inr">
                                                 <h2>HTML {{ $loop->iteration}}</h2>
                                                 <div class="row align-items-center" >
@@ -978,7 +983,7 @@ $openhour_data = openhoursActive();
                                                                         <label>Background Color</label>
                                                                     </th>
                                                                     <td>
-                                                                        <input type="color" name="about_setting[{{ $loop->iteration }}][about_background_color]" value="{{ isset($htmlboxs['about_background_color']) ? $htmlboxs['about_background_color'] : '' }}" class="form-control">
+                                                                        <input type="color" name="about_setting[{{ $loop->iteration }}][about_background_color]" value="{{ isset($htmlboxs->about_background_color) ? $htmlboxs->about_background_color : '' }}" class="form-control">
                                                                     </td>
                                                                 </tr>
 

@@ -355,15 +355,22 @@ class LayoutController extends Controller
                     if (!empty($about_image) || $about_image != '') {
                         $about_setting_htmlbox->about_image = $about_image;
                     }
+
                     if (!empty($about_background_image) || $about_background_image != '') {
                         $about_setting_htmlbox->about_background_image = $about_background_image;
                     }
 
-                    $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
+                    if (!empty($about_background_hover_color) || $about_background_hover_color != '') {
+                        $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
+                    }
+
+                    if (!empty($about_background_color) || $about_background_color != '') {
+                        $about_setting_htmlbox->about_background_color = $about_background_color;
+                    }
+
                     $about_setting_htmlbox->about_background_image_position = $about_background_image_position;
                     $about_setting_htmlbox->about_title = $about_title;
                     $about_setting_htmlbox->about_description = $about_description;
-                    $about_setting_htmlbox->about_background_color = $about_background_color;
                     // $about_setting_htmlbox->created_at = date('Y-m-d H:i:s');
                     $about_setting_htmlbox->update();
                 }
