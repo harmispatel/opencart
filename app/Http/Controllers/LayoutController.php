@@ -100,7 +100,10 @@ class LayoutController extends Controller
         $sliders = Slider::where('store_id',$current_store_id)->orderBy('id','ASC')->get();
 
         // Get All Sliders
-        $htmlbox = HtmlBox::with(['hasoneaboutActive'])->orderBy('id','ASC')->get();
+        $htmlbox = HtmlBox::with(['hasoneaboutActive'])->where('store_id',$current_store_id)->orderBy('id','ASC')->get();
+        // echo '<pre>';
+        // print_r($htmlbox->toArray());
+        // exit();
 
         // Get General Settings
         $get_genearl_settings = Settings::select('value')->where('store_id',$current_store_id)->where('key','general_settings')->first();
@@ -324,34 +327,58 @@ class LayoutController extends Controller
 
         // Add & Update HTML BOX Settings
         $about_settings = $request->about_setting;
+        // echo '<pre>';
+        // print_r($about_settings);
+        // exit();
 
         if(isset($about_settings))
         {
             foreach($about_settings as $htmlbox_settings)
             {
-                $about_settings_edit =  isset($htmlbox_settings['edit']) ? $htmlbox_settings['edit'] : '';
-                $data['about_layout_id'] =  isset($htmlbox_settings['about_layout_id']) ? $htmlbox_settings['about_layout_id'] : '';
-                $data['about_background_option'] =  isset($htmlbox_settings['about_background_option']) ? $htmlbox_settings['about_background_option'] : '';
-                $data['about_image'] =  isset($htmlbox_settings['about_image']) ? $htmlbox_settings['about_image'] : '';
-                $data['about_background_image'] =  isset($htmlbox_settings['about_background_image']) ? $htmlbox_settings['about_background_image'] : '';
-                $data['about_background_hover_color'] =  isset($htmlbox_settings['about_background_hover_color']) ? $htmlbox_settings['about_background_hover_color'] : '';
-                $data['about_background_image_position'] =  isset($htmlbox_settings['about_background_image_position']) ? $htmlbox_settings['about_background_image_position'] : '';
-                $data['about_title'] =  isset($htmlbox_settings['about_title']) ? $htmlbox_settings['about_title'] : '';
-                $data['about_description'] =  isset($htmlbox_settings['about_description']) ? $htmlbox_settings['about_description'] : '';
-                $data['about_background_color'] =  isset($htmlbox_settings['about_background_color']) ? $htmlbox_settings['about_background_color'] : '';
+                $about_settings_edit =  isset($htmlbox_settings['edithtmlbox']) ? $htmlbox_settings['edithtmlbox'] : '';
+                $about_layout_id =  isset($htmlbox_settings['about_layout_id']) ? $htmlbox_settings['about_layout_id'] : '';
+                $about_background_option =  isset($htmlbox_settings['about_background_option']) ? $htmlbox_settings['about_background_option'] : '';
+                $about_image =  isset($htmlbox_settings['about_image']) ? $htmlbox_settings['about_image'] : '';
+                $about_background_image =  isset($htmlbox_settings['about_background_image']) ? $htmlbox_settings['about_background_image'] : '';
+                $about_background_hover_color =  isset($htmlbox_settings['about_background_hover_color']) ? $htmlbox_settings['about_background_hover_color'] : '';
+                $about_background_image_position =  isset($htmlbox_settings['about_background_image_position']) ? $htmlbox_settings['about_background_image_position'] : '';
+                $about_title =  isset($htmlbox_settings['about_title']) ? $htmlbox_settings['about_title'] : '';
+                $about_description =  isset($htmlbox_settings['about_description']) ? $htmlbox_settings['about_description'] : '';
+                $about_background_color =  isset($htmlbox_settings['about_background_color']) ? $htmlbox_settings['about_background_color'] : '';
 
-
-                $value = serialize($data);
 
                 if($about_settings_edit != '' || !empty($about_settings_edit)){
                     $about_setting_htmlbox = HtmlBox::find($about_settings_edit);
-                    $about_setting_htmlbox->value = $value;
+                    // $about_setting_htmlbox->store_id = $current_store_id;
+                    $about_setting_htmlbox->about_layout_id = $about_layout_id;
+                    $about_setting_htmlbox->about_background_option = $about_background_option;
+                    if (!empty($about_image) || $about_image != '') {
+                        $about_setting_htmlbox->about_image = $about_image;
+                    }
+                    if (!empty($about_background_image) || $about_background_image != '') {
+                        $about_setting_htmlbox->about_background_image = $about_background_image;
+                    }
+
+                    $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
+                    $about_setting_htmlbox->about_background_image_position = $about_background_image_position;
+                    $about_setting_htmlbox->about_title = $about_title;
+                    $about_setting_htmlbox->about_description = $about_description;
+                    $about_setting_htmlbox->about_background_color = $about_background_color;
+                    // $about_setting_htmlbox->created_at = date('Y-m-d H:i:s');
                     $about_setting_htmlbox->update();
                 }
                 else{
                     $about_setting_htmlbox = new HtmlBox;
                     $about_setting_htmlbox->store_id = $current_store_id;
-                    $about_setting_htmlbox->value = $value;
+                    $about_setting_htmlbox->about_layout_id = $about_layout_id;
+                    $about_setting_htmlbox->about_background_option = $about_background_option;
+                    $about_setting_htmlbox->about_image = $about_image;
+                    $about_setting_htmlbox->about_background_image = $about_background_image;
+                    $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
+                    $about_setting_htmlbox->about_background_image_position = $about_background_image_position;
+                    $about_setting_htmlbox->about_title = $about_title;
+                    $about_setting_htmlbox->about_description = $about_description;
+                    $about_setting_htmlbox->about_background_color = $about_background_color;
                     $about_setting_htmlbox->created_at = date('Y-m-d H:i:s');
                     $about_setting_htmlbox->save();
                 }

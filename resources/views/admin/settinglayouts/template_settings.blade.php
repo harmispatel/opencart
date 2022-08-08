@@ -924,13 +924,6 @@ $openhour_data = openhoursActive();
                                  <div class="card-body pb-0" id="htmlbox">
                                     @if (count($htmlbox) > 0)
                                         @foreach ($htmlbox as $htmlboxs)
-                                        @php
-                                        $test1 = isset($htmlboxs->about_layout_id) ? $htmlboxs->about_layout_id : '';
-                                        $test = explode(' ', $test1);
-                                        // echo '<pre>';
-                                        // print_r($about_data['about_image']);
-                                        // exit();
-                                    @endphp
                                             <div class="htmlbox-inr">
                                                 <h2>HTML {{ $loop->iteration}}</h2>
                                                 <div class="row align-items-center" >
@@ -969,8 +962,8 @@ $openhour_data = openhoursActive();
                                                                     <label>Background Option</label>
                                                                 </th>
                                                                 <td>
-                                                                    <select name="about_setting[{{ $loop->iteration }}][about_background_option]" class="form-control">
-                                                                        {{-- <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control"> --}}
+                                                                    {{-- <select name="about_setting[{{ $loop->iteration }}][about_background_option]" class="form-control"> --}}
+                                                                        <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control">
                                                                         @php
                                                                             $about_background_option = isset($htmlboxs['about_background_option']) ? $htmlboxs['about_background_option'] : '';
                                                                         @endphp
@@ -1105,7 +1098,7 @@ $openhour_data = openhoursActive();
                                                         </th>
                                                         <td>
 
-                                                            <select name="about_setting[0][about_layout_id]" id="about_layout" class="form-control">
+                                                            <select name="about_setting[0][about_layout_id]" id="about_layout" onchange="backgroundOption(this)" class="form-control">
                                                                 <option value=""> - Select HTML Box - </option>
                                                                 @foreach ($about_layouts as $about)
                                                                     <option value="{{ $about->about_id }}">{{ $about->about_name }}</option>
@@ -1125,7 +1118,7 @@ $openhour_data = openhoursActive();
                                                             <label>Background Option</label>
                                                         </th>
                                                         <td>
-                                                            <select name="about_setting[0][about_background_option]"  class="form-control">
+                                                            <select name="about_setting[0][about_background_option]" class="form-control">
 
                                                                 <option value="1">Image</option>
                                                                 <option value="2">Color</option>
