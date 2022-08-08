@@ -140,6 +140,226 @@
 ?>
 {{-- END CSS --}}
 
+   {{-- ABOUT US --}}
+    {{------------------------------------------------------------------------------------------------}}
+        {{-- About US 1--}}
+        @foreach ($htmlbox_store_about_settings as $about_settings_css)
+            <?php
+                $about_background_option = isset($about_settings_css['about_background_option']) ? $about_settings_css['about_background_option'] : '';
+                if($about_settings_css->about_layout_id == 1)
+                {
+                    if($about_background_option == 1)
+                    {
+            ?>
+                        <style>
+                            .welcome{
+                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background-size: cover;
+                            }
+                        </style>
+            <?php
+                    }
+                    else
+                    {
+            ?>
+                        <style>
+                            .welcome
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
+                            }
+
+                            .welcome:hover
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
+                            }
+                        </style>
+            <?php
+                    }
+                }
+            ?>
+
+            {{-- About US 2--}}
+            <?php
+                if($about_settings_css->about_layout_id == 2)
+                {
+                    if($about_background_option == 1)
+                    {
+            ?>
+                        <style>
+                            .about-us{
+                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background-size: cover;
+                            }
+                        </style>
+            <?php
+                    }
+                    else
+                    {
+            ?>
+                        <style>
+                            .about-us
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
+                            }
+
+                            .about-us:hover
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
+                            }
+                        </style>
+            <?php
+                    }
+                }
+            ?>
+
+            {{-- About US 3--}}
+            <?php
+                if($about_settings_css->about_layout_id == 3)
+                {
+                    if($about_background_option == 1)
+                    {
+            ?>
+                        <style>
+                            .who-are-we{
+                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background-size: cover;
+                            }
+                        </style>
+            <?php
+                    }
+                    else
+                    {
+            ?>
+                        <style>
+                            .who-are-we
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
+                            }
+
+                            .who-are-we:hover
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
+                            }
+                        </style>
+            <?php
+                    }
+                }
+            ?>
+
+            {{-- About US 4--}}
+            <?php
+                if($about_settings_css->about_layout_id == 4)
+                {
+                    if($about_background_option == 1)
+                    {
+            ?>
+                        <style>
+                            .who-are-we-v4{
+                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background-size: cover;
+                            }
+                        </style>
+            <?php
+                    }
+                    else
+                    {
+            ?>
+                        <style>
+                            .who-are-we-v4
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
+                            }
+
+                            .who-are-we-v4:hover
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
+                            }
+                        </style>
+            <?php
+                    }
+                }
+            ?>
+
+            {{-- About US 5--}}
+            <?php
+                if($about_settings_css->about_layout_id == 5)
+                {
+            ?>
+                    <style>
+                        .who-are-we-v5
+                        {
+                            background: transparent url("<?php echo get_css_url().'public/admin/dots.svg' ?>") no-repeat 120px bottom;
+                        }
+                    </style>
+            <?php
+                    if($about_background_option == 1)
+                    {
+            ?>
+                        <style>
+                            .who-are-we-v5{
+                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background-size: cover;
+                            }
+                        </style>
+            <?php
+                    }
+                    else
+                    {
+            ?>
+                        <style>
+                            .who-are-we-v5
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
+                            }
+
+                            .who-are-we-v5:hover
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
+                            }
+                        </style>
+            <?php
+                    }
+                }
+            ?>
+
+            {{-- About US 6--}}
+            <?php
+                if($about_settings_css->about_layout_id == 6)
+                {
+                    if($about_background_option == 1)
+                    {
+            ?>
+                        <style>
+                            .who-are-we-v6{
+                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background-size: cover;
+                            }
+                        </style>
+            <?php
+                    }
+                    else
+                    {
+            ?>
+                        <style>
+                            .who-are-we-v6
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
+                            }
+
+                            .who-are-we-v6:hover
+                            {
+                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
+                            }
+                        </style>
+            <?php
+                    }
+                }
+            ?>
+        @endforeach
+    {{------------------------------------------------------------------------------------------------}}
+    {{-- END ABOUT US --}}
+
+
 
 
 <!-- Mobile Menu -->
@@ -573,148 +793,150 @@
 
 
 {{-- HTML BOX SECTION --}}
+        @foreach ($htmlbox_store_about_settings as $about_settings)
 
-        {{-- HTML BOX 1 --}}
-        @if ($about_id == 1)
-            <section class="welcome pt-110 pb-110">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6 wow animate__fadeInLeft" data-wow-duration="1s">
-                            <div style="height: 300px; overflow: hidden;" id="shopDescription">
-                                <h3 class="section-title color-green">
-                                    {{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}
-                                </h3>
-                                <p>
-                                    {!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}
-                                </p>
-                            </div>
-                            <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
-                            <a style="display: none;" class="btn mt-2 btn-green text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
-                        </div>
-
-                        <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
-                            <div class="img-box">
-                                 <img class="img-fluid" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        @endif
-        {{-- END HTML BOX 1 --}}
-
-
-        {{-- HTML BOX 2 --}}
-        @if ($about_id == 2)
-            <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s">
-                <div class="row">
-                    <div class="col-md-12 col-lg-6 img">
-                        <img class="img-fluid" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}" />
-                    </div>
-                    <div class="col-md-12 col-lg-6 content">
-                        <h3 class="title text-uppercase text-center">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</h3>
-                        <p>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</p>
-
-                        <div class="about-us-swiper swiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/2.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/3.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/2.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/3.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/2.jpg' }}"/></div>
-                                <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/3.jpg' }}"/></div>
-                            </div>
-                            <button class="swiper-button-next"></button>
-                            <button class="swiper-button-prev"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-        {{-- END HTML BOX 2 --}}
-
-
-        {{-- HTML BOX 3 --}}
-        @if ($about_id == 3)
-            <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-                <div class="container text-center">
-                    <div class="default-title-v3">
-                        <h3 class="title color-green">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</h3>
-                    </div>
-                    <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
-                </div>
-            </section>
-        @endif
-        {{-- END HTML BOX 3 --}}
-
-
-        {{-- HTML BOX 4 --}}
-        @if ($about_id == 4)
-            <section class="who-are-we-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12 col-md-12 col-lg-6">
-                            <div class="default-title-v4">
-                                <strong class="sub-title">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</strong>
-                            </div>
-                            <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
-                        </div>
-                        <div class="col-12 col-md-12 col-lg-6">
-                            <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}" />
-                        </div>
-                    </div>
-                </div>
-            </section>
-        @endif
-        {{-- END HTML BOX 4 --}}
-
-
-        {{-- HTML BOX 5 --}}
-        @if ($about_id == 5)
-            <section class="who-are-we-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-6">
-                            <img class="img-fluid" src="{{ isset($store_about_settings['about_image']) ? $store_about_settings['about_image'] : '' }}" />
-                        </div>
-
-                        <div class="col-sm-12 col-md-6">
-                            <div style="height: 300px; overflow: hidden;" id="shopDescription">
-                                <div class="default-title-v5">
-                                    <strong class="sub-title color-orange text-uppercase">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</strong>
+            {{-- HTML BOX 1 --}}
+            @if ($about_settings->about_layout_id == 1)
+                <section class="welcome pt-110 pb-110">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 wow animate__fadeInLeft" data-wow-duration="1s">
+                                <div style="height: 300px; overflow: hidden;" id="shopDescription">
+                                    <h3 class="section-title color-green">
+                                        {{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}
+                                    </h3>
+                                    <p>
+                                        {!! isset($about_settings['about_description']) ? $about_settings['about_description'] : '' !!}
+                                    </p>
                                 </div>
-                                <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
+                                <a class="btn mt-2 btn-green text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
+                                <a style="display: none;" class="btn mt-2 btn-green text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
                             </div>
-                            <a class="btn mt-2 btn-orange text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
-                            <a style="display: none;" class="btn mt-2 btn-orange text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
+
+                            <div class="col-sm-12 col-md-6 wow animate__fadeInRight" data-wow-duration="1s">
+                                <div class="img-box">
+                                    <img class="img-fluid" src="{{ isset($about_settings['about_image']) ? $about_settings['about_image'] : '' }}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endif
+            {{-- END HTML BOX 1 --}}
+
+
+            {{-- HTML BOX 2 --}}
+            @if ($about_settings->about_layout_id == 2)
+                <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6 img">
+                            <img class="img-fluid" src="{{ isset($about_settings['about_image']) ? $about_settings['about_image'] : '' }}" />
+                        </div>
+                        <div class="col-md-12 col-lg-6 content">
+                            <h3 class="title text-uppercase text-center">{{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}</h3>
+                            <p>{!! isset($about_settings['about_description']) ? $about_settings['about_description'] : '' !!}</p>
+
+                            <div class="about-us-swiper swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/2.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/3.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/2.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/3.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/1.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/2.jpg' }}"/></div>
+                                    <div class="swiper-slide"><img class="img-fluid" src="{{ get_css_url().'public/assets/demo-data/popular-foods/3.jpg' }}"/></div>
+                                </div>
+                                <button class="swiper-button-next"></button>
+                                <button class="swiper-button-prev"></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        @endif
-        {{-- END HTML BOX 5 --}}
+            @endif
+            {{-- END HTML BOX 2 --}}
 
 
-        {{-- HTML BOX 6 --}}
-        @if ($about_id == 6)
-            <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
-                <div class="container p-4">
-                    <div style="height: 300px; overflow: hidden;" id="shopDescription">
-                        <div class="default-title-v6">
-                            <strong class="sub-title color-orange text-uppercase">{{ isset($store_about_settings['about_title']) ? $store_about_settings['about_title'] : '' }}</strong>
+            {{-- HTML BOX 3 --}}
+            @if ($about_settings->about_layout_id == 3)
+                <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+                    <div class="container text-center">
+                        <div class="default-title-v3">
+                            <h3 class="title color-green">{{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}</h3>
                         </div>
-                        <div>{!! isset($store_about_settings['about_description']) ? $store_about_settings['about_description'] : '' !!}</div>
+                        <div>{!! isset($about_settings['about_description']) ? $about_settings['about_description'] : '' !!}</div>
                     </div>
+                </section>
+            @endif
+            {{-- END HTML BOX 3 --}}
 
-                    <a class="btn mt-3 text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
-                    <a style="display: none;" class="btn mt-3 text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
-                </div>
-            </section>
-        @endif
-        {{-- END HTML BOX 6 --}}
+
+            {{-- HTML BOX 4 --}}
+            @if ($about_settings->about_layout_id == 4)
+                <section class="who-are-we-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-6">
+                                <div class="default-title-v4">
+                                    <strong class="sub-title">{{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}</strong>
+                                </div>
+                                <div>{!! isset($about_settings['about_description']) ? $about_settings['about_description'] : '' !!}</div>
+                            </div>
+                            <div class="col-12 col-md-12 col-lg-6">
+                                <img class="rounded-circle" style="width: 400px;height: 400px;" src="{{ isset($about_settings['about_image']) ? $about_settings['about_image'] : '' }}" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endif
+            {{-- END HTML BOX 4 --}}
+
+
+            {{-- HTML BOX 5 --}}
+            @if ($about_settings->about_layout_id == 5)
+                <section class="who-are-we-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <img class="img-fluid" src="{{ isset($about_settings['about_image']) ? $about_settings['about_image'] : '' }}" />
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <div style="height: 300px; overflow: hidden;" id="shopDescription">
+                                    <div class="default-title-v5">
+                                        <strong class="sub-title color-orange text-uppercase">{{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}</strong>
+                                    </div>
+                                    <div>{!! isset($about_settings['about_description']) ? $about_settings['about_description'] : '' !!}</div>
+                                </div>
+                                <a class="btn mt-2 btn-orange text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
+                                <a style="display: none;" class="btn mt-2 btn-orange text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            @endif
+            {{-- END HTML BOX 5 --}}
+
+
+            {{-- HTML BOX 6 --}}
+            @if ($about_settings->about_layout_id == 6)
+                <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
+                    <div class="container p-4">
+                        <div style="height: 300px; overflow: hidden;" id="shopDescription">
+                            <div class="default-title-v6">
+                                <strong class="sub-title color-orange text-uppercase">{{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}</strong>
+                            </div>
+                            <div>{!! isset($about_settings['about_description']) ? $about_settings['about_description'] : '' !!}</div>
+                        </div>
+
+                        <a class="btn mt-3 text-uppercase" id="readmore" onclick="ShowMoreDescription()">read more</a>
+                        <a style="display: none;" class="btn mt-3 text-uppercase" id="readless" onclick="HideMoreDescription()">read less</a>
+                    </div>
+                </section>
+            @endif
+            {{-- END HTML BOX 6 --}}
+        @endforeach
 
 {{-- END HTML BOX SECTION --}}
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\DeliverySettings;
 use App\Models\Gallary;
+use App\Models\HtmlBox;
 use App\Models\OrderProduct;
 use App\Models\Postcodes;
 use App\Models\Product;
@@ -102,7 +103,12 @@ class HomeController extends Controller
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
-        return view('frontend.pages.home', compact(['photos', 'best_categories', 'popular_foods', 'delivery_setting', 'areas', 'sliders']));
+        $htmlbox_store_about_settings = HtmlBox::where('store_id', $front_store_id)->get();
+        // echo '<pre>';
+        // print_r($htmlbox_store_about_settings);
+        // exit();
+
+        return view('frontend.pages.home', compact(['photos', 'best_categories', 'popular_foods', 'delivery_setting', 'areas', 'sliders', 'htmlbox_store_about_settings']));
     }
 
 
