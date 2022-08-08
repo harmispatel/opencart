@@ -61,6 +61,15 @@ class LayoutController extends Controller
     }
 
 
+    function deletehtmlbox(Request $request){
+        $htmlbox_id =$request->htmlbox_id;
+
+        $htmlbox = HtmlBox::find($htmlbox_id)->delete();
+
+        return response([
+            'success' => 1,
+        ]);
+    }
 
 
 

@@ -1085,7 +1085,7 @@ $openhour_data = openhoursActive();
                                                         </div>
                                                     @else
                                                         <div class="col-md-1 text-center">
-                                                            <button class="btn rounded-circle btn-sm btn-danger" onclick="deletehtmlbox('{{ $htmlboxs->id }}')"><i class="fa fa-minus-circle"></i></button>
+                                                            <button type="button" class="btn rounded-circle btn-sm btn-danger" onclick="deletehtmlbox('{{ $htmlboxs->id }}')"><i class="fa fa-minus-circle"></i></button>
                                                         </div>
                                                     @endif
                                                 </div>
@@ -2379,7 +2379,7 @@ $openhour_data = openhoursActive();
         incr_htmlbox++;
         var html = '';
 
-        html +=`<div class="htmlbox-inr">
+        html +=`<div class="htmlbox-inr" id="about_setting` + incr_htmlbox + `">
                     <h2>HTML ` + incr_htmlbox + `</h2>
                     <div class="row align-items-center">
                         <div class="col-md-11">
@@ -2521,7 +2521,7 @@ $openhour_data = openhoursActive();
                             </table>
                         </div>
                         <div class="col-md-1 text-center">
-                            <button class="btn rounded-circle btn-sm btn-danger" onclick="$(\'#about_setting` + incr_htmlbox + `\').remove()"><i class="fa fa-minus-circle"></i></button>
+                            <button type="button" class="btn rounded-circle btn-sm btn-danger" onclick="$(\'#about_setting` + incr_htmlbox + `\').remove()"><i class="fa fa-minus-circle"></i></button>
                         </div>
                     </div>
                 </div>
@@ -2560,7 +2560,8 @@ $openhour_data = openhoursActive();
 
     function deletehtmlbox(id){
         var d_id = id;
-        if (confirm("Are You Sure You Want to Delete It ?"+ id)) {
+
+        if (confirm("Are You Sure You Want to Delete It ?")) {
             $.ajax({
                 type: "POST",
                 url: "{{ route('deletehtmlbox') }}",
@@ -2572,7 +2573,7 @@ $openhour_data = openhoursActive();
                 success: function(response) {
                     if (response.success == 1) {
                         alert("HtmlBox has been deleted Successfully..");
-                        // location.reload();
+                        location.reload();
                     }
                 }
             });
