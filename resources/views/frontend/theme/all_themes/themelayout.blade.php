@@ -28,10 +28,10 @@
     // Slider Search Box Permission
     $slider_online_searchbox_permission = isset($store_slider_settings['slider_online_searchbox_permission']) ? $store_slider_settings['slider_online_searchbox_permission'] : '';
 
-    // Get Current About ID & About Settings
-    $current_about_id = layoutID($currentURL,'about_id');
-    $about_id = $current_about_id['about_id'];
-    $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
+    // // Get Current About ID & About Settings
+    // $current_about_id = layoutID($currentURL,'about_id');
+    // $about_id = $current_about_id['about_id'];
+    // $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
 
 
     // Get Current BestCategory ID & BestCategory Settings
@@ -104,6 +104,7 @@
 {{--  CSS --}}
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700;800&amp;display=swap" rel="stylesheet"/>
 
+<link rel="stylesheet" href="{{  get_css_url().'public/assets/frontend_css/openhours.css' }}">
 <?php 
     if($store_setting['gallery_background_options'] == 'transparent')
     {
@@ -2430,7 +2431,7 @@
 
     {{-- OPENHOURS 1 --}}
     @if ($openhour_id == 1)
-        <section class="opening-hours pt-110 wow animate__fadeInUp" data-wow-duration="1s">
+        <section class="opening-hours pt-110 wow animate__fadeInUp" data-wow-duration="1s" style="">
             <div class="container text-center">
                 <h3 class="title text-uppercase">Visit us</h3>
                 <h3 class="sub-title">Opening Hours</h3>
@@ -2571,6 +2572,7 @@
             </div>
         </section>
     @endif
+   
     {{-- END OPENHOURS 5 --}}
 
 

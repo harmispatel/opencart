@@ -1,16 +1,16 @@
-<!--
+{{--
     THIS IS GALLRY PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     index.blade.php
     It's used for Photo Gallary for Stores.
     It's used in Frontend.
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
-<!-- Header Section -->
+{{-- Header Section --}}
 @include('header')
-<!-- End Header Section -->
+{{-- End Header Section --}}
 
 
 {{-- <link rel="shortcut icon" type="image/png" href="{{ asset('public/vendor/laravel-filemanager/img/72px color.png') }}"> --}}
@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
 <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
 
-<!-- Custom CSS -->
+{{-- Custom CSS --}}
 <style>
     .img-de {
         padding: 10px;
@@ -51,13 +51,13 @@
     }
 
 </style>
-<!-- End Custom CSS -->
+{{-- End Custom CSS --}}
 
 
-<!-- Section of List Customers -->
+{{-- Section of List Customers --}}
 <section>
     <div class="content-wrapper">
-        <!-- Breadcumb Section -->
+        {{-- Breadcumb Section --}}
         <section class="content-header">
             <div class="container-fluid">
                 @if (Session::has('success'))
@@ -72,7 +72,7 @@
                     <div class="col-sm-6">
                         <h1><i class="fa fa-image"></i>Photo Gallery</h1>
                     </div>
-                    <!-- Breadcrumb Start -->
+                    {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -86,11 +86,11 @@
                             <button class="btn btn-sm btn-primary" disabled><i class="fa fa-save"></i> UPDATE</button>
                         @endif
                     </div>
-                    <!-- End Breadcumb -->
+                    {{-- End Breadcumb --}}
                 </div>
             </div>
         </section>
-        <!-- End Breadcumb Section -->
+        {{-- End Breadcumb Section --}}
 
         @php
             $current_store = currentStoreId();
@@ -177,12 +177,12 @@
         </div>
     </div>
 </section>
-<!-- End Section of List Customers -->
+{{-- End Section of List Customers --}}
 
-<!-- Modal -->
+{{-- Modal --}}
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog" style="max-width: 950px ">
-        <!-- Modal content-->
+        {{-- Modal content--}}
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Photo Gallery</h2>
@@ -370,18 +370,18 @@
                 </div>
             </div>
         </div>
-        <!-- End Modal content-->
+        {{-- End Modal content--}}
     </div>
 </div>
-<!-- End Modal -->
+{{-- End Modal --}}
 
 
-<!-- Footer Section -->
+{{-- Footer Section --}}
 @include('footer')
-<!-- End Footer Section -->
+{{-- End Footer Section --}}
 
 
-<!-- SCRIPT -->
+{{-- SCRIPT --}}
 <script src="{{ asset('public/vendor/laravel-filemanager/js/cropper.min.js') }}"></script>
 <script src="{{ asset('public/vendor/laravel-filemanager/js/dropzone.min.js') }}"></script>
 <script src="{{ asset('public/vendor/laravel-filemanager/js/script.js') }}"></script>
@@ -549,4 +549,4 @@
     });
 
 </script>
-<!-- SCRIPT -->
+{{-- SCRIPT --}}

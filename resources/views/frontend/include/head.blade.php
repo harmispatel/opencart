@@ -35,10 +35,10 @@
     $slider_id = $current_slider_id['slider_id'];
     $store_slider_settings = storeLayoutSettings($slider_id,$front_store_id,'slider_settings','slider_id');
 
-    // Get Current About ID & About Settings
-    $current_about_id = layoutID($currentURL,'about_id');
-    $about_id = $current_about_id['about_id'];
-    $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
+    // // Get Current About ID & About Settings
+    // $current_about_id = layoutID($currentURL,'about_id');
+    // $about_id = $current_about_id['about_id'];
+    // $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
 
     // Get Current BestCategory ID & BestCategory Settings
     $current_bestcategory_id = layoutID($currentURL,'bestcategory_id');
@@ -1102,159 +1102,7 @@
     {{-- END RESERVATION --}}
 
 
-    {{-- OPENHOURS --}}
-    {{------------------------------------------------------------------------------------------------}}
-        {{-- OpenHours 1 --}}
-        <?php
-            if($openhour_id == 1)
-            {
-        ?>
-                <style>
-                    .opening-hours
-                    {
-                        background: url("<?php echo (isset($store_openhour_settings['openhour_background_image'])) ? $store_openhour_settings['openhour_background_image'] : '' ?>"), <?php echo (isset($store_openhour_settings['openhour_background_color'])) ? $store_openhour_settings['openhour_background_color'] : '' ?> 80px;
-                        background-repeat: no-repeat;
-                        background-position: <?php echo (isset($store_openhour_settings['openhour_background_image_position'])) ? $store_openhour_settings['openhour_background_image_position'] : '' ?>;
-                        background-size: 120px;
-                    }
 
-                    .opening-hours:hover
-                    {
-                        background-color: <?php echo (isset($store_openhour_settings['openhour_background_hover_color'])) ? $store_openhour_settings['openhour_background_hover_color'] : '' ?>;
-                    }
-                </style>
-        <?php
-            }
-        ?>
-
-        {{-- OpenHours 2 --}}
-        <?php
-            if($openhour_id == 2)
-            {
-        ?>
-                <style>
-                    .opening-hours-v2
-                    {
-                        background: url("<?php echo (isset($store_openhour_settings['openhour_background_image'])) ? $store_openhour_settings['openhour_background_image'] : '' ?>"), <?php echo (isset($store_openhour_settings['openhour_background_color'])) ? $store_openhour_settings['openhour_background_color'] : '' ?>;
-                        background-repeat: no-repeat;
-                        background-position: <?php echo (isset($store_openhour_settings['openhour_background_image_position'])) ? $store_openhour_settings['openhour_background_image_position'] : '' ?>;
-                        background-size: 120px;
-                    }
-
-
-                    .opening-hours-v2:hover
-                    {
-                        background-color: <?php echo (isset($store_openhour_settings['openhour_background_hover_color'])) ? $store_openhour_settings['openhour_background_hover_color'] : '' ?>;
-                    }
-                </style>
-        <?php
-            }
-        ?>
-
-        {{-- OpenHours 3 --}}
-        <?php
-            if($openhour_id == 3)
-            {
-        ?>
-                <style>
-                    .opening-hours-v3
-                    {
-                        background: url("<?php echo (isset($store_openhour_settings['openhour_background_image'])) ? $store_openhour_settings['openhour_background_image'] : '' ?>"), <?php echo (isset($store_openhour_settings['openhour_background_color'])) ? $store_openhour_settings['openhour_background_color'] : '' ?>;
-                        background-repeat: no-repeat;
-                        background-position: <?php echo (isset($store_openhour_settings['openhour_background_image_position'])) ? $store_openhour_settings['openhour_background_image_position'] : '' ?>;
-                        background-size: 120px;
-                    }
-
-
-                    .opening-hours-v3:hover
-                    {
-                        background-color: <?php echo (isset($store_openhour_settings['openhour_background_hover_color'])) ? $store_openhour_settings['openhour_background_hover_color'] : '' ?>;
-                    }
-                </style>
-        <?php
-            }
-        ?>
-
-        {{-- OpenHours 4 --}}
-        <?php
-            if($openhour_id == 4)
-            {
-        ?>
-                <style>
-                    .opening-hours-v4
-                    {
-                        background: url("<?php echo (isset($store_openhour_settings['openhour_background_image'])) ? $store_openhour_settings['openhour_background_image'] : '' ?>"), <?php echo (isset($store_openhour_settings['openhour_background_color'])) ? $store_openhour_settings['openhour_background_color'] : '' ?>;
-                        background-repeat: no-repeat;
-                        background-position: <?php echo (isset($store_openhour_settings['openhour_background_image_position'])) ? $store_openhour_settings['openhour_background_image_position'] : '' ?>;
-                        background-size: 120px;
-                    }
-
-
-                    .opening-hours-v4:hover
-                    {
-                        background-color: <?php echo (isset($store_openhour_settings['openhour_background_hover_color'])) ? $store_openhour_settings['openhour_background_hover_color'] : '' ?>;
-                    }
-
-                    .opening-hours-v4 .__time
-                    {
-                        background-image: url("<?php echo get_css_url().'public/admin/opening-hours.svg' ?>");
-                        background-repeat: no-repeat;
-                        background-position: center center;
-                    }
-                </style>
-        <?php
-            }
-        ?>
-
-        {{-- OpenHours 5 --}}
-        <?php
-            if($openhour_id == 5)
-            {
-        ?>
-                <style>
-                    .opening-hours-v5
-                    {
-                        background: url("<?php echo (isset($store_openhour_settings['openhour_background_image'])) ? $store_openhour_settings['openhour_background_image'] : '' ?>"), <?php echo (isset($store_openhour_settings['openhour_background_color'])) ? $store_openhour_settings['openhour_background_color'] : '' ?>;
-                        background-repeat: no-repeat;
-                        background-position: <?php echo (isset($store_openhour_settings['openhour_background_image_position'])) ? $store_openhour_settings['openhour_background_image_position'] : '' ?>;
-                        background-size: 120px;
-                    }
-
-
-                    .opening-hours-v5:hover
-                    {
-                        background-color: <?php echo (isset($store_openhour_settings['openhour_background_hover_color'])) ? $store_openhour_settings['openhour_background_hover_color'] : '' ?>;
-                    }
-                </style>
-        <?php
-            }
-        ?>
-
-        {{-- OpenHours 6 --}}
-        <?php
-            if($openhour_id == 6)
-            {
-        ?>
-                <style>
-                    .opening-hours-v6
-                    {
-                        background: url("<?php echo (isset($store_openhour_settings['openhour_background_image'])) ? $store_openhour_settings['openhour_background_image'] : '' ?>"), <?php echo (isset($store_openhour_settings['openhour_background_color'])) ? $store_openhour_settings['openhour_background_color'] : '' ?>;
-                        background-repeat: no-repeat;
-                        background-position: <?php echo (isset($store_openhour_settings['openhour_background_image_position'])) ? $store_openhour_settings['openhour_background_image_position'] : '' ?>;
-                        background-size: 120px;
-                    }
-
-
-                    .opening-hours-v6:hover
-                    {
-                        background-color: <?php echo (isset($store_openhour_settings['openhour_background_hover_color'])) ? $store_openhour_settings['openhour_background_hover_color'] : '' ?>;
-                    }
-                </style>
-        <?php
-            }
-        ?>
-    {{------------------------------------------------------------------------------------------------}}
-    {{-- END OPENHOURS --}}
 
 
     {{-- GENERAL --}}
