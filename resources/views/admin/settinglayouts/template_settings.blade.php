@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS TEMPLATE(THEME) SETTING FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     template_settings.blade.php
     It Displayed All Template(Theme) List & Storewise Display Template(Theme)
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 {{-- PHP CODE --}}
 @php

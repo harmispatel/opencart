@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS HEADER MenuOptionedit PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     edit.blade.php
     This for Edit MenuOption
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 {{-- Header --}}
@@ -301,8 +301,11 @@
                                                                                 <td>
                                                                                     {{ $omapping->topping_rename }}
                                                                                 </td>
+                                                                                @php
+                                                                                    $sizename = html_entity_decode($omapping->hasOneToppingSize->sizename);
+                                                                                @endphp
                                                                                 <td>
-                                                                                    {{ isset($omapping->hasOneToppingSize->sizename) ? $omapping->hasOneToppingSize->sizename : '' }}
+                                                                                    {{ isset($sizename) ? $sizename : '' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->min_item }}
@@ -463,13 +466,13 @@
 
         html += '<td class="align-middle"><select name="category" onchange="getproduct(this);"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select class="product" name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="text" name="topping_rename"></td>';
 
         // html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size)<option value="{{ $size->size_id }}">{{ $size->tsize }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size) @foreach($size->hasManyToppingSize as $tsize)<option value="{{ $tsize["id_size"] }}">{{ $tsize["size"] }}</option>@endforeach @endforeach</select></td>';
+        html += '<td class="align-middle"><select class="productsize" name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size) @foreach($size->hasManyToppingSize as $tsize)<option value="{{ $tsize["id_size"] }}">{{ $tsize["size"] }}</option>@endforeach @endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="number" name="min_item" value="1"></td>';
 
@@ -503,19 +506,18 @@
 
     // get product by category
     function getproduct(elem) {
-        let catid = $(elem).val();
+        let cat_id = $(elem).val();
 
         $.ajax({
             type: "get",
-            url: "{{ url('toppinggetproduct') }}/" + catid,
+            url: "{{ url('toppinggetproduct') }}/" + cat_id,
             dataType: "json",
             success: function (response) {
-
+                $('.product').empty().append(response.products);
+                $('.productsize').empty().append(response.productsize);
             }
         });
     }
-
-    // get product by category
 
 
 

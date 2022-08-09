@@ -252,6 +252,20 @@
 
 {{--  Start Get Product  --}}
 <script>
+    // addtablerow();
+    // function addtablerow() {
+    //     var jRow = $(&quot;&lt;tr&gt;&quot;).append(&quot;&lt;td&gt;Cell 1&lt;/td&gt;&quot;, &quot;&lt;td&gt;Cell 2&lt;/td&gt;&quot;);
+    //     table.row.add(jRow).draw();
+    //  }
+
+    // $(function() {
+    //     $('#new-batch').on('click', function(){
+    //         $('#receiving-box').css('display', 'block');
+    //         batches_table.row.add( ["3", "5", "2017-06-24 08:55:41"] ).draw();
+    //     });
+    // });
+
+
     $(document).ready(function() {
         var catval = $('#categorys :selected').val();
         var table =  $('#data-table').DataTable();
@@ -269,12 +283,12 @@
                     cat_id: catval,
                     // category_id:categoryval,
                 },
-            //     "success": function(res){
+                // "success": function(res){
 
-            //       $('.header').html();
-            //       $('.header').append(res.header);
-            //       $('.cat-list').html();
-            //     //   $('.cat-list').append(res.table);
+                //   $('.header').html();
+                //   $('.header').append(res.header);
+                //   $('.cat-list').html();
+                //   $('.cat-list').html(res.header);
             //    },
             },
             "order": [0, 'asc'],
@@ -315,6 +329,10 @@
                 },
             ]
         });
+        // $(function() {
+        //     // $('#receiving-box').css('display', 'block');
+        //     table.row.add( ["","3","3","3","3", "5", "2017-06-24 08:55:41"] ).draw();
+        // });
 
     });
 
@@ -338,10 +356,10 @@
                 },
             //     "success": function(res){
 
-            //       $('.header').html();
-            //       $('.header').append(res.header);
+            //     //   $('.header').html();
+            //     //   $('.header').append(res.header);
             //       $('.cat-list').html();
-            //     //   $('.cat-list').append(res.table);
+            //       $('.cat-list').append(res.header);
             //    },
             },
             columns: [{
@@ -381,6 +399,11 @@
                 },
             ]
         });
+
+        // $(function() {
+        //     // $('#receiving-box').css('display', 'block');
+        //     table.row.add( ["3","3","3","3","3", "5", "2017-06-24 08:55:41"] ).draw();
+        // });
 
     });
 </script>
