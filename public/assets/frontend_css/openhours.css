@@ -2,6 +2,7 @@
 .opening-hours {
     background-position: center;
     background-repeat: no-repeat;
+    background-image: url('../img/bg/opening-hours-bg.jpg');
     background-size: cover;
     padding-bottom: 250px;
   }
@@ -123,6 +124,7 @@
 /* OPEN HOURS 3 CSS */
 .opening-hours-v3 {
     background-color: #F7F2EF;
+    background-image: url(../img/icon/time.svg);
     background-repeat: no-repeat;
     background-position: 35vw 50px;
 }
@@ -184,7 +186,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* background-image: url(../img/bg/opening-hours.svg); */
+    background-image: url(../img/bg/opening-hours.svg);
     background-repeat: no-repeat;
     background-position: center center;
     height: 600px;
@@ -231,7 +233,7 @@
 
 /* OPEN HOURS 5 */
 .opening-hours-v5 {
-    background-color: rgba(76, 215, 144, 0.1);
+    background-color: #fdb932;
   }
   .opening-hours-v5 .default-title-v5 {
     margin-bottom: 3.5rem;

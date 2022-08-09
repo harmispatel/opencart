@@ -729,59 +729,59 @@ class LayoutController extends Controller
 
 
         // Add & Update Open Hours Settings
-        $openhour_settings = $request->openhour_setting;
+        // $openhour_settings = $request->openhour_setting;
 
-        if(isset($openhour_settings))
-        {
-            $openhour_id = $openhour_settings['openhour_layout_id'];
+        // if(isset($openhour_settings))
+        // {
+        //     $openhour_id = $openhour_settings['openhour_layout_id'];
 
-            $check_openhour_setting = Settings::where('store_id',$current_store_id)->where('key','openhour_settings')->where('openhours_id',$openhour_id)->first();
+        //     $check_openhour_setting = Settings::where('store_id',$current_store_id)->where('key','openhour_settings')->where('openhours_id',$openhour_id)->first();
 
-            $old_openhour_setting = isset($check_openhour_setting->value) ? unserialize($check_openhour_setting->value) : '';
+        //     $old_openhour_setting = isset($check_openhour_setting->value) ? unserialize($check_openhour_setting->value) : '';
 
-            $openhour_setting_id = isset($check_openhour_setting->setting_id) ? $check_openhour_setting->setting_id : '';
+        //     $openhour_setting_id = isset($check_openhour_setting->setting_id) ? $check_openhour_setting->setting_id : '';
 
-            if (!empty($openhour_setting_id) || $openhour_setting_id != '')
-            {
-                $openhour_background_image = isset($openhour_settings['openhour_background_image']) ? $openhour_settings['openhour_background_image'] : '';
+        //     if (!empty($openhour_setting_id) || $openhour_setting_id != '')
+        //     {
+        //         $openhour_background_image = isset($openhour_settings['openhour_background_image']) ? $openhour_settings['openhour_background_image'] : '';
 
-                if(!empty($openhour_background_image) || $openhour_background_image != '')
-                {
-                    if (isset($openhour_settings['openhour_background_image']) != '') {
-                        $openhour_settings['openhour_background_image'];
-                    } else {
-                        $openhour_settings['openhour_background_image'] = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
-                    }
+        //         if(!empty($openhour_background_image) || $openhour_background_image != '')
+        //         {
+        //             if (isset($openhour_settings['openhour_background_image']) != '') {
+        //                 $openhour_settings['openhour_background_image'];
+        //             } else {
+        //                 $openhour_settings['openhour_background_image'] = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
+        //             }
 
 
-                    $update_serial_openhour_setting = serialize($openhour_settings);
+        //             $update_serial_openhour_setting = serialize($openhour_settings);
 
-                    $openhour_setting_update = Settings::find($openhour_setting_id);
-                    $openhour_setting_update->value = $update_serial_openhour_setting;
-                    $openhour_setting_update->update();
-                }
-            }
-            else{
-                if (isset($openhour_settings['openhour_background_image']) != '') {
-                    $openhour_settings['openhour_background_image'];
-                } else {
-                    $openhour_settings['openhour_background_image'] = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
-                }
+        //             $openhour_setting_update = Settings::find($openhour_setting_id);
+        //             $openhour_setting_update->value = $update_serial_openhour_setting;
+        //             $openhour_setting_update->update();
+        //         }
+        //     }
+        //     else{
+        //         if (isset($openhour_settings['openhour_background_image']) != '') {
+        //             $openhour_settings['openhour_background_image'];
+        //         } else {
+        //             $openhour_settings['openhour_background_image'] = isset($old_openhour_setting['openhour_background_image']) ? $old_openhour_setting['openhour_background_image'] : '';
+        //         }
 
-                $serial_openhour_setting = serialize($openhour_settings);
+        //         $serial_openhour_setting = serialize($openhour_settings);
 
-                $openhour_setting_new = new Settings;
-                $openhour_setting_new->group = 'template';
-                $openhour_setting_new->store_id = $current_store_id;
-                $openhour_setting_new->openhours_id = $openhour_settings['openhour_layout_id'];
-                $openhour_setting_new->key = 'openhour_settings';
-                $openhour_setting_new->value = $serial_openhour_setting;
-                $openhour_setting_new->serialized = 1;
-                $openhour_setting_new->save();
+        //         $openhour_setting_new = new Settings;
+        //         $openhour_setting_new->group = 'template';
+        //         $openhour_setting_new->store_id = $current_store_id;
+        //         $openhour_setting_new->openhours_id = $openhour_settings['openhour_layout_id'];
+        //         $openhour_setting_new->key = 'openhour_settings';
+        //         $openhour_setting_new->value = $serial_openhour_setting;
+        //         $openhour_setting_new->serialized = 1;
+        //         $openhour_setting_new->save();
 
-            }
+        //     }
 
-            }
+        // }
             // End Add & Update Open Hours Settings
 
 

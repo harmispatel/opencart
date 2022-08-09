@@ -924,11 +924,6 @@ $openhour_data = openhoursActive();
                                  <div class="card-body pb-0" id="htmlbox">
                                     @if (count($htmlbox) > 0)
                                         @foreach ($htmlbox as $htmlboxs)
-                                        @php
-                                            // echo '<pre>';
-                                            // print_r($htmlboxs->about_background_color);
-                                            // exit();
-                                        @endphp
                                             <div class="htmlbox-inr">
                                                 <h2>HTML {{ $loop->iteration}}</h2>
                                                 <div class="row align-items-center" >
@@ -967,8 +962,7 @@ $openhour_data = openhoursActive();
                                                                     <label>Background Option</label>
                                                                 </th>
                                                                 <td>
-                                                                    {{-- <select name="about_setting[{{ $loop->iteration }}][about_background_option]" class="form-control"> --}}
-                                                                        <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control">
+                                                                    <select name="about_setting[{{ $loop->iteration }}][about_background_option]" onchange="backgroundOption(this)" class="form-control">
                                                                         @php
                                                                             $about_background_option = isset($htmlboxs['about_background_option']) ? $htmlboxs['about_background_option'] : '';
                                                                         @endphp
@@ -1975,9 +1969,7 @@ $openhour_data = openhoursActive();
                                                                 <option value=""> - Select Gallary - </option>
                                                                 @foreach ($gallary_layouts as $gallary)
                                                                     <option value="{{ $gallary->gallary_id }}"
-                                                                        {{ $gallary->gallary_id == $gallary_id ? 'selected' : '' }}>
-                                                                        {{ $gallary->gallary_name }}</option>
-                                                                @endforeach
+                                                                        {{ $gallary->gallary_id == $gallary_id ? 'selected' : '' }}> {{ $gallary->gallary_name }}</option> @endforeach
                                                             </select>
                                                         </td>
                                                     </tr>
@@ -2050,8 +2042,7 @@ $openhour_data = openhoursActive();
                                                         <td>
                                                             <select name="openhour_setting[openhour_layout_id]" id="openhour_layout" onchange="changeActiveOpeningHoursLayout()" class="form-control">
                                                                 <option value=""> - Select Open Hours - </option>
-                                                                @foreach ($openhours_layouts as $openhours)
-                                                                    <option value="{{ $openhours->openhour_id }}"
+                                                                @foreach ($openhours_layouts as $openhours) <option value="{{ $openhours->openhour_id }}"
                                                                         {{ $openhours->openhour_id == $openhour_id ? 'selected' : '' }}>
                                                                         {{ $openhours->openhour_name }}</option>
                                                                 @endforeach
@@ -2072,7 +2063,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Color</label>
                                                         </th>
@@ -2082,9 +2073,9 @@ $openhour_data = openhoursActive();
                                                                 value="{{ isset($get_openhour_settings['openhour_background_color']) ? $get_openhour_settings['openhour_background_color'] : '' }}"
                                                                 class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Hover Color</label>
                                                         </th>
@@ -2094,14 +2085,13 @@ $openhour_data = openhoursActive();
                                                                 value="{{ isset($get_openhour_settings['openhour_background_hover_color']) ? $get_openhour_settings['openhour_background_hover_color'] : '' }}"
                                                                 class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Image</label>
                                                         </th>
                                                         <td>
-                                                            {{-- <input type="file" name="openhour_setting[openhour_background_image]" class="form-control p-1"> --}}
                                                             <div class="input-group">
                                                                 <span class="input-group-btn">
                                                                     <a id="lfm8" data-input="thumbnail8" data-preview="holder8" onclick="setimage(this)"
@@ -2114,9 +2104,9 @@ $openhour_data = openhoursActive();
                                                             <div id="holder8" style="margin-top:15px;max-height:100px;"></div>
                                                             <img class="mt-2" src="{{ isset($get_openhour_settings['openhour_background_image']) ? $get_openhour_settings['openhour_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Image Position</label>
                                                         </th>
@@ -2144,7 +2134,7 @@ $openhour_data = openhoursActive();
                                                                     Center</option>
                                                             </select>
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
                                                 </table>
                                             </div>
