@@ -293,11 +293,10 @@
                                                                                     {{ $omapping->order_type }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->hasOneCategoryDescription->cname
-                                                                                    }}
+                                                                                    {{ $omapping->hasOneCategoryDescription->cname }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->hasOneProductDescription->pname }}
+                                                                                    {{ isset($omapping->hasOneProductDescription->pname) ? $omapping->hasOneProductDescription->pname : '' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->topping_rename }}
@@ -462,7 +461,7 @@
 
         html += '<td class="align-middle"><select name="order_type"><option value="*">*</option><option value="delivery">Delivery</option><option value="collection">Collection</option></select><input type="hidden" name="top_id" value="{{ $topping->id_topping }}"></td>';
 
-        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="category" onchange="getproduct(this);"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
 
@@ -500,6 +499,24 @@
         $('#mybtn1').hide();
     }
     // End Add Mapping
+
+
+    // get product by category
+    function getproduct(elem) {
+        let catid = $(elem).val();
+
+        $.ajax({
+            type: "get",
+            url: "{{ url('toppinggetproduct') }}/" + catid,
+            dataType: "json",
+            success: function (response) {
+
+            }
+        });
+    }
+
+    // get product by category
+
 
 
     // Store Mapping

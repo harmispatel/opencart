@@ -1492,7 +1492,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Option</label>
                                                         </th>
@@ -1505,8 +1505,8 @@ $openhour_data = openhoursActive();
                                                                 <option value="2" {{ $bestcategory_background_option == 2 ? 'selected' : '' }}>Color</option>
                                                             </select>
                                                         </td>
-                                                    </tr>
-                                                    @if($bestcategory_background_option == 2)
+                                                    </tr> --}}
+                                                    {{-- @if($bestcategory_background_option == 2) --}}
                                                     <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Color</label>
@@ -1519,7 +1519,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Hover Color</label>
                                                         </th>
@@ -1529,17 +1529,15 @@ $openhour_data = openhoursActive();
                                                                 value="{{ isset($get_bestcategory_settings['bestcategory_background_hover_color']) ? $get_bestcategory_settings['bestcategory_background_hover_color'] : '' }}"
                                                                 class="form-control">
                                                         </td>
-                                                    </tr>
-                                                    @endif
+                                                    </tr> --}}
+                                                    {{-- @endif --}}
 
-                                                    @if ($bestcategory_background_option == 1)
+                                                    {{-- @if ($bestcategory_background_option == 1)
                                                         <tr>
                                                             <th width="250" class="align-middle">
                                                                 <label>Background Image</label>
                                                             </th>
                                                             <td>
-                                                                {{-- <input type="file" name="bestcategory_setting[bestcategory_background_image]" class="form-control p-1">
-                                                                <img class="mt-2" src="{{ isset($get_bestcategory_settings['bestcategory_background_image']) ? $get_bestcategory_settings['bestcategory_background_image'] : '' }}" width="120" height="80" style="border: 2px solid black;"> --}}
                                                                 <div class="input-group">
                                                                     <span class="input-group-btn">
                                                                         <a id="lfm6" data-input="thumbnail6" data-preview="holder6" onclick="setimage(this)"
@@ -1583,7 +1581,7 @@ $openhour_data = openhoursActive();
                                                                 </select>
                                                             </td>
                                                         </tr>
-                                                    @endif
+                                                    @endif --}}
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1685,7 +1683,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Option</label>
                                                         </th>
@@ -1698,9 +1696,9 @@ $openhour_data = openhoursActive();
                                                                 <option value="2" {{ $review_background_option == 2 ? 'selected' : '' }}>Color</option>
                                                             </select>
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
-                                                    @if ($review_background_option == 2)
+                                                    {{-- @if ($review_background_option == 2) --}}
                                                         <tr>
                                                             <th width="250" class="align-middle">
                                                                 <label>Background Color</label>
@@ -1713,7 +1711,7 @@ $openhour_data = openhoursActive();
                                                             </td>
                                                         </tr>
 
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <th width="250" class="align-middle">
                                                                 <label>Background Hover Color</label>
                                                             </th>
@@ -1723,17 +1721,16 @@ $openhour_data = openhoursActive();
                                                                     value="{{ isset($get_review_settings['review_background_hover_color']) ? $get_review_settings['review_background_hover_color'] : '' }}"
                                                                     class="form-control">
                                                             </td>
-                                                        </tr>
-                                                    @endif
+                                                        </tr> --}}
+                                                    {{-- @endif --}}
 
 
-                                                    @if ($review_background_option == 1)
+                                                    {{-- @if ($review_background_option == 1)
                                                         <tr>
                                                             <th width="250" class="align-middle">
                                                                 <label>Background Image</label>
                                                             </th>
                                                             <td>
-                                                                {{-- <input type="file" name="review_setting[review_background_image]" class="form-control p-1"> --}}
                                                                 <div class="input-group">
                                                                     <span class="input-group-btn">
                                                                         <a id="lfm7" data-input="thumbnail7" data-preview="holder7" onclick="setimage(this)"
@@ -1777,7 +1774,7 @@ $openhour_data = openhoursActive();
                                                                 </select>
                                                             </td>
                                                         </tr>
-                                                    @endif
+                                                    @endif --}}
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -1889,7 +1886,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Hover Color</label>
                                                         </th>
@@ -1899,7 +1896,7 @@ $openhour_data = openhoursActive();
                                                                 value="{{ isset($get_reservation_settings['reservation_background_hover_color']) ? $get_reservation_settings['reservation_background_hover_color'] : '' }}"
                                                                 class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -2218,7 +2215,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Background Hover Color</label>
                                                         </th>
@@ -2228,7 +2225,7 @@ $openhour_data = openhoursActive();
                                                                 value="{{ isset($get_footer_settings['footer_background_hover_color']) ? $get_footer_settings['footer_background_hover_color'] : '' }}"
                                                                 class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
                                                     <tr>
                                                         <th width="250" class="align-middle">
@@ -2242,7 +2239,7 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th width="250" class="align-middle">
                                                             <label>Link Hover Color</label>
                                                         </th>
@@ -2252,7 +2249,7 @@ $openhour_data = openhoursActive();
                                                                 value="{{ isset($get_footer_settings['footer_link_hover_color']) ? $get_footer_settings['footer_link_hover_color'] : '' }}"
                                                                 class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
                                                 </table>
                                             </div>

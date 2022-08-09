@@ -98,6 +98,12 @@
     // Stores Reviews
     $review = storereview();
 
+
+    // Get Current Footer ID & Footer Settings
+    $current_footer_id = layoutID($currentURL,'footer_id');
+    $footer_id = $current_footer_id['footer_id'];
+    $store_footer_settings = storeLayoutSettings($footer_id,$front_store_id,'footer_settings','footer_id');
+
 @endphp
 
 
@@ -2455,7 +2461,11 @@
 
     {{-- OPENHOURS 2 --}}
     @if ($openhour_id == 2)
-        <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @if ($footer_id == 1)
+            <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="padding-bottom: 250px">
+        @else
+            <section class="opening-hours-v2 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @endif
             <div class="container"><img class="img-fluid" src="{{ get_css_url().'public/assets/theme2/img/icon/opening-hours-top-divider.svg' }}" />
                 <h3 class="title text-uppercase">opening hours</h3>
                 <div class="_divider"></div>
@@ -2483,7 +2493,11 @@
 
     {{-- OPENHOURS 3 --}}
     @if ($openhour_id == 3)
-        <section class="opening-hours-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @if ($footer_id == 1)
+            <section class="opening-hours-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="padding-bottom: 250px">
+        @else
+            <section class="opening-hours-v3 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @endif
             <div class="container">
                 <div class="default-title-v3 text-center">
                     <h3 class="title text-capitalize">opening hours</h3>
@@ -2511,7 +2525,11 @@
 
     {{-- OPENHOURS 4 --}}
     @if ($openhour_id == 4)
-        <section class="opening-hours-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @if ($footer_id == 1)
+            <section class="opening-hours-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="padding-bottom: 250px">
+        @else
+            <section class="opening-hours-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @endif
             <div class="container">
                 <div class="default-title-v4">
                     <h3 class="title text-capitalize">opening hours</h3>
@@ -2539,7 +2557,11 @@
 
     {{-- OPENHOURS 5 --}}
     @if ($openhour_id == 5)
-        <section class="opening-hours-v5 pt-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @if ($footer_id == 1)
+            <section class="opening-hours-v5 pt-75 wow animate__fadeInUp" data-wow-duration="1s" style="padding-bottom: 250px">
+        @else
+            <section class="opening-hours-v5 pt-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @endif
             <div class="default-title-v5 text-center">
                 <strong class="sub-title color-orange text-capitalize">opening hourse</strong>
             </div>
@@ -2567,6 +2589,7 @@
                             </div>
                         @endforeach
                     </div>
+                    <img class="img-fluid mt-3" src="{{ get_css_url().'public/assets/theme5/img/icon/time-bottom-flower.svg' }}">
                     <br>
                 </div>
             </div>
@@ -2578,7 +2601,11 @@
 
     {{-- OPENHOURS 6 --}}
     @if ($openhour_id == 6)
-        <section class="opening-hours-v6 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @if ($footer_id == 1)
+            <section class="opening-hours-v6 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="padding-bottom: 250px">
+        @else
+            <section class="opening-hours-v6 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+        @endif
             <div class="default-title-v6 text-center">
                 <strong class="sub-title text-capitalize">opening hours</strong>
             </div>

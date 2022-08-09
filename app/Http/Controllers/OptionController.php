@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategorytoStore;
+use App\Models\Product_to_category;
 use Illuminate\Http\Request;
 use App\Models\ProductOptionMapping;
 use App\Models\ProductStore;
@@ -342,6 +343,19 @@ class OptionController extends Controller
 
         echo json_encode($json_data);
    }
+
+    // Get Product By Category
+    public function toppinggetproduct($id)
+    {
+        $cat_product =Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $id)->orderBy('product_id','DESC')->get();
+        // echo '<pre>';
+        // print_r($cat_product->toArray());
+        // exit();
+        // foreach ($cat_product as $value) {
+        //     # code...
+        // }
+    }
+    // End Get Product By Category
 
 
 
