@@ -2534,18 +2534,22 @@
                 <div class="default-title-v4">
                     <h3 class="title text-capitalize">opening hours</h3>
                 </div>
-                <div class="__time">
+                <div class="row">
                     @foreach ($opning_days as $key => $oday)
-                        @php
-                            $day = $oday;
-                            $from = $opning_from[$key];
-                            $to = $opning_to[$key];
-                        @endphp
-
-                        <div class="__time-item">
-                            <strong>{{ $day }}</strong>
-                            <span>{{ $from }}</span>
-                            <span>{{ $to }}</span>
+                        <div class="col-md-6">
+                            <div class="__time">
+                            
+                                @php
+                                    $day = $oday;
+                                    $from = $opning_from[$key];
+                                    $to = $opning_to[$key];
+                                @endphp
+        
+                                <div class="__time-item">
+                                    <strong>{{ $day }}</strong>
+                                    <span>{{ $from }} to {{ $to }}</span>
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
