@@ -167,6 +167,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('editproduct/{id}', [ProductController::class, 'edit'])->name('editproduct');
     Route::post('addOptionValue', [ProductController::class, 'addOptionValue'])->name('addOptionValue');
     Route::post('updateproduct',[ProductController::class, 'update'])->name('updateproduct');
+    Route::post('productsizeprice',[ProductController::class, 'productsizeprice'])->name('productsizeprice');
 
 
 
