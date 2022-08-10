@@ -82,26 +82,21 @@
                             {{-- Card Body --}}
                             <div class="card-body">
                                 <input type="hidden" name="catid" id="changecatid">
-                                {{-- Table Start --}}
+                                {{-- Alert Message div --}}
+                                @if (Session::has('success'))
+                                    <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                                        {{ Session::get('success') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                @endif
+                            {{-- End Alert Message div --}}
+                            {{-- Table Start --}}
                                 <table class="table table-bordered " id="data-table">
-                                    {{-- Alert Message div --}}
-                                    @if (Session::has('success'))
-                                        <div class="alert alert-success del-alert alert-dismissible" id="alert"
-                                            role="alert">
-                                            {{ Session::get('success') }}
-                                            <button type="button" class="close" data-dismiss="alert"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
-                                    {{-- End Alert Message div --}}
-
                                     {{-- Table Head --}}
                                     <thead class="text-center header">
-                                            <th>
-                                                <input type="checkbox" name="checkall" id="del_all">
-                                            </th>
+                                            <th><input type="checkbox" name="checkall" id="del_all"></th>
                                             <th id="image">Image</th>
                                             <th id="name">Product Name</th>
                                             <th id="price">Price</th>
@@ -112,7 +107,7 @@
                                     {{-- End Table Head --}}
 
                                     {{-- Table Body --}}
-                                    <tbody class="text-center cat-list">
+                                    <tbody class="text-center cat-list" id="cat-list">
 
                                     </tbody>
                                     {{-- End Table Body --}}
@@ -135,6 +130,10 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
+    // data-table
+    // $(document).ready( function () {
+    //     $('#data-table').DataTable();
+    // } );
     // Select All Checkbox
     $('#del_all').on('click', function(e) {
         if ($(this).is(':checked', true)) {
@@ -198,78 +197,85 @@
     });
 </script>
 
-<script>
-    // $(document).ready(function() {
-    //         var catval = $('#categorys :selected').val();
-    //          $.ajaxSetup({
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             }
-    //         });
-    //         $.ajax({
-    //             type: "post",
-    //             url: "{{ route('getproductbycategory') }}",
-    //             dataType: "json",
-    //             data: {
-    //                 category_id: catval
-    //             },
-    //             success: function(result) {
-    //                 $('#data-table').html('');
-    //                 $('#data-table').html(result);
-    //             }
+{{-- <script>
+    $(document).ready(function() {
+            var catval = $('#categorys :selected').val();
+             $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "post",
+                url: "{{ route('getproductbycategory') }}",
+                dataType: "json",
+                data: {
+                    category_id: catval
+                },
+                success: function(result) {
+                    console.log(result.head_count);
+                    $('#data-table').html('');
+                    $('#data-table').html(result);
+                }
 
-    //         });
+            });
 
-    //         $('#categorys').change(function() {
-    //             var categoryval = this.value;
+            $('#categorys').change(function() {
+                var categoryval = this.value;
 
-    //             // var categoryval = $('#categorys :selected').val();
+                // var categoryval = $('#categorys :selected').val();
 
-    //             $.ajaxSetup({
-    //                 headers: {
-    //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //                 }
-    //             });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
 
-    //             $.ajax({
-    //                 type: "post",
-    //                 url: "{{ route('getproductbycategory') }}",
-    //                 dataType: "json",
-    //                 data: {
-    //                     category_id: categoryval
-    //                 },
-    //                 success: function(result) {
-    //                     $('#data-table').html('');
-    //                     $('#data-table').html(result);
-    //                 }
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('getproductbycategory') }}",
+                    dataType: "json",
+                    data: {
+                        category_id: categoryval
+                    },
+                    success: function(result) {
+                        $('#data-table').html('');
+                        $('#data-table').html(result);
+                    }
 
-    //             });
-    //         });
-    // });
-</script>
+                });
+            });
+    });
+</script> --}}
 
 
 {{--  Start Get Product  --}}
 <script>
-    // addtablerow();
-    // function addtablerow() {
-    //     var jRow = $(&quot;&lt;tr&gt;&quot;).append(&quot;&lt;td&gt;Cell 1&lt;/td&gt;&quot;, &quot;&lt;td&gt;Cell 2&lt;/td&gt;&quot;);
-    //     table.row.add(jRow).draw();
-    //  }
-
-    // $(function() {
-    //     $('#new-batch').on('click', function(){
-    //         $('#receiving-box').css('display', 'block');
-    //         batches_table.row.add( ["3", "5", "2017-06-24 08:55:41"] ).draw();
-    //     });
-    // });
-
-
     $(document).ready(function() {
         var catval = $('#categorys :selected').val();
         var table =  $('#data-table').DataTable();
-          table.destroy();
+        table.destroy();
+
+        // $(function() {
+        //     $.ajax({
+        //         url: "{{ route('productsizeprice') }}",
+        //         dataType: "json",
+        //         type: "POST",
+        //         data: {
+        //             _token: "{{ csrf_token() }}",
+        //             cat_id: catval,
+        //             // category_id:categoryval,
+        //         },
+        //         success: function (response) {
+        //             $('.header').html('');
+        //             $("#cat-list").before(response.subheader);
+        //             // $('#price').attr('colspan',response.head_count);
+        //         }
+        //     });
+        // });
+
+
         var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -283,12 +289,12 @@
                     cat_id: catval,
                     // category_id:categoryval,
                 },
-                // "success": function(res){
+            //     "success": function(res){
 
-                //   $('.header').html();
-                //   $('.header').append(res.header);
-                //   $('.cat-list').html();
-                //   $('.cat-list').html(res.header);
+            //     //   $('.header').html();
+            //     //   $('.header').append(res.header);
+            //     //   $('.cat-list').html();
+            //     //   $('.cat-list').html(res.header);
             //    },
             },
             "order": [0, 'asc'],
@@ -329,11 +335,6 @@
                 },
             ]
         });
-        // $(function() {
-        //     // $('#receiving-box').css('display', 'block');
-        //     table.row.add( ["","3","3","3","3", "5", "2017-06-24 08:55:41"] ).draw();
-        // });
-
     });
 
     $('#categorys').change(function() {
@@ -341,6 +342,23 @@
         var table =  $('#data-table').DataTable();
           table.destroy();
         var categoryval = this.value;
+
+        // $(function() {
+        //     $.ajax({
+        //         url: "{{ route('productsizeprice') }}",
+        //         dataType: "json",
+        //         type: "POST",
+        //         data: {
+        //             _token: "{{ csrf_token() }}",
+        //             category_id:categoryval,
+        //         },
+        //         success: function (response) {
+        //             $('.header').html('');
+        //             $("#cat-list").before(response.subheader);
+        //             // $('#price').attr('colspan',response.head_count);
+        //         }
+        //     });
+        // });
         var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -399,12 +417,6 @@
                 },
             ]
         });
-
-        // $(function() {
-        //     // $('#receiving-box').css('display', 'block');
-        //     table.row.add( ["3","3","3","3","3", "5", "2017-06-24 08:55:41"] ).draw();
-        // });
-
     });
 </script>
 
