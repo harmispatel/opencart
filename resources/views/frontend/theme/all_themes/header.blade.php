@@ -95,7 +95,7 @@
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 if($userdeliverytype == 'delivery')
                 {
-                    $price += $mycart['del_price'] * $mycart['quantity'];
+                    $price += (isset($mycart['del_price'])) ? $mycart['del_price'] : 0 * $mycart['quantity'];
                 }
                 elseif($userdeliverytype == 'collection')
                 {

@@ -432,11 +432,17 @@
         <section class="check-main" id="checkout2">
             <div class="container">
                 @if(\Session::has('error'))
-                    <div class="alert alert-danger">{{ \Session::get('error') }}</div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ \Session::get('error') }}
+                        <a type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                    </div>
                     {{ \Session::forget('error') }}
                 @endif
                 @if(\Session::has('success'))
-                    <div class="alert alert-success">{{ \Session::get('success') }}</div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ \Session::get('success') }}
+                        <a type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></a>
+                    </div>
                     {{ \Session::forget('success') }}
                 @endif
                 <div class="check-inr">
@@ -817,7 +823,7 @@
                                                             <div class="row mb-2" id="free_item">
                                                                 @if (!empty($session_free_item) || $session_free_item != '')
                                                                     <div class="col-md-4" style="text-align: right">
-                                                                        <a class="btn mt-1" style="background: red!important; color:white;">Free Item</a>
+                                                                        <a class="btn mt-1" style="background: red!important; color:white!important;">Free Item</a>
                                                                     </div>
                                                                     <div class="col-md-8">
                                                                         <div class="form-group">
@@ -834,7 +840,7 @@
                                                                                 $free_items = getFreeItems($free_explode);
                                                                             @endphp
                                                                             <div class="col-md-4" style="text-align: right">
-                                                                                <a class="btn mt-1" style="background: red!important; color:white;">Free Item</a>
+                                                                                <a class="btn mt-1" style="background: red!important; color:white!important;">Free Item</a>
                                                                             </div>
                                                                             <div class="col-md-8">
                                                                                 <div class="form-group">

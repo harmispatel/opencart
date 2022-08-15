@@ -82,13 +82,13 @@ class PayPalController extends Controller
             }
 
             return redirect()
-                ->route('createTransaction')
+                ->route('checkout')
                 ->with('error', 'Something went wrong.');
 
         } else {
             return redirect()
-                ->route('createTransaction')
-                ->with('error', $response['message'] ?? 'Something went wrong.');
+                ->route('checkout')
+                ->with('error', $response['error']['message'] ?? 'Something went wrong.');
         }
     }
 
@@ -167,7 +167,7 @@ class PayPalController extends Controller
                 'order_status_id' => 7, // 7 Order Rejected
             ]);
             return redirect()
-                ->route('createTransaction')
+                ->route('checkout')
                 ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
@@ -180,7 +180,7 @@ class PayPalController extends Controller
     public function cancelTransaction(Request $request)
     {
         return redirect()
-            ->route('createTransaction')
+            ->route('checkout')
             ->with('error', $response['message'] ?? 'You have canceled the transaction.');
     }
 }

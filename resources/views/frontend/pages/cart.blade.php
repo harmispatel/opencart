@@ -181,18 +181,18 @@
                                                 // Price
                                                 if($userdeliverytype == 'delivery')
                                                 {
-                                                    $price = $cart['del_price'];
-                                                    $qty_price = $cart['del_price'] * $cart['quantity'];
+                                                    $price = (isset($cart['del_price'])) ? $cart['del_price'] : 0;
+                                                    $qty_price = $price * $cart['quantity'];
                                                 }
                                                 elseif($userdeliverytype == 'collection')
                                                 {
-                                                    $price = $cart['col_price'];
-                                                    $qty_price = $cart['col_price'] * $cart['quantity'];
+                                                    $price = (isset($cart['col_price'])) ? $cart['col_price'] : 0;
+                                                    $qty_price = $price * $cart['quantity'];
                                                 }
                                                 else
                                                 {
-                                                    $price = $cart['main_price'];
-                                                    $qty_price = $cart['main_price'] * $cart['quantity'];
+                                                    $price = (isset($cart['main_price'])) ? $cart['main_price'] : 0;
+                                                    $qty_price = $price * $cart['quantity'];
                                                 }
 
                                                 $subtotal += $qty_price;
@@ -260,7 +260,7 @@
                         <table class="table table-responsive">
                             <tbody>
                                 <tr>
-                                    <td><b>Sub-Total {{$minimum_spend['min_spend']}}:</b></td>
+                                    <td><b>Sub-Total :</b></td>
                                     <td><span><b>{{ $currency }}{{ $subtotal }}</b></span></td>
                                 </tr>
                                 <tr>

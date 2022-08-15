@@ -2824,6 +2824,14 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
         if(isset($arr['size'][$sizeid]))
         {
             $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
+
+            if(isset($data['topping']))
+            {
+                if(count($data['topping']) > 0)
+                {
+                    $arr['size'][$sizeid]['topping'] = $data['topping'];
+                }
+            }
         }
         else
         {
@@ -2835,6 +2843,14 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
         if(isset($arr['withoutSize'][$productid]))
         {
             $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
+
+            if(isset($data['topping']))
+            {
+                if(count($data['topping']) > 0)
+                {
+                    $arr['withoutSize'][$productid]['topping'] = $data['topping'];
+                }
+            }
         }
         else
         {
@@ -2978,6 +2994,14 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
         if(isset($arr['size'][$sizeid]))
         {
             $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
+
+            if(isset($data['topping']))
+            {
+                if(count($data['topping']) > 0)
+                {
+                    $arr['size'][$sizeid]['topping'] = $data['topping'];
+                }
+            }
         }
         else
         {
@@ -2989,6 +3013,14 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
         if(isset($arr['withoutSize'][$productid]))
         {
             $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
+
+            if(isset($data['topping']))
+            {
+                if(count($data['topping']) > 0)
+                {
+                    $arr['withoutSize'][$productid]['topping'] = $data['topping'];
+                }
+            }
         }
         else
         {

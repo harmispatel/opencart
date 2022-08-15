@@ -213,24 +213,23 @@ class PaymentSettingController extends Controller
        }
        $user_shop_id = $user_details['user_shop'];
 
-        $data['pp_express_username'] = $request->apiusername;
-        $data['pp_express_password'] = $request->apipassword;
-        $data['pp_express_signature'] = $request->apisignature;
+        // $data['pp_express_username'] = $request->apiusername;
+        // $data['pp_express_password'] = $request->apipassword;
+        // $data['pp_express_signature'] = $request->apisignature;
         // $data['cod_order_status_id'] = 1;
         $data['pp_express_total'] = 1;
         $data['pp_charge_payment'] = $request->paycharge;
-        $data['pp_express_geo_zone_id'] = 0;
+        // $data['pp_express_geo_zone_id'] = 0;
         // $data['pp_front_text'] = $request->deliverytext;
-        $data['pp_printer_text'] = $request->printertext;
+        // $data['pp_printer_text'] = $request->printertext;
         $data['cod_status'] = 1;
         $data['current_store_id'] = $current_store_id ;
-        $data['pp_front_text'] = $request->fronttext;
-        $data['pp_express_sort_order'] = $request->sortorder;
+        // $data['pp_front_text'] = $request->fronttext;
+        $data['pp_express_sort_order'] = isset($request->sortorder) ? $request->sortorder : 0;
         $data['pp_sandbox_secret'] = $request->clint_secret;
         $data['pp_sandbox_clint'] = $request->clint_id;
         $data['pp_express_test'] = $request->paypalmod;
         $data['pp_express_status'] = $request->paypal_status;
-
 
         foreach ($data as $key => $new)
         {
@@ -243,13 +242,17 @@ class PaymentSettingController extends Controller
                 $query = Settings::where('store_id', $user_shop_id)->where('key', $key)->first();
             }
 
+
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
+
             if (!empty($setting_id) || $setting_id != '') {
                 $cod_update = Settings::find($setting_id);
                 $cod_update->value = $new;
                 $cod_update->update();
-            } else {
-                $cod_add = new Settings();
+            }
+            else
+            {
+                $cod_add = new Settings;
                 if($user_group_id == 1)
                 {
                     $cod_add->store_id = $current_store_id;

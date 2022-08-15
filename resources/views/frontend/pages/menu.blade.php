@@ -408,7 +408,7 @@ It's used for View Menu.
                                                                                                                                                                         data-bs-parent="#accordionExample{{ $top_pro_id }}">
                                                                                                                                                                         <div class="accordion-body">
                                                                                                                                                                             @if ($typeTopping == 'select')
-                                                                                                                                                                                <select class="form-control" name="select_top">
+                                                                                                                                                                                <select class="form-control" name="select_top[]">
                                                                                                                                                                                     @if (!empty($get_sub_topping) || $get_sub_topping != '')
                                                                                                                                                                                         <option value=""> -- --</option>
                                                                                                                                                                                         @foreach ($get_sub_topping as $stop)
@@ -440,7 +440,7 @@ It's used for View Menu.
                                                                                                                                                     </form>
                                                                                                                                                 </div>
                                                                                                                                                 <div class="modal-footer text-center">
-                                                                                                                                                    <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }},'model');" class="btn">Add To Cart</a>
+                                                                                                                                                    <button type="button" onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }},'model');" class="btn">Add To Cart</button>
                                                                                                                                                 </div>
                                                                                                                                             </div>
                                                                                                                                         </div>
@@ -540,7 +540,7 @@ It's used for View Menu.
                                                                                                                                                                     data-bs-parent="#accordionExample{{ $top_pro_id }}">
                                                                                                                                                                     <div class="accordion-body">
                                                                                                                                                                         @if ($typeTopping == 'select')
-                                                                                                                                                                            <select class="form-control" name="select_top">
+                                                                                                                                                                            <select class="form-control" name="select_top[]">
                                                                                                                                                                                 @if (!empty($get_sub_topping) || $get_sub_topping != '')
                                                                                                                                                                                     <option value=""> -- --</option>
                                                                                                                                                                                     @foreach ($get_sub_topping as $stop)
@@ -572,7 +572,7 @@ It's used for View Menu.
                                                                                                                                                 </form>
                                                                                                                                             </div>
                                                                                                                                             <div class="modal-footer text-center">
-                                                                                                                                                <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }},'model');" class="btn">Add To Cart</a>
+                                                                                                                                                <button type="button" onclick="addToCart({{ $values->product_id }},0,{{ $userid }},'model');" class="btn">Add To Cart</button>
                                                                                                                                             </div>
                                                                                                                                         </div>
                                                                                                                                     </div>
@@ -1073,7 +1073,7 @@ It's used for View Menu.
                     var form_data = new FormData(document.getElementById('top_form_'+sizeprice));
 
                     var chckbox = form_data.getAll('check_top');
-                    var drpdwn = form_data.get('select_top');
+                    var drpdwn = form_data.getAll('select_top[]');
 
                     if(chckbox != '' || drpdwn != '')
                     {
@@ -1117,8 +1117,8 @@ It's used for View Menu.
                                 $('.coupon_code').append(result.couponcode);
 
                                 // Modal
-                                $('#item-modal').html('');
-                                $('#item-modal').append(result.modal);
+                                // $('#item-modal').html('');
+                                // $('#item-modal').append(result.modal);
 
                                 // Free Items
                                 $('#freeItem').html('');
@@ -1148,7 +1148,7 @@ It's used for View Menu.
                     var form_data = new FormData(document.getElementById('new_top_form_'+product));
 
                     var chckbox = form_data.getAll('check_top');
-                    var drpdwn = form_data.get('select_top');
+                    var drpdwn = form_data.getAll('select_top[]');
 
                     if(chckbox != '' || drpdwn != '')
                     {
@@ -1192,8 +1192,8 @@ It's used for View Menu.
                                 $('.coupon_code').append(result.couponcode);
 
                                 // Modal
-                                $('#item-modal').html('');
-                                $('#item-modal').append(result.modal);
+                                // $('#item-modal').html('');
+                                // $('#item-modal').append(result.modal);
 
                                 // Free Items
                                 $('#freeItem').html('');
@@ -1271,8 +1271,8 @@ It's used for View Menu.
                     $('.coupon_code').append(result.couponcode);
 
                     // Modal
-                    $('#item-modal').html('');
-                    $('#item-modal').append(result.modal);
+                    // $('#item-modal').html('');
+                    // $('#item-modal').append(result.modal);
 
                     // Free Items
                     $('#freeItem').html('');
