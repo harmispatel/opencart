@@ -35,10 +35,10 @@
     $slider_id = $current_slider_id['slider_id'];
     $store_slider_settings = storeLayoutSettings($slider_id,$front_store_id,'slider_settings','slider_id');
 
-    // // Get Current About ID & About Settings
-    // $current_about_id = layoutID($currentURL,'about_id');
-    // $about_id = $current_about_id['about_id'];
-    // $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
+    // Get Current About ID & About Settings
+    $current_about_id = layoutID($currentURL,'about_id');
+    $about_id = $current_about_id['about_id'];
+    $store_about_settings = storeLayoutSettings($about_id,$front_store_id,'about_settings','about_id');
 
     // Get Current BestCategory ID & BestCategory Settings
     $current_bestcategory_id = layoutID($currentURL,'bestcategory_id');
