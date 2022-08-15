@@ -488,96 +488,141 @@ class ProductController extends Controller
 
 
     // Get All Products
-    function getproductbycategory(Request $request)
-    {
-        // $category_id = $request->category_id;
+    // function getproductbycategory(Request $request)
+    // {
+    //     $category_id = $request->category_id;
 
 
-        // $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->orderBy('product_id','DESC')->get();
+    //     $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->orderBy('product_id','DESC')->get();
 
-        // $headers = ToppingSize::where('id_category', $category_id)->get();
-        // $head_count = count($headers) + 1;
-        // $html = '';
-        // $html .= '<tr>';
-        // $html .= '<th><input type="checkbox" name="checkall" id="delall" value="' . $category_id . '"></th>';
-        // $html .= '<th>Image</th>';
-        // $html .= '<th>Product Name</th>';
-        // if (isset($head_count)) {
-        //     $html .= '<th colspan="' . $head_count . '" class="text-center">Price</th>';
-        // } else {
-        //     $html .= '<th class="text-center">Price</th>';
-        // }
-        // $html .= '<th>Status</th>';
-        // $html .= '<th>Sort Order</th>';
-        // $html .= '<th>Action</th>';
-        // $html .= '</tr>';
+    //     $headers = ToppingSize::where('id_category', $category_id)->get();
+    //     $head_count = count($headers) + 1;
+    //     $html = '';
+    //     $html .= '<tr>';
+    //     $html .= '<th><input type="checkbox" name="checkall" id="delall" value="' . $category_id . '"></th>';
+    //     $html .= '<th>Image</th>';
+    //     $html .= '<th>Product Name</th>';
+    //     if (isset($head_count)) {
+    //         $html .= '<th colspan="' . $head_count . '" class="text-center">Price</th>';
+    //     } else {
+    //         $html .= '<th class="text-center">Price</th>';
+    //     }
+    //     $html .= '<th>Status</th>';
+    //     $html .= '<th>Sort Order</th>';
+    //     $html .= '<th>Action</th>';
+    //     $html .= '</tr>';
 
-        // $html .= '<tr><td colspan="3"></td><th style="background:lightgray">Main Price</th>';
+    //     $html .= '<tr><td colspan="3"></td><th style="background:lightgray">Main Price</th>';
 
-        // if (count($headers) > 0) {
-        //     foreach ($headers as $header) {
-        //         $html .= '<th style="background:lightgray">' . $header->size . '</th>';
-        //     }
-        // }
-        // $html .= '<td colspan="3"></td> </tr>';
+    //     if (count($headers) > 0) {
+    //         foreach ($headers as $header) {
+    //             $html .= '<th style="background:lightgray">' . $header->size . '</th>';
+    //         }
+    //     }
+    //     $html .= '<td colspan="3"></td> </tr>';
 
-        // if (count($data) > 0) {
-        //     foreach ($data as $category) {
+    //     if (count($data) > 0) {
+    //         foreach ($data as $category) {
 
-        //         $html .= '<tr>';
-        //         $html .= '<td><input type="checkbox" name="del_all" id="del_all" value="' . $category->product_id . '"></td>';
-        //         if (!empty($category->image)) {
-        //             $image_path = asset('public/admin/product/' . $category->image);
-        //             $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
-        //         } else {
-        //             $image_path = asset('public/admin/product/no_image.jpg');
-        //             $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
-        //         }
-        //         $html .= '<td>' . $category->pname . '</td>';
-        //         $sizes = ToppingProductPriceSize::where('id_product', $category->product_id)->get();
+    //             $html .= '<tr>';
+    //             $html .= '<td><input type="checkbox" name="del_all" id="del_all" value="' . $category->product_id . '"></td>';
+    //             if (!empty($category->image)) {
+    //                 $image_path = asset('public/admin/product/' . $category->image);
+    //                 $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
+    //             } else {
+    //                 $image_path = asset('public/admin/product/no_image.jpg');
+    //                 $html .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
+    //             }
+    //             $html .= '<td>' . $category->pname . '</td>';
+    //             $sizes = ToppingProductPriceSize::where('id_product', $category->product_id)->get();
 
-        //         $html .= '<td>' . $category->price . '</td>';
+    //             $html .= '<td>' . $category->price . '</td>';
 
-        //         if(count($sizes) > 0)
-        //         {
-        //             foreach ($sizes as $size)
-        //             {
-        //                 $html .= '<td>' . $size->price . '</td>';
-        //             }
-        //         }
-        //         else
-        //         {
-        //             foreach ($headers as $header)
-        //             {
-        //                 $html .= '<td>-</td>';
-        //             }
-        //         }
+    //             if(count($sizes) > 0)
+    //             {
+    //                 foreach ($sizes as $size)
+    //                 {
+    //                     $html .= '<td>' . $size->price . '</td>';
+    //                 }
+    //             }
+    //             else
+    //             {
+    //                 foreach ($headers as $header)
+    //                 {
+    //                     $html .= '<td>-</td>';
+    //                 }
+    //             }
 
-        //         if ($category->status == 1) {
-        //             $html .= '<td>Enabled</td>';
-        //         } else {
-        //             $html .= '<td>Disabled</td>';
-        //         }
-        //         $html .= '<td>' . $category->sort_order . '</td>';
-        //         $edit_url = route('editproduct', $category->product_id);
+    //             if ($category->status == 1) {
+    //                 $html .= '<td>Enabled</td>';
+    //             } else {
+    //                 $html .= '<td>Disabled</td>';
+    //             }
+    //             $html .= '<td>' . $category->sort_order . '</td>';
+    //             $edit_url = route('editproduct', $category->product_id);
 
-        //         $html .= '<td><a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
-        //         $html .= '</tr>';
-        //     }
-        //     return response()->json($html);
-        // } else {
-        //     $html .= '<tr><td colspan="7">Product Not Available</td></tr>';
-        //     return response()->json($html);
-        // }
-    }
+    //             $html .= '<td><a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a></td>';
+    //             $html .= '</tr>';
+    //         }
+    //         return response()->json($html);
+    //     } else {
+    //         $html .= '<tr><td colspan="7">Product Not Available</td></tr>';
+    //         return response()->json($html);
+    //     }
+    // }
 
 
+    // product size header
+        public function productsizeprice(Request $request)
+        {
+            $category_id = $request->cat_id;
+
+/* =======++++======= */
+
+        $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->orderBy('product_id','DESC')->get();
+
+        $headers = ToppingSize::where('id_category', $category_id)->get();
+        $head_count = count($headers) + 1;
+        $html = '';
+        $html .= '<tr>';
+        $html .= '<th><input type="checkbox" name="checkall" id="delall" value="' . $category_id . '"></th>';
+        $html .= '<th>Image</th>';
+        $html .= '<th>Product Name</th>';
+        if (isset($head_count)) {
+            $html .= '<th colspan="' . $head_count . '" class="text-center">Price</th>';
+        } else {
+            $html .= '<th class="text-center">Price</th>';
+        }
+        $html .= '<th>Status</th>';
+        $html .= '<th>Sort Order</th>';
+        $html .= '<th>Action</th>';
+        $html .= '</tr>';
+
+        $html .= '<tr><td colspan="3"></td><th style="background:lightgray">Main Price</th>';
+
+        if (count($headers) > 0) {
+            foreach ($headers as $header) {
+                $html .= '<th style="background:lightgray">' . $header->size . '</th>';
+            }
+        }
+        $html .= '<td colspan="3"></td> </tr>';
+
+/* =======++++======= */
+
+
+            return response()->json([
+                // 'head_count' => $head_count,
+                'subheader' => $html,
+            ]);
+
+        }
 
 
     // Get All Products
     public function getproduct(Request $request)
     {
         $category_id = $request->cat_id;
+
         if(!empty($category_id) || $category_id != ''){
             session()->put('current_category_id',$category_id);
         }
@@ -625,8 +670,10 @@ class ProductController extends Controller
 
         }
 
+
         $data = array();
         $data1 = array();
+
         // $headers = ToppingSize::where('id_category',$category_id)->get();
 
         // $head_count = count($headers) + 1;
@@ -717,6 +764,8 @@ class ProductController extends Controller
                     $data['image'] = '<img src="' . $image_path . '" alt="Not Found" width="40">';
                 }
                 $data['name'] = $post->name;
+
+                // $data['price'] = $post->hasOneProduct->price;
                 $data['price'] = $post->hasOneProduct->price;
 
                 $data['status'] = $post->hasOneProduct->status;
