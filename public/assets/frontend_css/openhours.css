@@ -170,9 +170,10 @@
 }
 
 .opening-hours-v4 .default-title-v4 {
-    margin-left: 41.6666666667%;
+    /* margin-left: 41.6666666667%;
     top: 50px;
-    position: relative;
+    position: relative; */
+    text-align: center;
 }
 
 .opening-hours-v4 .container {
@@ -182,17 +183,18 @@
 
 .opening-hours-v4 .__time {
     display: flex;
-    position: absolute;
+    /* position: absolute; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url(../img/bg/opening-hours.svg);
+    margin-bottom:20px;
+    /* background-image: url(../img/bg/opening-hours.svg);
     background-repeat: no-repeat;
     background-position: center center;
     height: 600px;
     width: 600px;
     top: 0;
-    left: 0;
+    left: 0; */
 }
 
 .opening-hours-v4 .__time .__time-item {
@@ -203,7 +205,7 @@
 }
 
 .opening-hours-v4 .__time .__time-item strong {
-    font-size: 42px;
+    font-size: 35px;
     background-color: #4CD790;
     color: #fff;
     border-radius: 12px;

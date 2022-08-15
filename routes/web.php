@@ -213,6 +213,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('editmapping', [OptionController::class, 'editmapping'])->name('editmapping');
     Route::post('updatemapping', [OptionController::class, 'updatemapping'])->name('updatemapping');
     Route::post('deletemapping', [OptionController::class, 'deletemapping'])->name('deletemapping');
+    Route::get('toppinggetproduct/{id}', [OptionController::class, 'toppinggetproduct'])->name('toppinggetproduct');
 
 
     //Reviews

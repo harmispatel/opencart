@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS HEADER MenuOptionedit PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     edit.blade.php
     This for Edit MenuOption
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
 {{-- Header --}}
@@ -293,17 +293,19 @@
                                                                                     {{ $omapping->order_type }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->hasOneCategoryDescription->cname
-                                                                                    }}
+                                                                                    {{ $omapping->hasOneCategoryDescription->cname }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->hasOneProductDescription->pname }}
+                                                                                    {{ isset($omapping->hasOneProductDescription->pname) ? $omapping->hasOneProductDescription->pname : '' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->topping_rename }}
                                                                                 </td>
+                                                                                @php
+                                                                                    $sizename = html_entity_decode($omapping->hasOneToppingSize->sizename);
+                                                                                @endphp
                                                                                 <td>
-                                                                                    {{ isset($omapping->hasOneToppingSize->sizename) ? $omapping->hasOneToppingSize->sizename : '' }}
+                                                                                    {{ isset($sizename) ? $sizename : '' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->min_item }}
@@ -462,15 +464,15 @@
 
         html += '<td class="align-middle"><select name="order_type"><option value="*">*</option><option value="delivery">Delivery</option><option value="collection">Collection</option></select><input type="hidden" name="top_id" value="{{ $topping->id_topping }}"></td>';
 
-        html += '<td class="align-middle"><select name="category"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="category" onchange="getproduct(this);"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select class="product" name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="text" name="topping_rename"></td>';
 
         // html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size)<option value="{{ $size->size_id }}">{{ $size->tsize }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size) @foreach($size->hasManyToppingSize as $tsize)<option value="{{ $tsize["id_size"] }}">{{ $tsize["size"] }}</option>@endforeach @endforeach</select></td>';
+        html += '<td class="align-middle"><select class="productsize" name="size"><option value="*">*</option>@foreach($toppingsizebystore as $size) @foreach($size->hasManyToppingSize as $tsize)<option value="{{ $tsize["id_size"] }}">{{ $tsize["size"] }}</option>@endforeach @endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="number" name="min_item" value="1"></td>';
 
@@ -500,6 +502,23 @@
         $('#mybtn1').hide();
     }
     // End Add Mapping
+
+
+    // get product by category
+    function getproduct(elem) {
+        let cat_id = $(elem).val();
+
+        $.ajax({
+            type: "get",
+            url: "{{ url('toppinggetproduct') }}/" + cat_id,
+            dataType: "json",
+            success: function (response) {
+                $('.product').empty().append(response.products);
+                $('.productsize').empty().append(response.productsize);
+            }
+        });
+    }
+
 
 
     // Store Mapping
