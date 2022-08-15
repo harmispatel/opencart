@@ -1,4 +1,4 @@
-<!--
+{{--
     THIS IS HEADER ShopSetting PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     shop_setting.blade.php
@@ -8,7 +8,7 @@
     - Notification Tab
     - Suspend Tab
     ----------------------------------------------------------------------------------------------
--->
+--}}
 @php
 $demo = gallary_redirect_url();
 @endphp
@@ -602,7 +602,7 @@ $demo = gallary_redirect_url();
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Suspend for Time</label>
-                                                        <input class="form-control" type="date" id="suspend_time" name="suspend_time" value="{{ date('Y-m-d',strtotime($map_category['suspend_time'])) }}"/>
+                                                        <input class="form-control date_picker" type="date" id="suspend_time" name="suspend_time" value="{{ date('Y-m-d',strtotime($map_category['suspend_time'])) }}"/>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">
