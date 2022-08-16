@@ -138,17 +138,17 @@ class MenuController extends Controller
 
         if($is_topping != 0)
         {
-            if(count($checkbox) > 0 && count($drpdwn) > 0)
+            if(!empty($checkbox)  && !empty($drpdwn) )
             {
                 $checkbox = array_merge($checkbox,$drpdwn);
             }
             else
             {
-                if(count($checkbox) > 0)
+                if(!empty($checkbox))
                 {
                     $checkbox = $checkbox;
                 }
-                elseif(count($drpdwn) > 0)
+                elseif(!empty($drpdwn))
                 {
                     $checkbox = $drpdwn;
                 }
