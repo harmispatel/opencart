@@ -152,6 +152,10 @@ class MenuController extends Controller
                 {
                     $checkbox = $drpdwn;
                 }
+                else
+                {
+                    $checkbox = '';
+                }
             }
         }
         else
