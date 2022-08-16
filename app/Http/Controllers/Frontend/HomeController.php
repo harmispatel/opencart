@@ -112,6 +112,11 @@ class HomeController extends Controller
     }
 
 
+    // Suspend
+    function suspend()
+    {
+        return view('frontend.pages.suspend');
+    }
 
 
     // Function For ZipCode

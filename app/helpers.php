@@ -2688,6 +2688,12 @@ function frontStoreID($currentURL)
         'gallery_background_image',
         'config_currency',
         'config_logo',
+        'suspend_for',
+        'suspend_time',
+        'suspend_title',
+        'suspend_description',
+        'suspend_permanently',
+        'suspend_logo',
     ]);
     $data['store_settings'] = [];
     foreach($store_key as $row)
