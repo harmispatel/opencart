@@ -132,8 +132,8 @@ class MenuController extends Controller
     {
 
         $is_topping = isset($request->topping) ? $request->topping : 0;
-        $checkbox = isset($request->checkbox) ? $request->checkbox : '';
-        $drpdwn = isset($request->drpdwn) ? $request->drpdwn : '';
+        $checkbox = isset($request->checkbox) ? array_filter($request->checkbox) : '';
+        $drpdwn = isset($request->drpdwn) ? array_filter($request->drpdwn) : '';
 
 
         if($is_topping != 0)

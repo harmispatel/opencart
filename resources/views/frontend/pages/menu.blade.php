@@ -410,7 +410,7 @@ It's used for View Menu.
                                                                                                                                                                             @if ($typeTopping == 'select')
                                                                                                                                                                                 <select class="form-control" name="select_top[]">
                                                                                                                                                                                     @if (!empty($get_sub_topping) || $get_sub_topping != '')
-                                                                                                                                                                                        <option> -- --</option>
+                                                                                                                                                                                        <option value=""> -- --</option>
                                                                                                                                                                                         @foreach ($get_sub_topping as $stop)
                                                                                                                                                                                             <option value="{{ $stop->name }}">{{ $stop->name }}</option>
                                                                                                                                                                                         @endforeach
@@ -1075,7 +1075,7 @@ It's used for View Menu.
                     var chckbox = form_data.getAll('check_top');
                     var drpdwn = form_data.getAll('select_top[]');
 
-                    if(chckbox != '' || drpdwn != '')
+                    if(chckbox != '' && drpdwn != '')
                     {
                         $.ajax({
                             type: 'post',
