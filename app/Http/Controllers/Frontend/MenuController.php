@@ -135,17 +135,19 @@ class MenuController extends Controller
         $checkbox = isset($request->checkbox) ? $request->checkbox : '';
         $drpdwn = isset($request->drpdwn) ? $request->drpdwn : '';
 
-        if(!empty($checkbox) || $checkbox != '')
-        {
-            if(!empty($drpdwn) || $drpdwn != '')
-            {
-                $checkbox[] = $drpdwn;
-            }
-        }
-        else
-        {
-            $checkbox = $drpdwn;
-        }
+        $checkbox = array_merge($checkbox,$drpdwn);
+
+        // if(!empty($checkbox) || $checkbox != '')
+        // {
+        //     if(!empty($drpdwn) || $drpdwn != '')
+        //     {
+        //         $checkbox = $drpdwn;
+        //     }
+        // }
+        // else
+        // {
+        //     $checkbox = $drpdwn;
+        // }
 
         // Get Current URL
         $currentURL = URL::to("/");

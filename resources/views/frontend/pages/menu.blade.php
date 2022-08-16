@@ -912,10 +912,10 @@ It's used for View Menu.
                                     @if ($userdeliverytype == 'delivery')
                                         <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
                                         <div class="closed-now minimum_spend">
-                                                <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
+                                            <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
                                         </div>
                                     @else
-                                        <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
+                                        <a type="button" class="btn checkbt" disabled  style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</a>
                                         <div class="closed-now">
                                             <span class="closing-text" style="color: green !important;">We are open now!</span>
                                         </div>
