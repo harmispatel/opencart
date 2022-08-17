@@ -674,7 +674,7 @@ class ProductController extends Controller
         $data = array();
         $data1 = array();
 
-        // $headers = ToppingSize::where('id_category',$category_id)->get();
+        $headers = ToppingSize::where('id_category',$category_id)->get();
 
         // $head_count = count($headers) + 1;
         // $html ='';
@@ -699,7 +699,7 @@ class ProductController extends Controller
         // $table .='</tr>';
 
         if ($posts) {
-            foreach ($posts as $post) {
+           $i=1; foreach ($posts as $post) {
                 // echo "<pre>";
                 // print_r($post->hasOneProduct->product_id);
                 // exit;
@@ -721,10 +721,10 @@ class ProductController extends Controller
                 // $table .= '<td><img src="' . $image_path . '" alt="Not Found" width="40"></td>';
                 // }
                 // $table .= '<td>'.$post->name.'</td>';
-                // $sizes = ToppingProductPriceSize::where('id_product', $post->hasOneProduct->product_id)->get();
-                // //  echo "<pre>";
-                // // print_r($sizes);
-                // // exit;
+                $sizes = ToppingProductPriceSize::where('id_product', $post->hasOneProduct->product_id)->get();
+                //  echo "<pre>";
+                // print_r($sizes);
+                // exit;
 
                 // $table .= '<td>' . $post->hasOneProduct->price . '</td>';
 
@@ -766,7 +766,46 @@ class ProductController extends Controller
                 $data['name'] = $post->name;
 
                 // $data['price'] = $post->hasOneProduct->price;
-                $data['price'] = $post->hasOneProduct->price;
+               // $headers = ToppingSize::where('id_category',$category_id)->get();
+               // $headers = ToppingSize::where('id_category',$category_id)->first();
+                 $html="";
+               
+                    $html.='<table>';
+                        $html.='<thead>';
+                            $html.='<tr>';
+                            if($i==1){
+                                $html.= '<th style="background:lightgray">Main Price</th>';
+                            }        
+                                if (count($sizes) > 0) {
+                                    foreach ($sizes as $value) { 
+                                         $header = ToppingSize::where('id_size',$value->id_size)->first();
+                                          if($i==1){
+                                            $html.= '<th style="background:lightgray">' . $header->size . '</th>';
+                                        }
+                                         
+                                    }
+                                }     
+                            $html.='</tr>';
+                        $html.='</thead>';
+                        $html.='<tbody>';
+                            $html.='<tr>';
+                                $html.='<td>'.$post->hasOneProduct->price.'</td>';
+                                 if (count($sizes) > 0) {
+                                    foreach ($sizes as $value1) { 
+                                         $header1 = ToppingSize::where('id_size',$value1->id_size)->first();
+                                         if(!empty($header1)){
+                                            $html.= '<td>' . $value1->price . '</td>';
+                                         }
+                                    }
+                                }
+                            $html.='</tr>';
+                        $html.='</tbody>';
+                    $html.='</table>';
+
+                
+               
+                //$data['price'] = $post->hasOneProduct->price;
+                $data['price'] = $html;
 
                 $data['status'] = $post->hasOneProduct->status;
 
@@ -780,7 +819,7 @@ class ProductController extends Controller
                 $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
                 $data1[] = $data;
-
+            $i++;    
             }
         }
 
