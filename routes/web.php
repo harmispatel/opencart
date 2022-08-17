@@ -401,78 +401,80 @@ Route::get('filemanager',[FilemanagerController::class,'index'])->name('filemana
 Route::group(['middleware' => 'Suspend'], function () {
     Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
     Route::get('menu', [MenuController::class, 'index'])->name('menu');
+    Route::get('contact',[ContactUsController::class, 'index'])->name('contact');
+    Route::post('changeFreeItem', [MenuController::class, 'changeFreeItem'])->name('changeFreeItem');
+    Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
+    Route::post('getid', [MenuController::class, 'addToCart'])->name('getid');
+    Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
+    Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
+    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+    Route::post('voucher', [CheckoutController::class, 'voucher'])->name('voucher');
+    Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
+    Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
+    Route::get('success', [MyBasketController::class, 'success'])->name('success');
+    Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
+
+    // Payment paypal
+    Route::get('create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
+    Route::post('process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
+    Route::get('success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
+    Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
+
+    // Stripe
+    Route::get('stripe', [StripeController::class, 'stripe'])->name('stripe');
+    Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
+
+    // Get state by conrty
+    Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
+
+    // Get customer Address
+    Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
+    Route::get('getcustomeraddress/{id}', [CheckoutController::class, 'getcustomeraddress'])->name('getcustomeraddress');
+
+
+
+
+    // Member
+    Route::get('member', [MemberController::class, 'member'])->name('member');
+    Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
+    Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
+    Route::post('newaddress', [MemberController::class, 'newaddress'])->name('newaddress');
+    Route::post('changeDefAddress', [MemberController::class, 'changeDefAddress'])->name('changeDefAddress');
+    Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddressdelete'])->name('customeraddressdelete');
+    Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
+    Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
+    Route::post('getcustomerorderdetail', [MemberController::class, 'getcustomerorderdetail'])->name('getcustomerorderdetail');
+
+    // Order review send
+    Route::post('orderreviwe',[MemberController::class , 'orderreviwe'])->name('orderreviwe');
+
+    // Order
+    Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
+    Route::post('setTimeMethod', [CustomerOrder::class, 'setTimeMethod'])->name('setTimeMethod');
+    Route::post('customerdeliveryaddress', [CustomerOrder::class, 'customerdeliveryaddress'])->name('customerdeliveryaddress');
+
+
+    // customer
+    Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
+    Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
+    Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])->name('customerlogout');
+    Route::post('customerdetailupdate', [CustomerAuthController::class, 'customerdetailupdate'])->name('customerdetailupdate');
+
+
+    // Guest User
+    Route::post('registerguestuser', [CustomerAuthController::class, 'registerguestuser'])->name('registerguestuser');
+
+    //  coupon
+    Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
+    Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
+    Route::get('searchcouponcode', [MenuController::class, 'searchcouponcode'])->name('searchcouponcode');
+
+    // Guest User
+    Route::post('contactstore',[ContactUsController::class,'contactstore'])->name('contactstore');
 });
 
 // Suspend
 Route::get('suspend',[HomeControllerFront::class, 'suspend'])->name('suspend');
-
-Route::post('changeFreeItem', [MenuController::class, 'changeFreeItem'])->name('changeFreeItem');
-Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
-Route::post('getid', [MenuController::class, 'addToCart'])->name('getid');
-Route::post('deletecartproduct', [MenuController::class, 'deletecartproduct'])->name('deletecartproduct');
-Route::post('reservation', [ReservationController::class, 'index'])->name('reservation');
-Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::post('voucher', [CheckoutController::class, 'voucher'])->name('voucher');
-Route::post('checkZipCode', [HomeControllerFront::class, 'checkZipCode'])->name('checkZipCode');
-Route::post('postcodes', [HomeControllerFront::class, 'postcodes'])->name('postcodes');
-Route::get('success', [MyBasketController::class, 'success'])->name('success');
-Route::get('cart', [Cartcontroller::class, 'cart'])->name('cart');
-
-// Payment paypal
-Route::get('create-transaction', [PayPalController::class, 'createTransaction'])->name('createTransaction');
-Route::post('process-transaction', [PayPalController::class, 'processTransaction'])->name('processTransaction');
-Route::get('success-transaction', [PayPalController::class, 'successTransaction'])->name('successTransaction');
-Route::get('cancel-transaction', [PayPalController::class, 'cancelTransaction'])->name('cancelTransaction');
-
-// Stripe
-Route::get('stripe', [StripeController::class, 'stripe'])->name('stripe');
-Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
-
-// Get state by conrty
-Route::post('getRegionbyCountry', [CustomerController::class, 'getRegionbyCountry'])->name('getRegionbyCountry');
-
-// Get customer Address
-Route::get('getaddress/{id}', [OrdersController::class, 'getaddress'])->name('getaddress');
-Route::get('getcustomeraddress/{id}', [CheckoutController::class, 'getcustomeraddress'])->name('getcustomeraddress');
-
-
-
-
-// Member
-Route::get('member', [MemberController::class, 'member'])->name('member');
-Route::get('memberregister', [MemberController::class, 'memberregister'])->name('memberregister');
-Route::get('addnewaddress', [MemberController::class, 'addnewaddress'])->name('addnewaddress');
-Route::post('newaddress', [MemberController::class, 'newaddress'])->name('newaddress');
-Route::post('changeDefAddress', [MemberController::class, 'changeDefAddress'])->name('changeDefAddress');
-Route::get('customeraddressdelete/{id}', [MemberController::class, 'customeraddressdelete'])->name('customeraddressdelete');
-Route::get('customeraddressedit/{id}', [MemberController::class, 'customeraddressedit'])->name('customeraddressedit');
-Route::post('updatecustomeraddress', [MemberController::class, 'updatecustomeraddress'])->name('updatecustomeraddress');
-Route::post('getcustomerorderdetail', [MemberController::class, 'getcustomerorderdetail'])->name('getcustomerorderdetail');
-
-// Order review send
-Route::post('orderreviwe',[MemberController::class , 'orderreviwe'])->name('orderreviwe');
-
-// Order
-Route::post('confirmorder', [CustomerOrder::class, 'confirmorder'])->name('confirmorder');
-Route::post('setTimeMethod', [CustomerOrder::class, 'setTimeMethod'])->name('setTimeMethod');
-Route::post('customerdeliveryaddress', [CustomerOrder::class, 'customerdeliveryaddress'])->name('customerdeliveryaddress');
 Route::post('checkorderstatus', [CustomerOrder::class, 'checkorderstatus'])->name('checkorderstatus');
 
-// customer
-Route::post('customerlogin', [CustomerAuthController::class, 'customerlogin'])->name('customerlogin');
-Route::post('customerregister', [CustomerAuthController::class, 'customerregister'])->name('customerregister');
-Route::post('customerlogout', [CustomerAuthController::class, 'customerlogout'])->name('customerlogout');
-Route::post('customerdetailupdate', [CustomerAuthController::class, 'customerdetailupdate'])->name('customerdetailupdate');
 
-
-// Guest User
-Route::post('registerguestuser', [CustomerAuthController::class, 'registerguestuser'])->name('registerguestuser');
-
-//  coupon
-Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
-Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
-Route::get('searchcouponcode', [MenuController::class, 'searchcouponcode'])->name('searchcouponcode');
-
-// Guest User
-Route::get('contact',[ContactUsController::class, 'index'])->name('contact');
-Route::post('contactstore',[ContactUsController::class,'contactstore'])->name('contactstore');

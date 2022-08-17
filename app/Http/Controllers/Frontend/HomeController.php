@@ -104,9 +104,6 @@ class HomeController extends Controller
         }
 
         $htmlbox_store_about_settings = HtmlBox::where('store_id', $front_store_id)->get();
-        // echo '<pre>';
-        // print_r($htmlbox_store_about_settings);
-        // exit();
 
         return view('frontend.pages.home', compact(['photos', 'best_categories', 'popular_foods', 'delivery_setting', 'areas', 'sliders', 'htmlbox_store_about_settings']));
     }
@@ -115,7 +112,34 @@ class HomeController extends Controller
     // Suspend
     function suspend()
     {
-        return view('frontend.pages.suspend');
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Store Settings
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+
+        // Suspend Data
+        $data['suspend_title'] = isset($store_setting['suspend_title']) ? $store_setting['suspend_title'] : 'Maintenance Mode';
+        $data['suspend_description'] = isset($store_setting['suspend_description']) ? $store_setting['suspend_description'] : '';
+        $data['suspend_logo'] = isset($store_setting['suspend_logo']) ? $store_setting['suspend_logo'] : '';
+
+        // Suspend Permenantly
+        $suspend_permanently = isset($store_setting['suspend_permanently']) ? $store_setting['suspend_permanently'] : 'no';
+
+        if($suspend_permanently == 'yes')
+        {
+            return view('frontend.pages.suspend', $data);
+        }
+        else{
+            return redirect()->route('home');
+        }
+
     }
 
 
