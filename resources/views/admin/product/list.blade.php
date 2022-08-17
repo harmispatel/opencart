@@ -95,7 +95,7 @@
                             {{-- Table Start --}}
                                 <table class="table table-bordered " id="data-table">
                                     {{-- Table Head --}}
-                                    <thead class="text-center header">
+                                    <thead class="text-center header" id="header">
                                             <th><input type="checkbox" name="checkall" id="del_all"></th>
                                             <th id="image">Image</th>
                                             <th id="name">Product Name</th>
@@ -257,23 +257,21 @@
         var table =  $('#data-table').DataTable();
         table.destroy();
 
-        // $(function() {
-        //     $.ajax({
-        //         url: "{{ route('productsizeprice') }}",
-        //         dataType: "json",
-        //         type: "POST",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             cat_id: catval,
-        //             // category_id:categoryval,
-        //         },
-        //         success: function (response) {
-        //             $('.header').html('');
-        //             $("#cat-list").before(response.subheader);
-        //             // $('#price').attr('colspan',response.head_count);
-        //         }
-        //     });
-        // });
+        $(function() {
+            $.ajax({
+                url: "{{ route('productsizeprice') }}",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    cat_id: catval,
+                    // category_id:categoryval,
+                },
+                success: function (response) {
+                    $("#header").replaceWith(response.subheader);
+                }
+            });
+        });
 
 
         var table = $('#data-table').DataTable({
@@ -301,37 +299,44 @@
             columns: [{
                     "data": "checkbox",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"5%"
                 },
                 {
                     "data": "image",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
                 {
                     "data": "name",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"20%"
                 },
                 {
                     "data": "price",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"35%"
                 },
                 {
                     "data": "status",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
                 {
                     "data": "sort_order",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
                 {
                     "data": "action",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
             ]
         });
@@ -343,22 +348,21 @@
           table.destroy();
         var categoryval = this.value;
 
-        // $(function() {
-        //     $.ajax({
-        //         url: "{{ route('productsizeprice') }}",
-        //         dataType: "json",
-        //         type: "POST",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             category_id:categoryval,
-        //         },
-        //         success: function (response) {
-        //             $('.header').html('');
-        //             $("#cat-list").before(response.subheader);
-        //             // $('#price').attr('colspan',response.head_count);
-        //         }
-        //     });
-        // });
+        $(function() {
+            $.ajax({
+                url: "{{ route('productsizeprice') }}",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    cat_id: categoryval,
+                    // category_id:categoryval,
+                },
+                success: function (response) {
+                    $("#header").replaceWith(response.subheader);
+                }
+            });
+        });
         var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -383,37 +387,44 @@
             columns: [{
                     "data": "checkbox",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"5%"
                 },
                 {
                     "data": "image",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
                 {
                     "data": "name",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"20%"
                 },
                 {
                     "data": "price",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"35%"
                 },
                 {
                     "data": "status",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
                 {
                     "data": "sort_order",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
                 {
                     "data": "action",
                     "orderable": false,
-                    "bSortable": true
+                    "bSortable": true,
+                    "width":"10%"
                 },
             ]
         });

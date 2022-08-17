@@ -585,27 +585,39 @@ class ProductController extends Controller
         $head_count = count($headers) + 1;
         $html = '';
         $html .= '<tr>';
-        $html .= '<th><input type="checkbox" name="checkall" id="delall" value="' . $category_id . '"></th>';
-        $html .= '<th>Image</th>';
-        $html .= '<th>Product Name</th>';
-        if (isset($head_count)) {
-            $html .= '<th colspan="' . $head_count . '" class="text-center">Price</th>';
-        } else {
-            $html .= '<th class="text-center">Price</th>';
-        }
-        $html .= '<th>Status</th>';
-        $html .= '<th>Sort Order</th>';
-        $html .= '<th>Action</th>';
+        $html .= '<th style="width:5%;"><input type="checkbox" name="checkall" id="delall" value="' . $category_id . '"></th>';
+        $html .= '<th style="width:10%;">Image</th>';
+        $html .= '<th style="width:20%;">Product Name</th>';
+        // if (isset($head_count)) {
+            $html .= '<th style="width:35%;" class="text-center">
+                <p>Price</p>';
+                $html .='<table class="table">';
+                    $html .='<tr>';
+                        $html .='<td style="width:50%;">Main Price</td>';
+                        if (count($headers) > 0) {
+                            foreach ($headers as $header) {
+                                $html .= '<td style="background:lightgray">' . $header->size . '</td>';
+                            }
+                        }
+                    $html .= '</tr>';
+                $html .='</table>';
+            $html .='</th>';
+        // }
+        // else {
+        //     $html .= '<th class="text-center">Price</th>';
+        // }
+        $html .= '<th style="width:10%;">Status</th>';
+        $html .= '<th style="width:10%;">Sort Order</th>';
+        $html .= '<th style="width:10%;">Action</th>';
         $html .= '</tr>';
 
-        $html .= '<tr><td colspan="3"></td><th style="background:lightgray">Main Price</th>';
+        // $html .= '<tr>';
+        //     $html .= '<td colspan="3"></td>';
+        //     $html .= '<td>';
 
-        if (count($headers) > 0) {
-            foreach ($headers as $header) {
-                $html .= '<th style="background:lightgray">' . $header->size . '</th>';
-            }
-        }
-        $html .= '<td colspan="3"></td> </tr>';
+        //     $html .='</td>';
+        // $html .='</tr>';
+
 
 /* =======++++======= */
 
@@ -769,41 +781,49 @@ class ProductController extends Controller
                // $headers = ToppingSize::where('id_category',$category_id)->get();
                // $headers = ToppingSize::where('id_category',$category_id)->first();
                  $html="";
-               
-                    $html.='<table>';
-                        $html.='<thead>';
-                            $html.='<tr>';
-                            if($i==1){
-                                $html.= '<th style="background:lightgray">Main Price</th>';
-                            }        
-                                if (count($sizes) > 0) {
-                                    foreach ($sizes as $value) { 
-                                         $header = ToppingSize::where('id_size',$value->id_size)->first();
-                                          if($i==1){
-                                            $html.= '<th style="background:lightgray">' . $header->size . '</th>';
-                                        }
-                                         
-                                    }
-                                }     
-                            $html.='</tr>';
-                        $html.='</thead>';
+
+                    $html.='<table class="table">';
+                        // $html.='<thead>';
+                        //     $html.='<tr>';
+                        //     if($i==1){
+                        //         $html.= '<th style="background:lightgray">Main Price</th>';
+                        //     }
+                        //         if (count($sizes) > 0) {
+                        //             foreach ($sizes as $value) {
+                        //                  $header = ToppingSize::where('id_size',$value->id_size)->first();
+                        //                   if($i==1){
+                        //                     $html.= '<th style="background:lightgray">' . $header->size . '</th>';
+                        //                 }
+
+                        //             }
+                        //         }
+                        //     $html.='</tr>';
+                        // $html.='</thead>';
                         $html.='<tbody>';
                             $html.='<tr>';
-                                $html.='<td>'.$post->hasOneProduct->price.'</td>';
+                                $html.='<td style="width:50%;">'.$post->hasOneProduct->price.'</td>';
                                  if (count($sizes) > 0) {
-                                    foreach ($sizes as $value1) { 
-                                         $header1 = ToppingSize::where('id_size',$value1->id_size)->first();
-                                         if(!empty($header1)){
-                                            $html.= '<td>' . $value1->price . '</td>';
-                                         }
+                                    foreach ($sizes as $value1) {
+                                        $header1 = ToppingSize::where('id_size',$value1->id_size)->first();
+                                        if(!empty($header1))
+                                        {
+                                                $html.= '<td>' . $value1->price . '</td>';
+                                        }
+                                    }
+                                }else{
+                                    foreach ($headers as $header){
+
+                                        {
+                                            $html.= '<td>-</td>';
+                                        }
                                     }
                                 }
                             $html.='</tr>';
                         $html.='</tbody>';
                     $html.='</table>';
 
-                
-               
+
+
                 //$data['price'] = $post->hasOneProduct->price;
                 $data['price'] = $html;
 
@@ -819,7 +839,7 @@ class ProductController extends Controller
                 $data['action'] = '<a href="' . $edit_url . '" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>';
 
                 $data1[] = $data;
-            $i++;    
+            $i++;
             }
         }
 

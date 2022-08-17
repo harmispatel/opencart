@@ -979,7 +979,7 @@
                 <div class="container">
                     <a class="logo" href="{{route('home')}}">
                         <img class="attach img-fluid" src="{{ get_css_url().'public/assets/theme3/img/icon/logo-attach.svg' }}" />
-                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="logo" width="170" />
+                        <img class="img-fluid" src="{{ $store_logo }}" alt="logo" width="170" />
                     </a>
                     <ul class="menu">
                         <li class="{{ request()->is('/') ? 'active' : '' }}">

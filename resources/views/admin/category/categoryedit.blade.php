@@ -71,13 +71,13 @@ $demo = gallary_redirect_url();
                                         EDIT
                                     </h3>
                                     <div class="container" style="text-align: right">
-                                        <button type="submit" class="btn btn-sm btn-primary ml-auto">
+                                        <button type="submit" class="btn btn-primary ml-auto">
                                             <i class="fa fa-save"></i>
                                         </button>
                                         <button class="btn btn-sm btn-primary" type="submit" name="save_and_stay">
                                             <i class="fa fa-save"></i> Save & Stay
                                         </button>
-                                        <a href="{{ route('category') }}" class="btn btn-sm btn-danger ml-1 deletesellected">
+                                        <a href="{{ route('category') }}" class="btn btn-danger ml-1 deletesellected">
                                             <i class="fa fa-arrow-left"></i>
                                         </a>
                                     </div>
