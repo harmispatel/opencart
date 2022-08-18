@@ -424,6 +424,9 @@ $demo = gallary_redirect_url();
 @include('footer')
 {{-- End Footer --}}
 
+{{-- Sweet alert --}}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 {{-- SCRIPT --}}
 <script type="text/javascript">
 
