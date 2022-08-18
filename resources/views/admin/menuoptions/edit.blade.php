@@ -302,10 +302,11 @@
                                                                                     {{ $omapping->topping_rename }}
                                                                                 </td>
                                                                                 @php
-                                                                                    $sizename = html_entity_decode($omapping->hasOneToppingSize->sizename);
+                                                                                    $toppingname = isset($omapping->hasOneToppingSize->sizename) ? $omapping->hasOneToppingSize->sizename : '';
+                                                                                    $sizename = html_entity_decode($toppingname);
                                                                                 @endphp
                                                                                 <td>
-                                                                                    {{ isset($sizename) ? $sizename : '' }}
+                                                                                    {{ $sizename }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->min_item }}
