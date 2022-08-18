@@ -406,7 +406,7 @@
                                                             <label for="status" class="form-label">Status</label>
                                                             <select name="status" id="status" class="form-control">
                                                                 <option value="1" {{ ($product->status == 1) ? 'selected' : '' }}>Enabled</option>
-                                                                <option value="0" {{ ($product->status == 0) ? 'selected' : '' }}>Deabled</option>
+                                                                <option value="0" {{ ($product->status == 0) ? 'selected' : '' }}>Disabled</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-floating">

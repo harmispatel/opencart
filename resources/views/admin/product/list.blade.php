@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS HEADER Product List PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     list.blade.php
     It Displayed All Product List & Storewise Display Products
     ----------------------------------------------------------------------------------------------
--->
+--}}
 @php
     if(session()->has('current_category_id')){
         $current_category_id = session()->get('current_category_id');
@@ -130,12 +130,8 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-    // data-table
-    // $(document).ready( function () {
-    //     $('#data-table').DataTable();
-    // } );
     // Select All Checkbox
-    $('#del_all').on('click', function(e) {
+    $(document).on("click", "#del_all", function (e) {
         if ($(this).is(':checked', true)) {
             $(".del_all").prop('checked', true);
         } else {
@@ -197,58 +193,6 @@
     });
 </script>
 
-{{-- <script>
-    $(document).ready(function() {
-            var catval = $('#categorys :selected').val();
-             $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "{{ route('getproductbycategory') }}",
-                dataType: "json",
-                data: {
-                    category_id: catval
-                },
-                success: function(result) {
-                    console.log(result.head_count);
-                    $('#data-table').html('');
-                    $('#data-table').html(result);
-                }
-
-            });
-
-            $('#categorys').change(function() {
-                var categoryval = this.value;
-
-                // var categoryval = $('#categorys :selected').val();
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-
-
-                $.ajax({
-                    type: "post",
-                    url: "{{ route('getproductbycategory') }}",
-                    dataType: "json",
-                    data: {
-                        category_id: categoryval
-                    },
-                    success: function(result) {
-                        $('#data-table').html('');
-                        $('#data-table').html(result);
-                    }
-
-                });
-            });
-    });
-</script> --}}
-
 
 {{--  Start Get Product  --}}
 <script>
@@ -277,7 +221,8 @@
         var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            "scrollY": true,
+            // scrollY: false,
+            scrollX: true,
             "ajax": {
                 "url": "{{ route('getproduct') }}",
                 "dataType": "json",
@@ -287,13 +232,6 @@
                     cat_id: catval,
                     // category_id:categoryval,
                 },
-            //     "success": function(res){
-
-            //     //   $('.header').html();
-            //     //   $('.header').append(res.header);
-            //     //   $('.cat-list').html();
-            //     //   $('.cat-list').html(res.header);
-            //    },
             },
             "order": [0, 'asc'],
             columns: [{
@@ -366,7 +304,8 @@
         var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            "scrollY": true,
+            // scrollY: false,
+            scrollX: true,
             "ajax": {
                 "url": "{{ route('getproduct') }}",
                 "dataType": "json",
@@ -376,13 +315,6 @@
                     cat_id: categoryval,
                     // category_id:categoryval,
                 },
-            //     "success": function(res){
-
-            //     //   $('.header').html();
-            //     //   $('.header').append(res.header);
-            //       $('.cat-list').html();
-            //       $('.cat-list').append(res.header);
-            //    },
             },
             columns: [{
                     "data": "checkbox",
