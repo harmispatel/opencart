@@ -9,6 +9,7 @@ use App\Models\CategoryPath;
 use App\Models\CategorytoStore;
 use App\Models\Topping;
 use App\Models\ToppingCatOption;
+use App\Models\ToppingProductPriceSize;
 use App\Models\ToppingSize;
 use Illuminate\Http\Request;
 use DataTables;
@@ -616,6 +617,9 @@ class CategoryController extends Controller
         $cat->meta_keyword = isset($request->metakey) ? $request->metakey : "";
         $cat->update();
 
+        // $pro_size = new ToppingProductPriceSize;
+        // $pro_size =
+
 
         // Add Size & Update Size
         $size = isset($request->size) ? $request->size : '';
@@ -638,6 +642,15 @@ class CategoryController extends Controller
                         $topp_size->size = isset($sizename) ? $sizename : '';
                         $topp_size->short_order = isset($sort_order) ? $sort_order : 0;
                         $topp_size->save();
+
+                        $insertedId = $topp_size->id_size;
+                        $pro_size = new ToppingProductPriceSize;
+                        $pro_size->id_size = $insertedId;
+                        $pro_size->id_product = '';
+                        $pro_size->price = '';
+                        $pro_size->delivery_price = '';
+                        $pro_size->collection_price = '';
+                        $pro_size->save();
                     }
                 }
             }
@@ -688,6 +701,9 @@ class CategoryController extends Controller
 
         // Delete Topping Option
         ToppingSize::where('id_size', $size_id)->delete();
+        ToppingProductPriceSize::where('id_size', $size_id)->delete();
+
+
 
         return response()->json([
             'success' => 1,

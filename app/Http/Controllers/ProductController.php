@@ -620,7 +620,7 @@ class ProductController extends Controller
                                 $html.='<td style="width:50%;">'.$post->hasOneProduct->price.'</td>';
                                  if (count($sizes) > 0) {
                                     foreach ($sizes as $value1) {
-                                        $header1 = ToppingSize::where('id_size',$value1->id_size)->first();
+                                        $header1 = ToppingSize::where('id_size',$value1->id_size)->orderBy('short_order', 'ASC')->first();
                                         if(!empty($header1))
                                         {
                                                 $html.= '<td>' . $value1->price . '</td>';
@@ -892,8 +892,8 @@ class ProductController extends Controller
 
         if(!empty($id_size) || $id_size != '')
         {
-            if (!empty($price_size_id))
-            {
+            // if (!empty($price_size_id))
+            // {
                 foreach ($mainprice as $key => $mainprices)
                 {
                     $where = $price_size_id[$key];
@@ -903,19 +903,19 @@ class ProductController extends Controller
                     $toppingProductPriceSize->collection_price = $collectionprice[$key];
                     $toppingProductPriceSize->update();
                 }
-            }
-            else
-            {
-                foreach ($mainprice as $key => $mainprices) {
-                    $toppingProductPriceSize = new ToppingProductPriceSize;
-                    $toppingProductPriceSize->id_size = $id_size[$key];
-                    $toppingProductPriceSize->id_product = $product_id;
-                    $toppingProductPriceSize->price = $mainprices;
-                    $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
-                    $toppingProductPriceSize->collection_price = $collectionprice[$key];
-                    $toppingProductPriceSize->save();
-                }
-            }
+            // }
+            // else
+            // {
+            //     foreach ($mainprice as $key => $mainprices) {
+            //         $toppingProductPriceSize = new ToppingProductPriceSize;
+            //         $toppingProductPriceSize->id_size = $id_size[$key];
+            //         $toppingProductPriceSize->id_product = $product_id;
+            //         $toppingProductPriceSize->price = $mainprices;
+            //         $toppingProductPriceSize->delivery_price = $deliveryprice[$key];
+            //         $toppingProductPriceSize->collection_price = $collectionprice[$key];
+            //         $toppingProductPriceSize->save();
+            //     }
+            // }
         }
 
         return redirect()->route('products')->with('success', "Product Updated Successfully..");
