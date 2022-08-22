@@ -368,6 +368,7 @@ class LayoutController extends Controller
                         $about_setting_htmlbox->about_background_color = $about_background_color;
                     }
 
+                    $about_setting_htmlbox->about_background_hover_color = '';
                     $about_setting_htmlbox->about_background_image_position = $about_background_image_position;
                     $about_setting_htmlbox->about_title = $about_title;
                     $about_setting_htmlbox->about_description = $about_description;
@@ -381,6 +382,7 @@ class LayoutController extends Controller
                     $about_setting_htmlbox->about_background_option = $about_background_option;
                     $about_setting_htmlbox->about_image = $about_image;
                     $about_setting_htmlbox->about_background_image = $about_background_image;
+                    $about_setting_htmlbox->about_background_hover_color = '';
                     // $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
                     $about_setting_htmlbox->about_background_image_position = $about_background_image_position;
                     $about_setting_htmlbox->about_title = $about_title;
