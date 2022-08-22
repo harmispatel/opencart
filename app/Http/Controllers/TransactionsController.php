@@ -105,6 +105,9 @@ class TransactionsController extends Controller
 
             }
 
+            print_r($rejected_count_tot);
+            exit();
+
             return response()->json([
                 'customerorder' => $html,
                 'reject' => $rejected_count_tot,

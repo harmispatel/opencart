@@ -651,9 +651,9 @@ class Orders extends Model
                  $customer_order->customer_name = $cfullname;
                  $customer_order->billing_address = "";
                  $customer_order->delivery_address = "";
-                 $customer_order->order_status = "";
-                 $customer_order->order_type = "";
-                 $customer_order->order_amount = "";
+                 $customer_order->order_status = 7; //Rejected. paypal success trnnsaction after order prossesing.
+                 $customer_order->order_type = "collection";
+                 $customer_order->order_amount = $total;
                  $customer_order->commission_fee = "";
                  $customer_order->balance = "";
                  $customer_order->refunded_amount = null;
@@ -1221,9 +1221,9 @@ class Orders extends Model
                     $customer_order->customer_name = $cfullname;
                     $customer_order->billing_address = "";
                     $customer_order->delivery_address = "";
-                    $customer_order->order_status = "";
-                    $customer_order->order_type = "";
-                    $customer_order->order_amount = "";
+                    $customer_order->order_status = 7; //Rejected. paypal success trnnsaction after order prossesing.
+                    $customer_order->order_type = "delivery";
+                    $customer_order->order_amount = $total;
                     $customer_order->commission_fee = "";
                     $customer_order->balance = "";
                     $customer_order->refunded_amount = null;
@@ -1243,8 +1243,8 @@ class Orders extends Model
    }
 
     // Stripe payment gateway order store
-   public static function stripestoreOrder(Request $request)
-   {
+    public static function stripestoreOrder(Request $request)
+    {
 
     $currentURL = URL::to("/");
 
@@ -1278,254 +1278,254 @@ class Orders extends Model
     // Store Settings
     $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
 
-     // Get Currency Details
-     $currency_code = $store_setting['config_currency'];
-     $currency_details = Currency::where('code',$currency_code)->first();
+    // Get Currency Details
+    $currency_code = $store_setting['config_currency'];
+    $currency_details = Currency::where('code',$currency_code)->first();
 
-     $delivery_type = session()->get('flag_post_code');
-     $total = session()->get('total');
-     $subtotal = session()->get('subtotal');
-     $delivery_charges = session()->get('delivery_charge');
-     $delivery_charge = isset($delivery_charges) ? $delivery_charges : 0.00;
-     $couponcode = session()->get('couponcode');
-     $couponname = session()->get('couponname');
-     $servicecharge = isset($request->stripe_service_charge) ? $request->stripe_service_charge : 0.00;
+    $delivery_type = session()->get('flag_post_code');
+    $total = session()->get('total');
+    $subtotal = session()->get('subtotal');
+    $delivery_charges = session()->get('delivery_charge');
+    $delivery_charge = isset($delivery_charges) ? $delivery_charges : 0.00;
+    $couponcode = session()->get('couponcode');
+    $couponname = session()->get('couponname');
+    $servicecharge = isset($request->stripe_service_charge) ? $request->stripe_service_charge : 0.00;
 
-     $total = $request->total;
+    $total = $request->total;
     //  $subtotal = $request->subtotal;
     //  $delivery_charge = $request->delivery_charge;
     //  $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
     //  $couponname = $request->couponname;
 
 
-     // Store Details
-     $store = Store::where('store_id', $front_store_id)->first();
-     $data['store_mail'] = getStoreDetails($front_store_id,'config_email');
-     $data['store_name'] = getStoreDetails($front_store_id,'config_name');
-     // End Store Details
+    // Store Details
+    $store = Store::where('store_id', $front_store_id)->first();
+    $data['store_mail'] = getStoreDetails($front_store_id,'config_email');
+    $data['store_name'] = getStoreDetails($front_store_id,'config_name');
+    // End Store Details
 
-     if (session()->has('userid')) {
-         $user_id = session()->get('userid');
-     } else {
-         $user_id = 0;
-     }
+    if (session()->has('userid')) {
+        $user_id = session()->get('userid');
+    } else {
+        $user_id = 0;
+    }
 
-     // Customer Details
-     if ($user_id != 0) {
-         $customer = Customer::where('customer_id', $user_id)->first();
+    // Customer Details
+    if ($user_id != 0) {
+        $customer = Customer::where('customer_id', $user_id)->first();
 
-         $cust_address_id = isset($customer->address_id) ? $customer->address_id : '';
+        $cust_address_id = isset($customer->address_id) ? $customer->address_id : '';
 
-         $customer_def_address = CustomerAddress::where('address_id', $cust_address_id)->first();
-     }
-     // End Customer Details
+        $customer_def_address = CustomerAddress::where('address_id', $cust_address_id)->first();
+    }
+    // End Customer Details
 
-     // Get Time Method
-     if (session()->has('time_method')) {
-         $time_method = session()->get('time_method');
-     } else {
-         $time_method = '';
-     }
-     // End Time Method
+    // Get Time Method
+    if (session()->has('time_method')) {
+        $time_method = session()->get('time_method');
+    } else {
+        $time_method = '';
+    }
+    // End Time Method
 
-     $payment_method = 1;
+    $payment_method = 1;
 
-     // Check Delivery Type
-     if ($delivery_type == 'collection')  // Collection
-     {
-         // Check Payment Method
-         if ($payment_method == 1) //Cash On Delivery
-         {
-             // Check User Type
-             if ($user_id == 0) //Guest User
-             {
-                 $guest_user = session()->get('guest_user');
+    // Check Delivery Type
+    if ($delivery_type == 'collection')  // Collection
+    {
+        // Check Payment Method
+        if ($payment_method == 1) //Cash On Delivery
+        {
+            // Check User Type
+            if ($user_id == 0) //Guest User
+            {
+                $guest_user = session()->get('guest_user');
 
-                 if (!empty($guest_user)) {
-                     $guestUserCart = session()->get('cart1');
+                if (!empty($guest_user)) {
+                    $guestUserCart = session()->get('cart1');
 
-                     // Guest Order
-                     $gorder = new Orders;
-                     $gorder->invoice_no = 0;
-                     $gorder->invoice_prefix = 'INV-2013-00';
-                     $gorder->store_id = $front_store_id;
-                     $gorder->store_name = isset($store->name) ? $store->name : '';
-                     $gorder->store_url = isset($store->url) ? $store->url : '';
-                     $gorder->customer_id = 0;
-                     $gorder->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 0;
-                     $gorder->firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                     $gorder->lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
-                     $gorder->email = isset($guest_user['email']) ? $guest_user['email'] : '';
-                     $gorder->telephone = isset($guest_user['phone']) ? $guest_user['phone'] : '';
-                     $gorder->fax = '';
-                     $gorder->payment_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                     $gorder->payment_lastname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                     $gorder->payment_company = '';
-                     $gorder->payment_company_id = 0;
-                     $gorder->payment_tax_id = 0;
-                     $gorder->payment_address_1 = '';
-                     $gorder->payment_address_2 = '';
-                     $gorder->payment_city = '';
-                     $gorder->payment_postcode = '';
-                     $gorder->payment_country = 0;
-                     $gorder->payment_country_id = 0;
-                     $gorder->payment_zone = 0;
-                     $gorder->payment_zone_id = 0;
-                     $gorder->payment_address_format = '';
-                     $gorder->payment_method = 'CARD';
-                     $gorder->payment_code = 'stripe_gateway';
-                     $gorder->shipping_firstname = '';
-                     $gorder->shipping_lastname = '';
-                     $gorder->shipping_company = '';
-                     $gorder->shipping_address_1 = '';
-                     $gorder->shipping_address_2 = '';
-                     $gorder->shipping_city = '';
-                     $gorder->shipping_postcode = '';
-                     $gorder->shipping_country = 0;
-                     $gorder->shipping_country_id = 0;
-                     $gorder->shipping_zone = 0;
-                     $gorder->shipping_zone_id = 0;
-                     $gorder->shipping_address_format = '';
-                     $gorder->shipping_method = 'collection';
-                     $gorder->shipping_code = '';
-                     $gorder->comment = '';
-                     $gorder->total = $total;
-                     $gorder->order_status_id = 2; //Processing
-                     $gorder->message = '';
-                     $gorder->accepted_time = '';
-                     $gorder->affiliate_id = 0;
-                     $gorder->commission = 0.00;
-                     $gorder->language_id = 1;
-                     $gorder->currency_id = $currency_details['currency_id'];
-                     $gorder->currency_code = $currency_details['code'];
-                     $gorder->currency_value = $currency_details['value'];
-                     $gorder->ip = $_SERVER['REMOTE_ADDR'];
-                     $gorder->forwarded_ip = '';
-                     $gorder->user_agent = '';
-                     $gorder->accept_language = '';
-                     $gorder->date_added = date('Y-m-d h:i:s');
-                     $gorder->date_modified = date('Y-m-d h:i:s');
-                     $gorder->flag_post_code = session()->get('flag_post_code');
-                     $gorder->free_item =  $free_item;
-                     $gorder->timedelivery = $time_method;
-                     $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
-                     $gorder->clear_history = 0;
-                     $gorder->is_delete = 0;
-                     $gorder->save();
+                    // Guest Order
+                    $gorder = new Orders;
+                    $gorder->invoice_no = 0;
+                    $gorder->invoice_prefix = 'INV-2013-00';
+                    $gorder->store_id = $front_store_id;
+                    $gorder->store_name = isset($store->name) ? $store->name : '';
+                    $gorder->store_url = isset($store->url) ? $store->url : '';
+                    $gorder->customer_id = 0;
+                    $gorder->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 0;
+                    $gorder->firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                    $gorder->email = isset($guest_user['email']) ? $guest_user['email'] : '';
+                    $gorder->telephone = isset($guest_user['phone']) ? $guest_user['phone'] : '';
+                    $gorder->fax = '';
+                    $gorder->payment_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->payment_lastname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->payment_company = '';
+                    $gorder->payment_company_id = 0;
+                    $gorder->payment_tax_id = 0;
+                    $gorder->payment_address_1 = '';
+                    $gorder->payment_address_2 = '';
+                    $gorder->payment_city = '';
+                    $gorder->payment_postcode = '';
+                    $gorder->payment_country = 0;
+                    $gorder->payment_country_id = 0;
+                    $gorder->payment_zone = 0;
+                    $gorder->payment_zone_id = 0;
+                    $gorder->payment_address_format = '';
+                    $gorder->payment_method = 'CARD';
+                    $gorder->payment_code = 'stripe_gateway';
+                    $gorder->shipping_firstname = '';
+                    $gorder->shipping_lastname = '';
+                    $gorder->shipping_company = '';
+                    $gorder->shipping_address_1 = '';
+                    $gorder->shipping_address_2 = '';
+                    $gorder->shipping_city = '';
+                    $gorder->shipping_postcode = '';
+                    $gorder->shipping_country = 0;
+                    $gorder->shipping_country_id = 0;
+                    $gorder->shipping_zone = 0;
+                    $gorder->shipping_zone_id = 0;
+                    $gorder->shipping_address_format = '';
+                    $gorder->shipping_method = 'collection';
+                    $gorder->shipping_code = '';
+                    $gorder->comment = '';
+                    $gorder->total = $total;
+                    $gorder->order_status_id = 2; //Processing
+                    $gorder->message = '';
+                    $gorder->accepted_time = '';
+                    $gorder->affiliate_id = 0;
+                    $gorder->commission = 0.00;
+                    $gorder->language_id = 1;
+                    $gorder->currency_id = $currency_details['currency_id'];
+                    $gorder->currency_code = $currency_details['code'];
+                    $gorder->currency_value = $currency_details['value'];
+                    $gorder->ip = $_SERVER['REMOTE_ADDR'];
+                    $gorder->forwarded_ip = '';
+                    $gorder->user_agent = '';
+                    $gorder->accept_language = '';
+                    $gorder->date_added = date('Y-m-d h:i:s');
+                    $gorder->date_modified = date('Y-m-d h:i:s');
+                    $gorder->flag_post_code = session()->get('flag_post_code');
+                    $gorder->free_item =  $free_item;
+                    $gorder->timedelivery = $time_method;
+                    $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
+                    $gorder->clear_history = 0;
+                    $gorder->is_delete = 0;
+                    $gorder->save();
 
-                     session()->put('last_order_id',$gorder->order_id);
+                    session()->put('last_order_id',$gorder->order_id);
 
-                     // Guest Order Product
-                     if (isset($guestUserCart)) {
-                         if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
-                             foreach ($guestUserCart['withoutSize'] as $key => $cart) {
-                                 $gorder_product = new OrderProduct;
-                                 $gorder_product->order_id = $gorder->order_id;
-                                 $gorder_product->product_id = $cart['product_id'];
-                                 $gorder_product->name = $cart['name'];
-                                 $gorder_product->model = '';
-                                 $gorder_product->quantity = $cart['quantity'];
-                                 $gorder_product->price = $cart['main_price'];
-                                 $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
-                                 $gorder_product->tax = 0.00;
-                                 $gorder_product->reward = 0;
-                                 $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $toppings = [];
-                                 if(isset($cart['topping']) && !empty($cart['topping'])){
-                                     foreach ($cart['topping'] as $topping) {
-                                         $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                     }
-                                     $gorder_product->toppings = implode('', $toppings);
-                                 }
-                                 else{
-                                     $gorder_product->toppings = '';
-                                 }
-                                 $gorder_product->request = '';
-                                 $gorder_product->save();
-                             }
-                         }
+                    // Guest Order Product
+                    if (isset($guestUserCart)) {
+                        if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
+                            foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                                $gorder_product = new OrderProduct;
+                                $gorder_product->order_id = $gorder->order_id;
+                                $gorder_product->product_id = $cart['product_id'];
+                                $gorder_product->name = $cart['name'];
+                                $gorder_product->model = '';
+                                $gorder_product->quantity = $cart['quantity'];
+                                $gorder_product->price = $cart['main_price'];
+                                $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $gorder_product->tax = 0.00;
+                                $gorder_product->reward = 0;
+                                $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                $toppings = [];
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
+                                }
+                                else{
+                                    $gorder_product->toppings = '';
+                                }
+                                $gorder_product->request = '';
+                                $gorder_product->save();
+                            }
+                        }
 
-                         if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
-                             foreach ($guestUserCart['size'] as $key => $cart) {
-                                 $gorder_product = new OrderProduct;
-                                 $gorder_product->order_id = $gorder->order_id;
-                                 $gorder_product->product_id = $cart['product_id'];
-                                 $gorder_product->name = $cart['name'];
-                                 $gorder_product->model = '';
-                                 $gorder_product->quantity = $cart['quantity'];
-                                 $gorder_product->price = $cart['main_price'];
-                                 $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
-                                 $gorder_product->tax = 0.00;
-                                 $gorder_product->reward = 0;
-                                 $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $toppings = [];
-                                 if(isset($cart['topping']) && !empty($cart['topping'])){
-                                     foreach ($cart['topping'] as $topping) {
-                                         $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                     }
-                                     $gorder_product->toppings = implode('', $toppings);
-                                 }
-                                 else{
-                                     $gorder_product->toppings = '';
-                                 }
-                                 $gorder_product->request = '';
-                                 $gorder_product->save();
-                             }
-                         }
-                     }
-
-
-                     //Guest Order to Cart
-                     $gcart = $guestUserCart;
-                     $serial = serialize($gcart);
-                     $base64 = base64_encode($serial);
-
-                     $gorder_to_cart = new OrderCart;
-                     $gorder_to_cart->order_id = $gorder->order_id;
-                     $gorder_to_cart->session_order = $base64;
-                     $gorder_to_cart->save();
+                        if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
+                            foreach ($guestUserCart['size'] as $key => $cart) {
+                                $gorder_product = new OrderProduct;
+                                $gorder_product->order_id = $gorder->order_id;
+                                $gorder_product->product_id = $cart['product_id'];
+                                $gorder_product->name = $cart['name'];
+                                $gorder_product->model = '';
+                                $gorder_product->quantity = $cart['quantity'];
+                                $gorder_product->price = $cart['main_price'];
+                                $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $gorder_product->tax = 0.00;
+                                $gorder_product->reward = 0;
+                                $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                $toppings = [];
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
+                                }
+                                else{
+                                    $gorder_product->toppings = '';
+                                }
+                                $gorder_product->request = '';
+                                $gorder_product->save();
+                            }
+                        }
+                    }
 
 
-                     // Guest Order History
-                     $gorderhistory = new OrderHistory;
-                     $gorderhistory->order_id = $gorder->order_id;
-                     $gorderhistory->order_status_id = 2; //Processing
-                     $gorderhistory->notify = 1;
-                     $gorderhistory->comment = '';
-                     $gorderhistory->date_added = date('Y-m-d h:i:s');
-                     $gorderhistory->save();
+                    //Guest Order to Cart
+                    $gcart = $guestUserCart;
+                    $serial = serialize($gcart);
+                    $base64 = base64_encode($serial);
 
-                     // Order Delivery
-                     $gorderdelivery = new OrderTotal;
-                     $gorderdelivery->order_id = $gorder->order_id;
-                     $gorderdelivery->code = 'delivery';
-                     $gorderdelivery->title = 'Delivery';
-                     $gorderdelivery->text = $currency_details['symbol_left'].' 0.00';
-                     $gorderdelivery->value = 0.00;
-                     $gorderdelivery->sort_order = 0;
-                     $gorderdelivery->save();
+                    $gorder_to_cart = new OrderCart;
+                    $gorder_to_cart->order_id = $gorder->order_id;
+                    $gorder_to_cart->session_order = $base64;
+                    $gorder_to_cart->save();
 
-                     // Coupon Code
-                     if ($couponcode != 0) {
-                         $gordercoupon = new OrderTotal;
-                         $gordercoupon->order_id = $gorder->order_id;
-                         $gordercoupon->code = 'coupon';
-                         $gordercoupon->title = 'Coupon(' . $couponname . ')';
-                         $gordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
-                         $gordercoupon->value = '-' . $couponcode;
-                         $gordercoupon->sort_order = 0;
-                         $gordercoupon->save();
-                     }
 
-                     // Subtotal
-                     $gordersubtotal = new OrderTotal;
-                     $gordersubtotal->order_id = $gorder->order_id;
-                     $gordersubtotal->code = 'sub_total';
-                     $gordersubtotal->title = 'Sub-Total';
-                     $gordersubtotal->text = $currency_details['symbol_left'].$subtotal;
-                     $gordersubtotal->value = $subtotal;
-                     $gordersubtotal->sort_order = 0;
-                     $gordersubtotal->save();
+                    // Guest Order History
+                    $gorderhistory = new OrderHistory;
+                    $gorderhistory->order_id = $gorder->order_id;
+                    $gorderhistory->order_status_id = 2; //Processing
+                    $gorderhistory->notify = 1;
+                    $gorderhistory->comment = '';
+                    $gorderhistory->date_added = date('Y-m-d h:i:s');
+                    $gorderhistory->save();
+
+                    // Order Delivery
+                    $gorderdelivery = new OrderTotal;
+                    $gorderdelivery->order_id = $gorder->order_id;
+                    $gorderdelivery->code = 'delivery';
+                    $gorderdelivery->title = 'Delivery';
+                    $gorderdelivery->text = $currency_details['symbol_left'].' 0.00';
+                    $gorderdelivery->value = 0.00;
+                    $gorderdelivery->sort_order = 0;
+                    $gorderdelivery->save();
+
+                    // Coupon Code
+                    if ($couponcode != 0) {
+                        $gordercoupon = new OrderTotal;
+                        $gordercoupon->order_id = $gorder->order_id;
+                        $gordercoupon->code = 'coupon';
+                        $gordercoupon->title = 'Coupon(' . $couponname . ')';
+                        $gordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
+                        $gordercoupon->value = '-' . $couponcode;
+                        $gordercoupon->sort_order = 0;
+                        $gordercoupon->save();
+                    }
+
+                    // Subtotal
+                    $gordersubtotal = new OrderTotal;
+                    $gordersubtotal->order_id = $gorder->order_id;
+                    $gordersubtotal->code = 'sub_total';
+                    $gordersubtotal->title = 'Sub-Total';
+                    $gordersubtotal->text = $currency_details['symbol_left'].$subtotal;
+                    $gordersubtotal->value = $subtotal;
+                    $gordersubtotal->sort_order = 0;
+                    $gordersubtotal->save();
 
                     // service charge
                     if ($servicecharge != "") {
@@ -1539,213 +1539,210 @@ class Orders extends Model
                         $gordertotal->save();
                     }
 
-                     // Total to Pay
-                     $gordertotal = new OrderTotal;
-                     $gordertotal->order_id = $gorder->order_id;
-                     $gordertotal->code = 'total';
-                     $gordertotal->title = 'Total to Pay';
-                     $gordertotal->text = $currency_details['symbol_left']. $total;
-                     $gordertotal->value = $total;
-                     $gordertotal->sort_order = 0;
-                     $gordertotal->save();
+                    // Total to Pay
+                    $gordertotal = new OrderTotal;
+                    $gordertotal->order_id = $gorder->order_id;
+                    $gordertotal->code = 'total';
+                    $gordertotal->title = 'Total to Pay';
+                    $gordertotal->text = $currency_details['symbol_left']. $total;
+                    $gordertotal->value = $total;
+                    $gordertotal->sort_order = 0;
+                    $gordertotal->save();
 
-                     session()->forget('cart1');
-                     session()->forget('guest_user');
-                     session()->forget('free_item');
-                 }
-             }
-             else // Customer
-             {
-                 $usercart = getuserCart($user_id);
+                    session()->forget('cart1');
+                    session()->forget('guest_user');
+                    session()->forget('free_item');
+                }
+            }
+            else // Customer
+            {
+                $usercart = getuserCart($user_id);
 
-                 // New Order
-                 $order = new Orders;
-                 $order->invoice_no = 0;
-                 $order->invoice_prefix = 'INV-2013-00';
-                 $order->store_id = $front_store_id;
-                 $order->store_name = isset($store->name) ? $store->name : '';
-                 $order->store_url = isset($store->url) ? $store->url : '';
-                 $order->customer_id = $user_id;
-                 $order->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 1;
-                 $order->firstname = isset($customer->firstname) ? $customer->firstname : '';
-                 $order->lastname = isset($customer->lastname) ? $customer->lastname : '';
-                 $order->email = isset($customer->email) ? $customer->email : '';
-                 $order->telephone = isset($customer->telephone) ? $customer->telephone : '';
-                 $order->fax = isset($customer->fax) ? $customer->fax : '';
-                 $order->payment_firstname = isset($customer->firstname) ? $customer->firstname : '';
-                 $order->payment_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                 $order->payment_company = '';
-                 $order->payment_company_id = 0;
-                 $order->payment_tax_id = 0;
-                 $order->payment_address_1 = '';
-                 $order->payment_address_2 = '';
-                 $order->payment_city = '';
-                 $order->payment_postcode = '';
-                 $order->payment_country = 0;
-                 $order->payment_country_id = 0;
-                 $order->payment_zone = 0;
-                 $order->payment_zone_id = 0;
-                 $order->payment_address_format = '';
-                 $order->payment_method = 'CARD';
-                 $order->payment_code = 'stripe_gateway';
-                 $order->shipping_firstname = '';
-                 $order->shipping_lastname = '';
-                 $order->shipping_company = '';
-                 $order->shipping_address_1 = '';
-                 $order->shipping_address_2 = '';
-                 $order->shipping_city = '';
-                 $order->shipping_postcode = '';
-                 $order->shipping_country = 0;
-                 $order->shipping_country_id = 0;
-                 $order->shipping_zone = 0;
-                 $order->shipping_zone_id = 0;
-                 $order->shipping_address_format = '';
-                 $order->shipping_method = 'collection';
-                 $order->shipping_code = '';
-                 $order->comment = '';
-                 $order->total = $total;
-                 $order->order_status_id = 2; //Processing
-                 $order->message = '';
-                 $order->accepted_time = '';
-                 $order->affiliate_id = 0;
-                 $order->commission = 0.00;
-                 $order->language_id = 1;
-                 $order->currency_id = $currency_details['currency_id'];
-                 $order->currency_code = $currency_details['code'];
-                 $order->currency_value = $currency_details['value'];
-                 $order->ip = isset($customer->ip) ? $customer->ip : '';
-                 $order->forwarded_ip = '';
-                 $order->user_agent = '';
-                 $order->accept_language = '';
-                 $order->date_added = date('Y-m-d h:i:s');
-                 $order->date_modified = date('Y-m-d h:i:s');
-                 $order->flag_post_code = session()->get('flag_post_code');
-                 $order->free_item =  $free_item;
-                 $order->timedelivery = $time_method;
-                 $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
-                 $order->clear_history = 0;
-                 $order->is_delete = 0;
-                 echo '<pre>';
-                 print_r($order);
-                 exit();
-                //  $order->save();
+                // New Order
+                $order = new Orders;
+                $order->invoice_no = 0;
+                $order->invoice_prefix = 'INV-2013-00';
+                $order->store_id = $front_store_id;
+                $order->store_name = isset($store->name) ? $store->name : '';
+                $order->store_url = isset($store->url) ? $store->url : '';
+                $order->customer_id = $user_id;
+                $order->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 1;
+                $order->firstname = isset($customer->firstname) ? $customer->firstname : '';
+                $order->lastname = isset($customer->lastname) ? $customer->lastname : '';
+                $order->email = isset($customer->email) ? $customer->email : '';
+                $order->telephone = isset($customer->telephone) ? $customer->telephone : '';
+                $order->fax = isset($customer->fax) ? $customer->fax : '';
+                $order->payment_firstname = isset($customer->firstname) ? $customer->firstname : '';
+                $order->payment_lastname = isset($customer->lastname) ? $customer->lastname : '';
+                $order->payment_company = '';
+                $order->payment_company_id = 0;
+                $order->payment_tax_id = 0;
+                $order->payment_address_1 = '';
+                $order->payment_address_2 = '';
+                $order->payment_city = '';
+                $order->payment_postcode = '';
+                $order->payment_country = 0;
+                $order->payment_country_id = 0;
+                $order->payment_zone = 0;
+                $order->payment_zone_id = 0;
+                $order->payment_address_format = '';
+                $order->payment_method = 'CARD';
+                $order->payment_code = 'stripe_gateway';
+                $order->shipping_firstname = '';
+                $order->shipping_lastname = '';
+                $order->shipping_company = '';
+                $order->shipping_address_1 = '';
+                $order->shipping_address_2 = '';
+                $order->shipping_city = '';
+                $order->shipping_postcode = '';
+                $order->shipping_country = 0;
+                $order->shipping_country_id = 0;
+                $order->shipping_zone = 0;
+                $order->shipping_zone_id = 0;
+                $order->shipping_address_format = '';
+                $order->shipping_method = 'collection';
+                $order->shipping_code = '';
+                $order->comment = '';
+                $order->total = $total;
+                $order->order_status_id = 2; //Processing
+                $order->message = '';
+                $order->accepted_time = '';
+                $order->affiliate_id = 0;
+                $order->commission = 0.00;
+                $order->language_id = 1;
+                $order->currency_id = $currency_details['currency_id'];
+                $order->currency_code = $currency_details['code'];
+                $order->currency_value = $currency_details['value'];
+                $order->ip = isset($customer->ip) ? $customer->ip : '';
+                $order->forwarded_ip = '';
+                $order->user_agent = '';
+                $order->accept_language = '';
+                $order->date_added = date('Y-m-d h:i:s');
+                $order->date_modified = date('Y-m-d h:i:s');
+                $order->flag_post_code = session()->get('flag_post_code');
+                $order->free_item =  $free_item;
+                $order->timedelivery = $time_method;
+                $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
+                $order->clear_history = 0;
+                $order->is_delete = 0;
+                $order->save();
 
-                 $last_order_id = $order->order_id;
+                $last_order_id = $order->order_id;
 
-                 session()->put('last_order_id',$order->order_id);
-                 session()->forget('free_item');
+                session()->put('last_order_id',$order->order_id);
+                session()->forget('free_item');
 
-                 // Order Product
-                 if (isset($usercart)) {
-                     if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
-                         foreach ($usercart['withoutSize'] as $key => $cart) {
-                             $order_product = new OrderProduct;
-                             $order_product->order_id = $last_order_id;
-                             $order_product->product_id = $cart['product_id'];
-                             $order_product->name = $cart['name'];
-                             $order_product->model = '';
-                             $order_product->quantity = $cart['quantity'];
-                             $order_product->price = $cart['main_price'];
-                             $order_product->total = $cart['main_price'] *  $cart['quantity'];
-                             $order_product->tax = 0.00;
-                             $order_product->reward = 0;
-                             $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $toppings = [];
-                             if(isset($cart['topping']) && !empty($cart['topping'])){
-                                 foreach ($cart['topping'] as $topping) {
-                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                 }
-                                 $order_product->toppings = implode('', $toppings);
-                             }
-                             else{
-                                 $order_product->toppings = '';
-                             }
-                             $order_product->request = '';
-                             $order_product->save();
-                         }
-                     }
+                // Order Product
+                if (isset($usercart)) {
+                    if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
+                        foreach ($usercart['withoutSize'] as $key => $cart) {
+                            $order_product = new OrderProduct;
+                            $order_product->order_id = $last_order_id;
+                            $order_product->product_id = $cart['product_id'];
+                            $order_product->name = $cart['name'];
+                            $order_product->model = '';
+                            $order_product->quantity = $cart['quantity'];
+                            $order_product->price = $cart['main_price'];
+                            $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                            $order_product->tax = 0.00;
+                            $order_product->reward = 0;
+                            $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                            $toppings = [];
+                            if(isset($cart['topping']) && !empty($cart['topping'])){
+                                foreach ($cart['topping'] as $topping) {
+                                    $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                }
+                                $order_product->toppings = implode('', $toppings);
+                            }
+                            else{
+                                $order_product->toppings = '';
+                            }
+                            $order_product->request = '';
+                            $order_product->save();
+                        }
+                    }
 
-                     if (isset($usercart['size']) && count($usercart['size']) > 0) {
-                         foreach ($usercart['size'] as $key => $cart) {
-                             $order_product = new OrderProduct;
-                             $order_product->order_id = $last_order_id;
-                             $order_product->product_id = $cart['product_id'];
-                             $order_product->name = $cart['name'];
-                             $order_product->model = '';
-                             $order_product->quantity = $cart['quantity'];
-                             $order_product->price = $cart['main_price'];
-                             $order_product->total = $cart['main_price'] *  $cart['quantity'];
-                             $order_product->tax = 0.00;
-                             $order_product->reward = 0;
-                             $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                             $toppings = [];
-                             if(isset($cart['topping']) && !empty($cart['topping'])){
-                                 foreach ($cart['topping'] as $topping) {
-                                     $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                 }
-                                 $order_product->toppings = implode('', $toppings);
-                             }
-                             else{
-                                 $order_product->toppings = '';
-                             }
-                             $order_product->request = '';
-                             $order_product->save();
-                         }
-                     }
-                 }
+                    if (isset($usercart['size']) && count($usercart['size']) > 0) {
+                        foreach ($usercart['size'] as $key => $cart) {
+                            $order_product = new OrderProduct;
+                            $order_product->order_id = $last_order_id;
+                            $order_product->product_id = $cart['product_id'];
+                            $order_product->name = $cart['name'];
+                            $order_product->model = '';
+                            $order_product->quantity = $cart['quantity'];
+                            $order_product->price = $cart['main_price'];
+                            $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                            $order_product->tax = 0.00;
+                            $order_product->reward = 0;
+                            $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                            $toppings = [];
+                            if(isset($cart['topping']) && !empty($cart['topping'])){
+                                foreach ($cart['topping'] as $topping) {
+                                    $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                }
+                                $order_product->toppings = implode('', $toppings);
+                            }
+                            else{
+                                $order_product->toppings = '';
+                            }
+                            $order_product->request = '';
+                            $order_product->save();
+                        }
+                    }
+                }
 
-                 //Order to Cart
-                 $cart = isset($customer->cart) ? $customer->cart : '';
+                //Order to Cart
+                $cart = isset($customer->cart) ? $customer->cart : '';
 
-                 $order_to_cart = new OrderCart;
-                 $order_to_cart->order_id = $last_order_id;
-                 $order_to_cart->session_order = $cart;
-                 $order_to_cart->save();
+                $order_to_cart = new OrderCart;
+                $order_to_cart->order_id = $last_order_id;
+                $order_to_cart->session_order = $cart;
+                $order_to_cart->save();
 
-                 $customer_update = Customer::find($user_id);
-                 $customer_update->cart = '';
-                 $customer_update->update();
+                $customer_update = Customer::find($user_id);
+                $customer_update->cart = '';
+                $customer_update->update();
 
-                 // Order History
-                 $orderhistory = new OrderHistory;
-                 $orderhistory->order_id = $order->order_id;
-                 $orderhistory->order_status_id = 2; //Processing
-                 $orderhistory->notify = 1;
-                 $orderhistory->comment = '';
-                 $orderhistory->date_added = date('Y-m-d h:i:s');
-                 $orderhistory->save();
+                // Order History
+                $orderhistory = new OrderHistory;
+                $orderhistory->order_id = $order->order_id;
+                $orderhistory->order_status_id = 2; //Processing
+                $orderhistory->notify = 1;
+                $orderhistory->comment = '';
+                $orderhistory->date_added = date('Y-m-d h:i:s');
+                $orderhistory->save();
 
-                 // Order Delivery
-                 $orderdelivery = new OrderTotal;
-                 $orderdelivery->order_id = $order->order_id;
-                 $orderdelivery->code = 'delivery';
-                 $orderdelivery->title = 'Delivery';
-                 $orderdelivery->text = $currency_details['symbol_left'].'0.00';
-                 $orderdelivery->value = 0.00;
-                 $orderdelivery->sort_order = 0;
-                 $orderdelivery->save();
+                // Order Delivery
+                $orderdelivery = new OrderTotal;
+                $orderdelivery->order_id = $order->order_id;
+                $orderdelivery->code = 'delivery';
+                $orderdelivery->title = 'Delivery';
+                $orderdelivery->text = $currency_details['symbol_left'].'0.00';
+                $orderdelivery->value = 0.00;
+                $orderdelivery->sort_order = 0;
+                $orderdelivery->save();
 
-                 // Coupon Code
-                 if ($couponcode != 0) {
-                     $ordercoupon = new OrderTotal;
-                     $ordercoupon->order_id = $order->order_id;
-                     $ordercoupon->code = 'coupon';
-                     $ordercoupon->title = 'Coupon(' . $couponname . ')';
-                     $ordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
-                     $ordercoupon->value = '-' . $couponcode;
-                     $ordercoupon->sort_order = 0;
-                     $ordercoupon->save();
-                 }
+                // Coupon Code
+                if ($couponcode != 0) {
+                    $ordercoupon = new OrderTotal;
+                    $ordercoupon->order_id = $order->order_id;
+                    $ordercoupon->code = 'coupon';
+                    $ordercoupon->title = 'Coupon(' . $couponname . ')';
+                    $ordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
+                    $ordercoupon->value = '-' . $couponcode;
+                    $ordercoupon->sort_order = 0;
+                    $ordercoupon->save();
+                }
 
-                 // Subtotal
-                 $ordersubtotal = new OrderTotal;
-                 $ordersubtotal->order_id = $order->order_id;
-                 $ordersubtotal->code = 'sub_total';
-                 $ordersubtotal->title = 'Sub-Total';
-                 $ordersubtotal->text = $currency_details['symbol_left'].$subtotal;
-                 $ordersubtotal->value = $subtotal;
-                 $ordersubtotal->sort_order = 0;
-                 $ordersubtotal->save();
+                // Subtotal
+                $ordersubtotal = new OrderTotal;
+                $ordersubtotal->order_id = $order->order_id;
+                $ordersubtotal->code = 'sub_total';
+                $ordersubtotal->title = 'Sub-Total';
+                $ordersubtotal->text = $currency_details['symbol_left'].$subtotal;
+                $ordersubtotal->value = $subtotal;
+                $ordersubtotal->sort_order = 0;
+                $ordersubtotal->save();
 
                 // service charge
                 if ($servicecharge != "") {
@@ -1759,222 +1756,222 @@ class Orders extends Model
                     $ordertservicecharge->save();
                 }
 
-                 // Total to Pay
-                 $ordertotal = new OrderTotal;
-                 $ordertotal->order_id = $order->order_id;
-                 $ordertotal->code = 'total';
-                 $ordertotal->title = 'Total to Pay';
-                 $ordertotal->text = $currency_details['symbol_left'].$total;
-                 $ordertotal->value = $total;
-                 $ordertotal->sort_order = 0;
-                 $ordertotal->save();
+                // Total to Pay
+                $ordertotal = new OrderTotal;
+                $ordertotal->order_id = $order->order_id;
+                $ordertotal->code = 'total';
+                $ordertotal->title = 'Total to Pay';
+                $ordertotal->text = $currency_details['symbol_left'].$total;
+                $ordertotal->value = $total;
+                $ordertotal->sort_order = 0;
+                $ordertotal->save();
 
-                 // Order Details Array
-                 $orderserialize = $order->toArray();
+                // Order Details Array
+                $orderserialize = $order->toArray();
 
-                 $cfname = isset($customer->firstname) ? $customer->firstname : '';
-                 $clname = isset($customer->lastname) ? $customer->lastname : '';
-                 $cfullname = $cfname .' '. $clname;
-                 $customer_order = new CustomerOrder;
-                 $customer_order->store_id = $front_store_id;
-                 $customer_order->order_id = $last_order_id;
-                 $customer_order->customer_name = $cfullname;
-                 $customer_order->billing_address = "";
-                 $customer_order->delivery_address = "";
-                 $customer_order->order_status = "";
-                 $customer_order->order_type = "";
-                 $customer_order->order_amount = "";
-                 $customer_order->commission_fee = "";
-                 $customer_order->balance = "";
-                 $customer_order->refunded_amount = null;
-                 $customer_order->value = serialize($orderserialize);
-                 $customer_order->is_order = "";
-                 $customer_order->is_full_refund = 0;
-                 $customer_order->old_order_amount = null;
-                 $customer_order->order_date = date('Y-m-d h:i:s');
-                 $customer_order->date_added = date('Y-m-d h:i:s');
-                 $customer_order->refunded_date = null;
-                 $customer_order->save();
-             }
-         }
-     }
+                $cfname = isset($customer->firstname) ? $customer->firstname : '';
+                $clname = isset($customer->lastname) ? $customer->lastname : '';
+                $cfullname = $cfname .' '. $clname;
+                $customer_order = new CustomerOrder;
+                $customer_order->store_id = $front_store_id;
+                $customer_order->order_id = $last_order_id;
+                $customer_order->customer_name = $cfullname;
+                $customer_order->billing_address = "";
+                $customer_order->delivery_address = "";
+                $customer_order->order_status = "";
+                $customer_order->order_type = "collection";
+                $customer_order->order_amount = $total;
+                $customer_order->commission_fee = "";
+                $customer_order->balance = "";
+                $customer_order->refunded_amount = null;
+                $customer_order->value = serialize($orderserialize);
+                $customer_order->is_order = "";
+                $customer_order->is_full_refund = 0;
+                $customer_order->old_order_amount = null;
+                $customer_order->order_date = date('Y-m-d h:i:s');
+                $customer_order->date_added = date('Y-m-d h:i:s');
+                $customer_order->refunded_date = null;
+                $customer_order->save();
+            }
+        }
+    }
 
-     if ($delivery_type == 'delivery') // Delivery
-     {
-         // Check Payment Method
-         if ($payment_method == 1) //Cash On Delivery
-         {
-             // Check User Type
-             if ($user_id == 0) //Guest User
-             {
-                 $guest_user = session()->get('guest_user');
-                 $guest_user_address = session()->get('guest_user_address');
+    if ($delivery_type == 'delivery') // Delivery
+    {
+        // Check Payment Method
+        if ($payment_method == 1) //Cash On Delivery
+        {
+            // Check User Type
+            if ($user_id == 0) //Guest User
+            {
+                $guest_user = session()->get('guest_user');
+                $guest_user_address = session()->get('guest_user_address');
 
-                 if (!empty($guest_user)) {
-                     $guestUserCart = session()->get('cart1');
+                if (!empty($guest_user)) {
+                    $guestUserCart = session()->get('cart1');
 
-                     // Guest Order
-                     $gorder = new Orders;
-                     $gorder->invoice_no = 0;
-                     $gorder->invoice_prefix = 'INV-2013-00';
-                     $gorder->store_id = $front_store_id;
-                     $gorder->store_name = isset($store->name) ? $store->name : '';
-                     $gorder->store_url = isset($store->url) ? $store->url : '';
-                     $gorder->customer_id = 0;
-                     $gorder->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 0;
-                     $gorder->firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                     $gorder->lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
-                     $gorder->email = isset($guest_user['email']) ? $guest_user['email'] : '';
-                     $gorder->telephone = isset($guest_user['phone']) ? $guest_user['phone'] : '';
-                     $gorder->fax = '';
-                     $gorder->payment_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                     $gorder->payment_lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
-                     $gorder->payment_company = '';
-                     $gorder->payment_company_id = 0;
-                     $gorder->payment_tax_id = 0;
-                     $gorder->payment_address_1 = isset($guest_user_address['address_1']) ? $guest_user_address['address_1'] : '';
-                     $gorder->payment_address_2 = isset($guest_user_address['address_2']) ? $guest_user_address['address_2'] : '';
-                     $gorder->payment_city = isset($guest_user_address['city']) ? $guest_user_address['city'] : '';
-                     $gorder->payment_postcode = isset($guest_user_address['postcode']) ? $guest_user_address['postcode'] : '';
-                     $gorder->payment_country = 0;
-                     $gorder->payment_country_id = 0;
-                     $gorder->payment_zone = 0;
-                     $gorder->payment_zone_id = 0;
-                     $gorder->payment_address_format = '';
-                     $gorder->payment_method = 'CARD';
-                     $gorder->payment_code = 'stripe_gateway';
-                     $gorder->shipping_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                     $gorder->shipping_lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
-                     $gorder->shipping_company = '';
-                     $gorder->shipping_address_1 = isset($guest_user_address['address_1']) ? $guest_user_address['address_1'] : '';
-                     $gorder->shipping_address_2 = isset($guest_user_address['address_2']) ? $guest_user_address['address_2'] : '';
-                     $gorder->shipping_city = isset($guest_user_address['city']) ? $guest_user_address['city'] : '';
-                     $gorder->shipping_postcode = isset($guest_user_address['postcode']) ? $guest_user_address['postcode'] : '';
-                     $gorder->shipping_country = 0;
-                     $gorder->shipping_country_id = 0;
-                     $gorder->shipping_zone = 0;
-                     $gorder->shipping_zone_id = 0;
-                     $gorder->shipping_address_format = '';
-                     $gorder->shipping_method = 'delivery';
-                     $gorder->shipping_code = '';
-                     $gorder->comment = '';
-                     $gorder->total = $total;
-                     $gorder->order_status_id = 2; //Processing
-                     $gorder->message = '';
-                     $gorder->accepted_time = '';
-                     $gorder->affiliate_id = 0;
-                     $gorder->commission = 0.00;
-                     $gorder->language_id = 1;
-                     $gorder->currency_id = $currency_details['currency_id'];
-                     $gorder->currency_code = $currency_details['code'];
-                     $gorder->currency_value = $currency_details['value'];
-                     $gorder->ip = $_SERVER['REMOTE_ADDR'];
-                     $gorder->forwarded_ip = '';
-                     $gorder->user_agent = '';
-                     $gorder->accept_language = '';
-                     $gorder->date_added = date('Y-m-d h:i:s');
-                     $gorder->date_modified = date('Y-m-d h:i:s');
-                     $gorder->flag_post_code = session()->get('flag_post_code');
-                     $gorder->free_item =  $free_item;
-                     $gorder->timedelivery = $time_method;
-                     $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
-                     $gorder->clear_history = 0;
-                     $gorder->is_delete = 0;
-                     $gorder->save();
+                    // Guest Order
+                    $gorder = new Orders;
+                    $gorder->invoice_no = 0;
+                    $gorder->invoice_prefix = 'INV-2013-00';
+                    $gorder->store_id = $front_store_id;
+                    $gorder->store_name = isset($store->name) ? $store->name : '';
+                    $gorder->store_url = isset($store->url) ? $store->url : '';
+                    $gorder->customer_id = 0;
+                    $gorder->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 0;
+                    $gorder->firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                    $gorder->email = isset($guest_user['email']) ? $guest_user['email'] : '';
+                    $gorder->telephone = isset($guest_user['phone']) ? $guest_user['phone'] : '';
+                    $gorder->fax = '';
+                    $gorder->payment_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->payment_lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                    $gorder->payment_company = '';
+                    $gorder->payment_company_id = 0;
+                    $gorder->payment_tax_id = 0;
+                    $gorder->payment_address_1 = isset($guest_user_address['address_1']) ? $guest_user_address['address_1'] : '';
+                    $gorder->payment_address_2 = isset($guest_user_address['address_2']) ? $guest_user_address['address_2'] : '';
+                    $gorder->payment_city = isset($guest_user_address['city']) ? $guest_user_address['city'] : '';
+                    $gorder->payment_postcode = isset($guest_user_address['postcode']) ? $guest_user_address['postcode'] : '';
+                    $gorder->payment_country = 0;
+                    $gorder->payment_country_id = 0;
+                    $gorder->payment_zone = 0;
+                    $gorder->payment_zone_id = 0;
+                    $gorder->payment_address_format = '';
+                    $gorder->payment_method = 'CARD';
+                    $gorder->payment_code = 'stripe_gateway';
+                    $gorder->shipping_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                    $gorder->shipping_lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                    $gorder->shipping_company = '';
+                    $gorder->shipping_address_1 = isset($guest_user_address['address_1']) ? $guest_user_address['address_1'] : '';
+                    $gorder->shipping_address_2 = isset($guest_user_address['address_2']) ? $guest_user_address['address_2'] : '';
+                    $gorder->shipping_city = isset($guest_user_address['city']) ? $guest_user_address['city'] : '';
+                    $gorder->shipping_postcode = isset($guest_user_address['postcode']) ? $guest_user_address['postcode'] : '';
+                    $gorder->shipping_country = 0;
+                    $gorder->shipping_country_id = 0;
+                    $gorder->shipping_zone = 0;
+                    $gorder->shipping_zone_id = 0;
+                    $gorder->shipping_address_format = '';
+                    $gorder->shipping_method = 'delivery';
+                    $gorder->shipping_code = '';
+                    $gorder->comment = '';
+                    $gorder->total = $total;
+                    $gorder->order_status_id = 2; //Processing
+                    $gorder->message = '';
+                    $gorder->accepted_time = '';
+                    $gorder->affiliate_id = 0;
+                    $gorder->commission = 0.00;
+                    $gorder->language_id = 1;
+                    $gorder->currency_id = $currency_details['currency_id'];
+                    $gorder->currency_code = $currency_details['code'];
+                    $gorder->currency_value = $currency_details['value'];
+                    $gorder->ip = $_SERVER['REMOTE_ADDR'];
+                    $gorder->forwarded_ip = '';
+                    $gorder->user_agent = '';
+                    $gorder->accept_language = '';
+                    $gorder->date_added = date('Y-m-d h:i:s');
+                    $gorder->date_modified = date('Y-m-d h:i:s');
+                    $gorder->flag_post_code = session()->get('flag_post_code');
+                    $gorder->free_item =  $free_item;
+                    $gorder->timedelivery = $time_method;
+                    $gorder->gender_id = isset($guest_user['title']) ? $guest_user['title'] : 1;
+                    $gorder->clear_history = 0;
+                    $gorder->is_delete = 0;
+                    $gorder->save();
 
-                     session()->put('last_order_id',$gorder->order_id);
+                    session()->put('last_order_id',$gorder->order_id);
 
-                     // Guest Order Product
-                     if (isset($guestUserCart)) {
-                         if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
-                             foreach ($guestUserCart['withoutSize'] as $key => $cart) {
-                                 $gorder_product = new OrderProduct;
-                                 $gorder_product->order_id = $gorder->order_id;
-                                 $gorder_product->product_id = $cart['product_id'];
-                                 $gorder_product->name = $cart['name'];
-                                 $gorder_product->model = '';
-                                 $gorder_product->quantity = $cart['quantity'];
-                                 $gorder_product->price = $cart['main_price'];
-                                 $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
-                                 $gorder_product->tax = 0.00;
-                                 $gorder_product->reward = 0;
-                                 $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $toppings = [];
-                                 if(isset($cart['topping']) && !empty($cart['topping'])){
-                                     foreach ($cart['topping'] as $topping) {
-                                         $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                     }
-                                     $gorder_product->toppings = implode('', $toppings);
-                                 }
-                                 else{
-                                     $gorder_product->toppings = '';
-                                 }
-                                 $gorder_product->request = '';
-                                 $gorder_product->save();
-                             }
-                         }
+                    // Guest Order Product
+                    if (isset($guestUserCart)) {
+                        if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
+                            foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                                $gorder_product = new OrderProduct;
+                                $gorder_product->order_id = $gorder->order_id;
+                                $gorder_product->product_id = $cart['product_id'];
+                                $gorder_product->name = $cart['name'];
+                                $gorder_product->model = '';
+                                $gorder_product->quantity = $cart['quantity'];
+                                $gorder_product->price = $cart['main_price'];
+                                $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $gorder_product->tax = 0.00;
+                                $gorder_product->reward = 0;
+                                $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                $toppings = [];
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
+                                }
+                                else{
+                                    $gorder_product->toppings = '';
+                                }
+                                $gorder_product->request = '';
+                                $gorder_product->save();
+                            }
+                        }
 
-                         if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
-                             foreach ($guestUserCart['size'] as $key => $cart) {
-                                 $gorder_product = new OrderProduct;
-                                 $gorder_product->order_id = $gorder->order_id;
-                                 $gorder_product->product_id = $cart['product_id'];
-                                 $gorder_product->name = $cart['name'];
-                                 $gorder_product->model = '';
-                                 $gorder_product->quantity = $cart['quantity'];
-                                 $gorder_product->price = $cart['main_price'];
-                                 $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
-                                 $gorder_product->tax = 0.00;
-                                 $gorder_product->reward = 0;
-                                 $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $toppings = [];
-                                 if(isset($cart['topping']) && !empty($cart['topping'])){
-                                     foreach ($cart['topping'] as $topping) {
-                                         $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                     }
-                                     $gorder_product->toppings = implode('', $toppings);
-                                 }
-                                 else{
-                                     $gorder_product->toppings = '';
-                                 }
-                                 $gorder_product->request = '';
-                                 $gorder_product->save();
-                             }
-                         }
-                     }
+                        if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
+                            foreach ($guestUserCart['size'] as $key => $cart) {
+                                $gorder_product = new OrderProduct;
+                                $gorder_product->order_id = $gorder->order_id;
+                                $gorder_product->product_id = $cart['product_id'];
+                                $gorder_product->name = $cart['name'];
+                                $gorder_product->model = '';
+                                $gorder_product->quantity = $cart['quantity'];
+                                $gorder_product->price = $cart['main_price'];
+                                $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $gorder_product->tax = 0.00;
+                                $gorder_product->reward = 0;
+                                $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                $toppings = [];
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $gorder_product->toppings = implode('', $toppings);
+                                }
+                                else{
+                                    $gorder_product->toppings = '';
+                                }
+                                $gorder_product->request = '';
+                                $gorder_product->save();
+                            }
+                        }
+                    }
 
-                     //Guest Order to Cart
-                     $gcart = $guestUserCart;
-                     $serial = serialize($gcart);
-                     $base64 = base64_encode($serial);
+                    //Guest Order to Cart
+                    $gcart = $guestUserCart;
+                    $serial = serialize($gcart);
+                    $base64 = base64_encode($serial);
 
-                     $gorder_to_cart = new OrderCart;
-                     $gorder_to_cart->order_id = $gorder->order_id;
-                     $gorder_to_cart->session_order = $base64;
-                     $gorder_to_cart->save();
+                    $gorder_to_cart = new OrderCart;
+                    $gorder_to_cart->order_id = $gorder->order_id;
+                    $gorder_to_cart->session_order = $base64;
+                    $gorder_to_cart->save();
 
 
-                     // Guest Order History
-                     $gorderhistory = new OrderHistory;
-                     $gorderhistory->order_id = $gorder->order_id;
-                     $gorderhistory->order_status_id = 2; //Processing
-                     $gorderhistory->notify = 1;
-                     $gorderhistory->comment = '';
-                     $gorderhistory->date_added = date('Y-m-d h:i:s');
-                     $gorderhistory->save();
+                    // Guest Order History
+                    $gorderhistory = new OrderHistory;
+                    $gorderhistory->order_id = $gorder->order_id;
+                    $gorderhistory->order_status_id = 2; //Processing
+                    $gorderhistory->notify = 1;
+                    $gorderhistory->comment = '';
+                    $gorderhistory->date_added = date('Y-m-d h:i:s');
+                    $gorderhistory->save();
 
-                     // Order Delivery
-                     $gorderdelivery = new OrderTotal;
-                     $gorderdelivery->order_id = $gorder->order_id;
-                     $gorderdelivery->code = 'delivery';
-                     $gorderdelivery->title = 'Delivery';
-                     $gorderdelivery->text = $currency_details['symbol_left'].$delivery_charge;
-                     $gorderdelivery->value = $delivery_charge;
-                     $gorderdelivery->sort_order = 0;
-                     $gorderdelivery->save();
+                    // Order Delivery
+                    $gorderdelivery = new OrderTotal;
+                    $gorderdelivery->order_id = $gorder->order_id;
+                    $gorderdelivery->code = 'delivery';
+                    $gorderdelivery->title = 'Delivery';
+                    $gorderdelivery->text = $currency_details['symbol_left'].$delivery_charge;
+                    $gorderdelivery->value = $delivery_charge;
+                    $gorderdelivery->sort_order = 0;
+                    $gorderdelivery->save();
 
-                     // Coupon Code
-                     if ($couponcode != 0) {
+                    // Coupon Code
+                    if ($couponcode != 0) {
                         $gordercoupon = new OrderTotal;
                         $gordercoupon->order_id = $gorder->order_id;
                         $gordercoupon->code = 'coupon';
@@ -1983,17 +1980,17 @@ class Orders extends Model
                         $gordercoupon->value = '-' . $couponcode;
                         $gordercoupon->sort_order = 0;
                         $gordercoupon->save();
-                     }
+                    }
 
-                     // Subtotal
-                     $gordersubtotal = new OrderTotal;
-                     $gordersubtotal->order_id = $gorder->order_id;
-                     $gordersubtotal->code = 'sub_total';
-                     $gordersubtotal->title = 'Sub-Total';
-                     $gordersubtotal->text = $currency_details['symbol_left']. $subtotal;
-                     $gordersubtotal->value = $subtotal;
-                     $gordersubtotal->sort_order = 0;
-                     $gordersubtotal->save();
+                    // Subtotal
+                    $gordersubtotal = new OrderTotal;
+                    $gordersubtotal->order_id = $gorder->order_id;
+                    $gordersubtotal->code = 'sub_total';
+                    $gordersubtotal->title = 'Sub-Total';
+                    $gordersubtotal->text = $currency_details['symbol_left']. $subtotal;
+                    $gordersubtotal->value = $subtotal;
+                    $gordersubtotal->sort_order = 0;
+                    $gordersubtotal->save();
 
                     // service charge
                     if ($servicecharge != "") {
@@ -2007,211 +2004,211 @@ class Orders extends Model
                         $gordertotal->save();
                     }
 
-                     // Total to Pay
-                     $gordertotal = new OrderTotal;
-                     $gordertotal->order_id = $gorder->order_id;
-                     $gordertotal->code = 'total';
-                     $gordertotal->title = 'Total to Pay';
-                     $gordertotal->text = $currency_details['symbol_left'].$total;
-                     $gordertotal->value = $total;
-                     $gordertotal->sort_order = 0;
-                     $gordertotal->save();
+                    // Total to Pay
+                    $gordertotal = new OrderTotal;
+                    $gordertotal->order_id = $gorder->order_id;
+                    $gordertotal->code = 'total';
+                    $gordertotal->title = 'Total to Pay';
+                    $gordertotal->text = $currency_details['symbol_left'].$total;
+                    $gordertotal->value = $total;
+                    $gordertotal->sort_order = 0;
+                    $gordertotal->save();
 
-                     session()->forget('cart1');
-                     session()->forget('guest_user');
-                     session()->forget('guest_user_address');
-                     session()->forget('free_item');
-                 }
-             } else //Customer
-             {
-                 $usercart = getuserCart($user_id);
+                    session()->forget('cart1');
+                    session()->forget('guest_user');
+                    session()->forget('guest_user_address');
+                    session()->forget('free_item');
+                }
+            } else //Customer
+            {
+                $usercart = getuserCart($user_id);
 
-                 if (!empty($usercart)) {
-                     // New Order
-                     $order = new Orders;
-                     $order->invoice_no = 0;
-                     $order->invoice_prefix = 'INV-2013-00';
-                     $order->store_id = $front_store_id;
-                     $order->store_name = isset($store->name) ? $store->name : '';
-                     $order->store_url = isset($store->url) ? $store->url : '';
-                     $order->customer_id = $user_id;
-                     $order->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 1;
-                     $order->firstname = isset($customer->firstname) ? $customer->firstname : '';
-                     $order->lastname = isset($customer->lastname) ? $customer->lastname : '';
-                     $order->email = isset($customer->email) ? $customer->email : '';
-                     $order->telephone = isset($customer->telephone) ? $customer->telephone : '';
-                     $order->fax = isset($customer->fax) ? $customer->fax : '';
-                     $order->payment_firstname = isset($customer->firstname) ? $customer->firstname : '';
-                     $order->payment_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                     $order->payment_company = '';
-                     $order->payment_company_id = 0;
-                     $order->payment_tax_id = 0;
-                     $order->payment_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
-                     $order->payment_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
-                     $order->payment_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
-                     $order->payment_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
-                     $order->payment_country = 0;
-                     $order->payment_country_id = 0;
-                     $order->payment_zone = 0;
-                     $order->payment_zone_id = 0;
-                     $order->payment_address_format = '';
-                     $order->payment_method = 'CARD';
-                     $order->payment_code = 'stripe_gateway';
-                     $order->shipping_firstname = isset($customer->firstname) ? $customer->firstname : '';
-                     $order->shipping_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                     $order->shipping_company = '';
-                     $order->shipping_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
-                     $order->shipping_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
-                     $order->shipping_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
-                     $order->shipping_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
-                     $order->shipping_country = 0;
-                     $order->shipping_country_id = 0;
-                     $order->shipping_zone = 0;
-                     $order->shipping_zone_id = 0;
-                     $order->shipping_address_format = '';
-                     $order->shipping_method = 'delivery';
-                     $order->shipping_code = '';
-                     $order->comment = '';
-                     $order->total = $total;
-                     $order->order_status_id = 2; //Processing
-                     $order->message = '';
-                     $order->accepted_time = '';
-                     $order->affiliate_id = 0;
-                     $order->commission = 0.00;
-                     $order->language_id = 1;
-                     $order->currency_id = $currency_details['currency_id'];
-                     $order->currency_code = $currency_details['code'];
-                     $order->currency_value = $currency_details['value'];
-                     $order->ip = isset($customer->ip) ? $customer->ip : '';
-                     $order->forwarded_ip = '';
-                     $order->user_agent = '';
-                     $order->accept_language = '';
-                     $order->date_added = date('Y-m-d h:i:s');
-                     $order->date_modified = date('Y-m-d h:i:s');
-                     $order->flag_post_code = session()->get('flag_post_code');
-                     $order->free_item =  $free_item;
-                     $order->timedelivery = $time_method;
-                     $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
-                     $order->clear_history = 0;
-                     $order->is_delete = 0;
-                     $order->save();
+                if (!empty($usercart)) {
+                    // New Order
+                    $order = new Orders;
+                    $order->invoice_no = 0;
+                    $order->invoice_prefix = 'INV-2013-00';
+                    $order->store_id = $front_store_id;
+                    $order->store_name = isset($store->name) ? $store->name : '';
+                    $order->store_url = isset($store->url) ? $store->url : '';
+                    $order->customer_id = $user_id;
+                    $order->customer_group_id = isset($customer->customer_group_id) ? $customer->customer_group_id : 1;
+                    $order->firstname = isset($customer->firstname) ? $customer->firstname : '';
+                    $order->lastname = isset($customer->lastname) ? $customer->lastname : '';
+                    $order->email = isset($customer->email) ? $customer->email : '';
+                    $order->telephone = isset($customer->telephone) ? $customer->telephone : '';
+                    $order->fax = isset($customer->fax) ? $customer->fax : '';
+                    $order->payment_firstname = isset($customer->firstname) ? $customer->firstname : '';
+                    $order->payment_lastname = isset($customer->lastname) ? $customer->lastname : '';
+                    $order->payment_company = '';
+                    $order->payment_company_id = 0;
+                    $order->payment_tax_id = 0;
+                    $order->payment_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
+                    $order->payment_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
+                    $order->payment_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
+                    $order->payment_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
+                    $order->payment_country = 0;
+                    $order->payment_country_id = 0;
+                    $order->payment_zone = 0;
+                    $order->payment_zone_id = 0;
+                    $order->payment_address_format = '';
+                    $order->payment_method = 'CARD';
+                    $order->payment_code = 'stripe_gateway';
+                    $order->shipping_firstname = isset($customer->firstname) ? $customer->firstname : '';
+                    $order->shipping_lastname = isset($customer->lastname) ? $customer->lastname : '';
+                    $order->shipping_company = '';
+                    $order->shipping_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
+                    $order->shipping_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
+                    $order->shipping_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
+                    $order->shipping_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
+                    $order->shipping_country = 0;
+                    $order->shipping_country_id = 0;
+                    $order->shipping_zone = 0;
+                    $order->shipping_zone_id = 0;
+                    $order->shipping_address_format = '';
+                    $order->shipping_method = 'delivery';
+                    $order->shipping_code = '';
+                    $order->comment = '';
+                    $order->total = $total;
+                    $order->order_status_id = 2; //Processing
+                    $order->message = '';
+                    $order->accepted_time = '';
+                    $order->affiliate_id = 0;
+                    $order->commission = 0.00;
+                    $order->language_id = 1;
+                    $order->currency_id = $currency_details['currency_id'];
+                    $order->currency_code = $currency_details['code'];
+                    $order->currency_value = $currency_details['value'];
+                    $order->ip = isset($customer->ip) ? $customer->ip : '';
+                    $order->forwarded_ip = '';
+                    $order->user_agent = '';
+                    $order->accept_language = '';
+                    $order->date_added = date('Y-m-d h:i:s');
+                    $order->date_modified = date('Y-m-d h:i:s');
+                    $order->flag_post_code = session()->get('flag_post_code');
+                    $order->free_item =  $free_item;
+                    $order->timedelivery = $time_method;
+                    $order->gender_id = isset($customer->gender_id) ? $customer->gender_id : 1;
+                    $order->clear_history = 0;
+                    $order->is_delete = 0;
+                    $order->save();
 
-                     $last_order_id = $order->order_id;
+                    $last_order_id = $order->order_id;
 
-                     session()->put('last_order_id', $last_order_id);
-                     session()->forget('free_item');
+                    session()->put('last_order_id', $last_order_id);
+                    session()->forget('free_item');
 
-                     // Order Product
-                     if (isset($usercart)) {
-                         if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
-                             foreach ($usercart['withoutSize'] as $key => $cart) {
-                                 $order_product = new OrderProduct;
-                                 $order_product->order_id = $order->order_id;
-                                 $order_product->product_id = $cart['product_id'];
-                                 $order_product->name = $cart['name'];
-                                 $order_product->model = '';
-                                 $order_product->quantity = $cart['quantity'];
-                                 $order_product->price = $cart['main_price'];
-                                 $order_product->total = $cart['main_price'] *  $cart['quantity'];
-                                 $order_product->tax = 0.00;
-                                 $order_product->reward = 0;
-                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $toppings = [];
-                                 if(isset($cart['topping']) && !empty($cart['topping'])){
-                                     foreach ($cart['topping'] as $topping) {
-                                         $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                     }
-                                     $order_product->toppings = implode('', $toppings);
-                                 }
-                                 else{
-                                     $order_product->toppings = '';
-                                 }
-                                 $order_product->request = '';
-                                 $order_product->save();
-                             }
-                         }
+                    // Order Product
+                    if (isset($usercart)) {
+                        if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
+                            foreach ($usercart['withoutSize'] as $key => $cart) {
+                                $order_product = new OrderProduct;
+                                $order_product->order_id = $order->order_id;
+                                $order_product->product_id = $cart['product_id'];
+                                $order_product->name = $cart['name'];
+                                $order_product->model = '';
+                                $order_product->quantity = $cart['quantity'];
+                                $order_product->price = $cart['main_price'];
+                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->tax = 0.00;
+                                $order_product->reward = 0;
+                                $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                $toppings = [];
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $order_product->toppings = implode('', $toppings);
+                                }
+                                else{
+                                    $order_product->toppings = '';
+                                }
+                                $order_product->request = '';
+                                $order_product->save();
+                            }
+                        }
 
-                         if (isset($usercart['size']) && count($usercart['size']) > 0) {
-                             foreach ($usercart['size'] as $key => $cart) {
-                                 $order_product = new OrderProduct;
-                                 $order_product->order_id = $order->order_id;
-                                 $order_product->product_id = $cart['product_id'];
-                                 $order_product->name = $cart['name'];
-                                 $order_product->model = '';
-                                 $order_product->quantity = $cart['quantity'];
-                                 $order_product->price = $cart['main_price'];
-                                 $order_product->total = $cart['main_price'] *  $cart['quantity'];
-                                 $order_product->tax = 0.00;
-                                 $order_product->reward = 0;
-                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
-                                 $toppings = [];
-                                 if(isset($cart['topping']) && !empty($cart['topping'])){
-                                     foreach ($cart['topping'] as $topping) {
-                                         $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
-                                     }
-                                     $order_product->toppings = implode('', $toppings);
-                                 }
-                                 else{
-                                     $order_product->toppings = '';
-                                 }
-                                 $order_product->request = '';
-                                 $order_product->save();
-                             }
-                         }
-                     }
+                        if (isset($usercart['size']) && count($usercart['size']) > 0) {
+                            foreach ($usercart['size'] as $key => $cart) {
+                                $order_product = new OrderProduct;
+                                $order_product->order_id = $order->order_id;
+                                $order_product->product_id = $cart['product_id'];
+                                $order_product->name = $cart['name'];
+                                $order_product->model = '';
+                                $order_product->quantity = $cart['quantity'];
+                                $order_product->price = $cart['main_price'];
+                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->tax = 0.00;
+                                $order_product->reward = 0;
+                                $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
+                                $toppings = [];
+                                if(isset($cart['topping']) && !empty($cart['topping'])){
+                                    foreach ($cart['topping'] as $topping) {
+                                        $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                    }
+                                    $order_product->toppings = implode('', $toppings);
+                                }
+                                else{
+                                    $order_product->toppings = '';
+                                }
+                                $order_product->request = '';
+                                $order_product->save();
+                            }
+                        }
+                    }
 
-                     //Order to Cart
-                     $cart = isset($customer->cart) ? $customer->cart : '';
+                    //Order to Cart
+                    $cart = isset($customer->cart) ? $customer->cart : '';
 
-                     $order_to_cart = new OrderCart;
-                     $order_to_cart->order_id = $order->order_id;
-                     $order_to_cart->session_order = $cart;
-                     $order_to_cart->save();
+                    $order_to_cart = new OrderCart;
+                    $order_to_cart->order_id = $order->order_id;
+                    $order_to_cart->session_order = $cart;
+                    $order_to_cart->save();
 
-                     $customer_update = Customer::find($user_id);
-                     $customer_update->cart = '';
-                     $customer_update->update();
+                    $customer_update = Customer::find($user_id);
+                    $customer_update->cart = '';
+                    $customer_update->update();
 
-                     // Order History
-                     $orderhistory = new OrderHistory;
-                     $orderhistory->order_id = $order->order_id;
-                     $orderhistory->order_status_id = 2; //Processing
-                     $orderhistory->notify = 1;
-                     $orderhistory->comment = '';
-                     $orderhistory->date_added = date('Y-m-d h:i:s');
-                     $orderhistory->save();
+                    // Order History
+                    $orderhistory = new OrderHistory;
+                    $orderhistory->order_id = $order->order_id;
+                    $orderhistory->order_status_id = 2; //Processing
+                    $orderhistory->notify = 1;
+                    $orderhistory->comment = '';
+                    $orderhistory->date_added = date('Y-m-d h:i:s');
+                    $orderhistory->save();
 
-                     // Order Delivery
-                     $orderdelivery = new OrderTotal;
-                     $orderdelivery->order_id = $order->order_id;
-                     $orderdelivery->code = 'delivery';
-                     $orderdelivery->title = 'Delivery';
-                     $orderdelivery->text = $currency_details['symbol_left']. $delivery_charge;
-                     $orderdelivery->value = $delivery_charge;
-                     $orderdelivery->sort_order = 0;
-                     $orderdelivery->save();
+                    // Order Delivery
+                    $orderdelivery = new OrderTotal;
+                    $orderdelivery->order_id = $order->order_id;
+                    $orderdelivery->code = 'delivery';
+                    $orderdelivery->title = 'Delivery';
+                    $orderdelivery->text = $currency_details['symbol_left']. $delivery_charge;
+                    $orderdelivery->value = $delivery_charge;
+                    $orderdelivery->sort_order = 0;
+                    $orderdelivery->save();
 
-                     // Coupon Code
-                     if ($couponcode != 0) {
-                         $ordercoupon = new OrderTotal;
-                         $ordercoupon->order_id = $order->order_id;
-                         $ordercoupon->code = 'coupon';
-                         $ordercoupon->title = 'Coupon(' . $couponname . ')';
-                         $ordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
-                         $ordercoupon->value = '-' . $couponcode;
-                         $ordercoupon->sort_order = 0;
-                         $ordercoupon->save();
-                     }
+                    // Coupon Code
+                    if ($couponcode != 0) {
+                        $ordercoupon = new OrderTotal;
+                        $ordercoupon->order_id = $order->order_id;
+                        $ordercoupon->code = 'coupon';
+                        $ordercoupon->title = 'Coupon(' . $couponname . ')';
+                        $ordercoupon->text = $currency_details['symbol_left'].' -' . $couponcode;
+                        $ordercoupon->value = '-' . $couponcode;
+                        $ordercoupon->sort_order = 0;
+                        $ordercoupon->save();
+                    }
 
-                     // Subtotal
-                     $ordersubtotal = new OrderTotal;
-                     $ordersubtotal->order_id = $order->order_id;
-                     $ordersubtotal->code = 'sub_total';
-                     $ordersubtotal->title = 'Sub-Total';
-                     $ordersubtotal->text = $currency_details['symbol_left'].$subtotal;
-                     $ordersubtotal->value = $subtotal;
-                     $ordersubtotal->sort_order = 0;
-                     $ordersubtotal->save();
+                    // Subtotal
+                    $ordersubtotal = new OrderTotal;
+                    $ordersubtotal->order_id = $order->order_id;
+                    $ordersubtotal->code = 'sub_total';
+                    $ordersubtotal->title = 'Sub-Total';
+                    $ordersubtotal->text = $currency_details['symbol_left'].$subtotal;
+                    $ordersubtotal->value = $subtotal;
+                    $ordersubtotal->sort_order = 0;
+                    $ordersubtotal->save();
 
                     // service charge
                     if ($servicecharge != "") {
@@ -2225,17 +2222,17 @@ class Orders extends Model
                         $orderservicecharge->save();
                     }
 
-                     // Total to Pay
-                     $ordertotal = new OrderTotal;
-                     $ordertotal->order_id = $order->order_id;
-                     $ordertotal->code = 'total';
-                     $ordertotal->title = 'Total to Pay';
-                     $ordertotal->text = $currency_details['symbol_left'].$total;
-                     $ordertotal->value = $total;
-                     $ordertotal->sort_order = 0;
-                     $ordertotal->save();
+                    // Total to Pay
+                    $ordertotal = new OrderTotal;
+                    $ordertotal->order_id = $order->order_id;
+                    $ordertotal->code = 'total';
+                    $ordertotal->title = 'Total to Pay';
+                    $ordertotal->text = $currency_details['symbol_left'].$total;
+                    $ordertotal->value = $total;
+                    $ordertotal->sort_order = 0;
+                    $ordertotal->save();
 
-                     // Order Details Array
+                    // Order Details Array
                     $orderserialize = $order->toArray();
 
                     $cfname = isset($customer->firstname) ? $customer->firstname : '';
@@ -2248,8 +2245,8 @@ class Orders extends Model
                     $customer_order->billing_address = "";
                     $customer_order->delivery_address = "";
                     $customer_order->order_status = "";
-                    $customer_order->order_type = "";
-                    $customer_order->order_amount = "";
+                    $customer_order->order_type = "delivery";
+                    $customer_order->order_amount = $total;
                     $customer_order->commission_fee = "";
                     $customer_order->balance = "";
                     $customer_order->refunded_amount = null;
@@ -2262,10 +2259,11 @@ class Orders extends Model
                     $customer_order->refunded_date = null;
                     $customer_order->save();
 
-                 }
-             }
-         }
-     }
-   }
+                }
+            }
+        }
+    }
+    }
+
 
 }
