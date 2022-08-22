@@ -358,60 +358,13 @@ class SettingsController extends Controller
         $data['config_currency'] = isset($request->config_currency) ? $request->config_currency : '';
         $data['config_title'] = isset($request->config_title) ? $request->config_title : '';
         $data['config_meta_description'] = isset($request->config_meta_description) ? $request->config_meta_description : '';
-        // if ($request->hasFile('config_logo'))
-        // {
-        //     if($user_group_id == 1)
-        //     {
-        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_logo')->first();
-        //     }
-        //     else
-        //     {
-        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_logo')->first();
-        //     }
 
-        //     $old_name = isset($old->value) ? $old->value : '';
-
-        //     if (!empty($old_name) || $old_name != '') {
-        //         if (file_exists($old_name)) {
-        //             unlink($old_name);
-        //         }
-        //     }
-
-        //     $logo_name = time() . '.' . $request->file('config_logo')->getClientOriginalExtension();
-        //     $request->file('config_logo')->move(public_path('admin/store_images/logo'), $logo_name);
-        //     $data['config_logo'] = 'public/admin/store_images/logo/' . $logo_name;
-        // }
-         if($request->config_logo != ''){
-            $data['config_logo'] = $request->config_logo;
-         }
-         if($request->config_icon != ''){
-            $data['config_icon'] = $request->config_icon;
-         }
-
-        // if ($request->hasFile('config_icon'))
-        // {
-        //     if($user_group_id == 1)
-        //     {
-        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'config_icon')->first();
-        //     }
-        //     else
-        //     {
-        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'config_icon')->first();
-        //     }
-
-        //     $old_name = isset($old->value) ? $old->value : '';
-
-        //     if (!empty($old_name) || $old_name != '') {
-        //         if (file_exists($old_name)) {
-        //             unlink($old_name);
-        //         }
-        //     }
-
-        //     $icon_name = time() . '.' . $request->file('config_icon')->getClientOriginalExtension();
-        //     $request->file('config_icon')->move(public_path('admin/store_images/icon'), $icon_name);
-        //     $data['config_icon'] = 'public/admin/store_images/icon/' . $logo_name;
-        // }
-
+        if($request->config_logo != ''){
+        $data['config_logo'] = $request->config_logo;
+        }
+        if($request->config_icon != ''){
+        $data['config_icon'] = $request->config_icon;
+        }
 
         $data['grecaptcha'] = isset($request->grecaptcha) ? $request->grecaptcha : '';
         $data['enable_booking_module'] = isset($request->enable_booking_module) ? $request->enable_booking_module : '';
@@ -435,30 +388,7 @@ class SettingsController extends Controller
 
         if($request->suspend_logo != ''){
             $data['suspend_logo'] = $request->suspend_logo;
-         }
-        // if ($request->hasFile('suspend_logo'))
-        // {
-        //     if($user_group_id == 1)
-        //     {
-        //         $old = Settings::select('value')->where('store_id', $current_store_id)->where('key', 'suspend_logo')->first();
-        //     }
-        //     else
-        //     {
-        //         $old = Settings::select('value')->where('store_id', $user_shop_id)->where('key', 'suspend_logo')->first();
-        //     }
-
-        //     $old_name = isset($old->value) ? $old->value : '';
-
-        //     if (!empty($old_name) || $old_name != '') {
-        //         if (file_exists($old_name)) {
-        //             unlink($old_name);
-        //         }
-        //     }
-
-        //     $suspend_logo_name = time() . '.' . $request->file('suspend_logo')->getClientOriginalExtension();
-        //     $request->file('suspend_logo')->move(public_path('admin/store_images/suspend_logo'), $suspend_logo_name);
-        //     $data['suspend_logo'] = 'public/admin/store_images/suspend_logo/' . $suspend_logo_name;
-        // }
+        }
 
         $data['suspend_title'] = isset($request->suspend_title) ? $request->suspend_title : '';
         $data['suspend_description'] = isset($request->suspend_description) ? $request->suspend_description : '';
@@ -501,14 +431,22 @@ class SettingsController extends Controller
         if($user_group_id == 1)
         {
             $store = Store::find($current_store_id);
+            if ($store == "" || empty($store)) {
+                if ($setting_page == 'map') {
+                    return redirect()->route('mapandcategory')->with('error', 'Please Select Store..');
+                } else {
+                    return redirect()->route('shopsettings')->with('error', 'Please Select Store..');
+                }
+            }
         }
         else
         {
             $store = Store::find($user_shop_id);
         }
+
         $store->name = $data['config_name'];
-        $store->url =  $data['config_url'];
-        $store->ssl =  $data['config_ssl'];
+        $store->url  = $data['config_url'];
+        $store->ssl  = $data['config_ssl'];
         $store->update();
 
         if ($setting_page == 'map') {

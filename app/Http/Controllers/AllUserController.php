@@ -289,20 +289,9 @@ class AllUserController extends Controller
             $data->password = bcrypt($request['password']);
         }
 
-        // if($request->hasFile('image'))
-        // {
-        //     if(!empty($old_img))
-        //     {
-        //         if(file_exists('public/admin/users/'.$old_img))
-        //         {
-        //             unlink('public/admin/users/'.$old_img);
-        //         }
-        //     }
-
-        //     $imageName = time().'.'.$request->file('image')->getClientOriginalExtension();
-        //     $request->file('image')->move(public_path('admin/users/'),$imageName);
-        // }
-        $data->image = $request->image;
+        if (!empty($request->image) || $request->image != '') {
+            $data->image = $request->image;
+        }
 
         $data->update();
         return redirect()->route('dashboard')->with('success','Your Profile has been Updated.');

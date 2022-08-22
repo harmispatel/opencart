@@ -102,6 +102,14 @@ $demo = gallary_redirect_url();
                         </button>
                     </div>
                 @endif
+                @if(Session::has('error'))
+                    <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
+                        {{ Session::get('error') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Shop Settings</h1>
@@ -602,7 +610,7 @@ $demo = gallary_redirect_url();
                                                     <hr>
                                                     <div class="form-group">
                                                         <label>Suspend for Time</label>
-                                                        <input class="form-control date_picker" type="date" id="suspend_time" name="suspend_time" value="{{ date('Y-m-d',strtotime($map_category['suspend_time'])) }}"/>
+                                                        <input class="form-control" type="date" id="suspend_time" name="suspend_time" value="{{ date('Y-m-d',strtotime($map_category['suspend_time'])) }}"/>
                                                     </div>
                                                     <hr>
                                                     <div class="form-group">

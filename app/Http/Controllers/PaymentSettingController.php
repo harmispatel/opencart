@@ -331,14 +331,14 @@ class PaymentSettingController extends Controller
         }
         $user_shop_id = $user_details['user_shop'];
 
-        $data['stripe_publickey'] = $request->public_key;
-        $data['stripe_secretkey'] = $request->secret_key;
-        $data['stripe_charge_payment'] = $request->paycharge;
-        $data['stripe_geo_zone_id'] = 0;
-        $data['stripe_printer_text'] = $request->printertext;
-        // $data['stripe_order_status'] = $request->order_status;
-        // $data['stripe_orderstatus_faild'] = $request->orderstatus_faild;
-        $data['stripe_status'] = $request->stripe_status;
+        $data['stripe_publickey']           = isset($request->public_key) ? $request->public_key : '';
+        $data['stripe_secretkey']           = isset($request->secret_key) ? $request->secret_key : '';
+        $data['stripe_charge_payment']      = isset($request->paycharge) ? $request->paycharge : '';
+        $data['stripe_geo_zone_id']         = 0;
+        $data['stripe_printer_text']        = isset($request->printertext) ? $request->printertext : '';
+        // $data['stripe_order_status']        = isset($request->order_status) ? $request->order_status : '';
+        // $data['stripe_orderstatus_faild']   = isset($request->orderstatus_faild) ? $request->orderstatus_faild : '';
+        $data['stripe_status']              = isset($request->stripe_status) ? $request->stripe_status : '';
 
 
         foreach ($data as $key => $new)

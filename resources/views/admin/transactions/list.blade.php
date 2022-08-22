@@ -1,4 +1,4 @@
-<!--
+{{--
     THIS IS TRANSACTION PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     list.blade.php
@@ -11,47 +11,47 @@
     - Commission Total
     - Accepted Reataurant Net
     ----------------------------------------------------------------------------------------------
--->
+--}}
 
 
-<!-- Header Section -->
+{{-- Header Section --}}
 @include('header')
-<!-- End Header Section -->
+{{-- End Header Section --}}
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 
-<!-- Section of List Transactions -->
+{{-- Section of List Transactions --}}
 <section>
     <div class="content-wrapper">
-        <!-- Breadcumb Section -->
+        {{-- Breadcumb Section --}}
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <h1>Transactions</h1>
                     </div>
-                    <!-- Breadcrumb Start -->
+                    {{-- Breadcrumb Start --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item active">Transactions </li>
                         </ol>
                     </div>
-                    <!-- End Breadcumb -->
+                    {{-- End Breadcumb --}}
                 </div>
             </div>
         </section>
-        <!-- End Breadcumb Section -->
+        {{-- End Breadcumb Section --}}
 
-        <!-- List Section Start -->
+        {{-- List Section Start --}}
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <!-- Card Start -->
+                        {{-- Card Start --}}
                         <div class="card card-primary">
-                            <!-- Card Header -->
+                            {{-- Card Header --}}
                             <div class="card-header" style="background: #424e64">
                                 <h3 class="card-title pt-2">
                                     <i class="fa fa-list"></i>
@@ -64,9 +64,9 @@
                                 </form>
 
                             </div>
-                            <!-- End Card Header -->
+                            {{-- End Card Header --}}
 
-                            <!-- Card Body -->
+                            {{-- Card Body --}}
                             <div class="card-body">
                                 <table class="table table-bordered" id="transaction">
                                     @if (Session::has('success'))
@@ -108,26 +108,26 @@
                                     </tfoot>
                                 </table>
                             </div>
-                            <!-- End Card Body -->
+                            {{-- End Card Body --}}
                         </div>
-                        <!-- End Card -->
+                        {{-- End Card --}}
                     </div>
                 </div>
             </div>
         </section>
-        <!-- End Form Section -->
+        {{-- End Form Section --}}
 
     </div>
 </section>
-<!-- End Section of List Trasnsactions -->
+{{-- End Section of List Trasnsactions --}}
 
 
-<!-- Footer Section -->
+{{-- Footer Section --}}
 @include('footer')
-<!-- End Footer Section -->
+{{-- End Footer Section --}}
 
 
-<!-- SCRIPT -->
+{{-- SCRIPT --}}
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
@@ -177,4 +177,4 @@
 
     });
 </script>
-<!-- END SCRIPT -->
+{{-- END SCRIPT --}}
