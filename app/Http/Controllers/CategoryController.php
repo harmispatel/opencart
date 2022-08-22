@@ -294,7 +294,7 @@ class CategoryController extends Controller
         //     $request->file('image')->move(public_path('admin/category'), $imgname);
         //     $categoryurl = $currentURL . '/public/admin/category/';
         // }
-        $catdetail->image =$request->image;
+        $catdetail->image = isset($request->image) ? $request->image : '';
 
         // Insert Banner Image
         // if ($request->hasFile('banner')) {
@@ -303,7 +303,7 @@ class CategoryController extends Controller
         //     $bannerurl = $currentURL . '/public/admin/category/banner/';
         //     $catdetail->img_banner = $bannerurl . $bannerimgname;
         // }
-        $catdetail->img_banner = $request->banner;
+        $catdetail->img_banner = isset($request->banner) ? $request->banner : '';
         $days = isset($request->availibleday) ? $request->availibleday : 0;
         if ($days != 0) {
             $availibleday = implode(",", $days);

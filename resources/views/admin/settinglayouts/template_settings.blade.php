@@ -343,27 +343,21 @@ $openhour_data = openhoursActive();
                                                         </td>
                                                     </tr>
 
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <th class="align-middle">
                                                             <label>Menu Background Color</label>
                                                         </th>
                                                         <td>
-                                                            <input type="color"
-                                                                name="header_setting[menu_background_color]"
-                                                                value="{{ isset($get_header_settings['menu_background_color']) ? $get_header_settings['menu_background_color'] : '' }}"
-                                                                class="form-control">
+                                                            <input type="color" name="header_setting[menu_background_color]" value="{{ isset($get_header_settings['menu_background_color']) ? $get_header_settings['menu_background_color'] : '' }}" class="form-control">
                                                         </td>
-                                                    </tr>
+                                                    </tr> --}}
 
                                                     <tr>
                                                         <th class="align-middle">
                                                             <label>Menu Text Color</label>
                                                         </th>
                                                         <td>
-                                                            <input type="color"
-                                                                name="header_setting[menu_text_color]"
-                                                                value="{{ isset($get_header_settings['menu_text_color']) ? $get_header_settings['menu_text_color'] : '' }}"
-                                                                class="form-control">
+                                                            <input type="color" name="header_setting[menu_text_color]" value="{{ isset($get_header_settings['menu_text_color']) ? $get_header_settings['menu_text_color'] : '' }}" class="form-control">
                                                         </td>
                                                     </tr>
 
@@ -372,10 +366,7 @@ $openhour_data = openhoursActive();
                                                             <label>Menu Button Color</label>
                                                         </th>
                                                         <td>
-                                                            <input type="color"
-                                                                name="header_setting[menu_button_color]"
-                                                                value="{{ isset($get_header_settings['menu_button_color']) ? $get_header_settings['menu_button_color'] : '' }}"
-                                                                class="form-control">
+                                                            <input type="color" name="header_setting[menu_button_color]" value="{{ isset($get_header_settings['menu_button_color']) ? $get_header_settings['menu_button_color'] : '' }}" class="form-control">
                                                         </td>
                                                     </tr>
 
@@ -981,14 +972,14 @@ $openhour_data = openhoursActive();
                                                                     </td>
                                                                 </tr>
 
-                                                                <tr>
+                                                                {{-- <tr>
                                                                     <th width="250" class="align-middle">
                                                                         <label>Background Hover Color</label>
                                                                     </th>
                                                                     <td>
                                                                         <input type="color" value="{{ isset($htmlboxs['about_background_hover_color']) ? $htmlboxs['about_background_hover_color'] : '' }}" name="about_setting[{{ $loop->iteration }}][about_background_hover_color]" class="form-control">
                                                                     </td>
-                                                                </tr>
+                                                                </tr> --}}
                                                             @endif
 
 
@@ -1134,14 +1125,14 @@ $openhour_data = openhoursActive();
                                                             </td>
                                                         </tr>
 
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <th width="250" class="align-middle">
                                                                 <label>Background Hover Color</label>
                                                             </th>
                                                             <td>
                                                                 <input type="color" value="" name="about_setting[0][about_background_hover_color]" class="form-control">
                                                             </td>
-                                                        </tr>
+                                                        </tr> --}}
 
 
 
@@ -1324,7 +1315,7 @@ $openhour_data = openhoursActive();
                                                             </td>
                                                         </tr>
 
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <th width="250" class="align-middle">
                                                                 <label>Background Hover Color</label>
                                                             </th>
@@ -1334,7 +1325,7 @@ $openhour_data = openhoursActive();
                                                                     value="{{ isset($get_popularfood_settings['popularfood_background_hover_color']) ? $get_popularfood_settings['popularfood_background_hover_color'] : '' }}"
                                                                     class="form-control">
                                                             </td>
-                                                        </tr>
+                                                        </tr> --}}
                                                     @endif
 
                                                     @if ($popularfood_background_option == 1)

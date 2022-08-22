@@ -110,9 +110,6 @@ class LayoutController extends Controller
 
         // Get All Sliders
         $htmlbox = HtmlBox::with(['hasoneaboutActive'])->where('store_id',$current_store_id)->orderBy('id','ASC')->get();
-        // echo '<pre>';
-        // print_r($htmlbox->toArray());
-        // exit();
 
         // Get General Settings
         $get_genearl_settings = Settings::select('value')->where('store_id',$current_store_id)->where('key','general_settings')->first();
@@ -170,9 +167,6 @@ class LayoutController extends Controller
     // Update Template Settings
     function updateTemplateSetting(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
         // Get Current URL
         $currentURL = public_url();
 
