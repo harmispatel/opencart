@@ -141,11 +141,6 @@
                         {
                             background-color: <?php echo (isset($store_about_settings['about_background_color'])) ? $store_about_settings['about_background_color'] : '' ?>;
                         }
-
-                        .welcome:hover
-                        {
-                            background-color: <?php echo (isset($store_about_settings['about_background_hover_color'])) ? $store_about_settings['about_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -174,11 +169,6 @@
                         .about-us
                         {
                             background-color: <?php echo (isset($store_about_settings['about_background_color'])) ? $store_about_settings['about_background_color'] : '' ?>;
-                        }
-
-                        .about-us:hover
-                        {
-                            background-color: <?php echo (isset($store_about_settings['about_background_hover_color'])) ? $store_about_settings['about_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -209,11 +199,6 @@
                         {
                             background-color: <?php echo (isset($store_about_settings['about_background_color'])) ? $store_about_settings['about_background_color'] : '' ?>;
                         }
-
-                        .who-are-we:hover
-                        {
-                            background-color: <?php echo (isset($store_about_settings['about_background_hover_color'])) ? $store_about_settings['about_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -242,11 +227,6 @@
                         .who-are-we-v4
                         {
                             background-color: <?php echo (isset($store_about_settings['about_background_color'])) ? $store_about_settings['about_background_color'] : '' ?>;
-                        }
-
-                        .who-are-we-v4:hover
-                        {
-                            background-color: <?php echo (isset($store_about_settings['about_background_hover_color'])) ? $store_about_settings['about_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -285,11 +265,6 @@
                         {
                             background-color: <?php echo (isset($store_about_settings['about_background_color'])) ? $store_about_settings['about_background_color'] : '' ?>;
                         }
-
-                        .who-are-we-v5:hover
-                        {
-                            background-color: <?php echo (isset($store_about_settings['about_background_hover_color'])) ? $store_about_settings['about_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -318,11 +293,6 @@
                         .who-are-we-v6
                         {
                             background-color: <?php echo (isset($store_about_settings['about_background_color'])) ? $store_about_settings['about_background_color'] : '' ?>;
-                        }
-
-                        .who-are-we-v6:hover
-                        {
-                            background-color: <?php echo (isset($store_about_settings['about_background_hover_color'])) ? $store_about_settings['about_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -359,11 +329,6 @@
                         {
                             background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_color'])) ? $store_bestcategory_settings['bestcategory_background_color'] : '' ?>;
                         }
-
-                        .categories:hover
-                        {
-                            background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_hover_color'])) ? $store_bestcategory_settings['bestcategory_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -392,11 +357,6 @@
                         .categories-v2
                         {
                             background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_color'])) ? $store_bestcategory_settings['bestcategory_background_color'] : '' ?>;
-                        }
-
-                        .categories-v2:hover
-                        {
-                            background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_hover_color'])) ? $store_bestcategory_settings['bestcategory_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -427,11 +387,6 @@
                         {
                             background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_color'])) ? $store_bestcategory_settings['bestcategory_background_color'] : '' ?>;
                         }
-
-                        .best-categories-icon:hover
-                        {
-                            background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_hover_color'])) ? $store_bestcategory_settings['bestcategory_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -460,11 +415,6 @@
                         .best-categories-v4
                         {
                             background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_color'])) ? $store_bestcategory_settings['bestcategory_background_color'] : '' ?>;
-                        }
-
-                        .best-categories-v4:hover
-                        {
-                            background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_hover_color'])) ? $store_bestcategory_settings['bestcategory_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -496,11 +446,6 @@
                         {
                             background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_color'])) ? $store_bestcategory_settings['bestcategory_background_color'] : '' ?>;
                         }
-
-                        .best-categories-v5:hover
-                        {
-                            background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_hover_color'])) ? $store_bestcategory_settings['bestcategory_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -530,11 +475,6 @@
                         .popular-categories-v6
                         {
                             background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_color'])) ? $store_bestcategory_settings['bestcategory_background_color'] : '' ?>;
-                        }
-
-                        .popular-categories-v6:hover
-                        {
-                            background-color: <?php echo (isset($store_bestcategory_settings['bestcategory_background_hover_color'])) ? $store_bestcategory_settings['bestcategory_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -570,12 +510,7 @@
                     <style>
                         .popular-foods
                         {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?>;
-                        }
-
-                        .popular-foods:hover
-                        {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_hover_color'])) ? $store_popularfood_settings['popularfood_background_hover_color'] : '' ?>;
+                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?> !important;
                         }
                     </style>
         <?php
@@ -605,12 +540,7 @@
                     <style>
                         .popular-foods-v2
                         {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?>;
-                        }
-
-                        .popular-foods-v2:hover
-                        {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_hover_color'])) ? $store_popularfood_settings['popularfood_background_hover_color'] : '' ?>;
+                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?> !important;
                         }
                     </style>
         <?php
@@ -640,12 +570,7 @@
                     <style>
                         .popular-foods-v3
                         {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?>;
-                        }
-
-                        .popular-foods-v3:hover
-                        {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_hover_color'])) ? $store_popularfood_settings['popularfood_background_hover_color'] : '' ?>;
+                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?> !important;
                         }
                     </style>
         <?php
@@ -675,13 +600,9 @@
                     <style>
                         .popular-foods-v4
                         {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?>;
+                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?> !important;
                         }
 
-                        .popular-foods-v4:hover
-                        {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_hover_color'])) ? $store_popularfood_settings['popularfood_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -710,12 +631,7 @@
                     <style>
                         .popular-foods-v5
                         {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?>;
-                        }
-
-                        .popular-foods-v5:hover
-                        {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_hover_color'])) ? $store_popularfood_settings['popularfood_background_hover_color'] : '' ?>;
+                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?> !important;
                         }
                     </style>
         <?php
@@ -745,12 +661,7 @@
                     <style>
                         .popular-foods-v6
                         {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?>;
-                        }
-
-                        .popular-foods-v6:hover
-                        {
-                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_hover_color'])) ? $store_popularfood_settings['popularfood_background_hover_color'] : '' ?>;
+                            background-color: <?php echo (isset($store_popularfood_settings['popularfood_background_color'])) ? $store_popularfood_settings['popularfood_background_color'] : '' ?> !important;
                         }
                     </style>
         <?php
@@ -788,11 +699,6 @@
                         {
                             background-color: <?php echo (isset($store_review_settings['review_background_color'])) ? $store_review_settings['review_background_color'] : '' ?>;
                         }
-
-                        .user-comments:hover
-                        {
-                            background-color: <?php echo (isset($store_review_settings['review_background_hover_color'])) ? $store_review_settings['review_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -822,11 +728,6 @@
                         .user-comments-v2
                         {
                             background-color: <?php echo (isset($store_review_settings['review_background_color'])) ? $store_review_settings['review_background_color'] : '' ?>;
-                        }
-
-                        .user-comments-v2:hover
-                        {
-                            background-color: <?php echo (isset($store_review_settings['review_background_hover_color'])) ? $store_review_settings['review_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -858,11 +759,6 @@
                         {
                             background-color: <?php echo (isset($store_review_settings['review_background_color'])) ? $store_review_settings['review_background_color'] : '' ?>;
                         }
-
-                        .user-comments-v3:hover
-                        {
-                            background-color: <?php echo (isset($store_review_settings['review_background_hover_color'])) ? $store_review_settings['review_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -892,11 +788,6 @@
                         .user-comments-v4
                         {
                             background-color: <?php echo (isset($store_review_settings['review_background_color'])) ? $store_review_settings['review_background_color'] : '' ?>;
-                        }
-
-                        .user-comments-v4:hover
-                        {
-                            background-color: <?php echo (isset($store_review_settings['review_background_hover_color'])) ? $store_review_settings['review_background_hover_color'] : '' ?>;
                         }
                     </style>
         <?php
@@ -928,11 +819,6 @@
                         {
                             background-color: <?php echo (isset($store_review_settings['review_background_color'])) ? $store_review_settings['review_background_color'] : '' ?>;
                         }
-
-                        .user-comments-v5:hover
-                        {
-                            background-color: <?php echo (isset($store_review_settings['review_background_hover_color'])) ? $store_review_settings['review_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -963,11 +849,6 @@
                         {
                             background-color: <?php echo (isset($store_review_settings['review_background_color'])) ? $store_review_settings['review_background_color'] : '' ?>;
                         }
-
-                        .user-comments-v6:hover
-                        {
-                            background-color: <?php echo (isset($store_review_settings['review_background_hover_color'])) ? $store_review_settings['review_background_hover_color'] : '' ?>;
-                        }
                     </style>
         <?php
                 }
@@ -989,11 +870,6 @@
                     {
                         background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
                     }
-
-                    .reservation:hover
-                    {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_hover_color'])) ? $store_reservation_settings['reservation_background_hover_color'] : '' ?>;
-                    }
                 </style>
         <?php
             }
@@ -1008,11 +884,6 @@
                     .reservation-v2
                     {
                         background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
-                    }
-
-                    .reservation-v2:hover
-                    {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_hover_color'])) ? $store_reservation_settings['reservation_background_hover_color'] : '' ?>;
                     }
                 </style>
         <?php
@@ -1029,11 +900,6 @@
                     {
                         background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
                     }
-
-                    .reservation-v3:hover
-                    {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_hover_color'])) ? $store_reservation_settings['reservation_background_hover_color'] : '' ?>;
-                    }
                 </style>
         <?php
             }
@@ -1048,11 +914,6 @@
                     .reservation-v4
                     {
                         background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
-                    }
-
-                    .reservation-v4:hover
-                    {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_hover_color'])) ? $store_reservation_settings['reservation_background_hover_color'] : '' ?>;
                     }
                 </style>
         <?php
@@ -1069,11 +930,6 @@
                     {
                         background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
                     }
-
-                    .reservation-v5:hover
-                    {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_hover_color'])) ? $store_reservation_settings['reservation_background_hover_color'] : '' ?>;
-                    }
                 </style>
         <?php
             }
@@ -1088,11 +944,6 @@
                     .reservation-v6
                     {
                         background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
-                    }
-
-                    .reservation-v6:hover
-                    {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_hover_color'])) ? $store_reservation_settings['reservation_background_hover_color'] : '' ?>;
                     }
                 </style>
         <?php
