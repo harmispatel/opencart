@@ -330,9 +330,6 @@ class LayoutController extends Controller
 
         // Add & Update HTML BOX Settings
         $about_settings = $request->about_setting;
-        // echo '<pre>';
-        // print_r($about_settings);
-        // exit();
 
         if(isset($about_settings))
         {
@@ -343,7 +340,7 @@ class LayoutController extends Controller
                 $about_background_option =  isset($htmlbox_settings['about_background_option']) ? $htmlbox_settings['about_background_option'] : '';
                 $about_image =  isset($htmlbox_settings['about_image']) ? $htmlbox_settings['about_image'] : '';
                 $about_background_image =  isset($htmlbox_settings['about_background_image']) ? $htmlbox_settings['about_background_image'] : '';
-                $about_background_hover_color =  isset($htmlbox_settings['about_background_hover_color']) ? $htmlbox_settings['about_background_hover_color'] : '';
+                // $about_background_hover_color =  isset($htmlbox_settings['about_background_hover_color']) ? $htmlbox_settings['about_background_hover_color'] : '';
                 $about_background_image_position =  isset($htmlbox_settings['about_background_image_position']) ? $htmlbox_settings['about_background_image_position'] : '';
                 $about_title =  isset($htmlbox_settings['about_title']) ? $htmlbox_settings['about_title'] : '';
                 $about_description =  isset($htmlbox_settings['about_description']) ? $htmlbox_settings['about_description'] : '';
@@ -363,9 +360,9 @@ class LayoutController extends Controller
                         $about_setting_htmlbox->about_background_image = $about_background_image;
                     }
 
-                    if (!empty($about_background_hover_color) || $about_background_hover_color != '') {
-                        $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
-                    }
+                    // if (!empty($about_background_hover_color) || $about_background_hover_color != '') {
+                    //     $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
+                    // }
 
                     if (!empty($about_background_color) || $about_background_color != '') {
                         $about_setting_htmlbox->about_background_color = $about_background_color;
@@ -384,7 +381,7 @@ class LayoutController extends Controller
                     $about_setting_htmlbox->about_background_option = $about_background_option;
                     $about_setting_htmlbox->about_image = $about_image;
                     $about_setting_htmlbox->about_background_image = $about_background_image;
-                    $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
+                    // $about_setting_htmlbox->about_background_hover_color = $about_background_hover_color;
                     $about_setting_htmlbox->about_background_image_position = $about_background_image_position;
                     $about_setting_htmlbox->about_title = $about_title;
                     $about_setting_htmlbox->about_description = $about_description;
