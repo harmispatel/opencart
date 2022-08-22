@@ -94,7 +94,7 @@ $demo = gallary_redirect_url();
                                         @endif
                                     </div>
                                     <div class="form-group">
-                                        <label for="image"><span class="text-danger">*</span> Image</label>
+                                        <label for="image">Image</label>
                                         <div class="input-group">
                                             <span class="input-group-btn">
                                               <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">

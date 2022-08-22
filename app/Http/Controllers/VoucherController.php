@@ -303,7 +303,7 @@ class VoucherController extends Controller
         // $request->image->move(public_path('admin/voucherthemes'),$imageName);
 
         $vouchertheme = new Voucherthemes;
-        $vouchertheme->image = $request->image;
+        $vouchertheme->image = isset($request->image) ? $request->image : '';
         $vouchertheme->save();
 
         $Voucherthemename = new VoucherThemenames;
