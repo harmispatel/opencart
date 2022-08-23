@@ -209,8 +209,8 @@ $demo = gallary_redirect_url();
                                                     <input type="radio" name="options" value="1" onclick="$('#opt-btn').show();$('#groupTopping').show()" {{ ($topcatoption->enable_option == 1) ? 'checked' : '' }}> Enable &nbsp;
                                                     <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide();$('#groupTopping').hide()" {{ ($topcatoption->enable_option == 0) ? 'checked' : '' }}> Disable
                                                 @else
-                                                    <input type="radio" name="options" value="1" onclick="$('#opt-btn').show();"> Enable &nbsp;
-                                                    <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide();" checked> Disable
+                                                    <input type="radio" name="options" value="1" onclick="$('#opt-btn').show();$('#groupTopping').show()"> Enable &nbsp;
+                                                    <input type="radio" name="options" value="0"  onclick="$('#opt-btn').hide();$('#groupTopping').hide()" checked> Disable
                                                 @endif
                                             </div>
                                         </div>
