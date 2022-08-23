@@ -160,7 +160,7 @@
             ?>
                         <style>
                             .welcome{
-                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
                                 background-size: cover;
                             }
                         </style>
@@ -189,7 +189,7 @@
             ?>
                         <style>
                             .about-us{
-                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
                                 background-size: cover;
                             }
                         </style>
@@ -218,7 +218,7 @@
             ?>
                         <style>
                             .who-are-we{
-                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
                                 background-size: cover;
                             }
                         </style>
@@ -247,7 +247,7 @@
             ?>
                         <style>
                             .who-are-we-v4{
-                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
                                 background-size: cover;
                             }
                         </style>
@@ -284,7 +284,7 @@
             ?>
                         <style>
                             .who-are-we-v5{
-                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
                                 background-size: cover;
                             }
                         </style>
@@ -313,7 +313,7 @@
             ?>
                         <style>
                             .who-are-we-v6{
-                                background: url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
+                                background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($about_settings_css['about_background_image'])) ? $about_settings_css['about_background_image'] : '' ?>") no-repeat center;
                                 background-size: cover;
                             }
                         </style>
@@ -804,7 +804,12 @@
 
             {{-- HTML BOX 2 --}}
             @if ($about_settings->about_layout_id == 2)
-                <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s">
+                {{-- <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s"> --}}
+                    @if ($about_settings->about_background_option == 1)
+                        <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s" style="background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url('{{ (isset($about_settings['about_background_image'])) ? $about_settings['about_background_image'] : '' }}') no-repeat center; background-size: cover;">
+                    @else
+                        <div class="about-us container wow animate__fadeInUp" data-wow-duration="1s">                
+                    @endif
                     <div class="row">
                         <div class="col-md-12 col-lg-6 img">
                             <img class="img-fluid" src="{{ isset($about_settings['about_image']) ? $about_settings['about_image'] : '' }}" />
@@ -837,7 +842,12 @@
 
             {{-- HTML BOX 3 --}}
             @if ($about_settings->about_layout_id == 3)
-                <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+                {{-- <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s"> --}}
+                    @if ($about_settings->about_background_option == 1)
+                        <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url('{{ (isset($about_settings['about_background_image'])) ? $about_settings['about_background_image'] : '' }}') no-repeat center; background-size: cover;">
+                    @else
+                        <section class="who-are-we pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">                
+                    @endif
                     <div class="container text-center">
                         <div class="default-title-v3">
                             <h3 class="title color-green">{{ isset($about_settings['about_title']) ? $about_settings['about_title'] : '' }}</h3>
@@ -851,7 +861,12 @@
 
             {{-- HTML BOX 4 --}}
             @if ($about_settings->about_layout_id == 4)
-                <section class="who-are-we-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+                {{-- <section class="who-are-we-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s"> --}}
+                    @if ($about_settings->about_background_option == 1)
+                        <section class="who-are-we-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url('{{ (isset($about_settings['about_background_image'])) ? $about_settings['about_background_image'] : '' }}') no-repeat center; background-size: cover;">
+                    @else
+                        <section class="who-are-we-v4 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">                
+                    @endif
                     <div class="container">
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-6">
@@ -872,7 +887,11 @@
 
             {{-- HTML BOX 5 --}}
             @if ($about_settings->about_layout_id == 5)
-                <section class="who-are-we-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">
+                @if ($about_settings->about_background_option == 1)
+                    <section class="who-are-we-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s" style="background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url('{{ (isset($about_settings['about_background_image'])) ? $about_settings['about_background_image'] : '' }}') no-repeat center; background-size: cover;">
+                @else
+                    <section class="who-are-we-v5 pt-75 pb-75 wow animate__fadeInUp" data-wow-duration="1s">                
+                @endif
                     <div class="container">
                         <div class="row">
                             <div class="col-sm-12 col-md-6">
@@ -898,7 +917,12 @@
 
             {{-- HTML BOX 6 --}}
             @if ($about_settings->about_layout_id == 6)
-                <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">
+                {{-- <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s"> --}}
+                    @if ($about_settings->about_background_option == 1)
+                        <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s" style="background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url('{{ (isset($about_settings['about_background_image'])) ? $about_settings['about_background_image'] : '' }}') no-repeat center; background-size: cover;">
+                    @else
+                        <section class="who-are-we-v6 pt-90 pb-90 wow animate__fadeInUp" data-wow-duration="1s">                
+                    @endif
                     <div class="container p-4">
                         <div style="height: 300px; overflow: hidden;" id="shopDescription">
                             <div class="default-title-v6">

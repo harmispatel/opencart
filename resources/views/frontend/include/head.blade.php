@@ -127,7 +127,7 @@
         ?>
                     <style>
                         .welcome{
-                            background: url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -156,7 +156,7 @@
         ?>
                     <style>
                         .about-us{
-                            background: url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -185,7 +185,7 @@
         ?>
                     <style>
                         .who-are-we{
-                            background: url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -214,7 +214,7 @@
         ?>
                     <style>
                         .who-are-we-v4{
-                            background: url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -251,7 +251,7 @@
         ?>
                     <style>
                         .who-are-we-v5{
-                            background: url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -280,7 +280,7 @@
         ?>
                     <style>
                         .who-are-we-v6{
-                            background: url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_about_settings['about_background_image'])) ? $store_about_settings['about_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -315,7 +315,7 @@
         ?>
                     <style>
                         .categories{
-                            background: url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -344,7 +344,7 @@
         ?>
                     <style>
                         .categories-v2{
-                            background: url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -373,7 +373,7 @@
         ?>
                     <style>
                         .best-categories-icon{
-                            background: url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -402,7 +402,7 @@
         ?>
                     <style>
                         .best-categories-v4{
-                            background: url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -432,7 +432,7 @@
                     <style>
                         .best-categories-v5
                         {
-                            background: url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -462,7 +462,7 @@
                     <style>
                         .popular-categories-v6
                         {
-                            background: url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_bestcategory_settings['bestcategory_background_image'])) ? $store_bestcategory_settings['bestcategory_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -498,7 +498,7 @@
                     <style>
                         .popular-foods
                         {
-                            background: url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
+                            background: linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -528,7 +528,7 @@
                     <style>
                         .popular-foods-v2
                         {
-                            background: url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -558,7 +558,7 @@
                     <style>
                         .popular-foods-v3
                         {
-                            background: url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -588,7 +588,7 @@
                     <style>
                         .popular-foods-v4
                         {
-                            background: url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -619,7 +619,7 @@
                     <style>
                         .popular-foods-v5
                         {
-                            background: url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -649,7 +649,7 @@
                     <style>
                         .popular-foods-v6
                         {
-                            background: url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_popularfood_settings['popularfood_background_image'])) ? $store_popularfood_settings['popularfood_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -685,7 +685,7 @@
                     <style>
                         .user-comments
                         {
-                            background: url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -715,7 +715,7 @@
                     <style>
                         .user-comments-v2
                         {
-                            background: url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -745,7 +745,7 @@
                     <style>
                         .user-comments-v3
                         {
-                            background: url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -775,7 +775,7 @@
                     <style>
                         .user-comments-v4
                         {
-                            background: url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -805,7 +805,7 @@
                     <style>
                         .user-comments-v5
                         {
-                            background: url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
@@ -835,7 +835,7 @@
                     <style>
                         .user-comments-v6
                         {
-                            background: url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
+                            background:linear-gradient(to right, rgba(255,255,255, 0.7) 0 100%), url("<?php echo (isset($store_review_settings['review_background_image'])) ? $store_review_settings['review_background_image'] : '' ?>") no-repeat center;
                             background-size: cover;
                         }
                     </style>
