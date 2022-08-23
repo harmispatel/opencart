@@ -789,7 +789,7 @@ class ProductController extends Controller
         }
         $product->product_icons = isset($product_icons) ? $product_icons : 0;
         $order_type = $request['order_type'];
-        $product->order_type = isset($order_type) ? $order_type : 0;
+        $product->order_type = isset($order_type) ? $order_type : '';
         $day = $request['day'];
         if (!empty($day))
         {

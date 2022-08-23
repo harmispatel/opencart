@@ -915,7 +915,7 @@ It's used for View Menu.
                                             <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
                                         </div>
                                     @else
-                                        <a type="button" class="btn checkbt" disabled  style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</a>
+                                        <a href="{{ route('checkout') }}" type="button" class="btn checkbt">Checkout</a>
                                         <div class="closed-now">
                                             <span class="closing-text" style="color: green !important;">We are open now!</span>
                                         </div>

@@ -1,10 +1,10 @@
-<!--
+{{--
     THIS IS HEADER Productedit PAGE FOR ADMIN PANEL
     ----------------------------------------------------------------------------------------------
     edit.blade.php
     This for Edit Product
     ----------------------------------------------------------------------------------------------
--->
+--}}
     @php
         $data = gallary_redirect_url();
     @endphp
@@ -189,18 +189,9 @@
                                                         <div class="mb-3" id="order_types">
                                                             <label for="order" class="form-label">Order Type</label>
                                                             <div>
-
-                                                                <input type="radio" name="order_type" value="both"
-                                                                    {{ (isset($product->order_type) ? $product->order_type : '' == 'both') ? 'checked' : '' }}>
-                                                                Both
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="radio" name="order_type" value="delivery"
-                                                                    {{ (isset($product->order_type) ? $product->order_type : '' == 'delivery') ? 'checked' : '' }}>
-                                                                Delivery
-                                                                Only &nbsp;&nbsp;&nbsp;&nbsp;
-                                                                <input type="radio" name="order_type" value="collection"
-                                                                    {{ (isset($product->order_type) ? $product->order_type : '' == 'collection') ? 'checked' : '' }}>
-                                                                Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <input type="radio" name="order_type" value="both" {{ ($product->order_type == 'both') ? "checked" : '' }}> Both&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <input type="radio" name="order_type" value="delivery" {{ ($product->order_type == 'delivery') ? "checked" : ''}}> Delivery Only &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                <input type="radio" name="order_type" value="collection" {{ ($product->order_type == 'collection') ? "checked" : ''  }}> Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
                                                             </div>
                                                         </div>
                                                         <hr>
