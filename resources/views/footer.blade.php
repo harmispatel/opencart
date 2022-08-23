@@ -122,7 +122,9 @@
             success: function (response) {
                 if(response.success == 1)
                 {
-                    location.reload();
+                    // location.reload();
+                    var url = "{{ route('dashboard') }}";
+                    location.href = url;
                 }
             }
         });
