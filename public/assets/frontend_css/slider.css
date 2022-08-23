@@ -615,6 +615,7 @@
 .home-slide-v5-swiper .swiper-slide img.img-fluid {
     width: 100%;
     height: 600px;
+    border-radius :30px;
 }
 
 .home-slide-v5 {

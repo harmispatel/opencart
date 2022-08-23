@@ -637,7 +637,7 @@
 
                 <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="border-radius:0 0 10px 10px!important;">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                        <img class="img-fluid" src="{{ $store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
                     <ul class="menu">
                         <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">
@@ -1118,7 +1118,7 @@
             <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s">
                 <div class="container">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt=" Logo" style="max-width: 130px;" />
+                        <img class="img-fluid" src="{{ $store_logo }}" alt=" Logo" style="max-width: 130px;" />
                     </a>
                     <ul class="menu">
                         <li class="{{ (request()->is('/')) ? 'active' : '' }}">
@@ -1184,7 +1184,7 @@
                         </div>
                     @elseif ($menu_topbar_left == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
-                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                            <img class="img-fluid" src="{{ $store_logo }}" alt="Logo" style="max-width: 130px;" />
                         </a>
                     @else
                         @if (!empty($userlogin))
@@ -1222,7 +1222,7 @@
                         </div>
                     @elseif ($menu_topbar_center == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
-                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                            <img class="img-fluid" src="{{ $store_logo }}" alt="Logo" style="max-width: 130px;" />
                         </a>
                     @else
                         @if (!empty($userlogin))
@@ -1260,7 +1260,7 @@
                         </div>
                     @elseif ($menu_topbar_right == 'main_logo')
                         <a class="logo" href="{{ route('home') }}">
-                            <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                            <img class="img-fluid" src="{{ $store_logo }}" alt="Logo" style="max-width: 130px;" />
                         </a>
                     @else
                         @if (!empty($userlogin))
@@ -1462,7 +1462,7 @@
                     </div>
 
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
+                        <img class="img-fluid" src="{{ $store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
                    
                     <div class="restaurant-status open wow animate__bounceInDown" data-wow-duration="1s" style="display: block;">
