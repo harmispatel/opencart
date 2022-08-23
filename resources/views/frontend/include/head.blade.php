@@ -868,7 +868,7 @@
                 <style>
                     .reservation
                     {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
+                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?> !important;
                     }
                 </style>
         <?php
@@ -883,7 +883,7 @@
                 <style>
                     .reservation-v2
                     {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
+                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?> !important;
                     }
                 </style>
         <?php
@@ -898,7 +898,7 @@
                 <style>
                     .reservation-v3
                     {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
+                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?> !important;
                     }
                 </style>
         <?php
@@ -913,7 +913,7 @@
                 <style>
                     .reservation-v4
                     {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
+                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?> !important;
                     }
                 </style>
         <?php
@@ -928,7 +928,7 @@
                 <style>
                     .reservation-v5
                     {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
+                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?> !important;
                     }
                 </style>
         <?php
@@ -943,7 +943,7 @@
                 <style>
                     .reservation-v6
                     {
-                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?>;
+                        background-color: <?php echo (isset($store_reservation_settings['reservation_background_color'])) ? $store_reservation_settings['reservation_background_color'] : '' ?> !important;
                     }
                 </style>
         <?php

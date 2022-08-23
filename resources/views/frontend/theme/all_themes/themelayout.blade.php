@@ -174,11 +174,6 @@
                             {
                                 background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
                             }
-
-                            .welcome:hover
-                            {
-                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
-                            }
                         </style>
             <?php
                     }
@@ -207,11 +202,6 @@
                             .about-us
                             {
                                 background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
-                            }
-
-                            .about-us:hover
-                            {
-                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
                             }
                         </style>
             <?php
@@ -242,11 +232,6 @@
                             {
                                 background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
                             }
-
-                            .who-are-we:hover
-                            {
-                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
-                            }
                         </style>
             <?php
                     }
@@ -275,11 +260,6 @@
                             .who-are-we-v4
                             {
                                 background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
-                            }
-
-                            .who-are-we-v4:hover
-                            {
-                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
                             }
                         </style>
             <?php
@@ -318,11 +298,6 @@
                             {
                                 background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
                             }
-
-                            .who-are-we-v5:hover
-                            {
-                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
-                            }
                         </style>
             <?php
                     }
@@ -351,11 +326,6 @@
                             .who-are-we-v6
                             {
                                 background-color: <?php echo (isset($about_settings_css['about_background_color'])) ? $about_settings_css['about_background_color'] : '' ?>;
-                            }
-
-                            .who-are-we-v6:hover
-                            {
-                                background-color: <?php echo (isset($about_settings_css['about_background_hover_color'])) ? $about_settings_css['about_background_hover_color'] : '' ?>;
                             }
                         </style>
             <?php
