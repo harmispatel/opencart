@@ -541,7 +541,7 @@ class CategoryController extends Controller
         $topcatoption = ToppingCatOption::where('id_category', $id)->first();
 
         // Get Topping Size
-        $toppingsizes = ToppingSize::where('id_category', $id)->get();
+        $toppingsizes = ToppingSize::where('id_category', $id)->orderBy('short_order','ASC')->get();
 
         // Get Category Layout
         $category_layout = CategoryLayout::select('layout_id', 'name')->get();
