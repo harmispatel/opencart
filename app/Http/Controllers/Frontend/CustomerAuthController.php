@@ -43,20 +43,24 @@ class CustomerAuthController extends Controller
             if (session()->has('userid')) {
                 if (session()->has('cart1')) {
                     $usercart = getuserCart(session()->get('userid'));
-
-                    if (isset($usecart) || !empty($usercart)) {
-                        $session_array = session()->get('cart1');
-                        $merge_cart = array_push($usercart, $session_array);
-                    } else {
-                        $cart = session()->get('cart1');
-                        $serial = serialize($cart);
+                    // $NewArray = array();
+                    $session_array = session()->get('cart1');
+                    $NewArray= array_merge_recursive($usercart,$session_array);
+                    // $merge_cart = array_add($session_array,$usercart);
+                    echo '<pre>';
+                    print_r($usercart);
+                    exit();
+                    // if (isset($usecart) || !empty($usercart)) {
+                    // } else {
+                    //     $cart = session()->get('cart1');
+                        $serial = serialize($NewArray);
                         $base64 = base64_encode($serial);
                         $user_id = session()->get('userid');
                         $user = Customer::find($user_id);
                         $user->cart = $base64;
                         $user->update();
                         session()->forget('cart1');
-                    }
+                    // }
                 }
             }
 
