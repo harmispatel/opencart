@@ -1026,6 +1026,14 @@
     @include('frontend.include.script')
     {{-- End JS --}}
 
+    @php
+        if(empty($mycart['size'])){
+            $emptycarturl = route('cart');
+            echo "<script type='text/javascript'>
+                    window.location.replace('".$emptycarturl."');
+                </script>";
+        }
+    @endphp
 
     {{-- Custom JS --}}
     <script type="text/javascript">

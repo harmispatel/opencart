@@ -82,7 +82,7 @@ class ProductController extends Controller
         $html = '';
         $thead = '';
         $header = ToppingSize::where('id_category', $category_id)->count();
-        $headers = ToppingSize::where('id_category', $category_id)->get();
+        $headers = ToppingSize::where('id_category', $category_id)->orderBy('short_order','ASC')->get();
 
         if ($header > 0) {
             $head_count = $header + 1;
@@ -492,7 +492,7 @@ class ProductController extends Controller
 
         $data = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $category_id)->orderBy('product_id','DESC')->get();
 
-        $headers = ToppingSize::where('id_category', $category_id)->get();
+        $headers = ToppingSize::where('id_category', $category_id)->orderBy('short_order','ASC')->get();
         $head_count = count($headers) + 1;
         $html = '';
         $html .= '<tr>';
@@ -584,13 +584,10 @@ class ProductController extends Controller
         }
 
 
-        // echo '<pre>';
-        // print_r($posts->toArray());
-        // exit();
         $data = array();
         $data1 = array();
 
-        $headers = ToppingSize::where('id_category',$category_id)->get();
+        $headers = ToppingSize::where('id_category',$category_id)->orderBy('short_order','ASC')->get();
 
         if ($posts) {
            $i=1; foreach ($posts as $post) {
@@ -598,7 +595,10 @@ class ProductController extends Controller
                 // $name = isset($post->name) ? $post->name : '';
                 $status = isset($post->status) ? $post->status : '';
                 $edit_url = route('editproduct', $post->product_id);
-                $sizes = ToppingProductPriceSize::where('id_product', $post->hasOneProduct->product_id)->get();
+                $sizes = ToppingProductPriceSize::where('id_product', $post->hasOneProduct->product_id)->OrderBy('id_product_price_size', 'ASC')->get();
+                // echo '<pre>';
+                // print_r(count($sizes));
+
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
                 $data['product_id'] = $product_id;
@@ -619,11 +619,17 @@ class ProductController extends Controller
                             $html.='<tr>';
                                 $html.='<td style="width:50%;">'.$post->hasOneProduct->price.'</td>';
                                  if (count($sizes) > 0) {
+
                                     foreach ($sizes as $value1) {
-                                        $header1 = ToppingSize::where('id_size',$value1->id_size)->orderBy('short_order', 'ASC')->first();
-                                        if(!empty($header1))
+                                        $header1 = ToppingSize::where('id_size',$value1->id_size)->orderBy('short_order','ASC')->first();
+                                        // $header1 = ToppingSize::where('id_category',$category_id)->first();
+
+                                        if(!empty($value1->price) || $value1->price != 0.00){
+                                            $html.= '<td>' . $value1->price . '</td>';
+                                        }
+                                        else
                                         {
-                                                $html.= '<td>' . $value1->price . '</td>';
+                                            $html.= '<td>-</td>';
                                         }
                                     }
                                 }else{
@@ -679,12 +685,12 @@ class ProductController extends Controller
     // Add Option
     public function addOptionValue(Request $request)
     {
-        echo '<pre>';
-        print_r($request->optionTypeId);
-        exit();
+        // echo '<pre>';
+        // print_r($request->optionTypeId);
+        // exit();
         $option_value = DB::table('oc_option_value_description')->where('option_id', $request->optionTypeId)->get();
-        print_r($option_value);
-        die;
+        // print_r($option_value);
+        // die;
         return response()->json([
             'option_value' => $option_value,
         ]);
@@ -727,7 +733,7 @@ class ProductController extends Controller
 
         $prod_id = isset($product->category_id) ? $product->category_id : '';
 
-        $header = ToppingSize::where('id_category', $prod_id)->get();
+        $header = ToppingSize::where('id_category', $prod_id)->orderBy('short_order','ASC')->get();
 
         $price = ToppingProductPriceSize::where('id_product', $id)->get();
         $current_store_id = currentStoreId();

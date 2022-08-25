@@ -2782,8 +2782,8 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
             $data['col_price'] = $col_price;
         }
 
-        $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
-        $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+        $data['main_price'] = isset($product->hasOneToppingProductPriceSize['price']) ? $product->hasOneToppingProductPriceSize['price'] : 0;
+        $data['size'] = isset($product->hasOneToppingProductPriceSize->hasOneToppingSize['size']) ? $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'] : '';
 
         if($is_topping == 1)
         {
@@ -2953,7 +2953,7 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
             $data['col_price'] = $col_price;
         }
         $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
-        $data['size'] = $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'];
+        $data['size'] = isset($product->hasOneToppingProductPriceSize->hasOneToppingSize['size']);
 
         if($is_topping == 1)
         {
