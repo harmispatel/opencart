@@ -281,7 +281,11 @@
                         @if ($store_open_close == 'open' && $minimum_spend['min_spend'] <= $total)
                             <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
                         @else
-                            <button class="btn" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                            @if ($userdeliverytype == 'collection')
+                                <a href="{{ route('checkout') }}"><button class="btn">Checkout</button></a>
+                            @else
+                                <button class="btn" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
+                            @endif
                         @endif
                     </div>
                 @else
