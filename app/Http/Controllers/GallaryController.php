@@ -9,6 +9,13 @@ use App\Models\Settings;
 
 class GallaryController extends Controller
 {
+
+    public function index()
+    {
+        return view('admin.gallary.upload_gallary');
+    }
+
+
     // Function of Gallary Settings
     public function gallarysettings()
     {
@@ -101,10 +108,10 @@ class GallaryController extends Controller
 
 
     // Function of Gallary
-    public function uploadgallary()
-    {
-        return view('vendor.laravel-filemanager.index');
-    }
+    // public function uploadgallary()
+    // {
+    //     return view('vendor.laravel-filemanager.index');
+    // }
 
 
     // Function of Store new Images for gallary
@@ -121,11 +128,18 @@ class GallaryController extends Controller
 
         $images = isset($request->image) ? $request->image : '';
 
+        if($user_group_id == 1)
+        {
+            Gallary::where('store_id',$current_store_id)->delete();
+        }
+        else{
+            Gallary::where('store_id',$user_shop_id)->delete();
+        }
+
         if($images != '' || !empty($images))
         {
             if($user_group_id == 1)
             {
-                Gallary::where('store_id',$current_store_id)->delete();
 
                 foreach($images as $key => $image)
                 {
@@ -142,7 +156,7 @@ class GallaryController extends Controller
             }
             else
             {
-                Gallary::where('store_id',$user_shop_id)->delete();
+
 
                 foreach($images as $key => $image)
                 {

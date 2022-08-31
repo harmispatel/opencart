@@ -380,10 +380,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('option', [OptionController::class, 'index'])->name('option');
 
 
+    Route::get('uploadgallary', [GallaryController::class, 'index'])->name('uploadgallary');
+
+
     //Upload Gallary
-    Route::group(['prefix' => 'uploadgallary','as'=>'n','middleware' => ['web']], function (){
-        \UniSharp\LaravelFilemanager\Lfm::routes();
-    });
+    // Route::group(['prefix' => 'uploadgallary','as'=>'n','middleware' => ['web']], function (){
+    //     \UniSharp\LaravelFilemanager\Lfm::routes();
+    // });
 
     // Route::group(['prefix' => 'addproduct','as'=>'n','middleware' => ['web']], function (){
     //     \UniSharp\LaravelFilemanager\Lfm::routes();
