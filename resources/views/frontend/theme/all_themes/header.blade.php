@@ -99,7 +99,7 @@
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += $mycart['col_price'] * $mycart['quantity'];
+                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
                 }
                 else
                 {

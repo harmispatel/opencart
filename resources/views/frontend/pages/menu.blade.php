@@ -284,6 +284,7 @@ It's used for View Menu.
                                                 $product = getproduct($front_store_id, $cat_id);
                                                 $catvalue = strtolower($value->hasOneCategory->name);
                                                 $get_cat_top_status = getCatTopStatus($cat_id);
+
                                             @endphp
 
                                             @if(!empty($available_day) || $available_day != '')
@@ -300,7 +301,7 @@ It's used for View Menu.
                                                                 @foreach ($product as $values)
                                                                     @php
                                                                         $product_available_day = isset($values->hasOneProduct['availibleday']) ? explode(',',$values->hasOneProduct['availibleday']) : '';
-                                                                        if($get_cat_top_status == 1)
+                                                                        if($get_cat_top_status['enable_option'] == 1)
                                                                         {
                                                                             $proID = isset($values->product_id) ? $values->product_id : 0;
                                                                             $get_product_top_opt = getProductTopOpt($proID);
@@ -364,7 +365,7 @@ It's used for View Menu.
                                                                                                                 </div>
                                                                                                                 <div class="col-md-7">
                                                                                                                     @if($store_open_close == 'open')
-                                                                                                                        @if ($get_cat_top_status == 1)
+                                                                                                                        @if ($get_cat_top_status['enable_option'] == 1)
                                                                                                                             @if ($setsizeprice == 0)
                                                                                                                                 <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
                                                                                                                                     <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
@@ -388,12 +389,15 @@ It's used for View Menu.
                                                                                                                                                         @csrf
                                                                                                                                                         @foreach ($get_product_top_opt as $proTop)
                                                                                                                                                             @php
+                                                                                                                                                                $topcount = $loop->iteration;
                                                                                                                                                                 $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
                                                                                                                                                                 $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
                                                                                                                                                                 $top_pro_id = $proTop->id;
                                                                                                                                                                 $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
 
                                                                                                                                                                 $get_sub_topping = getSubTopping($id_group_topping);
+
+                                                                                                                                                                $toppingreq = unserialize($get_cat_top_status->group);  // required
 
                                                                                                                                                             @endphp
 
@@ -408,6 +412,7 @@ It's used for View Menu.
                                                                                                                                                                         data-bs-parent="#accordionExample{{ $top_pro_id }}">
                                                                                                                                                                         <div class="accordion-body">
                                                                                                                                                                             @if ($typeTopping == 'select')
+                                                                                                                                                                                {{-- <select class="form-control" name="select_top[]" {{ ($toppingreq[1]['set_require'] == 1) ? 'required' : ''}}>  required --}}
                                                                                                                                                                                 <select class="form-control" name="select_top[]">
                                                                                                                                                                                     @if (!empty($get_sub_topping) || $get_sub_topping != '')
                                                                                                                                                                                         <option value=""> -- --</option>
@@ -499,7 +504,7 @@ It's used for View Menu.
                                                                                                             </div>
                                                                                                             <div class="col-md-7">
                                                                                                                 @if($store_open_close == 'open')
-                                                                                                                    @if ($get_cat_top_status == 1)
+                                                                                                                    @if ($get_cat_top_status['enable_option'] == 1)
                                                                                                                         @if ($setprice != 0)
                                                                                                                             @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
 
@@ -520,6 +525,7 @@ It's used for View Menu.
                                                                                                                                                     @csrf
                                                                                                                                                     @foreach ($get_product_top_opt as $proTop)
                                                                                                                                                         @php
+
                                                                                                                                                             $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
                                                                                                                                                             $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
                                                                                                                                                             $top_pro_id = $proTop->id;
@@ -1075,7 +1081,7 @@ It's used for View Menu.
                     var chckbox = form_data.getAll('check_top');
                     var drpdwn = form_data.getAll('select_top[]');
 
-                    if(chckbox != '' && drpdwn != '')
+                    if(chckbox != '' || drpdwn != '')
                     {
                         $.ajax({
                             type: 'post',

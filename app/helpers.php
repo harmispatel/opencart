@@ -688,8 +688,8 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    // return 'http://192.168.1.116/opencart/';
-    return 'http://192.168.1.3/opencart/';
+    return 'http://192.168.1.116/opencart/';
+    // return 'http://192.168.1.3/opencart/';
     // return 'http://192.168.1.73/ECOMM/';
 }
 
@@ -2754,6 +2754,7 @@ function getuserCart($userId)
 // Function for Add to Cart Login User
 function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping, $checkbox)
 {
+
     $delivery_type = session()->get('flag_post_code');
 
     if(isset($cart))
@@ -2842,6 +2843,7 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
         else
         {
             $arr['size'][$sizeid] =$data;
+
         }
     }
     else
@@ -2863,6 +2865,7 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
             $arr['withoutSize'][$productid] =$data;
         }
     }
+
 
 
 
@@ -2953,7 +2956,7 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
             $data['col_price'] = $col_price;
         }
         $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
-        $data['size'] = isset($product->hasOneToppingProductPriceSize->hasOneToppingSize['size']);
+        $data['size'] = isset($product->hasOneToppingProductPriceSize->hasOneToppingSize['size']) ? $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'] : '';
 
         if($is_topping == 1)
         {
@@ -3247,7 +3250,7 @@ function getCatTopStatus($catId)
     {
         $get_cat_top = ToppingCatOption::where('id_category',$catId)->first();
         $enable_option = isset($get_cat_top['enable_option']) ? $get_cat_top['enable_option'] : 0;
-        return $enable_option;
+        return $get_cat_top;
     }
 
     return $enable_option;

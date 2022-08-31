@@ -568,6 +568,9 @@ class CategoryController extends Controller
     // Function of Update Category
     public function categoryupdate(Request $request)
     {
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',

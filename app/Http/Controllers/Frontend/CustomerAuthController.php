@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
+use App\Models\Product;
+use App\Models\ToppingProductPriceSize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
@@ -14,7 +16,6 @@ class CustomerAuthController extends Controller
     // Function For Customer Login
     public function customerlogin(Request $request)
     {
-
         $request->validate([
             'Email' => 'required|email|exists:oc_customer,email',
             'Password' => 'required',
@@ -40,29 +41,85 @@ class CustomerAuthController extends Controller
             session()->put('username', $customername->firstname);
             session()->put('userid', $customername->customer_id);
 
-            if (session()->has('userid')) {
-                if (session()->has('cart1')) {
-                    $usercart = getuserCart(session()->get('userid'));
-                    // $NewArray = array();
-                    $session_array = session()->get('cart1');
-                    $NewArray= array_merge_recursive($usercart,$session_array);
-                    // $merge_cart = array_add($session_array,$usercart);
-                    echo '<pre>';
-                    print_r($usercart);
-                    exit();
-                    // if (isset($usecart) || !empty($usercart)) {
-                    // } else {
-                    //     $cart = session()->get('cart1');
-                        $serial = serialize($NewArray);
-                        $base64 = base64_encode($serial);
-                        $user_id = session()->get('userid');
-                        $user = Customer::find($user_id);
-                        $user->cart = $base64;
-                        $user->update();
-                        session()->forget('cart1');
-                    // }
-                }
-            }
+              if (session()->has('userid'))
+              {
+                  if (session()->has('cart1'))
+                  {
+                      // If user is login then get usercart
+                      $usercart = getuserCart(session()->get('userid'));
+                      // Get cart from session
+                      $session_array = session()->get('cart1');
+                      if(isset($usercart['size'])){
+
+                          foreach($session_array['size'] as $key=> $valus)
+                          {
+                              $size_id = $key;
+
+                              if(isset($usercart['size'][$size_id]))
+                              {
+                                  $usercart['size'][$size_id]['quantity'] = $usercart['size'][$size_id]['quantity'] + $session_array['size'][$size_id]['quantity'];
+                                  $usercart['size'][$size_id]['topping'] = isset($session_array['size'][$size_id]['topping']) ? $session_array['size'][$size_id]['topping'] : '';
+
+                                  unset($session_array['size'][$size_id]);
+                                  unset($session_array['size']['topping']);
+
+                                  if(isset($session_array['size']))
+                                  {
+                                      if(count($session_array['size']) == 0)
+                                      {
+                                          unset($session_array['size']);
+                                      }
+                                  }
+
+
+                                  // $NewArray= array_merge_recursive($usercart,$session_array);
+                                  $serial = serialize($usercart);
+                                  $base64 = base64_encode($serial);
+                                  $user_id = session()->get('userid');
+                                  $user = Customer::find($user_id);
+                                  $user->cart = $base64;
+                                  $user->update();
+                              }
+                              else
+                              {
+                                  array_push($usercart['size'],$session_array['size'][$size_id]);
+
+                                  unset($session_array['size'][$size_id]);
+                                  unset($session_array['size']['topping']);
+
+                                  if(isset($session_array['size']))
+                                  {
+                                      if(count($session_array['size']) == 0)
+                                      {
+                                          unset($session_array['size']);
+                                      }
+                                  }
+                                  $serial = serialize($usercart);
+                                  $base64 = base64_encode($serial);
+                                  $user_id = session()->get('userid');
+                                  $user = Customer::find($user_id);
+                                  $user->cart = $base64;
+                                  $user->update();
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                          $NewArray= array_merge_recursive($usercart,$session_array);
+                          $serial = serialize($NewArray);
+                          $base64 = base64_encode($serial);
+                          $user_id = session()->get('userid');
+                          $user = Customer::find($user_id);
+                          $user->cart = $base64;
+                          $user->update();
+
+                      }
+
+
+                  }
+              }
+
 
             if ($ajaxlogin == 1) {
                 return response()->json([

@@ -249,13 +249,16 @@ $demo = gallary_redirect_url();
                                                 @endphp
                                                 @if(!empty($group) || $group != '')
                                                     @foreach ($group as $key => $value)
-                                                        <div id="group_{{ $key }}" class="mt-2">
-                                                            <a class="btn btn-sm btn-danger"  onclick="$('#group_{{ $key }}').remove()"><i class="fa fa-trash"></i></a>
+                                                    @php
+                                                        $loopcount = $loop->iteration
+                                                    @endphp
+                                                        <div id="group_{{ $loopcount }}" class="mt-2">
+                                                            <a class="btn btn-sm btn-danger"  onclick="$('#group_{{ $loopcount }}').remove()"><i class="fa fa-trash"></i></a>
                                                             <table class="table mt-1 table-bordered">
                                                                 <tr>
                                                                     <th>Select Option Group</th>
                                                                     <td>
-                                                                        <select name="group[{{ $key }}][id_group_option]">
+                                                                        <select name="group[{{ $loopcount }}][id_group_option]">
                                                                             @foreach($optiongroups as $optiongroup)
                                                                                 <option value="{{ $optiongroup->id_topping }}" {{ ($optiongroup->id_topping == $value['id_group_option']) ? 'selected' : '' }}>{{ $optiongroup->name_topping }}</option>
                                                                             @endforeach
@@ -265,24 +268,24 @@ $demo = gallary_redirect_url();
                                                                 <tr>
                                                                     <th>Select Free Group</th>
                                                                     <td>
-                                                                        <input name="group[{{ $key }}][set_option]" type="radio" value="1" onclick="$('.list_{{ $key }}').hide();" {{ ($value['set_option'] == 1) ? 'checked' : '' }}> <label class="pr-3">Free</label>
+                                                                        <input name="group[{{ $loopcount }}][set_option]" type="radio" value="1" onclick="$('.list_{{ $loopcount }}').hide();" {{ ($value['set_option'] == 1) ? 'checked' : '' }}> <label class="pr-3">Free</label>
 
-                                                                        <input name="group[{{ $key }}][set_option]" type="radio" value="2" onclick="$('.list_{{ $key }}').hide();" {{ ($value['set_option'] == 2) ? 'checked' : '' }}> <label  class="pr-3">Main Price</label>
+                                                                        <input name="group[{{ $loopcount }}][set_option]" type="radio" value="2" onclick="$('.list_{{ $loopcount }}').hide();" {{ ($value['set_option'] == 2) ? 'checked' : '' }}> <label  class="pr-3">Main Price</label>
 
-                                                                        <input name="group[{{ $key }}][set_option]" type="radio" value="3" onclick="$('.list_{{ $key }}').show();" {{ ($value['set_option'] == 3) ? 'checked' : '' }}> <label  class="pr-3">Set Price</label>
+                                                                        <input name="group[{{ $loopcount }}][set_option]" type="radio" value="3" onclick="$('.list_{{ $loopcount }}').show();" {{ ($value['set_option'] == 3) ? 'checked' : '' }}> <label  class="pr-3">Set Price</label>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <th></th>
                                                                     <td>
-                                                                        <input type="radio" name="group[{{ $key }}][set_require]" value="1" {{ ($value['set_require'] == 1) ? 'checked' : '' }}> <label class="pr-3">Required</label>
+                                                                        <input type="radio" name="group[{{ $loopcount }}][set_require]" value="1" {{ ($value['set_require'] == 1) ? 'checked' : '' }}> <label class="pr-3">Required</label>
 
-                                                                        <input type="radio" name="group[{{ $key }}][set_require]" value="0" {{ ($value['set_require'] == 0) ? 'checked' : '' }}> <label class="pr-3">Optional</label>
+                                                                        <input type="radio" name="group[{{ $loopcount }}][set_require]" value="0" {{ ($value['set_require'] == 0) ? 'checked' : '' }}> <label class="pr-3">Optional</label>
                                                                     </td>
                                                                 </tr>
                                                             </table>
                                                             @if( ($value['set_option'] == 1) || ($value['set_option'] == 2))
-                                                                <table class="table mt-1 table-bordered list_{{ $key }}" style="display: none;">
+                                                                <table class="table mt-1 table-bordered list_{{ $loopcount }}" style="display: none;">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Size</th>
@@ -291,17 +294,17 @@ $demo = gallary_redirect_url();
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach($toppingsizes as $toppingsize)
-                                                                            <tr class="size_{{ $key }}">
+                                                                            <tr class="size_{{ $loopcount }}">
                                                                                 <td>{{ html_entity_decode($toppingsize->size) }}</td>
                                                                                 <td>
-                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
+                                                                                    <input type="text" class="form-control" name="group[{{ $loopcount }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach
                                                                     </tbody>
                                                                 </table>
                                                             @elseif($value['set_option'] == 3)
-                                                                <table class="table mt-1 table-bordered list_{{ $key }}">
+                                                                <table class="table mt-1 table-bordered list_{{ $loopcount }}">
                                                                     <thead>
                                                                         <tr>
                                                                             <th>Size</th>
@@ -310,10 +313,10 @@ $demo = gallary_redirect_url();
                                                                     </thead>
                                                                     <tbody>
                                                                         @foreach($toppingsizes as $toppingsize)
-                                                                            <tr class="size_{{ $key }}">
+                                                                            <tr class="size_{{ $loopcount }}">
                                                                                 <td>{{ html_entity_decode($toppingsize->size) }}</td>
                                                                                 <td>
-                                                                                    <input type="text" class="form-control" name="group[{{ $key }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
+                                                                                    <input type="text" class="form-control" name="group[{{ $loopcount }}][size_val][{{ $toppingsize->id_size }}]" value="{{ isset($value['size_val'][$toppingsize->id_size]) ? $value['size_val'][$toppingsize->id_size] : '' }}">
                                                                                 </td>
                                                                             </tr>
                                                                         @endforeach

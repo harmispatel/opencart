@@ -315,6 +315,7 @@ class MenuController extends Controller
             else
             {
                 $cart = getuserCart($userid);
+
                 addtoCartUser($request, $productid, $sizeid, $cart, $userid, $is_topping, $checkbox);
             }
         }
@@ -558,6 +559,18 @@ class MenuController extends Controller
                 else
                 {
                     unset($cart['size'][$sizeid]);
+
+                        if(count($cart['size']) == 0){
+                            unset($cart['size']);
+                        }
+
+                        if(isset($cart['withoutSize'])){
+
+                            unset($cart);
+                            if(count($cart['withoutSize']) == 0 && count($cart['size']) == 0){
+                            }
+                        }
+
                 }
             }
 
