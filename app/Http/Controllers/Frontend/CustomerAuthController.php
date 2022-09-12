@@ -47,6 +47,7 @@ class CustomerAuthController extends Controller
                   {
                       // If user is login then get usercart
                       $usercart = getuserCart(session()->get('userid'));
+
                       // Get cart from session
                       $session_array = session()->get('cart1');
                       if(isset($usercart['size'])){
@@ -59,6 +60,9 @@ class CustomerAuthController extends Controller
                               {
                                   $usercart['size'][$size_id]['quantity'] = $usercart['size'][$size_id]['quantity'] + $session_array['size'][$size_id]['quantity'];
                                   $usercart['size'][$size_id]['topping'] = isset($session_array['size'][$size_id]['topping']) ? $session_array['size'][$size_id]['topping'] : '';
+                                  $usercart['size'][$size_id]['col_price'] = isset($session_array['size'][$size_id]['col_price']) ? $session_array['size'][$size_id]['col_price'] : '';
+                                  $usercart['size'][$size_id]['main_price'] = isset($session_array['size'][$size_id]['main_price']) ? $session_array['size'][$size_id]['main_price'] : '';
+                                  $usercart['size'][$size_id]['del_price'] = isset($session_array['size'][$size_id]['del_price']) ? $session_array['size'][$size_id]['del_price'] : '';
 
                                   unset($session_array['size'][$size_id]);
                                   unset($session_array['size']['topping']);
