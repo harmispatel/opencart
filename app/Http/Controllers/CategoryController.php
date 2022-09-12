@@ -279,7 +279,8 @@ class CategoryController extends Controller
 
         // Validation Of Category Fields
         $request->validate([
-            'category' => 'required',
+            'category' => 'required|unique:oc_category_description,name',
+            "sortorder" =>'required|unique:oc_category,sort_order',
             // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 

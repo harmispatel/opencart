@@ -150,7 +150,10 @@
 
                                     <div class="form-group">
                                         <label for="sortorder" class="form-label">Sort Order</label>
-                                        <input type="text" class="form-control" name="sortorder" id="sortorder" value="0">
+                                        <input type="text" class="form-control {{ ($errors->has('sortorder')) ? 'is-invalid' : '' }}" name="sortorder" id="sortorder" value="0">
+                                        @if ($errors->has('sortorder'))
+                                            <div class="invalid-feedback">{{ $errors->first('sortorder') }}</div>
+                                        @endif
                                     </div>
 
                                 </div>

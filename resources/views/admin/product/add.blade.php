@@ -14,7 +14,13 @@
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-
+@php
+    if(session()->has('current_category_id')){
+        $current_category_id = session()->get('current_category_id');
+    }else{
+        $current_category_id = 0;
+    }
+@endphp
 {{-- Section of Add Product --}}
 <section>
     <div class="content-wrapper">
@@ -108,7 +114,7 @@
                                                 <select name="category" id="category" class="form-control {{ $errors->has('category') ? 'is-invalid' : '' }}">
                                                     <option disabled selected>select</option>
                                                     @foreach ($result['category'] as $category)
-                                                        <option value="{{ $category->category_id }}">
+                                                        <option value="{{ $category->category_id }}" {{ ($current_category_id == $category->category_id ) ? 'selected' : '' }}>
                                                             {{ $category->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -170,11 +176,11 @@
                                             <div class="mb-3">
                                                 <label class="form-label">Order Type</label>
                                                 <div>
-                                                    <input type="radio" name="order_type[]" value="both" > Both
+                                                    <input type="radio" name="order_type" value="both" > Both
                                                     &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="radio" name="order_type[]" value="delivery"> Delivery
+                                                    <input type="radio" name="order_type" value="delivery"> Delivery
                                                     Only &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    <input type="radio" name="order_type[]" value="collection">
+                                                    <input type="radio" name="order_type" value="collection">
                                                     Collection Only &nbsp;&nbsp;&nbsp;&nbsp;
                                                 </div>
                                             </div>

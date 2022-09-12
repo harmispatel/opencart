@@ -28,6 +28,10 @@ class ProductController extends Controller
     // Function of Product List
     function index()
     {
+
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
         // Check User Permission
         if (check_user_role(50) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
@@ -369,6 +373,11 @@ class ProductController extends Controller
                 $query->where('store_id', $current_store_id);
             })->get();
         }
+
+        // $cat_id =session()->get('current_category_id');
+
+        // $cat_ids =Category::where('category_id',$cat_id)->first();
+
         $product_icon = ProductIcons::select('*')->get();
         $result['manufacturer'] = $manufacturer;
         $result['category'] = $category;
@@ -395,7 +404,6 @@ class ProductController extends Controller
    //  Insert Products
     public function store(Request $request)
     {
-
 
         $request->validate([
             'product' => 'required',
@@ -430,9 +438,12 @@ class ProductController extends Controller
             $product_icons = implode(',', $icon);
             $product->product_icons = isset($product_icons) ? $product_icons : 0;
         }
-        $data = $request->order_type;
-        $order_type = implode('', $data);
-        $product->order_type = isset($order_type) ? $order_type : 0;
+        // $data = $request->order_type;
+        // echo '<pre>';
+        // print_r($data);
+        // exit();
+        // $order_type = implode('', $data);
+        $product->order_type = isset($request->order_type) ? $request->order_type : '';
         if (!empty($day = $request['day'])) {
             $days = implode(',', $day);
             $product->availibleday = isset($days) ? $days : 0;
