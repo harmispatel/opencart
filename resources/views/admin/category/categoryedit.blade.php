@@ -404,8 +404,13 @@ $demo = gallary_redirect_url();
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="sortorder" class="form-label">Sort Order</label>
-                                        <input type="text" class="form-control" name="sortorder" id="sortorder" value="{{ isset($data->sort_order) ? $data->sort_order : '' }}">
+                                        <label for="sortorder" class="form-label"><span
+                                            class="text-danger">*</span>Sort Order</label>
+                                        {{-- <input type="text" class="form-control" name="sortorder" id="sortorder" value="{{ isset($data->sort_order) ? $data->sort_order : '' }}"> --}}
+                                        <input type="text" class="form-control {{ ($errors->has('sortorder')) ? 'is-invalid' : '' }}" name="sortorder" id="sortorder" value="{{ isset($data->sort_order) ? $data->sort_order : '' }}">
+                                        @if ($errors->has('sortorder'))
+                                            <div class="invalid-feedback">{{ $errors->first('sortorder') }}</div>
+                                        @endif
                                     </div>
 
                                  </div>

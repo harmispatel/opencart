@@ -575,9 +575,33 @@ class CategoryController extends Controller
         // Validation Of Category Fields
         $request->validate([
             'category' => 'required',
-            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            // 'banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            "sortorder" =>'required',
         ]);
+
+        $current_store_id = currentStoreId();
+
+        $chk_dup_category =Category::whereHas('hasOneCategoryToStore',function($q) use($current_store_id){
+            $q->where('store_id',$current_store_id);
+        })->where('name',$request->category)->where('category_id','!=',$request->id)->first();
+
+
+        if(!empty($chk_dup_category) || $chk_dup_category != ''){
+            $request->validate([
+                'category' => 'required|unique:oc_category_description,name',
+            ]);
+        }
+
+        $chk_dup_sort_order =CategoryDetail::whereHas('hasOneCategoryToStore',function($q) use($current_store_id){
+            $q->where('store_id',$current_store_id);
+        })->where('sort_order',$request->sortorder)->where('category_id','!=',$request->id)->first();
+
+
+
+        if(!empty($chk_dup_sort_order) || $chk_dup_sort_order != ''){
+            $request->validate([
+                'sortorder' => 'required|unique:oc_category,sort_order',
+            ]);
+        }
 
         $currentURL = public_url();
         // update Category Details

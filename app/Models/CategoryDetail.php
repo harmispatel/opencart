@@ -26,4 +26,8 @@ class CategoryDetail extends Model
         return $this->hasMany(CategorytoStore::class,'category_id','category_id');
     }
 
+    public function hasOneCategoryToStore()
+    {
+        return $this->hasOne(CategorytoStore::class, 'category_id','category_id');
+    }
 }
