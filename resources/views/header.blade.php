@@ -95,7 +95,7 @@
     <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/cropper.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/mime-icons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('public/vendor/laravel-filemanager/css/lfm.css') }}"> --}}
 
 
     <link rel="stylesheet" href="{{ asset('public/assets/fonts/fonts.min.css') }}">
