@@ -207,7 +207,7 @@
                                                         <div class="class=mb-3">
                                                             <label for="price" class="form-label">Price</label>
                                                             <div>
-                                                                Main Price <input type="text" name="mainprice"
+                                                                <b class="text-danger">*</b> Main Price <input type="text" name="mainprice"
                                                                     class="form-control"
                                                                     value="{{ isset($product->price) ? $product->price : '' }}">
                                                                 Delivery Price <input type="text" name="deliveryprice"
