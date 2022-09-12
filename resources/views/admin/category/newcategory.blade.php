@@ -78,7 +78,7 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="category" class="form-label">* Category Name</label>
+                                        <label for="category" class="form-label"> <b class="text-danger">*</b> Category Name</label>
                                         <input type="text" name="category" class="form-control {{ ($errors->has('category')) ? 'is-invalid' : '' }}" id="category" placeholder="Category Name" value="{{ old('category') }}">
                                         @if ($errors->has('category'))
                                             <div class="invalid-feedback">{{ $errors->first('category') }}</div>
@@ -149,7 +149,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="sortorder" class="form-label">Sort Order</label>
+                                        <label for="sortorder" class="form-label"><b class="text-danger">*</b>Sort Order</label>
                                         <input type="text" class="form-control {{ ($errors->has('sortorder')) ? 'is-invalid' : '' }}" name="sortorder" id="sortorder" value="0">
                                         @if ($errors->has('sortorder'))
                                             <div class="invalid-feedback">{{ $errors->first('sortorder') }}</div>
