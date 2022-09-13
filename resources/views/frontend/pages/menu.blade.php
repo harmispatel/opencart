@@ -310,6 +310,11 @@ It's used for View Menu.
                                                                         {
                                                                             $get_product_top_opt = '';
                                                                         }
+
+
+                                                                        $producticon = explode(',',$values->hasOneProduct['product_icons']);
+                                                                        // echo '<pre>';
+                                                                        // print_r($producticon);
                                                                     @endphp
 
                                                                     @if (!empty($product_available_day) || $product_available_day != '')
@@ -319,9 +324,19 @@ It's used for View Menu.
                                                                                     <div class="row">
                                                                                         <div class="col-md-7">
                                                                                             <div class="acc-body-inr-title">
-                                                                                                <h4>
-                                                                                                    {{ $values->hasOneDescription['name'] }}
-                                                                                                </h4>
+                                                                                                <div style="display: flex;align-items:center;justify-content: space-between;flex-wrap: wrap;">
+                                                                                                    <h4>
+                                                                                                        {{ $values->hasOneDescription['name'] }}
+                                                                                                    </h4>
+                                                                                                    <div>
+                                                                                                        @foreach ($producticon as $icon)
+                                                                                                            @php
+                                                                                                                $proicon = DB::table('oc_product_icons')->select('icon_url')->where('id', $icon)->first();
+                                                                                                            @endphp
+                                                                                                            <img src="{{ isset($proicon->icon_url) ? $proicon->icon_url : '' }}" style="width: 25px !important;margin:0 !important;">
+                                                                                                        @endforeach
+                                                                                                    </div>
+                                                                                                </div>
                                                                                                 @php
                                                                                                     $prodesc = html_entity_decode($values->hasOneDescription['description']);
                                                                                                 @endphp
