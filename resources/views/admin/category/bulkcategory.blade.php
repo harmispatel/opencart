@@ -215,7 +215,9 @@
                                                         </div>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <a class="btn btn-sm btn-danger" onclick="$('.ybc_cat_0').remove();return false;">DELETE</a>
+                                                        {{-- <a class="btn btn-sm btn-danger" onclick="$('.ybc_cat_0').remove();return false;">DELETE</a> --}}
+                                                        <button class="btn btn-sm btn-danger"  disabled>DELETE</button>
+
                                                     </td>
                                                 </tr>
                                             </tbody>

@@ -118,7 +118,7 @@ class ProductController extends Controller
         $thead .= '</tr>';
 
         $html .= '<tr class="productone" id="productone' . $lastid . '">';
-        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][name]" class="form-control"></td>';
+        $html .= '<td style="vertical-align: middle;"><input type="text" name="product[' . $lastid . '][name]" class="form-control"  required></td>';
         $html .= '<td style="vertical-align: middle;"><textarea type="text" name="product[' . $lastid . '][description]" class="form-control"></textarea></td>';
         if (isset($data->product_id)) {
             $sizes = ToppingProductPriceSize::where('id_product', $data->product_id)->get();
@@ -207,7 +207,7 @@ class ProductController extends Controller
             $html .= 'No Topping';
         }
         $html .= '</th>';
-        $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle"></i></a></td>';
+        $html .= '<td><a href="javascript:void(0)" class="delete_option btn btn-danger"><i class="fa fa-minus-circle" ></i></a></td>';
         $html .= '</tr>';
 
         if (isset($data->product_id)) {

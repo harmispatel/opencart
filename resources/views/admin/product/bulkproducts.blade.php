@@ -60,7 +60,7 @@
                                 <div class="container" style="text-align: right">
                                     @if (check_user_role(59) == 1)
                                         <button type="submit" form="bulkP" class="btn btn-sm btn-success ml-auto"><i
-                                                class="fa fa-plus"></i></button>
+                                            class="fa fa-save"></i></i></button>
                                     @endif
 
                                     @if (check_user_role(61) == 1)

@@ -142,7 +142,7 @@ class CustomerController extends Controller
 
                 $menu_redirect_url = isset($row->hasOneStore->ssl) ? $row->hasOneStore->ssl : '#';
 
-                $btn = '<div class="btn-group"><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a><button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="dropdown-header">Login into Store</li><li class="text-center"><a href="#/account/login" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li></ul></div>';
+                $btn = '<div class="btn-group"><a href="'.$edit_url.'" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a><button type="button" data-toggle="dropdown" class="btn btn-sm btn-primary dropdown-toggle" aria-expanded="false" style="border-left:1px solid white"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="dropdown-header">Login into Store</li><li class="text-center"><a href="'.$menu_redirect_url.'" target="_blank"><i class="fa fa-lock"></i> Your Store</a></li></ul></div>';
 
                 return $btn;
             })
