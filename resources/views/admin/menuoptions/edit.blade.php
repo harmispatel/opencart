@@ -293,7 +293,7 @@
                                                                                     {{ $omapping->order_type }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ $omapping->hasOneCategoryDescription->cname }}
+                                                                                    {{ isset($omapping->hasOneCategoryDescription->cname) ? $omapping->hasOneCategoryDescription->cname : '' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ isset($omapping->hasOneProductDescription->pname) ? $omapping->hasOneProductDescription->pname : '' }}
@@ -467,7 +467,7 @@
 
         html += '<td class="align-middle"><select name="category" onchange="getproduct(this);"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select class="product" name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ $product->hasOneProductDescription->pname }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select class="product" name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ isset($product->hasOneProductDescription->pname) ? $product->hasOneProductDescription->pname : '' }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="text" name="topping_rename"></td>';
 

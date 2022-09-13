@@ -16,7 +16,6 @@
 
 {{-- Custom CSS for Radio Buttons --}}
 <style>
-<style>
     .radioenable {
         display: none;
     }
@@ -32,7 +31,6 @@
         background: red !important;
         color: #fff !important;
     }
-</style>
 </style>
 {{-- End Custom CSS for Radio Buttons --}}
 
@@ -139,10 +137,10 @@
 
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <input type="radio" class="radioenable" id="enable" name="on_off" value="1" />
-                                                    <label class="btn btn-sm" style="width: 50px; background: black;color:white;" for="enable">ON</label>
-                                                    <input type="radio" class="radiodisable" id="disable" name="on_off" value="0"  checked/>
-                                                    <label class="btn btn-sm" style="width: 50px; background: black;color: white;" for="disable">OFF</label>
+                                                    <input type="radio" class="radioenable" id="enable" name="on_off" checked value="1"/>
+                                                    <label class="btn btn-sm" style=" background: black;color:white;" for="enable">ON</label>
+                                                    <input type="radio" class="radiodisable" id="disable" name="on_off" value="0"/>
+                                                    <label class="btn btn-sm" style=" background: black;color: white;" for="disable">OFF</label>
                                                 </div>
                                             </div>
 
