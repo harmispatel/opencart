@@ -311,8 +311,6 @@
                     dataType: "json",
                     success: function (data)
                     {
-
-
                         if($('.store_list').length > 0)
                         {
                             $('.store_list').remove();
@@ -332,10 +330,10 @@
                                 $('div.enter_postcode p').css('display','block');
                                 $('#search_result1').css('display','none');
                             }, 5000);
+
                         }
                         else
                         {
-
                             location.reload();
                         }
                     },

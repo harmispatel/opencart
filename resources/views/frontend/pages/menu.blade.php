@@ -289,7 +289,7 @@ It's used for View Menu.
                                                         <div class="accordion-item">
                                                             <h2 class="accordion-header" id="headingOne">
                                                                 <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
-                                                                    <span>{{ $value->hasOneCategory->name }}</span>
+                                                                    <span>{{ isset($value->hasOneCategory->name) ? $value->hasOneCategory->name : '' }}</span>
                                                                     <i class="fa fa-angle-down"></i>
                                                                 </button>
                                                             </h2>
@@ -702,7 +702,11 @@ It's used for View Menu.
                                                                     <i onclick="deletecartproduct({{ $cart['product_id'] }},{{ $key }},{{ $userid }})" class="fa fa-times-circle text-danger" style="cursor: pointer"></i>
                                                                 </td>
                                                                 <td>{{ $cart['quantity'] }}x</td>
+                                                                @if (!empty($cart['size']) || $cart['size'] != '')
                                                                 <td>{{ html_entity_decode($cart['size']) }}</td>
+                                                                @else
+                                                                <td>{{'-'}}</td>
+                                                                @endif
                                                                 <td>{{ $cart['name'] }} <br>
                                                                     @if (isset($cart['topping']) && !empty($cart['topping']))
                                                                         @foreach ($cart['topping'] as $ctop)
@@ -799,16 +803,18 @@ It's used for View Menu.
                                                                @if ($Coupon != '' || !empty($Coupon))
                                                                    <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
                                                                    <span>{{ $currency }}
-                                                                       -{{ number_format($couponcode,2) }}</span>
+                                                                       -{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
                                                                @endif
                                                            </div>
                                                            <div class="minicart-list-item-innr addcoupon">
                                                                <label>
                                                                    @if ($Coupon != '' || !empty($Coupon))
+                                                                       @if ($couponcode != 0)
                                                                        <a style="color: #ff0000;font-size:14px;"
                                                                            onclick="showcoupon();">
                                                                            Change Coupon Code
                                                                        </a>
+                                                                       @endif
                                                                    @else
                                                                        <a style="color: #ff0000;font-size:14px;"
                                                                            onclick="showcoupon();">

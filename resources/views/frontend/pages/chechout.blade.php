@@ -879,7 +879,7 @@
                                                                             <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
                                                                             <td>
                                                                                 <span>
-                                                                                    <b>{{ $currency }} -{{ round(isset($couponcode) ? $couponcode : 0 ,2) }}</b>
+                                                                                    <b>{{ $currency }} -{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b>
                                                                                 </span>
                                                                             </td>
                                                                         </tr>
@@ -895,7 +895,7 @@
                                                                         </tr>
                                                                         <tr class="total">
                                                                             <td><b>Total to pay:</b></td>
-                                                                            <td><span><b id="total_pay">{{ $currency }}{{ $total }}</b></span></td>
+                                                                            <td><span><b id="total_pay">{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>

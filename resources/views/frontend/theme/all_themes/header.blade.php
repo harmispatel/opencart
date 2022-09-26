@@ -147,7 +147,8 @@
                 }
             }
             $headertotal += $price - $couponcode + $delivery_charge;
-        }
+           
+        } 
         else
         {
             $headertotal += $price + $delivery_charge;
@@ -176,9 +177,11 @@
                 {
                     $price += $mycart['main_price'] * $mycart['quantity'];
                 }
+               
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
+         
         }
         if (isset($cart['withoutSize'])) 
         {
@@ -202,7 +205,7 @@
                 $cart_products += $mycart['quantity'];
             }
         }
-    
+        
         if(!empty($cart) || $cart != ''){
             if (!empty($Coupon) || $Coupon != '')
             {
@@ -218,7 +221,7 @@
                         $couponcode = $Coupon['discount'];
                     }
                 }
-               
+                
                 $headertotal = $price - $couponcode + $delivery_charge;
             }
             else
@@ -232,7 +235,7 @@
         // $sessiontotal = session()->put('total',$headertotal);
         $sessionsubtotal = session()->put('subtotal',$price);
          
-
+    
     $currentdate = strtotime(date("Y-m-d")); 
 @endphp
 

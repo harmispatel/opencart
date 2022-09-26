@@ -71,13 +71,15 @@ class MenuController extends Controller
         } else {
             $user_id = 0;
         }
+        $get_cpn =session()->get('currentcoupon');
 
 
         if (session()->has('currentcoupon')) {
             $Coupon = session()->get('currentcoupon');
         } else {
-            $get_coupon = Coupon::where('store_id', $front_store_id)->first();
+               $get_coupon = Coupon::where('store_id', $front_store_id)->first();
             if (isset($get_coupon) || $get_coupon != '') {
+
                 $product_history = CouponProduct::where('coupon_id', $get_coupon->coupon_id)->get();
                 $category_history = CouponCategory::where('coupon_id', $get_coupon->coupon_id)->get();
 
@@ -766,13 +768,14 @@ class MenuController extends Controller
                     $couponcode =  $Coupon['discount'];
                 }
             }
+
             // Main Total
             $total = $subtotal - $couponcode + $delivery_charge;
         } else {
             $total = $subtotal + $delivery_charge;
         }
         if($couponcode != 0){
-            $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . number_format($couponcode, 2) . '</span>';
+            $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         }
 
         $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
@@ -854,6 +857,7 @@ class MenuController extends Controller
         $userid = $request->user_id;
 
         $pro_id = session()->get('product_id');
+
 
         //  if(in_array($productid,$pro_id)){
         //     unset($pro_id['s_'.$productid]);

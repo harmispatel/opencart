@@ -269,12 +269,12 @@
                                 <tr>
                                     @if(!empty($Coupon) || $Coupon != '')
                                         <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
-                                        <td><span><b>{{ $currency }}-{{ number_format($couponcode, 2) }}</b></span></td>
+                                        <td><span><b>{{ $currency }}-{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b></span></td>
                                     @endif
                                 </tr>
                                 <tr>
                                     <td><b>Total to pay:</b></td>
-                                    <td><span><b>{{ $currency }}{{ $total }}</b></span></td>
+                                    <td><span><b>{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
                                 </tr>
                             </tbody>
                         </table>
