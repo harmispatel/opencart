@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
+use App\Models\CouponHistory;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
@@ -106,7 +108,6 @@ class CustomerOrder extends Controller
     // Function For  Confirm Order
     function confirmorder(Request $request)
     {
-
        // Get Current URL
        $currentURL = URL::to("/");
 
@@ -153,7 +154,17 @@ class CustomerOrder extends Controller
         $delivery_charge = 0.00;
         $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
         $servicecharge = $request->service_charge;
-        $couponname = $request->couponname;
+        $couponname = session()->get('couponname');
+
+        if(!empty($couponname))
+        {
+            $cpn_dt = Coupon::where('code',$couponname)->first();
+        }
+        else
+        {
+            $cpn_dt = '';
+        }
+
 
         // Store Details
         $store = Store::where('store_id', $front_store_id)->first();
@@ -273,7 +284,46 @@ class CustomerOrder extends Controller
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+                        $last_order_id = $gorder->order_id;
 
+                        if(!empty($couponname))
+                        {
+                            if(!empty($cpn_dt))
+                            {
+                                $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
+                                $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
+                                $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
+                                $subtotal = $request->subtotal;
+
+                                if($cpn_type == 'P')
+                                {
+                                    $amnt = ($subtotal * $cpn_discount) / 100;
+                                }
+                                elseif($cpn_type == 'F')
+                                {
+                                    $amnt = $subtotal - $cpn_discount;
+                                }
+                                else
+                                {
+                                    $amnt = 0;
+                                }
+
+                                if(!empty($cpn_id) && $cpn_id != 0)
+                                {
+                                    $coupon_history = new CouponHistory;
+                                    $coupon_history->coupon_id = $cpn_id;
+                                    $coupon_history->order_id = $last_order_id;
+                                    $coupon_history->customer_id = 0;
+                                    $coupon_history->amount = $amnt;
+                                    $coupon_history->date_added = date('Y-m-d  H:i:s');
+                                    $coupon_history->save();
+                                }
+
+                            }
+                        }
+
+                        session()->forget('couponcode');
+                        session()->forget('couponname');
                         session()->put('last_order_id',$gorder->order_id);
 
                         // Guest Order Product
@@ -497,6 +547,44 @@ class CustomerOrder extends Controller
 
                     $last_order_id = $order->order_id;
 
+                    if(!empty($couponname))
+                    {
+                        if(!empty($cpn_dt))
+                        {
+                            $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
+                            $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
+                            $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
+                            $subtotal = $request->subtotal;
+
+                            if($cpn_type == 'P')
+                            {
+                                $amnt = ($subtotal * $cpn_discount) / 100;
+                            }
+                            elseif($cpn_type == 'F')
+                            {
+                                $amnt = $subtotal - $cpn_discount;
+                            }
+                            else
+                            {
+                                $amnt = 0;
+                            }
+
+                            if(!empty($cpn_id) && $cpn_id != 0)
+                            {
+                                $coupon_history = new CouponHistory;
+                                $coupon_history->coupon_id = $cpn_id;
+                                $coupon_history->order_id = $last_order_id;
+                                $coupon_history->customer_id = $user_id;
+                                $coupon_history->amount = $amnt;
+                                $coupon_history->date_added = date('Y-m-d  H:i:s');
+                                $coupon_history->save();
+                            }
+
+                        }
+                    }
+
+                    session()->forget('couponcode');
+                    session()->forget('couponname');
                     session()->put('last_order_id',$order->order_id);
                     session()->forget('free_item');
 
@@ -727,6 +815,48 @@ class CustomerOrder extends Controller
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+                        // gust coupon history
+                        $last_order_id = $gorder->order_id;
+
+                        if(!empty($couponname))
+                        {
+                            if(!empty($cpn_dt))
+                            {
+                                $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
+                                $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
+                                $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
+                                $subtotal = $request->subtotal;
+
+                                if($cpn_type == 'P')
+                                {
+                                    $amnt = ($subtotal * $cpn_discount) / 100;
+                                }
+                                elseif($cpn_type == 'F')
+                                {
+                                    $amnt = $subtotal - $cpn_discount;
+                                }
+                                else
+                                {
+                                    $amnt = 0;
+                                }
+
+                                if(!empty($cpn_id) && $cpn_id != 0)
+                                {
+                                    $coupon_history = new CouponHistory;
+                                    $coupon_history->coupon_id = $cpn_id;
+                                    $coupon_history->order_id = $last_order_id;
+                                    $coupon_history->customer_id = 0;
+                                    $coupon_history->amount = $amnt;
+                                    $coupon_history->date_added = date('Y-m-d  H:i:s');
+                                    $coupon_history->save();
+                                }
+
+                            }
+                        }
+
+                        session()->forget('couponcode');
+                        session()->forget('couponname');
+
                         session()->put('last_order_id',$gorder->order_id);
 
                         // Guest Order Product
@@ -952,6 +1082,45 @@ class CustomerOrder extends Controller
                         $order->clear_history = 0;
                         $order->is_delete = 0;
                         $order->save();
+                        $last_order_id = $order->order_id;
+                        if(!empty($couponname))
+                        {
+                            if(!empty($cpn_dt))
+                            {
+                                $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
+                                $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
+                                $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
+                                $subtotal = $request->subtotal;
+
+                                if($cpn_type == 'P')
+                                {
+                                    $amnt = ($subtotal * $cpn_discount) / 100;
+                                }
+                                elseif($cpn_type == 'F')
+                                {
+                                    $amnt = $subtotal - $cpn_discount;
+                                }
+                                else
+                                {
+                                    $amnt = 0;
+                                }
+
+                                if(!empty($cpn_id) && $cpn_id != 0)
+                                {
+                                    $coupon_history = new CouponHistory;
+                                    $coupon_history->coupon_id = $cpn_id;
+                                    $coupon_history->order_id = $last_order_id;
+                                    $coupon_history->customer_id = $user_id;
+                                    $coupon_history->amount = $amnt;
+                                    $coupon_history->date_added = date('Y-m-d  H:i:s');
+                                    $coupon_history->save();
+                                }
+
+                            }
+                        }
+
+                        session()->forget('couponcode');
+                        session()->forget('couponname');
 
                         session()->put('last_order_id',$order->order_id);
                         session()->forget('free_item');
@@ -1109,6 +1278,9 @@ class CustomerOrder extends Controller
     // Function For  Customer Delivery Adderss
     public function customerdeliveryaddress(Request $request)
     {
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
 
        // Get Current URL
        $currentURL = URL::to("/");
@@ -1132,11 +1304,11 @@ class CustomerOrder extends Controller
 
         $address_1 = isset($request->address_1) ? $request->address_1 : '';
         $address_2 = isset($request->address_2) ? $request->address_2 : '';
-        $city = $request->city;
+        $city = isset($request->city) ? $request->city : '';
         $postcode = isset($request->postcode) ? $request->postcode : '';
         $phone_no = isset($request->phone_no) ? $request->phone_no : '';
         $additional_directions = isset($request->additional_directions) ? $request->additional_directions : '';
-        $area = $request->area;
+        $area = isset($request->area) ? $request->area : '';
 
         $address = $request->address;
 

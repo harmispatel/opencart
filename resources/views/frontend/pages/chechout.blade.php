@@ -478,11 +478,11 @@
                                                                 <div>
                                                                     <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery">
                                                                     <label class="form-check-label" for="deliver">Deliver to my address</label><br>
-                                                                    @if ($userdeliverytype == 'delivery')
+                                                                    {{-- @if ($userdeliverytype == 'delivery')
                                                                         @if ($store_open_close == 'open' && $session_total <= $minimum_spend['min_spend'])
                                                                             <span class="text-danger">Minimum delivery is {{ $currency }}{{ $minimum_spend['min_spend'] }}, you must spend {{ $currency }}{{ $minimum_spend['min_spend']-$session_total }} more for the chekout.</span>
                                                                         @endif
-                                                                    @endif
+                                                                    @endif --}}
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -724,14 +724,21 @@
                                                                                     @php
                                                                                         $subtotal += $qty_price;
 
+
                                                                                         if ($current_date >= $start_date && $current_date < $end_date) {
                                                                                             if (!empty($Coupon) || $Coupon != '') {
-                                                                                                if ($Coupon['type'] == 'P') {
-                                                                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                                                                                }
-                                                                                                if ($Coupon['type'] == 'F') {
-                                                                                                    $couponcode = $Coupon['discount'];
-                                                                                                }
+
+                                                                                                 $couponcode = 0;
+                                                                                                    if( $Coupon['total'] >= $subtotal){
+                                                                                                        if ($Coupon['type'] == 'P')
+                                                                                                        {
+                                                                                                            $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                                                                        }
+                                                                                                        if ($Coupon['type'] == 'F')
+                                                                                                        {
+                                                                                                            $couponcode = $Coupon['discount'];
+                                                                                                        }
+                                                                                                    }
                                                                                                 $total = $subtotal - $couponcode;
                                                                                             }
                                                                                         } else {
@@ -798,14 +805,17 @@
                                                                                         $subtotal += $qty_price;
                                                                                         if (!empty($Coupon) || $Coupon != '')
                                                                                         {
-                                                                                            if ($Coupon['type'] == 'P')
-                                                                                            {
-                                                                                                $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                                                                            }
-                                                                                            if ($Coupon['type'] == 'F')
-                                                                                            {
-                                                                                                $couponcode = $Coupon['discount'];
-                                                                                            }
+                                                                                            $couponcode = 0;
+                                                                                                if( $Coupon->total >= $subtotal){
+                                                                                                    if ($Coupon['type'] == 'P')
+                                                                                                    {
+                                                                                                        $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                                                                    }
+                                                                                                    if ($Coupon['type'] == 'F')
+                                                                                                    {
+                                                                                                        $couponcode = $Coupon['discount'];
+                                                                                                    }
+                                                                                                }
                                                                                             $total = $subtotal - $couponcode;
                                                                                         }
                                                                                         else
@@ -864,6 +874,7 @@
                                                                             <td><b>Sub-Total:</b></td>
                                                                             <td><span><b>{{ $currency }} {{ $subtotal }}</b></span></td>
                                                                         </tr>
+                                                                        @if (!empty($Coupon) || $Coupon != '')
                                                                         <tr class="coupon_code">
                                                                             <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
                                                                             <td>
@@ -872,6 +883,7 @@
                                                                                 </span>
                                                                             </td>
                                                                         </tr>
+                                                                        @endif
                                                                         <tr class="voucher"></tr>
                                                                         <tr id="servicecharge" style="display: none">
                                                                             <td><b>Service Charge :</b></td>
@@ -1027,7 +1039,7 @@
     {{-- End JS --}}
 
     @php
-        if(empty($mycart['size'])){
+        if(empty($mycart)){
             $emptycarturl = route('cart');
             echo "<script type='text/javascript'>
                     window.location.replace('".$emptycarturl."');
@@ -1216,6 +1228,7 @@
         function DeliveryAddress()
         {
             var form_data = new FormData(document.getElementById('delivery_address'));
+            console.log(form_data);
             var time_select_del = $('#del_time').val();
             var time_select_col = $('#col_time').val();
 
@@ -1708,7 +1721,8 @@
             var coupon = $("input[name='coupon']").val();
             var method_type = $('input[name="payment_method"]:checked').val();
             $('#couponload').css('display' , 'inline-block');
-            let total = $('#total').val()
+            let total = $('#total').val();
+
             $.ajax({
                 type: 'post',
                 url: '{{ url("getcoupon") }}',
@@ -1721,6 +1735,7 @@
                 dataType: 'json',
                 success: function(result)
                 {
+                    console.log(result);
                     $('#couponload').css('display' , 'none');
                     if(result.success == 1)
                     {

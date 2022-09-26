@@ -120,10 +120,6 @@ It's used for View Menu.
     {
         $session_free_item = '';
     }
-
-    // echo '<pre>';
-    // print_r(session()->all());
-    // exit();
 @endphp
 
 
@@ -324,7 +320,7 @@ It's used for View Menu.
                                                                                     <div class="row">
                                                                                         <div class="col-md-7">
                                                                                             <div class="acc-body-inr-title">
-                                                                                                <div style="display: flex;align-items:center;justify-content: space-between;flex-wrap: wrap;">
+                                                                                                <div style="display: flex;align-items:center;flex-wrap: wrap;">
                                                                                                     <h4>
                                                                                                         {{ $values->hasOneDescription['name'] }}
                                                                                                     </h4>
@@ -764,18 +760,22 @@ It's used for View Menu.
                                         @php
                                             if (!empty($Coupon) || $Coupon != '')
                                             {
-                                                if ($Coupon['type'] == 'P')
-                                                {
-                                                    $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                                }
-                                                if ($Coupon['type'] == 'F')
-                                                {
-                                                    $couponcode = $Coupon['discount'];
+                                                $couponcode = 0;
+                                                if( $Coupon['total'] >= $subtotal){
+                                                    if ($Coupon['type'] == 'P')
+                                                    {
+                                                        $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                    }
+                                                    if ($Coupon['type'] == 'F')
+                                                    {
+                                                        $couponcode = $Coupon['discount'];
+                                                    }
                                                 }
                                                 $total = $subtotal - $couponcode;
                                             }
                                             else
                                             {
+
                                                 $total = $subtotal;
                                             }
                                         @endphp
@@ -793,29 +793,32 @@ It's used for View Menu.
                                                 </li>
                                                 @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
                                                     <li class="minicart-list-item">
-                                                        <div class="minicart-list-item-innr coupon_code">
-                                                            @if ($Coupon != '' || !empty($Coupon))
-                                                                <label
-                                                                    id="coupontext">Coupon({{ $Coupon['code'] }})</label>
-                                                                <span>{{ $currency }}
-                                                                    -{{ isset($couponcode) ? $couponcode : '' }}</span>
-                                                            @endif
-                                                        </div>
-                                                        <div class="minicart-list-item-innr addcoupon">
-                                                            <label>
-                                                                @if ($Coupon != '' || !empty($Coupon))
-                                                                    <a style="color: #ff0000;font-size:14px;"
-                                                                        onclick="showcoupon();">
-                                                                        Change Coupon Code
-                                                                    </a>
-                                                                @else
-                                                                    <a style="color: #ff0000;font-size:14px;"
-                                                                        onclick="showcoupon();">
-                                                                        Apply New Coupon Code
-                                                                    </a>
-                                                                @endif
-                                                            </label>
-                                                        </div>
+                                                        @if (($Coupon != '' || !empty($Coupon)))
+                                                           @if ($couponcode != 0)
+                                                           <div class="minicart-list-item-innr coupon_code">
+                                                               @if ($Coupon != '' || !empty($Coupon))
+                                                                   <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
+                                                                   <span>{{ $currency }}
+                                                                       -{{ number_format($couponcode,2) }}</span>
+                                                               @endif
+                                                           </div>
+                                                           <div class="minicart-list-item-innr addcoupon">
+                                                               <label>
+                                                                   @if ($Coupon != '' || !empty($Coupon))
+                                                                       <a style="color: #ff0000;font-size:14px;"
+                                                                           onclick="showcoupon();">
+                                                                           Change Coupon Code
+                                                                       </a>
+                                                                   @else
+                                                                       <a style="color: #ff0000;font-size:14px;"
+                                                                           onclick="showcoupon();">
+                                                                           Apply New Coupon Code
+                                                                       </a>
+                                                                   @endif
+                                                               </label>
+                                                           </div>
+                                                           @endif
+                                                        @endif
                                                         <div class="minicart-list-item-innr">
                                                             <div class="showcoupons">
                                                                 <form method="POST" id="from_showcoupon">
@@ -827,6 +830,10 @@ It's used for View Menu.
                                                                             </div>
                                                                             <div class="col-md-4 text-right">
                                                                                 <input style="text-transform: uppercase;" type="submit" value="Apply" class="btn btn-danger ">
+                                                                                {{-- <button class="btn btn-primary" type="submit" style="text-transform: uppercase;">
+                                                                                    Apply
+                                                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                                                  </button> --}}
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
@@ -840,17 +847,19 @@ It's used for View Menu.
                                                             </div>
                                                         </div>
                                                     </li>
-                                                @else
+                                                    @else
                                                     <li class="minicart-list-item">
                                                         <div class="minicart-list-item-innr coupon_code">
 
                                                         </div>
                                                     </li>
                                                 @endif
+
+
                                                 <li class="minicart-list-item">
                                                     <div class="minicart-list-item-innr total">
                                                         <label>Total to pay:</label>
-                                                        <span>{{ $currency }} {{ isset($total) ? $total : '' }}</span>
+                                                        <span>{{ $currency }} {{ ($total <= 0) ? 0 : $total }}</span>
                                                     </div>
                                                 </li>
                                                 <li class="minicart-list-item" id="freeItem">
@@ -896,7 +905,12 @@ It's used for View Menu.
                                             @endif
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
-                                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
+                                                    {{-- <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}> --}}
+                                                    @if ($userdeliverytype == 'delivery')
+                                                        <input class="form-check-input" type="radio" name="delivery_type" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
+                                                    @else
+                                                        <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
+                                                    @endif
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
                                                     </label><br>
@@ -982,11 +996,11 @@ It's used for View Menu.
 
 
     <!-- Delivery Type Modal -->
-    <div class="modal fade csmodal" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal fade csmodal" id="Modal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                    <button type="button" id="delete" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                 </div>
                 <form action="">
                     <div class="modal-body">
@@ -1039,7 +1053,7 @@ It's used for View Menu.
 
     <!-- Custom JS -->
     <script type="text/javascript">
-
+     var coll1 = $("input[name='delivery_type']:checked").val();
         // Document Script
         $(document).ready(function()
         {
@@ -1113,6 +1127,7 @@ It's used for View Menu.
                             dataType: 'json',
                             success: function(result)
                             {
+
                                 // Cart Data
                                 $('.empty-box').html('');
                                 $('.empty-box').append(result.html);
@@ -1188,6 +1203,8 @@ It's used for View Menu.
                             dataType: 'json',
                             success: function(result)
                             {
+
+
                                 // Cart Data
                                 $('.empty-box').html('');
                                 $('.empty-box').append(result.html);
@@ -1267,6 +1284,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
+
                     // Cart Data
                     $('.empty-box').html('');
                     $('.empty-box').append(result.html);
@@ -1331,18 +1349,32 @@ It's used for View Menu.
 
 
         // Delivery Button
+        // $('#delivery').on('click', function()
+        // {
+        //     $('#Modal').modal('show');
+        // });
+
         $('#delivery').on('click', function()
         {
+            $(this).prop('checked', false);
+            if (!$('#collection').is(':checked') && coll1 != undefined) {
+                $('#collection').prop('checked', true);
+            }
+
+            $('#delivery').filter(':radio').removeAttr('checked');
             $('#Modal').modal('show');
         });
         // End Delivery Button
 
         // Cancel and go back
-        $('#tested').click(function() {
-               location.reload();
-        });
+        // $('#tested').click(function() {
+        //        location.reload();
+        // });
         // End Cancel and go back
 
+        // $('#delete').click(function() {
+        //        location.reload();
+        // });
         // Delete Cart Product
         function deletecartproduct(prod_id, size_id, uid)
         {

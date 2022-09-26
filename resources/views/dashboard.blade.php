@@ -148,87 +148,87 @@
 <script type="text/javascript">
 
     // Document Ready
-    $('document').ready(function()
-    {
-        // Get Top Sales
-        var range = $('#range :selected').val();
-        $("#sales-reprt").html('');
-        $('#range').attr("disabled",true);
+    // $('document').ready(function()
+    // {
+    //     // Get Top Sales
+    //     var range = $('#range :selected').val();
+    //     $("#sales-reprt").html('');
+    //     $('#range').attr("disabled",true);
 
-        $.ajax({
-            type: "post",
-            url: "{{ route('getSalesReport') }}",
-            data: {
-                SalesReport : range,
-            },
-            beforeSend: function() {
-                $('#sales-loader').show();
-            },
-            dataType: "json",
-            success: function(response)
-            {
-                if(response.success == 1)
-                {
-                    $('#sales-loader').hide();
-                    $("#sales-reprt").html('');
-                    $('#range').removeAttr("disabled");
-                    $("#sales-reprt").append(response.html);
-                }
-            }
-        });
-        // End Get Top Sales
+    //     $.ajax({
+    //         type: "post",
+    //         url: "{{ route('getSalesReport') }}",
+    //         data: {
+    //             SalesReport : range,
+    //         },
+    //         beforeSend: function() {
+    //             $('#sales-loader').show();
+    //         },
+    //         dataType: "json",
+    //         success: function(response)
+    //         {
+    //             if(response.success == 1)
+    //             {
+    //                 $('#sales-loader').hide();
+    //                 $("#sales-reprt").html('');
+    //                 $('#range').removeAttr("disabled");
+    //                 $("#sales-reprt").append(response.html);
+    //             }
+    //         }
+    //     });
+    //     // End Get Top Sales
 
-        // Get Top 10 Customer
-        var cust_range = $('#range :selected').val();
-        $("#top-ten-cus").html('');
-        $('#top10').attr("disabled",true);
+    //     // Get Top 10 Customer
+    //     var cust_range = $('#range :selected').val();
+    //     $("#top-ten-cus").html('');
+    //     $('#top10').attr("disabled",true);
 
-        $.ajax({
-            type: "post",
-            url: "{{ route('getTopTenCustomer') }}",
-            data: {
-                'range' : cust_range,
-            },
-            beforeSend: function() {
-                $('#top10-loader').show();
-            },
-            dataType: "json",
-            success: function(response)
-            {
-                $("#top-ten-cus").html('');
-                $('#top10').removeAttr("disabled");
-                $('#top10-loader').hide();
-                $("#top-ten-cus").append(response.html);
-            }
-        });
-        // End Get Top Customer
+    //     $.ajax({
+    //         type: "post",
+    //         url: "{{ route('getTopTenCustomer') }}",
+    //         data: {
+    //             'range' : cust_range,
+    //         },
+    //         beforeSend: function() {
+    //             $('#top10-loader').show();
+    //         },
+    //         dataType: "json",
+    //         success: function(response)
+    //         {
+    //             $("#top-ten-cus").html('');
+    //             $('#top10').removeAttr("disabled");
+    //             $('#top10-loader').hide();
+    //             $("#top-ten-cus").append(response.html);
+    //         }
+    //     });
+    //     // End Get Top Customer
 
-        // General
-        var general_range = $('#range :selected').val();
-        $("#gen-total-reprt").html('');
-        $('#gen-total').attr("disabled",true);
+    //     // General
+    //     var general_range = $('#range :selected').val();
+    //     $("#gen-total-reprt").html('');
+    //     $('#gen-total').attr("disabled",true);
 
-        $.ajax({
-            type: "post",
-            url: "{{ route('getGeneralTotal') }}",
-            data: {
-                'range' : general_range,
-            },
-            beforeSend: function() {
-                $('#genral-loader').show();
-            },
-            dataType: "json",
-            success: function(response)
-            {
-                $("#gen-total-reprt").html('');
-                $('#gen-total').removeAttr("disabled");
-                $('#genral-loader').hide();
-                $("#gen-total-reprt").append(response.html);
-            }
-        });
-        // End General
+    //     $.ajax({
+    //         type: "post",
+    //         url: "{{ route('getGeneralTotal') }}",
+    //         data: {
+    //             'range' : general_range,
+    //         },
+    //         beforeSend: function() {
+    //             $('#genral-loader').show();
+    //         },
+    //         dataType: "json",
+    //         success: function(response)
+    //         {
+    //             $("#gen-total-reprt").html('');
+    //             $('#gen-total').removeAttr("disabled");
+    //             $('#genral-loader').hide();
+    //             $("#gen-total-reprt").append(response.html);
+    //         }
+    //     });
+    //     // End General
 
-    });
+    // });
     // End Document Ready
 
 

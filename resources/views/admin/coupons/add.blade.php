@@ -281,7 +281,7 @@
                                             <div class="form-group">
                                                 <label for="usercoupon">Uses Per Coupon</label>
                                                 <input class="form-control" name="usercoupon" id="usercoupon"
-                                                value="1" type="text" placeholder="Uses Per Coupon">
+                                                 type="text" placeholder="Uses Per Coupon">
                                                 <small id="codenamehelp" class="text-muted">
                                                     The maximum number of times the coupon can be used by any customer. Leave blank for unlimited.
                                                 </small>
@@ -289,7 +289,7 @@
 
                                             <div class="form-group">
                                                 <label for="usercostomer">Uses Per Customer</label>
-                                                <input class="form-control" name="usercostomer" id="usercostomer" value="1" type="text" placeholder="Uses Per Customer">
+                                                <input class="form-control" name="usercostomer" id="usercostomer"  type="text" placeholder="Uses Per Customer">
                                                 <small id="codenamehelp" class="text-muted">
                                                     The maximum number of times the coupon can be used by a single customer. Leave blank for unlimited.
                                                 </small>

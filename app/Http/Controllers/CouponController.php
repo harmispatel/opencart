@@ -9,7 +9,9 @@ use App\Models\CouponHistory;
 use App\Models\CouponProduct;
 use App\Models\ProductDescription;
 use Illuminate\Http\Request;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
+
+// use DataTables;
 
 class CouponController extends Controller
 {
@@ -174,8 +176,8 @@ class CouponController extends Controller
         $coupon->total = isset($request->tamount) ? $request->tamount : "0";
         $coupon->date_start = isset($request->sdate) ? $request->sdate : date("Y-m-d h:i:s");
         $coupon->date_end = isset($request->edate) ? $request->edate : date("Y-m-d h:i:s");
-        $coupon->uses_total = isset($request->usercoupon) ? $request->usercoupon : "0";
-        $coupon->uses_customer = isset($request->usercostomer) ? $request->usercostomer : "0";
+        $coupon->uses_total = isset($request->usercoupon) ? $request->usercoupon : "";
+        $coupon->uses_customer = isset($request->usercostomer) ? $request->usercostomer : "";
         $coupon->status = isset($request->status) ? $request->status : "0";
         $coupon->on_off = isset($request->on_off) ? $request->on_off : "0";
         $coupon->date_added = date("Y-m-d h:i:s");
@@ -231,8 +233,8 @@ class CouponController extends Controller
         $coupon->total = isset($request->tamount) ? $request->tamount : "0";
         $coupon->date_start = isset($request->sdate) ? $request->sdate : "";
         $coupon->date_end = isset($request->edate) ? $request->edate : "";
-        $coupon->uses_total = isset($request->usercoupon) ? $request->usercoupon : "0";
-        $coupon->uses_customer = isset($request->usercostomer) ? $request->usercostomer : "0";
+        $coupon->uses_total = isset($request->usercoupon) ? $request->usercoupon : " ";
+        $coupon->uses_customer = isset($request->usercostomer) ? $request->usercostomer : " ";
         $coupon->status = isset($request->status) ? $request->status : "0";
         $coupon->on_off = isset($request->on_off) ? $request->on_off : "0";
 
@@ -341,7 +343,7 @@ class CouponController extends Controller
             $couponid = $request->couponid;
             $data = CouponHistory::select('oc_coupon_history.*', 'oc_order.firstname', 'oc_order.lastname')->join('oc_order', 'oc_coupon_history.order_id', '=', 'oc_order.order_id')->where('coupon_id', $couponid)->get();
 
-            return Datatables::of($data)->addIndexColumn()
+            return DataTables::of($data)->addIndexColumn()
                 ->addColumn('date_added', function ($row) {
                     $date_added = date('d-m-Y', strtotime($row->date_added));
                     return $date_added;

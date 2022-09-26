@@ -14,134 +14,75 @@ class CustomerAuthController extends Controller
 {
 
     // Function For Customer Login
-    public function customerlogin(Request $request)
-    {
-        $request->validate([
-            'Email' => 'required|email|exists:oc_customer,email',
-            'Password' => 'required',
-        ]);
-
-        $ajaxlogin = $request->ajaxlogin;
-
-        $email = $request->Email;
-        $pass = md5($request->Password);
-        $emailexist = Customer::where('email', '=', $email)->exists();
-
-        $customername = Customer::select('customer_id', 'firstname', 'password')->where('email', '=', $email)->first();
-
-        if(empty($ajaxlogin))
-        {
-            if($pass != $customername->password)
-            {
-                return redirect()->route('member')->with('error',"No match for E-Mail Address and/or Password");
-            }
-        }
-
-        if (($emailexist == 1) && ($pass == $customername->password)) {
-            session()->put('username', $customername->firstname);
-            session()->put('userid', $customername->customer_id);
-
-              if (session()->has('userid'))
-              {
-                  if (session()->has('cart1'))
-                  {
-                      // If user is login then get usercart
-                      $usercart = getuserCart(session()->get('userid'));
-
-                      // Get cart from session
-                      $session_array = session()->get('cart1');
-                      if(isset($usercart['size'])){
-
-                          foreach($session_array['size'] as $key=> $valus)
-                          {
-                              $size_id = $key;
-
-                              if(isset($usercart['size'][$size_id]))
-                              {
-                                  $usercart['size'][$size_id]['quantity'] = $usercart['size'][$size_id]['quantity'] + $session_array['size'][$size_id]['quantity'];
-                                  $usercart['size'][$size_id]['topping'] = isset($session_array['size'][$size_id]['topping']) ? $session_array['size'][$size_id]['topping'] : '';
-                                  $usercart['size'][$size_id]['col_price'] = isset($session_array['size'][$size_id]['col_price']) ? $session_array['size'][$size_id]['col_price'] : '';
-                                  $usercart['size'][$size_id]['main_price'] = isset($session_array['size'][$size_id]['main_price']) ? $session_array['size'][$size_id]['main_price'] : '';
-                                  $usercart['size'][$size_id]['del_price'] = isset($session_array['size'][$size_id]['del_price']) ? $session_array['size'][$size_id]['del_price'] : '';
-
-                                  unset($session_array['size'][$size_id]);
-                                  unset($session_array['size']['topping']);
-
-                                  if(isset($session_array['size']))
-                                  {
-                                      if(count($session_array['size']) == 0)
-                                      {
-                                          unset($session_array['size']);
-                                      }
-                                  }
+   // Function For Customer Login
+   public function customerlogin(Request $request)
+   {
 
 
-                                  // $NewArray= array_merge_recursive($usercart,$session_array);
-                                  $serial = serialize($usercart);
-                                  $base64 = base64_encode($serial);
-                                  $user_id = session()->get('userid');
-                                  $user = Customer::find($user_id);
-                                  $user->cart = $base64;
-                                  $user->update();
-                              }
-                              else
-                              {
-                                  array_push($usercart['size'],$session_array['size'][$size_id]);
+       $request->validate([
+           'Email' => 'required|email|exists:oc_customer,email',
+           'Password' => 'required',
+       ]);
 
-                                  unset($session_array['size'][$size_id]);
-                                  unset($session_array['size']['topping']);
+       $ajaxlogin = $request->ajaxlogin;
 
-                                  if(isset($session_array['size']))
-                                  {
-                                      if(count($session_array['size']) == 0)
-                                      {
-                                          unset($session_array['size']);
-                                      }
-                                  }
-                                  $serial = serialize($usercart);
-                                  $base64 = base64_encode($serial);
-                                  $user_id = session()->get('userid');
-                                  $user = Customer::find($user_id);
-                                  $user->cart = $base64;
-                                  $user->update();
-                                }
+       $email = $request->Email;
+       $pass = md5($request->Password);
+       $emailexist = Customer::where('email', '=', $email)->exists();
 
-                            }
-                        }
-                        else
-                        {
-                          $NewArray= array_merge_recursive($usercart,$session_array);
-                          $serial = serialize($NewArray);
-                          $base64 = base64_encode($serial);
-                          $user_id = session()->get('userid');
-                          $user = Customer::find($user_id);
-                          $user->cart = $base64;
-                          $user->update();
+       $customername = Customer::select('customer_id', 'firstname', 'password')->where('email', '=', $email)->first();
 
-                      }
+       if(empty($ajaxlogin))
+       {
+           if($pass != $customername->password)
+           {
+               return redirect()->route('member')->with('error',"No match for E-Mail Address and/or Password");
+           }
+       }
 
+       if (($emailexist == 1) && ($pass == $customername->password)) {
+           session()->put('username', $customername->firstname);
+           session()->put('userid', $customername->customer_id);
 
-                  }
-              }
+           if (session()->has('userid')) {
+               if (session()->has('cart1')) {
+                   $usercart = getuserCart(session()->get('userid'));
 
+                   if (isset($usecart) || !empty($usercart)) {
+                       $session_array = session()->get('cart1');
+                       $merge_cart = array_push($usercart, $session_array);
+                   } else {
+                       $cart['cart1'] = session()->get('cart1');
+                       $cart['product_id'] = session()->get('product_id');
+                       $serial = serialize($cart);
+                       $base64 = base64_encode($serial);
+                       $user_id = session()->get('userid');
+                       $user = Customer::find($user_id);
+                       $user->cart = $base64;
+                       $user->update();
+                       session()->forget('cart1');
+                   }
+               }
+           }
 
-            if ($ajaxlogin == 1) {
-                return response()->json([
-                    'status' => 1,
-                ]);
-            } else {
-                return redirect()->back();
-            }
-        } else {
-            if ($ajaxlogin == 1) {
-                return response()->json([
-                    'status' => 0,
-                ]);
-            } else {
-                return redirect()->back();
-            }
-        }
-    }
+           if ($ajaxlogin == 1) {
+               return response()->json([
+                   'status' => 1,
+               ]);
+           } else {
+               return redirect()->back();
+           }
+       } else {
+           if ($ajaxlogin == 1) {
+               return response()->json([
+                   'status' => 0,
+               ]);
+           } else {
+               return redirect()->back();
+           }
+       }
+   }
+
 
 
 
@@ -284,6 +225,10 @@ class CustomerAuthController extends Controller
     // Function For Customer logOut
     public function customerlogout()
     {
+        $user_id = session()->get('userid');
+        $user = Customer::find($user_id);
+        $user->cart = "";
+        $user->update();
         session()->flush();
         return redirect()->route('home');
     }

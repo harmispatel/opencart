@@ -153,13 +153,17 @@ class HomeController extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         $type = $request->type;
-
+        $flag_post_code =session()->get('flag_post_code');
         // Check User ID
         if (session()->has('userid')) {
             $userid = session()->get('userid');
         } else {
             $userid = 0;
         }
+
+         if($type == $flag_post_code ){
+
+
 
         if ($type == 'collection') {
 
@@ -219,7 +223,24 @@ class HomeController extends Controller
             $json['success'] = 'collection';
             return response()->json($json);
         }
+    }else{
+        // session()->forget('cart1');
+        // session()->put('flag_post_code', 'collection');
+        //     $json['success'] = 'collection';
+        //     return response()->json($json);
+        if($userid == 0){
+            session()->forget('cart1');
+        }else{
+            $user = Customer::find($userid);
+            $user->cart = '';
+            $user->update();
+        }
+        session()->put('flag_post_code',$type);
+            return response()->json([
+                'success' => 1,
+            ]);
 
+    }
         if (isset($request->keyword)) {
             $keyword = trim($request->keyword);
         } else {
@@ -341,6 +362,7 @@ class HomeController extends Controller
         }
         if (!isset($json['success'])) $json['error'] = $json['error'];
         return response()->json($json);
+
     }
 
 

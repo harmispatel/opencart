@@ -1777,11 +1777,21 @@ function getproductcount($demo)
 // Function for get Product
 function getproduct($front_store_id,$cat_id)
 {
-    $product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
-        $query->where('category_id', $cat_id);
-    })->get();
+    $flag_post_code =session()->get('flag_post_code');
+    $both ='both';
+    if(isset($flag_post_code)){
+        $product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
+            $query->where('category_id', $cat_id);
+        })->whereHas('hasOneProduct', function ($q) use ($flag_post_code, $both) {
+            $q->whereIn('order_type',[$flag_post_code, $both]);
+        })->get();
+    }
+    else{
+        $product=Product_to_category::with(['hasOneProduct','hasOneDescription','hasOneToppingProductPriceSize'])->whereHas('hasOneProduct', function ($query) use ($cat_id) {
+            $query->where('category_id', $cat_id);
+        })->get();
+    }
     return $product;
-
 }
 
 
@@ -2744,6 +2754,9 @@ function getuserCart($userId)
     $cust_cart = isset($customer->cart) ? $customer->cart : '';
     $base64decode = base64_decode($cust_cart);
     $cart = unserialize($base64decode);
+    // echo '<pre>';
+    // print_r($cart);
+    // exit();
     return $cart;
 }
 
@@ -2825,7 +2838,15 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
     $data['model'] = $product->model;
     $data['quantity'] = 1;
     $data['product_id'] = $productid;
+    // $arrs = array();
+    // if ($sizeid != 0){
 
+    //     $arr['s_' . $sizeid] = $productid;
+    // }
+    // else{
+    //     $arrs[$productid] = $productid;
+    // }
+    // $arr['product_id'] = $arrs;
     if ($sizeid != 0)
     {
         if(isset($arr['size'][$sizeid]))
@@ -2844,6 +2865,12 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
         {
             $arr['size'][$sizeid] =$data;
 
+        }
+        if(isset($arr['product_id'])){
+
+            $arr['product_id']['s_' . $sizeid] = $productid;
+        }else{
+            $arr['product_id']['s_' . $sizeid] = $productid;
         }
     }
     else
@@ -2864,6 +2891,13 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
         {
             $arr['withoutSize'][$productid] =$data;
         }
+
+        if(isset($arr['product_id'])){
+
+            $arr['product_id'][$productid] = $productid;
+        }else{
+            $arr['product_id'][$productid] = $productid;
+        }
     }
 
 
@@ -2875,6 +2909,8 @@ function addtoCartUser($request,$productid,$sizeid, $cart, $userid, $is_topping,
     $user = Customer::find($user_id);
     $user->cart = $base64;
     $user->update();
+
+
 
 }
 

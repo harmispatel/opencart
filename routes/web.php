@@ -254,7 +254,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('couponupdate', [CouponController::class, 'couponupdate'])->name('couponupdate');
     Route::get('searchproduct', [CouponController::class, 'products'])->name('searchproduct');
     Route::get('searchcategory', [CouponController::class, 'searchcategory'])->name('searchcategory');
-    Route::POST('getallcouponhistory', [CouponController::class, 'gegetallcouponhistorytallcouponhistory'])->name('getallcouponhistory');
+    Route::POST('getallcouponhistory', [CouponController::class, 'getallcouponhistory'])->name('getallcouponhistory');
     Route::POST('updonoff', [CouponController::class, 'updonoff'])->name('updonoff');
     // Route::post('updonoff', [CouponController::class, 'updonoff'])->name('updonoff');
 

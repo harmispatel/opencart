@@ -236,14 +236,17 @@
                                     @php
                                         if(!empty($Coupon) || $Coupon != '')
                                         {
-                                            if ($Coupon['type'] == 'P')
-                                            {
-                                                $couponcode = ($subtotal * $Coupon['discount']) / 100;
-                                            }
-                                            if ($Coupon['type'] == 'F')
-                                            {
-                                                $couponcode = $subtotal - $Coupon['discount'];
-                                            }
+                                            $couponcode = 0;
+                                                if( $Coupon->total >= $subtotal){
+                                                    if ($Coupon['type'] == 'P')
+                                                    {
+                                                        $couponcode = ($subtotal * $Coupon['discount']) / 100;
+                                                    }
+                                                    if ($Coupon['type'] == 'F')
+                                                    {
+                                                        $couponcode = $Coupon['discount'];
+                                                    }
+                                                }
                                             $total = $subtotal - $couponcode;
                                         }
                                         else
@@ -266,7 +269,7 @@
                                 <tr>
                                     @if(!empty($Coupon) || $Coupon != '')
                                         <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
-                                        <td><span><b>{{ $currency }}-{{ $couponcode }}</b></span></td>
+                                        <td><span><b>{{ $currency }}-{{ number_format($couponcode, 2) }}</b></span></td>
                                     @endif
                                 </tr>
                                 <tr>

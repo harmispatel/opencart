@@ -18,6 +18,7 @@
     .radioenable {
         display: none;
     }
+
     .radiodisable {
         display: none;
     }
@@ -26,6 +27,7 @@
         background: green !important;
         color: #fff !important;
     }
+
     .radiodisable:checked+label {
         background: red !important;
         color: #fff !important;
@@ -61,39 +63,39 @@
         <section class="content">
             <div class="container-fluid">
                 @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Warning: Please check the form carefully for errors!</strong>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Warning: Please check the form carefully for errors!</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card --}}
                         <div class="card">
                             {{-- Form --}}
                             <form action="{{ route('couponupdate') }}" id="voucherform" method="POST">
-                            {{ @csrf_field() }}
+                                {{ @csrf_field() }}
 
-                            {{-- Card Header --}}
-                            <div class="card-header">
-                                <h3 class="card-title pt-2 m-0" style="color: black">
-                                    <i class="fas fa-pencil-alt"></i>
-                                    EDIT
-                                </h3>
-                                <div class="container" style="text-align: right">
-                                    <button type="submit" class="btn btn-sm btn-primary ml-auto">
-                                        <i class="fa fa-save"></i>
-                                    </button>
-                                    <a href="{{ route('coupons') }}" class="btn btn-sm btn-danger ml-1">
-                                        <i class="fa fa-arrow-left"></i>
-                                    </a>
+                                {{-- Card Header --}}
+                                <div class="card-header">
+                                    <h3 class="card-title pt-2 m-0" style="color: black">
+                                        <i class="fas fa-pencil-alt"></i>
+                                        EDIT
+                                    </h3>
+                                    <div class="container" style="text-align: right">
+                                        <button type="submit" class="btn btn-sm btn-primary ml-auto">
+                                            <i class="fa fa-save"></i>
+                                        </button>
+                                        <a href="{{ route('coupons') }}" class="btn btn-sm btn-danger ml-1">
+                                            <i class="fa fa-arrow-left"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            {{-- End Card Header --}}
+                                {{-- End Card Header --}}
 
-                            {{-- Card Body --}}
+                                {{-- Card Body --}}
                                 <div class="card-body">
                                     {{-- Tabs Link --}}
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -110,11 +112,12 @@
                                     <div class="tab-content" id="nav-tabContent">
 
                                         {{-- General Tab --}}
-                                        <div class="tab-pane fade show active mt-4" id="nav-General" role="tabpanel" aria-labelledby="nav-General-tab">
+                                        <div class="tab-pane fade show active mt-4" id="nav-General" role="tabpanel"
+                                            aria-labelledby="nav-General-tab">
 
                                             <div class="form-group">
                                                 <input type="hidden" name="couponid" id="couponid"
-                                                value="{{ $coupon->coupon_id }}">
+                                                    value="{{ $coupon->coupon_id }}">
                                             </div>
 
                                             <div class="form-group">
@@ -122,7 +125,9 @@
                                                     <span class="text-danger">*</span>
                                                     Coupon Name
                                                 </label>
-                                                <input type="text" class="form-control {{ ($errors->has('coupon_name')) ? 'is-invalid' : '' }}" name="coupon_name" id="coupon_name" value="{{ $coupon->name }}">
+                                                <input type="text"
+                                                    class="form-control {{ $errors->has('coupon_name') ? 'is-invalid' : '' }}"
+                                                    name="coupon_name" id="coupon_name" value="{{ $coupon->name }}">
                                                 @if ($errors->has('coupon_name'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('coupon_name') }}
@@ -135,7 +140,9 @@
                                                     <span class="text-danger">*</span>
                                                     Code
                                                 </label>
-                                                <input type="text" maxlength="10" class="form-control {{ ($errors->has('code')) ? 'is-invalid' : '' }}" name="code" id="code" value="{{ $coupon->code }}">
+                                                <input type="text" maxlength="10"
+                                                    class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}"
+                                                    name="code" id="code" value="{{ $coupon->code }}">
                                                 @if ($errors->has('code'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('code') }}
@@ -145,10 +152,18 @@
 
                                             <div class="form-group">
                                                 <div class="btn-group">
-                                                    <input type="radio" class="radioenable" id="enable" name="on_off" value="1" {{ $coupon->on_off == 1 ? "checked" : "" }} />
-                                                    <label class="btn btn-sm" style="width: 50px; background: black;color:white;" for="enable">ON</label>
-                                                    <input type="radio" class="radiodisable" id="disable" name="on_off" value="0"  {{ $coupon->on_off == 0 ? "checked" : "" }}/>
-                                                    <label class="btn btn-sm" style="width: 50px; background: black;color: white;" for="disable">OFF</label>
+                                                    <input type="radio" class="radioenable" id="enable"
+                                                        name="on_off" value="1"
+                                                        {{ $coupon->on_off == 1 ? 'checked' : '' }} />
+                                                    <label class="btn btn-sm"
+                                                        style="width: 50px; background: black;color:white;"
+                                                        for="enable">ON</label>
+                                                    <input type="radio" class="radiodisable" id="disable"
+                                                        name="on_off" value="0"
+                                                        {{ $coupon->on_off == 0 ? 'checked' : '' }} />
+                                                    <label class="btn btn-sm"
+                                                        style="width: 50px; background: black;color: white;"
+                                                        for="disable">OFF</label>
                                                 </div>
                                             </div>
 
@@ -160,16 +175,22 @@
                                                 <div class="form-control">
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="apply"
-                                                        id="delivery" value="1" {{ $coupon->apply_shipping == 1 ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="delivery">Delivery</label>
+                                                            id="delivery" value="1"
+                                                            {{ $coupon->apply_shipping == 1 ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="delivery">Delivery</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="apply"
-                                                        id="collection" value="2" {{ $coupon->apply_shipping == 2 ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="collection">Collection</label>
+                                                            id="collection" value="2"
+                                                            {{ $coupon->apply_shipping == 2 ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="collection">Collection</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="apply" id="both" value="3" {{ $coupon->apply_shipping == 3 ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" name="apply"
+                                                            id="both" value="3"
+                                                            {{ $coupon->apply_shipping == 3 ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="both">Both</label>
                                                     </div>
                                                 </div>
@@ -178,19 +199,25 @@
                                             <div class="form-group">
                                                 <label for="type">Type</label>
                                                 <select class="form-control" id="type" name="type">
-                                                    <option value="P"  {{ $coupon->type == 'P' ? 'selected' : '' }}>Percentage</option>
-                                                    <option value="F"  {{ $coupon->type == 'F' ? 'selected' : '' }}>Fixed Amount</option>
+                                                    <option value="P"
+                                                        {{ $coupon->type == 'P' ? 'selected' : '' }}>Percentage
+                                                    </option>
+                                                    <option value="F"
+                                                        {{ $coupon->type == 'F' ? 'selected' : '' }}>Fixed Amount
+                                                    </option>
                                                 </select>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="discount">Discount</label>
-                                                <input class="form-control" name="discount" id="discount" type="text" value="{{ number_format($coupon->discount,2) }}">
+                                                <input class="form-control" name="discount" id="discount"
+                                                    type="text" value="{{ number_format($coupon->discount, 2) }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="tamount">Total Amount</label>
-                                                <input class="form-control" name="tamount" id="tamount" type="text" value="{{ number_format($coupon->total,2) }}">
+                                                <input class="form-control" name="tamount" id="tamount"
+                                                    type="text" value="{{ number_format($coupon->total, 2) }}">
                                                 <small id="codenamehelp" class="text-muted">
                                                     The total amount that must reached before the coupon is valid.
                                                 </small>
@@ -200,11 +227,15 @@
                                                 <label for="clogin">Customer Login</label><br>
                                                 <div class="form-control">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="clogin" id="clogin1" value="1" {{ $coupon->logged == 1 ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" name="clogin"
+                                                            id="clogin1" value="1"
+                                                            {{ $coupon->logged == 1 ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="clogin1">Yes</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="clogin" id="clogin2" value="0" {{ $coupon->logged == 0 ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" name="clogin"
+                                                            id="clogin2" value="0"
+                                                            {{ $coupon->logged == 0 ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="clogin2">No</label>
                                                     </div>
                                                 </div>
@@ -214,11 +245,15 @@
                                                 <label for="discount">Free Shipping</label>
                                                 <div class="form-control">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="shipping" id="fshipping" value="1" {{ $coupon->shipping == 1 ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio"
+                                                            name="shipping" id="fshipping" value="1"
+                                                            {{ $coupon->shipping == 1 ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="fshipping">Yes</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="shipping" id="fshipping1" value="0" {{ $coupon->shipping == 0 ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio"
+                                                            name="shipping" id="fshipping1" value="0"
+                                                            {{ $coupon->shipping == 0 ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="fshipping1">No</label>
                                                     </div>
                                                 </div>
@@ -227,20 +262,25 @@
                                             <div class="form-group">
                                                 <label for="product">Products</label>
                                                 <input class="form-control" id="product" type="text"
-                                                placeholder="Products">
+                                                    placeholder="Products">
                                                 <small id="codenamehelp" class="text-muted">
-                                                    Choose specific Products the coupon will apply to. Select no products to apply coupon to entire cart.
+                                                    Choose specific Products the coupon will apply to. Select no
+                                                    products to apply coupon to entire cart.
                                                 </small>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="col-md-6">
-                                                    <div class="overflow-auto p-4" style="height: 150px; background: gainsboro;" id="addproduct">
+                                                    <div class="overflow-auto p-4"
+                                                        style="height: 150px; background: gainsboro;" id="addproduct">
                                                         @foreach ($products as $product)
                                                             <div class="d-block product{{ $product->product_id }}">
                                                                 {{ html_entity_decode($product->name) }}
-                                                                <i class="float-right fa fa-minus-circle text-danger" onclick="$('.product{{ $product->product_id }}').remove();"></i>
-                                                                <input type="hidden" value="{{ $product->product_id }}" name="proid[]">
+                                                                <i class="float-right fa fa-minus-circle text-danger"
+                                                                    onclick="$('.product{{ $product->product_id }}').remove();"></i>
+                                                                <input type="hidden"
+                                                                    value="{{ $product->product_id }}"
+                                                                    name="proid[]">
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -250,21 +290,26 @@
                                             <div class="form-group">
                                                 <label for="category">Category</label>
                                                 <input class="form-control" id="category" type="text"
-                                                placeholder="Category">
+                                                    placeholder="Category">
                                                 <small id="codenamehelp" class="text-muted">
-                                                    Choose specific Category the coupon will apply to. Select no products to apply coupon to entire
+                                                    Choose specific Category the coupon will apply to. Select no
+                                                    products to apply coupon to entire
                                                     cart.
                                                 </small>
                                             </div>
 
                                             <div class="form-group">
                                                 <div class="col-md-6">
-                                                    <div class="overflow-auto p-4" style="height: 150px; background: gainsboro;" id="addcategory">
+                                                    <div class="overflow-auto p-4"
+                                                        style="height: 150px; background: gainsboro;"
+                                                        id="addcategory">
                                                         @foreach ($category as $cat)
                                                             <div class="d-block product{{ $cat->category_id }}">
                                                                 {{ html_entity_decode($cat->name) }}
-                                                                <i class="float-right fa fa-minus-circle text-danger" onclick="$('.product{{ $cat->category_id }}').remove();"></i>
-                                                                <input type="hidden" value="{{ $cat->category_id }}" name="catid[]">
+                                                                <i class="float-right fa fa-minus-circle text-danger"
+                                                                    onclick="$('.product{{ $cat->category_id }}').remove();"></i>
+                                                                <input type="hidden" value="{{ $cat->category_id }}"
+                                                                    name="catid[]">
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -273,36 +318,43 @@
 
                                             <div class="form-group">
                                                 <label for="sdate">Date Start</label>
-                                                <input class="form-control" name="sdate" id="sdate" type="date" value="{{ $coupon->date_start }}">
+                                                <input class="form-control" name="sdate" id="sdate"
+                                                    type="date" value="{{ $coupon->date_start }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="edate">Date End</label>
-                                                <input class="form-control" name="edate" id="edate" type="date" value="{{ $coupon->date_end }}">
+                                                <input class="form-control" name="edate" id="edate"
+                                                    type="date" value="{{ $coupon->date_end }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="usercoupon">Uses Per Coupon</label>
                                                 <input class="form-control" name="usercoupon" id="usercoupon"
-                                                value="{{ $coupon->uses_total }}" type="text">
+                                                    value="{{ $coupon->uses_total }}" type="text">
                                                 <small id="codenamehelp" class="text-muted">
-                                                    The maximum number of times the coupon can be used by any customer. Leave blank for unlimited.
+                                                    The maximum number of times the coupon can be used by any customer.
+                                                    Leave blank for unlimited.
                                                 </small>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="usercostomer">Uses Per Customer</label>
-                                                <input class="form-control" name="usercostomer" id="usercostomer" value="{{ $coupon->uses_customer }}" type="text">
+                                                <input class="form-control" name="usercostomer" id="usercostomer"
+                                                    value="{{ $coupon->uses_customer }}" type="text">
                                                 <small id="codenamehelp" class="text-muted">
-                                                    The maximum number of times the coupon can be used by a single customer. Leave blank for unlimited.
+                                                    The maximum number of times the coupon can be used by a single
+                                                    customer. Leave blank for unlimited.
                                                 </small>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="status">Status</label>
                                                 <select class="form-control" id="status" name="status">
-                                                    <option value="1" {{ $coupon->status == 1 ? 'selected' : '' }}>Enable</option>
-                                                    <option value="0" {{ $coupon->status == 0 ? 'selected' : '' }}>disable</option>
+                                                    <option value="1"
+                                                        {{ $coupon->status == 1 ? 'selected' : '' }}>Enable</option>
+                                                    <option value="0"
+                                                        {{ $coupon->status == 0 ? 'selected' : '' }}>disable</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -310,10 +362,11 @@
 
                                         {{-- History Tab --}}
                                         <div class="tab-pane fade" id="nav-history" role="tabpanel"
-                                        aria-labelledby="nav-history-tab">
+                                            aria-labelledby="nav-history-tab">
                                             <div class="row mt-4">
                                                 <div class="col-md-12">
-                                                    <table class="table table-bordered table-striped w-100" id="table">
+                                                    <table class="table table-bordered table-striped w-100"
+                                                        id="table">
                                                         <thead class="bg-dark">
                                                             <tr>
                                                                 <th scope="col">Order Id</th>
@@ -355,10 +408,8 @@
 
 {{-- SCRIPT --}}
 <script type="text/javascript">
-
     // html code decode
-    function htmlDecode(input)
-    {
+    function htmlDecode(input) {
         var doc = new DOMParser().parseFromString(input, "text/html");
         return doc.documentElement.textContent;
     }
@@ -367,60 +418,60 @@
 
     // Search Products
     $('#product').autocomplete({
-        source: function(requete, reponse)
-        {
+        source: function(requete, reponse) {
             $.ajax({
-                    url: "{{ url('searchproduct') }}",
-                    data: {
-                            product: requete.term
-                    },
-                    dataType: 'json',
-                    success: function(data)
-                    {
-                        reponse($.map(data, function(object)
-                        {
-                            return {
-                                    label: htmlDecode(object.name),
-                                    proid: object.product_id,
-                            };
-                        }));
-                    }
+                url: "{{ url('searchproduct') }}",
+                data: {
+                    product: requete.term
+                },
+                dataType: 'json',
+                beforeSend: function() {
+                    $('#loader2').show();
+                },
+                success: function(data) {
+                    $('#loader2').hide();
+                    reponse($.map(data, function(object) {
+                        return {
+                            label: htmlDecode(object.name),
+                            proid: object.product_id,
+                        };
+                    }));
+                }
             });
         },
         minLength: 1,
         delay: 500,
-        select: function(event, ui)
-        {
+        select: function(event, ui) {
             $('#product').val("");
-            $('#addproduct').append(' <div class="d-block product' + ui.item.proid + '">' + ui.item.label+'<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product' + ui.item.proid + '\').remove();"></i>\<input type="hidden" value="' + ui.item.proid + '" name="proid[]">\</div>');
+            $('#addproduct').append(' <div class="d-block product' + ui.item.proid + '">' + ui.item.label +
+                '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.product' + ui.item
+                .proid + '\').remove();"></i>\<input type="hidden" value="' + ui.item.proid +
+                '" name="proid[]">\</div>');
             return false;
         },
-        messages:
-        {
+        messages: {
             noResults: '',
             results: function() {}
         }
-
     });
-    // End Search Product
+    // End Search Products
 
-
-    // Search category
+    // Search Category
     $('#category').autocomplete({
-        source: function(requete, reponse)
-        {
+        source: function(requete, reponse) {
             $.ajax({
                 url: "{{ url('searchcategory') }}",
                 data: {
-                        category: requete.term
+                    category: requete.term
                 },
                 dataType: 'json',
-                success: function(data)
-                {
-                    reponse($.map(data, function(object)
-                    {
-                        return
-                        {
+                beforeSend: function() {
+                    $('#loader1').show();
+                },
+                success: function(data) {
+                    $('#loader1').hide();
+                    reponse($.map(data, function(object) {
+                        return {
                             label: htmlDecode(object.name),
                             catid: object.category_id,
                         };
@@ -430,51 +481,46 @@
         },
         minLength: 1,
         delay: 500,
-        select: function(event, ui)
-        {
+        select: function(event, ui) {
             $('#category').val("");
-            $('#addcategory').append(' <div class="d-block category' + ui.item.catid + '">' + ui.item.label +
-            '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category' + ui.item
-                .catid + '\').remove();"></i>\<input type="hidden" value="' + ui.item.catid + '" name="catid[]">\</div>');
+            $('#addcategory').append(' <div class="d-block category' + ui.item.catid + '">' + ui.item
+                .label +
+                '<i class="float-right fa fa-minus-circle text-danger" onclick="$(\'.category' + ui.item
+                .catid + '\').remove();"></i>\<input type="hidden" value="' + ui.item.catid +
+                '" name="catid[]">\</div>');
             return false;
         },
-        messages:
-        {
+        messages: {
             noResults: '',
             results: function() {}
         }
     });
     // End Search Category
-
 </script>
 
 <script>
-    $(document).ready(function()
-    {
-        // call Function
-        getallcouponhistory();
-
+    $(document).ready(function() {
         // Get AllCouponHistory
-        function getallcouponhistory()
-        {
+        $(function() {
             var couponid = $('#couponid').val();
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-          var table =  $('#table').DataTable();
-          table.destroy();
+            // var table = $('#table').DataTable();
+            // table.destroy();
             var table = $('#table').DataTable({
-                    "serverSide": true,
-                    "processing": true,
+                "serverSide": true,
+                "processing": true,
 
-                    "ajax":{
+                "ajax": {
                     "url": "{{ url('getallcouponhistory') }}",
                     "type": "POST",
-                    "data":{couponid: couponid,}
-                    },
+                    "data": {
+                        couponid: couponid
+                    }
+                },
                 columns: [{
                         data: 'order_id',
                         name: 'order_id',
@@ -493,7 +539,7 @@
                     },
                 ]
             });
-        }
+        });
     });
 </script>
 {{-- END SCRIPT --}}

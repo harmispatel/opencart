@@ -192,8 +192,12 @@
                 },
                 dataType: "json",
                 success: function (data){
-                    if(data.success == 'collection')
-                    window.location = catpath;
+                    location.reload();
+                    // alert('HI')
+                    // if(data.success == 'collection'){
+                    //     window.location = catpath;
+
+                    // }
                 }
             });
         });
@@ -307,6 +311,8 @@
                     dataType: "json",
                     success: function (data)
                     {
+
+
                         if($('.store_list').length > 0)
                         {
                             $('.store_list').remove();
@@ -329,6 +335,7 @@
                         }
                         else
                         {
+
                             location.reload();
                         }
                     },
