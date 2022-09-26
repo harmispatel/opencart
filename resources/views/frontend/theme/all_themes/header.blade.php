@@ -95,11 +95,11 @@
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 if($userdeliverytype == 'delivery')
                 {
-                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
+                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
+                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
                 }
                 else
                 {
@@ -115,7 +115,7 @@
                 if($userdeliverytype == 'delivery')
                 {
                     // $price += isset($mycart['del_price']) * $mycart['quantity']);
-                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
+                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
 
                 }
                 elseif($userdeliverytype == 'collection')
@@ -171,7 +171,7 @@
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += (isset($mycart['col_price'])) ? $mycart['col_price'] : 0 * $mycart['quantity'];
+                    $price += (isset($mycart['col_price'])) ? $mycart['col_price'] : 1 * $mycart['quantity'];
                 }
                 else
                 {

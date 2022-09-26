@@ -733,6 +733,7 @@ class MenuController extends Controller
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
                 $html .= '<td>' . $cart['quantity'] . 'x</td>';
+                $html .= '<td>-</td>';
                 $html .= '<td>' . $cart['name'] . '<br>';
 
                 if (isset($cart['topping']) && !empty($cart['topping'])) {
@@ -775,6 +776,7 @@ class MenuController extends Controller
             $total = $subtotal + $delivery_charge;
         }
         if($couponcode != 0){
+            // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . number_format($couponcode, 2) . '</span>';
             $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         }
 
