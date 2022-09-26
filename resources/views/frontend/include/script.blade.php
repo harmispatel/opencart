@@ -311,8 +311,6 @@
                     dataType: "json",
                     success: function (data)
                     {
-
-
                         if($('.store_list').length > 0)
                         {
                             $('.store_list').remove();
@@ -335,7 +333,6 @@
                         }
                         else
                         {
-
                             location.reload();
                         }
                     },

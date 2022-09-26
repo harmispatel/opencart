@@ -211,13 +211,13 @@
                                             <div class="form-group">
                                                 <label for="discount">Discount</label>
                                                 <input class="form-control" name="discount" id="discount"
-                                                    type="text" value="{{ number_format($coupon->discount, 2) }}">
+                                                    type="text" value="{{ $coupon->discount }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="tamount">Total Amount</label>
                                                 <input class="form-control" name="tamount" id="tamount"
-                                                    type="text" value="{{ number_format($coupon->total, 2) }}">
+                                                    type="text" value="{{ $coupon->total }}">
                                                 <small id="codenamehelp" class="text-muted">
                                                     The total amount that must reached before the coupon is valid.
                                                 </small>

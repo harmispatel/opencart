@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Customer;
 use App\Models\DeliverySettings;
 use App\Models\Gallary;
@@ -16,6 +15,7 @@ use App\Models\Product_to_category;
 use App\Models\Settings;
 use App\Models\Slider;
 use App\Models\ToppingProductPriceSize;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
@@ -27,40 +27,37 @@ class HomeController extends Controller
         // Get Current URL
         $currentURL = URL::to("/");
 
-
         // Get Store Settings & Other Settings
         $store_data = frontStoreID($currentURL);
 
-
         // Get Current Front Store ID
-        $front_store_id =  $store_data['store_id'];
+        $front_store_id = $store_data['store_id'];
 
         // Store Settings
-        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] : '';
 
         // Get Current BestCategory ID & BestCategory Settings
-        $current_bestcategory_id = layoutID($currentURL,'bestcategory_id');
+        $current_bestcategory_id = layoutID($currentURL, 'bestcategory_id');
         $bestcategory_id = $current_bestcategory_id['bestcategory_id'];
-        $store_bestcategory_settings = storeLayoutSettings($bestcategory_id,$front_store_id,'bestcategory_settings','bestcategory_id');
+        $store_bestcategory_settings = storeLayoutSettings($bestcategory_id, $front_store_id, 'bestcategory_settings', 'bestcategory_id');
 
         // Get Current PopularFood ID & PopularFood Settings
-        $current_popularfood_id = layoutID($currentURL,'popularfood_id');
+        $current_popularfood_id = layoutID($currentURL, 'popularfood_id');
         $popularfood_id = $current_popularfood_id['popularfood_id'];
-        $store_popularfood_settings = storeLayoutSettings($popularfood_id,$front_store_id,'popularfood_settings','popularfood_id');
+        $store_popularfood_settings = storeLayoutSettings($popularfood_id, $front_store_id, 'popularfood_settings', 'popularfood_id');
 
         // Get Current Gallary ID & Gallary Settings
-        $current_gallary_id = layoutID($currentURL,'gallary_id');
+        $current_gallary_id = layoutID($currentURL, 'gallary_id');
         $gallary_id = $current_gallary_id['gallary_id'];
-        $store_gallary_settings = storeLayoutSettings($gallary_id,$front_store_id,'gallary_settings','gallary_id');
+        $store_gallary_settings = storeLayoutSettings($gallary_id, $front_store_id, 'gallary_settings', 'gallary_id');
 
-
-        $food_limit =  isset($store_popularfood_settings['popularfood_limit']) ? $store_popularfood_settings['popularfood_limit'] : 10;
+        $food_limit = isset($store_popularfood_settings['popularfood_limit']) ? $store_popularfood_settings['popularfood_limit'] : 10;
 
         $cat_limit = isset($store_bestcategory_settings['bestcategory_limit']) ? $store_bestcategory_settings['bestcategory_limit'] : 5;
 
         $gallary_limit = isset($store_gallary_settings['gallary_limit']) ? $store_gallary_settings['gallary_limit'] : 10;
 
-        $sliders = Slider::where('store_id',$front_store_id)->get();
+        $sliders = Slider::where('store_id', $front_store_id)->get();
 
         $photos = Gallary::where('store_id', $front_store_id)->limit($gallary_limit)->get();
 
@@ -108,9 +105,8 @@ class HomeController extends Controller
         return view('frontend.pages.home', compact(['photos', 'best_categories', 'popular_foods', 'delivery_setting', 'areas', 'sliders', 'htmlbox_store_about_settings']));
     }
 
-
     // Suspend
-    function suspend()
+    public function suspend()
     {
         // Get Current URL
         $currentURL = URL::to("/");
@@ -119,10 +115,10 @@ class HomeController extends Controller
         $store_data = frontStoreID($currentURL);
 
         // Get Current Front Store ID
-        $front_store_id =  $store_data['store_id'];
+        $front_store_id = $store_data['store_id'];
 
         // Store Settings
-        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] :'';
+        $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] : '';
 
         // Suspend Data
         $data['suspend_title'] = isset($store_setting['suspend_title']) ? $store_setting['suspend_title'] : 'Maintenance Mode';
@@ -132,16 +128,13 @@ class HomeController extends Controller
         // Suspend Permenantly
         $suspend_permanently = isset($store_setting['suspend_permanently']) ? $store_setting['suspend_permanently'] : 'no';
 
-        if($suspend_permanently == 'yes')
-        {
+        if ($suspend_permanently == 'yes') {
             return view('frontend.pages.suspend', $data);
-        }
-        else{
+        } else {
             return redirect()->route('home');
         }
 
     }
-
 
     // Function For ZipCode
     public function checkZipCode(Request $request)
@@ -153,7 +146,7 @@ class HomeController extends Controller
         $front_store_id =  $current_theme['store_id'];
 
         $type = $request->type;
-        $flag_post_code =session()->get('flag_post_code');
+
         // Check User ID
         if (session()->has('userid')) {
             $userid = session()->get('userid');
@@ -161,61 +154,65 @@ class HomeController extends Controller
             $userid = 0;
         }
 
-         if($type == $flag_post_code ){
-
-
-
         if ($type == 'collection') {
 
             if ($userid == 0) {
                 if (session()->has('cart1')) {
-                    $cart = session()->get('cart1');
+                    session()->forget('cart1');
 
-                    if (!empty($cart) || isset($cart)) {
-                        if (isset($cart['size']) && !empty($cart['size'])) {
-                            foreach ($cart['size'] as $key => $value) {
-                                $cart['size'][$key]['del_price'] = 0.00;
-                                session()->put('cart1', $cart);
-                            }
-                        }
+                    // Change ortder type change price delevery and collection session
+                    // $cart = session()->get('cart1');
 
-                        if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                            foreach ($cart['withoutSize'] as $key => $value) {
-                                $cart['withoutSize'][$key]['del_price'] = 0.00;
-                                session()->put('cart1', $cart);
-                            }
-                        }
-                    }
+                    // if (!empty($cart) || isset($cart)) {
+                    //     if (isset($cart['size']) && !empty($cart['size'])) {
+                    //         foreach ($cart['size'] as $key => $value) {
+                    //             $cart['size'][$key]['del_price'] = 0.00;
+                    //             session()->put('cart1', $cart);
+                    //         }
+                    //     }
+
+                    //     if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
+                    //         foreach ($cart['withoutSize'] as $key => $value) {
+                    //             $cart['withoutSize'][$key]['del_price'] = 0.00;
+                    //             session()->put('cart1', $cart);
+                    //         }
+                    //     }
+                    // }
                 }
             } else {
                 if (!empty($userid)) {
-                    $customer_cart = getuserCart($userid);
+                    $user = Customer::find($userid);
+                    $user->cart = '';
+                    $user->update();
 
-                    if (isset($customer_cart) && !empty($customer_cart)) {
-                        if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                            foreach ($customer_cart['size'] as $key => $value) {
-                                $customer_cart['size'][$key]['del_price'] = 0.00;
+                    // Change ortder type change price delevery and collection Database
+                    // $customer_cart = getuserCart($userid);
 
-                                $serial = serialize($customer_cart);
-                                $base64 = base64_encode($serial);
-                                $user = Customer::find($userid);
-                                $user->cart = $base64;
-                                $user->update();
-                            }
-                        }
+                    // if (isset($customer_cart) && !empty($customer_cart)) {
+                    //     if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
+                    //         foreach ($customer_cart['size'] as $key => $value) {
+                    //             $customer_cart['size'][$key]['del_price'] = 0.00;
 
-                        if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                            foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                $customer_cart['withoutSize'][$key]['del_price'] = 0.00;
+                    //             $serial = serialize($customer_cart);
+                    //             $base64 = base64_encode($serial);
+                    //             $user = Customer::find($userid);
+                    //             $user->cart = $base64;
+                    //             $user->update();
+                    //         }
+                    //     }
 
-                                $serial = serialize($customer_cart);
-                                $base64 = base64_encode($serial);
-                                $user = Customer::find($userid);
-                                $user->cart = $base64;
-                                $user->update();
-                            }
-                        }
-                    }
+                    //     if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
+                    //         foreach ($customer_cart['withoutSize'] as $key => $value) {
+                    //             $customer_cart['withoutSize'][$key]['del_price'] = 0.00;
+
+                    //             $serial = serialize($customer_cart);
+                    //             $base64 = base64_encode($serial);
+                    //             $user = Customer::find($userid);
+                    //             $user->cart = $base64;
+                    //             $user->update();
+                    //         }
+                    //     }
+                    // }
                 }
             }
 
@@ -223,24 +220,7 @@ class HomeController extends Controller
             $json['success'] = 'collection';
             return response()->json($json);
         }
-    }else{
-        // session()->forget('cart1');
-        // session()->put('flag_post_code', 'collection');
-        //     $json['success'] = 'collection';
-        //     return response()->json($json);
-        if($userid == 0){
-            session()->forget('cart1');
-        }else{
-            $user = Customer::find($userid);
-            $user->cart = '';
-            $user->update();
-        }
-        session()->put('flag_post_code',$type);
-            return response()->json([
-                'success' => 1,
-            ]);
 
-    }
         if (isset($request->keyword)) {
             $keyword = trim($request->keyword);
         } else {
@@ -280,72 +260,76 @@ class HomeController extends Controller
 
                             // Guest User
                             if ($userid == 0) {
-                                if (session()->has('cart1')) {
-                                    $cart = session()->get('cart1');
+                                session()->forget('cart1');
+                                // if (session()->has('cart1')) {
+                                //     $cart = session()->get('cart1');
 
-                                    if (!empty($cart) || isset($cart)) {
-                                        // For Delivery Price
-                                        if ($d_type == 'delivery') {
-                                            if (isset($cart['size']) && !empty($cart['size'])) {
-                                                foreach ($cart['size'] as $key => $value) {
-                                                    $size_id = $key;
-                                                    $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                                    $cart['size'][$key]['del_price'] = $del_price;
-                                                    session()->put('cart1', $cart);
-                                                }
-                                            }
+                                //     if (!empty($cart) || isset($cart)) {
+                                //         // For Delivery Price
+                                //         if ($d_type == 'delivery') {
+                                //             if (isset($cart['size']) && !empty($cart['size'])) {
+                                //                 foreach ($cart['size'] as $key => $value) {
+                                //                     $size_id = $key;
+                                //                     $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                                //                     $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                                //                     $cart['size'][$key]['del_price'] = $del_price;
+                                //                     session()->put('cart1', $cart);
+                                //                 }
+                                //             }
 
-                                            if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                                                foreach ($cart['withoutSize'] as $key => $value) {
-                                                    $prod_id = $key;
-                                                    $prod = Product::where('product_id', $prod_id)->first();
-                                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                                    $cart['withoutSize'][$key]['del_price'] = $del_price;
-                                                    session()->put('cart1', $cart);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                //             if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
+                                //                 foreach ($cart['withoutSize'] as $key => $value) {
+                                //                     $prod_id = $key;
+                                //                     $prod = Product::where('product_id', $prod_id)->first();
+                                //                     $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                                //                     $cart['withoutSize'][$key]['del_price'] = $del_price;
+                                //                     session()->put('cart1', $cart);
+                                //                 }
+                                //             }
+                                //         }
+                                //     }
+                                // }
                             } else {
                                 if (!empty($userid)) {
                                     $customer_cart = getuserCart($userid);
+                                    $user = Customer::find($userid);
+                                    $user->cart = '';
+                                    $user->update();
 
-                                    if (isset($customer_cart) && !empty($customer_cart)) {
-                                        // For Delivery Price
-                                        if ($d_type == 'delivery') {
-                                            if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                                                foreach ($customer_cart['size'] as $key => $value) {
-                                                    $size_id = $key;
-                                                    $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                                    $customer_cart['size'][$key]['del_price'] = $del_price;
+                                    // if (isset($customer_cart) && !empty($customer_cart)) {
+                                    //     // For Delivery Price
+                                    //     if ($d_type == 'delivery') {
+                                    //         if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
+                                    //             foreach ($customer_cart['size'] as $key => $value) {
+                                    //                 $size_id = $key;
+                                    //                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                                    //                 $customer_cart['size'][$key]['del_price'] = $del_price;
 
-                                                    $serial = serialize($customer_cart);
-                                                    $base64 = base64_encode($serial);
-                                                    $user = Customer::find($userid);
-                                                    $user->cart = $base64;
-                                                    $user->update();
-                                                }
-                                            }
+                                    //                 $serial = serialize($customer_cart);
+                                    //                 $base64 = base64_encode($serial);
+                                    //                 $user = Customer::find($userid);
+                                    //                 $user->cart = $base64;
+                                    //                 $user->update();
+                                    //             }
+                                    //         }
 
-                                            if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                                                foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                                    $prod_id = $key;
-                                                    $prod = Product::where('product_id', $prod_id)->first();
-                                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                                    $customer_cart['withoutSize'][$key]['del_price'] = $del_price;
+                                    //         if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
+                                    //             foreach ($customer_cart['withoutSize'] as $key => $value) {
+                                    //                 $prod_id = $key;
+                                    //                 $prod = Product::where('product_id', $prod_id)->first();
+                                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                                    //                 $customer_cart['withoutSize'][$key]['del_price'] = $del_price;
 
-                                                    $serial = serialize($customer_cart);
-                                                    $base64 = base64_encode($serial);
-                                                    $user = Customer::find($userid);
-                                                    $user->cart = $base64;
-                                                    $user->update();
-                                                }
-                                            }
-                                        }
-                                    }
+                                    //                 $serial = serialize($customer_cart);
+                                    //                 $base64 = base64_encode($serial);
+                                    //                 $user = Customer::find($userid);
+                                    //                 $user->cart = $base64;
+                                    //                 $user->update();
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // }
                                 }
                             }
 
@@ -362,10 +346,7 @@ class HomeController extends Controller
         }
         if (!isset($json['success'])) $json['error'] = $json['error'];
         return response()->json($json);
-
     }
-
-
 
 
     // Function For PostCode
@@ -383,8 +364,5 @@ class HomeController extends Controller
         }
         return response()->json($json);
     }
-
-
-
 
 }
