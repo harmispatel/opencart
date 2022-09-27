@@ -741,8 +741,8 @@ It's used for View Menu.
                                                                 }
                                                                 elseif($userdeliverytype == 'collection')
                                                                 {
-                                                                    // $price = $cart['col_price'] * $cart['quantity'];
-                                                                    $price = isset($cart['col_price']) ? $cart['col_price'] : 1 * $cart['quantity'];
+                                                                    $price = $cart['col_price'] * $cart['quantity'];
+                                                                    // $price = isset($cart['col_price']) ? $cart['col_price'] : 1 * $cart['quantity'];
                                                                 }
                                                                 else
                                                                 {
