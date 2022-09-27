@@ -2178,6 +2178,7 @@ class MenuController extends Controller
                                                     $couponcode = $Couponcode->discount;
                                                 }
 
+
                                                 // $total = $subtotal - $couponcode + $delivery_charge;
                                                 $total = $subtotal - $couponcode ;
 

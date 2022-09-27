@@ -1456,6 +1456,7 @@ It's used for View Menu.
 
                     if (result.success == 1)
                     {
+                        // alert(result.couponcode)
                         $('#success').html('');
                         $('#success').append(result.success_message);
 
