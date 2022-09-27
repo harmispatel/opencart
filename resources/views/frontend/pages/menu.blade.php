@@ -725,7 +725,7 @@ It's used for View Menu.
                                                                 // Price
                                                                 if($userdeliverytype == 'delivery')
                                                                 {
-                                                                    $price = isset($cart['del_price']) ? $cart['del_price'] :1 * $cart['quantity'];
+                                                                    $price = $cart['del_price'] * $cart['quantity'];
                                                                 }
                                                                 elseif($userdeliverytype == 'collection')
                                                                 {
@@ -735,9 +735,10 @@ It's used for View Menu.
                                                                 else
                                                                 {
                                                                     $price = $cart['main_price'] * $cart['quantity'];
-                                                                }
 
+                                                                }
                                                                 $subtotal += $price;
+
 
                                                             @endphp
                                                             <tr>

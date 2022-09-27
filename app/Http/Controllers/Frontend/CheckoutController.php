@@ -112,7 +112,7 @@ class CheckoutController extends Controller
                   if ($get_coupon->logged == 1) {
                       if ($user_id != 0) {
                           $cart =getuserCart($user_id);
-                          $cart_proid = $cart['product_id'];
+                          $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
                           $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                           $count_user_per_cpn = count($cpn_history);
                           $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();

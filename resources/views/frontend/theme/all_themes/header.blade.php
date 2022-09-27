@@ -116,7 +116,6 @@
                 {
                     $price += (isset($mycart['del_price']) * $mycart['quantity']);
                     // $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
-
                 }
                 elseif($userdeliverytype == 'collection')
                 {
@@ -132,8 +131,10 @@
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
-        }
 
+        }
+        
+      
         if (!empty($Coupon) || $Coupon != '')
         {
             $couponcode =0;
@@ -148,7 +149,10 @@
                     $couponcode = $Coupon['discount'];
                 }
             }
+           
             $headertotal += $price - $couponcode + $delivery_charge;
+            
+           
            
         } 
         else

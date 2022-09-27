@@ -124,7 +124,7 @@ class MenuController extends Controller
                         $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $product_history = CouponProduct::where('product_id', $get_coupon->coupon_id)->first();
                         $cart = getuserCart($user_id);
-                        $cart_proid = $cart['product_id'];
+                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] :'';
                         // $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->groupBy('customer_id')->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
@@ -458,7 +458,7 @@ class MenuController extends Controller
                 if ($get_coupon->logged == 1) {
                     if ($user_id != 0) {
                         $cart = getuserCart($user_id);
-                        $cart_proid = $cart['product_id'];
+                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
                         $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
@@ -1004,7 +1004,7 @@ class MenuController extends Controller
                     $cpn_history = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->get();
                     $count_user_per_cpn = count($cpn_history);
                     $cart = getuserCart($userid);
-                    $cart_proid = $cart['product_id'];
+                    $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
                     $uses_per_cpn = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->where('customer_id', $userid)->count();
                     if ($Couponcode->on_off == 1 && $Couponcode->status == 1) {
                         if ($Couponcode->uses_total >  $count_user_per_cpn || $Couponcode->uses_total == 0) {
