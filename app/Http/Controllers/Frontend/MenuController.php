@@ -2628,9 +2628,10 @@ class MenuController extends Controller
                 // session()->delete('cart1');
                 session()->forget('cart1');
             } else {
-                $user = Customer::find($userid);
-                $user->cart = '';
-                $user->update();
+                session()->forget('cart1');
+                // $user = Customer::find($userid);
+                // $user->cart = '';
+                // $user->update();
             }
             session()->put('flag_post_code', $d_type);
             return response()->json([
