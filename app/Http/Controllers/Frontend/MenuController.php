@@ -34,9 +34,7 @@ class MenuController extends Controller
     public function index()
     {
 
-        // echo '<pre>';
-        // print_r(session()->all());
-        // exit();
+
         // session()->forget('couponcode');
         //  session()->forget('couponname');
         $prod_id = session()->get('product_id');
@@ -776,12 +774,15 @@ class MenuController extends Controller
             $total = $subtotal + $delivery_charge;
         }
         if(isset($couponcode) ? $couponcode : 0 != 0){
-            // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . number_format($couponcode, 2) . '</span>';
             $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         }
         else{
         $coupon_html .= '';
         }
+        // echo '<pre>';
+        // print_r( $total);
+        // exit();
+        session()->put('headertotal',$total);
         // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
         $sessioncouponname = session()->put('couponname', isset($Coupon['code']) ? $Coupon['code'] : '');

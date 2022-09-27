@@ -1,3 +1,5 @@
+
+
 {{--
     THIS IS LAYOUT(THEME) 1 HEADER PAGE FRONTEND DESIGN
     ----------------------------------------------------------------------------------------------
@@ -84,11 +86,7 @@
     // Cart Details
     if(session()->has('userid'))
     {
-        // Get Cart From Database===- 
-        // $cart = getuserCart(session()->get('userid'));
-
-        // Get Cart From Session===-
-        $mycart = session()->get('cart1');
+        $cart = getuserCart(session()->get('userid'));
         $cart_products = 0;
 
         if (isset($cart['size'])) 
@@ -99,11 +97,11 @@
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 if($userdeliverytype == 'delivery')
                 {
-                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
+                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
+                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
                 }
                 else
                 {
@@ -118,15 +116,14 @@
             {
                 if($userdeliverytype == 'delivery')
                 {
-                    $price += (isset($mycart['del_price']) * $mycart['quantity']);
-                    // $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
+                    // $price += isset($mycart['del_price']) * $mycart['quantity']);
+                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (0 * $mycart['quantity']);
+
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    // $price += $mycart['col_price'] * $mycart['quantity'];
-                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);  
-                }   
-                    
+                    $price += $mycart['col_price'] * $mycart['quantity'];
+                }
                 else
                 {
                     $price += $mycart['main_price'] * $mycart['quantity'];
@@ -135,30 +132,24 @@
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
-
         }
-        
-      
+
         if (!empty($Coupon) || $Coupon != '')
         {
-            $couponcode =0;
-            if ( $Coupon['total'] >= $price)
-            {
-                if ($Coupon['type'] == 'P')
+           $couponcode =0;
+                if ( $Coupon['total'] >= $price)
                 {
-                    $couponcode = ($price * $Coupon['discount']) / 100;
+                    if ($Coupon['type'] == 'P')
+                    {
+                        $couponcode = ($price * $Coupon['discount']) / 100;
+                    }
+                    if ($Coupon['type'] == 'F')
+                    {
+                        $couponcode = $Coupon['discount'];
+                    }
                 }
-                if ($Coupon['type'] == 'F')
-                {
-                    $couponcode = $Coupon['discount'];
-                }
-            }
-           
             $headertotal += $price - $couponcode + $delivery_charge;
-            
-           
-           
-        } 
+        }
         else
         {
             $headertotal += $price + $delivery_charge;
@@ -181,17 +172,15 @@
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += (isset($mycart['col_price'])) ? $mycart['col_price'] : 1 * $mycart['quantity'];
+                    $price += (isset($mycart['col_price'])) ? $mycart['col_price'] : 0 * $mycart['quantity'];
                 }
                 else
                 {
                     $price += $mycart['main_price'] * $mycart['quantity'];
                 }
-               
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
-         
         }
         if (isset($cart['withoutSize'])) 
         {
@@ -215,11 +204,11 @@
                 $cart_products += $mycart['quantity'];
             }
         }
-        
+    
         if(!empty($cart) || $cart != ''){
             if (!empty($Coupon) || $Coupon != '')
             {
-                $couponcode =0;
+               $couponcode =0;
                 if ( $Coupon['total'] >= $price)
                 {
                     if ($Coupon['type'] == 'P')
@@ -231,7 +220,7 @@
                         $couponcode = $Coupon['discount'];
                     }
                 }
-                
+               
                 $headertotal = $price - $couponcode + $delivery_charge;
             }
             else
@@ -245,7 +234,7 @@
         // $sessiontotal = session()->put('total',$headertotal);
         $sessionsubtotal = session()->put('subtotal',$price);
          
-    
+
     $currentdate = strtotime(date("Y-m-d")); 
 @endphp
 
@@ -660,7 +649,7 @@
 
                 <div class="header-bottom wow animate__fadeInDown" data-wow-duration="1s" style="border-radius:0 0 10px 10px!important;">
                     <a class="logo" href="{{ route('home') }}">
-                        <img class="img-fluid" src="{{ $store_logo }}" alt="Logo" style="max-width: 130px;" />
+                        <img class="img-fluid" src="{{ get_css_url().$store_logo }}" alt="Logo" style="max-width: 130px;" />
                     </a>
                     <ul class="menu">
                         <li class="{{ ((request()->is('/'))) ? 'active' : '' }}">

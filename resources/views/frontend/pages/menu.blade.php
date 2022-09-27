@@ -805,30 +805,30 @@ It's used for View Menu.
                                                     <li class="minicart-list-item">
                                                         @if (($Coupon != '' || !empty($Coupon)))
                                                            @if ($couponcode != 0)
-                                                           <div class="minicart-list-item-innr coupon_code">
-                                                               @if ($Coupon != '' || !empty($Coupon))
-                                                                   <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
-                                                                   <span>{{ $currency }}
-                                                                       -{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
-                                                               @endif
-                                                           </div>
-                                                           <div class="minicart-list-item-innr addcoupon">
-                                                               <label>
-                                                                   @if ($Coupon != '' || !empty($Coupon))
-                                                                       @if ($couponcode != 0)
-                                                                       <a style="color: #ff0000;font-size:14px;"
-                                                                           onclick="showcoupon();">
-                                                                           Change Coupon Code
-                                                                       </a>
-                                                                       @endif
-                                                                   @else
-                                                                       <a style="color: #ff0000;font-size:14px;"
-                                                                           onclick="showcoupon();">
-                                                                           Apply New Coupon Code
-                                                                       </a>
-                                                                   @endif
-                                                               </label>
-                                                           </div>
+                                                            <div class="minicart-list-item-innr coupon_code">
+                                                                @if ($Coupon != '' || !empty($Coupon))
+                                                                    <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
+                                                                    <span>{{ $currency }}
+                                                                        -{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
+                                                                @endif
+                                                            </div>
+                                                            <div class="minicart-list-item-innr addcoupon">
+                                                                <label>
+                                                                    @if ($Coupon != '' || !empty($Coupon))
+                                                                        @if ($couponcode != 0)
+                                                                        <a style="color: #ff0000;font-size:14px;"
+                                                                            onclick="showcoupon();">
+                                                                            Change Coupon Code
+                                                                        </a>
+                                                                        @endif
+                                                                    @else
+                                                                        <a style="color: #ff0000;font-size:14px;"
+                                                                            onclick="showcoupon();">
+                                                                            Apply New Coupon Code
+                                                                        </a>
+                                                                    @endif
+                                                                </label>
+                                                            </div>
                                                            @endif
                                                         @endif
                                                         <div class="minicart-list-item-innr">
