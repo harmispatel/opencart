@@ -621,32 +621,43 @@ class MenuController extends Controller
                             }
                         }
                     } else {
-                        $cart = getuserCart($userid);
                         if ($sizeid == 0) {
-                            unset($cart['withoutSize'][$productid]);
-                            $serial = serialize($cart);
-                            $base64 = base64_encode($serial);
-                            $user = Customer::find($userid);
-                            $user->cart = $base64;
-                            $user->update();
-
+                            session()->forget('cart1.withoutSize.' . $productid);
                             for ($i = 1; $i <= $loopid; $i++) {
-                                $newcart = getuserCart($userid);
-                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid, $is_topping, $checkbox);
+                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
                             }
                         } else {
-                            unset($cart['size'][$sizeid]);
-                            unset($cart['withoutSize'][$productid]);
-                            $serial = serialize($cart);
-                            $base64 = base64_encode($serial);
-                            $user = Customer::find($userid);
-                            $user->cart = $base64;
-                            $user->update();
+                            session()->forget('cart1.size.' . $sizeid);
                             for ($i = 1; $i <= $loopid; $i++) {
-                                $newcart = getuserCart($userid);
-                                addtoCartUser($request, $productid, $sizeid, $newcart, $userid, $is_topping, $checkbox);
+                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
                             }
                         }
+                        // $cart = getuserCart($userid);
+                        // if ($sizeid == 0) {
+                        //     unset($cart['withoutSize'][$productid]);
+                        //     $serial = serialize($cart);
+                        //     $base64 = base64_encode($serial);
+                        //     $user = Customer::find($userid);
+                        //     $user->cart = $base64;
+                        //     $user->update();
+
+                        //     for ($i = 1; $i <= $loopid; $i++) {
+                        //         $newcart = getuserCart($userid);
+                        //         addtoCartUser($request, $productid, $sizeid, $newcart, $userid, $is_topping, $checkbox);
+                        //     }
+                        // } else {
+                        //     unset($cart['size'][$sizeid]);
+                        //     unset($cart['withoutSize'][$productid]);
+                        //     $serial = serialize($cart);
+                        //     $base64 = base64_encode($serial);
+                        //     $user = Customer::find($userid);
+                        //     $user->cart = $base64;
+                        //     $user->update();
+                        //     for ($i = 1; $i <= $loopid; $i++) {
+                        //         $newcart = getuserCart($userid);
+                        //         addtoCartUser($request, $productid, $sizeid, $newcart, $userid, $is_topping, $checkbox);
+                        //     }
+                        // }
                     }
                 } else {
                     return response()->json([
@@ -658,16 +669,20 @@ class MenuController extends Controller
             if ($userid == 0) {
                 addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
             } else {
-                $cart = getuserCart($userid);
+                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox); //Session
 
-                addtoCartUser($request, $productid, $sizeid, $cart, $userid, $is_topping, $checkbox);
+                // Database
+                // $cart = getuserCart($userid);
+
+                // addtoCartUser($request, $productid, $sizeid, $cart, $userid, $is_topping, $checkbox);
             }
         }
 
         if ($userid == 0) {
             $mycart = $request->session()->get('cart1');
         } else {
-            $mycart = getuserCart($userid);
+            $mycart = $request->session()->get('cart1'); //Session
+            // $mycart = getuserCart($userid); //Database
         }
 
 
@@ -887,33 +902,39 @@ class MenuController extends Controller
                 session()->forget('cart1.size.' . $sizeid);
             }
         } else {
-            $cart = getuserCart($userid);
-
-            if (isset($cart)) {
-                if ($sizeid == 0) {
-                    unset($cart['withoutSize'][$productid]);
-                    unset($cart['product_id'][$productid]);
-                } else {
-                    unset($cart['size'][$sizeid]);
-                    unset($cart['product_id']['s_' . $sizeid]);
-                    if (isset($cart['size']) && count($cart['size']) == 0) {
-                        unset($cart['size']);
-                    }
-                    if (isset($cart['withoutSize']) && count($cart['withoutSize']) == 0) {
-                        unset($cart['withoutSize']);
-                    }
-                    if (count($cart['product_id']) == 0) {
-                        unset($cart['product_id']);
-                    }
-                }
+             // Session
+            if ($sizeid == 0) {
+                session()->forget('cart1.withoutSize.' . $productid);
+            } else {
+                session()->forget('cart1.size.' . $sizeid);
             }
 
-            $serial = serialize($cart);
-            $base64 = base64_encode($serial);
-            $user_id = $userid;
-            $user = Customer::find($user_id);
-            $user->cart = $base64;
-            $user->update();
+            // $cart = getuserCart($userid);  // Database
+            // if (isset($cart)) {
+            //     if ($sizeid == 0) {
+            //         unset($cart['withoutSize'][$productid]);
+            //         unset($cart['product_id'][$productid]);
+            //     } else {
+            //         unset($cart['size'][$sizeid]);
+            //         unset($cart['product_id']['s_' . $sizeid]);
+            //         if (isset($cart['size']) && count($cart['size']) == 0) {
+            //             unset($cart['size']);
+            //         }
+            //         if (isset($cart['withoutSize']) && count($cart['withoutSize']) == 0) {
+            //             unset($cart['withoutSize']);
+            //         }
+            //         if (count($cart['product_id']) == 0) {
+            //             unset($cart['product_id']);
+            //         }
+            //     }
+            // }
+
+            // $serial = serialize($cart);
+            // $base64 = base64_encode($serial);
+            // $user_id = $userid;
+            // $user = Customer::find($user_id);
+            // $user->cart = $base64;
+            // $user->update();
         }
 
 
@@ -2396,127 +2417,125 @@ class MenuController extends Controller
         }
         if ($flag_post_code == $d_type) {
 
-
-
-
             // Guest User
             if ($userid == 0) {
                 if (session()->has('cart1')) {
                     $cart = session()->get('cart1');
 
-                    if (!empty($cart) || isset($cart)) {
-                        // For Delivery Price
-                        if ($d_type == 'delivery') {
-                            if (isset($cart['size']) && !empty($cart['size'])) {
-                                foreach ($cart['size'] as $key => $value) {
-                                    $size_id = $key;
-                                    $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                    $cart['size'][$key]['del_price'] = $del_price;
-                                    session()->put('cart1', $cart);
-                                }
-                            }
+                    // if (!empty($cart) || isset($cart)) {
+                    //     // For Delivery Price
+                    //     if ($d_type == 'delivery') {
+                    //         if (isset($cart['size']) && !empty($cart['size'])) {
+                    //             foreach ($cart['size'] as $key => $value) {
+                    //                 $size_id = $key;
+                    //                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                    //                 $cart['size'][$key]['del_price'] = $del_price;
+                    //                 session()->put('cart1', $cart);
+                    //             }
+                    //         }
 
-                            if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                                foreach ($cart['withoutSize'] as $key => $value) {
-                                    $prod_id = $key;
-                                    $prod = Product::where('product_id', $prod_id)->first();
-                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                    $cart['withoutSize'][$key]['del_price'] = $del_price;
-                                    session()->put('cart1', $cart);
-                                }
-                            }
-                        } elseif ($d_type == 'collection') {
-                            if (isset($cart['size']) && !empty($cart['size'])) {
-                                foreach ($cart['size'] as $key => $value) {
-                                    $size_id = $key;
-                                    $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                    $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-                                    $cart['size'][$key]['col_price'] = $col_price;
-                                    session()->put('cart1', $cart);
-                                }
-                            }
+                    //         if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
+                    //             foreach ($cart['withoutSize'] as $key => $value) {
+                    //                 $prod_id = $key;
+                    //                 $prod = Product::where('product_id', $prod_id)->first();
+                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                    //                 $cart['withoutSize'][$key]['del_price'] = $del_price;
+                    //                 session()->put('cart1', $cart);
+                    //             }
+                    //         }
+                    //     } elseif ($d_type == 'collection') {
+                    //         if (isset($cart['size']) && !empty($cart['size'])) {
+                    //             foreach ($cart['size'] as $key => $value) {
+                    //                 $size_id = $key;
+                    //                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                    //                 $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                    //                 $cart['size'][$key]['col_price'] = $col_price;
+                    //                 session()->put('cart1', $cart);
+                    //             }
+                    //         }
 
-                            if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                                foreach ($cart['withoutSize'] as $key => $value) {
-                                    $prod_id = $key;
-                                    $prod = Product::where('product_id', $prod_id)->first();
-                                    $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-                                    $cart['withoutSize'][$key]['col_price'] = $col_price;
-                                    session()->put('cart1', $cart);
-                                }
-                            }
-                        }
-                    }
+                    //         if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
+                    //             foreach ($cart['withoutSize'] as $key => $value) {
+                    //                 $prod_id = $key;
+                    //                 $prod = Product::where('product_id', $prod_id)->first();
+                    //                 $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                    //                 $cart['withoutSize'][$key]['col_price'] = $col_price;
+                    //                 session()->put('cart1', $cart);
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             } else {
                 if (!empty($userid)) {
-                    $customer_cart = getuserCart($userid);
+                    // $customer_cart = getuserCart($userid); //Database
+                    $customer_cart = session()->get('cart1'); //Session
 
-                    if (isset($customer_cart) && !empty($customer_cart)) {
-                        // For Delivery Price
-                        if ($d_type == 'delivery') {
-                            if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                                foreach ($customer_cart['size'] as $key => $value) {
-                                    $size_id = $key;
-                                    $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                    $customer_cart['size'][$key]['del_price'] = $del_price;
+                    // if (isset($customer_cart) && !empty($customer_cart)) {
+                    //     // For Delivery Price
+                    //     if ($d_type == 'delivery') {
+                    //         if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
+                    //             foreach ($customer_cart['size'] as $key => $value) {
+                    //                 $size_id = $key;
+                    //                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                    //                 $customer_cart['size'][$key]['del_price'] = $del_price;
 
-                                    $serial = serialize($customer_cart);
-                                    $base64 = base64_encode($serial);
-                                    $user = Customer::find($userid);
-                                    $user->cart = $base64;
-                                    $user->update();
-                                }
-                            }
+                    //                 $serial = serialize($customer_cart);
+                    //                 $base64 = base64_encode($serial);
+                    //                 $user = Customer::find($userid);
+                    //                 $user->cart = $base64;
+                    //                 $user->update();
+                    //             }
+                    //         }
 
-                            if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                                foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                    $prod_id = $key;
-                                    $prod = Product::where('product_id', $prod_id)->first();
-                                    $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                    $customer_cart['withoutSize'][$key]['del_price'] = $del_price;
+                    //         if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
+                    //             foreach ($customer_cart['withoutSize'] as $key => $value) {
+                    //                 $prod_id = $key;
+                    //                 $prod = Product::where('product_id', $prod_id)->first();
+                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
+                    //                 $customer_cart['withoutSize'][$key]['del_price'] = $del_price;
 
-                                    $serial = serialize($customer_cart);
-                                    $base64 = base64_encode($serial);
-                                    $user = Customer::find($userid);
-                                    $user->cart = $base64;
-                                    $user->update();
-                                }
-                            }
-                        } elseif ($d_type == 'collection') {
-                            if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                                foreach ($customer_cart['size'] as $key => $value) {
-                                    $size_id = $key;
-                                    $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                    $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-                                    $customer_cart['size'][$key]['col_price'] = $col_price;
+                    //                 $serial = serialize($customer_cart);
+                    //                 $base64 = base64_encode($serial);
+                    //                 $user = Customer::find($userid);
+                    //                 $user->cart = $base64;
+                    //                 $user->update();
+                    //             }
+                    //         }
+                    //     } elseif ($d_type == 'collection') {
+                    //         if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
+                    //             foreach ($customer_cart['size'] as $key => $value) {
+                    //                 $size_id = $key;
+                    //                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
+                    //                 $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                    //                 $customer_cart['size'][$key]['col_price'] = $col_price;
 
-                                    $serial = serialize($customer_cart);
-                                    $base64 = base64_encode($serial);
-                                    $user = Customer::find($userid);
-                                    $user->cart = $base64;
-                                    $user->update();
-                                }
-                            }
+                    //                 $serial = serialize($customer_cart);
+                    //                 $base64 = base64_encode($serial);
+                    //                 $user = Customer::find($userid);
+                    //                 $user->cart = $base64;
+                    //                 $user->update();
+                    //             }
+                    //         }
 
-                            if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                                foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                    $prod_id = $key;
-                                    $prod = Product::where('product_id', $prod_id)->first();
-                                    $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
-                                    $customer_cart['withoutSize'][$key]['col_price'] = $col_price;
+                    //         if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
+                    //             foreach ($customer_cart['withoutSize'] as $key => $value) {
+                    //                 $prod_id = $key;
+                    //                 $prod = Product::where('product_id', $prod_id)->first();
+                    //                 $col_price = isset($prod->collection_price) ? $prod->collection_price : 0.00;
+                    //                 $customer_cart['withoutSize'][$key]['col_price'] = $col_price;
 
-                                    $serial = serialize($customer_cart);
-                                    $base64 = base64_encode($serial);
-                                    $user = Customer::find($userid);
-                                    $user->cart = $base64;
-                                    $user->update();
-                                }
-                            }
-                        }
-                    }
+                    //                 $serial = serialize($customer_cart);
+                    //                 $base64 = base64_encode($serial);
+                    //                 $user = Customer::find($userid);
+                    //                 $user->cart = $base64;
+                    //                 $user->update();
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             }
 
@@ -2529,61 +2548,62 @@ class MenuController extends Controller
                 if (session()->has('cart1')) {
                     $cart = session()->get('cart1');
 
-                    if (!empty($cart) || isset($cart)) {
-                        if (isset($cart['size']) && !empty($cart['size'])) {
-                            foreach ($cart['size'] as $key => $value) {
-                                if ($d_type == 'delivery') {
-                                    $sub_total += $value['del_price'] * $value['quantity'];
-                                } elseif ($d_type == 'collection') {
-                                    $sub_total += $value['col_price'] * $value['quantity'];
-                                } else {
-                                    $sub_total += $value['main_price'] * $value['quantity'];
-                                }
-                            }
-                        }
+                    // if (!empty($cart) || isset($cart)) {
+                    //     if (isset($cart['size']) && !empty($cart['size'])) {
+                    //         foreach ($cart['size'] as $key => $value) {
+                    //             if ($d_type == 'delivery') {
+                    //                 $sub_total += $value['del_price'] * $value['quantity'];
+                    //             } elseif ($d_type == 'collection') {
+                    //                 $sub_total += $value['col_price'] * $value['quantity'];
+                    //             } else {
+                    //                 $sub_total += $value['main_price'] * $value['quantity'];
+                    //             }
+                    //         }
+                    //     }
 
-                        if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                            foreach ($cart['withoutSize'] as $key => $value) {
-                                if ($d_type == 'delivery') {
-                                    $sub_total += $value['del_price'] * $value['quantity'];
-                                } elseif ($d_type == 'collection') {
-                                    $sub_total += $value['col_price'] * $value['quantity'];
-                                } else {
-                                    $sub_total += $value['main_price'] * $value['quantity'];
-                                }
-                            }
-                        }
-                    }
+                    //     if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
+                    //         foreach ($cart['withoutSize'] as $key => $value) {
+                    //             if ($d_type == 'delivery') {
+                    //                 $sub_total += $value['del_price'] * $value['quantity'];
+                    //             } elseif ($d_type == 'collection') {
+                    //                 $sub_total += $value['col_price'] * $value['quantity'];
+                    //             } else {
+                    //                 $sub_total += $value['main_price'] * $value['quantity'];
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             } else {
                 if (!empty($userid)) {
-                    $customer_cart = getuserCart($userid);
+                    // $customer_cart = getuserCart($userid); // Database
+                    $customer_cart = session()->get('cart1'); // Session
 
-                    if (isset($customer_cart) && !empty($customer_cart)) {
-                        if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                            foreach ($customer_cart['size'] as $key => $value) {
-                                if ($d_type == 'delivery') {
-                                    $sub_total += $value['del_price'] * $value['quantity'];
-                                } elseif ($d_type == 'collection') {
-                                    $sub_total += $value['col_price'] * $value['quantity'];
-                                } else {
-                                    $sub_total += $value['main_price'] * $value['quantity'];
-                                }
-                            }
-                        }
+                    // if (isset($customer_cart) && !empty($customer_cart)) {
+                    //     if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
+                    //         foreach ($customer_cart['size'] as $key => $value) {
+                    //             if ($d_type == 'delivery') {
+                    //                 $sub_total += $value['del_price'] * $value['quantity'];
+                    //             } elseif ($d_type == 'collection') {
+                    //                 $sub_total += $value['col_price'] * $value['quantity'];
+                    //             } else {
+                    //                 $sub_total += $value['main_price'] * $value['quantity'];
+                    //             }
+                    //         }
+                    //     }
 
-                        if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                            foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                if ($d_type == 'delivery') {
-                                    $sub_total += $value['del_price'] * $value['quantity'];
-                                } elseif ($d_type == 'collection') {
-                                    $sub_total += $value['col_price'] * $value['quantity'];
-                                } else {
-                                    $sub_total += $value['main_price'] * $value['quantity'];
-                                }
-                            }
-                        }
-                    }
+                    //     if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
+                    //         foreach ($customer_cart['withoutSize'] as $key => $value) {
+                    //             if ($d_type == 'delivery') {
+                    //                 $sub_total += $value['del_price'] * $value['quantity'];
+                    //             } elseif ($d_type == 'collection') {
+                    //                 $sub_total += $value['col_price'] * $value['quantity'];
+                    //             } else {
+                    //                 $sub_total += $value['main_price'] * $value['quantity'];
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
             }
 
@@ -2628,6 +2648,7 @@ class MenuController extends Controller
                 // session()->delete('cart1');
                 session()->forget('cart1');
             } else {
+                // session()->delete('cart1');
                 session()->forget('cart1');
                 // $user = Customer::find($userid);
                 // $user->cart = '';

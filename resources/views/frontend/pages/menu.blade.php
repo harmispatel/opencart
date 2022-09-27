@@ -69,7 +69,7 @@ It's used for View Menu.
 
 
         // $mycart = getuserCart(session()->get('userid'));
-        // cart after login ===
+        // cart after login ===---
         $mycart = session()->get('cart1');
 
         // if(isset($mycart))
@@ -98,6 +98,10 @@ It's used for View Menu.
     }
     // End Get Customer Cart
 
+    // echo '<pre>';
+    // print_r($mycart);
+    // exit();
+
     if(session()->has('subtotal'))
     {
         $get_sub_total = session()->get('subtotal');
@@ -125,6 +129,9 @@ It's used for View Menu.
     {
         $session_free_item = '';
     }
+    // echo '<pre>';
+    // print_r(session()->all());
+    // exit();
 @endphp
 
 

@@ -68,7 +68,7 @@
         // Database cart
         // $mycart = getuserCart(session()->get('userid'));
 
-        $mycart = session()->get('cart1');
+        $mycart = session()->get('cart1'); // Session
     }
     else
     {

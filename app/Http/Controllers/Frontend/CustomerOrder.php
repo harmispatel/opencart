@@ -474,7 +474,8 @@ class CustomerOrder extends Controller
                 }
                 else // Customer
                 {
-                    $usercart = getuserCart($user_id);
+                    // $usercart = getuserCart($user_id); // Database
+                    $usercart = session()->get('cart1'); // Session
 
                     // New Order
                     $order = new Orders;
@@ -1008,7 +1009,9 @@ class CustomerOrder extends Controller
                 }
                 else //Customer
                 {
-                    $usercart = getuserCart($user_id);
+                    // $usercart = getuserCart($user_id);  // Database
+                    $usercart = session()->get('cart1');  // Session
+
                     // echo '<pre>';
                     // print_r($usercart['main_price']);
                     // exit();
