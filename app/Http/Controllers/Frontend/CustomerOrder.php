@@ -586,6 +586,7 @@ class CustomerOrder extends Controller
 
                     session()->forget('couponcode');
                     session()->forget('couponname');
+                    session()->forget('cart1');
                     session()->put('last_order_id',$order->order_id);
                     session()->forget('free_item');
 
@@ -1124,7 +1125,7 @@ class CustomerOrder extends Controller
 
                         session()->forget('couponcode');
                         session()->forget('couponname');
-
+                        session()->forget('cart1');
                         session()->put('last_order_id',$order->order_id);
                         session()->forget('free_item');
 
