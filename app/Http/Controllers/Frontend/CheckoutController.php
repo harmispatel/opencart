@@ -321,7 +321,8 @@ class CheckoutController extends Controller
         if ($userid == 0) {
             $mycart = $request->session()->get('cart1');
         } else {
-            $mycart = getuserCart($userid);
+            // $mycart = getuserCart($userid); // Database
+            $mycart = $request->session()->get('cart1'); // Sission
         }
 
 
