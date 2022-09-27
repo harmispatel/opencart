@@ -114,14 +114,16 @@
             {
                 if($userdeliverytype == 'delivery')
                 {
-                    // $price += isset($mycart['del_price']) * $mycart['quantity']);
-                    $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
+                    $price += (isset($mycart['del_price']) * $mycart['quantity']);
+                    // $price += (isset($mycart['del_price'])) ? ($mycart['del_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);
 
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += $mycart['col_price'] * $mycart['quantity'];
-                }
+                    // $price += $mycart['col_price'] * $mycart['quantity'];
+                    $price += (isset($mycart['col_price'])) ? ($mycart['col_price'] * $mycart['quantity']) : (1 * $mycart['quantity']);  
+                }   
+                    
                 else
                 {
                     $price += $mycart['main_price'] * $mycart['quantity'];

@@ -722,15 +722,15 @@ It's used for View Menu.
                                                     @if (isset($mycart['withoutSize']))
                                                         @foreach ($mycart['withoutSize'] as $cart)
                                                             @php
-
                                                                 // Price
                                                                 if($userdeliverytype == 'delivery')
                                                                 {
-                                                                    $price = $cart['del_price'] * $cart['quantity'];
+                                                                    $price = isset($cart['del_price']) ? $cart['del_price'] :1 * $cart['quantity'];
                                                                 }
                                                                 elseif($userdeliverytype == 'collection')
                                                                 {
-                                                                    $price = $cart['col_price'] * $cart['quantity'];
+                                                                    // $price = $cart['col_price'] * $cart['quantity'];
+                                                                    $price = isset($cart['col_price']) ? $cart['col_price'] : 1 * $cart['quantity'];
                                                                 }
                                                                 else
                                                                 {

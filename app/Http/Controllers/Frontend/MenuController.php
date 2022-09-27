@@ -775,11 +775,14 @@ class MenuController extends Controller
         } else {
             $total = $subtotal + $delivery_charge;
         }
-        if($couponcode != 0){
+        if(isset($couponcode) ? $couponcode : 0 != 0){
             // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . number_format($couponcode, 2) . '</span>';
             $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         }
-
+        else{
+        $coupon_html .= '';
+        }
+        // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
         $sessioncouponname = session()->put('couponname', isset($Coupon['code']) ? $Coupon['code'] : '');
         $sessioncurrency = session()->put('currency', $store_setting['config_currency']);
