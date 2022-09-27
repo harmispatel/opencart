@@ -267,10 +267,13 @@
                                     <td><b>Sub-Total :</b></td>
                                     <td><span><b>{{ $currency }}{{ $subtotal }}</b></span></td>
                                 </tr>
+
                                 <tr>
                                     @if(!empty($Coupon) || $Coupon != '')
-                                        <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
-                                        <td><span><b>{{ $currency }}-{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b></span></td>
+                                        @if ($couponcode != 0)
+                                            <td><b>Coupon({{ $Coupon['code'] }}):</b></td>
+                                            <td><span><b>{{ $currency }}-{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b></span></td>
+                                        @endif
                                     @endif
                                 </tr>
                                 <tr>

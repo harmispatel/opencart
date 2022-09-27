@@ -879,14 +879,16 @@
                                                                             <td><span><b>{{ $currency }} {{ $subtotal }}</b></span></td>
                                                                         </tr>
                                                                         @if (!empty($Coupon) || $Coupon != '')
-                                                                        <tr class="coupon_code">
-                                                                            <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
-                                                                            <td>
-                                                                                <span>
-                                                                                    <b>{{ $currency }} -{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b>
-                                                                                </span>
-                                                                            </td>
-                                                                        </tr>
+                                                                            @if ($couponcode != 0)
+                                                                                <tr class="coupon_code">
+                                                                                    <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
+                                                                                    <td>
+                                                                                        <span>
+                                                                                            <b>{{ $currency }} -{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b>
+                                                                                        </span>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endif
                                                                         @endif
                                                                         <tr class="voucher"></tr>
                                                                         <tr id="servicecharge" style="display: none">

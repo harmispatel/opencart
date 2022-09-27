@@ -150,6 +150,7 @@
                     }
                 }
             $headertotal += $price - $couponcode + $delivery_charge;
+            
         }
         else
         {
@@ -159,30 +160,35 @@
     else 
     {
         $cart = session()->get('cart1');
-      
+        
         $cart_products = 0;
-
+        
         if (isset($cart['size'])) 
         {
             foreach ($cart['size'] as $mycart) 
             {
                 // $price += isset($mycart['col_price']) ? $mycart['col_price'] * $mycart['quantity'] : 0 * $mycart['quantity'];
+                
                 if($userdeliverytype == 'delivery')
                 {
                     $price += $mycart['del_price'] * $mycart['quantity'];
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += (isset($mycart['col_price'])) ? $mycart['col_price'] : 0 * $mycart['quantity'];
+                    $price +=$mycart['col_price'] * $mycart['quantity'];
                 }
                 else
                 {
                     $price += $mycart['main_price'] * $mycart['quantity'];
                 }
+               
+               
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
+            
         }
+        
         if (isset($cart['withoutSize'])) 
         {
             foreach ($cart['withoutSize'] as $mycart) 
@@ -205,6 +211,10 @@
                 $cart_products += $mycart['quantity'];
             }
         }
+            
+        // echo '<pre>';
+        // print_r($price);
+     
     
         if(!empty($cart) || $cart != ''){
             if (!empty($Coupon) || $Coupon != '')
@@ -222,7 +232,10 @@
                     }
                 }
                
-                $headertotal = $price - $couponcode + $delivery_charge;
+
+                    $headertotal = $price - $couponcode + $delivery_charge;
+                 
+                   
             }
             else
             {
