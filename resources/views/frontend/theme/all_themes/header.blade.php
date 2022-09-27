@@ -84,7 +84,11 @@
     // Cart Details
     if(session()->has('userid'))
     {
-        $cart = getuserCart(session()->get('userid'));
+        // Get Cart From Database===- 
+        // $cart = getuserCart(session()->get('userid'));
+
+        // Get Cart From Session===-
+        $mycart = session()->get('cart1');
         $cart_products = 0;
 
         if (isset($cart['size'])) 

@@ -65,7 +65,12 @@ It's used for View Menu.
     if (session()->has('userid'))
     {
         $userid = session()->get('userid');
-        $mycart = getuserCart(session()->get('userid'));
+
+
+
+        // $mycart = getuserCart(session()->get('userid'));
+        // cart after login ===
+        $mycart = session()->get('cart1');
 
         // if(isset($mycart))
         // {

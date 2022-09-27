@@ -44,26 +44,26 @@ class CustomerAuthController extends Controller
            session()->put('username', $customername->firstname);
            session()->put('userid', $customername->customer_id);
 
-           if (session()->has('userid')) {
-               if (session()->has('cart1')) {
-                   $usercart = getuserCart(session()->get('userid'));
+        //    if (session()->has('userid')) {
+        //        if (session()->has('cart1')) {
+        //            $usercart = getuserCart(session()->get('userid'));
 
-                   if (isset($usecart) || !empty($usercart)) {
-                       $session_array = session()->get('cart1');
-                       $merge_cart = array_push($usercart, $session_array);
-                   } else {
-                       $cart['cart1'] = session()->get('cart1');
-                       $cart['product_id'] = session()->get('product_id');
-                       $serial = serialize($cart);
-                       $base64 = base64_encode($serial);
-                       $user_id = session()->get('userid');
-                       $user = Customer::find($user_id);
-                       $user->cart = $base64;
-                       $user->update();
-                       session()->forget('cart1');
-                   }
-               }
-           }
+        //            if (isset($usecart) || !empty($usercart)) {
+        //                $session_array = session()->get('cart1');
+        //                $merge_cart = array_push($usercart, $session_array);
+        //            } else {
+        //                $cart['cart1'] = session()->get('cart1');
+        //                $cart['product_id'] = session()->get('product_id');
+        //                $serial = serialize($cart);
+        //                $base64 = base64_encode($serial);
+        //                $user_id = session()->get('userid');
+        //                $user = Customer::find($user_id);
+        //                $user->cart = $base64;
+        //                $user->update();
+        //                session()->forget('cart1');
+        //            }
+        //        }
+        //    }
 
            if ($ajaxlogin == 1) {
                return response()->json([
