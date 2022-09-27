@@ -159,7 +159,7 @@ class HomeController extends Controller
             if ($userid == 0) {
                 if (session()->has('cart1')) {
                     session()->forget('cart1');
-
+                    $a = 1;
                     // Change ortder type change price delevery and collection session
                     // $cart = session()->get('cart1');
 
@@ -181,9 +181,15 @@ class HomeController extends Controller
                 }
             } else {
                 if (!empty($userid)) {
-                    $user = Customer::find($userid);
-                    $user->cart = '';
-                    $user->update();
+                    session()->forget('cart1');
+                    $a = 2;
+
+                    // =========----------===========
+                    // $user = Customer::find($userid);
+                    // $user->cart = '';
+                    // $user->update();
+                    // =========----------===========
+
 
                     // Change ortder type change price delevery and collection Database
                     // $customer_cart = getuserCart($userid);
@@ -291,10 +297,14 @@ class HomeController extends Controller
                                 // }
                             } else {
                                 if (!empty($userid)) {
-                                    $customer_cart = getuserCart($userid);
-                                    $user = Customer::find($userid);
-                                    $user->cart = '';
-                                    $user->update();
+
+                                    session()->forget('cart1'); //Session
+
+                                    // Database
+                                    // $customer_cart = getuserCart($userid);
+                                    // $user = Customer::find($userid);
+                                    // $user->cart = '';
+                                    // $user->update();
 
                                     // if (isset($customer_cart) && !empty($customer_cart)) {
                                     //     // For Delivery Price

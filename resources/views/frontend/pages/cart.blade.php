@@ -59,7 +59,8 @@
     if (session()->has('userid'))
     {
         $userid = session()->get('userid');
-        $mycart = getuserCart(session()->get('userid'));
+        // $mycart = getuserCart(session()->get('userid')); // Database
+        $mycart = session()->get('cart1'); // Session
     }
     else
     {
