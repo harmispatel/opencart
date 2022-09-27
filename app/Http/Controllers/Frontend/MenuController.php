@@ -42,10 +42,6 @@ class MenuController extends Controller
         $cat_id = Product_to_category::where('product_id', $prod_id)->first();
         // }
 
-        // echo '<pre>';
-        // print_r($cat_id->toArray());
-        // exit();
-
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -102,8 +98,6 @@ class MenuController extends Controller
                 $session_proid = session()->get('product_id');
 
 
-                // print_r(array_intersect($cat_to_pro,$session_proid));
-                // exit();
 
                 if ($get_coupon->apply_shipping == 1) {
                     $apply_shipping = 'delivery';
@@ -794,9 +788,6 @@ class MenuController extends Controller
         else{
         $coupon_html .= '';
         }
-        // echo '<pre>';
-        // print_r( $total);
-        // exit();
         session()->put('headertotal',$total);
         // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
         $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
@@ -846,8 +837,6 @@ class MenuController extends Controller
         $headertotal += $total;
 
 
-        // print_r($total .'<br>'.$minimum_spend['min_spend'] );
-        // exit();
 
         if ($minimum_spend['min_spend'] <= $total) {
             $min_spend = 'true';
@@ -1025,7 +1014,8 @@ class MenuController extends Controller
                     }
                     $cpn_history = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->get();
                     $count_user_per_cpn = count($cpn_history);
-                    $cart = getuserCart($userid);
+                    // $cart = getuserCart($userid); // Database
+                    $cart = getuserCart($userid); // Database
                     $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
                     $uses_per_cpn = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->where('customer_id', $userid)->count();
                     if ($Couponcode->on_off == 1 && $Couponcode->status == 1) {
@@ -1044,7 +1034,8 @@ class MenuController extends Controller
                                                     if ($userid == 0) {
                                                         $mycart = $request->session()->get('cart1');
                                                     } else {
-                                                        $mycart = getuserCart($userid);
+                                                        $mycart = $request->session()->get('cart1');
+                                                        $mycart = getuserCart($userid); // Database
                                                     }
 
                                                     $subtotal = 0;
@@ -1079,12 +1070,15 @@ class MenuController extends Controller
                                                             $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
                                                     }
+                                                    $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
 
-                                                    if ($Couponcode->type == 'P') {
-                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                    }
-                                                    if ($Couponcode->type == 'F') {
-                                                        $couponcode = $Couponcode->discount;
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
                                                     }
 
                                                     $total = $subtotal - $couponcode + $delivery_charge;
@@ -1144,7 +1138,8 @@ class MenuController extends Controller
                                                 if ($userid == 0) {
                                                     $mycart = $request->session()->get('cart1');
                                                 } else {
-                                                    $mycart = getuserCart($userid);
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
                                                 }
 
                                                 $subtotal = 0;
@@ -1180,12 +1175,16 @@ class MenuController extends Controller
                                                     }
                                                 }
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
-                                                }
+                                                $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
 
@@ -1253,7 +1252,8 @@ class MenuController extends Controller
                                                     if ($userid == 0) {
                                                         $mycart = $request->session()->get('cart1');
                                                     } else {
-                                                        $mycart = getuserCart($userid);
+                                                        $mycart = $request->session()->get('cart1'); // Session
+                                                        // $mycart = getuserCart($userid); // Database
                                                     }
 
                                                     $subtotal = 0;
@@ -1289,11 +1289,15 @@ class MenuController extends Controller
                                                         }
                                                     }
 
-                                                    if ($Couponcode->type == 'P') {
-                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                    }
-                                                    if ($Couponcode->type == 'F') {
-                                                        $couponcode = $Couponcode->discount;
+                                                    $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
                                                     }
 
                                                     $total = $subtotal - $couponcode + $delivery_charge;
@@ -1353,7 +1357,8 @@ class MenuController extends Controller
                                                 if ($userid == 0) {
                                                     $mycart = $request->session()->get('cart1');
                                                 } else {
-                                                    $mycart = getuserCart($userid);
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
                                                 }
 
                                                 $subtotal = 0;
@@ -1389,13 +1394,16 @@ class MenuController extends Controller
                                                     }
                                                 }
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
-                                                }
+                                                $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
 
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
                                                 $total = $subtotal - $couponcode + $delivery_charge;
 
                                                 $total_html = '';
@@ -1463,7 +1471,8 @@ class MenuController extends Controller
                                                     if ($userid == 0) {
                                                         $mycart = $request->session()->get('cart1');
                                                     } else {
-                                                        $mycart = getuserCart($userid);
+                                                        $mycart = $request->session()->get('cart1'); // Session
+                                                        // $mycart = getuserCart($userid); // Database
                                                     }
 
                                                     $subtotal = 0;
@@ -1498,11 +1507,15 @@ class MenuController extends Controller
                                                             $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
                                                     }
-                                                    if ($Couponcode->type == 'P') {
-                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                    }
-                                                    if ($Couponcode->type == 'F') {
-                                                        $couponcode = $Couponcode->discount;
+                                                    $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
                                                     }
 
                                                     // $total = $subtotal - $couponcode + $delivery_charge;
@@ -1565,7 +1578,8 @@ class MenuController extends Controller
                                                 if ($userid == 0) {
                                                     $mycart = $request->session()->get('cart1');
                                                 } else {
-                                                    $mycart = getuserCart($userid);
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
                                                 }
 
                                                 $subtotal = 0;
@@ -1587,11 +1601,15 @@ class MenuController extends Controller
                                                     }
                                                 }
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
+                                                $couponcode = 0;
+                                                if($Couponcode['total'] >= $subtotal){
+
+                                                    if ($Couponcode->type == 'P') {
+                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                    }
+                                                    if ($Couponcode->type == 'F') {
+                                                        $couponcode = $Couponcode->discount;
+                                                    }
                                                 }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
@@ -1690,7 +1708,7 @@ class MenuController extends Controller
                 }
                 $cpn_history = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->get();
                 $count_user_per_cpn = count($cpn_history);
-                // $cart = getuserCart($userid);
+                // $cart = getuserCart($userid); // Database
                 // $cart_proid = $cart['product_id'];
                 $uses_per_cpn = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->where('customer_id', $userid)->count();
                 if ($Couponcode->on_off == 1 && $Couponcode->status == 1) {
@@ -1709,7 +1727,8 @@ class MenuController extends Controller
                                                 if ($userid == 0) {
                                                     $mycart = $request->session()->get('cart1');
                                                 } else {
-                                                    $mycart = getuserCart($userid);
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
                                                 }
 
                                                 $subtotal = 0;
@@ -1745,12 +1764,16 @@ class MenuController extends Controller
                                                     }
                                                 }
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
-                                                }
+                                                $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
 
@@ -1809,7 +1832,8 @@ class MenuController extends Controller
                                             if ($userid == 0) {
                                                 $mycart = $request->session()->get('cart1');
                                             } else {
-                                                $mycart = getuserCart($userid);
+                                                $mycart = $request->session()->get('cart1'); // Session
+                                                // $mycart = getuserCart($userid); // Database
                                             }
 
                                             $subtotal = 0;
@@ -1845,13 +1869,16 @@ class MenuController extends Controller
                                                 }
                                             }
 
-                                            if ($Couponcode->type == 'P') {
-                                                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                            }
-                                            if ($Couponcode->type == 'F') {
-                                                $couponcode = $Couponcode->discount;
-                                            }
+                                            $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
 
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
                                             $total = $subtotal - $couponcode + $delivery_charge;
 
                                             $total_html = '';
@@ -1919,7 +1946,8 @@ class MenuController extends Controller
                                                 if ($userid == 0) {
                                                     $mycart = $request->session()->get('cart1');
                                                 } else {
-                                                    $mycart = getuserCart($userid);
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
                                                 }
 
                                                 $subtotal = 0;
@@ -1955,12 +1983,16 @@ class MenuController extends Controller
                                                     }
                                                 }
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
-                                                }
+                                                $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
 
@@ -2019,7 +2051,8 @@ class MenuController extends Controller
                                             if ($userid == 0) {
                                                 $mycart = $request->session()->get('cart1');
                                             } else {
-                                                $mycart = getuserCart($userid);
+                                                $mycart = $request->session()->get('cart1'); // Session
+                                                // $mycart = getuserCart($userid); // Database
                                             }
 
                                             $subtotal = 0;
@@ -2055,12 +2088,16 @@ class MenuController extends Controller
                                                 }
                                             }
 
-                                            if ($Couponcode->type == 'P') {
-                                                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                            }
-                                            if ($Couponcode->type == 'F') {
-                                                $couponcode = $Couponcode->discount;
-                                            }
+                                            $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
 
                                             $total = $subtotal - $couponcode + $delivery_charge;
 
@@ -2129,7 +2166,8 @@ class MenuController extends Controller
                                                 if ($userid == 0) {
                                                     $mycart = $request->session()->get('cart1');
                                                 } else {
-                                                    $mycart = getuserCart($userid);
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
                                                 }
 
                                                 $subtotal = 0;
@@ -2164,12 +2202,16 @@ class MenuController extends Controller
                                                         $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
                                                 }
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                                }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
-                                                }
+                                                $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
 
                                                 // $total = $subtotal - $couponcode + $delivery_charge;
                                                 $total = $subtotal - $couponcode ;
@@ -2231,7 +2273,8 @@ class MenuController extends Controller
                                             if ($userid == 0) {
                                                 $mycart = $request->session()->get('cart1');
                                             } else {
-                                                $mycart = getuserCart($userid);
+                                                $mycart = $request->session()->get('cart1'); // Session
+                                                // $mycart = getuserCart($userid); // Database
                                             }
 
                                             $subtotal = 0;
@@ -2253,12 +2296,16 @@ class MenuController extends Controller
                                                 }
                                             }
 
-                                            if ($Couponcode->type == 'P') {
-                                                $couponcode = ($subtotal * $Couponcode->discount) / 100;
-                                            }
-                                            if ($Couponcode->type == 'F') {
-                                                $couponcode = $Couponcode->discount;
-                                            }
+                                            $couponcode = 0;
+                                                    if($Couponcode['total'] >= $subtotal){
+
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
+                                                    }
 
                                             $total = $subtotal - $couponcode + $delivery_charge;
 
