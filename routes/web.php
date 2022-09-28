@@ -471,6 +471,7 @@ Route::group(['middleware' => 'Suspend'], function () {
     Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
     Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
     Route::get('searchcouponcode', [MenuController::class, 'searchcouponcode'])->name('searchcouponcode');
+    Route::post('servicecharge', [MenuController::class, 'servicecharge'])->name('servicecharge');
 
     // Guest User
     Route::post('contactstore',[ContactUsController::class,'contactstore'])->name('contactstore');
