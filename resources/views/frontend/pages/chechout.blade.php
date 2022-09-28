@@ -1022,10 +1022,10 @@
                                 <input type="hidden" name="service_charge" id="service_charge">
                                 <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
                                 <input type="hidden" name="couponname" id="couponname" value="{{ isset($couponname) ? $couponname : '' }}">
-                                <input type="button" value="Pay {{ $currency }} {{ isset($total) ? $total : '' }}" id="button-payment-method" class="btn back-bt" disabled>
+                                <input type="button" value="Pay {{ $currency }} {{ ((round($total , 2) <= 0) ? 0 : round($total , 2)) }}" id="button-payment-method" class="btn back-bt" disabled>
                                 {{-- <a type="hidden" href="{{ route('stripe') }}">Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a> --}}
                                 <input type="hidden" name="currency_code" value="{{ $store_setting['config_currency'] }}">
-                                <input type="hidden" name="total" id="total" value="{{ isset($total) ? $total : '' }}">
+                                <input type="hidden" name="total" id="total" value="{{ ((round($total , 2) <= 0) ? 0 : round($total , 2)) }}">
                             </form>
                         </div>
                     </div>
