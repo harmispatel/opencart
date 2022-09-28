@@ -612,7 +612,7 @@
                             <div class="backbtn d-flex justify-content-between">
                                 <button class="btn disabled" disabled><i class="fa fa-angle-left"></i> Back</button>
                                 @if ($userdeliverytype == 'delivery')
-                                    @if ($store_open_close == 'open' && $minimum_spend['min_spend'] <= $session_total)
+                                    @if ($store_open_close == 'open')
                                         <a class="btn back-bt del_next" onclick="DeliveryAddress();">Next</a>
                                     @else
                                         <button class="btn back-bt del_next" disabled>Next</button>
@@ -1745,6 +1745,7 @@
                     $('#couponload').css('display' , 'none');
                     if(result.success == 1)
                     {
+
                         $('#couponError').html('');
                         $('#couponSuccess').html('');
                         $('#couponSuccess').append(result.success_message);

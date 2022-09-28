@@ -1201,7 +1201,7 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr  class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span></td></tr>';
+                                                $couponcode_html .= '<tr  class="coupon_code"><td><b>Coupon1(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span></td></tr>';
                                                 // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
                                                 if ($request->method_type == 1) {
                                                     $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $stripe_charge, 2) . '</b></span>';
@@ -1419,7 +1419,7 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
+                                                $couponcode_html .= '<span><b>Coupon2(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
                                                 // $couponcode_html .= '<tr  class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span></td></tr>';
                                                 // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
                                                 if ($request->method_type == 1) {
@@ -1594,7 +1594,14 @@ class MenuController extends Controller
 
                                                 if (isset($mycart['size']) || !empty($mycart['size'])) {
                                                     foreach ($mycart['size'] as $key => $cart) {
-                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                        if($delivery_type == 'delivery'){
+                                                            $price = $cart['del_price'] * $cart['quantity'];
+                                                        }elseif($delivery_type == 'collection'){
+                                                            $price = $cart['col_price'] * $cart['quantity'];
+                                                        }else{
+
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                        }
                                                         $subtotal += $price;
                                                         $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
@@ -1602,7 +1609,14 @@ class MenuController extends Controller
 
                                                 if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
                                                     foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                        if($delivery_type == 'delivery'){
+                                                            $price = $cart['del_price'] * $cart['quantity'];
+                                                        }elseif($delivery_type == 'collection'){
+                                                            $price = $cart['col_price'] * $cart['quantity'];
+                                                        }else{
+
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                        }
                                                         $subtotal += $price;
                                                         $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
@@ -1627,7 +1641,7 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
+                                                $couponcode_html .= '<span><b>Coupon3(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
                                                 // $couponcode_html .= '<tr  class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span></td></tr>';
                                                 // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
                                                 if ($request->method_type == 1) {
@@ -1722,11 +1736,15 @@ class MenuController extends Controller
                     if ($Couponcode->uses_total >  $count_user_per_cpn || $Couponcode->uses_total == 0) {
                         if ($Couponcode->uses_customer > $uses_per_cpn) {
                             if (!empty($session_proid) ||  $session_proid != '') {
+                                // echo ' Hello Dharmesh';
                                 if (array_intersect($product_check,  $session_proid) && count($product_check) != 0) {
                                     if ($apply_shipping == $delivery_type) {
+
                                         if ($Couponcode->total >= $request->total) {
+
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
+
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
                                                 session()->save();
@@ -1743,7 +1761,7 @@ class MenuController extends Controller
 
                                                 if (isset($mycart['size']) || !empty($mycart['size'])) {
                                                     foreach ($mycart['size'] as $key => $cart) {
-                                                         if($delivery_type == 'delivery'){
+                                                        if($delivery_type == 'delivery'){
                                                             $price = $cart['del_price'] * $cart['quantity'];
                                                         }elseif($delivery_type == 'collection'){
                                                             $price = $cart['col_price'] * $cart['quantity'];
@@ -1894,7 +1912,7 @@ class MenuController extends Controller
 
                                             $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                             // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
+                                            $couponcode_html .= '<span><b>Coupon4(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
                                             // $couponcode_html .= '<tr  class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span></td></tr>';
                                             // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
                                             if ($request->method_type == 1) {
@@ -1942,6 +1960,7 @@ class MenuController extends Controller
                                         ]);
                                     }
                                 } elseif (array_intersect($cat_to_pro,  $session_proid) && count($cat_to_pro) != 0) {
+
                                     if ($apply_shipping == $delivery_type) {
                                         if ($Couponcode->total >= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
@@ -2010,7 +2029,7 @@ class MenuController extends Controller
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>'.$currency.' -' . round($couponcode,2) . '</b></span></td></tr>';
-                                                $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
+                                                $couponcode_html .= '<span><b>Coupon5(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
 
                                                 // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
                                                 if ($request->method_type == 1) {
@@ -2114,7 +2133,7 @@ class MenuController extends Controller
 
                                             $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                             // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
+                                            $couponcode_html .= '<span><b>Coupon6(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span>';
                                             // $couponcode_html .= '<tr  class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . round($couponcode, 2) . '</b></span></td></tr>';
                                             // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
                                             if ($request->method_type == 1) {
@@ -2163,9 +2182,11 @@ class MenuController extends Controller
                                     }
                                 } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
                                     if ($apply_shipping == $delivery_type) {
+
                                         if ($Couponcode->total >= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
+
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
                                                 session()->save();
@@ -2226,6 +2247,7 @@ class MenuController extends Controller
 
 
 
+
                                                 $total_html = '';
                                                 $couponcode_html = '';
                                                 $success_message = '';
@@ -2290,7 +2312,14 @@ class MenuController extends Controller
 
                                             if (isset($mycart['size']) || !empty($mycart['size'])) {
                                                 foreach ($mycart['size'] as $key => $cart) {
-                                                    $price = $cart['main_price'] * $cart['quantity'];
+                                                    if($delivery_type == 'delivery'){
+                                                        $price = $cart['del_price'] * $cart['quantity'];
+                                                    }elseif($delivery_type == 'collection'){
+                                                        $price = $cart['col_price'] * $cart['quantity'];
+                                                    }else{
+
+                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                    }
                                                     $subtotal += $price;
                                                     $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                 }
@@ -2298,7 +2327,14 @@ class MenuController extends Controller
 
                                             if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
                                                 foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                    $price = $cart['main_price'] * $cart['quantity'];
+                                                    if($delivery_type == 'delivery'){
+                                                        $price = $cart['del_price'] * $cart['quantity'];
+                                                    }elseif($delivery_type == 'collection'){
+                                                        $price = $cart['col_price'] * $cart['quantity'];
+                                                    }else{
+
+                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                    }
                                                     $subtotal += $price;
                                                     $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                 }
@@ -2316,6 +2352,7 @@ class MenuController extends Controller
                                                     }
 
                                             $total = $subtotal - $couponcode + $delivery_charge;
+
 
                                             $total_html = '';
                                             $couponcode_html = '';
