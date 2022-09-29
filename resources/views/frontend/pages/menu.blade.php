@@ -840,20 +840,15 @@ It's used for View Menu.
                                                         @endif
                                                         <div class="minicart-list-item-innr">
                                                             <div class="showcoupons">
-                                                                <form action="{{ route('getcoupon') }}" method="POST" id="from_showcoupon">
+                                                                <form method="POST" id="from_showcoupon">
                                                                     @csrf
                                                                     <div class="myDiv" style="display:none;">
                                                                         <div class="row">
                                                                             <div class="col-md-8">
-                                                                                <label for="">Apply New Coupon Code</label>
                                                                                 <input style="float:left;padding:5px 2px" type="text" name="coupon" value="" id="searchcoupon" placeholder="Enter your coupon here" class="coupon-val ">
                                                                             </div>
                                                                             <div class="col-md-4 text-right">
-                                                                                {{-- <input style="text-transform: uppercase;" type="submit" value="Apply" class="btn btn-danger "> --}}
-                                                                                <button class="btn btn-primary" type="submit" style="display: inline-block; width: 102%">
-                                                                                    APPLY
-                                                                                    <span class="spinner-border spinner-border-sm text-white" id="applycpn" role="status" aria-hidden="true" style="display: none"></span>
-                                                                                  </button>
+                                                                                <input style="text-transform: uppercase;" type="submit" value="Apply" class="btn btn-danger ">
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">

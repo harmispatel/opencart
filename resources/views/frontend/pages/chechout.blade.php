@@ -1777,15 +1777,26 @@
         });
         // Voucher Apply
 
+        // let method_type = 0;
+        // $('.pay_btn').on('click', function()
+        // {
+        //     // var method_type = $('input[name="payment_method"]:checked').val();
+        //     var method_type = $(this).val();
+        // });
+
+        // let m_type = method_type;
+        // alert(method_type)
+
 
         // Coupon Apply
         $('#coupon_form').submit(function(e)
         {
             e.preventDefault();
             var coupon = $("input[name='coupon']").val();
-            var method_type = $('input[name="payment_method"]:checked').val();
+            // var method_type = $('input[name="payment_method"]:checked').val();
             $('#couponload').css('display' , 'inline-block');
             let total = $('#total').val();
+
             var method_type = $('input[name="payment_method"]:checked').val();
 
             $.ajax({
