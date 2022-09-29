@@ -569,7 +569,6 @@ class CustomerOrder extends Controller
                             {
                                 $amnt = 0;
                             }
-
                             if(!empty($cpn_id) && $cpn_id != 0)
                             {
                                 $coupon_history = new CouponHistory;
@@ -584,7 +583,12 @@ class CustomerOrder extends Controller
                         }
                     }
 
+                    session()->forget('headertotal');
+                    // session()->forget('flag_post_code');
+                    session()->forget('total');
+                    session()->forget('product_id');
                     session()->forget('couponcode');
+                    session()->forget('currentcoupon');
                     session()->forget('couponname');
                     session()->forget('cart1');
                     session()->put('last_order_id',$order->order_id);
@@ -1123,11 +1127,17 @@ class CustomerOrder extends Controller
                             }
                         }
 
+                        session()->forget('headertotal');
+                        session()->forget('total');
+                        session()->forget('product_id');
+                        // session()->forget('flag_post_code');
                         session()->forget('couponcode');
+                        session()->forget('currentcoupon');
                         session()->forget('couponname');
                         session()->forget('cart1');
                         session()->put('last_order_id',$order->order_id);
                         session()->forget('free_item');
+
 
                         // Order Product
                         if (isset($usercart)) {

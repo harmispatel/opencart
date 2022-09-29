@@ -845,6 +845,7 @@ It's used for View Menu.
                                                                     <div class="myDiv" style="display:none;">
                                                                         <div class="row">
                                                                             <div class="col-md-8">
+                                                                                <label for="">Apply New Coupon Code</label>
                                                                                 <input style="float:left;padding:5px 2px" type="text" name="coupon" value="" id="searchcoupon" placeholder="Enter your coupon here" class="coupon-val ">
                                                                             </div>
                                                                             <div class="col-md-4 text-right">
