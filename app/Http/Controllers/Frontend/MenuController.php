@@ -34,25 +34,65 @@ class MenuController extends Controller
     public function servicecharge(Request $req)
     {
 
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
         $servicecharge = paymentdetails();
 
         $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
         $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
         $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
 
-        $s_subtotal = session()->get('subtotal');
-        $s_coupon = session()->get('currentcoupon');
+         $s_subtotal = session()->get('subtotal');
+         $s_coupon = session()->get('currentcoupon');
+         $ordertype = session()->get('flag_post_code');
+         $coupon_name = session()->get('couponname');
+         $Coupon_code = coupon::where('code', $coupon_name)->where('store_id', $front_store_id)->first();
 
 
-        if (isset($s_coupon['type']) ? $s_coupon['type'] : '' == 'P') {
-            $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
+         if ($Coupon_code['type'] == 'P')
+         {
+             $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
+         }
+         if ($Coupon_code['type'] == 'F')
+         {
+             $couponcode = $Coupon_code['discount'];
+         }
+
+
+         $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
+
+
+        //  Minimum Spend
+         $key = ([
+            'enable_delivery',
+            'delivery_option',
+        ]);
+
+        $delivery_setting = [];
+
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+
+            $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
-        if (isset($s_coupon['type']) ? $s_coupon['type'] : '' == 'F') {
-            $couponcode = $s_coupon['discount'];
+
+
+        if ($delivery_setting['delivery_option'] == 'area') {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+        } else {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
         }
+        $minimum_spend = $deliverysettings->last()->toArray();
+        //  End Minimum Spend
+        $total = $s_subtotal - $discount;
 
-
-        $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
 
         if ($req->method_type == 1) {
             if (!empty($discount) || $discount != '') {
@@ -61,15 +101,25 @@ class MenuController extends Controller
                 $total = $s_subtotal;
             }
             $tottal = ($total <= 0) ? 0 : $total;
-            $order_total = $tottal   + $stripe_charge;
+            $order_total = $tottal + $stripe_charge;
+            session()->put('total',$order_total);
+            if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
+                return response()->json([
+                    'error' => 1,
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $order_total ." more for the chekout.",
+                    'total' => $order_total,
+                    'headertotal' => $order_total,
+                    'service_charge' => $stripe_charge,
+                ]);
 
-            session()->put('total', $order_total);
-            return response()->json([
-                'success' => 1,
-                'total' => $order_total,
-                'headertotal' => $order_total,
-                'service_charge' => $stripe_charge
-            ]);
+            }else{
+                return response()->json([
+                    'success' => 1,
+                    'total' => $order_total,
+                    'headertotal' => $order_total,
+                    'service_charge' => $stripe_charge
+                ]);
+            }
         }
         if ($req->method_type == 2) {
             if (!empty($discount) || $discount != '') {
@@ -79,13 +129,25 @@ class MenuController extends Controller
             }
             $tottal = ($total <= 0) ? 0 : $total;
             $order_total = $tottal  + $paypal_charge;
-            session()->put('total', $order_total);
-            return response()->json([
-                'success' => 2,
-                'total' => $order_total,
-                'headertotal' => $order_total,
-                'service_charge' => $paypal_charge,
-            ]);
+            session()->put('total',$order_total);
+            if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
+                return response()->json([
+                    'error' => 1,
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $order_total ." more for the chekout.",
+                    'total' => $order_total,
+                    'headertotal' => $order_total,
+                    'service_charge' => $paypal_charge,
+
+                ]);
+
+            }else{
+                return response()->json([
+                    'success' => 2,
+                    'total' => $order_total,
+                    'headertotal' => $order_total,
+                    'service_charge' => $paypal_charge,
+                ]);
+            }
         }
         if ($req->method_type == 3) {
             if (!empty($discount) || $discount != '') {
@@ -95,14 +157,27 @@ class MenuController extends Controller
             }
             $tottal = ($total <= 0) ? 0 : $total;
             $order_total = $tottal + $cod_charge;
-            session()->put('total', $order_total);
-            return response()->json([
-                'success' => 3,
-                'total' => $order_total,
-                'headertotal' => $order_total,
-                'service_charge' => $cod_charge
-            ]);
+            session()->put('total',$order_total);
+            if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
+                return response()->json([
+                    'error' => 1,
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $order_total ." more for the chekout.",
+                    'total' => $order_total,
+                    'headertotal' => $order_total,
+                    'service_charge' => $cod_charge
+
+                ]);
+
+            }else{
+                return response()->json([
+                    'success' => 3,
+                    'total' => $order_total,
+                    'headertotal' => $order_total,
+                    'service_charge' => $cod_charge
+                ]);
+            }
         }
+
     }
 
 
@@ -1117,6 +1192,7 @@ class MenuController extends Controller
                                                 {
                                                     $code = $Couponcode->toArray();
                                                     session()->put('currentcoupon', $code);
+                                                    session()->put('couponname', $Couponcode['name']);
                                                     session()->save();
 
                                                     if ($userid == 0) {
@@ -1227,6 +1303,7 @@ class MenuController extends Controller
                                             {
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
                                                 session()->save();
 
                                                 if ($userid == 0) {
@@ -1347,6 +1424,7 @@ class MenuController extends Controller
                                                 {
                                                     $code = $Couponcode->toArray();
                                                     session()->put('currentcoupon', $code);
+                                                    session()->put('couponname', $Couponcode['name']);
                                                     session()->save();
 
                                                     if ($userid == 0) {
@@ -1458,6 +1536,7 @@ class MenuController extends Controller
                                             {
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
                                                 session()->save();
 
                                                 if ($userid == 0) {
@@ -1580,6 +1659,7 @@ class MenuController extends Controller
                                                 {
                                                     $code = $Couponcode->toArray();
                                                     session()->put('currentcoupon', $code);
+                                                    session()->put('couponname', $Couponcode['name']);
                                                     session()->save();
 
                                                     if ($userid == 0) {
@@ -1693,6 +1773,7 @@ class MenuController extends Controller
                                             {
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
                                                 session()->save();
 
                                                 if ($userid == 0) {
@@ -1866,6 +1947,7 @@ class MenuController extends Controller
 
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
                                                 session()->save();
 
                                                 if ($userid == 0) {
@@ -1977,6 +2059,7 @@ class MenuController extends Controller
                                         {
                                             $code = $Couponcode->toArray();
                                             session()->put('currentcoupon', $code);
+                                            session()->put('couponname', $Couponcode['name']);
                                             session()->save();
 
                                             if ($userid == 0) {
@@ -2098,6 +2181,7 @@ class MenuController extends Controller
                                             {
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
                                                 session()->save();
 
                                                 if ($userid == 0) {
@@ -2209,6 +2293,7 @@ class MenuController extends Controller
                                         {
                                             $code = $Couponcode->toArray();
                                             session()->put('currentcoupon', $code);
+                                            session()->put('couponname', $Couponcode['name']);
                                             session()->save();
 
                                             if ($userid == 0) {
@@ -2334,6 +2419,7 @@ class MenuController extends Controller
 
                                                 $code = $Couponcode->toArray();
                                                 session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
                                                 session()->save();
 
                                                 if ($userid == 0) {
@@ -2449,6 +2535,7 @@ class MenuController extends Controller
                                         {
                                             $code = $Couponcode->toArray();
                                             session()->put('currentcoupon', $code);
+                                            session()->put('couponname', $Couponcode['name']);
                                             session()->save();
 
                                             if ($userid == 0) {

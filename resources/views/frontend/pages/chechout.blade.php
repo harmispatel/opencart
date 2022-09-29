@@ -642,6 +642,10 @@
                                 <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100  " aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="min_delivery" style="display: none">
+                            <span class="min_delivery"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header accordion-button" id="headingOne" type="button">
@@ -1381,70 +1385,109 @@
         // Payment Button JS
         $('.pay_btn').on('click', function()
         {
-            var method_type = $('input[name="payment_method"]:checked').val();
+            // var method_type = $('input[name="payment_method"]:checked').val();
 
-            $.ajax({
-                type: "post",
-                url: "{{ route('servicecharge') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "method_type" : method_type,
-                },
-                dataType: "json",
-                success: function (response) {
-                    $('#servicecharge').css("display", "contents");
+            var method_type = $(this).val();
 
-                    // alert(response.service_charge);
-                    if (method_type == 3) {
-                        $('.pirce-value').text('');
-                        $('.pirce-value').append(response.headertotal);
-                        $('#button-payment-method').val('');
-                        $('#button-payment-method').val('CONFIRM');
-                        $('#button-payment-method').removeAttr("type").attr("type", "button");
+                // Uncheck others
+                $(this).prop('checked', false);
+                $('#button-payment-method').prop('disabled', true);
+
+                // $(this).prop('checked', true);
+                // alert($(this).prop('checked')); // this return true
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('servicecharge') }}",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "method_type" : method_type,
+                    },
+                    dataType: "json",
+                    success: function (response) {
                         $('#servicecharge').css("display", "contents");
-                        $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
-                        $('#total_pay').text('');
-                        $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                        $('#total').val(response.total);
-                        $('#service_charge').val(response.service_charge);
+                        if (response.error == 1) {
+                            $(this).prop('checked', false);
+                            $('#min_delivery').css('display', 'block');
+                            $('.min_delivery').html(response.message);
+                            $('.pirce-value').text('');
+                            $('.pirce-value').append(response.headertotal);
+                            $('#button-payment-method').val('');
+                            $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
+                            $('#button-payment-method').prop('disabled', true);
+                            $('#button-payment-method').removeAttr("type");
+                            $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+                            $('#total_pay').text('');
+                            $('#total_pay').text("{{ $currency }} "+ response.total +"");
+                            $('#total').val(response.total);
+                            $('#service_charge').val(response.service_charge);
+                        }
+                        else{
+                            // alert(response.service_charge);
+                            if (method_type == 3) {
+                                $('#cod').prop('checked',true);
+                                $('#min_delivery').css('display', 'none');
+                                $('.pirce-value').text('');
+                                $('.pirce-value').append(response.headertotal);
+                                $('#button-payment-method').val('');
+                                $('#button-payment-method').val('CONFIRM');
+                                $('#button-payment-method').removeAttr("type").attr("type", "button");
+                                $('#button-payment-method').prop('disabled', false);
+                                $('#servicecharge').css("display", "contents");
+                                $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+                                $('#total_pay').text('');
+                                $('#total_pay').text("{{ $currency }} "+ response.total +"");
+                                $('#total').val(response.total);
+                                $('#service_charge').val(response.service_charge);
+                            }
+                            else if (method_type == 2) { // paypal
+                                // $('#myfoodbasketpayments_gateway1').prop('checked',true);
+                                $('#myfoodbasketpayments_gateway1').prop('checked', true);
+                                $('#min_delivery').css('display', 'none');
+                                $('.pirce-value').text('');
+                                $('.pirce-value').append(response.headertotal);
+                                $('#button-payment-method').val('');
+                                $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
+                                $('#button-payment-method').removeAttr("type").attr("type", "submit");
+                                $('#button-payment-method').html("<a href='#'>Pay {{ $currency }} "+ response.total +"</a>");
+                                $('#servicecharge').css("display", "contents");
+                                $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+                                $('#total_pay').text('');
+                                $('#button-payment-method').prop('disabled', true);
+                                $('#total_pay').text("{{ $currency }} "+ response.total +"");
+                                $('#total').val(response.total);
+                                $('#service_charge').val(response.service_charge)
+                            }
+                            else if (method_type == 1) {  // stripe
+                                // $('#myfoodbasketpayments_gateway').prop('checked',true);
+                                $('#myfoodbasketpayments_gateway').prop('checked', true);
+                                $('#min_delivery').css('display', 'none');
+                                $('.pirce-value').text('');
+                                $('.pirce-value').append(response.headertotal);
+                                $('#button-payment-method').val('');
+                                $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
+                                $('#button-payment-method').removeAttr("type").attr("type", "button");
+                                $('#servicecharge').css("display", "contents");
+                                $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+                                $('#total_pay').text('');
+                                $('#button-payment-method').prop('disabled', true);
+                                $('#total_pay').text("{{ $currency }} "+ response.total +"");
+                                $('#total').val(response.total);
+                                $('#service_charge').val(response.service_charge);
+                                // $.session.set('total', "+ response.total +");
+                            }
+                            else{
+                                $('#button-payment-method').val('');
+                                $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
+                            }
+                        }
                     }
-                    else if (method_type == 2) { // paypal
-                        $('.pirce-value').text('');
-                        $('.pirce-value').append(response.headertotal);
-                        $('#button-payment-method').val('');
-                        $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
-                        $('#button-payment-method').removeAttr("type").attr("type", "submit");
-                        $('#button-payment-method').html("<a href='#'>Pay {{ $currency }} "+ response.total +"</a>");
-                        $('#servicecharge').css("display", "contents");
-                        $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
-                        $('#total_pay').text('');
-                        $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                        $('#total').val(response.total);
-                        $('#service_charge').val(response.service_charge)
-                    }
-                    else if (method_type == 1) {  // stripe
-                        $('.pirce-value').text('');
-                        $('.pirce-value').append(response.headertotal);
-                        $('#button-payment-method').val('');
-                        $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
-                        $('#button-payment-method').removeAttr("type").attr("type", "button");
-                        $('#servicecharge').css("display", "contents");
-                        $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
-                        $('#total_pay').text('');
-                        $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                        $('#total').val(response.total);
-                        $('#service_charge').val(response.service_charge);
-                        // $.session.set('total', "+ response.total +");
-                    }
-                    else{
-                        $('#button-payment-method').val('');
-                        $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
-                    }
+                });
+            // }
 
+            // $('#myContainer li').click(function() {
+            //     $(":input",this).prop('checked',false);
+            // });
 
-                    console.log(response.success);
-                }
-            });
 
             // if (method_type == 1) {
 
@@ -1485,7 +1528,7 @@
             //     $('#service_charge').val({{ $cod_charge }});
 
             // }
-            $('#button-payment-method').removeAttr('disabled');
+
         });
         // End Payment Button JS
 
