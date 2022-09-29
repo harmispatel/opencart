@@ -941,6 +941,8 @@ class MenuController extends Controller
 
             // Main Total
             $total = $subtotal - $couponcode + $delivery_charge;
+            $all_total = ($total <= 0) ? 0 : $total;
+
         } else {
             $total = $subtotal + $delivery_charge;
         }
@@ -1245,7 +1247,7 @@ class MenuController extends Controller
                                                         }
                                                     }
                                                     $total = $subtotal - $couponcode + $delivery_charge;
-
+                                                    $all_total = ($total <= 0) ? 0 : $total;
 
                                                     $total_html = '';
                                                     $couponcode_html = '';
@@ -1258,21 +1260,24 @@ class MenuController extends Controller
 
                                                     if ($request->method_type == 1) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $stripe_charge, 2));
                                                     } elseif ($request->method_type == 2) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                     } elseif ($request->method_type == 3) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $cod_charge, 2));
                                                     } else {
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                        $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total, 2) );
                                                     }
 
+                                                    // echo '<pre>';
+                                                    // print_r($total_html+ 1);
+                                                    // exit();
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -1358,6 +1363,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
+                                                $all_total = ($total <= 0) ? 0 : $total;
 
                                                 $total_html = '';
                                                 $couponcode_html = '';
@@ -1368,21 +1374,24 @@ class MenuController extends Controller
                                                 $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
                                                 } elseif ($request->method_type == 2) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                 } elseif ($request->method_type == 3) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
                                                 } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                    $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
                                                 }
 
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 2);
+                                                // exit();
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -1479,6 +1488,7 @@ class MenuController extends Controller
                                                     }
 
                                                     $total = $subtotal - $couponcode + $delivery_charge;
+                                                    $all_total = ($total <= 0) ? 0 : $total;
 
                                                     $total_html = '';
                                                     $couponcode_html = '';
@@ -1491,21 +1501,24 @@ class MenuController extends Controller
 
                                                     if ($request->method_type == 1) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $stripe_charge, 2));
                                                     } elseif ($request->method_type == 2) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                     } elseif ($request->method_type == 3) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $cod_charge, 2));
                                                     } else {
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                        $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total, 2) );
                                                     }
 
+                                                    // echo '<pre>';
+                                                    // print_r($total_html+ 2);
+                                                    // exit();
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -1590,6 +1603,7 @@ class MenuController extends Controller
                                                     }
                                                 }
                                                 $total = $subtotal - $couponcode + $delivery_charge;
+                                                $all_total = ($total <= 0) ? 0 : $total;
 
                                                 $total_html = '';
                                                 $couponcode_html = '';
@@ -1603,21 +1617,23 @@ class MenuController extends Controller
 
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
                                                 } elseif ($request->method_type == 2) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                 } elseif ($request->method_type == 3) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
                                                 } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                    $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
                                                 }
-
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 4);
+                                                // exit();
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -1714,6 +1730,7 @@ class MenuController extends Controller
 
                                                     // $total = $subtotal - $couponcode + $delivery_charge;
                                                     $total = $subtotal - $couponcode;
+                                                    $all_total = ($total <= 0) ? 0 : $total;
 
 
 
@@ -1728,21 +1745,24 @@ class MenuController extends Controller
 
                                                     if ($request->method_type == 1) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $stripe_charge, 2));
                                                     } elseif ($request->method_type == 2) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                     } elseif ($request->method_type == 3) {
                                                         // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                        $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $cod_charge, 2));
                                                     } else {
-                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                        $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total, 2) );
                                                     }
 
+                                                    // echo '<pre>';
+                                                    // print_r($total_html+ 5);
+                                                    // exit();
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -1828,6 +1848,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
+                                                $all_total = ($total <= 0) ? 0 : $total;
 
                                                 $total_html = '';
                                                 $couponcode_html = '';
@@ -1841,21 +1862,24 @@ class MenuController extends Controller
 
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
                                                 } elseif ($request->method_type == 2) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                 } elseif ($request->method_type == 3) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
                                                 } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                    $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
                                                 }
 
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 6);
+                                                // exit();
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -2002,6 +2026,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
+                                                $all_total = ($total <= 0) ? 0 : $total;
 
                                                 $total_html = '';
                                                 $couponcode_html = '';
@@ -2014,21 +2039,24 @@ class MenuController extends Controller
 
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
                                                 } elseif ($request->method_type == 2) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                 } elseif ($request->method_type == 3) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
                                                 } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                    $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
                                                 }
 
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 7);
+                                                // exit();
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -2113,6 +2141,7 @@ class MenuController extends Controller
                                                 }
                                             }
                                             $total = $subtotal - $couponcode + $delivery_charge;
+                                            $all_total = ($total <= 0) ? 0 : $total;
 
                                             $total_html = '';
                                             $couponcode_html = '';
@@ -2121,24 +2150,25 @@ class MenuController extends Controller
                                             $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                             // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                             $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span>';
-
                                             if ($request->method_type == 1) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $stripe_charge, 2));
                                             } elseif ($request->method_type == 2) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $paypal_charge, 2)) ;
                                             } elseif ($request->method_type == 3) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $cod_charge, 2));
                                             } else {
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                $head_total = (round($all_total, 2) );
                                             }
-
+                                            // echo '<pre>';
+                                            // print_r($total_html+ 8);
+                                            // exit();
                                             return response()->json([
                                                 'success' => 1,
                                                 'success_message' => $success_message,
@@ -2236,6 +2266,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $total = $subtotal - $couponcode + $delivery_charge;
+                                                $all_total = ($total <= 0) ? 0 : $total;
 
                                                 $total_html = '';
                                                 $couponcode_html = '';
@@ -2245,24 +2276,26 @@ class MenuController extends Controller
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
-
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
                                                 } elseif ($request->method_type == 2) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                 } elseif ($request->method_type == 3) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
                                                 } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                    $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
                                                 }
 
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 9);
+                                                // exit();
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -2349,6 +2382,9 @@ class MenuController extends Controller
 
                                             $total = $subtotal - $couponcode + $delivery_charge;
 
+                                            $all_total = ($total <= 0) ? 0 : $total;
+
+
                                             $total_html = '';
                                             $couponcode_html = '';
                                             $success_message = '';
@@ -2358,24 +2394,26 @@ class MenuController extends Controller
                                             $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
 
                                             //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
-
                                             if ($request->method_type == 1) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $stripe_charge, 2));
                                             } elseif ($request->method_type == 2) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $paypal_charge, 2)) ;
                                             } elseif ($request->method_type == 3) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $cod_charge, 2));
                                             } else {
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                $head_total = (round($all_total, 2) );
                                             }
 
+                                            // echo '<pre>';
+                                            // print_r($total_html+ 10);
+                                            // exit();
                                             return response()->json([
                                                 'success' => 1,
                                                 'success_message' => $success_message,
@@ -2475,6 +2513,7 @@ class MenuController extends Controller
 
                                                 // $total = $subtotal - $couponcode + $delivery_charge;
                                                 $total = $subtotal - $couponcode;
+                                                $all_total = ($total <= 0) ? 0 : $total;
 
 
 
@@ -2487,24 +2526,25 @@ class MenuController extends Controller
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
-
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
                                                 } elseif ($request->method_type == 2) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
                                                 } elseif ($request->method_type == 3) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
                                                 } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                    $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
                                                 }
-
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 11);
+                                                // exit();
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -2590,7 +2630,7 @@ class MenuController extends Controller
                                             }
 
                                             $total = $subtotal - $couponcode + $delivery_charge;
-
+                                            $all_total = ($total <= 0) ? 0 : $total;
 
                                             $total_html = '';
                                             $couponcode_html = '';
@@ -2602,22 +2642,24 @@ class MenuController extends Controller
                                             //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
                                             // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
+
                                             if ($request->method_type == 1) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $stripe_charge, 2) <= 0) ? 0 : round($total + $stripe_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $stripe_charge, 2));
                                             } elseif ($request->method_type == 2) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $paypal_charge, 2) <= 0) ? 0 : round($total + $paypal_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $paypal_charge, 2)) ;
                                             } elseif ($request->method_type == 3) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2)) . '</b></span>';
-                                                $head_total = ((round($total + $cod_charge, 2) <= 0) ? 0 : round($total + $cod_charge, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                $head_total = (round($all_total + $cod_charge, 2));
                                             } else {
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . ((round($total, 2) <= 0) ? 0 : round($total, 2)) . '</b></span>';
-                                                $head_total = ((round($total, 2) <= 0) ? 0 : round($total, 2));
+                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                $head_total = (round($all_total, 2) );
                                             }
+
 
                                             return response()->json([
                                                 'success' => 1,
