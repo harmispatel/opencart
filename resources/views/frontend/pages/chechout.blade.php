@@ -1049,7 +1049,9 @@
     {{-- End JS --}}
 
     @php
-        if(empty($mycart)){
+        $cart_size_session = isset($mycart['size']) ? $mycart['size'] : '';
+        $cart_withoutsize_session = isset($mycart['withoutsize']) ? $mycart['withoutsize'] : '';
+        if(empty($cart_size_session) && empty($cart_withoutsize_session)){
             $emptycarturl = route('cart');
             echo "<script type='text/javascript'>
                     window.location.replace('".$emptycarturl."');

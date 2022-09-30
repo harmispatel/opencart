@@ -197,18 +197,18 @@ class CustomerAuthController extends Controller
         }
 
 
-        if (session()->has('userid')) {
-            if (session()->has('cart1')) {
-                $cart = session()->get('cart1');
-                $serial = serialize($cart);
-                $base64 = base64_encode($serial);
-                $user_id = session()->get('userid');
-                $user = Customer::find($user_id);
-                $user->cart = $base64;
-                $user->update();
-                session()->forget('cart1');
-            }
-        }
+        // if (session()->has('userid')) {
+        //     if (session()->has('cart1')) {
+        //         $cart = session()->get('cart1');
+        //         $serial = serialize($cart);
+        //         $base64 = base64_encode($serial);
+        //         $user_id = session()->get('userid');
+        //         $user = Customer::find($user_id);
+        //         $user->cart = $base64;
+        //         $user->update();
+        //         session()->forget('cart1');
+        //     }
+        // }
 
         if ($ajaxregister == 1) {
             return response()->json([

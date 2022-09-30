@@ -56,18 +56,20 @@ class MenuController extends Controller
          $Coupon_code = coupon::where('code', $coupon_name)->where('store_id', $front_store_id)->first();
 
 
-         if (isset($Coupon_code['type']) ? $Coupon_code['type'] : '' == 'P')
+         if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : '')
          {
              $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
          }
-         if (isset($Coupon_code['type']) ? $Coupon_code['type'] : '' == 'F')
+         if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : '' )
          {
              $couponcode = $Coupon_code['discount'];
          }
 
+        //  echo '<pre>';
+        //  print_r($couponcode);
+        //  exit();
 
          $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
-
 
         //  Minimum Spend
          $key = ([
@@ -133,7 +135,7 @@ class MenuController extends Controller
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal ." more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal  ." more for the chekout.",
                     'total' => $order_total,
                     'headertotal' => $order_total,
                     'service_charge' => $paypal_charge,
@@ -158,10 +160,11 @@ class MenuController extends Controller
             $tottal = ($total <= 0) ? 0 : $total;
             $order_total = $tottal + $cod_charge;
             session()->put('total',$order_total);
+
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal ." more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal  ." more for the chekout.",
                     'total' => $order_total,
                     'headertotal' => $order_total,
                     'service_charge' => $cod_charge
@@ -676,11 +679,8 @@ class MenuController extends Controller
 
                     if (!empty($get_coupon) || $get_coupon != '') {
                         if ($get_coupon->status == 1 && $get_coupon->on_off == 1) {
-                            echo '1';
                             if ($get_coupon->uses_total >  $count_user_per_cpn || $get_coupon->uses_total == 0) {
-                                echo '2';
                                 if ($get_coupon->uses_customer > $uses_per_cpn) {
-                                    echo "3";
                                     if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
 
                                         if ($apply_shipping == $delivery_type) {
@@ -1963,7 +1963,6 @@ class MenuController extends Controller
                     if ($Couponcode->uses_total >  $count_user_per_cpn || $Couponcode->uses_total == 0) {
                         if ($Couponcode->uses_customer > $uses_per_cpn) {
                             if (!empty($session_proid) ||  $session_proid != '') {
-                                // echo ' Hello Dharmesh';
                                 if (array_intersect($product_check,  $session_proid) && count($product_check) != 0) {
                                     if ($apply_shipping == $delivery_type) {
 
