@@ -1,3 +1,4 @@
+
 {{--
 THIS IS View Menu  PAGE FOR FRONTEND
 ----------------------------------------------------------------------------------------------
@@ -1029,7 +1030,7 @@ It's used for View Menu.
 
 
     <!-- Delivery Type Modal -->
-    <div class="modal fade csmodal" id="csmodal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal fade csmodal" id="Modal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

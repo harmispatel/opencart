@@ -1409,18 +1409,25 @@
                         $('#servicecharge').css("display", "none");
                         $('#min_delivery').css('display', 'block');
                         $('.min_delivery').html(response.message);
+
                         // $('.pirce-value').text('');
-                        // $('.pirce-value').append(response.headertotal);
                         $('#button-payment-method').val('');
                         // $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
                         $('#button-payment-method').val("CONFIRM");
                         // $('#button-payment-method').removeAttr("type");
-                        // $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
-                        // $('#total_pay').text('');
-                        // $('#total_pay').text("{{ $currency }} "+ response.total +"");
                         // $('#total').val(response.total);
                         // $('#service_charge').val(response.service_charge);
                         $('#button-payment-method').prop('disabled', true);
+
+
+                        let total = response.total-response.service_charge;
+                        $('.pirce-value').text('');
+
+                        $('#total_pay').text('');
+                        $('#total_pay').text("{{ $currency }} "+ total +"");
+                        // $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+
+                        $('.pirce-value').append(total);
                     }
                     else{
                         // alert(response.service_charge);
@@ -1536,8 +1543,6 @@
         $('#button-payment-method').on('click', function()
         {
             var method_type = $('input[name="payment_method"]:checked').val();
-            // alert(method_type);
-            // return false;
             var total = $('#total').val();
             var subtotal = $('#subtotal').val();
             var service_charge = $('#service_charge').val();
@@ -1802,6 +1807,7 @@
             let total = $('#total').val();
 
             var method_type = $('input[name="payment_method"]:checked').val();
+            var order_type = $('#deliver').val();
 
             $.ajax({
                 type: 'post',
@@ -1816,8 +1822,21 @@
                 dataType: 'json',
                 success: function(result)
                 {
-                    console.log(result);
+
+                    // console.log(result);
                     $('#couponload').css('display' , 'none');
+
+
+                    // if (order_type == 'delivery' && result.headertotal <= result.min_spend) {
+                    //     alert("HI")
+                    //     $('#min_delivery').css('display', 'block');
+                    //     $('.min_delivery').html('Minimum delivery is {{ $currency }} '+result.min_spend+'');
+                    //     // Minimum delivery is {{ $currency }}.;
+                    //     // $('.min_delivery').html(response.message);
+                    //     // $('input[name="payment_method"]:checked').prop('checked', false);
+                    // }
+
+
                     if(result.success == 1)
                     {
                         if (method_type == 3) {
@@ -1834,8 +1853,8 @@
                         $('#couponSuccess').append(result.success_message);
                         $('.coupon_code').html('');
                         if ( $(".coupon_code").length ) {
-                             /*EXISTS (greater than 0) */
-                             $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                            /*EXISTS (greater than 0) */
+                            $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
                         }else{
                             $('<tr><td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td></tr>').insertBefore(".voucher");
                         }
@@ -1846,6 +1865,13 @@
                         setTimeout(() => {
                             $('#couponSuccess').html('');
                         }, 10000);
+
+
+                        if (order_type == 'delivery' && result.min_spend >= result.headertotal) {
+                            $('#min_delivery').css('display', 'block');
+                            $('.min_delivery').html('Minimum delivery is {{ $currency }} '+result.min_spend+'');
+                            $('#button-payment-method').prop('disabled', true);
+                        }
                     }
 
                     if(result.errors == 1)
@@ -1857,6 +1883,7 @@
                             $('#couponError').html('');
                         }, 10000);
                     }
+
                 }
             });
         });

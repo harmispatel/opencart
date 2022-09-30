@@ -56,23 +56,38 @@ class MenuController extends Controller
          $s_coupon = session()->get('currentcoupon');
          $ordertype = session()->get('flag_post_code');
          $coupon_name = session()->get('couponname');
-         $Coupon_code = coupon::where('code', $coupon_name)->where('store_id', $front_store_id)->first();
+
+         $couponcode_name = isset($s_coupon['code']) ? $s_coupon['code'] : $coupon_name;
+         $Coupon_code = coupon::where('code', $couponcode_name)->where('store_id', $front_store_id)->first();
 
 
-         if (!empty($s_coupon) || $s_coupon != '') {
+         if (!empty($Coupon_code) || $Coupon_code != '') {
              if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0)
              {
-                $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
+                $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
              }
              if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : 0)
              {
-                $couponcode = $s_coupon['discount'];
+                $couponcode = $Coupon_code['discount'];
              }
          }
+        //  else
+        //  if($s_coupon){
+        //     if (isset($s_coupon['type']) ? ($s_coupon['type'] == 'P') : 0)
+        //      {
+        //         $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
+        //      }
+        //      if ( isset($s_coupon['type']) ? ($s_coupon['type'] == 'F') : 0)
+        //      {
+        //         $couponcode = $s_coupon['discount'];
+        //      }
+        //  }
         else{
             $couponcode = 0;
         }
-
+        //   echo '<pre>';
+        //   print_r($couponcode);
+        //   exit();
 
          $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
 
@@ -1504,6 +1519,29 @@ class MenuController extends Controller
         $current_date = strtotime(date('Y-m-d'));
         $delivery_type = session()->get('flag_post_code');
 
+        //  Minimum Spend
+        $key = ([
+            'enable_delivery',
+            'delivery_option',
+        ]);
+
+        $delivery_setting = [];
+
+        foreach ($key as $row) {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+
+            $delivery_setting[$row] = isset($query->value) ? $query->value : '';
+        }
+
+
+        if ($delivery_setting['delivery_option'] == 'area') {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+        } else {
+            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        }
+        $minimum_spend = $deliverysettings->last()->toArray();
+        //  End Minimum Spend
+
         if (session()->has('userid')) {
             $userid = session()->get('userid');
         } else {
@@ -1632,7 +1670,12 @@ class MenuController extends Controller
 
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    } else {
+                                                        $couponcode_html .= '';
+                                                    }
+
                                                     //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
                                                     if ($request->method_type == 1) {
@@ -1661,6 +1704,7 @@ class MenuController extends Controller
                                                         'couponcode' => $couponcode_html,
                                                         'total' => $total_html,
                                                         'headertotal' => $head_total,
+                                                        'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
                                                 } else // Expired Coupon
                                                 {
@@ -1748,7 +1792,11 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                } else {
+                                                    $couponcode_html .= '';
+                                                }
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
                                                     $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
@@ -1775,6 +1823,7 @@ class MenuController extends Controller
                                                     'couponcode' => $couponcode_html,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
                                             } else // Expired Coupon
                                             {
@@ -1873,7 +1922,11 @@ class MenuController extends Controller
 
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    } else {
+                                                        $couponcode_html .= '';
+                                                    }
                                                     //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
                                                     if ($request->method_type == 1) {
@@ -1901,7 +1954,7 @@ class MenuController extends Controller
                                                         'success_message' => $success_message,
                                                         'couponcode' => $couponcode_html,
                                                         'total' => $total_html,
-                                                        'headertotal' => $head_total,
+                                                        'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
                                                 } else // Expired Coupon
                                                 {
@@ -1988,7 +2041,11 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                } else {
+                                                    $couponcode_html .= '';
+                                                }
 
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
@@ -2017,6 +2074,7 @@ class MenuController extends Controller
                                                     'couponcode' => $couponcode_html,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
                                             } else // Expired Coupon
                                             {
@@ -2117,7 +2175,11 @@ class MenuController extends Controller
 
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    } else {
+                                                        $couponcode_html .= '';
+                                                    }
                                                     //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
                                                     if ($request->method_type == 1) {
@@ -2146,6 +2208,7 @@ class MenuController extends Controller
                                                         'couponcode' => $couponcode_html,
                                                         'total' => $total_html,
                                                         'headertotal' => $head_total,
+                                                        'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
                                                 } else // Expired Coupon
                                                 {
@@ -2233,7 +2296,11 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                } else {
+                                                    $couponcode_html .= '';
+                                                }
 
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
@@ -2263,6 +2330,7 @@ class MenuController extends Controller
                                                     'couponcode' => $couponcode_html,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
                                             } else // Expired Coupon
                                             {
@@ -2410,7 +2478,11 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                } else {
+                                                    $couponcode_html .= '';
+                                                }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
                                                 if ($request->method_type == 1) {
@@ -2439,6 +2511,7 @@ class MenuController extends Controller
                                                     'couponcode' => $couponcode_html,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
                                             } else // Expired Coupon
                                             {
@@ -2525,7 +2598,11 @@ class MenuController extends Controller
 
                                             $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                             // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            $couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span>';
+                                            if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                            } else {
+                                                $couponcode_html .= '';
+                                            }
                                             if ($request->method_type == 1) {
                                                 // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
                                                 $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
@@ -2551,6 +2628,7 @@ class MenuController extends Controller
                                                 'couponcode' => $couponcode_html,
                                                 'total' => $total_html,
                                                 'headertotal' => $head_total,
+                                                'min_spend' => $minimum_spend['min_spend'],
                                             ]);
                                         } else // Expired Coupon
                                         {
@@ -2650,7 +2728,11 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                } else {
+                                                    $couponcode_html .= '';
+                                                }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
@@ -2678,6 +2760,7 @@ class MenuController extends Controller
                                                     'couponcode' => $couponcode_html,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
                                             } else // Expired Coupon
                                             {
@@ -2767,7 +2850,11 @@ class MenuController extends Controller
 
                                             $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                             // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                            if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                            } else {
+                                                $couponcode_html .= '';
+                                            }
 
                                             //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
                                             if ($request->method_type == 1) {
@@ -2796,6 +2883,7 @@ class MenuController extends Controller
                                                 'couponcode' => $couponcode_html,
                                                 'total' => $total_html,
                                                 'headertotal' => $head_total,
+                                                'min_spend' => $minimum_spend['min_spend'],
                                             ]);
                                         } else // Expired Coupon
                                         {
@@ -2900,7 +2988,11 @@ class MenuController extends Controller
 
                                                 $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                } else {
+                                                    $couponcode_html .= '';
+                                                }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
                                                 if ($request->method_type == 1) {
                                                     // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
@@ -2927,6 +3019,7 @@ class MenuController extends Controller
                                                     'couponcode' => $couponcode_html,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
                                             } else // Expired Coupon
                                             {
@@ -3014,7 +3107,11 @@ class MenuController extends Controller
 
                                             $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                             // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                            if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                            } else {
+                                                $couponcode_html .= '';
+                                            }
                                             //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
                                             // $total_html .= '<label><b>Total to pay:</b></label><span><b id="total_pay">'. $currency . ' . $total . '</b></span>';
@@ -3043,6 +3140,7 @@ class MenuController extends Controller
                                                 'couponcode' => $couponcode_html,
                                                 'total' => $total_html,
                                                 'headertotal' => $head_total,
+                                                'min_spend' => $minimum_spend['min_spend'],
                                             ]);
                                         } else // Expired Coupon
                                         {
