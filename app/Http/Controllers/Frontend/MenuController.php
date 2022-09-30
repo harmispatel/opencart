@@ -56,18 +56,20 @@ class MenuController extends Controller
          $Coupon_code = coupon::where('code', $coupon_name)->where('store_id', $front_store_id)->first();
 
 
-         if (isset($s_coupon['type']) ? $s_coupon['type'] : '' == 'P')
+         if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : '')
          {
              $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
          }
-         if (isset($s_coupon['type']) ? $s_coupon['type'] : '' == 'F')
+         if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : '' )
          {
              $couponcode = $s_coupon['discount'];
          }
 
+        //  echo '<pre>';
+        //  print_r($couponcode);
+        //  exit();
 
          $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
-
 
         //  Minimum Spend
          $key = ([
@@ -133,7 +135,7 @@ class MenuController extends Controller
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal ." more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal  ." more for the chekout.",
                     'total' => $order_total,
                     'headertotal' => $order_total,
                     'service_charge' => $paypal_charge,
@@ -158,10 +160,11 @@ class MenuController extends Controller
             $tottal = ($total <= 0) ? 0 : $total;
             $order_total = $tottal + $cod_charge;
             session()->put('total',$order_total);
+
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal ." more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ".  number_format($minimum_spend['min_spend'],2) - $tottal  ." more for the chekout.",
                     'total' => $order_total,
                     'headertotal' => $order_total,
                     'service_charge' => $cod_charge

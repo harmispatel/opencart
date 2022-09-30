@@ -1050,16 +1050,16 @@
     @include('frontend.include.script')
     {{-- End JS --}}
 
-    {{-- @php
-
-         if($mycart = '' || empty($mycart['size']) || empty($mycart['withoutsize'])){
-             $emptycarturl = route('cart');
-             echo "<script type='text/javascript'>
-                     window.location.replace('".$emptycarturl."');
-                 </script>";
-         }
-
-    @endphp --}}
+    @php
+        $cart_size_session = isset($mycart['size']) ? $mycart['size'] : '';
+        $cart_withoutsize_session = isset($mycart['withoutsize']) ? $mycart['withoutsize'] : '';
+        if(empty($cart_size_session) && empty($cart_withoutsize_session)){
+            $emptycarturl = route('cart');
+            echo "<script type='text/javascript'>
+                    window.location.replace('".$emptycarturl."');
+                </script>";
+        }
+    @endphp
 
     {{-- Custom JS --}}
     <script type="text/javascript">
