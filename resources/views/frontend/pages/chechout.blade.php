@@ -449,6 +449,8 @@
                     </div>
                     {{ \Session::forget('success') }}
                 @endif
+
+
                 <div class="check-inr">
                     <div class="row justify-content-center" id="demo">
                         <div class="col-md-12">
@@ -1048,14 +1050,16 @@
     @include('frontend.include.script')
     {{-- End JS --}}
 
-    @php
-        if(empty($mycart)){
-            $emptycarturl = route('cart');
-            echo "<script type='text/javascript'>
-                    window.location.replace('".$emptycarturl."');
-                </script>";
-        }
-    @endphp
+    {{-- @php
+
+         if($mycart = '' || empty($mycart['size']) || empty($mycart['withoutsize'])){
+             $emptycarturl = route('cart');
+             echo "<script type='text/javascript'>
+                     window.location.replace('".$emptycarturl."');
+                 </script>";
+         }
+
+    @endphp --}}
 
     {{-- Custom JS --}}
     <script type="text/javascript">
@@ -1829,7 +1833,12 @@
                         $('#couponSuccess').html('');
                         $('#couponSuccess').append(result.success_message);
                         $('.coupon_code').html('');
-                        $('.coupon_code').append('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                        if ( $(".coupon_code").length ) {
+                             /*EXISTS (greater than 0) */
+                             $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                        }else{
+                            $('<tr><td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td></tr>').insertBefore(".voucher");
+                        }
                         $('.total').html('');
                         $('.total').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
                         $('.pirce-value').text('');
