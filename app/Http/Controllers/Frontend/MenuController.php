@@ -62,11 +62,11 @@ class MenuController extends Controller
          if (!empty($s_coupon) || $s_coupon != '') {
              if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0)
              {
-                $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
+                $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
              }
              if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : 0)
              {
-                $couponcode = $s_coupon['discount'];
+                $couponcode = $Coupon_code['discount'];
              }
          }
         else{

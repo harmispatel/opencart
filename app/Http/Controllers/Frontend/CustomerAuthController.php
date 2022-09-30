@@ -114,7 +114,7 @@ class CustomerAuthController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'email' => 'required|email|unique:oc_customer,email',
-                'phone' => 'required|min:10',
+                'phone' => 'required',
                 'password' => 'min:6|required_with:confirm_password|same:confirm_password',
                 'confirm_password' => 'min:6|required_with:password|same:password',
             ]);
@@ -123,7 +123,7 @@ class CustomerAuthController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'email' => 'required|email|unique:oc_customer,email',
-                'phone' => 'required|min:10',
+                'phone' => 'required',
                 'address_1' => 'required',
                 'city' => 'required',
                 'country' => 'required',
@@ -138,7 +138,7 @@ class CustomerAuthController extends Controller
                 'firstname' => 'required',
                 'lastname' => 'required',
                 'email' => 'required|email|unique:oc_customer,email',
-                'phone' => 'required|min:10',
+                'phone' => 'required',
                 'password' => 'min:6|required_with:confirm_password|same:confirm_password',
                 'confirm_password' => 'min:6|required_with:password|same:password',
             ]);
@@ -215,7 +215,7 @@ class CustomerAuthController extends Controller
                 'status' => 1,
             ]);
         } else {
-            return redirect()->route('member');
+            return redirect()->back();
         }
     }
 
@@ -225,10 +225,10 @@ class CustomerAuthController extends Controller
     // Function For Customer logOut
     public function customerlogout()
     {
-        $user_id = session()->get('userid');
-        $user = Customer::find($user_id);
-        $user->cart = "";
-        $user->update();
+        // $user_id = session()->get('userid');
+        // $user = Customer::find($user_id);
+        // $user->cart = "";
+        // $user->update();
         session()->flush();
         return redirect()->route('home');
     }

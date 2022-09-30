@@ -9,6 +9,10 @@
 
 @php
 
+    // echo '<pre>';
+    // print_r(session()->all());
+    // exit();
+
     // Get Current URL
     $currentURL = URL::to("/");
 
@@ -146,6 +150,7 @@
     {
         $session_free_item = '';
     }
+
 
 @endphp
 
@@ -1051,8 +1056,13 @@
     {{-- End JS --}}
 
     @php
+    // echo '<pre>';
+    // // print_r($mycart['size']);
+    // echo "<br>";
+    // print_r($mycart);
+    // exit();
         $cart_size_session = isset($mycart['size']) ? $mycart['size'] : '';
-        $cart_withoutsize_session = isset($mycart['withoutsize']) ? $mycart['withoutsize'] : '';
+        $cart_withoutsize_session = isset($mycart['withoutSize']) ? $mycart['withoutSize'] : '';
         if(empty($cart_size_session) && empty($cart_withoutsize_session)){
             $emptycarturl = route('cart');
             echo "<script type='text/javascript'>
