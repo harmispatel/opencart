@@ -33,6 +33,9 @@ class MenuController extends Controller
 
     public function servicecharge(Request $req)
     {
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
 
         // Get Current URL
         $currentURL = URL::to("/");
@@ -56,18 +59,20 @@ class MenuController extends Controller
          $Coupon_code = coupon::where('code', $coupon_name)->where('store_id', $front_store_id)->first();
 
 
-         if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : '')
-         {
-            $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
+         if (!empty($s_coupon) || $s_coupon != '') {
+             if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0)
+             {
+                $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
+             }
+             if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : 0)
+             {
+                $couponcode = $s_coupon['discount'];
+             }
          }
-         if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : '' )
-         {
-            $couponcode = $s_coupon['discount'];
-         }
+        else{
+            $couponcode = 0;
+        }
 
-        //  echo '<pre>';
-        //  print_r($couponcode);
-        //  exit();
 
          $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
 
@@ -93,8 +98,6 @@ class MenuController extends Controller
         }
         $minimum_spend = $deliverysettings->last()->toArray();
         //  End Minimum Spend
-        // $total = $s_subtotal - $discount;
-
 
         if ($req->method_type == 1) {
             if (!empty($discount) || $discount != '') {
@@ -105,6 +108,9 @@ class MenuController extends Controller
             $tottal = ($total <= 0) ? 0 : $total;
             $order_total = $tottal + $stripe_charge;
             session()->put('total',$order_total);
+            // echo '<pre>';
+            // print_r($order_total);
+            // exit();
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
                 return response()->json([
                     'error' => 1,

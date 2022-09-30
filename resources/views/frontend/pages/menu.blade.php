@@ -129,6 +129,8 @@ It's used for View Menu.
     {
         $session_free_item = '';
     }
+
+    $session_flag_code = (session()->get('flag_post_code')) ? (session()->get('flag_post_code')) : '';
     // echo '<pre>';
     // print_r(session()->all());
     // exit();
@@ -395,9 +397,19 @@ It's used for View Menu.
                                                                                                                                 </button>
                                                                                                                             @else
                                                                                                                                 @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
-                                                                                                                                    <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
+                                                                                                                                    {{-- <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
                                                                                                                                         <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                    </a>
+                                                                                                                                    </a> --}}
+                                                                                                                                    @if ($session_flag_code != '' || !empty($session_flag_code))
+                                                                                                                                        <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
+                                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                        </a>
+                                                                                                                                    @else
+                                                                                                                                        {{-- <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus"> --}}
+                                                                                                                                        <a onclick="$('#Modal').modal('show');" class="btn options-btn cartstatus">
+                                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                        </a>
+                                                                                                                                    @endif
 
                                                                                                                                     {{-- Dynamic Model --}}
                                                                                                                                     <div class="modal fade free-item-modal_{{ $sizeprice_id }}" id="freeItem_{{ $sizeprice_id }}" tabindex="-1" aria-labelledby="freeItem_{{ $sizeprice_id }}Label" aria-hidden="true">
@@ -530,10 +542,16 @@ It's used for View Menu.
                                                                                                                     @if ($get_cat_top_status['enable_option'] == 1)
                                                                                                                         @if ($setprice != 0)
                                                                                                                             @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
-
-                                                                                                                                <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus">
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                </a>
+                                                                                                                                @if ($session_flag_code != '' || !empty($session_flag_code))
+                                                                                                                                    <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus">
+                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+                                                                                                                                @else
+                                                                                                                                    {{-- <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus"> --}}
+                                                                                                                                    <a onclick="$('#Modal').modal('show');" class="btn options-btn cartstatus">
+                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+                                                                                                                                @endif
 
                                                                                                                                 {{-- Dynamic Model --}}
                                                                                                                                 <div class="modal fade newfree-item-modal_{{ $proID }}" id="newfreeItem_{{ $proID }}" tabindex="-1" aria-labelledby="newfreeItem_{{ $proID }}Label" aria-hidden="true">
@@ -610,28 +628,28 @@ It's used for View Menu.
 
                                                                                                                             @else
                                                                                                                                 <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    <span class="sizeprice hide-carttext text-white 8">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                                 </a>
                                                                                                                             @endif
                                                                                                                         @else
                                                                                                                             <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
-                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="sizeprice hide-carttext text-white 9">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
                                                                                                                     @else
                                                                                                                         @if ($setprice != 0)
                                                                                                                             <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
-                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="sizeprice hide-carttext text-white 10">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             </a>
                                                                                                                         @else
                                                                                                                             <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
-                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="sizeprice hide-carttext text-white 11">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
                                                                                                                     @endif
                                                                                                                 @else
                                                                                                                     <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                        <span class="sizeprice hide-carttext text-white 12">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                     </a>
                                                                                                                 @endif
                                                                                                             </div>
@@ -1116,6 +1134,20 @@ It's used for View Menu.
             var status = $('#user_delivery_val').val();
             var coll = $("input[name='delivery_type']:checked").val();
 
+
+            if (coll == 'collection')
+            {
+                $('#Modal').modal('hide');
+            }
+            else
+            {
+                if (status == '')
+                {
+                    $('#Modal').modal('show');
+                    return false;
+                }
+            }
+
             if(model == 'model')
             {
                 if(sizeprice != 0)
@@ -1274,18 +1306,6 @@ It's used for View Menu.
 
             }
 
-            if (coll == 'collection')
-            {
-                $('#Modal').modal('hide');
-            }
-            else
-            {
-                if (status == '')
-                {
-                    $('#Modal').modal('show');
-                    return false;
-                }
-            }
 
             $.ajax({
                 type: 'post',
