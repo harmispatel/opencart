@@ -797,7 +797,7 @@ It's used for View Menu.
                                             if (!empty($Coupon) || $Coupon != '')
                                             {
                                                 $couponcode = 0;
-                                                if( $Coupon['total'] >= $subtotal){
+                                                if( $Coupon['total'] <= $subtotal){
                                                     if ($Coupon['type'] == 'P')
                                                     {
                                                         $couponcode = ($subtotal * $Coupon['discount']) / 100;

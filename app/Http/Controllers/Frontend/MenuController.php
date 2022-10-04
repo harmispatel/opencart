@@ -1316,7 +1316,7 @@ class MenuController extends Controller
         // Coupon Code
         if (!empty(isset($Coupon) ? $Coupon : '') || isset($Coupon) ? $Coupon : '' != '') {
             $couponcode = 0;
-            if ($Coupon['total'] >= $subtotal) {
+            if ($Coupon['total'] <= $subtotal) {
                 if ($Coupon['type'] == 'P') {
                     $couponcode = ($subtotal * $Coupon['discount']) / 100;
                 }
@@ -1664,7 +1664,7 @@ class MenuController extends Controller
                                                         }
                                                     }
                                                     $couponcode = 0;
-                                                    if ($Couponcode['total'] >= $subtotal) {
+                                                    if ($Couponcode['total'] <= $subtotal) {
 
                                                         if ($Couponcode->type == 'P') {
                                                             $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -1799,7 +1799,7 @@ class MenuController extends Controller
                                                     }
 
                                                     $couponcode = 0;
-                                                    if ($Couponcode['total'] >= $subtotal) {
+                                                    if ($Couponcode['total'] <= $subtotal) {
 
                                                         if ($Couponcode->type == 'P') {
                                                             $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -1940,7 +1940,7 @@ class MenuController extends Controller
                                                     }
 
                                                     $couponcode = 0;
-                                                    if ($Couponcode['total'] >= $subtotal) {
+                                                    if ($Couponcode['total'] <= $subtotal) {
 
                                                         if ($Couponcode->type == 'P') {
                                                             $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2073,7 +2073,7 @@ class MenuController extends Controller
                                                     }
 
                                                     $couponcode = 0;
-                                                    if ($Couponcode['total'] >= $subtotal) {
+                                                    if ($Couponcode['total'] <= $subtotal) {
 
                                                         if ($Couponcode->type == 'P') {
                                                             $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2216,7 +2216,7 @@ class MenuController extends Controller
                                                         }
                                                     }
                                                     $couponcode = 0;
-                                                    if ($Couponcode['total'] >= $subtotal) {
+                                                    if ($Couponcode['total'] <= $subtotal) {
 
                                                         if ($Couponcode->type == 'P') {
                                                             $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2353,7 +2353,7 @@ class MenuController extends Controller
                                                     }
 
                                                     $couponcode = 0;
-                                                    if ($Couponcode['total'] >= $subtotal) {
+                                                    if ($Couponcode['total'] <= $subtotal) {
 
                                                         if ($Couponcode->type == 'P') {
                                                             $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2546,7 +2546,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                if ($Couponcode['total'] <= $subtotal) {
 
                                                     if ($Couponcode->type == 'P') {
                                                         $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2680,7 +2680,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                if ($Couponcode['total'] <= $subtotal) {
 
                                                     if ($Couponcode->type == 'P') {
                                                         $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2821,7 +2821,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                if ($Couponcode['total'] <= $subtotal) {
 
                                                     if ($Couponcode->type == 'P') {
                                                         $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -2958,7 +2958,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                if ($Couponcode['total'] <= $subtotal) {
 
                                                     if ($Couponcode->type == 'P') {
                                                         $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -3107,7 +3107,7 @@ class MenuController extends Controller
                                                     }
                                                 }
                                                 $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                if ($Couponcode['total'] <= $subtotal) {
 
                                                     if ($Couponcode->type == 'P') {
                                                         $couponcode = ($subtotal * $Couponcode->discount) / 100;
@@ -3245,7 +3245,7 @@ class MenuController extends Controller
                                                 }
 
                                                 $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                if ($Couponcode['total'] <= $subtotal) {
 
                                                     if ($Couponcode->type == 'P') {
                                                         $couponcode = ($subtotal * $Couponcode->discount) / 100;

@@ -138,7 +138,7 @@
         if (!empty($Coupon) || $Coupon != '')
         {
            $couponcode =0;
-                if ( $Coupon['total'] >= $price)
+                if ( $Coupon['total'] <= $price)
                 {
                     if ($Coupon['type'] == 'P')
                     {
@@ -220,7 +220,7 @@
             if (!empty($Coupon) || $Coupon != '')
             {
                $couponcode =0;
-                if ( $Coupon['total'] >= $price)
+                if ( $Coupon['total'] <= $price)
                 {
                     if ($Coupon['type'] == 'P')
                     {
