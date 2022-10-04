@@ -1833,7 +1833,7 @@
                 {
 
                     // console.log(result);
-                    alert(order_type)
+
                     $('#couponload').css('display' , 'none');
 
 
