@@ -1343,9 +1343,13 @@ class MenuController extends Controller
             $total = $subtotal + $delivery_charge;
         }
         if (isset($couponcode) ? $couponcode : 0 != 0) {
-            $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</span>';
+            // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</span>';
+            $couponcode_name = $Coupon['code'];
+            $couponcode_amount = (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2));
         } else {
-            $coupon_html .= '';
+            $couponcode_name = '';
+            $couponcode_amount = '';
+
         }
 
         session()->put('headertotal', $total);
@@ -1410,7 +1414,8 @@ class MenuController extends Controller
             'cart_products' => $cart_products,
             'headertotal' => (round($headertotal, 2) <= 0) ? 0 : round($headertotal, 2),
             'total' => $total_html,
-            'couponcode' => $coupon_html,
+            'couponcode_name' => $couponcode_name,
+            'couponcode_amount' => $couponcode_amount,
             'cart_rule_html' => $cart_rule_html,
             'min_spend' => $min_spend,
         ]);
@@ -1499,6 +1504,9 @@ class MenuController extends Controller
     // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -1672,12 +1680,25 @@ class MenuController extends Controller
                                                     $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    if($Couponcode['total'] >= $subtotal) {
+                                                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    }else{
+                                                        session()->forget('couponname');
+                                                        session()->forget('currentcoupon');
+                                                        session()->forget('couponcode');
+                                                        session()->save();
+                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    }
+
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        $couponcode_name = $Couponcode->code;
+                                                        $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                     } else {
-                                                        $couponcode_html .= '';
+                                                        // $couponcode_html .= '';
+                                                        $couponcode_name = '';
+                                                        $couponcode_amount = '';
                                                     }
 
                                                     //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
@@ -1705,7 +1726,8 @@ class MenuController extends Controller
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
-                                                        'couponcode' => $couponcode_html,
+                                                        'couponcode_name' => $couponcode_name,
+                                                        'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
@@ -1728,125 +1750,136 @@ class MenuController extends Controller
                                                 ]);
                                             }
                                         } elseif ($apply_shipping == 'both') {
-                                            // if ($request->total >= $Couponcode->total) {
-                                            if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
-                                            {
-                                                $code = $Couponcode->toArray();
-                                                session()->put('currentcoupon', $code);
-                                                session()->put('couponname', $Couponcode['name']);
-                                                session()->save();
+                                            if ($request->total >= $Couponcode->total) {
+                                                if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+                                                {
+                                                    $code = $Couponcode->toArray();
+                                                    session()->put('currentcoupon', $code);
+                                                    session()->put('couponname', $Couponcode['name']);
+                                                    session()->save();
 
-                                                if ($userid == 0) {
-                                                    $mycart = $request->session()->get('cart1');
-                                                } else {
-                                                    $mycart = $request->session()->get('cart1'); // Session
-                                                    // $mycart = getuserCart($userid); // Database
-                                                }
+                                                    if ($userid == 0) {
+                                                        $mycart = $request->session()->get('cart1');
+                                                    } else {
+                                                        $mycart = $request->session()->get('cart1'); // Session
+                                                        // $mycart = getuserCart($userid); // Database
+                                                    }
 
-                                                $subtotal = 0;
-                                                $delivery_charge = 0;
+                                                    $subtotal = 0;
+                                                    $delivery_charge = 0;
 
-                                                if (isset($mycart['size']) || !empty($mycart['size'])) {
-                                                    foreach ($mycart['size'] as $key => $cart) {
-                                                        if ($delivery_type == 'delivery') {
-                                                            $price = $cart['del_price'] * $cart['quantity'];
-                                                        } elseif ($delivery_type == 'collection') {
-                                                            $price = $cart['col_price'] * $cart['quantity'];
-                                                        } else {
+                                                    if (isset($mycart['size']) || !empty($mycart['size'])) {
+                                                        foreach ($mycart['size'] as $key => $cart) {
+                                                            if ($delivery_type == 'delivery') {
+                                                                $price = $cart['del_price'] * $cart['quantity'];
+                                                            } elseif ($delivery_type == 'collection') {
+                                                                $price = $cart['col_price'] * $cart['quantity'];
+                                                            } else {
 
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                            }
+                                                            $subtotal += $price;
+                                                            // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
-                                                        $subtotal += $price;
-                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                }
 
-                                                if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
-                                                    foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                        if ($delivery_type == 'delivery') {
-                                                            $price = $cart['del_price'] * $cart['quantity'];
-                                                        } elseif ($delivery_type == 'collection') {
-                                                            $price = $cart['col_price'] * $cart['quantity'];
-                                                        } else {
+                                                    if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
+                                                        foreach ($mycart['withoutSize'] as $key => $cart) {
+                                                            if ($delivery_type == 'delivery') {
+                                                                $price = $cart['del_price'] * $cart['quantity'];
+                                                            } elseif ($delivery_type == 'collection') {
+                                                                $price = $cart['col_price'] * $cart['quantity'];
+                                                            } else {
 
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                            }
+                                                            $subtotal += $price;
+                                                            // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
-                                                        $subtotal += $price;
-                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                }
 
-                                                $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                    $couponcode = 0;
+                                                    if ($Couponcode['total'] >= $subtotal) {
 
-                                                    if ($Couponcode->type == 'P') {
-                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
                                                     }
-                                                    if ($Couponcode->type == 'F') {
-                                                        $couponcode = $Couponcode->discount;
+
+                                                    $total = $subtotal - $couponcode + $delivery_charge;
+                                                    $all_total = ($total <= 0) ? 0 : $total;
+
+                                                    $total_html = '';
+                                                    // $couponcode_html = '';
+                                                    $success_message = '';
+
+                                                    if($Couponcode['total'] >= $subtotal) {
+                                                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    }else{
+                                                        session()->forget('couponname');
+                                                        session()->forget('currentcoupon');
+                                                        session()->forget('couponcode');
+                                                        session()->save();
+                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
                                                     }
+                                                    // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                                                    if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                        // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        $couponcode_name = $Couponcode->code;
+                                                        $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
+                                                    } else {
+                                                        // $couponcode_html .= '';
+                                                        $couponcode_name = '';
+                                                        $couponcode_amount = '';
+                                                    }
+                                                    if ($request->method_type == 1) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $stripe_charge, 2));
+                                                    } elseif ($request->method_type == 2) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $paypal_charge, 2)) ;
+                                                    } elseif ($request->method_type == 3) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $cod_charge, 2));
+                                                    } else {
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total, 2) );
+                                                    }
+
+
+                                                    return response()->json([
+                                                        'success' => 1,
+                                                        'success_message' => $success_message,
+                                                        'couponcode_name' => $couponcode_name,
+                                                        'couponcode_amount' => $couponcode_amount,
+                                                        'total' => $total_html,
+                                                        'headertotal' => $head_total,
+                                                        'min_spend' => $minimum_spend['min_spend'],
+                                                    ]);
                                                 }
-
-                                                $total = $subtotal - $couponcode + $delivery_charge;
-                                                $all_total = ($total <= 0) ? 0 : $total;
-
-                                                $total_html = '';
-                                                $couponcode_html = '';
-                                                $success_message = '';
-
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                                                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
-                                                } else {
-                                                    $couponcode_html .= '';
+                                                else // Expired Coupon
+                                                {
+                                                    $error_msg = '';
+                                                    $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                    return response()->json([
+                                                        'errors' => 1,
+                                                        'errors_message' => $error_msg,
+                                                    ]);
                                                 }
-                                                if ($request->method_type == 1) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $stripe_charge, 2));
-                                                } elseif ($request->method_type == 2) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
-                                                } elseif ($request->method_type == 3) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $cod_charge, 2));
-                                                } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total, 2) );
-                                                }
-
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 2);
-                                                // exit();
-                                                return response()->json([
-                                                    'success' => 1,
-                                                    'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
-                                                    'total' => $total_html,
-                                                    'headertotal' => $head_total,
-                                                    'min_spend' => $minimum_spend['min_spend'],
-                                                ]);
-                                            } else // Expired Coupon
-                                            {
+                                            } else{
                                                 $error_msg = '';
-                                                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                                 return response()->json([
                                                     'errors' => 1,
                                                     'errors_message' => $error_msg,
                                                 ]);
                                             }
-                                            // }
-                                            // else{
-                                            //     $error_msg = '';
-                                            //     $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
-                                            //     return response()->json([
-                                            //         'errors' => 1,
-                                            //         'errors_message' => $error_msg,
-                                            //     ]);
-                                            // }
                                         } else {
                                             $error_msg = '';
                                             $error_msg .= '<span class="text-danger"> Sorry Coupon is Expired!</span>';
@@ -1923,13 +1956,25 @@ class MenuController extends Controller
                                                     $total_html = '';
                                                     $couponcode_html = '';
                                                     $success_message = '';
+                                                    if($Couponcode['total'] >= $subtotal) {
+                                                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    }else{
+                                                        session()->forget('couponname');
+                                                        session()->forget('currentcoupon');
+                                                        session()->forget('couponcode');
+                                                        session()->save();
+                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    }
 
-                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        $couponcode_name = $Couponcode->code;
+                                                        $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                     } else {
-                                                        $couponcode_html .= '';
+                                                        // $couponcode_html .= '';
+                                                        $couponcode_name = '';
+                                                        $couponcode_amount = '';
                                                     }
                                                     //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
@@ -1956,7 +2001,8 @@ class MenuController extends Controller
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
-                                                        'couponcode' => $couponcode_html,
+                                                        'couponcode_name' => $couponcode_name,
+                                                        'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
                                                         'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
@@ -1978,126 +2024,139 @@ class MenuController extends Controller
                                                 ]);
                                             }
                                         } elseif ($apply_shipping == 'both') {
-                                            // if ($request->total >= $Couponcode->total) {
-                                            if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
-                                            {
-                                                $code = $Couponcode->toArray();
-                                                session()->put('currentcoupon', $code);
-                                                session()->put('couponname', $Couponcode['name']);
-                                                session()->save();
+                                            if ($request->total >= $Couponcode->total) {
+                                                if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+                                                {
+                                                    $code = $Couponcode->toArray();
+                                                    session()->put('currentcoupon', $code);
+                                                    session()->put('couponname', $Couponcode['name']);
+                                                    session()->save();
 
-                                                if ($userid == 0) {
-                                                    $mycart = $request->session()->get('cart1');
-                                                } else {
-                                                    $mycart = $request->session()->get('cart1'); // Session
-                                                    // $mycart = getuserCart($userid); // Database
-                                                }
+                                                    if ($userid == 0) {
+                                                        $mycart = $request->session()->get('cart1');
+                                                    } else {
+                                                        $mycart = $request->session()->get('cart1'); // Session
+                                                        // $mycart = getuserCart($userid); // Database
+                                                    }
 
-                                                $subtotal = 0;
-                                                $delivery_charge = 0;
+                                                    $subtotal = 0;
+                                                    $delivery_charge = 0;
 
-                                                if (isset($mycart['size']) || !empty($mycart['size'])) {
-                                                    foreach ($mycart['size'] as $key => $cart) {
-                                                        if ($delivery_type == 'delivery') {
-                                                            $price = $cart['del_price'] * $cart['quantity'];
-                                                        } elseif ($delivery_type == 'collection') {
-                                                            $price = $cart['col_price'] * $cart['quantity'];
-                                                        } else {
+                                                    if (isset($mycart['size']) || !empty($mycart['size'])) {
+                                                        foreach ($mycart['size'] as $key => $cart) {
+                                                            if ($delivery_type == 'delivery') {
+                                                                $price = $cart['del_price'] * $cart['quantity'];
+                                                            } elseif ($delivery_type == 'collection') {
+                                                                $price = $cart['col_price'] * $cart['quantity'];
+                                                            } else {
 
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                            }
+                                                            $subtotal += $price;
+                                                            // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
-                                                        $subtotal += $price;
-                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                }
 
-                                                if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
-                                                    foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                        if ($delivery_type == 'delivery') {
-                                                            $price = $cart['del_price'] * $cart['quantity'];
-                                                        } elseif ($delivery_type == 'collection') {
-                                                            $price = $cart['col_price'] * $cart['quantity'];
-                                                        } else {
+                                                    if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
+                                                        foreach ($mycart['withoutSize'] as $key => $cart) {
+                                                            if ($delivery_type == 'delivery') {
+                                                                $price = $cart['del_price'] * $cart['quantity'];
+                                                            } elseif ($delivery_type == 'collection') {
+                                                                $price = $cart['col_price'] * $cart['quantity'];
+                                                            } else {
 
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                            }
+                                                            $subtotal += $price;
+                                                            // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
-                                                        $subtotal += $price;
-                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                }
 
-                                                $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                    $couponcode = 0;
+                                                    if ($Couponcode['total'] >= $subtotal) {
 
-                                                    if ($Couponcode->type == 'P') {
-                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
                                                     }
-                                                    if ($Couponcode->type == 'F') {
-                                                        $couponcode = $Couponcode->discount;
+                                                    $total = $subtotal - $couponcode + $delivery_charge;
+                                                    $all_total = ($total <= 0) ? 0 : $total;
+
+                                                    $total_html = '';
+                                                    $couponcode_html = '';
+                                                    $success_message = '';
+
+                                                    if($Couponcode['total'] >= $subtotal) {
+                                                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    }else{
+                                                        session()->forget('couponname');
+                                                        session()->forget('currentcoupon');
+                                                        session()->forget('couponcode');
+                                                        session()->save();
+                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
                                                     }
+                                                    // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                                                    if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                        // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        $couponcode_name = $Couponcode->code;
+                                                        $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
+                                                    } else {
+                                                        // $couponcode_html .= '';
+                                                        $couponcode_name = '';
+                                                        $couponcode_amount = '';
+                                                    }
+
+                                                    //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
+
+                                                    if ($request->method_type == 1) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $stripe_charge, 2));
+                                                    } elseif ($request->method_type == 2) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $paypal_charge, 2)) ;
+                                                    } elseif ($request->method_type == 3) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $cod_charge, 2));
+                                                    } else {
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total, 2) );
+                                                    }
+                                                    // echo '<pre>';
+                                                    // print_r($total_html+ 4);
+                                                    // exit();
+                                                    return response()->json([
+                                                        'success' => 1,
+                                                        'success_message' => $success_message,
+                                                        'couponcode_name' => $couponcode_name,
+                                                        'couponcode_amount' => $couponcode_amount,
+                                                        'total' => $total_html,
+                                                        'headertotal' => $head_total,
+                                                        'min_spend' => $minimum_spend['min_spend'],
+                                                    ]);
+                                                } else // Expired Coupon
+                                                {
+                                                    $error_msg = '';
+                                                    $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                    return response()->json([
+                                                        'errors' => 1,
+                                                        'errors_message' => $error_msg,
+                                                    ]);
                                                 }
-                                                $total = $subtotal - $couponcode + $delivery_charge;
-                                                $all_total = ($total <= 0) ? 0 : $total;
-
-                                                $total_html = '';
-                                                $couponcode_html = '';
-                                                $success_message = '';
-
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                                                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
-                                                } else {
-                                                    $couponcode_html .= '';
-                                                }
-
-                                                //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
-
-                                                if ($request->method_type == 1) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $stripe_charge, 2));
-                                                } elseif ($request->method_type == 2) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
-                                                } elseif ($request->method_type == 3) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $cod_charge, 2));
-                                                } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total, 2) );
-                                                }
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 4);
-                                                // exit();
-                                                return response()->json([
-                                                    'success' => 1,
-                                                    'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
-                                                    'total' => $total_html,
-                                                    'headertotal' => $head_total,
-                                                    'min_spend' => $minimum_spend['min_spend'],
-                                                ]);
-                                            } else // Expired Coupon
-                                            {
+                                            }
+                                            else{
                                                 $error_msg = '';
-                                                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                                 return response()->json([
                                                     'errors' => 1,
                                                     'errors_message' => $error_msg,
                                                 ]);
                                             }
-                                            // }
-                                            // else{
-                                            //     $error_msg = '';
-                                            //     $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
-                                            //     return response()->json([
-                                            //         'errors' => 1,
-                                            //         'errors_message' => $error_msg,
-                                            //     ]);
-                                            // }
                                         } else {
                                             $error_msg = '';
                                             $error_msg .= '<span class="text-danger"> Sorry Coupon is Expired!</span>';
@@ -2177,12 +2236,24 @@ class MenuController extends Controller
                                                     $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    if($Couponcode['total'] >= $subtotal) {
+                                                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    }else{
+                                                        session()->forget('couponname');
+                                                        session()->forget('currentcoupon');
+                                                        session()->forget('couponcode');
+                                                        session()->save();
+                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    }
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                        $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        $couponcode_name = $Couponcode->code;
+                                                        $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                     } else {
-                                                        $couponcode_html .= '';
+                                                        // $couponcode_html .= '';
+                                                        $couponcode_name = '';
+                                                        $couponcode_amount = '';
                                                     }
                                                     //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
@@ -2209,7 +2280,8 @@ class MenuController extends Controller
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
-                                                        'couponcode' => $couponcode_html,
+                                                        'couponcode_name' => $couponcode_name,
+                                                        'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
@@ -2232,128 +2304,141 @@ class MenuController extends Controller
                                                 ]);
                                             }
                                         } elseif ($apply_shipping == 'both') {
-                                            // if ($request->total >= $Couponcode->total) {
-                                            if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
-                                            {
-                                                $code = $Couponcode->toArray();
-                                                session()->put('currentcoupon', $code);
-                                                session()->put('couponname', $Couponcode['name']);
-                                                session()->save();
+                                            if ($request->total >= $Couponcode->total) {
+                                                if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+                                                {
+                                                    $code = $Couponcode->toArray();
+                                                    session()->put('currentcoupon', $code);
+                                                    session()->put('couponname', $Couponcode['name']);
+                                                    session()->save();
 
-                                                if ($userid == 0) {
-                                                    $mycart = $request->session()->get('cart1');
-                                                } else {
-                                                    $mycart = $request->session()->get('cart1'); // Session
-                                                    // $mycart = getuserCart($userid); // Database
-                                                }
+                                                    if ($userid == 0) {
+                                                        $mycart = $request->session()->get('cart1');
+                                                    } else {
+                                                        $mycart = $request->session()->get('cart1'); // Session
+                                                        // $mycart = getuserCart($userid); // Database
+                                                    }
 
-                                                $subtotal = 0;
-                                                $delivery_charge = 0;
+                                                    $subtotal = 0;
+                                                    $delivery_charge = 0;
 
-                                                if (isset($mycart['size']) || !empty($mycart['size'])) {
-                                                    foreach ($mycart['size'] as $key => $cart) {
-                                                        if ($delivery_type == 'delivery') {
-                                                            $price = $cart['del_price'] * $cart['quantity'];
-                                                        } elseif ($delivery_type == 'collection') {
-                                                            $price = $cart['col_price'] * $cart['quantity'];
-                                                        } else {
+                                                    if (isset($mycart['size']) || !empty($mycart['size'])) {
+                                                        foreach ($mycart['size'] as $key => $cart) {
+                                                            if ($delivery_type == 'delivery') {
+                                                                $price = $cart['del_price'] * $cart['quantity'];
+                                                            } elseif ($delivery_type == 'collection') {
+                                                                $price = $cart['col_price'] * $cart['quantity'];
+                                                            } else {
 
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                            }
+                                                            $subtotal += $price;
+                                                            // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
-                                                        $subtotal += $price;
-                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                }
 
-                                                if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
-                                                    foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                        if ($delivery_type == 'delivery') {
-                                                            $price = $cart['del_price'] * $cart['quantity'];
-                                                        } elseif ($delivery_type == 'collection') {
-                                                            $price = $cart['col_price'] * $cart['quantity'];
-                                                        } else {
+                                                    if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
+                                                        foreach ($mycart['withoutSize'] as $key => $cart) {
+                                                            if ($delivery_type == 'delivery') {
+                                                                $price = $cart['del_price'] * $cart['quantity'];
+                                                            } elseif ($delivery_type == 'collection') {
+                                                                $price = $cart['col_price'] * $cart['quantity'];
+                                                            } else {
 
-                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                                $price = $cart['main_price'] * $cart['quantity'];
+                                                            }
+                                                            $subtotal += $price;
+                                                            // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                         }
-                                                        $subtotal += $price;
-                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                }
 
-                                                $couponcode = 0;
-                                                if ($Couponcode['total'] >= $subtotal) {
+                                                    $couponcode = 0;
+                                                    if ($Couponcode['total'] >= $subtotal) {
 
-                                                    if ($Couponcode->type == 'P') {
-                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        if ($Couponcode->type == 'P') {
+                                                            $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                        }
+                                                        if ($Couponcode->type == 'F') {
+                                                            $couponcode = $Couponcode->discount;
+                                                        }
                                                     }
-                                                    if ($Couponcode->type == 'F') {
-                                                        $couponcode = $Couponcode->discount;
+
+                                                    $total = $subtotal - $couponcode + $delivery_charge;
+                                                    $all_total = ($total <= 0) ? 0 : $total;
+
+                                                    $total_html = '';
+                                                    $couponcode_html = '';
+                                                    $success_message = '';
+
+                                                    if($Couponcode['total'] >= $subtotal) {
+                                                        $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                    }else{
+                                                        session()->forget('couponname');
+                                                        session()->forget('currentcoupon');
+                                                        session()->forget('couponcode');
+                                                        session()->save();
+                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
                                                     }
+                                                    // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                                                    if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                        // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                        $couponcode_name = $Couponcode->code;
+                                                        $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
+                                                    } else {
+                                                        // $couponcode_html .= '';
+                                                        $couponcode_name = '';
+                                                        $couponcode_amount = '';
+                                                    }
+
+                                                    //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
+
+                                                    if ($request->method_type == 1) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $stripe_charge, 2));
+                                                    } elseif ($request->method_type == 2) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $paypal_charge, 2)) ;
+                                                    } elseif ($request->method_type == 3) {
+                                                        // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total + $cod_charge, 2));
+                                                    } else {
+                                                        $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                        $head_total = (round($all_total, 2) );
+                                                    }
+
+                                                    // echo '<pre>';
+                                                    // print_r($total_html+ 6);
+                                                    // exit();
+                                                    return response()->json([
+                                                        'success' => 1,
+                                                        'success_message' => $success_message,
+                                                        'couponcode_name' => $couponcode_name,
+                                                        'couponcode_amount' => $couponcode_amount,
+                                                        'total' => $total_html,
+                                                        'headertotal' => $head_total,
+                                                        'min_spend' => $minimum_spend['min_spend'],
+                                                    ]);
+                                                } else // Expired Coupon
+                                                {
+                                                    $error_msg = '';
+                                                    $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                    return response()->json([
+                                                        'errors' => 1,
+                                                        'errors_message' => $error_msg,
+                                                    ]);
                                                 }
-
-                                                $total = $subtotal - $couponcode + $delivery_charge;
-                                                $all_total = ($total <= 0) ? 0 : $total;
-
-                                                $total_html = '';
-                                                $couponcode_html = '';
-                                                $success_message = '';
-
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                                                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
-                                                } else {
-                                                    $couponcode_html .= '';
-                                                }
-
-                                                //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
-
-                                                if ($request->method_type == 1) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $stripe_charge, 2));
-                                                } elseif ($request->method_type == 2) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
-                                                } elseif ($request->method_type == 3) {
-                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total + $cod_charge, 2));
-                                                } else {
-                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
-                                                    $head_total = (round($all_total, 2) );
-                                                }
-
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 6);
-                                                // exit();
-                                                return response()->json([
-                                                    'success' => 1,
-                                                    'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
-                                                    'total' => $total_html,
-                                                    'headertotal' => $head_total,
-                                                    'min_spend' => $minimum_spend['min_spend'],
-                                                ]);
-                                            } else // Expired Coupon
-                                            {
+                                            }
+                                            else{
                                                 $error_msg = '';
-                                                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                                 return response()->json([
                                                     'errors' => 1,
                                                     'errors_message' => $error_msg,
                                                 ]);
                                             }
-                                            // }
-                                            // else{
-                                            //     $error_msg = '';
-                                            //     $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
-                                            //     return response()->json([
-                                            //         'errors' => 1,
-                                            //         'errors_message' => $error_msg,
-                                            //     ]);
-                                            // }
                                         } else {
                                             $error_msg = '';
                                             $error_msg .= '<span class="text-danger"> Sorry Coupon is Expired!</span>';
@@ -2478,12 +2563,24 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                if($Couponcode['total'] >= $subtotal) {
+                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                }else{
+                                                    session()->forget('couponname');
+                                                    session()->forget('currentcoupon');
+                                                    session()->forget('couponcode');
+                                                    session()->save();
+                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    $couponcode_name = $Couponcode->code;
+                                                    $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                 } else {
-                                                    $couponcode_html .= '';
+                                                    // $couponcode_html .= '';
+                                                    $couponcode_name = '';
+                                                    $couponcode_amount = '';
                                                 }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
@@ -2510,7 +2607,8 @@ class MenuController extends Controller
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
+                                                    'couponcode_name' => $couponcode_name,
+                                                    'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
@@ -2533,123 +2631,136 @@ class MenuController extends Controller
                                             ]);
                                         }
                                     } elseif ($apply_shipping == 'both') {
-                                        // if ($request->total >= $Couponcode->total) {
-                                        if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
-                                        {
-                                            $code = $Couponcode->toArray();
-                                            session()->put('currentcoupon', $code);
-                                            session()->put('couponname', $Couponcode['name']);
-                                            session()->save();
+                                        if ($request->total >= $Couponcode->total) {
+                                            if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+                                            {
+                                                $code = $Couponcode->toArray();
+                                                session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
+                                                session()->save();
 
-                                            if ($userid == 0) {
-                                                $mycart = $request->session()->get('cart1');
-                                            } else {
-                                                $mycart = $request->session()->get('cart1'); // Session
-                                                // $mycart = getuserCart($userid); // Database
-                                            }
+                                                if ($userid == 0) {
+                                                    $mycart = $request->session()->get('cart1');
+                                                } else {
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
+                                                }
 
-                                            $subtotal = 0;
-                                            $delivery_charge = 0;
+                                                $subtotal = 0;
+                                                $delivery_charge = 0;
 
-                                            if (isset($mycart['size']) || !empty($mycart['size'])) {
-                                                foreach ($mycart['size'] as $key => $cart) {
-                                                    if ($delivery_type == 'delivery') {
-                                                        $price = $cart['del_price'] * $cart['quantity'];
-                                                    } elseif ($delivery_type == 'collection') {
-                                                        $price = $cart['col_price'] * $cart['quantity'];
-                                                    } else {
+                                                if (isset($mycart['size']) || !empty($mycart['size'])) {
+                                                    foreach ($mycart['size'] as $key => $cart) {
+                                                        if ($delivery_type == 'delivery') {
+                                                            $price = $cart['del_price'] * $cart['quantity'];
+                                                        } elseif ($delivery_type == 'collection') {
+                                                            $price = $cart['col_price'] * $cart['quantity'];
+                                                        } else {
 
-                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                        }
+                                                        $subtotal += $price;
+                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                    $subtotal += $price;
-                                                    // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                 }
-                                            }
 
-                                            if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
-                                                foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                    if ($delivery_type == 'delivery') {
-                                                        $price = $cart['del_price'] * $cart['quantity'];
-                                                    } elseif ($delivery_type == 'collection') {
-                                                        $price = $cart['col_price'] * $cart['quantity'];
-                                                    } else {
+                                                if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
+                                                    foreach ($mycart['withoutSize'] as $key => $cart) {
+                                                        if ($delivery_type == 'delivery') {
+                                                            $price = $cart['del_price'] * $cart['quantity'];
+                                                        } elseif ($delivery_type == 'collection') {
+                                                            $price = $cart['col_price'] * $cart['quantity'];
+                                                        } else {
 
-                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                        }
+                                                        $subtotal += $price;
+                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                    $subtotal += $price;
-                                                    // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                 }
-                                            }
 
-                                            $couponcode = 0;
-                                            if ($Couponcode['total'] >= $subtotal) {
+                                                $couponcode = 0;
+                                                if ($Couponcode['total'] >= $subtotal) {
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                    if ($Couponcode->type == 'P') {
+                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                    }
+                                                    if ($Couponcode->type == 'F') {
+                                                        $couponcode = $Couponcode->discount;
+                                                    }
                                                 }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
+                                                $total = $subtotal - $couponcode + $delivery_charge;
+                                                $all_total = ($total <= 0) ? 0 : $total;
+
+                                                $total_html = '';
+                                                $couponcode_html = '';
+                                                $success_message = '';
+
+                                                if($Couponcode['total'] >= $subtotal) {
+                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                }else{
+                                                    session()->forget('couponname');
+                                                    session()->forget('currentcoupon');
+                                                    session()->forget('couponcode');
+                                                    session()->save();
+                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
                                                 }
+                                                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    $couponcode_name = $Couponcode->code;
+                                                    $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
+                                                } else {
+                                                    // $couponcode_html .= '';
+                                                    $couponcode_name = '';
+                                                    $couponcode_amount = '';
+                                                }
+                                                if ($request->method_type == 1) {
+                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
+                                                } elseif ($request->method_type == 2) {
+                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
+                                                } elseif ($request->method_type == 3) {
+                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
+                                                } else {
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
+                                                }
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 8);
+                                                // exit();
+                                                return response()->json([
+                                                    'success' => 1,
+                                                    'success_message' => $success_message,
+                                                    'couponcode_name' => $couponcode_name,
+                                                    'couponcode_amount' => $couponcode_amount,
+                                                    'total' => $total_html,
+                                                    'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
+                                                ]);
+                                            } else // Expired Coupon
+                                            {
+                                                $error_msg = '';
+                                                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                return response()->json([
+                                                    'errors' => 1,
+                                                    'errors_message' => $error_msg,
+                                                ]);
                                             }
-                                            $total = $subtotal - $couponcode + $delivery_charge;
-                                            $all_total = ($total <= 0) ? 0 : $total;
-
-                                            $total_html = '';
-                                            $couponcode_html = '';
-                                            $success_message = '';
-
-                                            $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                                            // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
-                                            } else {
-                                                $couponcode_html .= '';
-                                            }
-                                            if ($request->method_type == 1) {
-                                                // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
-                                                $head_total = (round($all_total + $stripe_charge, 2));
-                                            } elseif ($request->method_type == 2) {
-                                                // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
-                                                $head_total = (round($all_total + $paypal_charge, 2)) ;
-                                            } elseif ($request->method_type == 3) {
-                                                // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
-                                                $head_total = (round($all_total + $cod_charge, 2));
-                                            } else {
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
-                                                $head_total = (round($all_total, 2) );
-                                            }
-                                            // echo '<pre>';
-                                            // print_r($total_html+ 8);
-                                            // exit();
-                                            return response()->json([
-                                                'success' => 1,
-                                                'success_message' => $success_message,
-                                                'couponcode' => $couponcode_html,
-                                                'total' => $total_html,
-                                                'headertotal' => $head_total,
-                                                'min_spend' => $minimum_spend['min_spend'],
-                                            ]);
-                                        } else // Expired Coupon
-                                        {
+                                        }
+                                        else{
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                            $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,
                                             ]);
                                         }
-                                        // }
-                                        // else{
-                                        //     $error_msg = '';
-                                        //     $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
-                                        //     return response()->json([
-                                        //         'errors' => 1,
-                                        //         'errors_message' => $error_msg,
-                                        //     ]);
-                                        // }
                                     } else {
                                         $error_msg = '';
                                         $error_msg .= '<span class="text-danger"> Sorry Coupon is Expired!</span>';
@@ -2727,12 +2838,24 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                if($Couponcode['total'] >= $subtotal) {
+                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                }else{
+                                                    session()->forget('couponname');
+                                                    session()->forget('currentcoupon');
+                                                    session()->forget('couponcode');
+                                                    session()->save();
+                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    $couponcode_name = $Couponcode->code;
+                                                    $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                 } else {
-                                                    $couponcode_html .= '';
+                                                    // $couponcode_html .= '';
+                                                    $couponcode_name = '';
+                                                    $couponcode_amount = '';
                                                 }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
                                                 if ($request->method_type == 1) {
@@ -2758,7 +2881,8 @@ class MenuController extends Controller
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
+                                                    'couponcode_name' => $couponcode_name,
+                                                    'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
@@ -2785,129 +2909,142 @@ class MenuController extends Controller
                                             ]);
                                         }
                                     } elseif ($apply_shipping == 'both') {
-                                        // if ($request->total >= $Couponcode->total) {
-                                        if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
-                                        {
-                                            $code = $Couponcode->toArray();
-                                            session()->put('currentcoupon', $code);
-                                            session()->put('couponname', $Couponcode['name']);
-                                            session()->save();
+                                        if ($request->total >= $Couponcode->total) {
+                                            if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
+                                            {
+                                                $code = $Couponcode->toArray();
+                                                session()->put('currentcoupon', $code);
+                                                session()->put('couponname', $Couponcode['name']);
+                                                session()->save();
 
-                                            if ($userid == 0) {
-                                                $mycart = $request->session()->get('cart1');
-                                            } else {
-                                                $mycart = $request->session()->get('cart1'); // Session
-                                                // $mycart = getuserCart($userid); // Database
-                                            }
+                                                if ($userid == 0) {
+                                                    $mycart = $request->session()->get('cart1');
+                                                } else {
+                                                    $mycart = $request->session()->get('cart1'); // Session
+                                                    // $mycart = getuserCart($userid); // Database
+                                                }
 
-                                            $subtotal = 0;
-                                            $delivery_charge = 0;
+                                                $subtotal = 0;
+                                                $delivery_charge = 0;
 
-                                            if (isset($mycart['size']) || !empty($mycart['size'])) {
-                                                foreach ($mycart['size'] as $key => $cart) {
-                                                    if ($delivery_type == 'delivery') {
-                                                        $price = $cart['del_price'] * $cart['quantity'];
-                                                    } elseif ($delivery_type == 'collection') {
-                                                        $price = $cart['col_price'] * $cart['quantity'];
-                                                    } else {
+                                                if (isset($mycart['size']) || !empty($mycart['size'])) {
+                                                    foreach ($mycart['size'] as $key => $cart) {
+                                                        if ($delivery_type == 'delivery') {
+                                                            $price = $cart['del_price'] * $cart['quantity'];
+                                                        } elseif ($delivery_type == 'collection') {
+                                                            $price = $cart['col_price'] * $cart['quantity'];
+                                                        } else {
 
-                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                        }
+                                                        $subtotal += $price;
+                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                    $subtotal += $price;
-                                                    // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                 }
-                                            }
 
-                                            if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
-                                                foreach ($mycart['withoutSize'] as $key => $cart) {
-                                                    if ($delivery_type == 'delivery') {
-                                                        $price = $cart['del_price'] * $cart['quantity'];
-                                                    } elseif ($delivery_type == 'collection') {
-                                                        $price = $cart['col_price'] * $cart['quantity'];
-                                                    } else {
+                                                if (isset($mycart['withoutSize']) || !empty($mycart['withoutSize'])) {
+                                                    foreach ($mycart['withoutSize'] as $key => $cart) {
+                                                        if ($delivery_type == 'delivery') {
+                                                            $price = $cart['del_price'] * $cart['quantity'];
+                                                        } elseif ($delivery_type == 'collection') {
+                                                            $price = $cart['col_price'] * $cart['quantity'];
+                                                        } else {
 
-                                                        $price = $cart['main_price'] * $cart['quantity'];
+                                                            $price = $cart['main_price'] * $cart['quantity'];
+                                                        }
+                                                        $subtotal += $price;
+                                                        // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                     }
-                                                    $subtotal += $price;
-                                                    // $delivery_charge += isset($cart['del_price']) ? $cart['del_price'] : 0.00;
                                                 }
-                                            }
 
-                                            $couponcode = 0;
-                                            if ($Couponcode['total'] >= $subtotal) {
+                                                $couponcode = 0;
+                                                if ($Couponcode['total'] >= $subtotal) {
 
-                                                if ($Couponcode->type == 'P') {
-                                                    $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                    if ($Couponcode->type == 'P') {
+                                                        $couponcode = ($subtotal * $Couponcode->discount) / 100;
+                                                    }
+                                                    if ($Couponcode->type == 'F') {
+                                                        $couponcode = $Couponcode->discount;
+                                                    }
                                                 }
-                                                if ($Couponcode->type == 'F') {
-                                                    $couponcode = $Couponcode->discount;
+
+                                                $total = $subtotal - $couponcode + $delivery_charge;
+
+                                                $all_total = ($total <= 0) ? 0 : $total;
+
+
+                                                $total_html = '';
+                                                $couponcode_html = '';
+                                                $success_message = '';
+
+                                                if($Couponcode['total'] >= $subtotal) {
+                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                }else{
+                                                    session()->forget('couponname');
+                                                    session()->forget('currentcoupon');
+                                                    session()->forget('couponcode');
+                                                    session()->save();
+                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
                                                 }
+                                                // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
+                                                if (isset($couponcode) ? $couponcode : 0 != 0) {
+                                                    // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    $couponcode_name = $Couponcode->code;
+                                                    $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
+                                                } else {
+                                                    // $couponcode_html .= '';
+                                                    $couponcode_name = '';
+                                                    $couponcode_amount = '';
+                                                }
+
+                                                //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
+                                                if ($request->method_type == 1) {
+                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $stripe_charge, 2));
+                                                } elseif ($request->method_type == 2) {
+                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $paypal_charge, 2)) ;
+                                                } elseif ($request->method_type == 3) {
+                                                    // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total + $cod_charge, 2));
+                                                } else {
+                                                    $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
+                                                    $head_total = (round($all_total, 2) );
+                                                }
+
+                                                // echo '<pre>';
+                                                // print_r($total_html+ 10);
+                                                // exit();
+                                                return response()->json([
+                                                    'success' => 1,
+                                                    'success_message' => $success_message,
+                                                    'couponcode_name' => $couponcode_name,
+                                                    'couponcode_amount' => $couponcode_amount,
+                                                    'total' => $total_html,
+                                                    'headertotal' => $head_total,
+                                                    'min_spend' => $minimum_spend['min_spend'],
+                                                ]);
+                                            } else // Expired Coupon
+                                            {
+                                                $error_msg = '';
+                                                $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                                return response()->json([
+                                                    'errors' => 1,
+                                                    'errors_message' => $error_msg,
+                                                ]);
                                             }
-
-                                            $total = $subtotal - $couponcode + $delivery_charge;
-
-                                            $all_total = ($total <= 0) ? 0 : $total;
-
-
-                                            $total_html = '';
-                                            $couponcode_html = '';
-                                            $success_message = '';
-
-                                            $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
-                                            // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
-                                            if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
-                                            } else {
-                                                $couponcode_html .= '';
-                                            }
-
-                                            //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
-                                            if ($request->method_type == 1) {
-                                                // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  round($total + $stripe_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $stripe_charge, 2)) . '</b></span>';
-                                                $head_total = (round($all_total + $stripe_charge, 2));
-                                            } elseif ($request->method_type == 2) {
-                                                // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $paypal_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $paypal_charge, 2)) . '</b></span>';
-                                                $head_total = (round($all_total + $paypal_charge, 2)) ;
-                                            } elseif ($request->method_type == 3) {
-                                                // $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . round($total + $cod_charge, 2) . '</b></span>';
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' .  (round($all_total + $cod_charge, 2)) . '</b></span>';
-                                                $head_total = (round($all_total + $cod_charge, 2));
-                                            } else {
-                                                $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
-                                                $head_total = (round($all_total, 2) );
-                                            }
-
-                                            // echo '<pre>';
-                                            // print_r($total_html+ 10);
-                                            // exit();
-                                            return response()->json([
-                                                'success' => 1,
-                                                'success_message' => $success_message,
-                                                'couponcode' => $couponcode_html,
-                                                'total' => $total_html,
-                                                'headertotal' => $head_total,
-                                                'min_spend' => $minimum_spend['min_spend'],
-                                            ]);
-                                        } else // Expired Coupon
-                                        {
+                                        }
+                                        else{
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Sorry Coupon is Expired!</span>';
+                                            $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,
                                             ]);
                                         }
-                                        // }
-                                        // else{
-                                        //     $error_msg = '';
-                                        //     $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
-                                        //     return response()->json([
-                                        //         'errors' => 1,
-                                        //         'errors_message' => $error_msg,
-                                        //     ]);
-                                        // }
                                     } else {
                                         $error_msg = '';
                                         $error_msg .= '<span class="text-danger"> Sorry Coupon is Expired!</span>';
@@ -2992,12 +3129,24 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                if($Couponcode['total'] >= $subtotal) {
+                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                }else{
+                                                    session()->forget('couponname');
+                                                    session()->forget('currentcoupon');
+                                                    session()->forget('couponcode');
+                                                    session()->save();
+                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    $couponcode_name = $Couponcode->code;
+                                                    $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                 } else {
-                                                    $couponcode_html .= '';
+                                                    // $couponcode_html .= '';
+                                                    $couponcode_name = '';
+                                                    $couponcode_amount = '';
                                                 }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
                                                 if ($request->method_type == 1) {
@@ -3022,7 +3171,8 @@ class MenuController extends Controller
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
+                                                    'couponcode_name' => $couponcode_name,
+                                                    'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
@@ -3112,12 +3262,24 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                if($Couponcode['total'] >= $subtotal) {
+                                                    $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
+                                                }else{
+                                                    session()->forget('couponname');
+                                                    session()->forget('currentcoupon');
+                                                    session()->forget('couponcode');
+                                                    session()->save();
+                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
-                                                    $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    // $couponcode_html .= '<tr class="coupon_code"><td><b>Coupon(' . $Couponcode->code . '):</b></td><td><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</b></span></td></tr>';
+                                                    $couponcode_name = $Couponcode->code;
+                                                    $couponcode_amount = ($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2);
                                                 } else {
-                                                    $couponcode_html .= '';
+                                                    // $couponcode_html .= '';
+                                                    $couponcode_name = '';
+                                                    $couponcode_amount = '';
                                                 }
                                                 //$couponcode_html .= '<span><b>Coupon(' . $Couponcode->code . '):</b></span><span><b>' . $currency . ' -' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</b></span>';
 
@@ -3144,7 +3306,8 @@ class MenuController extends Controller
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
-                                                    'couponcode' => $couponcode_html,
+                                                    'couponcode_name' => $couponcode_name,
+                                                    'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
@@ -3169,7 +3332,7 @@ class MenuController extends Controller
 
 
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
+                                            $error_msg .= '<span class="text-danger">Maximum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,

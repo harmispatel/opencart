@@ -1832,7 +1832,7 @@
                 success: function(result)
                 {
 
-                    // console.log(result);
+                    console.log(result);
 
                     $('#couponload').css('display' , 'none');
 
@@ -1874,7 +1874,15 @@
                         $('.coupon_code').html('');
                         if ( $(".coupon_code").length ) {
                             /*EXISTS (greater than 0) */
-                            $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                            // $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                            if (result.couponcode_name != '' && result.couponcode_amount != '') {
+                                $('.coupon_code').html('<td><b>Coupon('+ result.couponcode_name +'):</b></td>\
+                                                        <td>\
+                                                            <span>\
+                                                                <b>'+ result.couponcode_amount +'</b>\
+                                                            </span>\
+                                                        </td>');
+                                }
                         }else{
                             if (result.couponcode != '') {
                                 $('<tr><td ><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td></tr>').insertBefore(".voucher");
