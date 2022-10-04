@@ -165,6 +165,10 @@ class CustomerOrder extends Controller
             $cpn_dt = '';
         }
 
+        // echo '<pre>';
+        // print_r($cpn_dt->toArray());
+        // exit();
+
 
         // Store Details
         $store = Store::where('store_id', $front_store_id)->first();
@@ -583,16 +587,16 @@ class CustomerOrder extends Controller
                         }
                     }
 
-                    session()->forget('headertotal');
-                    // session()->forget('flag_post_code');
-                    session()->forget('total');
-                    session()->forget('product_id');
-                    session()->forget('couponcode');
-                    session()->forget('currentcoupon');
-                    session()->forget('couponname');
-                    session()->forget('cart1');
+                    // session()->forget('headertotal');
+                    // // session()->forget('flag_post_code');
+                    // session()->forget('total');
+                    // session()->forget('product_id');
+                    // session()->forget('couponcode');
+                    // session()->forget('currentcoupon');
+                    // session()->forget('couponname');
+                    // session()->forget('cart1');
+                    // session()->forget('free_item');
                     session()->put('last_order_id',$order->order_id);
-                    session()->forget('free_item');
 
                     // Order Product
                     if (isset($usercart)) {
@@ -729,6 +733,16 @@ class CustomerOrder extends Controller
                     $ordertotal->save();
 
                     $new_url = $currentURL . '/success';
+
+                    session()->forget('headertotal');
+                    // session()->forget('flag_post_code');
+                    session()->forget('total');
+                    session()->forget('product_id');
+                    session()->forget('couponcode');
+                    session()->forget('currentcoupon');
+                    session()->forget('couponname');
+                    session()->forget('cart1');
+                    session()->forget('free_item');
 
                     return response()->json([
                         'success' => 1,
@@ -1127,16 +1141,16 @@ class CustomerOrder extends Controller
                             }
                         }
 
-                        session()->forget('headertotal');
-                        session()->forget('total');
-                        session()->forget('product_id');
-                        // session()->forget('flag_post_code');
-                        session()->forget('couponcode');
-                        session()->forget('currentcoupon');
-                        session()->forget('couponname');
-                        session()->forget('cart1');
+                        // session()->forget('headertotal');
+                        // session()->forget('total');
+                        // session()->forget('product_id');
+                        // // session()->forget('flag_post_code');
+                        // session()->forget('couponcode');
+                        // session()->forget('currentcoupon');
+                        // session()->forget('couponname');
+                        // session()->forget('cart1');
+                        // session()->forget('free_item');
                         session()->put('last_order_id',$order->order_id);
-                        session()->forget('free_item');
 
 
                         // Order Product
@@ -1275,6 +1289,16 @@ class CustomerOrder extends Controller
                         $ordertotal->save();
 
                         $new_url = $currentURL . '/success';
+
+                        session()->forget('headertotal');
+                        session()->forget('total');
+                        session()->forget('product_id');
+                        // session()->forget('flag_post_code');
+                        session()->forget('couponcode');
+                        session()->forget('currentcoupon');
+                        session()->forget('couponname');
+                        session()->forget('cart1');
+                        session()->forget('free_item');
 
                         return response()->json([
                             'success' => 1,

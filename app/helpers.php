@@ -2971,8 +2971,8 @@ function getCoupon()
                 $apply_shipping = '';
             }
 
-            $start_date = isset($session_get_coupon->date_start) ? strtotime($session_get_coupon->date_start) : '';
-            $end_date = isset($session_get_coupon->date_end) ? strtotime($session_get_coupon->date_end) : '';
+            $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
+            $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
 
             if ($session_get_coupon['logged'] == 1) {
                 if ($user_id != 0) {
@@ -3167,8 +3167,8 @@ function getCoupon()
                 $apply_shipping = '';
             }
 
-            $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
-            $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
+            $start_date = isset($get_coupon['date_start']) ? strtotime($get_coupon['date_start']) : '';
+            $end_date = isset($get_coupon['date_end']) ? strtotime($get_coupon['date_end']) : '';
             if ($get_coupon->logged == 1) {
                 if ($user_id != 0) {
                     $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();

@@ -651,7 +651,7 @@
                         </div>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert" id="min_delivery" style="display: none">
                             <span class="min_delivery"></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
                         </div>
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
@@ -1252,7 +1252,6 @@
         function DeliveryAddress()
         {
             var form_data = new FormData(document.getElementById('delivery_address'));
-            console.log(form_data);
             var time_select_del = $('#del_time').val();
             var time_select_col = $('#col_time').val();
 
@@ -1817,7 +1816,8 @@
             let total = $('#total').val();
 
             var method_type = $('input[name="payment_method"]:checked').val();
-            var order_type = $('#deliver').val();
+            var order_type = $('input[name="order"]:checked').val();
+            // var order_type = $('#deliver').val();
 
             $.ajax({
                 type: 'post',
@@ -1827,13 +1827,13 @@
                     'coupon': coupon,
                     'method_type': method_type,
                     'total': total,
-                    'method_type': method_type,
                 },
                 dataType: 'json',
                 success: function(result)
                 {
 
                     // console.log(result);
+                    alert(order_type)
                     $('#couponload').css('display' , 'none');
 
 
@@ -1849,6 +1849,16 @@
 
                     if(result.success == 1)
                     {
+
+                        if (order_type == 'delivery') {
+                            if (result.min_spend >= result.headertotal) {
+                                $('#min_delivery').css('display', 'block');
+                                $('.min_delivery').html('Minimum delivery is {{ $currency }} '+result.min_spend+'');
+                                $('#button-payment-method').prop('disabled', true);
+                            }
+
+                        }
+
                         if (method_type == 3) {
                             $('#button-payment-method').val('');
                             $('#button-payment-method').val('CONFIRM');
@@ -1866,7 +1876,9 @@
                             /*EXISTS (greater than 0) */
                             $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
                         }else{
-                            $('<tr><td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td></tr>').insertBefore(".voucher");
+                            if (result.couponcode != '') {
+                                $('<tr><td ><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td></tr>').insertBefore(".voucher");
+                            }
                         }
                         $('.total').html('');
                         $('.total').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
@@ -1875,13 +1887,6 @@
                         setTimeout(() => {
                             $('#couponSuccess').html('');
                         }, 10000);
-
-
-                        if (order_type == 'delivery' && result.min_spend >= result.headertotal) {
-                            $('#min_delivery').css('display', 'block');
-                            $('.min_delivery').html('Minimum delivery is {{ $currency }} '+result.min_spend+'');
-                            $('#button-payment-method').prop('disabled', true);
-                        }
                     }
 
                     if(result.errors == 1)

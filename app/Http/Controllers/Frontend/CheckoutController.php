@@ -290,8 +290,8 @@ class CheckoutController extends Controller
                       $apply_shipping = '';
                   }
 
-                  $start_date = isset($get_coupon->date_start) ? strtotime($get_coupon->date_start) : '';
-                  $end_date = isset($get_coupon->date_end) ? strtotime($get_coupon->date_end) : '';
+                  $start_date = isset($get_coupon['date_start']) ? strtotime($get_coupon['date_start']) : '';
+                  $end_date = isset($get_coupon['date_end']) ? strtotime($get_coupon['date_end']) : '';
 
                   if ($get_coupon->logged == 1) {
                       if ($user_id != 0) {

@@ -963,8 +963,8 @@ It's used for View Menu.
                                         @if ($minimum_spend['min_spend'] >= $total)
                                             <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
                                             <div class="closed-now minimum_spend">
-                                                    <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}.</span>
-                                                    {{-- <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}, you must spend {{ $currency }}{{number_format($minimum_spend['min_spend'],2) - $total}} more for the chekout.</span> --}}
+                                                    <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}.</span>
+                                                    {{-- <span class="closing-text 6" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}, you must spend {{ $currency }}{{number_format($minimum_spend['min_spend'],2) - $total}} more for the chekout.</span> --}}
                                             </div>
                                         @else
                                             <div class="closed-now pt-0">
@@ -974,19 +974,19 @@ It's used for View Menu.
                                     @else
                                         <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
                                         <div class="closed-now">
-                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                            <span class="closing-text 2" style="color: green !important;">We are open now!</span>
                                         </div>
                                     @endif
                                 @else
                                     @if ($userdeliverytype == 'delivery')
                                         <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
                                         <div class="closed-now minimum_spend">
-                                            <span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
+                                            <span class="closing-text 3" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
                                         </div>
                                     @else
                                         <a href="{{ route('cart') }}" type="button" class="btn checkbt">Checkout</a>
                                         <div class="closed-now">
-                                            <span class="closing-text" style="color: green !important;">We are open now!</span>
+                                            <span class="closing-text 4" style="color: green !important;">We are open now!</span>
                                         </div>
                                     @endif
                                 @endif
@@ -994,7 +994,7 @@ It's used for View Menu.
                                 <div class="closed-now">
                                     <button class="btn w-100 checkbt" disabled style="cursor: not-allowed; pointer-events: auto; color:black;">Checkout</button>
                                     <div class="closed-now">
-                                        <span class="closing-text">We are closed now !</span>
+                                        <span class="closing-text 5">We are closed now !</span>
                                     </div>
                                 </div>
                             @endif
@@ -1473,8 +1473,25 @@ It's used for View Menu.
                         }, 5000);
                     }
 
+                    if (result.headertotal >= result.min_spend) {
+                        $('.disabled_checkout_btn').removeClass('disabled');
+                        $('.minimum_spend').html('');
+                    }
+                    else{
+                        $('.disabled_checkout_btn').addClass('disabled');
+                        $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ result.min_spend +'.</span>');
+                        // $('.disabled_checkout_btn').addClass('disabled');
+                    }
+                    // if (result.headertotal >= result.min_spend) {
+                    //     $('.disabled_checkout_btn').removeClass('disabled');
+                    //     $('.minimum_spend').html('');
+                    // }
+
                     if (result.success == 1)
                     {
+
+
+                        // console.log(result);
                         // alert(result.couponcode)
                         $('#success').html('');
                         $('#success').append(result.success_message);
