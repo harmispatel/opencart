@@ -188,7 +188,6 @@
 <script>
     // Add New Image
     var gallary = $('#img_count').val();
-    console.log(gallary);
     function addGallary()
     {
 
@@ -227,10 +226,6 @@
     var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
     var target_input = document.getElementById(button.getAttribute('data-input'));
     var target_preview = document.getElementById(button.getAttribute('data-preview'));
-
-    console.log("target_preview " + target_preview);
-    console.log("target_input " + target_input);
-    console.log("route_prefix " + route_prefix);
 
     window.open(route_prefix + '?type=' + 'image' || 'file', 'FileManager',
         'width=900,height=600');
