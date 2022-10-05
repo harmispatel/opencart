@@ -456,9 +456,7 @@ class OrdersController extends Controller
         // $neworder->date_modified = date("Y-m-d h:i:s");
         // $neworder->save();
         // // return redirect()->route('orders');
-        // echo '<pre>';
-        // print_r($neworder->toArray());
-        // exit();
+
         return view('admin.order.list');
     }
 

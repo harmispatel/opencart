@@ -165,9 +165,7 @@ class CustomerOrder extends Controller
             $cpn_dt = '';
         }
 
-        // echo '<pre>';
-        // print_r($cpn_dt->toArray());
-        // exit();
+
 
 
         // Store Details
@@ -1031,9 +1029,7 @@ class CustomerOrder extends Controller
                     // $usercart = getuserCart($user_id);  // Database
                     $usercart = session()->get('cart1');  // Session
 
-                    // echo '<pre>';
-                    // print_r($usercart['main_price']);
-                    // exit();
+
                     if (!empty($usercart))
                     {
                         // New Order
@@ -1316,9 +1312,6 @@ class CustomerOrder extends Controller
     // Function For  Customer Delivery Adderss
     public function customerdeliveryaddress(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
 
        // Get Current URL
        $currentURL = URL::to("/");

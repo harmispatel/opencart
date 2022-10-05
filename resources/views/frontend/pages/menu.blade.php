@@ -828,34 +828,32 @@ It's used for View Menu.
                                                     </div>
                                                 </li>
                                                 @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
-                                                    <li class="minicart-list-item {{ "HI" }}">
+                                                    <li class="minicart-list-item">
                                                         @if (($Coupon != '' || !empty($Coupon)))
                                                            @if ($couponcode != 0)
-                                                            <div class="minicart-list-item-innr coupon_code {{ "hi" }}">
-                                                                @if ($Coupon != '' || !empty($Coupon))
+                                                                <div class="minicart-list-item-innr coupon_code">
+                                                                    @if ($Coupon != '' || !empty($Coupon))
                                                                     <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
                                                                     <span>{{ $currency }}-{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
-                                                                @endif
-                                                            </div>
-                                                            <div class="minicart-list-item-innr addcoupon">
-                                                                <label>
-                                                                    @if ($Coupon != '' || !empty($Coupon))
-                                                                        @if ($couponcode != 0)
-                                                                        <a style="color: #ff0000;font-size:14px;"
-                                                                            onclick="showcoupon();">
-                                                                            Change Coupon Code
-                                                                        </a>
-                                                                        @endif
-                                                                    @else
-                                                                        <a style="color: #ff0000;font-size:14px;"
-                                                                            onclick="showcoupon();">
-                                                                            Apply New Coupon Code
-                                                                        </a>
                                                                     @endif
+                                                                </div>
+                                                            @endif
+                                                         @endif
+                                                         <div class="minicart-list-item-innr addcoupon">
+                                                             <label>
+                                                                @if ($couponcode != 0)
+                                                                    <a style="color: #ff0000;font-size:14px;"
+                                                                        onclick="showcoupon();">
+                                                                        Change Coupon Code
+                                                                    </a>
+                                                                @else
+                                                                    <a class="Applynew_coupon" style="color: #ff0000;font-size:14px;"
+                                                                        onclick="showcoupon();">
+                                                                        Apply New Coupon Code
+                                                                    </a>
+                                                                @endif
                                                                 </label>
                                                             </div>
-                                                           @endif
-                                                        @endif
                                                         <div class="minicart-list-item-innr d-flex coupon_code"></div>
                                                         <div class="minicart-list-item-innr addcoupon addnewcoupon" style="display: none">
                                                             <label>
@@ -1244,7 +1242,7 @@ It's used for View Menu.
                                     $('.coupon_code').html('');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
                                     $('.addnewcoupon').css('display','block');
-                                    // $('.myDiv').css('display','block');
+                                    $('.Applynew_coupon').css('display','none');
                                 }
                                 else{
                                     // $('.coupon_code').css('display','none');
@@ -1334,7 +1332,8 @@ It's used for View Menu.
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
                                     $('.coupon_code').css('display','block');
                                     $('.addnewcoupon').css('display','block');
-                                    // $('.myDiv').css('display','block');
+                                    $('.Applynew_coupon').css('display','none');
+
                                 }
                                 else{
                                     // $('.coupon_code').css('display','none');
@@ -1417,6 +1416,7 @@ It's used for View Menu.
                             $('.coupon_code').css('display','block');
                             $('.addnewcoupon').css('display','block');
                             // $('.myDiv').css('display','block');
+                            $('.Applynew_coupon').css('display','none');
                         }
                         else{
                             $('.coupon_code').css('display','none');
@@ -1587,6 +1587,7 @@ It's used for View Menu.
                             $('.coupon_code').css('display','block');
                             $('.addnewcoupon').css('display','block');
                             // $('.myDiv').css('display','block');
+                            $('.Applynew_coupon').css('display','none');
                         }
                         else{
                             $('.coupon_code').css('display','none');

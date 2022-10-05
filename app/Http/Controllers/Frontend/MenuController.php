@@ -81,9 +81,7 @@ class MenuController extends Controller
         else{
             $couponcode = 0;
         }
-        //   echo '<pre>';
-        //   print_r($couponcode);
-        //   exit();
+
 
          $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
 
@@ -205,9 +203,7 @@ class MenuController extends Controller
     public function index()
     {
 
-        //   echo '<pre>';
-        //   print_r(session()->all());
-        //   exit();
+
         // session()->forget('couponcode');
         //  session()->forget('couponname');
         $prod_id = session()->get('product_id');
@@ -875,7 +871,7 @@ class MenuController extends Controller
                                   if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
                                       if (!empty($session_proid) || $session_proid != '') {
                                           if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
-                                            //   echo 'product ';
+
                                               if ($apply_shipping == $delivery_type) {
                                                   if ($current_date >= $start_date && $current_date < $end_date) {
                                                       $Coupon = $session_get_coupon;
@@ -890,7 +886,7 @@ class MenuController extends Controller
                                                   }
                                               }
                                           } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                              // echo 'category ';
+
                                               if ($apply_shipping == $delivery_type) {
                                                   if ($current_date >= $start_date && $current_date < $end_date) {
                                                       $Coupon = $session_get_coupon;
@@ -1052,9 +1048,7 @@ class MenuController extends Controller
                     $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                     // $product_history = CouponProduct::where('product_id', $productid)->first();
 
-                    // echo '<pre>';
-                    // print_r(session()->all());
-                    // exit();
+
 
                     $count_user_per_cpn = count($cpn_history);
                     $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
@@ -1504,9 +1498,7 @@ class MenuController extends Controller
     // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->all());
-        // exit();
+
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -1720,9 +1712,6 @@ class MenuController extends Controller
                                                         $head_total = (round($all_total, 2) );
                                                     }
 
-                                                    // echo '<pre>';
-                                                    // print_r($total_html+ 1);
-                                                    // exit();
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -1995,9 +1984,7 @@ class MenuController extends Controller
                                                         $head_total = (round($all_total, 2) );
                                                     }
 
-                                                    // echo '<pre>';
-                                                    // print_r($total_html+ 2);
-                                                    // exit();
+
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -2127,9 +2114,7 @@ class MenuController extends Controller
                                                         $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
                                                         $head_total = (round($all_total, 2) );
                                                     }
-                                                    // echo '<pre>';
-                                                    // print_r($total_html+ 4);
-                                                    // exit();
+
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -2274,9 +2259,7 @@ class MenuController extends Controller
                                                         $head_total = (round($all_total, 2) );
                                                     }
 
-                                                    // echo '<pre>';
-                                                    // print_r($total_html+ 5);
-                                                    // exit();
+
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -2409,9 +2392,7 @@ class MenuController extends Controller
                                                         $head_total = (round($all_total, 2) );
                                                     }
 
-                                                    // echo '<pre>';
-                                                    // print_r($total_html+ 6);
-                                                    // exit();
+
                                                     return response()->json([
                                                         'success' => 1,
                                                         'success_message' => $success_message,
@@ -2601,9 +2582,7 @@ class MenuController extends Controller
                                                     $head_total = (round($all_total, 2) );
                                                 }
 
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 7);
-                                                // exit();
+
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -2731,9 +2710,7 @@ class MenuController extends Controller
                                                     $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
                                                     $head_total = (round($all_total, 2) );
                                                 }
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 8);
-                                                // exit();
+
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -2875,9 +2852,7 @@ class MenuController extends Controller
                                                     $head_total = (round($all_total, 2) );
                                                 }
 
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 9);
-                                                // exit();
+
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -3015,9 +2990,7 @@ class MenuController extends Controller
                                                     $head_total = (round($all_total, 2) );
                                                 }
 
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 10);
-                                                // exit();
+
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -3165,9 +3138,7 @@ class MenuController extends Controller
                                                     $total_html .= '<span><b>Total to pay:</b></span><span><b id="total_pay">' . $currency . ' ' . (round($all_total, 2)) . '</b></span>';
                                                     $head_total = (round($all_total, 2) );
                                                 }
-                                                // echo '<pre>';
-                                                // print_r($total_html+ 11);
-                                                // exit();
+
                                                 return response()->json([
                                                     'success' => 1,
                                                     'success_message' => $success_message,
@@ -3195,7 +3166,7 @@ class MenuController extends Controller
                                             ]);
                                         }
                                     } elseif ($apply_shipping == 'both') {
-                                        // echo '3';
+
                                         if ($request->total <= $Couponcode->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {

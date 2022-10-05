@@ -691,8 +691,8 @@ function public_url()
 function get_css_url()
 {
     // return 'https://the-public.co.uk/App-Myfood/myfoodbasket/';
-    return 'http://192.168.1.116/opencart/';
-    // return 'http://192.168.1.3/opencart/';
+    // return 'http://192.168.1.116/opencart/';
+    return 'http://192.168.1.3/opencart/';
     // return 'http://192.168.1.73/ECOMM/';
 }
 
@@ -2757,9 +2757,6 @@ function getuserCart($userId)
     $cust_cart = isset($customer->cart) ? $customer->cart : '';
     $base64decode = base64_decode($cust_cart);
     $cart = unserialize($base64decode);
-    // echo '<pre>';
-    // print_r($cart);
-    // exit();
     return $cart;
 }
 
@@ -3049,7 +3046,7 @@ function getCoupon()
                               if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
                                   if (!empty($session_proid) || $session_proid != '') {
                                       if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
-                                          echo 'product ';
+
                                           if ($apply_shipping == $delivery_type) {
                                               if ($current_date >= $start_date && $current_date < $end_date) {
                                                   $Coupon = $session_get_coupon;
@@ -3064,7 +3061,7 @@ function getCoupon()
                                               }
                                           }
                                       } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                          // echo 'category ';
+
                                           if ($apply_shipping == $delivery_type) {
                                               if ($current_date >= $start_date && $current_date < $end_date) {
                                                   $Coupon = $session_get_coupon;

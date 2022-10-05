@@ -29,9 +29,7 @@ class ProductController extends Controller
     function index()
     {
 
-        // echo '<pre>';
-        // print_r(session()->all());
-        // exit();
+
         // Check User Permission
         if (check_user_role(50) != 1) {
             return redirect()->route('dashboard')->with('error', "Sorry you haven't Access.");
@@ -439,9 +437,7 @@ class ProductController extends Controller
             $product->product_icons = isset($product_icons) ? $product_icons : 0;
         }
         // $data = $request->order_type;
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
+
         // $order_type = implode('', $data);
         $product->order_type = isset($request->order_type) ? $request->order_type : '';
         if (!empty($day = $request['day'])) {
@@ -607,8 +603,7 @@ class ProductController extends Controller
                 $status = isset($post->status) ? $post->status : '';
                 $edit_url = route('editproduct', $post->product_id);
                 $sizes = ToppingProductPriceSize::where('id_product', $post->hasOneProduct->product_id)->OrderBy('id_product_price_size', 'ASC')->get();
-                // echo '<pre>';
-                // print_r(count($sizes));
+
 
 
                 $data['checkbox'] = "<input type='checkbox' name='del_all' class='del_all' value='$product_id'>";
@@ -696,9 +691,7 @@ class ProductController extends Controller
     // Add Option
     public function addOptionValue(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->optionTypeId);
-        // exit();
+
         $option_value = DB::table('oc_option_value_description')->where('option_id', $request->optionTypeId)->get();
         // print_r($option_value);
         // die;

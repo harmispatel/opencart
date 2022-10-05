@@ -1462,17 +1462,12 @@ class LayoutController extends Controller
 
     // public function setbackground(Request $request)
     // {
-    //     // echo '<pre>';
-    //     // print_r($request->all());
-    //     // exit();
+    //
 
     //     $settingkey = $request->itemname;
     //     $settingsvalue = $request->itemvalue;
 
-    //     echo '<pre>';
-    //     print_r($settingkey);
-    //     exit();
-
+    //
     //     // Get Current URL
     //     $currentURL = public_url();
 

@@ -55,8 +55,6 @@ class LoyaltyController extends Controller
              $setting->value = $request->rewardtype;
              $setting->serialized = 0;
              $setting->save();
-         } else{
-             echo "hello";
          }
 
         if($rewardtype == 'money'){
