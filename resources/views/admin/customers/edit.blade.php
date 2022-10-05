@@ -656,7 +656,6 @@
             cache: false,
             processData: false,
             success: function (response) {
-                console.log(response);
                 alert('Customer Updated');
                 window.location.href = response;
             },

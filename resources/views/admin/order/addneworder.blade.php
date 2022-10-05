@@ -868,7 +868,6 @@
         delay: 500,
 
         select: function(event, ui) {
-            console.log(ui.item.customer_id);
             $(' #fname ').val(ui.item.fname);
             $(' #lname ').val(ui.item.lname);
             $(' #email ').val(ui.item.email);

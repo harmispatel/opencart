@@ -519,7 +519,6 @@
 
 function setimage(image) {
     var id = $(image).attr("id");
-    console.log(id);
     var route_prefix = "filemanager";
     $(id).filemanager('image', {
         prefix: route_prefix
