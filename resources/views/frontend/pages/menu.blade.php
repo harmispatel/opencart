@@ -828,14 +828,13 @@ It's used for View Menu.
                                                     </div>
                                                 </li>
                                                 @if ((isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])))
-                                                    <li class="minicart-list-item">
+                                                    <li class="minicart-list-item {{ "HI" }}">
                                                         @if (($Coupon != '' || !empty($Coupon)))
                                                            @if ($couponcode != 0)
-                                                            <div class="minicart-list-item-innr coupon_code">
+                                                            <div class="minicart-list-item-innr coupon_code {{ "hi" }}">
                                                                 @if ($Coupon != '' || !empty($Coupon))
                                                                     <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
-                                                                    <span>{{ $currency }}
-                                                                        -{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
+                                                                    <span>{{ $currency }}-{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
                                                                 @endif
                                                             </div>
                                                             <div class="minicart-list-item-innr addcoupon">
@@ -857,6 +856,14 @@ It's used for View Menu.
                                                             </div>
                                                            @endif
                                                         @endif
+                                                        <div class="minicart-list-item-innr d-flex coupon_code"></div>
+                                                        <div class="minicart-list-item-innr addcoupon addnewcoupon" style="display: none">
+                                                            <label>
+                                                                <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">
+                                                                    Change Coupon Code
+                                                                </a>
+                                                            </label>
+                                                        </div>
                                                         <div class="minicart-list-item-innr">
                                                             <div class="showcoupons">
                                                                 <form method="POST" id="from_showcoupon">
@@ -881,13 +888,9 @@ It's used for View Menu.
                                                             </div>
                                                         </div>
                                                     </li>
-                                                    @else
+                                                @else
                                                     <li class="minicart-list-item coupon-code">
-                                                        <div class="minicart-list-item-innr coupon_code"></div>
-                                                        {{-- <div class="minicart-list-item-innr coupon_code">
-                                                            <label id="coupontext">Coupon(10OFF)</label>
-                                                            <span>£-25.75</span>
-                                                        </div> --}}
+                                                        <div class="minicart-list-item-innr d-flex coupon_code"></div>
                                                         <div class="minicart-list-item-innr addcoupon addnewcoupon" style="display: none">
                                                             <label>
                                                                 <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">
@@ -1209,6 +1212,8 @@ It's used for View Menu.
                             success: function(result)
                             {
 
+                                console.log(result);
+
                                 // Cart Data
                                 $('.empty-box').html('');
                                 $('.empty-box').append(result.html);
@@ -1239,9 +1244,10 @@ It's used for View Menu.
                                     $('.coupon_code').html('');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
                                     $('.addnewcoupon').css('display','block');
+                                    // $('.myDiv').css('display','block');
                                 }
                                 else{
-                                    $('.coupon_code').css('display','none');
+                                    // $('.coupon_code').css('display','none');
                                     $('.addnewcoupon').css('display','none');
                                 }
 
@@ -1296,7 +1302,7 @@ It's used for View Menu.
                             dataType: 'json',
                             success: function(result)
                             {
-
+                                console.log(result);
 
                                 // Cart Data
                                 $('.empty-box').html('');
@@ -1326,10 +1332,12 @@ It's used for View Menu.
                                 if (result.couponcode_name != '' && result.couponcode_amount != '') {
                                     $('.coupon_code').html('');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                                    $('.coupon_code').css('display','block');
                                     $('.addnewcoupon').css('display','block');
+                                    // $('.myDiv').css('display','block');
                                 }
                                 else{
-                                    $('.coupon_code').css('display','none');
+                                    // $('.coupon_code').css('display','none');
                                     $('.addnewcoupon').css('display','none');
                                 }
 
@@ -1376,7 +1384,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-
+                    console.log(result);
                     // Cart Data
                     $('.empty-box').html('');
                     $('.empty-box').append(result.html);
@@ -1406,7 +1414,9 @@ It's used for View Menu.
                         if (result.couponcode_name != '' && result.couponcode_amount != '') {
                             $('.coupon_code').html('');
                             $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                            $('.coupon_code').css('display','block');
                             $('.addnewcoupon').css('display','block');
+                            // $('.myDiv').css('display','block');
                         }
                         else{
                             $('.coupon_code').css('display','none');
@@ -1574,7 +1584,9 @@ It's used for View Menu.
                         if (result.couponcode_name != '' && result.couponcode_amount != '') {
                             $('.coupon_code').html('');
                             $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                            $('.coupon_code').css('display','block');
                             $('.addnewcoupon').css('display','block');
+                            // $('.myDiv').css('display','block');
                         }
                         else{
                             $('.coupon_code').css('display','none');
@@ -1601,121 +1613,6 @@ It's used for View Menu.
                 }
             });
         });
-        // End Apply Coupon
-
-
-        // Apply Coupon
-        // $(document).on('click','#applaycoupon',function(e)
-        // {
-
-        //     $('#applycpn').css('display' , 'inline-block');
-        //     e.preventDefault();
-        //     var coupon = $("input[name='coupon']").val();
-        //     alert(coupon)
-
-        //     $.ajax({
-        //         type: 'post',
-        //         url: '{{ url('getcoupon') }}',
-        //         data: {
-        //             "_token": "{{ csrf_token() }}",
-        //             'coupon': coupon,
-        //         },
-        //         dataType: 'json',
-        //         success: function(result)
-        //         {
-        //             console.log(result);
-        //             $('#applycpn').css('display', 'none');
-        //             if (result.errors == 1)
-        //             {
-        //                 $('#error').html('');
-        //                 $('#error').append(result.errors_message);
-        //                 $('#from_showcoupon').trigger('reset');
-        //                 setTimeout(() => {
-        //                     $('#error').html('');
-        //                 }, 5000);
-        //             }
-
-        //             if (result.headertotal >= result.min_spend) {
-        //                 $('.disabled_checkout_btn').removeClass('disabled');
-        //                 $('.minimum_spend').html('');
-        //             }
-        //             else{
-        //                 $('.disabled_checkout_btn').addClass('disabled');
-        //                 $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ result.min_spend +'.</span>');
-        //                 // $('.disabled_checkout_btn').addClass('disabled');
-        //             }
-        //             // if (result.headertotal >= result.min_spend) {
-        //             //     $('.disabled_checkout_btn').removeClass('disabled');
-        //             //     $('.minimum_spend').html('');
-        //             // }
-
-        //             if (result.success == 1)
-        //             {
-
-
-        //                 // console.log(result);
-        //                 // alert(result.couponcode)
-        //                 $('#success').html('');
-        //                 $('#success').append(result.success_message);
-
-        //                 // Coupon Code
-        //                 // $('.coupon_code').html('');
-        //                 // $('.coupon_code').append(result.couponcode);
-        //                 $('.coupon-code').html('');
-        //                 $('.coupon-code').html('   <li class="minicart-list-item coupon-code">\
-        //                                                 <div class="minicart-list-item-innr coupon_code coupon_text">\
-        //                                                     <label id="coupontext">Coupon('+ result.couponcode_name +')</label>\
-        //                                                     <span>'+ result.couponcode_amount +'</span>\
-        //                                                 </div>\
-        //                                                 <div class="minicart-list-item-innr addcoupon">\
-        //                                                     <label>\
-        //                                                         <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">\
-        //                                                             Change Coupon Code\
-        //                                                         </a>\
-        //                                                     </label>\
-        //                                                 </div>\
-        //                                                 <div class="minicart-list-item-innr">\
-        //                                                     <div class="showcoupons">\
-        //                                                         <form method="POST" id="from_applaycoupon">\
-        //                                                             <div class="myDiv" style="display:none;">\
-        //                                                                 <div class="row">\
-        //                                                                     <div class="col-md-8">\
-        //                                                                         <input style="float:left;padding:5px 2px" type="text" name="coupon" value="" id="searchcoupon" placeholder="Enter your coupon here" class="coupon-val ">\
-        //                                                                     </div>\
-        //                                                                     <div class="col-md-4 text-right">\
-        //                                                                         <input style="text-transform: uppercase;" type="button" value="Apply" class="btn btn-danger ">\
-        //                                                                     </div>\
-        //                                                                 </div>\
-        //                                                                 <div class="row">\
-        //                                                                     <div class="col-md-12">\
-        //                                                                         <div id="error"></div>\
-        //                                                                         <div id="success"></div>\
-        //                                                                     </div>\
-        //                                                                 </div>\
-        //                                                             </div>\
-        //                                                         </form>\
-        //                                                     </div>\
-        //                                                 </div>\
-        //                                             </li>');
-
-        //                 // Total
-        //                 $('.total').html('');
-        //                 $('.total').append(result.total);
-
-        //                 // Header Total
-        //                 $('.pirce-value').text('');
-        //                 $('.pirce-value').append(result.headertotal);
-
-        //                 $('#from_showcoupon').trigger('reset');
-
-        //                 setTimeout(() => {
-        //                     $('#success').html('');
-        //                     $('.myDiv').hide();
-        //                 }, 2000);
-        //             }
-        //         }
-        //     });
-        // });
         // End Apply Coupon
 
 
