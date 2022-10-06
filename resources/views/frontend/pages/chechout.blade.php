@@ -1832,7 +1832,6 @@
                 success: function(result)
                 {
 
-                    console.log(result);
 
                     $('#couponload').css('display' , 'none');
 

@@ -1212,7 +1212,6 @@ It's used for View Menu.
                             success: function(result)
                             {
 
-                                console.log(result);
 
                                 // Cart Data
                                 $('.empty-box').html('');
@@ -1302,7 +1301,6 @@ It's used for View Menu.
                             dataType: 'json',
                             success: function(result)
                             {
-                                console.log(result);
 
                                 // Cart Data
                                 $('.empty-box').html('');
@@ -1384,7 +1382,6 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-                    console.log(result);
                     // Cart Data
                     $('.empty-box').html('');
                     $('.empty-box').append(result.html);
@@ -1509,7 +1506,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-                    location.reload();
+                    // location.reload();
                 }
             });
         }
@@ -1573,7 +1570,6 @@ It's used for View Menu.
                     {
 
 
-                        // console.log(result);
                         // alert(result.couponcode)
                         $('#success').html('');
                         $('#success').append(result.success_message);

@@ -262,7 +262,6 @@
                 url:'{{ url("storerelation") }}',
                 data: {"_token": "{{ csrf_token() }}",passchedkId:passchedkId,ischeckked:checkboxVal},
                 success: function(response) {
-                    console.log(response);
                     alert('sucess');
                     // location.reload();
                 }

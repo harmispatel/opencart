@@ -485,7 +485,6 @@
 
                         $('#ohistory').html('');
                         let test = $('#ohistory').append(response.html);
-                        console.log(test);
 
                     }
 

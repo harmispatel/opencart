@@ -389,7 +389,6 @@
                     '_token': '{{ csrf_token() }}'
                 },
         		success: function(response) {
-                    // console.log(response.html);
                     switch(addtime.attr('rel'))
                     {
                         case 'bussines': number_bussines++;break;
