@@ -794,9 +794,9 @@ It's used for View Menu.
                                             </table>
                                         </div>
                                         @php
+                                            $couponcode = 0;
                                             if (!empty($Coupon) || $Coupon != '')
                                             {
-                                                $couponcode = 0;
                                                 if( $Coupon['total'] <= $subtotal){
                                                     if ($Coupon['type'] == 'P')
                                                     {
@@ -828,6 +828,7 @@ It's used for View Menu.
                                                     </div>
                                                 </li>
                                                 @if (($couponcode > 0 ) && (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) && ($Coupon != '' || !empty($Coupon)))
+
                                                     <li class="minicart-list-item">
                                                         {{-- {{-- @if (($Coupon != '' || !empty($Coupon))) --}}
                                                             {{-- @if ($couponcode != 0) --}}
