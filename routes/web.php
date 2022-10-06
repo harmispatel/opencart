@@ -470,6 +470,7 @@ Route::group(['middleware' => 'Suspend'], function () {
     //  coupon
     Route::post('coupon', [CheckoutController::class, 'coupon'])->name('coupon');
     Route::post('getcoupon', [MenuController::class, 'getcoupon'])->name('getcoupon');
+    Route::post('updatecart', [MenuController::class, 'updatecart'])->name('updatecart');
     Route::get('searchcouponcode', [MenuController::class, 'searchcouponcode'])->name('searchcouponcode');
     Route::post('servicecharge', [MenuController::class, 'servicecharge'])->name('servicecharge');
 

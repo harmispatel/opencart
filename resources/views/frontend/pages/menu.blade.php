@@ -10,6 +10,9 @@ It's used for View Menu.
 
 
 @php
+    // echo '<pre>';
+    // print_r(session()->all());
+    // exit();
 
     // Get Current URL
     $currentURL = URL::to("/");
@@ -1126,16 +1129,81 @@ It's used for View Menu.
     <!-- End Delivery Type Modal -->
 
 
+
     {{-- Footer --}}
     @include('frontend.theme.all_themes.footer')
 
     <!-- JS -->
     @include('frontend.include.script')
     <!-- End JS -->
-
+    {{-- <script type="text/javascript">
+        $(window).load(function() {
+            alert("Image loaded.");
+            console.log("Image loaded.");
+        });
+  </script> --}}
 
     <!-- Custom JS -->
     <script type="text/javascript">
+
+        var ordertype = $("input[name='delivery_type']:checked").val();
+
+        // $(document).ready(function () {
+        //     // location.reload();
+        // });
+
+        $(function() {
+            $.ajax({
+                type: "post",
+                url: "{{ route('updatecart')}}",
+                dataType: "json",
+                data: {"_token": "{{ csrf_token() }}",
+                        'ordertype': ordertype,
+                    },
+                success: function (response) {
+                    console.log(response.cart_products);
+                    $('.empty-box').html('');
+                    $('.empty-box').html(response.cart_products);
+
+                    // Sub Total
+                    $('.sub-total').html('');
+                    $('.sub-total').append(response.subtotal);
+
+                    // $('.empty-box').html('');
+                    // $('.empty-box').append(result.html);
+
+                    // Sub Total
+                    $('.sub-total').html('');
+                    $('.sub-total').append(response.subtotal);
+
+                    $('.total').html('');
+                    $('.total').append(response.total);
+
+                    // Header Total
+                    $('.pirce-value').text('');
+                    $('.pirce-value').append(response.headertotal);
+
+                    if (response.couponcode_name == '' && response.couponcode_amount == '')
+                    {
+                        alert('hi')
+                        $('.coupon_code').html('');
+                        $('.coupon_code').css('display','none');
+                        // $('.coupon_code').html('<label id="coupontext">Coupon3('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                        $('.changecoupon').css('display','none');
+                        $('.Applynew_coupon').css('display','none');
+                        $('.addnewcoupon').css('display','none');
+                    }
+                    else{
+                        alert('h2')
+                        // $('.coupon_code').css('display','none');
+                        $('.addnewcoupon').css('display','block');
+                    }
+
+                }
+            });
+        });
+
+
      var coll1 = $("input[name='delivery_type']:checked").val();
         // Document Script
         $(document).ready(function()
@@ -1605,8 +1673,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-
-                //    alert(result.subtotal)
+                //    alert(result.min_spend)
                     $('#applycpn').css('display', 'none');
                     if (result.errors == 1)
                     {
@@ -1623,7 +1690,6 @@ It's used for View Menu.
                         $('.minimum_spend').html('');
                     }
                     else{
-
                             $('.disabled_checkout_btn').addClass('disabled');
                             $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
 
