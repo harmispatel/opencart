@@ -238,185 +238,185 @@ class MenuController extends Controller
 
 
         if (session()->has('currentcoupon')) {
-            $session_get_coupon = session()->get('currentcoupon');
-            if(isset($session_get_coupon)){
-                $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
-                $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            $Coupon = session()->get('currentcoupon');
+            // if(isset($session_get_coupon)){
+            //     $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            //     $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
 
-                $category_check = [];
-                foreach ($category_history as $value) {
-                    $category_check[] = $value->category_id;
-                }
-                $cat_to_pro = array();
-                foreach ($category_check as $values) {
-                    $pro_cat = Product_to_category::where('category_id', $values)->get();
-                    foreach ($pro_cat as $value) {
-                        $cat_to_pro[] = $value->product_id;
-                    }
-                }
-                $product_check = array();
-                foreach ($product_history as $value) {
-                    $product_check[] = $value->product_id;
-                }
-                $session_proid = session()->get('product_id');
+            //     $category_check = [];
+            //     foreach ($category_history as $value) {
+            //         $category_check[] = $value->category_id;
+            //     }
+            //     $cat_to_pro = array();
+            //     foreach ($category_check as $values) {
+            //         $pro_cat = Product_to_category::where('category_id', $values)->get();
+            //         foreach ($pro_cat as $value) {
+            //             $cat_to_pro[] = $value->product_id;
+            //         }
+            //     }
+            //     $product_check = array();
+            //     foreach ($product_history as $value) {
+            //         $product_check[] = $value->product_id;
+            //     }
+            //     $session_proid = session()->get('product_id');
 
-                if ($session_get_coupon['apply_shipping'] == 1) {
-                    $apply_shipping = 'delivery';
-                } elseif ($session_get_coupon['apply_shipping'] == 2) {
-                    $apply_shipping = 'collection';
-                } elseif ($session_get_coupon['apply_shipping'] == 3) {
-                    $apply_shipping = 'both';
-                } else {
-                    $apply_shipping = '';
-                }
+            //     if ($session_get_coupon['apply_shipping'] == 1) {
+            //         $apply_shipping = 'delivery';
+            //     } elseif ($session_get_coupon['apply_shipping'] == 2) {
+            //         $apply_shipping = 'collection';
+            //     } elseif ($session_get_coupon['apply_shipping'] == 3) {
+            //         $apply_shipping = 'both';
+            //     } else {
+            //         $apply_shipping = '';
+            //     }
 
-                $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
-                $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
+            //     $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
+            //     $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
 
-                if ($session_get_coupon['logged'] == 1) {
-                    if ($user_id != 0) {
-                        $cart =getuserCart($user_id);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
-                        $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
-                        $count_user_per_cpn = count($cpn_history);
-                        $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
-                        if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
-                            if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
-                                if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
-                                    if (!empty( $cart_proid) ||  $cart_proid != '') {
-                                        if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        }
-                                        elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
+            //     if ($session_get_coupon['logged'] == 1) {
+            //         if ($user_id != 0) {
+            //             $cart =getuserCart($user_id);
+            //             $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+            //             $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            //             $count_user_per_cpn = count($cpn_history);
+            //             $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
+            //             if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
+            //                 if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
+            //                     if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
+            //                         if (!empty( $cart_proid) ||  $cart_proid != '') {
+            //                             if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             }
+            //                             elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
 
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } elseif ($session_get_coupon['logged'] == 0) {
-                    $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
-                    // $product_history = CouponProduct::where('product_id', $productid)->first();
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     } elseif ($session_get_coupon['logged'] == 0) {
+            //         $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            //         // $product_history = CouponProduct::where('product_id', $productid)->first();
 
-                    // $cat_history = CouponCategory::where('category_id', $category_id)->first();
-                    $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
+            //         // $cat_history = CouponCategory::where('category_id', $category_id)->first();
+            //         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
 
-                    $count_user_per_cpn = count($cpn_history);
-                    if (!empty($session_get_coupon) || $session_get_coupon != '') {
-                        if ($session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
-                            if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
-                                if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
-                                    if (!empty($session_proid) || $session_proid != '') {
-                                        if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        if (!empty($session_get_coupon) || $session_get_coupon != '') {
-                            if ($session_get_coupon['status'] == 1) {
-                                if ($session_get_coupon['on_off'] == 1) {
-                                    if ($apply_shipping == $delivery_type) {
-                                        if ($current_date >= $start_date && $current_date < $end_date) {
-                                            $Coupon = $session_get_coupon;
-                                        } else {
-                                            $Coupon = '';
-                                        }
-                                    } elseif ($apply_shipping == 'both') {
-                                        if ($current_date >= $start_date && $current_date < $end_date) {
-                                            $Coupon = $session_get_coupon;
-                                        } else {
-                                            $Coupon = '';
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //         $count_user_per_cpn = count($cpn_history);
+            //         if (!empty($session_get_coupon) || $session_get_coupon != '') {
+            //             if ($session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
+            //                 if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
+            //                     if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
+            //                         if (!empty($session_proid) || $session_proid != '') {
+            //                             if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         } else {
+            //             if (!empty($session_get_coupon) || $session_get_coupon != '') {
+            //                 if ($session_get_coupon['status'] == 1) {
+            //                     if ($session_get_coupon['on_off'] == 1) {
+            //                         if ($apply_shipping == $delivery_type) {
+            //                             if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                 $Coupon = $session_get_coupon;
+            //                             } else {
+            //                                 $Coupon = '';
+            //                             }
+            //                         } elseif ($apply_shipping == 'both') {
+            //                             if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                 $Coupon = $session_get_coupon;
+            //                             } else {
+            //                                 $Coupon = '';
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         } else {
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
             if (isset($get_coupon) || $get_coupon != '') {
@@ -761,191 +761,192 @@ class MenuController extends Controller
         }
 
         if (session()->has('currentcoupon')) {
-            $session_get_coupon = session()->get('currentcoupon');
-            if(isset($session_get_coupon)){
-                $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
-                $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            // $session_get_coupon = session()->get('currentcoupon');
+            $Coupon = session()->get('currentcoupon');
+            // if(isset($session_get_coupon)){
+            //     $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            //     $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
 
-                $category_check = [];
-                foreach ($category_history as $value) {
-                    $category_check[] = $value->category_id;
-                }
-                $cat_to_pro = array();
-                foreach ($category_check as $values) {
-                    $pro_cat = Product_to_category::where('category_id', $values)->get();
-                    foreach ($pro_cat as $value) {
-                        $cat_to_pro[] = $value->product_id;
-                    }
-                }
-                $product_check = array();
-                foreach ($product_history as $value) {
-                    $product_check[] = $value->product_id;
-                }
-                $session_proid = session()->get('product_id');
+            //     $category_check = [];
+            //     foreach ($category_history as $value) {
+            //         $category_check[] = $value->category_id;
+            //     }
+            //     $cat_to_pro = array();
+            //     foreach ($category_check as $values) {
+            //         $pro_cat = Product_to_category::where('category_id', $values)->get();
+            //         foreach ($pro_cat as $value) {
+            //             $cat_to_pro[] = $value->product_id;
+            //         }
+            //     }
+            //     $product_check = array();
+            //     foreach ($product_history as $value) {
+            //         $product_check[] = $value->product_id;
+            //     }
+            //     $session_proid = session()->get('product_id');
 
-                if ($session_get_coupon['apply_shipping'] == 1) {
-                    $apply_shipping = 'delivery';
-                } elseif ($session_get_coupon['apply_shipping'] == 2) {
-                    $apply_shipping = 'collection';
-                } elseif ($session_get_coupon['apply_shipping'] == 3) {
-                    $apply_shipping = 'both';
-                } else {
-                    $apply_shipping = '';
-                }
+            //     if ($session_get_coupon['apply_shipping'] == 1) {
+            //         $apply_shipping = 'delivery';
+            //     } elseif ($session_get_coupon['apply_shipping'] == 2) {
+            //         $apply_shipping = 'collection';
+            //     } elseif ($session_get_coupon['apply_shipping'] == 3) {
+            //         $apply_shipping = 'both';
+            //     } else {
+            //         $apply_shipping = '';
+            //     }
 
-                $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
-                $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
+            //     $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
+            //     $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
 
-                if ($session_get_coupon['logged'] == 1) {
-                    if ($user_id != 0) {
-                        $cart =getuserCart($user_id);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
-                        $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
-                        $count_user_per_cpn = count($cpn_history);
-                        $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
-                        if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
-                            if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
-                                if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
-                                    if (!empty( $cart_proid) ||  $cart_proid != '') {
-                                        if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        }
-                                        elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
+            //     if ($session_get_coupon['logged'] == 1) {
+            //         if ($user_id != 0) {
+            //             $cart =getuserCart($user_id);
+            //             $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+            //             $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            //             $count_user_per_cpn = count($cpn_history);
+            //             $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
+            //             if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
+            //                 if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
+            //                     if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
+            //                         if (!empty( $cart_proid) ||  $cart_proid != '') {
+            //                             if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             }
+            //                             elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
 
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
-                                            if ($apply_shipping == $delivery_type) {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            } elseif ($apply_shipping == 'both') {
-                                                if ($current_date >= $start_date && $current_date < $end_date) {
-                                                    $Coupon = $session_get_coupon;
-                                                } else {
-                                                    $Coupon = '';
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } elseif ($session_get_coupon['logged'] == 0) {
-                    $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
-                    // $product_history = CouponProduct::where('product_id', $productid)->first();
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+            //                                 if ($apply_shipping == $delivery_type) {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 } elseif ($apply_shipping == 'both') {
+            //                                     if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                         $Coupon = $session_get_coupon;
+            //                                     } else {
+            //                                         $Coupon = '';
+            //                                     }
+            //                                 }
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     } elseif ($session_get_coupon['logged'] == 0) {
+            //         $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+            //         // $product_history = CouponProduct::where('product_id', $productid)->first();
 
-                    // $cat_history = CouponCategory::where('category_id', $category_id)->first();
-                    $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
+            //         // $cat_history = CouponCategory::where('category_id', $category_id)->first();
+            //         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
 
-                    $count_user_per_cpn = count($cpn_history);
-                    if (!empty($session_get_coupon) || $session_get_coupon != '') {
-                        if ($session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
-                            if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
-                                  if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
-                                      if (!empty($session_proid) || $session_proid != '') {
-                                          if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
+            //         $count_user_per_cpn = count($cpn_history);
+            //         if (!empty($session_get_coupon) || $session_get_coupon != '') {
+            //             if ($session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
+            //                 if ($session_get_coupon['uses_total'] >  $count_user_per_cpn || $session_get_coupon['uses_total'] == 0) {
+            //                       if ($session_get_coupon['uses_customer'] > $uses_per_cpn) {
+            //                           if (!empty($session_proid) || $session_proid != '') {
+            //                               if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
 
-                                              if ($apply_shipping == $delivery_type) {
-                                                  if ($current_date >= $start_date && $current_date < $end_date) {
-                                                      $Coupon = $session_get_coupon;
-                                                  } else {
-                                                      $Coupon = '';
-                                                  }
-                                              } elseif ($apply_shipping == 'both') {
-                                                  if ($current_date >= $start_date && $current_date < $end_date) {
-                                                      $Coupon = $session_get_coupon;
-                                                  } else {
-                                                      $Coupon = '';
-                                                  }
-                                              }
-                                          } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
+            //                                   if ($apply_shipping == $delivery_type) {
+            //                                       if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                           $Coupon = $session_get_coupon;
+            //                                       } else {
+            //                                           $Coupon = '';
+            //                                       }
+            //                                   } elseif ($apply_shipping == 'both') {
+            //                                       if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                           $Coupon = $session_get_coupon;
+            //                                       } else {
+            //                                           $Coupon = '';
+            //                                       }
+            //                                   }
+            //                               } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
 
-                                              if ($apply_shipping == $delivery_type) {
-                                                  if ($current_date >= $start_date && $current_date < $end_date) {
-                                                      $Coupon = $session_get_coupon;
-                                                  } else {
-                                                      $Coupon = '';
-                                                  }
-                                              } elseif ($apply_shipping == 'both') {
-                                                  if ($current_date >= $start_date && $current_date < $end_date) {
-                                                      $Coupon = $session_get_coupon;
-                                                  } else {
-                                                      $Coupon = '';
-                                                  }
-                                              }
-                                          } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
-                                              // else {
-                                              if ($apply_shipping == $delivery_type) {
-                                                  if ($current_date >= $start_date && $current_date < $end_date) {
-                                                      $Coupon = $session_get_coupon;
-                                                  } else {
-                                                      $Coupon = '';
-                                                  }
-                                              } elseif ($apply_shipping == 'both') {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                      $Coupon = $session_get_coupon;
-                                                  } else {
-                                                      $Coupon = '';
-                                                  }
-                                              }
-                                          }
-                                      }
-                                  }
-                                      // else{
-                                      //     $Coupon = '';
-                                      // }
-                            }
-                        }
-                    } else {
-                        if (!empty($session_get_coupon) || $session_get_coupon != '') {
-                            if ($session_get_coupon['status'] == 1) {
-                                if ($session_get_coupon['on_off'] == 1) {
-                                    if ($apply_shipping == $delivery_type) {
-                                        if ($current_date >= $start_date && $current_date < $end_date) {
-                                            $Coupon = $session_get_coupon;
-                                        } else {
-                                            $Coupon = '';
-                                        }
-                                    } elseif ($apply_shipping == 'both') {
-                                        if ($current_date >= $start_date && $current_date < $end_date) {
-                                            $Coupon = $session_get_coupon;
-                                        } else {
-                                            $Coupon = '';
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                                   if ($apply_shipping == $delivery_type) {
+            //                                       if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                           $Coupon = $session_get_coupon;
+            //                                       } else {
+            //                                           $Coupon = '';
+            //                                       }
+            //                                   } elseif ($apply_shipping == 'both') {
+            //                                       if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                           $Coupon = $session_get_coupon;
+            //                                       } else {
+            //                                           $Coupon = '';
+            //                                       }
+            //                                   }
+            //                               } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+            //                                   // else {
+            //                                   if ($apply_shipping == $delivery_type) {
+            //                                       if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                           $Coupon = $session_get_coupon;
+            //                                       } else {
+            //                                           $Coupon = '';
+            //                                       }
+            //                                   } elseif ($apply_shipping == 'both') {
+            //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                           $Coupon = $session_get_coupon;
+            //                                       } else {
+            //                                           $Coupon = '';
+            //                                       }
+            //                                   }
+            //                               }
+            //                           }
+            //                       }
+            //                           // else{
+            //                           //     $Coupon = '';
+            //                           // }
+            //                 }
+            //             }
+            //         } else {
+            //             if (!empty($session_get_coupon) || $session_get_coupon != '') {
+            //                 if ($session_get_coupon['status'] == 1) {
+            //                     if ($session_get_coupon['on_off'] == 1) {
+            //                         if ($apply_shipping == $delivery_type) {
+            //                             if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                 $Coupon = $session_get_coupon;
+            //                             } else {
+            //                                 $Coupon = '';
+            //                             }
+            //                         } elseif ($apply_shipping == 'both') {
+            //                             if ($current_date >= $start_date && $current_date < $end_date) {
+            //                                 $Coupon = $session_get_coupon;
+            //                             } else {
+            //                                 $Coupon = '';
+            //                             }
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         } else {
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
             if (isset($get_coupon)) {
@@ -1221,87 +1222,91 @@ class MenuController extends Controller
 
 
 
-        $html = '';
         $subtotal = 0;
         $delivery_charge = 0;
         $cart_products = 0;
 
 
+        $html = '';
         $html .= '<table class="table">';
 
-        if (isset($mycart['size'])) {
-            foreach ($mycart['size'] as $key => $cart) {
 
-                // price
-                if ($delivery_type == 'delivery') {
-                    $price = $cart['del_price'] * $cart['quantity'];
-                } elseif ($delivery_type == 'collection') {
-                    $price = $cart['col_price'] * $cart['quantity'];
-                } else {
-                    $price = $cart['main_price'] * $cart['quantity'];
-                }
+           if (isset($mycart['size'])) {
+               foreach ($mycart['size'] as $key => $cart) {
 
-
-                $html .= '<tr>';
-                $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $key . ',' . $userid . ')" style="cursor:pointer;"></i></td>';
-                $html .= '<td>' . $cart['quantity'] . 'x</td>';
-                $html .= '<td>' . $cart['size'] . '</td>';
-                $html .= '<td>' . $cart['name'] . '<br>';
-
-                if (isset($cart['topping']) && !empty($cart['topping'])) {
-                    foreach ($cart['topping'] as $topp) {
-                        $html .= '<span>- ' . $topp . '</span></br>';
-                    }
-                }
-
-                $html .= '</td>';
-                $html .= '<td style="width: 80px;">' . $currency . ' ' . $price . '</td>';
-                $html .= '</tr>';
+                   // price
+                   if ($delivery_type == 'delivery') {
+                       $price = $cart['del_price'] * $cart['quantity'];
+                   } elseif ($delivery_type == 'collection') {
+                       $price = $cart['col_price'] * $cart['quantity'];
+                   } else {
+                       $price = $cart['main_price'] * $cart['quantity'];
+                   }
 
 
-                // Sub Total
-                $subtotal += $price;
+                   $html .= '<tr>';
+                   $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $key . ',' . $userid . ')" style="cursor:pointer;"></i></td>';
+                   $html .= '<td>' . $cart['quantity'] . 'x</td>';
+                   $html .= '<td>' . $cart['size'] . '</td>';
+                   $html .= '<td>' . $cart['name'] . '<br>';
 
-                // Header Count
-                $cart_products += $cart['quantity'];
-            }
-        }
+                   if (isset($cart['topping']) && !empty($cart['topping'])) {
+                       foreach ($cart['topping'] as $topp) {
+                           $html .= '<span>- ' . $topp . '</span></br>';
+                       }
+                   }
 
-        if (isset($mycart['withoutSize'])) {
-            $sizeid = 0;
-            foreach ($mycart['withoutSize'] as $cart) {
-                // price
-                if ($delivery_type == 'delivery') {
-                    $price = $cart['del_price'] * $cart['quantity'];
-                } elseif ($delivery_type == 'collection') {
-                    $price = $cart['col_price'] * $cart['quantity'];
-                } else {
-                    $price = $cart['main_price'] * $cart['quantity'];
-                }
+                   $html .= '</td>';
+                   $html .= '<td style="width: 80px;">' . $currency . ' ' . $price . '</td>';
+                   $html .= '</tr>';
 
-                $html .= '<tr>';
-                $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
-                $html .= '<td>' . $cart['quantity'] . 'x</td>';
-                $html .= '<td>-</td>';
-                $html .= '<td>' . $cart['name'] . '<br>';
 
-                if (isset($cart['topping']) && !empty($cart['topping'])) {
-                    foreach ($cart['topping'] as $topp) {
-                        $html .= '<span>- ' . $topp . '</span></br>';
-                    }
-                }
+                   // Sub Total
+                   $subtotal += $price;
 
-                $html .= '</td>';
-                $html .= '<td style="width: 80px;">' . $currency . ' ' . $price . '</td>';
-                $html .= '</tr>';
+                   // Header Count
+                   $cart_products += $cart['quantity'];
+               }
+           }
 
-                // Subtotal
-                $subtotal += $price;
+           if (isset($mycart['withoutSize'])) {
+               $sizeid = 0;
+               foreach ($mycart['withoutSize'] as $cart) {
+                   // price
+                   if ($delivery_type == 'delivery') {
+                       $price = $cart['del_price'] * $cart['quantity'];
+                   } elseif ($delivery_type == 'collection') {
+                       $price = $cart['col_price'] * $cart['quantity'];
+                   } else {
+                       $price = $cart['main_price'] * $cart['quantity'];
+                   }
 
-                // Header Count
-                $cart_products += $cart['quantity'];
-            }
-        }
+                   $html .= '<tr>';
+                   $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
+                   $html .= '<td>' . $cart['quantity'] . 'x</td>';
+                   $html .= '<td>-</td>';
+                   $html .= '<td>' . $cart['name'] . '<br>';
+
+                   if (isset($cart['topping']) && !empty($cart['topping'])) {
+                       foreach ($cart['topping'] as $topp) {
+                           $html .= '<span>- ' . $topp . '</span></br>';
+                       }
+                   }
+
+                   $html .= '</td>';
+                   $html .= '<td style="width: 80px;">' . $currency . ' ' . $price . '</td>';
+                   $html .= '</tr>';
+
+                   // Subtotal
+                   $subtotal += $price;
+
+                   // Header Count
+                   $cart_products += $cart['quantity'];
+               }
+           }
+
+
+
         $html .= '</table>';
 
 
@@ -1334,7 +1339,9 @@ class MenuController extends Controller
             $all_total = ($total <= 0) ? 0 : $total;
 
         } else {
+
             $total = $subtotal + $delivery_charge;
+
         }
         if (isset($couponcode) ? $couponcode : 0 != 0) {
             // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</span>';
@@ -1424,9 +1431,10 @@ class MenuController extends Controller
         $productid = $request->product_id;
         $sizeid = $request->size_id;
         $userid = $request->user_id;
-
+        $currentURL = URL::to("/");
         $pro_id = session()->get('product_id');
-
+        $store_data = frontStoreID($currentURL);
+        $front_store_id =  $store_data['store_id'];
 
         //  if(in_array($productid,$pro_id)){
         //     unset($pro_id['s_'.$productid]);
@@ -1450,6 +1458,7 @@ class MenuController extends Controller
             } else {
                 session()->forget('cart1.size.' . $sizeid);
             }
+        //    $mycart =session()->get('cart1');
         } else {
             // Session
             if ($sizeid == 0) {
@@ -1457,7 +1466,7 @@ class MenuController extends Controller
             } else {
                 session()->forget('cart1.size.' . $sizeid);
             }
-
+            // $mycart =session()->get('cart1');
             // $cart = getuserCart($userid);  // Database
             // if (isset($cart)) {
             //     if ($sizeid == 0) {
@@ -1485,11 +1494,392 @@ class MenuController extends Controller
             // $user->cart = $base64;
             // $user->update();
         }
+         // minimum spend
+        //  $DeliveryCollectionSettings = Settings::select('value')->where('store_id', $front_store_id)->where('key', 'delivery_option')->first();
+
+        //  if ($DeliveryCollectionSettings['value'] == 'area') {
+        //      $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+        //  } else {
+        //      $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        //  }
+        //  $minimum_spend = $deliverysettings->last()->toArray();
+
+        //  echo '<pre>';
+        //  print_r($minimum_spend['min_spend']);
+        //  exit();
+
+        // $delivery_type = session()->get('flag_post_code');
+
+        // $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] : '';
+
+        // // $currency = getCurrencySymbol($store_setting['config_currency']);
+        // $html = '';
+        // $subtotal = 0 ;
+        // $cart_products =0;
+        // $subtotl_html ='';
+        // $total_html = '';
+        // $headertotal = 0;
+        // $delivery_charge = 0;
+        // $cart_products = 0;
 
 
+        // $current_date = strtotime(date('Y-m-d'));
+        // if (session()->has('userid')) {
+        //     $user_id = session()->get('userid');
+        // } else {
+        //     $user_id = 0;
+        // }
+
+        // if (session()->has('currentcoupon')) {
+        //     $Coupon = session()->get('currentcoupon');
+        // } else {
+        //     $get_coupon = Coupon::where('store_id', $front_store_id)->first();
+        //     if (isset($get_coupon)) {
+
+        //         $product_history = CouponProduct::where('coupon_id', $get_coupon->coupon_id)->get();
+        //         $category_history = CouponCategory::where('coupon_id', $get_coupon->coupon_id)->get();
+
+        //         $category_check = [];
+        //         foreach ($category_history as $value) {
+        //             $category_check[] = $value->category_id;
+        //         }
+        //         $cat_to_pro = array();
+        //         foreach ($category_check as $values) {
+        //             $pro_cat = Product_to_category::where('category_id', $values)->get();
+        //             foreach ($pro_cat as $value) {
+        //                 $cat_to_pro[] = $value->product_id;
+        //             }
+        //         }
+        //         $product_check = array();
+        //         foreach ($product_history as $value) {
+        //             $product_check[] = $value->product_id;
+        //         }
+        //         $session_proid = session()->get('product_id');
+
+        //         if ($get_coupon->apply_shipping == 1) {
+        //             $apply_shipping = 'delivery';
+        //         } elseif ($get_coupon->apply_shipping == 2) {
+        //             $apply_shipping = 'collection';
+        //         } elseif ($get_coupon->apply_shipping == 3) {
+        //             $apply_shipping = 'both';
+        //         } else {
+        //             $apply_shipping = '';
+        //         }
+
+        //         $start_date = isset($get_coupon['date_start']) ? strtotime($get_coupon['date_start']) : '';
+        //         $end_date = isset($get_coupon['date_end']) ? strtotime($get_coupon['date_end']) : '';
+
+        //         if ($get_coupon->logged == 1) {
+        //             if ($user_id != 0) {
+        //                 $cart = getuserCart($user_id);
+        //                 $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+        //                 $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
+        //                 $count_user_per_cpn = count($cpn_history);
+        //                 $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
+        //                 if ((!empty($get_coupon) || $get_coupon != '') && $get_coupon->status == 1 && $get_coupon->on_off == 1) {
+        //                     if ($get_coupon->uses_total >  $count_user_per_cpn || $get_coupon->uses_total == 0) {
+        //                         if ($get_coupon->uses_customer > $uses_per_cpn) {
+        //                             if (!empty($cart_proid) ||  $cart_proid != '') {
+        //                                 if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
+        //                                     if ($apply_shipping == $delivery_type) {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     } elseif ($apply_shipping == 'both') {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     }
+        //                                 } elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
+
+        //                                     if ($apply_shipping == $delivery_type) {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     } elseif ($apply_shipping == 'both') {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     }
+        //                                 } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+
+        //                                     if ($apply_shipping == $delivery_type) {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     } elseif ($apply_shipping == 'both') {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     }
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         } elseif ($get_coupon->logged == 0) {
+        //             $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
+        //             // $product_history = CouponProduct::where('product_id', $productid)->first();
+
+
+
+        //             $count_user_per_cpn = count($cpn_history);
+        //             $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
+
+        //             if (!empty($get_coupon) || $get_coupon != '') {
+        //                 if ($get_coupon->status == 1 && $get_coupon->on_off == 1) {
+        //                     if ($get_coupon->uses_total >  $count_user_per_cpn || $get_coupon->uses_total == 0) {
+        //                         if ($get_coupon->uses_customer > $uses_per_cpn) {
+        //                             if ($get_coupon->uses_customer > $uses_per_cpn) {
+        //                                 if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
+
+        //                                     if ($apply_shipping == $delivery_type) {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     } elseif ($apply_shipping == 'both') {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     }
+        //                                 } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
+
+        //                                     if ($apply_shipping == $delivery_type) {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     } elseif ($apply_shipping == 'both') {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     }
+        //                                 } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+        //                                     if ($apply_shipping == $delivery_type) {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     } elseif ($apply_shipping == 'both') {
+        //                                         if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                             $Coupon = $get_coupon;
+        //                                         } else {
+        //                                             $Coupon = '';
+        //                                         }
+        //                                     }
+        //                                 }
+        //                             }
+        //                         }
+        //                         // else{
+        //                         //     $Coupon = '';
+        //                         // }
+        //                     }
+        //                 }
+        //             } else {
+        //                 if (!empty($get_coupon) || $get_coupon != '') {
+        //                     if ($get_coupon->status == 1) {
+        //                         if ($get_coupon->on_off == 1) {
+        //                             if ($apply_shipping == $delivery_type) {
+        //                                 if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                     $Coupon = $get_coupon;
+        //                                 } else {
+        //                                     $Coupon = '';
+        //                                 }
+        //                             } elseif ($apply_shipping == 'both') {
+        //                                 if ($current_date >= $start_date && $current_date < $end_date) {
+        //                                     $Coupon = $get_coupon;
+        //                                 } else {
+        //                                     $Coupon = '';
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+
+        // $html .= '<table class="table">';
+
+
+        // if (isset($mycart['size'])) {
+        //     foreach ($mycart['size'] as $key => $cart) {
+        //         // price
+        //         if ($delivery_type == 'delivery') {
+        //             $price = $cart['del_price'] * $cart['quantity'];
+        //         } elseif ($delivery_type == 'collection') {
+        //             $price = $cart['col_price'] * $cart['quantity'];
+        //         } else {
+        //             $price = $cart['main_price'] * $cart['quantity'];
+        //         }
+
+
+
+        //         $html .= '<tr>';
+        //         $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $key . ',' . $userid . ')" style="cursor:pointer;"></i></td>';
+        //         $html .= '<td>' . $cart['quantity'] . 'x</td>';
+        //         $html .= '<td>' . $cart['size'] . '</td>';
+        //         $html .= '<td>' . $cart['name'] . '<br>';
+
+        //         if (isset($cart['topping']) && !empty($cart['topping'])) {
+        //             foreach ($cart['topping'] as $topp) {
+        //                 $html .= '<span>- ' . $topp . '</span></br>';
+        //             }
+        //         }
+
+        //         $html .= '</td>';
+        //         $html .= '<td style="width: 80px;">' . '£' . ' ' . $price . '</td>';
+        //         $html .= '</tr>';
+
+        //         // Sub Total
+        //         $subtotal +=  $price ;
+
+
+        //         // Header Count
+        //         $cart_products += $cart['quantity'];
+        //     }
+        // }
+        // if (isset($mycart['withoutSize'])) {
+        //     $sizeid = 0;
+        //     foreach ($mycart['withoutSize'] as $cart) {
+        //         // price
+        //         if ($delivery_type == 'delivery') {
+        //             $price = $cart['del_price'] * $cart['quantity'];
+        //         } elseif ($delivery_type == 'collection') {
+        //             $price = $cart['col_price'] * $cart['quantity'];
+        //         } else {
+        //             $price = $cart['main_price'] * $cart['quantity'];
+        //         }
+
+        //         $html .= '<tr>';
+        //         $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
+        //         $html .= '<td>' . $cart['quantity'] . 'x</td>';
+        //         $html .= '<td>-</td>';
+        //         $html .= '<td>' . $cart['name'] . '<br>';
+
+        //         if (isset($cart['topping']) && !empty($cart['topping'])) {
+        //             foreach ($cart['topping'] as $topp) {
+        //                 $html .= '<span>- ' . $topp . '</span></br>';
+        //             }
+        //         }
+
+        //         $html .= '</td>';
+        //         $html .= '<td style="width: 80px;">' . '£' . ' ' . $price . '</td>';
+        //         $html .= '</tr>';
+
+        //         // Subtotal
+        //         $subtotal += isset($price) ? $price : 0;
+
+        //         // Header Count
+        //         $cart_products += $cart['quantity'];
+        //     }
+        // }
+
+        // $cart_size_session = isset($mycart['size']) ? $mycart['size'] : '';
+        // $cart_withoutsize_session = isset($mycart['withoutSize']) ? $mycart['withoutSize'] : '';
+        // if(empty($cart_size_session) && empty($cart_withoutsize_session)){
+        //     $html .= '<span>Your shopping cart is empty!</span>';
+
+        // }
+
+        // $html .= '</table>';
+        // // Coupon Code
+        // if (!empty(isset($Coupon) ? $Coupon : '') || isset($Coupon) ? $Coupon : '' != '') {
+        //     $couponcode = 0;
+        //     if ($Coupon['total'] <= $subtotal) {
+        //         if ($Coupon['type'] == 'P') {
+        //             $couponcode = ($subtotal * $Coupon['discount']) / 100;
+        //         }
+        //         if ($Coupon['type'] == 'F') {
+        //             $couponcode =  $Coupon['discount'];
+        //         }
+
+        //         $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
+        //         $sessioncouponname = session()->put('couponname', isset($Coupon['code']) ? $Coupon['code'] : '');
+        //         $sessioncurrency = session()->put('currency', $store_setting['config_currency']);
+        //     }
+        //     else{
+        //         session()->forget('couponname');
+        //         session()->forget('currentcoupon');
+        //         session()->forget('couponcode');
+        //         session()->save();
+        //     }
+
+        //     // Main Total
+        //     $total = $subtotal - $couponcode + $delivery_charge;
+        //     $all_total = ($total <= 0) ? 0 : $total;
+
+        // } else {
+
+        //     $total = $subtotal + $delivery_charge;
+
+        // }
+
+
+
+        // if (isset($couponcode) ? $couponcode : 0 != 0) {
+        //     // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2)) . '</span>';
+        //     $couponcode_name = $Coupon['code'];
+        //     $couponcode_amount = (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode, 2));
+        // } else {
+        //     $couponcode_name = '';
+        //     $couponcode_amount = '';
+
+        // }
+
+
+
+
+        // $total_html .= '<label><b>Total to pay:</b></label><span>' . '£' . ' ' . (($total <= 0) ? 0 : $total) . '</span>';
+        // $subtotl_html .= '<label>Sub-Total</label><span>' . '£' . ' ' . $subtotal . '</span>';
+        // $headertotal += $total;
+
+        // if ($minimum_spend['min_spend'] <= $total) {
+        //     $min_spend = 'true';
+        // } else {
+        //     $min_spend = 'false';
+        // }
+
+
+        // echo '<pre>';
+        // print_r($couponcode_name);
+        // echo "  ";
+        // print_r($couponcode_amount);
+        // exit();
 
         return response()->json([
             'success' => 1,
+            // 'html' => $html,
+            // 'subtotal' => $subtotl_html,
+            // 'total' => $total_html,
+            // 'headertotal' => (round($headertotal, 2) <= 0) ? 0 : round($headertotal, 2),
+            // 'couponcode_name' => $couponcode_name,
+            // 'couponcode_amount' => $couponcode_amount,
+            // 'min_spend' => $min_spend,
+            // 'minimum_spend'  => $minimum_spend['min_spend'],
         ]);
     }
 
@@ -1498,6 +1888,9 @@ class MenuController extends Controller
     // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
+
+
+
 
         // Get Current URL
         $currentURL = URL::to("/");
@@ -1559,6 +1952,7 @@ class MenuController extends Controller
 
         $Couponcode = coupon::where('code', $Coupon)->where('store_id', $front_store_id)->first();
 
+
         $product_history = CouponProduct::where('coupon_id', isset($Couponcode->coupon_id))->get();
         $category_history = CouponCategory::where('coupon_id', isset($Couponcode->coupon_id))->get();
 
@@ -1608,7 +2002,8 @@ class MenuController extends Controller
                                 if (!empty($cart_proid) ||  $cart_proid != '') {
                                     if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
                                         if ($apply_shipping == $delivery_type) {
-                                            if ($Couponcode->total >= $request->total) {
+                                            if ($Couponcode->total <= $request->total) {
+
                                                 if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                                 {
                                                     $code = $Couponcode->toArray();
@@ -1672,14 +2067,14 @@ class MenuController extends Controller
                                                     $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    if($Couponcode['total'] >= $subtotal) {
+                                                    if($Couponcode['total'] <= $subtotal) {
                                                         $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     }else{
                                                         session()->forget('couponname');
                                                         session()->forget('currentcoupon');
                                                         session()->forget('couponcode');
                                                         session()->save();
-                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                        $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                     }
 
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
@@ -1739,7 +2134,7 @@ class MenuController extends Controller
                                                 ]);
                                             }
                                         } elseif ($apply_shipping == 'both') {
-                                            if ($request->total >= $Couponcode->total) {
+                                            if ($Couponcode->total <= $request->total) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                                 {
                                                     $code = $Couponcode->toArray();
@@ -1805,14 +2200,14 @@ class MenuController extends Controller
                                                     // $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    if($Couponcode['total'] >= $subtotal) {
+                                                    if($Couponcode['total'] <= $subtotal) {
                                                         $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     }else{
                                                         session()->forget('couponname');
                                                         session()->forget('currentcoupon');
                                                         session()->forget('couponcode');
                                                         session()->save();
-                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                        $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                     }
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -1880,7 +2275,7 @@ class MenuController extends Controller
                                         }
                                     } elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
                                         if ($apply_shipping == $delivery_type) {
-                                            if ($Couponcode->total >= $request->total) {
+                                            if ($Couponcode->total <= $request->total) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                                 {
                                                     $code = $Couponcode->toArray();
@@ -1945,14 +2340,14 @@ class MenuController extends Controller
                                                     $total_html = '';
                                                     $couponcode_html = '';
                                                     $success_message = '';
-                                                    if($Couponcode['total'] >= $subtotal) {
+                                                    if($Couponcode['total'] <= $subtotal) {
                                                         $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     }else{
                                                         session()->forget('couponname');
                                                         session()->forget('currentcoupon');
                                                         session()->forget('couponcode');
                                                         session()->save();
-                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                        $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                     }
 
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
@@ -2011,7 +2406,7 @@ class MenuController extends Controller
                                                 ]);
                                             }
                                         } elseif ($apply_shipping == 'both') {
-                                            if ($request->total >= $Couponcode->total) {
+                                            if ($Couponcode->total <= $request->total) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                                 {
                                                     $code = $Couponcode->toArray();
@@ -2076,14 +2471,14 @@ class MenuController extends Controller
                                                     $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    if($Couponcode['total'] >= $subtotal) {
+                                                    if($Couponcode['total'] <= $subtotal) {
                                                         $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     }else{
                                                         session()->forget('couponname');
                                                         session()->forget('currentcoupon');
                                                         session()->forget('couponcode');
                                                         session()->save();
-                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                        $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                     }
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -2153,7 +2548,7 @@ class MenuController extends Controller
                                         }
                                     } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
                                         if ($apply_shipping == $delivery_type) {
-                                            if ($Couponcode->total >= $request->total) {
+                                            if ($Couponcode->total <= $request->total) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                                 {
                                                     $code = $Couponcode->toArray();
@@ -2221,14 +2616,14 @@ class MenuController extends Controller
                                                     $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    if($Couponcode['total'] >= $subtotal) {
+                                                    if($Couponcode['total'] <= $subtotal) {
                                                         $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     }else{
                                                         session()->forget('couponname');
                                                         session()->forget('currentcoupon');
                                                         session()->forget('couponcode');
                                                         session()->save();
-                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                        $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                     }
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -2287,7 +2682,7 @@ class MenuController extends Controller
                                                 ]);
                                             }
                                         } elseif ($apply_shipping == 'both') {
-                                            if ($request->total >= $Couponcode->total) {
+                                            if ($Couponcode->total <= $request->total) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                                 {
                                                     $code = $Couponcode->toArray();
@@ -2353,14 +2748,14 @@ class MenuController extends Controller
                                                     $couponcode_html = '';
                                                     $success_message = '';
 
-                                                    if($Couponcode['total'] >= $subtotal) {
+                                                    if($Couponcode['total'] <= $subtotal) {
                                                         $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                     }else{
                                                         session()->forget('couponname');
                                                         session()->forget('currentcoupon');
                                                         session()->forget('couponcode');
                                                         session()->save();
-                                                        $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                        $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                     }
                                                     // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                     if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -2477,7 +2872,7 @@ class MenuController extends Controller
                             if (!empty($session_proid) ||  $session_proid != '') {
                                 if (array_intersect($product_check,  $session_proid) && count($product_check) != 0) {
                                     if ($apply_shipping == $delivery_type) {
-                                        if ($Couponcode->total >= $request->total) {
+                                        if ($Couponcode->total <= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
 
@@ -2544,14 +2939,14 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                if($Couponcode['total'] >= $subtotal) {
+                                                if($Couponcode['total'] <= $subtotal) {
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 }else{
                                                     session()->forget('couponname');
                                                     session()->forget('currentcoupon');
                                                     session()->forget('couponcode');
                                                     session()->save();
-                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                 }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -2610,7 +3005,7 @@ class MenuController extends Controller
                                             ]);
                                         }
                                     } elseif ($apply_shipping == 'both') {
-                                        if ($request->total >= $Couponcode->total) {
+                                        if ($Couponcode->total <= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
                                                 $code = $Couponcode->toArray();
@@ -2675,14 +3070,14 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                if($Couponcode['total'] >= $subtotal) {
+                                                if($Couponcode['total'] <= $subtotal) {
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 }else{
                                                     session()->forget('couponname');
                                                     session()->forget('currentcoupon');
                                                     session()->forget('couponcode');
                                                     session()->save();
-                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                 }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -2749,7 +3144,7 @@ class MenuController extends Controller
                                     }
                                 } elseif (array_intersect($cat_to_pro,  $session_proid) && count($cat_to_pro) != 0) {
                                     if ($apply_shipping == $delivery_type) {
-                                        if ($Couponcode->total >= $request->total) {
+                                        if ($Couponcode->total <= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
                                                 $code = $Couponcode->toArray();
@@ -2815,14 +3210,14 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                if($Couponcode['total'] >= $subtotal) {
+                                                if($Couponcode['total'] <= $subtotal) {
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 }else{
                                                     session()->forget('couponname');
                                                     session()->forget('currentcoupon');
                                                     session()->forget('couponcode');
                                                     session()->save();
-                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                 }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -2871,7 +3266,8 @@ class MenuController extends Controller
                                                     'errors_message' => $error_msg,
                                                 ]);
                                             }
-                                        } else {
+                                        }
+                                         else {
                                             $code = $Couponcode->toArray();
                                             session()->unset('currentcoupon', $code);
                                             session()->unset('couponname', $Couponcode['name']);
@@ -2884,7 +3280,7 @@ class MenuController extends Controller
                                             ]);
                                         }
                                     } elseif ($apply_shipping == 'both') {
-                                        if ($request->total >= $Couponcode->total) {
+                                        if ($Couponcode->total <= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
                                                 $code = $Couponcode->toArray();
@@ -2952,14 +3348,14 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                if($Couponcode['total'] >= $subtotal) {
+                                                if($Couponcode['total'] <= $subtotal) {
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 }else{
                                                     session()->forget('couponname');
                                                     session()->forget('currentcoupon');
                                                     session()->forget('couponcode');
                                                     session()->save();
-                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                 }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -3031,7 +3427,8 @@ class MenuController extends Controller
 
                                     if ($apply_shipping == $delivery_type) {
 
-                                        if ($Couponcode->total >= $request->total) {
+
+                                        if ($Couponcode->total <= $request->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
 
@@ -3102,14 +3499,14 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                if($Couponcode['total'] >= $subtotal) {
+                                                if($Couponcode['total'] <= $subtotal) {
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 }else{
                                                     session()->forget('couponname');
                                                     session()->forget('currentcoupon');
                                                     session()->forget('couponcode');
                                                     session()->save();
-                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                 }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {
@@ -3166,8 +3563,8 @@ class MenuController extends Controller
                                             ]);
                                         }
                                     } elseif ($apply_shipping == 'both') {
+                                        if ($Couponcode->total <= $request->total) {
 
-                                        if ($request->total <= $Couponcode->total) {
                                             if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
                                             {
                                                 $code = $Couponcode->toArray();
@@ -3233,14 +3630,14 @@ class MenuController extends Controller
                                                 $couponcode_html = '';
                                                 $success_message = '';
 
-                                                if($Couponcode['total'] >= $subtotal) {
+                                                if($Couponcode['total'] <= $subtotal) {
                                                     $success_message .= '<span class="text-success">Your Coupon has been Applied...</span>';
                                                 }else{
                                                     session()->forget('couponname');
                                                     session()->forget('currentcoupon');
                                                     session()->forget('couponcode');
                                                     session()->save();
-                                                    $success_message .= '<span class="text-danger">Your Coupon has been Not Applied...</span>';
+                                                    $success_message .= '<span class="text-danger">Coupon  Not Valid. . .</span>';
                                                 }
                                                 // $couponcode_html .= '<label><b>Coupon(' . $Couponcode->code . '):</b></label><span><b>£ -' . $couponcode . '</b></span>';
                                                 if (isset($couponcode) ? $couponcode : 0 != 0) {

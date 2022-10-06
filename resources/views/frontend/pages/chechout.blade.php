@@ -821,7 +821,7 @@
                                                                                         if (!empty($Coupon) || $Coupon != '')
                                                                                         {
                                                                                             $couponcode = 0;
-                                                                                                if( $Coupon['total'] >= $subtotal){
+                                                                                                if( $Coupon['total'] <= $subtotal){
                                                                                                     if ($Coupon['type'] == 'P')
                                                                                                     {
                                                                                                         $couponcode = ($subtotal * $Coupon['discount']) / 100;
@@ -1876,16 +1876,11 @@
                             /*EXISTS (greater than 0) */
                             // $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
                             if (result.couponcode_name != '' && result.couponcode_amount != '') {
-                                $('.coupon_code').html('<td><b>Coupon('+ result.couponcode_name +'):</b></td>\
-                                                        <td>\
-                                                            <span>\
-                                                                <b>'+ result.couponcode_amount +'</b>\
-                                                            </span>\
-                                                        </td>');
-                                }
+                                $('.coupon_code').html('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>');
+                            }
                         }else{
                             if (result.couponcode != '') {
-                                $('<tr><td ><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td></tr>').insertBefore(".voucher");
+                                $('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>').insertBefore(".voucher");
                             }
                         }
                         $('.total').html('');

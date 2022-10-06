@@ -195,11 +195,11 @@
             {
                 if($userdeliverytype == 'delivery')
                 {
-                    $price = $mycart['del_price'] * $mycart['quantity'];
+                    $price += $mycart['del_price'] * $mycart['quantity'];
                 }
                 elseif($userdeliverytype == 'collection')
                 {
-                    $price += $mycart['col_price'] * $mycart['quantity'];
+                    $price +=$mycart['col_price'] * $mycart['quantity'];
                 }
                 else
                 {
@@ -211,7 +211,7 @@
                 $cart_products += $mycart['quantity'];
             }
         }
-            
+       
         // echo '<pre>';
         // print_r($price);
      
@@ -247,7 +247,7 @@
     // End Cart Details
         // $sessiontotal = session()->put('total',$headertotal);
         $sessionsubtotal = session()->put('subtotal',$price);
-         
+          
 
     $currentdate = strtotime(date("Y-m-d")); 
 @endphp
