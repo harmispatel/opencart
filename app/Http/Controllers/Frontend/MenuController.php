@@ -33,6 +33,10 @@ class MenuController extends Controller
 
     public function servicecharge(Request $req)
     {
+
+        // echo '<pre>';
+        // print_r(session()->all());
+        // exit();
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -55,17 +59,24 @@ class MenuController extends Controller
 
          $couponcode_name = isset($s_coupon['code']) ? $s_coupon['code'] : $coupon_name;
          $Coupon_code = coupon::where('code', $couponcode_name)->where('store_id', $front_store_id)->first();
-
+        // echo '<pre>';
+        // print_r($Coupon_code);
+        // exit();
 
          if (!empty($Coupon_code) || $Coupon_code != '') {
-             if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0)
-             {
-                $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
-             }
-             if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : 0)
-             {
-                $couponcode = $Coupon_code['discount'];
-             }
+            $couponcode =0;
+            if( $Coupon_code['total'] <= $s_subtotal){
+                if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0)
+                {
+                    $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
+
+                }
+                if ( isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : 0)
+                {
+                    $couponcode = $Coupon_code['discount'];
+                }
+            }
+
          }
         //  else
         //  if($s_coupon){
@@ -81,6 +92,7 @@ class MenuController extends Controller
         else{
             $couponcode = 0;
         }
+
 
 
          $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));

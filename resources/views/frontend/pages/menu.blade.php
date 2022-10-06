@@ -794,7 +794,9 @@ It's used for View Menu.
                                             </table>
                                         </div>
                                         @php
-                                            $couponcode = 0;
+
+
+                                        $couponcode = 0;
                                             if (!empty($Coupon) || $Coupon != '')
                                             {
                                                 if( $Coupon['total'] <= $subtotal){
@@ -827,8 +829,7 @@ It's used for View Menu.
                                                         @endif
                                                     </div>
                                                 </li>
-                                                @if (($couponcode > 0 ) && (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) && ($Coupon != '' || !empty($Coupon)))
-
+                                                @if ( $couponcode != 0 && (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) && ($Coupon != '' || !empty($Coupon)))
                                                     <li class="minicart-list-item">
                                                         {{-- {{-- @if (($Coupon != '' || !empty($Coupon))) --}}
                                                             {{-- @if ($couponcode != 0) --}}
@@ -850,7 +851,7 @@ It's used for View Menu.
                                                                 @else
                                                                     <a class="Applynew_coupon" style="color: #ff0000;font-size:14px;"
                                                                         onclick="showcoupon();">
-                                                                        Apply New Coupon Code
+                                                                        Apply Coupon Code
                                                                     </a>
                                                                 @endif
                                                                 </label>
@@ -889,9 +890,23 @@ It's used for View Menu.
                                                     </li>
                                                 @else
                                                     <li class="minicart-list-item coupon-code">
-                                                        <div class="minicart-list-item-innr d-flex coupon_code 3"></div>
-                                                        <div class="minicart-list-item-innr addcoupon addnewcoupon" style="display: none">
-                                                            <label><a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">Apply Coupon Code</a></label>
+                                                        <div class="minicart-list-item-innr d-flex coupon_code"></div>
+                                                        {{-- <div class="minicart-list-item-innr addcoupon addnewcoupon" style="display: none"> --}}
+                                                        <div class="minicart-list-item-innr addcoupon addnewcoupon">
+                                                            {{-- <label>
+                                                                <a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">Apply Coupon Code</a>
+                                                            </label> --}}
+                                                            @if ($couponcode != 0)
+                                                                <a style="color: #ff0000;font-size:14px;"
+                                                                    onclick="showcoupon();">
+                                                                    Change Coupon Code
+                                                                </a>
+                                                            @else
+                                                                <a class="Applynew_coupon" style="color: #ff0000;font-size:14px;"
+                                                                    onclick="showcoupon();">
+                                                                    Apply Coupon Code
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                         {{-- <div class="minicart-list-item-innr changecoupon" style="display: none">
                                                             <label><a style="color: #ff0000;font-size:14px;" onclick="showcoupon();">Chenge Coupon Code</a></label>
@@ -1632,8 +1647,8 @@ It's used for View Menu.
                             $('.coupon_code').html('');
                             // $('.coupon_code').css('display','block');
                             $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                            $('.Applynew_coupon').css('display','none');
-                            $('.addnewcoupon').css('display','block');
+                            $('.Applynew_coupon').css('display','block');
+                            // $('.addnewcoupon').css('display','block');
                             // $('.changecoupon').css('display','block');
                         }
                         else{
