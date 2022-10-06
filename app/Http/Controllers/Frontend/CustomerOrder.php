@@ -156,6 +156,10 @@ class CustomerOrder extends Controller
         $servicecharge = $request->service_charge;
         $couponname = session()->get('couponname');
 
+        // echo '<pre>';
+        // print_r($couponname);
+        // exit();
+
         if(!empty($couponname))
         {
             $cpn_dt = Coupon::where('code',$couponname)->first();

@@ -1430,6 +1430,7 @@ class MenuController extends Controller
         return response()->json([
             'html' => $html,
             'subtotal' => $subtotl_html,
+            'sub_total' =>$subtotal,
             'cart_products' => $cart_products,
             'headertotal' => (round($headertotal, 2) <= 0) ? 0 : round($headertotal, 2),
             'total' => $total_html,
@@ -2130,6 +2131,7 @@ class MenuController extends Controller
                                                         'couponcode_name' => $couponcode_name,
                                                         'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
+                                                        'subtotal' => $subtotal,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
@@ -2260,6 +2262,7 @@ class MenuController extends Controller
                                                         'couponcode_name' => $couponcode_name,
                                                         'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
+                                                        'subtotal' => $subtotal,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
@@ -2402,6 +2405,7 @@ class MenuController extends Controller
                                                         'success_message' => $success_message,
                                                         'couponcode_name' => $couponcode_name,
                                                         'couponcode_amount' => $couponcode_amount,
+                                                        'subtotal' => $subtotal,
                                                         'total' => $total_html,
                                                         'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
@@ -2532,6 +2536,7 @@ class MenuController extends Controller
                                                         'success_message' => $success_message,
                                                         'couponcode_name' => $couponcode_name,
                                                         'couponcode_amount' => $couponcode_amount,
+                                                        'subtotal' => $subtotal,
                                                         'total' => $total_html,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
@@ -2678,6 +2683,7 @@ class MenuController extends Controller
                                                         'couponcode_name' => $couponcode_name,
                                                         'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
+                                                        'subtotal' => $subtotal,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
@@ -2811,6 +2817,7 @@ class MenuController extends Controller
                                                         'couponcode_name' => $couponcode_name,
                                                         'couponcode_amount' => $couponcode_amount,
                                                         'total' => $total_html,
+                                                        'subtotal' => $subtotal,
                                                         'headertotal' => $head_total,
                                                         'min_spend' => $minimum_spend['min_spend'],
                                                     ]);
@@ -3001,6 +3008,7 @@ class MenuController extends Controller
                                                     'couponcode_name' => $couponcode_name,
                                                     'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
+                                                    'subtotal' => $subtotal,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
@@ -3129,6 +3137,7 @@ class MenuController extends Controller
                                                     'couponcode_name' => $couponcode_name,
                                                     'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
+                                                    'subtotal' => $subtotal,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
@@ -3271,6 +3280,7 @@ class MenuController extends Controller
                                                     'couponcode_name' => $couponcode_name,
                                                     'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
+                                                    'subtotal' => $subtotal,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
@@ -3410,6 +3420,7 @@ class MenuController extends Controller
                                                     'couponcode_name' => $couponcode_name,
                                                     'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
+                                                    'subtotal' => $subtotal,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
@@ -3559,6 +3570,7 @@ class MenuController extends Controller
                                                     'couponcode_name' => $couponcode_name,
                                                     'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
+                                                    'subtotal' => $subtotal,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
                                                 ]);
@@ -3694,6 +3706,7 @@ class MenuController extends Controller
                                                     'couponcode_name' => $couponcode_name,
                                                     'couponcode_amount' => $couponcode_amount,
                                                     'total' => $total_html,
+                                                    'subtotal' => $subtotal,
                                                     'headertotal' => $head_total,
                                                     'min_spend' => $minimum_spend['min_spend'],
                                                 ]);

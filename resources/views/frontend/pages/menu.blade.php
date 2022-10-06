@@ -1244,7 +1244,7 @@ It's used for View Menu.
                                 $('.total').html('');
                                 $('.total').append(result.total);
 
-                                $('#total').val(result.subtotal);
+                                $('#total').val(result.sub_total);
 
                                 // Header Total
                                 $('.pirce-value').text('');
@@ -1335,7 +1335,7 @@ It's used for View Menu.
                                 // Total Amount
                                 $('.total').html('');
                                 $('.total').append(result.total);
-                                $('#total').val(result.subtotal);
+                                $('#total').val(result.sub_total);
 
                                 // Header Total
                                 $('.pirce-value').text('');
@@ -1422,7 +1422,7 @@ It's used for View Menu.
                     $('.total').html('');
                     $('.total').append(result.total);
 
-                    $('#total').val(result.subtotal);
+                    $('#total').val(result.sub_total);
 
                     // Header Total
                     $('.pirce-value').text('');
@@ -1605,7 +1605,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-                    console.log(result);
+                //    alert(result.subtotal)
                     $('#applycpn').css('display', 'none');
                     if (result.errors == 1)
                     {

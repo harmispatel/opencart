@@ -753,7 +753,12 @@
                                                                                                         {
                                                                                                             $couponcode = $Coupon['discount'];
                                                                                                         }
-                                                                                                    }
+                                                                                                    } else {
+                                                                                                    session()->forget('couponname');
+                                                                                                    session()->forget('currentcoupon');
+                                                                                                    session()->forget('couponcode');
+                                                                                                    session()->save();
+                                                                                                }
                                                                                                 $total = $subtotal - $couponcode;
                                                                                             }
                                                                                         } else {
