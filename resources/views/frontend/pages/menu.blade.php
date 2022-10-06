@@ -1605,6 +1605,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
+
                 //    alert(result.subtotal)
                     $('#applycpn').css('display', 'none');
                     if (result.errors == 1)
@@ -1622,8 +1623,10 @@ It's used for View Menu.
                         $('.minimum_spend').html('');
                     }
                     else{
-                        $('.disabled_checkout_btn').addClass('disabled');
-                        $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ result.min_spend +'.</span>');
+
+                            $('.disabled_checkout_btn').addClass('disabled');
+                            $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ result.min_spend +'.</span>');
+
                         // $('.disabled_checkout_btn').addClass('disabled');
                     }
                     // if (result.headertotal >= result.min_spend) {
