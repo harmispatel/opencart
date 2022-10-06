@@ -1625,7 +1625,7 @@ It's used for View Menu.
                     else{
 
                             $('.disabled_checkout_btn').addClass('disabled');
-                            $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ result.min_spend +'.</span>');
+                            $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
 
                         // $('.disabled_checkout_btn').addClass('disabled');
                     }

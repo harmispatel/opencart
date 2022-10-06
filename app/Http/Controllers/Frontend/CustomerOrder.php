@@ -156,9 +156,6 @@ class CustomerOrder extends Controller
         $servicecharge = $request->service_charge;
         $couponname = session()->get('couponname');
 
-        // echo '<pre>';
-        // print_r($couponname);
-        // exit();
 
         if(!empty($couponname))
         {
@@ -168,6 +165,9 @@ class CustomerOrder extends Controller
         {
             $cpn_dt = '';
         }
+        // echo '<pre>';
+        // print_r($cpn_dt);
+        // exit();
 
 
 
@@ -320,7 +320,7 @@ class CustomerOrder extends Controller
                                     $coupon_history->coupon_id = $cpn_id;
                                     $coupon_history->order_id = $last_order_id;
                                     $coupon_history->customer_id = 0;
-                                    $coupon_history->amount = $amnt;
+                                    $coupon_history->amount = "-$cpn_discount";
                                     $coupon_history->date_added = date('Y-m-d  H:i:s');
                                     $coupon_history->save();
                                 }
@@ -582,7 +582,7 @@ class CustomerOrder extends Controller
                                 $coupon_history->coupon_id = $cpn_id;
                                 $coupon_history->order_id = $last_order_id;
                                 $coupon_history->customer_id = $user_id;
-                                $coupon_history->amount = $amnt;
+                                $coupon_history->amount ="-$cpn_discount";
                                 $coupon_history->date_added = date('Y-m-d  H:i:s');
                                 $coupon_history->save();
                             }
@@ -869,7 +869,7 @@ class CustomerOrder extends Controller
                                     $coupon_history->coupon_id = $cpn_id;
                                     $coupon_history->order_id = $last_order_id;
                                     $coupon_history->customer_id = 0;
-                                    $coupon_history->amount = $amnt;
+                                    $coupon_history->amount = "-$cpn_discount";
                                     $coupon_history->date_added = date('Y-m-d  H:i:s');
                                     $coupon_history->save();
                                 }
@@ -1134,7 +1134,7 @@ class CustomerOrder extends Controller
                                     $coupon_history->coupon_id = $cpn_id;
                                     $coupon_history->order_id = $last_order_id;
                                     $coupon_history->customer_id = $user_id;
-                                    $coupon_history->amount = $amnt;
+                                    $coupon_history->amount ="-$cpn_discount";
                                     $coupon_history->date_added = date('Y-m-d  H:i:s');
                                     $coupon_history->save();
                                 }

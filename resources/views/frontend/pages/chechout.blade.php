@@ -753,12 +753,13 @@
                                                                                                         {
                                                                                                             $couponcode = $Coupon['discount'];
                                                                                                         }
-                                                                                                    } else {
-                                                                                                    session()->forget('couponname');
-                                                                                                    session()->forget('currentcoupon');
-                                                                                                    session()->forget('couponcode');
-                                                                                                    session()->save();
-                                                                                                }
+                                                                                                    }
+                                                                                                //      else {
+                                                                                                //     session()->forget('couponname');
+                                                                                                //     session()->forget('currentcoupon');
+                                                                                                //     session()->forget('couponcode');
+                                                                                                //     session()->save();
+                                                                                                // }
                                                                                                 $total = $subtotal - $couponcode;
                                                                                             }
                                                                                         } else {
@@ -835,12 +836,13 @@
                                                                                                     {
                                                                                                         $couponcode = $Coupon['discount'];
                                                                                                     }
-                                                                                                }else{
-                                                                                                    session()->forget('couponname');
-                                                                                                    session()->forget('currentcoupon');
-                                                                                                    session()->forget('couponcode');
-                                                                                                    session()->save();
                                                                                                 }
+                                                                                                // else{
+                                                                                                //     session()->forget('couponname');
+                                                                                                //     session()->forget('currentcoupon');
+                                                                                                //     session()->forget('couponcode');
+                                                                                                //     session()->save();
+                                                                                                // }
                                                                                             $total = $subtotal - $couponcode;
                                                                                         }
                                                                                         else
@@ -1423,6 +1425,7 @@
                 },
                 dataType: "json",
                 success: function (response) {
+                    //  alert(response.total)
                     if (response.error == 1) {
                         $(this).prop('checked', false);
                         $('#servicecharge').css("display", "none");
