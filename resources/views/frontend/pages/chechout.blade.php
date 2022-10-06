@@ -1036,7 +1036,7 @@
                                 <input type="button" value="Pay {{ $currency }} {{ ((round($total , 2) <= 0) ? 0 : round($total , 2)) }}" id="button-payment-method" class="btn back-bt" disabled>
                                 {{-- <a type="hidden" href="{{ route('stripe') }}">Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a> --}}
                                 <input type="hidden" name="currency_code" value="{{ $store_setting['config_currency'] }}">
-                                <input type="hidden" name="total" id="total" value="{{ ((round($total , 2) <= 0) ? 0 : round($total , 2)) }}">
+                                <input type="hidden" name="total" id="total" value="{{$subtotal}}">
                             </form>
                         </div>
                     </div>
@@ -1424,7 +1424,7 @@
                         // $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
                         $('#button-payment-method').val("CONFIRM");
                         // $('#button-payment-method').removeAttr("type");
-                        // $('#total').val(response.total);
+                        // $('#total').val(response.subtotal);
                         // $('#service_charge').val(response.service_charge);
                         $('#button-payment-method').prop('disabled', true);
 
@@ -1452,7 +1452,7 @@
                             $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
                             $('#total_pay').text('');
                             $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                            $('#total').val(response.total);
+                            $('#total').val(response.subtotal);
                             $('#service_charge').val(response.service_charge);
                             $('#button-payment-method').prop('disabled', false);
                         }
@@ -1470,7 +1470,7 @@
                             $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
                             $('#total_pay').text('');
                             $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                            $('#total').val(response.total);
+                            $('#total').val(response.subtotal);
                             $('#service_charge').val(response.service_charge)
                             $('#button-payment-method').prop('disabled', false);
                         }
@@ -1487,7 +1487,7 @@
                             $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
                             $('#total_pay').text('');
                             $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                            $('#total').val(response.total);
+                            $('#total').val(response.subtotal);
                             $('#service_charge').val(response.service_charge);
                             // $.session.set('total', "+ response.total +");
                             $('#button-payment-method').prop('disabled', false);
@@ -1815,6 +1815,8 @@
             $('#couponload').css('display' , 'inline-block');
             let total = $('#total').val();
 
+
+
             var method_type = $('input[name="payment_method"]:checked').val();
             var order_type = $('input[name="order"]:checked').val();
             // var order_type = $('#deliver').val();
@@ -1874,11 +1876,13 @@
                         if ( $(".coupon_code").length ) {
                             /*EXISTS (greater than 0) */
                             // $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                            $('.coupon_code').html('');
                             if (result.couponcode_name != '' && result.couponcode_amount != '') {
                                 $('.coupon_code').html('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>');
                             }
                         }else{
                             if (result.couponcode != '') {
+                                $('.coupon_code').html('');
                                 $('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>').insertBefore(".voucher");
                             }
                         }

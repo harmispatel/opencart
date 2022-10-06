@@ -1062,7 +1062,7 @@ It's used for View Menu.
 
 
     <!-- Delivery Type Modal -->
-    <input type="hidden" name="total" id="total" value="{{ $total }}">
+    <input type="hidden" name="total" id="total" value="{{ $subtotal }}">
     <div class="modal fade csmodal" id="Modal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1229,7 +1229,7 @@ It's used for View Menu.
                                 $('.total').html('');
                                 $('.total').append(result.total);
 
-                                $('#total').val(result.headertotal);
+                                $('#total').val(result.subtotal);
 
                                 // Header Total
                                 $('.pirce-value').text('');
@@ -1320,7 +1320,7 @@ It's used for View Menu.
                                 // Total Amount
                                 $('.total').html('');
                                 $('.total').append(result.total);
-                                $('#total').val(result.headertotal);
+                                $('#total').val(result.subtotal);
 
                                 // Header Total
                                 $('.pirce-value').text('');
@@ -1390,7 +1390,7 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-                    console.log(result);
+                    console.log(result.subtotal);
                     // Cart Data
                     $('.empty-box').html('');
                     $('.empty-box').append(result.html);
@@ -1407,7 +1407,7 @@ It's used for View Menu.
                     $('.total').html('');
                     $('.total').append(result.total);
 
-                    $('#total').val(result.headertotal);
+                    $('#total').val(result.subtotal);
 
                     // Header Total
                     $('.pirce-value').text('');
@@ -1576,6 +1576,7 @@ It's used for View Menu.
             e.preventDefault();
             var coupon = $("input[name='coupon']").val();
             let total = $('#total').val();
+            //   alert(total)
 
 
             $.ajax({
@@ -1646,7 +1647,7 @@ It's used for View Menu.
                         $('.total').html('');
                         $('.total').append(result.total);
 
-                        $('#total').val(result.headertotal);
+                        $('#total').val(result.subtotal);
                         // Header Total
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.headertotal);

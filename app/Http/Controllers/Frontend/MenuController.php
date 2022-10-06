@@ -123,6 +123,7 @@ class MenuController extends Controller
                     'error' => 1,
                     'message' => "Minimum delivery is " . session()->get('currency')." ". (float) number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
                     'total' => (float) number_format($order_total,2),
+                    'subtotal' =>$s_subtotal,
                     'headertotal' => (float) number_format($order_total,2),
                     'service_charge' => $stripe_charge,
                 ]);
@@ -131,6 +132,7 @@ class MenuController extends Controller
                 return response()->json([
                     'success' => 1,
                     'total' => (float) number_format($order_total,2),
+                    'subtotal' =>$s_subtotal,
                     'headertotal' => (float) number_format($order_total,2),
                     'service_charge' => $stripe_charge
                 ]);
@@ -151,6 +153,7 @@ class MenuController extends Controller
                     'error' => 1,
                     'message' => "Minimum delivery is " . session()->get('currency')." ". (float) number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
                     'total' => (float) number_format($order_total,2),
+                    'subtotal' =>$s_subtotal,
                     'headertotal' => (float) number_format($order_total,2),
                     'service_charge' => $paypal_charge,
 
@@ -160,6 +163,7 @@ class MenuController extends Controller
                 return response()->json([
                     'success' => 2,
                     'total' => (float) number_format($order_total,2),
+                    'subtotal' =>$s_subtotal,
                     'headertotal' => (float) number_format($order_total,2),
                     'service_charge' => $paypal_charge,
                 ]);
@@ -181,6 +185,7 @@ class MenuController extends Controller
                     'error' => 1,
                     'message' => "Minimum delivery is " . session()->get('currency')." ". (float) number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
                     'total' => (float) number_format($order_total,2),
+                    'subtotal' =>$s_subtotal,
                     'headertotal' => (float) number_format($order_total,2),
                     'service_charge' => $cod_charge
 
@@ -190,6 +195,7 @@ class MenuController extends Controller
                 return response()->json([
                     'success' => 3,
                     'total' => (float) number_format($order_total,2),
+                    'subtotal' =>$s_subtotal,
                     'headertotal' => (float) number_format($order_total,2),
                     'service_charge' => $cod_charge
                 ]);
@@ -1888,10 +1894,9 @@ class MenuController extends Controller
     // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
-
-
-
-
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -2127,7 +2132,7 @@ class MenuController extends Controller
                                                 }
                                             } else {
                                                 $error_msg = '';
-                                                $error_msg .= '<span class="text-danger">Maximum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
+                                                $error_msg .= '<span class="text-danger">Minimum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
                                                 return response()->json([
                                                     'errors' => 1,
                                                     'errors_message' => $error_msg,
@@ -2399,7 +2404,7 @@ class MenuController extends Controller
                                                 }
                                             } else {
                                                 $error_msg = '';
-                                                $error_msg .= '<span class="text-danger">Maximum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
+                                                $error_msg .= '<span class="text-danger">Minimum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
                                                 return response()->json([
                                                     'errors' => 1,
                                                     'errors_message' => $error_msg,
@@ -2675,7 +2680,7 @@ class MenuController extends Controller
                                                 }
                                             } else {
                                                 $error_msg = '';
-                                                $error_msg .= '<span class="text-danger">Maximum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
+                                                $error_msg .= '<span class="text-danger">Minimum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
                                                 return response()->json([
                                                     'errors' => 1,
                                                     'errors_message' => $error_msg,
@@ -2998,7 +3003,7 @@ class MenuController extends Controller
                                             }
                                         } else {
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Maximum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
+                                            $error_msg .= '<span class="text-danger">Minimum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,
@@ -3273,7 +3278,7 @@ class MenuController extends Controller
                                             session()->unset('couponname', $Couponcode['name']);
                                             session()->save();
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Maximum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
+                                            $error_msg .= '<span class="text-danger">Minimum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,
@@ -3556,7 +3561,7 @@ class MenuController extends Controller
                                             }
                                         } else {
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Maximum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
+                                            $error_msg .= '<span class="text-danger">Minimum Amount is ' . $currency . '' . number_format($Couponcode->total, 0) . ' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,
@@ -3700,7 +3705,7 @@ class MenuController extends Controller
 
 
                                             $error_msg = '';
-                                            $error_msg .= '<span class="text-danger">Maximum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
+                                            $error_msg .= '<span class="text-danger">Minimum Amount is '.$currency.''.number_format($Couponcode->total,0).' for Apply This Coupon.</span>';
                                             return response()->json([
                                                 'errors' => 1,
                                                 'errors_message' => $error_msg,

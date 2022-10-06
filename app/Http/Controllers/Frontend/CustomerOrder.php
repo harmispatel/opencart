@@ -324,8 +324,6 @@ class CustomerOrder extends Controller
                             }
                         }
 
-                        session()->forget('couponcode');
-                        session()->forget('couponname');
                         session()->put('last_order_id',$gorder->order_id);
 
                         // Guest Order Product
@@ -462,6 +460,9 @@ class CustomerOrder extends Controller
                             $gordertotal->save();
                         }
 
+
+                        session()->forget('couponcode');
+                        session()->forget('couponname');
                         session()->forget('cart1');
                         session()->forget('guest_user');
                         session()->forget('free_item');
