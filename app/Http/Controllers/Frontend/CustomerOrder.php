@@ -155,11 +155,13 @@ class CustomerOrder extends Controller
         $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
         $servicecharge = $request->service_charge;
         $couponname = session()->get('couponname');
+        $currentcoupon = session()->get('currentcoupon');
+        $code =isset($currentcoupon['code']) ? $currentcoupon['code'] : $couponname ;
 
 
-        if(!empty($couponname))
+        if(!empty($code))
         {
-            $cpn_dt = Coupon::where('code',$couponname)->first();
+            $cpn_dt = Coupon::where('code','10OFF')->first();
         }
         else
         {
@@ -292,27 +294,27 @@ class CustomerOrder extends Controller
 
                         $last_order_id = $gorder->order_id;
 
-                        if(!empty($couponname))
-                        {
-                            if(!empty($cpn_dt))
-                            {
+                        // if(!empty($code))
+                        // {
+                        //     if(!empty($cpn_dt))
+                        //     {
                                 $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                                 $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                                 $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
                                 $subtotal = $request->subtotal;
 
-                                if($cpn_type == 'P')
-                                {
-                                    $amnt = ($subtotal * $cpn_discount) / 100;
-                                }
-                                elseif($cpn_type == 'F')
-                                {
-                                    $amnt = $subtotal - $cpn_discount;
-                                }
-                                else
-                                {
-                                    $amnt = 0;
-                                }
+                                // if($cpn_type == 'P')
+                                // {
+                                //     $amnt = ($subtotal * $cpn_discount) / 100;
+                                // }
+                                // elseif($cpn_type == 'F')
+                                // {
+                                //     $amnt = $subtotal - $cpn_discount;
+                                // }
+                                // else
+                                // {
+                                //     $amnt = 0;
+                                // }
 
                                 if(!empty($cpn_id) && $cpn_id != 0)
                                 {
@@ -325,8 +327,8 @@ class CustomerOrder extends Controller
                                     $coupon_history->save();
                                 }
 
-                            }
-                        }
+                        //     }
+                        // }
 
                         session()->put('last_order_id',$gorder->order_id);
 
@@ -555,27 +557,27 @@ class CustomerOrder extends Controller
 
                     $last_order_id = $order->order_id;
 
-                    if(!empty($couponname))
-                    {
-                        if(!empty($cpn_dt))
-                        {
+                    // if(!empty($code))
+                    // {
+                    //     if(!empty($cpn_dt))
+                    //     {
                             $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                             $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                             $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
                             $subtotal = $request->subtotal;
 
-                            if($cpn_type == 'P')
-                            {
-                                $amnt = ($subtotal * $cpn_discount) / 100;
-                            }
-                            elseif($cpn_type == 'F')
-                            {
-                                $amnt = $subtotal - $cpn_discount;
-                            }
-                            else
-                            {
-                                $amnt = 0;
-                            }
+                            // if($cpn_type == 'P')
+                            // {
+                            //     $amnt = ($subtotal * $cpn_discount) / 100;
+                            // }
+                            // elseif($cpn_type == 'F')
+                            // {
+                            //     $amnt = $subtotal - $cpn_discount;
+                            // }
+                            // else
+                            // {
+                            //     $amnt = 0;
+                            // }
                             if(!empty($cpn_id) && $cpn_id != 0)
                             {
                                 $coupon_history = new CouponHistory;
@@ -587,8 +589,8 @@ class CustomerOrder extends Controller
                                 $coupon_history->save();
                             }
 
-                        }
-                    }
+                    //     }
+                    // }
 
                     // session()->forget('headertotal');
                     // // session()->forget('flag_post_code');
@@ -841,27 +843,27 @@ class CustomerOrder extends Controller
                         // gust coupon history
                         $last_order_id = $gorder->order_id;
 
-                        if(!empty($couponname))
-                        {
-                            if(!empty($cpn_dt))
-                            {
+                        // if(!empty($code))
+                        // {
+                        //     if(!empty($cpn_dt))
+                        //     {
                                 $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                                 $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                                 $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
                                 $subtotal = $request->subtotal;
 
-                                if($cpn_type == 'P')
-                                {
-                                    $amnt = ($subtotal * $cpn_discount) / 100;
-                                }
-                                elseif($cpn_type == 'F')
-                                {
-                                    $amnt = $subtotal - $cpn_discount;
-                                }
-                                else
-                                {
-                                    $amnt = 0;
-                                }
+                                // if($cpn_type == 'P')
+                                // {
+                                //     $amnt = ($subtotal * $cpn_discount) / 100;
+                                // }
+                                // elseif($cpn_type == 'F')
+                                // {
+                                //     $amnt = $subtotal - $cpn_discount;
+                                // }
+                                // else
+                                // {
+                                //     $amnt = 0;
+                                // }
 
                                 if(!empty($cpn_id) && $cpn_id != 0)
                                 {
@@ -874,8 +876,8 @@ class CustomerOrder extends Controller
                                     $coupon_history->save();
                                 }
 
-                            }
-                        }
+                        //     }
+                        // }
 
                         session()->forget('couponcode');
                         session()->forget('couponname');
@@ -1106,27 +1108,27 @@ class CustomerOrder extends Controller
                         $order->is_delete = 0;
                         $order->save();
                         $last_order_id = $order->order_id;
-                        if(!empty($couponname))
-                        {
-                            if(!empty($cpn_dt))
-                            {
+                        // if(!empty($code))
+                        // {
+                        //     if(!empty($cpn_dt))
+                        //     {
                                 $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                                 $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                                 $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
                                 $subtotal = $request->subtotal;
 
-                                if($cpn_type == 'P')
-                                {
-                                    $amnt = ($subtotal * $cpn_discount) / 100;
-                                }
-                                elseif($cpn_type == 'F')
-                                {
-                                    $amnt = $subtotal - $cpn_discount;
-                                }
-                                else
-                                {
-                                    $amnt = 0;
-                                }
+                                // if($cpn_type == 'P')
+                                // {
+                                //     $amnt = ($subtotal * $cpn_discount) / 100;
+                                // }
+                                // elseif($cpn_type == 'F')
+                                // {
+                                //     $amnt = $subtotal - $cpn_discount;
+                                // }
+                                // else
+                                // {
+                                //     $amnt = 0;
+                                // }
 
                                 if(!empty($cpn_id) && $cpn_id != 0)
                                 {
@@ -1139,8 +1141,8 @@ class CustomerOrder extends Controller
                                     $coupon_history->save();
                                 }
 
-                            }
-                        }
+                        //     }
+                        // }
 
                         // session()->forget('headertotal');
                         // session()->forget('total');

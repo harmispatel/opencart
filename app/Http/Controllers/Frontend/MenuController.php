@@ -52,6 +52,10 @@ class MenuController extends Controller
         $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
         $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
 
+
+        // echo '<pre>';
+        // print_r($cod_charge);
+        // exit();
          $s_subtotal = session()->get('subtotal');
          $s_coupon = session()->get('currentcoupon');
          $ordertype = session()->get('flag_post_code');
@@ -128,22 +132,22 @@ class MenuController extends Controller
             $order_total = $row_total + $stripe_charge;
             session()->put('total',$order_total);
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
-                $amount_due = (float) number_format($minimum_spend['min_spend'],2) - (float) number_format($row_total,2);
+                $amount_due = $minimum_spend['min_spend'] - $row_total;
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency')." ". (float) number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
-                    'total' => (float) number_format($order_total,2),
+                    'message' => "Minimum delivery is " . session()->get('currency')." ". $minimum_spend['min_spend'] .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
+                    'total' => $order_total,
                     'subtotal' =>$s_subtotal,
-                    'headertotal' => (float) number_format($order_total,2),
+                    'headertotal' =>$order_total,
                     'service_charge' => $stripe_charge,
                 ]);
 
             }else{
                 return response()->json([
                     'success' => 1,
-                    'total' => (float) number_format($order_total,2),
+                    'total' => $order_total,
                     'subtotal' =>$s_subtotal,
-                    'headertotal' => (float) number_format($order_total,2),
+                    'headertotal' =>$order_total,
                     'service_charge' => $stripe_charge
                 ]);
             }
@@ -159,13 +163,13 @@ class MenuController extends Controller
             session()->put('total',$order_total);
 
             if($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']){
-                $amount_due = (float) number_format($minimum_spend['min_spend'],2) - (float) number_format($row_total,2);
+                $amount_due =$minimum_spend['min_spend'] - $row_total;
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency')." ". (float) number_format($minimum_spend['min_spend'],2) .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
-                    'total' => (float) number_format($order_total,2),
+                    'message' => "Minimum delivery is " . session()->get('currency')." ".$minimum_spend['min_spend'] .", you must spend " . session()->get('currency')." ". $amount_due ." more for the chekout.",
+                    'total' =>$order_total,
                     'subtotal' =>$s_subtotal,
-                    'headertotal' => (float) number_format($order_total,2),
+                    'headertotal' =>$order_total,
                     'service_charge' => $paypal_charge,
 
                 ]);
@@ -173,9 +177,9 @@ class MenuController extends Controller
             }else{
                 return response()->json([
                     'success' => 2,
-                    'total' => (float) number_format($order_total,2),
+                    'total' =>$order_total,
                     'subtotal' =>$s_subtotal,
-                    'headertotal' => (float) number_format($order_total,2),
+                    'headertotal' => $order_total,
                     'service_charge' => $paypal_charge,
                 ]);
             }
