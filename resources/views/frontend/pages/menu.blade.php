@@ -991,9 +991,9 @@ It's used for View Menu.
                                                 <div class="form-check m-auto">
                                                     {{-- <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}> --}}
                                                     @if ($userdeliverytype == 'delivery')
-                                                        <input class="form-check-input" type="radio" name="delivery_type" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" value="delivery" name="delivery_type" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
                                                     @else
-                                                        <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
+                                                        <input class="form-check-input" type="radio" value="delivery" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}>
                                                     @endif
                                                     <label class="form-check-label" for="delivery">
                                                         <h6>Delivery</h6>
@@ -1148,10 +1148,6 @@ It's used for View Menu.
 
         var ordertype = $("input[name='delivery_type']:checked").val();
 
-        // $(document).ready(function () {
-        //     // location.reload();
-        // });
-
         $(function() {
             $.ajax({
                 type: "post",
@@ -1161,7 +1157,8 @@ It's used for View Menu.
                         'ordertype': ordertype,
                     },
                 success: function (response) {
-                    console.log(response.cart_products);
+                    // alert(response.min_spend)
+                    // console.log(response.cart_products);
                     $('.empty-box').html('');
                     $('.empty-box').html(response.cart_products);
 
@@ -1210,6 +1207,17 @@ It's used for View Menu.
                         // alert('h2')
                         // $('.coupon_code').css('display','none');
                         $('.addnewcoupon').css('display','block');
+                    }
+
+                    if (response.min_spend == 'true') {
+                        // checkeout button status
+                        $('.disabled_checkout_btn').removeClass('disabled');
+                        $('.minimum_spend').html('');
+                    } else{
+                        // $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ response.minimum_spend +'.</span>');
+                        // $('.disabled_checkout_btn').addClass('disabled');
+                        $('.disabled_checkout_btn').addClass('disabled');
+                        $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
                     }
 
                 }

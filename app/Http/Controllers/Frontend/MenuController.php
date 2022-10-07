@@ -1286,17 +1286,33 @@ class MenuController extends Controller
 
         $mycart = session()->get('cart1');
 
-        $userid = 0;
+        // if (session()->has('userid')) {
+        //     $userid = session()->get('userid');
+        // } else {
+        //     $userid = 0;
+        // }
 
         $delivery_type = $request->ordertype;
+
+        // minimum spend
+         $DeliveryCollectionSettings = Settings::select('value')->where('store_id', $front_store_id)->where('key', 'delivery_option')->first();
+
+         if ($DeliveryCollectionSettings['value'] == 'area') {
+             $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+         } else {
+             $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+         }
+         $minimum_spend = $deliverysettings->last()->toArray();
+
+
 
 
 
         $current_date = strtotime(date('Y-m-d'));
         if (session()->has('userid')) {
-            $user_id = session()->get('userid');
+            $userid = session()->get('userid');
         } else {
-            $user_id = 0;
+            $userid = 0;
         }
 
         if (session()->has('currentcoupon')) {
@@ -1339,12 +1355,12 @@ class MenuController extends Controller
                 $end_date = isset($get_coupon['date_end']) ? strtotime($get_coupon['date_end']) : '';
 
                 if ($get_coupon->logged == 1) {
-                    if ($user_id != 0) {
-                        $cart = getuserCart($user_id);
+                    if ($userid != 0) {
+                        $cart = getuserCart($userid);
                         $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
                         $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $count_user_per_cpn = count($cpn_history);
-                        $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
+                        $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $userid)->count();
                         if ((!empty($get_coupon) || $get_coupon != '') && $get_coupon->status == 1 && $get_coupon->on_off == 1) {
                             if ($get_coupon->uses_total >  $count_user_per_cpn || $get_coupon->uses_total == 0) {
                                 if ($get_coupon->uses_customer > $uses_per_cpn) {
@@ -1406,7 +1422,7 @@ class MenuController extends Controller
 
 
                     $count_user_per_cpn = count($cpn_history);
-                    $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
+                    $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $userid)->count();
 
                     if (!empty($get_coupon) || $get_coupon != '') {
                         if ($get_coupon->status == 1 && $get_coupon->on_off == 1) {
@@ -1495,7 +1511,9 @@ class MenuController extends Controller
         $cart_products = 0;
         $headertotal = 0;
 
-
+    //    echo '<pre>';
+    //    print_r($delivery_type);
+    //    exit();
 
         $html = '';
         $html .= '<table class="table">';
@@ -1512,6 +1530,11 @@ class MenuController extends Controller
                    } else {
                        $price = $cart['main_price'] * $cart['quantity'];
                    }
+
+                //    echo '<pre>';
+                //    print_r($price);
+                //    exit();
+
 
 
                    $html .= '<tr>';
@@ -1550,6 +1573,9 @@ class MenuController extends Controller
                    } else {
                        $price = $cart['main_price'] * $cart['quantity'];
                    }
+                //    echo '<pre>';
+                //    print_r($price);
+                //    exit();
 
                    $html .= '<tr>';
                    $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
@@ -1625,6 +1651,12 @@ class MenuController extends Controller
 
         }
 
+        if ($minimum_spend['min_spend'] <= $total) {
+            $min_spend = 'true';
+        } else {
+            $min_spend = 'false';
+        }
+
         // echo '<pre>';
         // print_r($couponcode_name);
         // print_r($couponcode_amount);
@@ -1637,6 +1669,8 @@ class MenuController extends Controller
         // exit();
         return response()->json([
             'cart_products' => $html,
+            'min_spend' => $min_spend,
+            'minimum_spend' => $minimum_spend,
             'subtotal' => $subtotl_html,
             'html' => $html,
             'subtotal' => $subtotl_html,
