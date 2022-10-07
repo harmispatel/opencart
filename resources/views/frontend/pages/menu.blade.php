@@ -836,7 +836,7 @@ It's used for View Menu.
                                                     <li class="minicart-list-item">
                                                         {{-- {{-- @if (($Coupon != '' || !empty($Coupon))) --}}
                                                             {{-- @if ($couponcode != 0) --}}
-                                                                <div class="minicart-list-item-innr coupon_code 1">
+                                                                <div class="minicart-list-item-innr coupon_code d-flex">
                                                                     @if ($Coupon != '' || !empty($Coupon))
                                                                         <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
                                                                         <span>{{ $currency }}-{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
@@ -1034,7 +1034,7 @@ It's used for View Menu.
                                             <span class="closing-text 3" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
                                         </div>
                                     @else
-                                        <a href="{{ route('cart') }}" type="button" class="btn checkbt">Checkout</a>
+                                        <a href="{{ route('checkout') }}" type="button" class="btn checkbt">Checkout</a>
                                         <div class="closed-now">
                                             <span class="closing-text 4" style="color: green !important;">We are open now!</span>
                                         </div>
@@ -1183,18 +1183,31 @@ It's used for View Menu.
                     $('.pirce-value').text('');
                     $('.pirce-value').append(response.headertotal);
 
-                    if (response.couponcode_name == '' && response.couponcode_amount == '')
+                    if (response.couponcode_name != '' && response.couponcode_amount != '')
                     {
-                        alert('hi')
+                        // $('.coupon_code').html('');
+                        // $('.coupon_code').css('display','none');
+                        // $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                        // $('.changecoupon').css('display','none');
+                        // $('.Applynew_coupon').css('display','none');
+                        // $('.addnewcoupon').css('display','none');
+
                         $('.coupon_code').html('');
-                        $('.coupon_code').css('display','none');
-                        // $('.coupon_code').html('<label id="coupontext">Coupon3('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                        $('.changecoupon').css('display','none');
-                        $('.Applynew_coupon').css('display','none');
-                        $('.addnewcoupon').css('display','none');
+                        $('.coupon_code').css('display','block');
+                        $('.coupon_code').html('<label id="coupontext">Coupon('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
+                        // $('.Applynew_coupon').css('display','block');
+
+
+
+                        // $('.coupon_code').html('');
+                        // $('.coupon_code').css('display','block');
+                        // // $('.Applynew_coupon').css('display','none');
+                        // $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                        // $('.addnewcoupon').css('display','block');
+                        // // $('.changecoupon').css('display','block');
                     }
                     else{
-                        alert('h2')
+                        // alert('h2')
                         // $('.coupon_code').css('display','none');
                         $('.addnewcoupon').css('display','block');
                     }
@@ -1322,16 +1335,29 @@ It's used for View Menu.
                                 // $('.coupon_code').html('');
                                 // $('.coupon_code').append(result.couponcode);
 
+                                // if (result.couponcode_name != '' && result.couponcode_amount != '') {
+                                //     $('.coupon_code').html('');
+                                //     // $('.coupon_code').css('display','block');
+                                //     $('.Applynew_coupon').css('display','none');
+                                //     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                                //     $('.addnewcoupon').css('display','block');
+                                //     // $('.changecoupon').css('display','block');
+                                // }
+                                // else{
+                                //     // $('.coupon_code').css('display','none');
+                                //     $('.addnewcoupon').css('display','block');
+                                // }
+
                                 if (result.couponcode_name != '' && result.couponcode_amount != '') {
                                     $('.coupon_code').html('');
-                                    // $('.coupon_code').css('display','block');
-                                    $('.Applynew_coupon').css('display','none');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                                    $('.addnewcoupon').css('display','block');
+                                    $('.Applynew_coupon').css('display','block');
                                     // $('.changecoupon').css('display','block');
+                                    $('.addnewcoupon').css('display','block');
+
                                 }
                                 else{
-                                    // $('.coupon_code').css('display','none');
+                                    $('.coupon_code').css('display','none');
                                     $('.addnewcoupon').css('display','block');
                                 }
 
@@ -1413,21 +1439,34 @@ It's used for View Menu.
                                 // $('.coupon_code').html('');
                                 // $('.coupon_code').append(result.couponcode);
 
-                                if (result.couponcode_name != '' && result.couponcode_amount != '') {
+                                // if (result.couponcode_name != '' && result.couponcode_amount != '') {
 
-                                    // $('.coupon_code').html('');
-                                    // $('.coupon_code').html('<label id="coupontext">Coupon2('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                                    // $('.Applynew_coupon').css('display','none');
-                                    // $('.coupon_code').css('display','block');
+                                //     // $('.coupon_code').html('');
+                                //     // $('.coupon_code').html('<label id="coupontext">Coupon2('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                                //     // $('.Applynew_coupon').css('display','none');
+                                //     // $('.coupon_code').css('display','block');
+                                //     $('.coupon_code').html('');
+                                //     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                                //     $('.Applynew_coupon').css('display','none');
+                                //     $('.addnewcoupon').css('display','block');
+                                //     // $('.changecoupon').css('display','block');
+
+                                // }
+                                // else{
+                                //     // $('.coupon_code').css('display','none');
+                                //     $('.addnewcoupon').css('display','block');
+                                // }
+
+                                if (result.couponcode_name != '' && result.couponcode_amount != '') {
                                     $('.coupon_code').html('');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                                    $('.Applynew_coupon').css('display','none');
-                                    $('.addnewcoupon').css('display','block');
+                                    $('.Applynew_coupon').css('display','block');
                                     // $('.changecoupon').css('display','block');
+                                    $('.addnewcoupon').css('display','block');
 
                                 }
                                 else{
-                                    // $('.coupon_code').css('display','none');
+                                    $('.coupon_code').css('display','none');
                                     $('.addnewcoupon').css('display','block');
                                 }
 

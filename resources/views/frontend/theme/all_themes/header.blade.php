@@ -675,15 +675,15 @@
                         <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
-                        @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        {{-- @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
-                        @else
+                        @else --}}
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
-                        @endif  
+                        {{-- @endif   --}}
                         <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
@@ -800,15 +800,15 @@
                         <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
-                        @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        {{-- @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
-                        @else
+                        @else --}}
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
-                        @endif  
+                        {{-- @endif   --}}
                         <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
@@ -1017,15 +1017,15 @@
                         <li class="{{ request()->is('menu') ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
-                        @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        {{-- @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
-                        @else
+                        @else --}}
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
-                        @endif  
+                        {{-- @endif   --}}
                         <li class="{{ request()->is('contact') ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
@@ -1156,15 +1156,15 @@
                         <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
-                        @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        {{-- @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
-                        @else
+                        @else --}}
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
-                        @endif  
+                        {{-- @endif   --}}
                         <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                         <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
@@ -1341,15 +1341,15 @@
                         <li class="{{ (request()->is('menu')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
-                        @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        {{-- @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
-                        @else
+                        @else --}}
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
-                        @endif
+                        {{-- @endif --}}
                         <li class="{{ (request()->is('contact')) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>
@@ -1463,15 +1463,15 @@
                         <li class="{{ ((request()->is('menu'))) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('menu') }}">menu</a>
                         </li>
-                        @if (empty($cart['size']) || empty($cart['withoutSize']))
+                        {{-- @if (empty($cart['size']) || empty($cart['withoutSize']))
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('cart') }}">check out</a>
                             </li>
-                        @else
+                        @else --}}
                             <li class="{{ (request()->is('checkout')) ? 'active' : '' }}">
                                 <a class="text-uppercase" href="{{ route('checkout') }}">check out</a>
                             </li>
-                        @endif
+                        {{-- @endif --}}
                         <li class="{{ ((request()->is('contact'))) ? 'active' : '' }}">
                             <a class="text-uppercase" href="{{ route('contact') }}">contact us</a>
                         </li>

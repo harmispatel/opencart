@@ -1625,11 +1625,11 @@ class MenuController extends Controller
 
         }
 
-        echo '<pre>';
-        print_r($couponcode_name);
-        print_r($couponcode_amount);
+        // echo '<pre>';
+        // print_r($couponcode_name);
+        // print_r($couponcode_amount);
 
-        exit();
+        // exit();
 
 
         // echo '<pre>';
