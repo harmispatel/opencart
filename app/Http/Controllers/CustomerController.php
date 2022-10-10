@@ -630,7 +630,8 @@ class CustomerController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required',
-            'phone' => 'required|min:10',
+            'phone' => 'required',
+            // 'phone' => 'required|min:10',
         ]);
 
 
@@ -662,7 +663,7 @@ class CustomerController extends Controller
 
         if(($request->password != '' || !empty($request->password)))
         {
-            $customer->password = isset($request->password) ? bcrypt($request->password) : '';
+            $customer->password = isset($request->password) ? md5($request->password) : '';
         }
 
         // $customer->cart = isset($request->cart) ? $request->cart : '';

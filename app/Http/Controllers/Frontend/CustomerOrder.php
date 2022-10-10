@@ -161,7 +161,7 @@ class CustomerOrder extends Controller
 
         if(!empty($code))
         {
-            $cpn_dt = Coupon::where('code','10OFF')->first();
+            $cpn_dt = Coupon::where('code',$code)->first();
         }
         else
         {

@@ -259,7 +259,8 @@ class CustomerAuthController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required',
-            'phone' => 'required|min:10',
+            'phone' => 'required',
+            // 'phone' => 'required|min:10',
 
         ]);
 
