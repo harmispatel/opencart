@@ -798,8 +798,7 @@ It's used for View Menu.
                                         </div>
                                         @php
 
-
-                                        $couponcode = 0;
+                                            $couponcode = 0;
                                             if (!empty($Coupon) || $Coupon != '')
                                             {
                                                 if( $Coupon['total'] <= $subtotal){
@@ -819,6 +818,9 @@ It's used for View Menu.
 
                                                 $total = $subtotal;
                                             }
+                                            // echo '<pre>';
+                                            // print_r($couponcode);
+                                            // exit();
                                         @endphp
                                         <div class="minicart-total">
                                             <ul class="minicart-list">
@@ -832,18 +834,23 @@ It's used for View Menu.
                                                         @endif
                                                     </div>
                                                 </li>
-                                                @if ( $couponcode != 0 && (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) && ($Coupon != '' || !empty($Coupon)))
+                                                <?php
+                                                //    echo '<pre>';
+                                                //    print_r($couponcode);
+                                                //    exit();
+                                                ?>
+                                                @if (($Coupon != '' || !empty($Coupon)) && (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) && ($couponcode != 0))
                                                     <li class="minicart-list-item">
-                                                        {{-- {{-- @if (($Coupon != '' || !empty($Coupon))) --}}
-                                                            {{-- @if ($couponcode != 0) --}}
+                                                        {{-- @if (($Coupon != '' || !empty($Coupon)))
+                                                            @if ($couponcode != 0) --}}
                                                                 <div class="minicart-list-item-innr coupon_code d-flex">
-                                                                    @if ($Coupon != '' || !empty($Coupon))
+                                                                    @if (($Coupon != '' || !empty($Coupon)) && $couponcode !== 0)
                                                                         <label id="coupontext">Coupon({{ $Coupon['code'] }})</label>
                                                                         <span>{{ $currency }}-{{   (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2))  }}</span>
                                                                     @endif
                                                                 </div>
-                                                             {{-- @endif --}}
-                                                        {{-- @endif --}}
+                                                             {{-- @endif
+                                                        @endif --}}
                                                         <div class="minicart-list-item-innr addcoupon">
                                                             <label>
                                                                 @if ($couponcode != 0)
@@ -1020,6 +1027,10 @@ It's used for View Menu.
                                             <div class="closed-now pt-0">
                                                 <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
                                             </div>
+                                            <div class="closed-now minimum_spend">
+                                                <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}.</span>
+                                                {{-- <span class="closing-text 6" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}, you must spend {{ $currency }}{{number_format($minimum_spend['min_spend'],2) - $total}} more for the chekout.</span> --}}
+                                            </div>
                                         @endif
                                     @else
                                         <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
@@ -1182,26 +1193,11 @@ It's used for View Menu.
 
                     if (response.couponcode_name != '' && response.couponcode_amount != '')
                     {
-                        // $('.coupon_code').html('');
-                        // $('.coupon_code').css('display','none');
-                        // $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                        // $('.changecoupon').css('display','none');
-                        // $('.Applynew_coupon').css('display','none');
-                        // $('.addnewcoupon').css('display','none');
 
                         $('.coupon_code').html('');
                         $('.coupon_code').css('display','block');
-                        $('.coupon_code').html('<label id="coupontext">Coupon('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
+                        $('.coupon_code').html('<label id="coupontext">Coupon123('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
                         // $('.Applynew_coupon').css('display','block');
-
-
-
-                        // $('.coupon_code').html('');
-                        // $('.coupon_code').css('display','block');
-                        // // $('.Applynew_coupon').css('display','none');
-                        // $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                        // $('.addnewcoupon').css('display','block');
-                        // // $('.changecoupon').css('display','block');
                     }
                     else{
                         // alert('h2')
@@ -1705,7 +1701,7 @@ It's used for View Menu.
             $('#applycpn').css('display' , 'inline-block');
             e.preventDefault();
             var coupon = $("input[name='coupon']").val();
-            let total = $('#total').val();
+            let subtotal = $('#total').val();
             //   alert(total)
 
 
@@ -1715,7 +1711,7 @@ It's used for View Menu.
                 data: {
                     "_token": "{{ csrf_token() }}",
                     'coupon': coupon,
-                    'total': total,
+                    'total': subtotal,
                 },
                 dataType: 'json',
                 success: function(result)

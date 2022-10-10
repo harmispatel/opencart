@@ -289,9 +289,12 @@ class MenuController extends Controller
 
                 if ($session_get_coupon['logged'] == 1) {
                     if ($user_id != 0) {
-                        $cart = getuserCart($user_id);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
-                        $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+                        $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
+                        $product_history = CouponProduct::where('product_id', $get_coupon->coupon_id)->first();
+                        // $cart = getuserCart($user_id);
+                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cart_proid = session()->get('product_id');
+                        // $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->groupBy('customer_id')->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
                         if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
@@ -986,9 +989,10 @@ class MenuController extends Controller
 
                 if ($session_get_coupon['logged'] == 1) {
                     if ($user_id != 0) {
-                        $cart = getuserCart($user_id);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
-                        $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+                        // $cart = getuserCart($user_id);
+                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cart_proid = session()->get('product_id');
+                        $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
                         if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
