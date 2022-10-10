@@ -158,18 +158,15 @@ class CustomerOrder extends Controller
         $currentcoupon = session()->get('currentcoupon');
         $code =isset($currentcoupon['code']) ? $currentcoupon['code'] : $couponname ;
 
-
         if(!empty($code))
         {
-            $cpn_dt = Coupon::where('code','10OFF')->first();
+            $cpn_dt = Coupon::where('code',$code)->where('store_id',$front_store_id)->first();
         }
         else
         {
             $cpn_dt = '';
         }
-        // echo '<pre>';
-        // print_r($cpn_dt);
-        // exit();
+
 
 
 
@@ -592,12 +589,12 @@ class CustomerOrder extends Controller
                     //     }
                     // }
 
+                    // session()->forget('flag_post_code');
                     // session()->forget('headertotal');
-                    // // session()->forget('flag_post_code');
                     // session()->forget('total');
                     // session()->forget('product_id');
-                    // session()->forget('couponcode');
                     // session()->forget('currentcoupon');
+                    // session()->forget('couponcode');
                     // session()->forget('couponname');
                     // session()->forget('cart1');
                     // session()->forget('free_item');

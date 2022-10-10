@@ -341,7 +341,7 @@ class CouponController extends Controller
     {
         if ($request->ajax()) {
             $couponid = $request->couponid;
-            $data = CouponHistory::select('oc_coupon_history.*', 'oc_order.firstname', 'oc_order.lastname')->join('oc_order', 'oc_coupon_history.order_id', '=', 'oc_order.order_id')->where('coupon_id', $couponid)->get();
+            $data = CouponHistory::with(['hasOnecustomersorder'])->where('coupon_id', $couponid)->get();
 
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('date_added', function ($row) {
@@ -349,8 +349,7 @@ class CouponController extends Controller
                     return $date_added;
                 })
                 ->addColumn('customer_name', function ($row) {
-                    $cname = $row->firstname . ' ' . $row->lastname;
-
+                    $cname = $row->hasOnecustomersorder['firstname'] . ' ' . $row->hasOnecustomersorder['lastname'];
                     return $cname;
                 })
                 ->rawColumns(['date_added'])

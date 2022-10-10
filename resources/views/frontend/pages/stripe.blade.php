@@ -48,7 +48,7 @@
 
 
         $ordertotal = session()->has('total') ? session('total') : '';
-        $total = $ordertotal + $stripe_charge;
+        $total = $ordertotal;
     @endphp
       <div class="container">
          <div class="row justify-content-center h-100 align-item-center">

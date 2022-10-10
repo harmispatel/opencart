@@ -1720,7 +1720,8 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-                //    alert(result.min_spend)
+                    console.log(result.min_spend)
+                    console.log(result.headertotal)
                     $('#applycpn').css('display', 'none');
                     if (result.errors == 1)
                     {
@@ -1732,23 +1733,27 @@ It's used for View Menu.
                         }, 5000);
                     }
 
-                    if (result.headertotal >= result.min_spend) {
-                        $('.disabled_checkout_btn').removeClass('disabled');
-                        $('.minimum_spend').html('');
-                    }
-                    else{
-                            $('.disabled_checkout_btn').addClass('disabled');
-                            $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
 
-                        // $('.disabled_checkout_btn').addClass('disabled');
-                    }
-                    // if (result.headertotal >= result.min_spend) {
-                    //     $('.disabled_checkout_btn').removeClass('disabled');
-                    //     $('.minimum_spend').html('');
-                    // }
 
                     if (result.success == 1)
                     {
+
+                            if (result.headertotal >= result.min_spend) {
+
+                                $('.disabled_checkout_btn').removeClass('disabled');
+                                $('.minimum_spend').html('');
+                            }
+                            else{
+
+                                    $('.disabled_checkout_btn').addClass('disabled');
+                                    $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
+
+                                // $('.disabled_checkout_btn').addClass('disabled');
+                            }
+                            // if (result.headertotal >= result.min_spend) {
+                            //     $('.disabled_checkout_btn').removeClass('disabled');
+                            //     $('.minimum_spend').html('');
+                            // }
 
 
                         // console.log(result);

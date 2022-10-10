@@ -503,6 +503,7 @@
         // Get AllCouponHistory
         $(function() {
             var couponid = $('#couponid').val();
+            // alert(couponid)
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
