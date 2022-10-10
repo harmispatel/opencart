@@ -309,8 +309,9 @@ class MenuController extends Controller
                     if ($user_id != 0) {
                         $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $product_history = CouponProduct::where('product_id', $get_coupon->coupon_id)->first();
-                        $cart = getuserCart($user_id);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        // $cart = getuserCart($user_id);
+                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cart_proid = session()->get('product_id');
                         // $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->groupBy('customer_id')->get();
                         $count_user_per_cpn = count($cpn_history);
 
@@ -833,8 +834,9 @@ class MenuController extends Controller
 
                 if ($get_coupon->logged == 1) {
                     if ($user_id != 0) {
-                        $cart = getuserCart($user_id);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        // $cart = getuserCart($user_id);
+                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cart_proid = session()->get('product_id');
                         $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $user_id)->count();
@@ -1360,8 +1362,9 @@ class MenuController extends Controller
 
                 if ($get_coupon->logged == 1) {
                     if ($userid != 0) {
-                        $cart = getuserCart($userid);
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        // $cart = getuserCart($userid);
+                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cart_proid = session()->get('product_id');
                         $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->where('customer_id', $userid)->count();
@@ -2254,14 +2257,14 @@ class MenuController extends Controller
                         $cpn_history = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->get();
                         $count_user_per_cpn = count($cpn_history);
                         // $cart = getuserCart($userid); // Database
-                        $cart = getuserCart($userid); // Database
-                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        // $cart = getuserCart($userid); // Database
+                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
                         $uses_per_cpn = CouponHistory::where('coupon_id', $Couponcode->coupon_id)->where('customer_id', $userid)->count();
                         if ($Couponcode->on_off == 1 && $Couponcode->status == 1) {
                             if ($Couponcode->uses_total >  $count_user_per_cpn || $Couponcode->uses_total == 0) {
                                 if ($Couponcode->uses_customer > $uses_per_cpn) {
-                                    if (!empty($cart_proid) ||  $cart_proid != '') {
-                                        if (array_intersect($product_check,  $cart_proid) && count($product_check) != 0) {
+                                    if (!empty($session_proid) ||  $session_proid != '') {
+                                        if (array_intersect($product_check,  $session_proid) && count($product_check) != 0) {
                                             if ($apply_shipping == $delivery_type) {
                                                 if ($Couponcode->total <= $request->total) {
 
@@ -2536,7 +2539,7 @@ class MenuController extends Controller
                                                     'errors_message' => $error_msg,
                                                 ]);
                                             }
-                                        } elseif (array_intersect($cat_to_pro,  $cart_proid) && count($cat_to_pro) != 0) {
+                                        } elseif (array_intersect($cat_to_pro,  $session_proid) && count($cat_to_pro) != 0) {
                                             if ($apply_shipping == $delivery_type) {
                                                 if ($Couponcode->total <= $request->total) {
                                                     if ($current_date >= $start_date && $current_date < $end_date) // Coupon Not Expired
