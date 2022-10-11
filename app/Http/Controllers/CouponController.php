@@ -36,13 +36,13 @@ class CouponController extends Controller
         if ($user_group_id == 1) {
             if ($user_group_id == 0) {
 
-                $data['coupons'] = Coupon::get();
+                $data['coupons'] = Coupon::OrderBy('coupon_id', 'DESC')->get();
             } else {
 
-                $data['coupons'] = Coupon::where('store_id', $current_store_id)->get();
+                $data['coupons'] = Coupon::where('store_id', $current_store_id)->OrderBy('coupon_id', 'DESC')->get();
             }
         } else {
-            $data['coupons'] = Coupon::where('store_id', $user_shop_id)->get();
+            $data['coupons'] = Coupon::where('store_id', $user_shop_id)->OrderBy('coupon_id', 'DESC')->get();
         }
 
         return view('admin.coupons.list', $data);

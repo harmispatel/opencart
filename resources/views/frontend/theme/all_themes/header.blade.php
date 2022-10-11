@@ -75,7 +75,9 @@
 
     // Get Coupon
     $Coupon = getCoupon();
-
+//    echo '<pre>';
+//    print_r($Coupon);
+//    exit();
 
     $html = '';
     $headertotal = 0;

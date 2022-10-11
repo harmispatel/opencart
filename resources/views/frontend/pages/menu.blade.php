@@ -1196,7 +1196,7 @@ It's used for View Menu.
 
                         $('.coupon_code').html('');
                         $('.coupon_code').css('display','block');
-                        $('.coupon_code').html('<label id="coupontext">Coupon123('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
+                        $('.coupon_code').html('<label id="coupontext">Coupon('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
                         // $('.Applynew_coupon').css('display','block');
                     }
                     else{
@@ -1381,6 +1381,10 @@ It's used for View Menu.
                                     $('.disabled_checkout_btn').removeClass('disabled');
                                     $('.minimum_spend').html('');
                                 }
+                                else{
+                                    $('.disabled_checkout_btn').addClass('disabled');
+                                    $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
+                                }
                             }
                         });
                     }
@@ -1490,6 +1494,10 @@ It's used for View Menu.
                                     $('.disabled_checkout_btn').removeClass('disabled');
                                     $('.minimum_spend').html('');
                                 }
+                                else{
+                                    $('.disabled_checkout_btn').addClass('disabled');
+                                    $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
+                                }
                             }
                         });
                     }
@@ -1568,6 +1576,10 @@ It's used for View Menu.
                         // checkeout button status
                         $('.disabled_checkout_btn').removeClass('disabled');
                         $('.minimum_spend').html('');
+                    }
+                    else{
+                        $('.disabled_checkout_btn').addClass('disabled');
+                        $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
                     }
                 }
             });

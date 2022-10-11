@@ -108,6 +108,9 @@ class CustomerOrder extends Controller
     // Function For  Confirm Order
     function confirmorder(Request $request)
     {
+        // echo '<pre>';
+        // print_r($request->total);
+        // exit();
        // Get Current URL
        $currentURL = URL::to("/");
 

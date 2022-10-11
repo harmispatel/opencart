@@ -33,10 +33,6 @@ class MenuController extends Controller
 
     public function servicecharge(Request $req)
     {
-
-        // echo '<pre>';
-        // print_r(session()->all());
-        // exit();
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -53,19 +49,23 @@ class MenuController extends Controller
         $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
 
 
-        // echo '<pre>';
-        // print_r($cod_charge);
-        // exit();
+
         $s_subtotal = session()->get('subtotal');
         $s_coupon = session()->get('currentcoupon');
         $ordertype = session()->get('flag_post_code');
         $coupon_name = session()->get('couponname');
-
+        $delivery_type = session()->get('flag_post_code');
+        $current_date = strtotime(date('Y-m-d'));
         $couponcode_name = isset($s_coupon['code']) ? $s_coupon['code'] : $coupon_name;
         $Coupon_code = coupon::where('code', $couponcode_name)->where('store_id', $front_store_id)->first();
+        if(session()->has('userid')){
+            $user_id = session()->get('userid');
+        }else{
+            $user_id = 0;
+        }
 
+        $couponcode = 0;
         if (!empty($Coupon_code) || $Coupon_code != '') {
-            $couponcode = 0;
             if ($Coupon_code['total'] <= $s_subtotal) {
                 if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0) {
                     $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
@@ -74,20 +74,6 @@ class MenuController extends Controller
                     $couponcode = $Coupon_code['discount'];
                 }
             }
-        }
-        //  else
-        //  if($s_coupon){
-        //     if (isset($s_coupon['type']) ? ($s_coupon['type'] == 'P') : 0)
-        //      {
-        //         $couponcode = ($s_subtotal * $s_coupon['discount']) / 100;
-        //      }
-        //      if ( isset($s_coupon['type']) ? ($s_coupon['type'] == 'F') : 0)
-        //      {
-        //         $couponcode = $s_coupon['discount'];
-        //      }
-        //  }
-        else {
-            $couponcode = 0;
         }
 
 
@@ -126,22 +112,22 @@ class MenuController extends Controller
             $row_total = ($total <= 0) ? 0 : $total;
             $order_total = $row_total + $stripe_charge;
             session()->put('total', $order_total);
-            if ($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']) {
+            if ($ordertype == 'delivery' && $row_total < $minimum_spend['min_spend']) {
                 $amount_due = $minimum_spend['min_spend'] - $row_total;
                 return response()->json([
                     'error' => 1,
                     'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend['min_spend'] . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the chekout.",
-                    'total' => $order_total,
+                    'total' => number_format($order_total,2),
                     'subtotal' => $s_subtotal,
-                    'headertotal' => $order_total,
+                    'headertotal' => number_format($order_total,2),
                     'service_charge' => $stripe_charge,
                 ]);
             } else {
                 return response()->json([
                     'success' => 1,
-                    'total' => $order_total,
+                    'total' => number_format($order_total,2),
                     'subtotal' => $s_subtotal,
-                    'headertotal' => $order_total,
+                    'headertotal' => number_format($order_total,2),
                     'service_charge' => $stripe_charge
                 ]);
             }
@@ -156,23 +142,23 @@ class MenuController extends Controller
             $order_total = $row_total  + $paypal_charge;
             session()->put('total', $order_total);
 
-            if ($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']) {
+            if ($ordertype == 'delivery' && $row_total < $minimum_spend['min_spend']) {
                 $amount_due = $minimum_spend['min_spend'] - $row_total;
                 return response()->json([
                     'error' => 1,
                     'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend['min_spend'] . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the chekout.",
-                    'total' => $order_total,
+                    'total' => number_format($order_total,2),
                     'subtotal' => $s_subtotal,
-                    'headertotal' => $order_total,
+                    'headertotal' => number_format($order_total,2),
                     'service_charge' => $paypal_charge,
 
                 ]);
             } else {
                 return response()->json([
                     'success' => 2,
-                    'total' => $order_total,
+                    'total' => number_format($order_total,2),
                     'subtotal' => $s_subtotal,
-                    'headertotal' => $order_total,
+                    'headertotal' => number_format($order_total,2),
                     'service_charge' => $paypal_charge,
                 ]);
             }
@@ -188,24 +174,25 @@ class MenuController extends Controller
             session()->put('total', $order_total);
 
 
-            if ($ordertype == 'delivery' && $order_total <= $minimum_spend['min_spend']) {
+
+            if ($ordertype == 'delivery' && $row_total < $minimum_spend['min_spend']) {
 
                 $amount_due = $minimum_spend['min_spend'] - $row_total;
                 return response()->json([
                     'error' => 1,
                     'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend['min_spend'] . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the chekout.",
-                    'total' => $order_total,
+                    'total' => number_format($order_total,2),
                     'subtotal' => $s_subtotal,
-                    'headertotal' => $order_total,
+                    'headertotal' => number_format($order_total,2),
                     'service_charge' => $cod_charge
 
                 ]);
             } else {
                 return response()->json([
                     'success' => 3,
-                    'total' => $order_total,
+                    'total' => number_format($order_total,2),
                     'subtotal' => $s_subtotal,
-                    'headertotal' => $order_total,
+                    'headertotal' => number_format($order_total,2),
                     'service_charge' => $cod_charge
                 ]);
             }
@@ -250,9 +237,9 @@ class MenuController extends Controller
 
 
         if (session()->has('currentcoupon')) {
+
             // $Coupon = session()->get('currentcoupon');
             $session_get_coupon = session()->get('currentcoupon');
-            // echo "helloooooo";
             if (isset($session_get_coupon)) {
                 $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                 $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
@@ -284,17 +271,15 @@ class MenuController extends Controller
                     $apply_shipping = '';
                 }
 
-                $start_date = isset($session_get_coupon->date_start) ? strtotime($session_get_coupon->date_start) : '';
-                $end_date = isset($session_get_coupon->date_end) ? strtotime($session_get_coupon->date_end) : '';
+                $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
+                $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
+
 
                 if ($session_get_coupon['logged'] == 1) {
                     if ($user_id != 0) {
-                        $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
-                        $product_history = CouponProduct::where('product_id', $get_coupon->coupon_id)->first();
-                        // $cart = getuserCart($user_id);
-                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
-                        $cart_proid = session()->get('product_id');
-                        // $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->groupBy('customer_id')->get();
+                        $cart = getuserCart($user_id);
+                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
                         if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
@@ -351,6 +336,7 @@ class MenuController extends Controller
                         }
                     }
                 } elseif ($session_get_coupon['logged'] == 0) {
+
                     if ($user_id != 0) {
                         $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                         // $product_history = CouponProduct::where('product_id', $productid)->first();
@@ -380,7 +366,7 @@ class MenuController extends Controller
                                                     }
                                                 }
                                             } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                                // echo 'category ';
+
                                                 if ($apply_shipping == $delivery_type) {
                                                     if ($current_date >= $start_date && $current_date < $end_date) {
                                                         $Coupon = $session_get_coupon;
@@ -439,7 +425,11 @@ class MenuController extends Controller
                             }
                         }
                     } else {
+
                         $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
+                        // $product_history = CouponProduct::where('product_id', $productid)->first();
+
+                        // $cat_history = CouponCategory::where('category_id', $category_id)->first();
                         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
 
                         $count_user_per_cpn = count($cpn_history);
@@ -464,7 +454,7 @@ class MenuController extends Controller
                                                 }
                                             }
                                         } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                            // echo 'category ';
+
                                             if ($apply_shipping == $delivery_type) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) {
                                                     $Coupon = $session_get_coupon;
@@ -526,6 +516,7 @@ class MenuController extends Controller
                 }
             }
         } else {
+
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
             if (isset($get_coupon) || $get_coupon != '') {
 
@@ -952,7 +943,6 @@ class MenuController extends Controller
 
         if (session()->has('currentcoupon')) {
             $session_get_coupon = session()->get('currentcoupon');
-            // $Coupon = session()->get('currentcoupon');
             if (isset($session_get_coupon)) {
                 $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                 $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
@@ -989,10 +979,9 @@ class MenuController extends Controller
 
                 if ($session_get_coupon['logged'] == 1) {
                     if ($user_id != 0) {
-                        // $cart = getuserCart($user_id);
-                        // $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
-                        $cart_proid = session()->get('product_id');
-                        $cpn_history = CouponHistory::where('coupon_id', $get_coupon->coupon_id)->get();
+                        $cart = getuserCart($user_id);
+                        $cart_proid = isset($cart['product_id']) ? $cart['product_id'] : '';
+                        $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                         $count_user_per_cpn = count($cpn_history);
                         $uses_per_cpn = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->where('customer_id', $user_id)->count();
                         if ((!empty($session_get_coupon) || $session_get_coupon != '') && $session_get_coupon['status'] == 1 && $session_get_coupon['on_off'] == 1) {
@@ -1228,6 +1217,7 @@ class MenuController extends Controller
             }
         } else {
             $get_coupon = Coupon::where('store_id', $front_store_id)->first();
+
             if (isset($get_coupon)) {
 
                 $product_history = CouponProduct::where('coupon_id', $get_coupon->coupon_id)->get();
@@ -1685,6 +1675,7 @@ class MenuController extends Controller
                     $couponcode =  $Coupon['discount'];
                 }
 
+                $currentcoupon = session()->put('currentcoupon', isset($Coupon) ? $Coupon : '');
                 $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
                 $sessioncouponname = session()->put('couponname', isset($Coupon['code']) ? $Coupon['code'] : '');
                 $sessioncurrency = session()->put('currency', $store_setting['config_currency']);
@@ -1761,11 +1752,12 @@ class MenuController extends Controller
 
 
 
-        if ($minimum_spend['min_spend'] <= $total) {
+        if ($total >= $minimum_spend['min_spend']) {
             $min_spend = 'true';
         } else {
             $min_spend = 'false';
         }
+
 
         return response()->json([
             'html' => $html,
@@ -1865,8 +1857,8 @@ class MenuController extends Controller
                     $apply_shipping = '';
                 }
 
-                $start_date = isset($session_get_coupon->date_start) ? strtotime($session_get_coupon->date_start) : '';
-                $end_date = isset($session_get_coupon->date_end) ? strtotime($session_get_coupon->date_end) : '';
+                $start_date = isset($session_get_coupon['date_start']) ? strtotime($session_get_coupon['date_start']) : '';
+                $end_date = isset($session_get_coupon['date_end']) ? strtotime($session_get_coupon['date_end']) : '';
 
                 if ($session_get_coupon['logged'] == 1) {
                     if ($userid != 0) {
@@ -1958,7 +1950,7 @@ class MenuController extends Controller
                                                     }
                                                 }
                                             } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                                // echo 'category ';
+
                                                 if ($apply_shipping == $delivery_type) {
                                                     if ($current_date >= $start_date && $current_date < $end_date) {
                                                         $Coupon = $session_get_coupon;
@@ -2045,7 +2037,7 @@ class MenuController extends Controller
                                                 }
                                             }
                                         } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-                                            // echo 'category ';
+
                                             if ($apply_shipping == $delivery_type) {
                                                 if ($current_date >= $start_date && $current_date < $end_date) {
                                                     $Coupon = $session_get_coupon;
@@ -2384,9 +2376,7 @@ class MenuController extends Controller
         $cart_products = 0;
         $headertotal = 0;
 
-        //    echo '<pre>';
-        //    print_r($delivery_type);
-        //    exit();
+
 
         $html = '';
         $html .= '<table class="table">';
@@ -2404,9 +2394,7 @@ class MenuController extends Controller
                     $price = $cart['main_price'] * $cart['quantity'];
                 }
 
-                //    echo '<pre>';
-                //    print_r($price);
-                //    exit();
+
 
 
 
@@ -2446,9 +2434,7 @@ class MenuController extends Controller
                 } else {
                     $price = $cart['main_price'] * $cart['quantity'];
                 }
-                //    echo '<pre>';
-                //    print_r($price);
-                //    exit();
+
 
                 $html .= '<tr>';
                 $html .= '<td><i class="fa fa-times-circle text-danger" onclick="deletecartproduct(' . $cart['product_id'] . ',' . $sizeid . ',' . $userid . ')" style="cursor:pointer"></i></td>';
@@ -2491,7 +2477,7 @@ class MenuController extends Controller
                 if ($Coupon['type'] == 'F') {
                     $couponcode =  $Coupon['discount'];
                 }
-
+                $currentcoupon = session()->put('currentcoupon', isset($Coupon) ? $Coupon : '');
                 $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
                 $sessioncouponname = session()->put('couponname', isset($Coupon['code']) ? $Coupon['code'] : '');
                 $sessioncurrency = session()->put('currency', $store_setting['config_currency']);
@@ -2527,24 +2513,17 @@ class MenuController extends Controller
             $couponcode_amount = '';
         }
 
-        if ($minimum_spend['min_spend'] <= $total) {
+        if ($total >= $minimum_spend['min_spend']) {
             $min_spend = 'true';
         } else {
             $min_spend = 'false';
         }
 
-        // echo '<pre>';
-        // print_r($couponcode_name);
-        // print_r($couponcode_amount);
-
-        // exit();
 
 
-        // echo '<pre>';
-        // print_r($subtotal);
-        // exit();
         return response()->json([
-            'cart_products' => $html,
+             'cart_products' => $html,
+            // 'cart_products'=> $cart_products,
             'min_spend' => $min_spend,
             'minimum_spend' => $minimum_spend,
             'subtotal' => $subtotl_html,
@@ -2638,9 +2617,7 @@ class MenuController extends Controller
         //  }
         //  $minimum_spend = $deliverysettings->last()->toArray();
 
-        //  echo '<pre>';
-        //  print_r($minimum_spend['min_spend']);
-        //  exit();
+
 
         // $delivery_type = session()->get('flag_post_code');
 
@@ -2998,11 +2975,7 @@ class MenuController extends Controller
         // }
 
 
-        // echo '<pre>';
-        // print_r($couponcode_name);
-        // echo "  ";
-        // print_r($couponcode_amount);
-        // exit();
+
 
         return response()->json([
             'success' => 1,
@@ -3022,9 +2995,7 @@ class MenuController extends Controller
     // Function For Get Coupon Code
     public function getcoupon(Request $request)
     {
-        // echo '<pre>';
-        // print_r($request->total);
-        // exit();
+
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -6131,3 +6102,4 @@ class MenuController extends Controller
         return response()->json($filterResult);
     }
 }
+
