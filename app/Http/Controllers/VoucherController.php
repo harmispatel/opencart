@@ -123,29 +123,32 @@ class VoucherController extends Controller
         //     'Phone'    => '6355271486',
         // ];
 
-        // \Mail::send('admin.mail_fromat.voucher_mail', ['data' => $data],
+        // \Mail::send('admin.mail_format.voucher_mail', ['data' => $data],
+        // // \Mail::send('admin.mail_format.voucher_mail', ['data' => $data],
         //     function ($message) use ($data)
         //     {
         //         $message->from($data['from'])->to($data['to'])->subject('Some body wrote to you online');
         //     });
 
-        // // second method
-        // $email = 'hasankaradiya1626@gmail.com';
-        // $name = 'Hasan Karadiya';
-        // $uname = 'robinrobin9976@gmail.com';
-        // $message = 'hii';
-        // $subject = 'Voucher';
-        // if(isset($uname))
-        // {
-        //     $from = $uname;
+        // second method
+        $email = 'hasankaradiya1626@gmail.com';
+        $name = 'Hasan Karadiya';
+        $uname = 'robinrobin9976@gmail.com';
+        $message = 'hii';
+        $subject = 'Voucher';
 
-        //         \Mail::send('admin.mail_fromat.voucher_mail', ['body' => $message], function ($m) use ($email,$subject,$name, $from) {
-        //             $m->from($from, 'Checkout');
-        //             $m->to($email, $name)->subject($subject);
-        //         });
+        if(isset($uname))
+        {
+            $from = $uname;
 
-        // }
-        return view('admin.mail_fromat.voucher_mail');
+                \Mail::send('admin.mail_format.voucher_mail', ['body' => $message], function ($m) use ($email,$subject,$name, $from) {
+                    $m->from($from, 'Checkout');
+                    $m->to($email, $name)->subject($subject);
+                });
+
+        }
+        return view('admin.mail_format.voucher_mail');
+        // return redirect()->back();
     }
 
 
