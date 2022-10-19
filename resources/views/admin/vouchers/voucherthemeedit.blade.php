@@ -102,6 +102,11 @@ $demo = gallary_redirect_url();
                                               </a>
                                             </span>
                                             <input id="thumbnail" class="form-control" type="text" name="image">
+                                            {{-- @if ($errors->has('image'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('image') }}
+                                                </div>
+                                            @endif --}}
                                           </div>
                                           <img id="holder" style="margin-top:15px;max-height:100px;">
                                     </div>

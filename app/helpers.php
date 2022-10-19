@@ -1711,6 +1711,85 @@ function getGeneralTotals($range)
 }
 
 
+function getorderdetails($range){
+
+    if($range == 'day')
+    {
+        $startDate = date('Y-m-d 00:00:00');
+        $query = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->get();
+        $accepted_order = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->count();
+        $total = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->sum('total');
+        $collection_count = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('shipping_method','collection')->count();
+        $collection_total = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('shipping_method','collection')->sum('total');
+        $delivery_count = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('shipping_method','delivery')->count();
+        $delivery_total = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('shipping_method','delivery')->sum('total');
+        $G_count = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('customer_group_id',0)->count();
+        $G_total = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('customer_group_id',0)->sum('total');
+        $C_count = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('customer_group_id',1)->count();
+        $C_total = Orders::where('order_status_id','=',15)->where('date_added','>=',$startDate)->where('customer_group_id',1)->sum('total');
+
+        return  ['query'=>$query,'accepted_order'=>$accepted_order,'total'=>$total,'collection_count'=>$collection_count,'collection_total'=>$collection_total,'delivery_count'=>$delivery_count,'delivery_total'=>$delivery_total,'G_count'=>$G_count,'G_total'=>$G_total ,'C_count'=>$C_count,'C_total'=>$C_total];
+
+    }elseif ($range == 'week') {
+        $monday =  strtotime("monday this week");
+        $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+        $this_week_sd = date("Y-m-d",$monday);
+        $this_week_ed = date("Y-m-d",$sunday);
+        $startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
+        $endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
+
+
+        $query = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->get();
+        $accepted_order = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->count();
+        $total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->sum('total');
+        $collection_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('shipping_method','collection')->count();
+        $collection_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('shipping_method','collection')->sum('total');
+        $delivery_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('shipping_method','delivery')->count();
+        $delivery_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('shipping_method','delivery')->sum('total');
+        $G_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',0)->count();
+        $G_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',0)->sum('total');
+        $C_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',1)->count();
+        $C_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',1)->sum('total');
+        return  ['query'=>$query,'accepted_order'=>$accepted_order,'total'=>$total,'collection_count'=>$collection_count,'collection_total'=>$collection_total,'delivery_count'=>$delivery_count,'delivery_total'=>$delivery_total,'G_count'=>$G_count,'G_total'=>$G_total ,'C_count'=>$C_count,'C_total'=>$C_total];
+    }elseif ($range == 'month') {
+        $startDate_this_month = date('Y-m-01 00:00:00'); // hard-coded '01' for first day
+        $lastDate_this_month  = date('Y-m-t 23:59:59');
+
+        $query = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->get();
+        $accepted_order = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->count();
+        $total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->sum('total');
+        $collection_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('shipping_method','collection')->count();
+        $collection_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('shipping_method','collection')->sum('total');
+        $delivery_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('shipping_method','delivery')->count();
+        $delivery_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('shipping_method','delivery')->sum('total');
+        $G_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',0)->count();
+        $G_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',0)->sum('total');
+        $C_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',1)->count();
+        $C_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',1)->sum('total');
+        return  ['query'=>$query,'accepted_order'=>$accepted_order,'total'=>$total,'collection_count'=>$collection_count,'collection_total'=>$collection_total,'delivery_count'=>$delivery_count,'delivery_total'=>$delivery_total,'G_count'=>$G_count,'G_total'=>$G_total ,'C_count'=>$C_count,'C_total'=>$C_total];
+    }
+    elseif($range == 'year')
+    {
+        $this_year_ini = new DateTime('first day of January this year');
+        $this_year_end = new DateTime('last day of December this year');
+
+        $this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
+        $this_year_end = $this_year_end->format('Y-m-d 23:59:59');
+
+        $query = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->get();
+        $accepted_order = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->count();
+        $total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->sum('total');
+        $collection_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('shipping_method','collection')->count();
+        $collection_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('shipping_method','collection')->sum('total');
+        $delivery_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('shipping_method','delivery')->count();
+        $delivery_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('shipping_method','delivery')->sum('total');
+        $G_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',0)->count();
+        $G_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',0)->sum('total');
+        $C_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',1)->count();
+        $C_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',1)->sum('total');
+        return  ['query'=>$query,'accepted_order'=>$accepted_order,'total'=>$total,'collection_count'=>$collection_count,'collection_total'=>$collection_total,'delivery_count'=>$delivery_count,'delivery_total'=>$delivery_total,'G_count'=>$G_count,'G_total'=>$G_total ,'C_count'=>$C_count,'C_total'=>$C_total];
+    }
+}
 
 
 
@@ -2936,7 +3015,8 @@ function getCoupon()
     $Coupon = '';
     if(session()->has('currentcoupon'))
     {
-        $session_get_coupon = session()->get('currentcoupon');
+        $coupon_name = session()->get('currentcoupon');
+        $session_get_coupon = Coupon::where('store_id', $front_store_id)->where('code',$coupon_name['code'])->first();
 
         if(isset($session_get_coupon)){
             $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
@@ -3216,6 +3296,10 @@ function getCoupon()
     else
     {
         $get_coupon = Coupon::where('store_id', $front_store_id)->first();
+        // echo '<pre>';
+        // print_r($get_coupon);
+        // exit();
+
         if (isset($get_coupon) || $get_coupon != '') {
 
             $product_history = CouponProduct::where('coupon_id', $get_coupon->coupon_id)->get();

@@ -383,23 +383,26 @@ class OrdersController extends Controller
     {
         // Validation
         $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'phone' => 'required',
+            'firstname' => 'min:3 | max:32',
+            'lastname' => 'min:3 | max:32',
+            'phone' => 'min:3 | max:32',
             'email' => 'required|email',
-            'payment_firstname' => 'required',
-            'payment_lastname' => 'required',
+            'payment_firstname' => 'min:1 | max:32',
+            'payment_lastname' => 'min:1 | max:32',
             'payment_region_id' => 'required',
             'payment_country_id' => 'required',
-            'payment_city' => 'required',
-            'payment_address_1' => 'required',
-            'shipping_firstname' => 'required',
-            'shipping_lastname' => 'required',
+            'payment_city' => 'min:3 | max:32',
+            'payment_address_1' => 'min:1 | max:32',
+            'shipping_firstname' => 'min:1 | max:32',
+            'shipping_lastname' => 'min:1 | max:32',
+            'shipping_address_1' =>'min:3 | max:32',
+            'shipping_city' => 'min:3 | max:32',
             'shipping_region_id' => 'required',
             'shipping_country_id' => 'required',
             'shipping_city' => 'required',
             'shipping_address_1' => 'required',
             'storename' => 'required',
+            'payment_method' =>'required',
         ]);
 
         // // Insert New Order

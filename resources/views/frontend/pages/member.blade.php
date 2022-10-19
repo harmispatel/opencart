@@ -44,6 +44,39 @@
     <link rel="stylesheet" href="{{ get_css_url().'public/assets/frontend/pages/menu.css' }}">
     {{-- End CSS --}}
 </head>
+
+<style>
+    .check-title{
+        display:flex;
+        justify-content:space-between;
+        align-items: center;
+    }
+    .check-title h1{
+        font-size:35px;
+    }
+    .earn-point{
+        display:flex;
+        align-items:center;
+    }
+    .earn-point p{
+        color:gray;
+        font-size:18px;
+        font-weight:700;
+        margin:0;
+    }
+    .earn-point span{
+        background: #651230 none repeat scroll 0 0;
+        border-radius: 3px;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 5px;
+        padding: 7px 25px;
+    }
+</style>
+
+
+
 <body>
 
     <sidebar class="mobile-menu"><a class="close far fa-times-circle" href="#"></a><a class="logo"
@@ -218,11 +251,27 @@
                     </div>
                 </div>
             @else
+
                 <section class="check-main ">
                     <div class="container">
                         <div class="check-inr">
                             <div class="row" id="Checkout">
                                 <div class="col-md-12">
+                                    <div class="check-title">
+                                        <h1>My Account</h1>
+                                        @php
+                                            $current_store = currentStoreId();
+                                            $Loyalty =getLoyaltyDetails($current_store, 'rewardtype');
+                                            // echo '<pre>';
+                                            // print_r($Loyalty['value']);
+                                            // exit();
+                                        @endphp
+                                        @if ($Loyalty['value']  == 'point')
+                                        <div class="earn-point"><p>Loyalty point Earned:</p><span>£ NAN</span></div>
+                                        @elseif ($Loyalty['value'] == 'money')
+                                        <div class="earn-point"><p>Loyalty Money Earned:</p><span>£ NAN</span></div>
+                                        @endif
+                                    </div>
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header accordion-button" id="headingOne" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">

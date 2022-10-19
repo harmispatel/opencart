@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Orders;
 use App\Models\Reviews;
+use App\Models\Settings;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 

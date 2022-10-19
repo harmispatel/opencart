@@ -143,6 +143,9 @@
                                                 <input type="text" maxlength="10"
                                                     class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}"
                                                     name="code" id="code" value="{{ $coupon->code }}">
+                                                    <small id="codenamehelp" class="text-muted">
+                                                        Enable to add into cart automatically.
+                                                    </small>
                                                 @if ($errors->has('code'))
                                                     <div class="invalid-feedback">
                                                         {{ $errors->first('code') }}
@@ -206,6 +209,9 @@
                                                         {{ $coupon->type == 'F' ? 'selected' : '' }}>Fixed Amount
                                                     </option>
                                                 </select>
+                                                <small id="codenamehelp" class="text-muted">
+                                                    Percentage or Fixed Amount.
+                                                </small>
                                             </div>
 
                                             <div class="form-group">
@@ -239,6 +245,9 @@
                                                         <label class="form-check-label" for="clogin2">No</label>
                                                     </div>
                                                 </div>
+                                                <small id="codenamehelp" class="text-muted">
+                                                    Customer must be logged in to use the coupon.
+                                                </small>
                                             </div>
 
                                             <div class="form-group">
@@ -292,9 +301,7 @@
                                                 <input class="form-control" id="category" type="text"
                                                     placeholder="Category">
                                                 <small id="codenamehelp" class="text-muted">
-                                                    Choose specific Category the coupon will apply to. Select no
-                                                    products to apply coupon to entire
-                                                    cart.
+                                                    Choose all products under selected category.
                                                 </small>
                                             </div>
 
@@ -332,20 +339,18 @@
                                                 <label for="usercoupon">Uses Per Coupon</label>
                                                 <input class="form-control" name="usercoupon" id="usercoupon"
                                                     value="{{ $coupon->uses_total }}" type="text">
-                                                <small id="codenamehelp" class="text-muted">
-                                                    The maximum number of times the coupon can be used by any customer.
-                                                    Leave blank for unlimited.
-                                                </small>
+                                                    <small id="codenamehelp" class="text-muted">
+                                                        The maximum number of times the coupon can be used by any customer. Leave blank for unlimited.
+                                                    </small>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="usercostomer">Uses Per Customer</label>
                                                 <input class="form-control" name="usercostomer" id="usercostomer"
                                                     value="{{ $coupon->uses_customer }}" type="text">
-                                                <small id="codenamehelp" class="text-muted">
-                                                    The maximum number of times the coupon can be used by a single
-                                                    customer. Leave blank for unlimited.
-                                                </small>
+                                                    <small id="codenamehelp" class="text-muted">
+                                                        The maximum number of times the coupon can be used by a single customer. Leave blank for unlimited.
+                                                    </small>
                                             </div>
 
                                             <div class="form-group">

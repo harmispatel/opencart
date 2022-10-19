@@ -71,7 +71,7 @@
                                 <div class="card-body">
 
                                     <div class="form-group">
-                                        <label for="username">User Name</label>
+                                        <label for="username"><span class="text-danger">*</span>User Name</label>
                                         <input type="text" name="username" id="username" class="form-control {{ ($errors->has('username')) ? 'is-invalid' : '' }}" value="{{ old('username') }}">
                                         @if($errors->has('username'))
                                             <div class="invalid-feedback">
@@ -81,7 +81,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="username">Users Group</label>
+                                        <label for="username"><span class="text-danger">*</span>Users Group</label>
                                         <select name="usersgroup" id="usersgroup" class="form-control {{ ($errors->has('usersgroup')) ? 'is-invalid' : '' }}">
                                             <option value="">Select User Group</option>
                                             @foreach ($usersgroup as $usergroup)
@@ -97,7 +97,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="firstname">Firstname</label>
+                                        <label for="firstname"><span class="text-danger">*</span>Firstname</label>
                                         <input type="text" name="firstname" id="firstname" class="form-control {{ ($errors->has('firstname')) ? 'is-invalid' : '' }}" value="{{ old('firstname') }}">
                                         @if($errors->has('firstname'))
                                             <div class="invalid-feedback">
@@ -107,7 +107,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="lastname">Lastname</label>
+                                        <label for="lastname"><span class="text-danger">*</span>Lastname</label>
                                         <input type="text" name="lastname" id="lastname" class="form-control {{ ($errors->has('lastname')) ? 'is-invalid' : '' }}" value="{{ old('lastname') }}">
                                         @if($errors->has('lastname'))
                                             <div class="invalid-feedback">
@@ -117,7 +117,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email">E-mail</label>
+                                        <label for="email"><span class="text-danger">*</span>E-mail</label>
                                         <input type="text" name="email" id="email" class="form-control {{ ($errors->has('email')) ? 'is-invalid' : '' }}" value="{{ old('email') }}">
                                         @if($errors->has('email'))
                                             <div class="invalid-feedback">
@@ -140,7 +140,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="password">Password</label>
+                                        <label for="password"><span class="text-danger">*</span>Password</label>
                                         <input type="password" name="password" id="password" class="form-control {{ ($errors->has('password')) ? 'is-invalid' : '' }}">
                                         @if($errors->has('password'))
                                             <div class="invalid-feedback">
@@ -150,7 +150,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="confirm">Confirm Password</label>
+                                        <label for="confirm"><span class="text-danger">*</span>Confirm Password</label>
                                         <input type="password" name="confirm" id="confirm" class="form-control {{ ($errors->has('confirm')) ? 'is-invalid' : '' }}">
                                         @if($errors->has('confirm'))
                                             <div class="invalid-feedback">
@@ -160,7 +160,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="status">Stores</label>
+                                        <label for="status"><span class="text-danger">*</span>Stores</label>
                                         <select name="store" id="store" class="form-control {{ ($errors->has('store')) ? 'is-invalid' : '' }}">
                                             <option value="">Select Your Store</option>
                                             @foreach ($stores as $store)

@@ -149,8 +149,8 @@ class CouponController extends Controller
 
         // Validation
         $request->validate([
-            'code' => 'required|max:10',
-            'coupon_name' => 'required',
+            'code' => 'min:3 | max:10',
+            'coupon_name' => 'min:3 | max:255',
         ]);
 
         $user_details = user_details();
@@ -217,8 +217,8 @@ class CouponController extends Controller
     {
         // Validation
         $request->validate([
-            'code' => 'required|max:10',
-            'coupon_name' => 'required',
+            'code' => 'min:3 | max:10',
+            'coupon_name' => 'min:3 | max:255',
         ]);
 
         // Update Coupon

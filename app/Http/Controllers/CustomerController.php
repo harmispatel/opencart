@@ -489,10 +489,10 @@ class CustomerController extends Controller
 
         // Validation
         $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'firstname' => 'min:3 | max:32',
+            'lastname' => 'min:3 | max:32',
             'email' => 'required|email|unique:oc_customer,email',
-            'phone' => 'required|min:10',
+            'phone' => 'min:10',
             'password' => 'min:6|required_with:confirm|same:confirm',
             'confirm' => 'min:6|required_with:password|same:password',
         ]);

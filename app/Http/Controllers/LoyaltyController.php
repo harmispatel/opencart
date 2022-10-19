@@ -59,6 +59,9 @@ class LoyaltyController extends Controller
 
         if($rewardtype == 'money'){
             $query = Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
+            // echo '<pre>';
+            // print_r($query);
+            // exit();
             $setting_id = isset($query->setting_id) ? $query->setting_id : '';
             $data['minimum'] =isset($request->money['minimum']) ? $request->money['minimum'] : '';
             $data['collectionaward'] = isset($request->money['collectionaward']) ? $request->money['collectionaward'] : '';
@@ -96,6 +99,9 @@ class LoyaltyController extends Controller
            else if($rewardtype == 'point')
            {
             $query1= Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
+            // echo '<pre>';
+            // print_r($query1);
+            // exit();
             $setting_id1 = isset($query1->setting_id) ? $query1->setting_id : '';
             $point['minimum'] =isset($request->point['minimum']) ? $request->point['minimum'] : '';
             $point['rewardsevery'] = isset($request->point['rewardsevery']) ? $request->point['rewardsevery'] : '';

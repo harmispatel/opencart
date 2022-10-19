@@ -44,9 +44,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1>Coming Soon..</h1>
+                        {{-- <h1>Coming Soon..</h1> --}}
                         {{-- Card Start --}}
-                        {{-- <div class="card">
+                        <div class="card p-4">
                             <form action="{{ route('storeloyalty') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <h1>Loyalty System</h1>
@@ -54,17 +54,6 @@
                                 @php
                                     $current_store = currentStoreId();
                                     $rewardtype = getLoyaltyDetails($current_store, 'rewardtype');
-                                    //  echo '<pre>';
-                                    //  print_r($rewardtype['unserializemoney']['minimum']);
-                                    //  exit();
-                                    // $point = getLoyaltyDetails($current_store, 0, $rewardtype);
-                                    // echo '<pre>';
-                                    // print_r($point);
-
-                                    // $money = getLoyaltyDetails($current_store, 0, $rewardtype);
-                                    // echo '<pre>';
-                                    // print_r($money);
-
                                 @endphp
                                 <div class="rewardtype">
                                     <div class="radio">
@@ -425,7 +414,7 @@
                                             @endif
 
                                             @if (!empty($days) || $days != '')
-                                                <input type="checkbox" name="point[availibleday][]" value="2"
+                                                <input type="checkbox" name="point[availibleday][]" value="3"
                                                     id="point_day_3" {{ in_array(3, $days) ? 'checked' : '' }} />
                                                 <label for="point_day_3" class="day_available">TUE</label>
                                             @else
@@ -505,7 +494,7 @@
                                     <input type="submit" name="submit" value="SAVE" class="btn btn-success">
                                 </div>
                             </form>
-                        </div> --}}
+                        </div>
                         {{-- End Card --}}
                     </div>
                 </div>

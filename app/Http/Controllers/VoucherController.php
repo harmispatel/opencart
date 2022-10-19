@@ -234,12 +234,12 @@ class VoucherController extends Controller
 
         // Validation
         $request->validate([
-            'code' => 'required|max:10',
+            'code' => 'min:3 | max:10',
             'apply' => 'required',
-            'formname' => 'required',
-            'email' => 'required',
-            'name' => 'required',
-            'toemail' => 'required',
+            'formname' => 'min:3 | max:62',
+            'email' => 'required | email',
+            'name' => 'min:3 | max:62',
+            'toemail' => 'required | email',
             'theme' => 'required',
             'amount' => 'required',
             'status' => 'required',
@@ -298,8 +298,8 @@ class VoucherController extends Controller
     public function voucherthemestore(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name' => 'min:3 | max:32',
+            'image' => 'required',
         ]);
 
         // $imageName = $request->image->getClientOriginalName();
@@ -368,7 +368,8 @@ class VoucherController extends Controller
 
         // Validation
         $request->validate([
-            'name' => 'required',
+            'name' => 'min:3 | max:32',
+            // 'image' => 'required',
         ]);
 
         $vouchertheme = Voucherthemes::find($vouchertheme_id);

@@ -240,6 +240,13 @@ Route::group(['middleware' => 'AuthUser'], function () {
 
     // New Order
     Route::get('neworders', [NewOrderController::class, 'index'])->name('neworders');
+    Route::post('getallorderdetails',[NewOrderController::class, 'getallorderdetails'])->name('getallorderdetails');
+    Route::post('deleteorder',[NewOrderController::class, 'deleteorder'])->name('deleteorder');
+    Route::post('orderdetail',[NewOrderController::class, 'orderdetail'])->name('orderdetail');
+    Route::post('orderfilterdetail',[NewOrderController::class, 'orderfilterdetail'])->name('orderfilterdetail');
+
+
+
 
     // Loyalty
     Route::get('loyalty', [LoyaltyController::class, 'index'])->name('loyalty');

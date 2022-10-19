@@ -64,10 +64,10 @@ class AllUserController extends Controller
 
         // Validation
         $request->validate([
-            'username' => 'required',
+            'username' => 'min:1 | max:62',
             'usersgroup' => 'required',
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'firstname' => 'min:1 | max:62',
+            'lastname' => 'min:1 | max:62',
             'email' => 'required|unique:oc_user',
             // 'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'store' => 'required',
@@ -179,9 +179,9 @@ class AllUserController extends Controller
 
         // Validation
         $request->validate([
-            'username' => 'required',
-            'usersgroup' => 'required',
-            'firstname' => 'required',
+            'username' => 'min:1 | max:62',
+            'usersgroup' => 'min:1 | max:62',
+            'firstname' => 'min:1 | max:62',
             'lastname' => 'required',
             'email' => 'required',
             'store' => 'required',

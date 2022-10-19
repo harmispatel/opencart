@@ -43,7 +43,8 @@ class Cartcontroller extends Controller
         $Coupon = '';
         if (session()->has('currentcoupon')) {
             // $Coupon= session()->get('currentcoupon');
-            $session_get_coupon = session()->get('currentcoupon');
+            $coupon_name = session()->get('currentcoupon');
+            $session_get_coupon = Coupon::where('store_id', $front_store_id)->where('code',$coupon_name['code'])->first();
             if (isset($session_get_coupon)) {
                 $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                 $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();

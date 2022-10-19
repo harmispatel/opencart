@@ -38,6 +38,7 @@ class TransactionsController extends Controller
         $current_store_id = currentStoreId();
 
         $user_details = user_details();
+
         if(isset($user_details))
         {
             $user_group_id = $user_details['user_group_id'];
@@ -58,7 +59,6 @@ class TransactionsController extends Controller
             $user_shop_id = $user_details['user_shop'];
             $customerorder = CustomerOrder::where('store_id',$user_shop_id)->with(['hasOneStore'])->whereBetween('customer_order.order_date', [$startdate, $enddate])->groupBy('customer_order.store_id')->get();
         }
-
 
 
         $html = '';
@@ -104,9 +104,12 @@ class TransactionsController extends Controller
                 // echo $rejected_count;die;
 
             }
+            // echo '<pre>';
+            // print_r($rejected_count);
+            // exit();
 
-            print_r($rejected_count_tot);
-            exit();
+            // print_r($rejected_count_tot);
+            // exit();
 
             return response()->json([
                 'customerorder' => $html,

@@ -97,19 +97,23 @@
                                     </div>
 
                                     <div class="form-group mt-3">
-                                        <label for="publickey">* Public Key</label>
-                                        <input type="text" class="@error('public_key') is-invalid @enderror form-control" name="public_key" value="{{ $stripe['stripe_publickey'] }}" id="publickey">
-                                        @error('public_key')
-                                            <div>{{ $message }}</div>
-                                        @enderror
+                                        <label for="publickey"><span class="text-danger">*</span>Public Key</label>
+                                        <input type="text" class="{{ ($errors->has('public_key')) ? 'is-invalid' : '' }} form-control" name="public_key" value="{{ $stripe['stripe_publickey'] }}" id="publickey">
+                                        @if($errors->has('public_key'))
+                                            <div class="invalid-feedback">
+                                                {{ $errors->first('public_key') }}
+                                            </div>
+                                        @endif
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="secretkey">* Secret Key</label>
-                                        <input type="text" class="@error('secret_key') is-invalid @enderror form-control" name="secret_key" value="{{ $stripe['stripe_secretkey'] }}" id="secretkey">
-                                        @error('secret_key')
-                                            <div>{{ $message }}</div>
-                                        @enderror
+                                        <label for="secretkey"><span class="text-danger">*</span>Secret Key</label>
+                                        <input type="text" class="{{ ($errors->has('secret_key')) ? 'is-invalid' : '' }} form-control" name="secret_key" value="{{ $stripe['stripe_secretkey'] }}" id="secretkey">
+                                        @if($errors->has('secret_key'))
+                                        <div class="invalid-feedback">
+                                            {{ $errors->first('secret_key') }}
+                                        </div>
+                                    @endif
                                     </div>
 
                                     <div class="form-group">

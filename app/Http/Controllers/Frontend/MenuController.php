@@ -171,6 +171,7 @@ class MenuController extends Controller
             }
             $row_total = ($total <= 0) ? 0 : $total;
             $order_total = $row_total + $cod_charge;
+
             session()->put('total', $order_total);
 
 
@@ -239,7 +240,10 @@ class MenuController extends Controller
         if (session()->has('currentcoupon')) {
 
             // $Coupon = session()->get('currentcoupon');
-            $session_get_coupon = session()->get('currentcoupon');
+            $coupon_name = session()->get('currentcoupon');
+            $session_get_coupon = Coupon::where('store_id', $front_store_id)->where('code',$coupon_name['code'])->first();
+
+
             if (isset($session_get_coupon)) {
                 $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                 $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
@@ -425,7 +429,6 @@ class MenuController extends Controller
                             }
                         }
                     } else {
-
                         $cpn_history = CouponHistory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                         // $product_history = CouponProduct::where('product_id', $productid)->first();
 
@@ -491,10 +494,12 @@ class MenuController extends Controller
                                     // }
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             if (!empty($session_get_coupon) || $session_get_coupon != '') {
                                 if ($session_get_coupon['status'] == 1) {
                                     if ($session_get_coupon['on_off'] == 1) {
+
                                         if ($apply_shipping == $delivery_type) {
                                             if ($current_date >= $start_date && $current_date < $end_date) {
                                                 $Coupon = $session_get_coupon;
@@ -942,7 +947,8 @@ class MenuController extends Controller
         }
 
         if (session()->has('currentcoupon')) {
-            $session_get_coupon = session()->get('currentcoupon');
+            $coupon_name = session()->get('currentcoupon');
+            $session_get_coupon = Coupon::where('store_id', $front_store_id)->where('code',$coupon_name['code'])->first();
             if (isset($session_get_coupon)) {
                 $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                 $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
@@ -1825,7 +1831,8 @@ class MenuController extends Controller
 
         if (session()->has('currentcoupon')) {
             // $Coupon = session()->get('currentcoupon');
-            $session_get_coupon = session()->get('currentcoupon');
+            $coupon_name = session()->get('currentcoupon');
+            $session_get_coupon = Coupon::where('store_id', $front_store_id)->where('code',$coupon_name['code'])->first();
             if (isset($session_get_coupon)) {
                 $product_history = CouponProduct::where('coupon_id', $session_get_coupon['coupon_id'])->get();
                 $category_history = CouponCategory::where('coupon_id', $session_get_coupon['coupon_id'])->get();
@@ -3054,7 +3061,7 @@ class MenuController extends Controller
         $Coupon = $request->coupon;
         $method_type = isset($request->method_type) ? $request->method_type : '';
 
-        $Couponcode = coupon::where('code', $Coupon)->where('store_id', $front_store_id)->first();
+        $Couponcode = coupon::where('code',$Coupon)->where('store_id', $front_store_id)->first();
 
 
         $product_history = CouponProduct::where('coupon_id', isset($Couponcode->coupon_id))->get();

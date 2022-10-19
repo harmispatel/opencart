@@ -71,7 +71,7 @@
 
                                     <input type="hidden" name="id" id="id" value="{{ $users->user_id }}">
                                     <div class="form-group">
-                                        <label for="username">Username</label>
+                                        <label for="username"><span class="text-danger">*</span>Username</label>
                                         <input type="text" name="username" id="username"
                                             class="form-control {{ $errors->has('username') ? 'is-invalid' : '' }}"
                                             value="{{ $users->username }}">
@@ -83,7 +83,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="username">Users Group</label>
+                                        <label for="username"><span class="text-danger">*</span>Users Group</label>
                                         <select name="usersgroup" id="usersgroup"
                                             class="form-control {{ $errors->has('usersgroup') ? 'is-invalid' : '' }}">
                                             <option value="">Select User Group</option>
@@ -101,7 +101,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="firstname">Firstname</label>
+                                        <label for="firstname"><span class="text-danger">*</span>Firstname</label>
                                         <input type="text" name="firstname" id="firstname"
                                             class="form-control {{ $errors->has('firstname') ? 'is-invalid' : '' }}"
                                             value="{{ $users->firstname }}">
@@ -113,7 +113,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="lastname">Lastname</label>
+                                        <label for="lastname"><span class="text-danger">*</span>Lastname</label>
                                         <input type="text" name="lastname" id="lastname"
                                             class="form-control {{ $errors->has('lastname') ? 'is-invalid' : '' }}"
                                             value="{{ $users->lastname }}">
@@ -125,7 +125,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="email">E-mail</label>
+                                        <label for="email"><span class="text-danger">*</span>E-mail</label>
                                         <input type="text" name="email" id="email"
                                             class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
                                             value="{{ $users->email }}">
@@ -155,7 +155,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="password">Password</label>
+                                        <label for="password"><span class="text-danger">*</span>Password</label>
                                         <input type="password" name="password" id="password"
                                             class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}">
                                         @if ($errors->has('password'))
@@ -166,7 +166,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="confirm">Confirm Password</label>
+                                        <label for="confirm"><span class="text-danger">*</span>Confirm Password</label>
                                         <input type="password" name="confirm" id="confirm"
                                             class="form-control {{ $errors->has('confirm') ? 'is-invalid' : '' }}">
                                         @if ($errors->has('confirm'))
@@ -177,7 +177,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="status">Stores</label>
+                                        <label for="status"><span class="text-danger">*</span>Stores</label>
                                         <select name="store" id="store"
                                             class="form-control {{ $errors->has('store') ? 'is-invalid' : '' }}">
                                             <option value="">Select Your Store</option>

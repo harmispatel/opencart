@@ -404,10 +404,9 @@ class ProductController extends Controller
     {
 
         $request->validate([
-            'product' => 'required',
+            'product' => 'min:3 | max:255',
             'mainprice' => 'required',
             // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'mainprice' => 'required',
             'category' => 'required',
         ]);
 
@@ -764,7 +763,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'product' => 'required',
+            'product' => 'min:3 | max:255',
             // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
 

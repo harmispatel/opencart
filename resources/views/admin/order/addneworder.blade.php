@@ -170,6 +170,8 @@
                                                                     {{ $errors->first('firstname') }}
                                                                 </div>
                                                             @endif
+
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -662,10 +664,15 @@
                                                                 <tr>
                                                                     <td>Payment Method</td>
                                                                     <td>
-                                                                        <select name="payment_method" id="payment_method" class="form-control">
+                                                                        <select name="payment_method" id="payment_method" class="form-control {{ ($errors->has('payment_method')) ? 'is-invalid' : '' }}">
                                                                             <option value=""> -- Select -- </option>
                                                                             <option value="1">Gpay</option>
                                                                         </select>
+                                                                        @if($errors->has('payment_method'))
+                                                                        <div class="invalid-feedback">
+                                                                            {{ $errors->first('payment_method') }}
+                                                                        </div>
+                                                                    @endif
                                                                     </td>
                                                                 </tr>
                                                                 <tr>

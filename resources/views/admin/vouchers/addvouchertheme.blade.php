@@ -90,15 +90,15 @@
                                                 <i class="fa fa-picture-o"></i> Choose
                                               </a>
                                             </span>
-                                            <input id="thumbnail" class="form-control" type="text" name="image">
+                                            <input id="thumbnail" class="form-control {{ ($errors->has('image')) ? 'is-invalid' : '' }}" type="text" name="image">
+                                            @if ($errors->has('image'))
+                                                <div class="invalid-feedback">
+                                                    {{ $errors->first('image') }}
+                                                </div>
+                                            @endif
                                           </div>
                                           <img id="holder" style="margin-top:15px;max-height:100px;">
-                                        {{-- <input class="form-control p-1   {{ ($errors->has('image')) ? 'is-invalid' : '' }}" name="image" id="image" type="file">
-                                        @if ($errors->has('image'))
-                                            <div class="invalid-feedback">
-                                                {{ $errors->first('image') }}
-                                            </div>
-                                        @endif --}}
+                                        {{-- <input class="form-control p-1   {{ ($errors->has('image')) ? 'is-invalid' : '' }}" name="image" id="image" type="file"> --}}
                                     </div>
                                 </div>
                                 {{-- End Card Body --}}
