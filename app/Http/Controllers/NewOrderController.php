@@ -620,7 +620,7 @@ class NewOrderController extends Controller
                         $html .= '</pre>';
                     $html .= '</div>';
 
-                    $print_route = route('invoice',$order_id);
+                    $print_route = route('invoice2',$order_id);
 
                     $html .= '<div class="col-md-12 text-right">';
                         $html .= '<a target="_blank" href="'.$print_route.'" class="btn btn-dark">Print &nbsp;<i class="fa fa-print"></i></a>';

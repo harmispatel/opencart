@@ -584,17 +584,19 @@ class OrdersController extends Controller
 
 
     // Function for Print Invoice
-    // public function invoice($id)
-    // {
+    public function invoice2($id)
+    {
 
-    //     $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
+        $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
 
-    //     $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
+        $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
 
-    //     $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+        $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
 
-    //     return view('admin.order.invoice', ["orders" => $orders, 'productorders' => $productorders, 'ordertotal' => $ordertotal]);
-    // }
+        return view('admin.order.invoice2', ["orders" => $orders, 'productorders' => $productorders, 'ordertotal' => $ordertotal]);
+    }
+
+
     public function invoice(Request $request)
     {
         $invoiceIds = explode(',', $request->invoiceIds);

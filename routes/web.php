@@ -182,7 +182,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
     Route::post('invoice', [OrdersController::class, 'invoice'])->name('invoice');
-    // Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
+    Route::get('invoice2/{id}', [OrdersController::class, 'invoice2'])->name('invoice2');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
     Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
