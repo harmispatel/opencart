@@ -184,7 +184,8 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('deleteorder', [OrdersController::class, 'deleteorder'])->name('deleteorder');
     Route::get('orderdata/{id}', [OrdersController::class, 'getorderhistory'])->name('orderdata');
     Route::post('orderhistory', [OrdersController::class, 'orderhistoryinsert'])->name('orderhistory');
-    Route::get('invoice/{id}', [OrdersController::class, 'invoice'])->name('invoice');
+    Route::post('invoice', [OrdersController::class, 'invoice'])->name('invoice');
+    Route::get('invoice2/{id}', [OrdersController::class, 'invoice2'])->name('invoice2');
     Route::get('shipping/{id}', [OrdersController::class, 'shipping'])->name('shipping');
     Route::get('getproducts/{id}', [OrdersController::class, 'getproducts'])->name('getproducts');
     Route::post('addneworders', [OrdersController::class, 'addneworders'])->name('addneworders');
@@ -244,6 +245,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
     // New Order
     Route::get('neworders', [NewOrderController::class, 'index'])->name('neworders');
     Route::post('getallorderdetails',[NewOrderController::class, 'getallorderdetails'])->name('getallorderdetails');
+    Route::post('getallorderdetailsbyYear',[NewOrderController::class, 'getallorderdetailsbyYear'])->name('getallorderdetailsbyYear');
+    Route::post('getOrderListByYear',[NewOrderController::class, 'getOrderListByYear'])->name('getOrderListByYear');
+    Route::post('getReceiptByOrderID',[NewOrderController::class, 'getReceiptByOrderID'])->name('getReceiptByOrderID');
     Route::post('deleteorder',[NewOrderController::class, 'deleteorder'])->name('deleteorder');
     Route::post('orderdetail',[NewOrderController::class, 'orderdetail'])->name('orderdetail');
     Route::post('orderfilterdetail',[NewOrderController::class, 'orderfilterdetail'])->name('orderfilterdetail');

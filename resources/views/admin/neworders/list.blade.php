@@ -17,14 +17,14 @@
         margin: 0;
         list-style: none;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
     }
 
     .calender_tabs ul li {
         padding: 5px 10px;
         color: #000;
         background-color: #fff;
-        border-radius: 10px;
+        border-radius: 5px;
         display: flex;
         align-items: center;
     }
@@ -42,11 +42,11 @@
     .small-box .inner {
         min-height: 145px;
     }
+
 </style>
 
 @php
     $range = session()->get('range');
-    $orderdetails = getorderdetails($range);
 @endphp
 
 {{-- Section of List New Order --}}
@@ -72,47 +72,20 @@
         </section>
         {{-- End Header Section --}}
 
-{{-- <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-  </button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div> --}}
 
         {{-- modal open --}}
-        {{-- <div class="modal fade" id="orderreceipt" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="orderreceiptLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body mb-3" id="ordermodal">
-                    </div>
-                </div>
+        <div class="modal fade" id="orderReciept" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+
+              </div>
             </div>
-        </div> --}}
+          </div>
         {{-- modal colose --}}
+
+
         {{-- List Section Start --}}
-        <section class="content">
+        <section class="content" id="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -120,11 +93,9 @@
                         <div class="card card-primary">
                             {{-- Card Header --}}
                             <div class="card-header" style="background: #424e64">
-
-
                                 <div class="div">
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-5">
                                             <div class="calender_tabs">
                                                 <ul>
                                                     <li><input type="radio" name="calender_tabs" value="day"
@@ -145,16 +116,28 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {{-- <div class="btn-group btn-group-toggle" dat-toggle="buttons">
-                                                <button class="btn btn-primary btn-sm" autocomplete="off">DAILY</button>
-                                                <button class="btn btn-primary btn-sm" autocomplete="off" style="border-left:1px solid white">WEEKLY</button>
-                                                <button class="btn btn-primary btn-sm" autocomplete="off" style="border-left:1px solid white">MONTHLY</button>
-                                                <button class="btn btn-primary btn-sm" autocomplete="off" style="border-left:1px solid white">YEARLY</button>
-                                            </div> --}}
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="container" style="text-align: right">
-                                                <input type="text" name="daterange" value="" />
+                                        <div class="col-md-7">
+                                            <div class="container d-flex justify-content-around align-items-center">
+                                                <a href="javascript:void(0)" class="mr-2 right-arrow arrow-date arraow-date-slector" onclick="onchangeDatepickerFillter('pre')"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+
+                                                <div class="input-group date mr-2 " id="datetimepicker1">
+                                                    <label for="date1 mt-2">From : </label>&nbsp;&nbsp;
+                                                    <input disabled type="text" id="date1" class="form-control">
+                                                    <div class="input-group-append">
+                                                        <div class="input-group-text" id="btnGroupAddon"><i class="fa fa-calendar"></i></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="input-group date ml-1" id="datetimepicker2">
+                                                    <label for="date2">To : </label>&nbsp;&nbsp;
+                                                    <input disabled id="date2" type="text" class="form-control">
+                                                    <div class="input-group-append">
+                                                        <div class="input-group-text" id="btnGroupAddon"><i class="fa fa-calendar"></i></div>
+                                                    </div>
+                                                </div>
+
+                                                <a href="javascript:void(0)" class="ml-2 left-arrow arrow-date arraow-date-slector" onclick="onchangeDatepickerFillter('next')"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -167,189 +150,8 @@
                             @if (!empty($range) || $range != '')
                                 <div class="card-body">
                                     <div class="card p-3">
-
+                                        <div class="spinner text-center"><img src="{{ asset("public/admin/gif/gif5.gif") }}" width="200"></div>
                                         <div class="row" id="card-stats">
-
-                                            {{-- Card 1 --}}
-                                            <div class="col-lg-3 col-6">
-                                                <!-- small box -->
-                                                <div class="small-box bg-light">
-                                                    <div class="inner">
-                                                        <div class="d-flex justify-content-between box-title">
-                                                            <h3 style="color: #2c9ea9">
-                                                                £{{ number_format(isset($orderdetails['total']) ? $orderdetails['total'] : 0, 2) }}</h3>
-                                                            <i class="fa fa-chart-area"></i>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">Delivery:
-                                                                    £{{ number_format(isset($orderdetails['delivery_total']) ? $orderdetails['delivery_total'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Cash Order: £ {{ number_format(isset($orderdetails['total']) ? $orderdetails['total'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Collection: £
-                                                                    {{ number_format(isset($orderdetails['collection_total']) ? $orderdetails['collection_total'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Card Order: £0.00
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {{-- <div class="icon" style="color: #2c9ea9">
-                                                        <i class="ion ion-bag"></i>
-                                                    </div> --}}
-                                                    <div class="small-box-footer" style="background: #2c9ea9">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                Total Sales
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <i class="fa fa-arrow-circle-up"></i> 0.00%
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- End Card 1 --}}
-
-                                            {{-- Card 2 --}}
-                                            <div class="col-lg-3 col-6">
-                                                <!-- small box -->
-                                                <div class="small-box bg-light">
-                                                    <div class="inner">
-                                                        <div class="d-flex justify-content-between box-title">
-                                                            <h3 style="color: #2c9ea9">
-                                                                {{ number_format(isset($orderdetails['accepted_order']) ? $orderdetails['accepted_order'] : 0, 0) }}</h3>
-                                                            <i class="fa fa-shopping-basket "></i>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Delivery:
-                                                                    £{{ number_format(isset($orderdetails['delivery_count']) ? $orderdetails['delivery_count'] : 0, 0) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Cash Order:
-                                                                    £{{ number_format(isset($orderdetails['accepted_order']) ? $orderdetails['accepted_order'] : 0, 0) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Collection:
-                                                                    £{{ number_format(isset($orderdetails['collection_count']) ? $orderdetails['collection_count'] :0, 0) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    Card Order: £0.00
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {{-- <div class="icon" style="color: #2c9ea9">
-                                                        <i class="ion ion-bag"></i>
-                                                    </div> --}}
-                                                    <div class="small-box-footer" style="background: #2c9ea9">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                Number of Sales
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <i class="fa fa-arrow-circle-up"></i> 0.00%
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- End Card 2 --}}
-
-                                            {{-- Card 3 --}}
-                                            <div class="col-lg-3 col-6">
-                                                <!-- small box -->
-                                                <div class="small-box bg-light">
-                                                    <div class="inner">
-                                                        <div class="d-flex justify-content-between box-title">
-                                                            <h3 style="color: #2c9ea9">0.00</h3>
-                                                            <i class="fa fa-tags"></i>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                        </div>
-                                                    </div>
-                                                    {{-- <div class="icon" style="color: #2c9ea9">
-                                                        <i class="ion ion-bag"></i>
-                                                    </div> --}}
-                                                    <div class="small-box-footer" style="background: #2c9ea9">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                Number of Sold Items
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <i class="fa fa-arrow-circle-up"></i> 0.00%
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- End Card 3 --}}
-
-                                            {{-- Card 4 --}}
-                                            <div class="col-lg-3 col-6">
-                                                <!-- small box -->
-                                                <div class="small-box bg-light">
-                                                    <div class="inner">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    customer: £{{ number_format(isset($orderdetails['C_total']) ? $orderdetails['C_total'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    No of orders:
-                                                                    £{{ number_format(isset($orderdetails['C_count']) ? $orderdetails['C_count'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    guest user:
-                                                                    £{{ number_format(isset($orderdetails['G_total']) ? $orderdetails['G_total'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <p style="font-size: 12px; margin: 0">
-                                                                    No of orders:
-                                                                    £{{ number_format(isset($orderdetails['G_count']) ? $orderdetails['G_count'] : 0, 2) }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    {{-- <div class="icon" style="color: #2c9ea9">
-                                                        <i class="ion ion-bag"></i>
-                                                    </div> --}}
-                                                    <div class="small-box-footer" style="background: #2c9ea9">
-                                                        <div class="row">
-                                                            <div class="col-md-6">Top {{ isset($orderdetails['C_count']) ? $orderdetails['C_count'] : 0 }} Customer.
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <i class="fa fa-arrow-circle-up"></i> 0.00%
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- End Card 4 --}}
-
                                         </div>
                                     </div>
 
@@ -394,7 +196,7 @@
                                         </div>
                                     </div>
                                     <div class="card p-3" id="table">
-                                        <table class="table table-striped" border="1">
+                                        <table class="table table-striped" id="DataTable" border="1">
                                             <thead>
                                                 <tr>
                                                     <th><input type="checkbox" name="checkall" id="delall"></th>
@@ -411,51 +213,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="tbody">
-                                                @foreach ($orderdetails['query'] as $value)
-                                                @php
-
-                                                    $edit_url = route('vieworder', $value['order_id']);
-                                                @endphp
-                                                    <tr>
-                                                        <td><input type="checkbox" name="checkall" class="delall"
-                                                                value="{{ $value['order_id'] }}"></td>
-                                                        @if ($value['shipping_method'] == 'collection')
-                                                            <td><i class="fa fa-shopping-basket"></i></td>
-                                                        @else
-                                                            <td><i class="fa fa-motorcycle"></i></td>
-                                                        @endif
-                                                        <td>{{ $value['order_id'] }}</td>
-                                                        <td>{{ $value['store_name'] }}</td>
-                                                        <td>{{ $value['firstname'] }}</td>
-                                                        <td>{{ number_format($value['total'], 2) }}</td>
-                                                        <td>{{ $value['date_added'] }}</td>
-                                                        @if ($value['order_status_id'] == 15)
-                                                            <td><i class="fa fa-check-circle" title="Accepted"
-                                                                    style="color:#14bd07;"></td>
-                                                        @elseif ($value['order_status_id'] == 5)
-                                                            <td><i class="fa fa-thumbs-up" title="Complete"
-                                                                    style="color:#51a351;"></i></td>
-                                                        @elseif ($value['order_status_id'] == 2)
-                                                            <td><i class="fa fa-loader" title="Complete"
-                                                                    style="color:#51a351;"></i></td>
-                                                        @elseif ($value['order_status_id'] == 7)
-                                                            <td><i class="fa fa-times-circle" title="Complete"
-                                                                    style="color:red;"></i></td>
-                                                        @elseif ($value['order_status_id'] == 11)
-                                                            <td><i class="fa fa-check" title="Complete"
-                                                                    style="color:#51a351;"></i></td>
-                                                        @elseif ($value['order_status_id'] == 1)
-                                                            <td><i class="fa fa-fa fa-search" title="Complete"
-                                                                    style="color:#51a351;"></i></td>
-                                                        @endif
-                                                        <td><button class="orderdetail" value="{{ $value['order_id'] }}"><i class="fa fa-print"></i></button></td>
-                                                        <td><i class="fa fa-mobile"></i></td>
-                                                        <td><a href="{{$edit_url}}" style="color: #000000"><i class="fa fa-reply"></i></a></td>
-                                                    </tr>
-                                                @endforeach
                                             </tbody>
                                         </table>
-
                                     </div>
 
                                 </div>
@@ -482,9 +241,241 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script type="text/javascript">
+
+
+    $('document').ready(function(){
+        // var date = new Date();
+        // var strDate = "00:00 " + date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear();
+        // var endDate = "23:59 " + date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear();
+
+		$('#date1').val('Start Date');
+		$('#date2').val('End Date');
+
+        var currentRange = $('input[name="calender_tabs"]:checked').val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('getallorderdetails') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "currentRange":currentRange
+            },
+            beforeSend: function() {
+                $('.spinner').show();
+                $('#card-stats').html('');
+                $('.arrow-date').hide();
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if(response.success == 1)
+                {
+                    $('.spinner').hide();
+                    $('.arrow-date').show();
+
+                    $('#date1').val(response.startDate);
+		            $('#date2').val(response.endDate);
+
+                    $('#card-stats').html('');
+                    $('#card-stats').html(response.card);
+
+                    // $('#equictntbl').dataTable().fnClearTable();
+                    $('.tbody').html('');
+                    $('.table').dataTable().fnDestroy();
+                    $('.tbody').html(response.table_data);
+                    $('.table').dataTable();
+                }
+            }
+        });
+
+    });
+
+
+    // Get Order Details By Calendar Tabs
+    function calender_tabs(range) {
+
+        var currentRange = range;
+
+        $('#card-stats').html('');
+        $('.tbody').html('');
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('getallorderdetails') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "currentRange":currentRange
+            },
+            beforeSend: function() {
+                $('.spinner').show();
+                $('.table').dataTable().fnClearTable();
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if(response.success == 1)
+                {
+                    $('.spinner').hide();
+
+                    $('#date1').val(response.startDate);
+		            $('#date2').val(response.endDate);
+
+                    $('#card-stats').html('');
+                    $('#card-stats').html(response.card);
+
+                    $('.tbody').html('');
+                    $('.table').dataTable().fnDestroy();
+                    $('.tbody').html(response.table_data);
+                    $('.table').dataTable();
+                }
+            }
+        });
+    }
+
+
+    // Get Orders Details By Date
+    function onchangeDatepickerFillter(type){
+
+        var date_type = type;
+        var currentRange = $('input[name="calender_tabs"]:checked').val();
+        var startDate = $('#date1').val();
+		var endDate = $('#date2').val();
+
+        if(currentRange == 'year')
+        {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('getallorderdetailsbyYear') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "currentRange":currentRange,
+                    "start_date":startDate,
+                    "end_date":endDate,
+                    "date_type":date_type,
+                },
+                beforeSend: function() {
+                    $('.spinner').show();
+                    $('#DataTable').dataTable().fnClearTable();
+                    $('#card-stats').html('');
+                    $('.arrow-date').hide();
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if(response.success == 1)
+                    {
+                        var oldTab = $('.table').DataTable();
+                        oldTab.destroy();
+
+                        var table = $('.table').DataTable({
+                            processing: true,
+                            serverSide: true,
+                            ajax: {
+                                "url":"{{ route('getOrderListByYear') }}",
+                                "type":"POST",
+                                "data": {
+                                    "_token": "{{ csrf_token() }}",
+                                    "currentRange":currentRange,
+                                    "start_date":startDate,
+                                    "end_date":endDate,
+                                    "date_type":date_type,
+                                    }
+                            },
+                            columns: [
+                                {data: 'checkbox', name: 'checkbox',orderable: false, searchable: false},
+                                {data: 'type', name: 'type'},
+                                {data: 'order_id', name: 'order_id'},
+                                {data: 'store_name', name: 'store_name'},
+                                {data: 'customer_name', name: 'customer_name'},
+                                {data: 'order_total', name: 'order_total'},
+                                {data: 'date_added', name: 'date_added'},
+                                {data: 'order_status', name: 'order_status'},
+                                {data: 'order_print', name: 'order_print'},
+                                {data: 'order_sms', name: 'order_sms'},
+                                {data: 'order_reply', name: 'order_reply'},
+                            ],
+                        });
+
+                        $('.spinner').hide();
+                        $('.arrow-date').show();
+                        $('#date1').val(response.startDate);
+                        $('#date2').val(response.endDate);
+                        $('#card-stats').html('');
+                        $('#card-stats').html(response.card);
+                    }
+                }
+            });
+        }
+        else
+        {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('getallorderdetails') }}",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "currentRange":currentRange,
+                    "start_date":startDate,
+                    "end_date":endDate,
+                    "date_type":date_type,
+                },
+                beforeSend: function() {
+                    $('#card-stats').html('');
+                    // $('.arrow-date').hide();
+                    $('.spinner').show();
+                    $('.table').dataTable().fnClearTable();
+                },
+                dataType: "JSON",
+                success: function (response) {
+                    if(response.success == 1)
+                    {
+                        $('.spinner').hide();
+
+                        $('.arrow-date').show();
+
+                        $('#date1').val(response.startDate);
+                        $('#date2').val(response.endDate);
+
+                        $('#card-stats').html('');
+                        $('#card-stats').html(response.card);
+
+                        // $('#equictntbl').dataTable().fnClearTable();
+                        $('.tbody').html('');
+                        $('.table').dataTable().fnDestroy();
+                        $('.tbody').html(response.table_data);
+                        $('.table').dataTable();
+                    }
+                }
+            });
+        }
+
+
+    }
+
+
+
+    // Get Order Receipt By Order ID
+    function  getOrderReceipt(orderID){
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('getReceiptByOrderID') }}",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "order_id":orderID
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if(response.success == 1)
+                {
+                    $('#orderReciept .modal-content').html('');
+                    $('#orderReciept .modal-content').html(response.result);
+                    $('#orderReciept').modal('show');
+                }
+            }
+        });
+
+    }
+
+
     // Select All Checkbox
     $(document).on("click", "#delall", function(e) {
-
         if ($(this).is(':checked', true)) {
             $(".delall").prop('checked', true);
         } else {
@@ -548,59 +539,6 @@
     $(function() {
         $('input[name="daterange"]').daterangepicker();
     });
-
-    function calender_tabs(values) {
-
-        $.ajax({
-            type: "post",
-            url: "{{ route('getallorderdetails') }}",
-            data: {
-                values: values,
-            },
-            dataType: "json",
-            success: function(response) {
-
-                var table ='';
-                $('#card-stats').html('');
-                $('#card-stats').html(response.html);
-
-                $.each(response.tabledata, function (index, val) {
-                    table +='<tr>';
-                    table +='<td><input type="checkbox" name="checkall" class="delall" value='+val.order_id+'></td>';
-                    if (val.shipping_method == 'collection'){
-                        table +='<td><i class="fa fa-shopping-basket"></i></td>';
-                    }else{
-                        table +='<td><i class="fa fa-motorcycle"></i></td>';
-                    }
-                    table +='<td>'+ val.order_id +'</td>';
-                    table +='<td>'+ val.store_name +'</td>';
-                    table +='<td>'+ val.firstname +'</td>';
-                    table +='<td>'+ val.total+ '</td>';
-                    table +='<td>'+ val.date_added +'</td>';
-                    if(val.order_status_id == 15){
-                        table +='<td><i class="fa fa-check-circle" title="Accepted" style="color:#14bd07;"></td>';
-                    }else if (val.order_status_id == 5) {
-                        table +='<td><i class="fa fa-thumbs-up" title="Complete" style="color:#51a351;"></i></td>';
-                    }else if (val.order_status_id == 2) {
-                        table +='<td><i class="fa fa-loader" title="Complete" style="color:#51a351;"></i></td>';
-                    }else if (val.order_status_id == 7) {
-                        table +='<td><i class="fa fa-times-circle" title="Complete" style="color:red;"></i></td>';
-                    }else if (val.order_status_id == 11) {
-                        table +='<td><i class="fa fa-check" title="Complete" style="color:#51a351;"></i></td>';
-                    }else if (val.order_status_id == 1) {
-                        table +='<td><i class="fa fa-fa fa-search" title="Complete" style="color:#51a351;"></i></td>';
-                    }
-                    table +='<td><i class="fa fa-print"></i></td>';
-                    table +='<td><i class="fa fa-mobile"></i></td>';
-                    table +='<td><i class="fa fa-reply"></td>';
-                    table +='</tr>';
-                });
-
-                $('.tbody').html('');
-                $('.tbody').html(table);
-            }
-        });
-    }
 
     $('.orderdetail').click(function (e) {
         e.preventDefault();

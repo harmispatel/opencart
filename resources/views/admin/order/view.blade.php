@@ -69,8 +69,12 @@
                                     Details
                                 </h3>
                                 <div class="container" style="text-align: right">
+                                    <form action="{{route('invoice')}}" method="POST"  id="invoice">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="invoiceIds" id="inoiveIdsArr" value="{{ $orders->order_id }}">
+                                    </form>
                                     @if(check_user_role(71) == 1)
-                                        <a href="{{ route('invoice',$orders->order_id) }}" target="_blank" class="btn btn-sm btn-info ml-auto">
+                                        <a target="_blank" class="btn btn-sm btn-info ml-auto" id="invoiceBtn">
                                             <i class="fa fa-print"></i>
                                         </a>
                                     @endif
@@ -523,6 +527,13 @@
         });
     }
     // End Genrate Invoice
+
+    // Invoice Orders
+    $('#invoiceBtn').click(function()
+    {
+        $('#invoice').submit();
+    });
+    // Invoice Orders
 
 </script>
 {{-- END SCRIPT --}}
