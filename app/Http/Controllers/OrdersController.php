@@ -22,6 +22,7 @@ use App\Models\Store;
 use App\Models\VoucherThemeDescription;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Mail;
 
 class OrdersController extends Controller
 {
@@ -506,7 +507,7 @@ class OrdersController extends Controller
             $data['storeAddr'] = isset($store_addr->value) ? $store_addr->value : '';
             $data['storePhone'] = isset($store_tele->value) ? $store_tele->value : '';
 
-            \Mail::send('admin.mail_format.orderstatus', ['data' => $data],
+            Mail::send('admin.mail_format.orderstatus', ['data' => $data],
             function ($message) use ($data)
             {
                 $message->from('hasankaradiya1626@gmail.com');
@@ -583,16 +584,25 @@ class OrdersController extends Controller
 
 
     // Function for Print Invoice
-    public function invoice($id)
+    // public function invoice($id)
+    // {
+
+    //     $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
+
+    //     $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
+
+    //     $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
+
+    //     return view('admin.order.invoice', ["orders" => $orders, 'productorders' => $productorders, 'ordertotal' => $ordertotal]);
+    // }
+    public function invoice(Request $request)
     {
+        $invoiceIds = explode(',', $request->invoiceIds);
 
-        $orders = Orders::where('oc_order.order_id', '=', $id)->join('oc_order_product', 'oc_order.order_id', '=', 'oc_order_product.order_id')->first();
+        $order = Orders::with(['hasManyOrderProduct','hasManyOrderTotal'])->whereIn('oc_order.order_id', $invoiceIds)->get();
 
-        $productorders = OrderProduct::where('oc_order_product.order_id', '=', $id)->get();
+        return view('admin.order.invoice', ["order" => $order]);
 
-        $ordertotal = OrderTotal::where('oc_order_total.order_id', '=', $id)->get();
-
-        return view('admin.order.invoice', ["orders" => $orders, 'productorders' => $productorders, 'ordertotal' => $ordertotal]);
     }
 
 

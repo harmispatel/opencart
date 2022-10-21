@@ -58,6 +58,15 @@
                                     Orders List
                                 </h3>
                                 <div class="container" style="text-align: right">
+                                    <form action="{{route('invoice')}}" method="POST"  id="invoice">
+                                          {{ csrf_field() }}
+                                          <input type="hidden" name="invoiceIds" id="inoiveIdsArr" value="">
+                                    </form>
+                                    @if(check_user_role(71) == 1)
+                                        <a target="_blank" class="btn btn-sm btn-info ml-auto" id="invoiceBtn">
+                                            <i class="fa fa-print"></i>
+                                        </a>
+                                    @endif
                                     @if(check_user_role(38) == 1)
                                         <a href="{{ route('ordersinsert') }}" class="btn btn-sm btn-primary ml-auto">
                                             <i class="fa fa-plus"></i>
@@ -65,7 +74,7 @@
                                     @endif
 
                                     @if(check_user_role(41) == 1)
-                                        <a href="#" class="btn btn-sm btn-danger ml-1 deletesellected">
+                                        <a href="#" class="btn btn-sm btn-danger ml-auto deletesellected">
                                             <i  class="fa fa-trash"></i>
                                         </a>
                                     @endif
@@ -242,6 +251,29 @@
         }
     });
     // End Delete Orders
+
+
+    // Invoice Orders
+    $('#invoiceBtn').click(function()
+    {
+        var checkValues = $('.del_all:checked').map(function()
+        {
+            return $(this).val();
+        }).get();
+
+        if (checkValues != '')
+        {
+            $('#inoiveIdsArr').val('');
+            $('#inoiveIdsArr').val(checkValues);
+
+            $('#invoice').submit();
+        }
+        else
+        {
+            swal("Please select atleast One Order", "", "warning");
+        }
+    });
+    // Invoice Orders
 
 </script>
 <!-- End Scripts -->
