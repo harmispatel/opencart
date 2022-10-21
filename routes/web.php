@@ -175,6 +175,9 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::get('orders', [OrdersController::class, 'index'])->name('orders');
     Route::get('ordersinsert', [OrdersController::class, 'ordersinsert'])->name('ordersinsert');
     Route::post('getorders', [OrdersController::class, 'getorders'])->name('getorders');
+    Route::post('adminaddtocart', [OrdersController::class, 'adminaddtocart'])->name('adminaddtocart');
+    Route::post('deleteproductcart', [OrdersController::class, 'deleteproductcart'])->name('deleteproductcart');
+    Route::post('applycouponvoucher', [OrdersController::class, 'applycouponvoucher'])->name('applycouponvoucher');
     Route::get('vieworder/{id}', [OrdersController::class, 'vieworder'])->name('vieworder');
     Route::get('editorder', [OrdersController::class, 'editorder'])->name('editorder');
     Route::post('updateorder', [OrdersController::class, 'updateorder'])->name('updateorder');

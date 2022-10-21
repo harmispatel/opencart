@@ -358,7 +358,7 @@ class CustomerOrder extends Controller
                                     $toppings = [];
                                     if(isset($cart['topping']) && !empty($cart['topping'])){
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+'.$topping.'</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     }
@@ -394,7 +394,7 @@ class CustomerOrder extends Controller
                                     $toppings = [];
                                     if(isset($cart['topping']) && !empty($cart['topping'])){
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+'.$topping.'</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+'.$topping.'</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     }

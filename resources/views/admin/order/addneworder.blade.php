@@ -21,6 +21,24 @@
 
 <link rel="stylesheet" href="{{ asset('public/plugins/sweetalert2/sweetalert2.min.css') }}">
 
+@php
+
+    $admincartdata=session()->get('admincart');
+    $service=session()->get('service');
+    $admin_couponcode=session()->get('admin_couponcode');
+    $admin_couponcode_name=session()->get('admin_couponcode_name');
+    $admin_vouchers_name=session()->get('admin_vouchers_name');
+    $admin_vouchers_amount=session()->get('admin_vouchers_amount');
+
+    $sub_total = session()->get('admincarttotal');
+
+    $totals = $sub_total - $admin_couponcode - $admin_vouchers_amount + $service;
+
+
+
+@endphp
+
+
 <!-- Section of Add Order -->
 <section>
     <div class="content-wrapper">
@@ -109,7 +127,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="store">Store</label>
+                                                            <label for="store"><span class="text-danger">*</span>Store</label>
                                                             <select class="form-control {{ ($errors->has('storename')) ? 'is-invalid' : '' }}" name="storename" id="store">
                                                                 <option value="">Default</option>
                                                                 @foreach ($stores as $store)
@@ -129,7 +147,7 @@
                                                         <div class="form-group" id="#search">
                                                             <label for="cname">Customer</label>
                                                             <input type="text" id="cname" name="cname" value="{{ old('cname') }}" class="form-control" placeholder="Search & Select Customer">
-                                                            <input type="hidden" id="customerid" class="form-control" value="">
+                                                            <input type="hidden" name="customerid" id="customerid" class="form-control" value="">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-1">
@@ -170,8 +188,6 @@
                                                                     {{ $errors->first('firstname') }}
                                                                 </div>
                                                             @endif
-
-
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -455,7 +471,7 @@
                                                         <table class="table table-bordered table-striped">
                                                             <thead>
                                                                 <tr>
-                                                                    <th></th>
+                                                                    <th>Delete</th>
                                                                     <th>Product</th>
                                                                     <th>Model</th>
                                                                     <th>Quantity</th>
@@ -463,12 +479,69 @@
                                                                     <th>Total</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="6" class="text-center">
-                                                                        Products Not Avavilable
-                                                                    </td>
-                                                                </tr>
+                                                            <tbody class="tbody">
+                                                                @if(isset($admincartdata))
+                                                                @php
+                                                                    $total = 0;
+                                                                @endphp
+                                                                    @foreach ($admincartdata as $value)
+                                                                    <tr>
+                                                                        <td>
+                                                                            <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
+                                                                            <i class="fa fa-trash" ></i>
+                                                                            </a>
+                                                                       </td>
+                                                                        <td>{{$value['p_name']}}</td>
+                                                                        <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
+                                                                        <td>{{ $value['p_quantity'] }}</td>
+                                                                        <td>{{ $value['p_price'] }}</td>
+                                                                        <td>{{ $value['total'] }}</td>
+                                                                    </tr>
+                                                                    @php
+                                                                         $total +=$value['total'];
+                                                                    @endphp
+                                                                    @endforeach
+                                                                    <tr>
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>SubTotal</b></td>
+                                                                        <td>{{$total}}</td>
+                                                                    </tr>
+                                                                    @if(!empty($admin_couponcode) || $admin_couponcode != '' &&  !empty($admin_couponcode_name) || $admin_couponcode_name != '')
+                                                                    <tr class="coupon">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Coupon({{$admin_couponcode_name}})</b></td>
+                                                                        <td> - {{  $admin_couponcode}}</td>
+                                                                    </tr>
+                                                                    @endif
+                                                                    @if(!empty($admin_vouchers_amount) || $admin_vouchers_amount != '' &&  !empty($admin_vouchers_name) || $admin_vouchers_name != '')
+                                                                    <tr class="voucher">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Voucher({{$admin_vouchers_name}})</b></td>
+                                                                        <td> - {{  $admin_vouchers_amount}}</td>
+                                                                    </tr>
+                                                                    @endif
+                                                                    @if(!empty($service) || $service != '')
+                                                                    <tr class="service_charge">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Service_Charge</b></td>
+                                                                        <td> {{  $service}}</td>
+                                                                    </tr>
+                                                                    @endif
+                                                                    @if(!empty($totals) || $totals != '')
+                                                                    <tr class="Total">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Total</b></td>
+                                                                        <td>{{  $totals}}</td>
+                                                                    </tr>
+                                                                    @endif
+
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="6" class="text-center">
+                                                                            Products Not Avavilable
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -499,14 +572,14 @@
                                                                 <tr>
                                                                     <td>Quantity</td>
                                                                     <td>
-                                                                        <input class="form-control" type="text" value="1" placeholder="Qty.">
+                                                                        <input class="form-control" name="quantity" type="text"  placeholder="Qty.">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
                                                                     <td colspan="2" class="text-center">
-                                                                        <a class="btn btn-sm btn-primary">
+                                                                        <a class="btn btn-sm btn-primary" onclick="add_product()">
                                                                             ADD PRODUCT
                                                                         </a>
                                                                     </td>
@@ -529,7 +602,7 @@
                                                         <table class="table table-bordered table-striped">
                                                             <thead>
                                                                 <tr>
-                                                                    <th></th>
+                                                                    <th>Delete</th>
                                                                     <th>Product</th>
                                                                     <th>Model</th>
                                                                     <th>Quantity</th>
@@ -537,13 +610,70 @@
                                                                     <th>Total</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="6" class="text-center">
-                                                                        Products Not Avavilable
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
+                                                                <tbody class="tbody">
+                                                                    @if(isset($admincartdata))
+                                                                    @php
+                                                                        $total = 0;
+                                                                    @endphp
+                                                                        @foreach ($admincartdata as $value)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
+                                                                                <i class="fa fa-trash" ></i>
+                                                                                </a>
+                                                                           </td>
+                                                                            <td>{{$value['p_name']}}</td>
+                                                                            <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
+                                                                            <td>{{ $value['p_quantity'] }}</td>
+                                                                            <td>{{ $value['p_price'] }}</td>
+                                                                            <td>{{ $value['total'] }}</td>
+                                                                        </tr>
+                                                                        @php
+                                                                             $total +=$value['total'];
+                                                                        @endphp
+                                                                        @endforeach
+                                                                        <tr>
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>SubTotal</b></td>
+                                                                            <td>{{$total}}</td>
+                                                                        </tr>
+                                                                        @if((!empty($admin_couponcode) || $admin_couponcode != '') &&  (!empty($admin_couponcode_name) || $admin_couponcode_name != ''))
+                                                                        <tr class="coupon">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Coupon({{$admin_couponcode_name}})</b></td>
+                                                                            <td> - {{  $admin_couponcode}}</td>
+                                                                        </tr>
+                                                                        @endif
+                                                                        @if((!empty($admin_vouchers_amount) || $admin_vouchers_amount != '') && ( !empty($admin_vouchers_name) || $admin_vouchers_name != ''))
+                                                                        <tr class="voucher">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Voucher({{$admin_vouchers_name}})</b></td>
+                                                                            <td> - {{  $admin_vouchers_amount}}</td>
+                                                                        </tr>
+                                                                        @endif
+                                                                        @if(!empty($service) || $service != '')
+                                                                        <tr class="service_charge">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Service_Charge</b></td>
+                                                                            <td> {{  $service}}</td>
+                                                                        </tr>
+                                                                        @endif
+                                                                        @if(!empty($totals) || $totals != '')
+                                                                        <tr class="Total">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Total</b></td>
+                                                                            <td>{{  $totals}}</td>
+                                                                        </tr>
+                                                                        @endif
+
+                                                                    @else
+                                                                        <tr>
+                                                                            <td colspan="6" class="text-center">
+                                                                                Products Not Avavilable
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endif
+                                                                </tbody>
                                                         </table>
                                                     </div>
                                                     <div class="col-md-12">
@@ -627,7 +757,7 @@
                                                         <table class="table table-bordered table-striped">
                                                             <thead>
                                                                 <tr>
-                                                                    <th></th>
+                                                                    <th>Delete</th>
                                                                     <th>Product</th>
                                                                     <th>Model</th>
                                                                     <th>Quantity</th>
@@ -635,12 +765,71 @@
                                                                     <th>Total</th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td colspan="6" class="text-center">
-                                                                        Products Not Avavilable
-                                                                    </td>
-                                                                </tr>
+                                                            <tbody class="tbody">
+                                                                @if(isset($admincartdata))
+                                                                @php
+                                                                    $total = 0;
+                                                                @endphp
+                                                                    @foreach ($admincartdata as $value)
+                                                                    <tr>
+                                                                            <td>
+                                                                            <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
+                                                                            <i class="fa fa-trash" ></i>
+                                                                            </a>
+                                                                       </td>
+                                                                        <td>{{$value['p_name']}}</td>
+                                                                        <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
+                                                                        <td>{{ $value['p_quantity'] }}</td>
+                                                                        <td>{{ $value['p_price'] }}</td>
+                                                                        <td>{{ $value['total'] }}</td>
+                                                                    </tr>
+                                                                    @php
+                                                                         $total +=$value['total'];
+                                                                    @endphp
+                                                                    @endforeach
+                                                                    <tr class="subtotal">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>SubTotal</b></td>
+                                                                        <td>{{$total}}</td>
+                                                                    </tr>
+                                                                    @if(!empty($admin_couponcode) || $admin_couponcode != '' &&  !empty($admin_couponcode_name) || $admin_couponcode_name != '')
+                                                                    <tr class="coupon">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Coupon({{$admin_couponcode_name}})</b></td>
+                                                                        <td> - {{  $admin_couponcode}}</td>
+                                                                    </tr>
+                                                                    @endif
+                                                                    @if(!empty($admin_vouchers_amount) || $admin_vouchers_amount != '' &&  !empty($admin_vouchers_name) || $admin_vouchers_name != '')
+                                                                    <tr class="voucher">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Voucher({{$admin_vouchers_name}})</b></td>
+                                                                        <td> - {{  $admin_vouchers_amount}}</td>
+                                                                    </tr>
+                                                                    @endif
+                                                                    @if(!empty($service) || $service != '')
+                                                                    <tr class="service_charge">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Service_Charge</b></td>
+                                                                        <td> {{  $service}}</td>
+                                                                    </tr>
+                                                                    @endif
+                                                                    @if(!empty($totals) || $totals != '')
+                                                                    <tr class="Total">
+                                                                        <td colspan="4"></td>
+                                                                        <td><b>Total</b></td>
+                                                                        <td>{{  $totals}}</td>
+                                                                    </tr>
+                                                                    @endif
+
+
+
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="6" class="text-center">
+                                                                            Products Not Avavilable
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -657,34 +846,41 @@
                                                                     <td>
                                                                         <select name="shipping_method" id="shipping_method" class="form-control">
                                                                             <option value=""> -- Select -- </option>
-                                                                            <option value="1">Abc</option>
+                                                                            <option value="collection">collection</option>
+                                                                            <option value="delivery">delivery</option>
                                                                         </select>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td>Payment Method</td>
+                                                                    <td><span class="text-danger">*</span>Payment Method</td>
                                                                     <td>
                                                                         <select name="payment_method" id="payment_method" class="form-control {{ ($errors->has('payment_method')) ? 'is-invalid' : '' }}">
                                                                             <option value=""> -- Select -- </option>
-                                                                            <option value="1">Gpay</option>
+                                                                            <option value="3">cod</option>
+                                                                            <option value="2">paypal</option>
+                                                                            <option value="1">stripe</option>
                                                                         </select>
                                                                         @if($errors->has('payment_method'))
-                                                                        <div class="invalid-feedback">
-                                                                            {{ $errors->first('payment_method') }}
-                                                                        </div>
-                                                                    @endif
+                                                                            <div class="invalid-feedback">
+                                                                                {{ $errors->first('payment_method') }}
+                                                                            </div>
+                                                                        @endif
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Coupon</td>
                                                                     <td>
                                                                         <input type="text" name="coupon" id="coupon" class="form-control">
+                                                                        <p class="text-danger" id="couponError" style="text-align: left"></p>
+                                                                        <p class="text-success" id="couponSuccess" style="text-align: left"></p>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Voucher</td>
                                                                     <td>
                                                                         <input type="text" name="voucher" id="voucher" class="form-control">
+                                                                        <p class="text-danger" id="voucherError" style="text-align: left"></p>
+                                                                        <p class="text-success" id="voucherSuccess" style="text-align: left"></p>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -719,7 +915,7 @@
                                                             <tfoot>
                                                                 <tr>
                                                                     <td colspan="2" class="text-center">
-                                                                        <a class="btn btn-sm btn-primary">
+                                                                        <a class="btn btn-sm btn-primary" onclick="updateTotal();">
                                                                             UPDATE TOTALS
                                                                         </a>
                                                                     </td>
@@ -957,6 +1153,106 @@
             results: function() {}
         }
     });
+
+      function add_product(){
+          var product_id =$("#productid").val();
+          var store_id =$("#store_id").val();
+          var quantity = $("input[name=quantity]").val();
+
+          if (product_id != '' && quantity != '') {
+
+              $.ajax({
+                type: "post",
+                url: "{{ route('adminaddtocart') }}",
+                data: {
+                    product_id : product_id,
+                    quantity   : quantity,
+                    store_id   : store_id,
+                },
+                dataType: "json",
+                success: function (response) {
+                  $('.tbody').html('');
+                  $('.tbody').html(response.html);
+                }
+              });
+          }else{
+            alert('Product and quantity has been required')
+          }
+      }
+
+      function deleteproductcart(id){
+        var pro_id =id;
+         $.ajax({
+            type: "post",
+            url: "{{ route('deleteproductcart') }}",
+            data: {
+                pro_id : pro_id,
+            },
+            dataType: "json",
+            success: function (response) {
+                $('.tbody').html('');
+                $('.tbody').html(response.html);
+            }
+         });
+      }
+       function updateTotal(){
+
+          var coupon = $("input[name='coupon']").val();
+          var voucher = $("input[name='voucher']").val();
+          var store_id =$('#store :selected').val();
+          var shipping_method =$('#shipping_method :selected').val();
+          var servicecharge =$('#payment_method :selected').val();
+          var userid = $("#customerid").val();
+
+
+          $.ajax({
+            type: "post",
+            url: "{{ route('applycouponvoucher') }}",
+            data: {
+                coupon   : coupon,
+                voucher  : voucher,
+                store_id : store_id,
+                userid   : userid,
+                shipping_method : shipping_method,
+                servicecharge : servicecharge,
+            },
+            dataType: "json",
+            success: function (response) {
+
+                if(response.error == 1)
+                {
+                    $('#couponError').html('');
+                    $('#couponError').append(response.error_msg);
+                    setTimeout(() => {
+                        $('#couponError').html('');
+                    }, 10000);
+                }
+                if(response.errors == 1)
+                {
+                    $('#voucherError').html('');
+                    $('#voucherError').append(response.error_msg_voucher);
+                    setTimeout(() => {
+                        $('#voucherError').html('');
+                    }, 10000);
+                }
+
+                $('.subtotal').html('');
+                $('.subtotal').html(response.subtotal);
+                $('.coupon').html('');
+                $('.coupon').html(response.coupons);
+                $('.voucher').html('');
+                $('.voucher').html(response.vouchers);
+                $('.service_charge').html('');
+                $('.service_charge').html(response.service);
+                $('.Total').html('');
+                $('.Total').html(response.totals);
+
+
+
+            }
+          });
+
+       }
 
 </script>
 <!-- END SCRIPT -->
