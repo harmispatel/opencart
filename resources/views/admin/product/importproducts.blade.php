@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
-                        {{-- <div class="card card-primary ">
+                        <div class="card card-primary ">
                             <h1><i class="fa fa-image"></i>Csv Import</h1>
                             <form action="" method="POST" enctype="multipart/form-data">
 
@@ -55,8 +55,8 @@
                                     <button type="submit" id="submit" name="import"class="btn btn-primary">Import</button>
                                 </div>
                             </form>
-                        </div> --}}
-                        <h1>Coming Soon..</h1>
+                        </div>
+                        {{-- <h1>Coming Soon..</h1> --}}
                         {{-- End Card --}}
                     </div>
                 </div>
