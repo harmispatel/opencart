@@ -250,7 +250,6 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('getReceiptByOrderID',[NewOrderController::class, 'getReceiptByOrderID'])->name('getReceiptByOrderID');
     Route::post('deleteorder',[NewOrderController::class, 'deleteorder'])->name('deleteorder');
     Route::post('orderdetail',[NewOrderController::class, 'orderdetail'])->name('orderdetail');
-    Route::post('orderfilterdetail',[NewOrderController::class, 'orderfilterdetail'])->name('orderfilterdetail');
 
 
 
