@@ -294,6 +294,8 @@
     function calender_tabs(range) {
 
         var currentRange = range;
+        // $('#date1').val('');
+        // $('#date2').val('');
 
         $('#card-stats').html('');
         $('.tbody').html('');
@@ -307,6 +309,7 @@
             },
             beforeSend: function() {
                 $('.spinner').show();
+                $('.arrow-date').hide();
                 $('.table').dataTable().fnClearTable();
             },
             dataType: "JSON",
@@ -314,7 +317,7 @@
                 if(response.success == 1)
                 {
                     $('.spinner').hide();
-
+                    $('.arrow-date').show();
                     $('#date1').val(response.startDate);
 		            $('#date2').val(response.endDate);
 
@@ -353,9 +356,9 @@
                 },
                 beforeSend: function() {
                     $('.spinner').show();
+                    $('.arrow-date').hide();
                     $('#DataTable').dataTable().fnClearTable();
                     $('#card-stats').html('');
-                    $('.arrow-date').hide();
                 },
                 dataType: "JSON",
                 success: function (response) {
@@ -417,7 +420,7 @@
                 },
                 beforeSend: function() {
                     $('#card-stats').html('');
-                    // $('.arrow-date').hide();
+                    $('.arrow-date').hide();
                     $('.spinner').show();
                     $('.table').dataTable().fnClearTable();
                 },

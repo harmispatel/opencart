@@ -2199,6 +2199,18 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
                 });
             }
 
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
+
 
         }
         elseif ($range == 'month')
@@ -2433,6 +2445,17 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
                 });
             }
 
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
 
         }
         elseif($range == 'year')
@@ -2670,6 +2693,18 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
                 });
             }
 
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
+
         }
     }
     else
@@ -2684,35 +2719,37 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
             {
                 // Current Date
                 $start_date = date('Y-m-d 00:00:00', strtotime("+1 day", strtotime($start_d)));
+                $end_date = date('Y-m-d 23:59:00', strtotime("+1 day", strtotime($start_d)));
             }
             elseif($dateType == 'pre')
             {
                 // Current Date
                 $start_date = date('Y-m-d 00:00:00', strtotime("-1 day", strtotime($start_d)));
+                $end_date = date('Y-m-d 23:59:00', strtotime("-1 day", strtotime($start_d)));
             }
 
             // Order Details
-            $orders_query = Orders::where('date_added','>=',$start_date);
+            $orders_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Total Accepted Orders
-            $accepted_order_query = Orders::where('date_added','>=',$start_date);
+            $accepted_order_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Order Total
-            $total_query = Orders::where('date_added','>=',$start_date);
+            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Total Collections Order
-            $collection_count_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','collection');
+            $collection_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','collection');
+            $collection_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','delivery');
+            $delivery_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','delivery');
+            $delivery_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',0);
+            $guest_customer_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0);
             // Total of Guest Customers
-            $guest_customer_total_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',0);
+            $guest_customer_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0);
             // Total Customers
-            $customer_count_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',1);
+            $customer_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1);
             // Total of Customers
-            $customer_total_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',1);
+            $customer_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1);
 
 
             // Store ID Query
@@ -2796,10 +2833,8 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
             {
                 // Start Date
                 $start_date = date('Y-m-d 00:00:00', strtotime("-7 day", strtotime($start_d)));
-
                 // End Date
                 $end_date = date('Y-m-d 23:59:00', strtotime("+6 day", strtotime($start_date)));
-
             }
 
             // Order Details
@@ -2807,7 +2842,7 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
             // Total Accepted Orders
             $accepted_order_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Order Total
-            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->sum('total');
+            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Total Collections Order
             $collection_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total of Collection Orders
@@ -2915,7 +2950,7 @@ function getorderdetails($range,$customDate,$type,$orderpayment,$status){
             // Total Accepted Orders
             $accepted_order_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Order Total
-            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->sum('total');
+            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Total Collections Order
             $collection_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total of Collection Orders
