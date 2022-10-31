@@ -563,39 +563,63 @@
     function filter(val,method){
         if(method == 'type')
         {
-        var type =val;
-        var orderpayment =$("#orderpayment :selected").val();
-        var status =$("#status :selected").val();
+            var type =val;
+            var orderpayment =$("#orderpayment :selected").val();
+            var status =$("#status :selected").val();
         }
         else if(method == 'orderpayment')
         {
-        var type =$("#type :selected").val();
-        var orderpayment = val;
-        var status =$("#status :selected").val();
+            var type =$("#type :selected").val();
+            var orderpayment = val;
+            var status =$("#status :selected").val();
         }
         else if(method == 'status')
         {
-        var type =$("#type :selected").val();
-        var orderpayment =$("#orderpayment :selected").val();
-        var status =val;
+            var type =$("#type :selected").val();
+            var orderpayment =$("#orderpayment :selected").val();
+            var status =val;
         }
 
+
+        var currentRange = $('input[name="calender_tabs"]:checked').val();
+
+        $('#card-stats').html('');
+        $('.tbody').html('');
+
         $.ajax({
-            type: "post",
-            url: "{{route('orderfilterdetail')}}",
+            type: "POST",
+            url: "{{ route('getallorderdetails') }}",
             data: {
+                "_token": "{{ csrf_token() }}",
+                "currentRange":currentRange,
                 "type" : type,
                 "orderpayment" : orderpayment ,
                 "status" : status,
             },
-            dataType: "json",
+            beforeSend: function() {
+                $('.spinner').show();
+                $('.table').dataTable().fnClearTable();
+            },
+            dataType: "JSON",
             success: function (response) {
-                $('#table').html('');
-                $('#table').html(response.tabledata);
+                if(response.success == 1)
+                {
+                    $('.spinner').hide();
+
+                    $('#date1').val(response.startDate);
+		            $('#date2').val(response.endDate);
+
+                    $('#card-stats').html('');
+                    $('#card-stats').html(response.card);
+
+                    $('.tbody').html('');
+                    $('.table').dataTable().fnDestroy();
+                    $('.tbody').html(response.table_data);
+                    $('.table').dataTable();
+                }
             }
         });
 
     }
-    $('.table').DataTable();
 </script>
 {{-- End Script Section --}}

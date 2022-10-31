@@ -1711,7 +1711,7 @@ function getGeneralTotals($range)
 }
 
 
-function getorderdetails($range,$customDate){
+function getorderdetails($range,$customDate,$type,$orderpayment,$status){
 
     $startDate = '';
     $endDate = '';
@@ -1726,37 +1726,241 @@ function getorderdetails($range,$customDate){
             $startDate = date('Y-m-d 00:00:00');
 
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->get();
-
+            $orders_query = Orders::where('date_added','>=',$startDate);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->count();
-
+            $accepted_order_query = Orders::where('date_added','>=',$startDate);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->sum('total');
-
+            $total_query = Orders::where('date_added','>=',$startDate);
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::where('date_added','>=',$startDate)->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::where('date_added','>=',$startDate)->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::where('date_added','>=',$startDate)->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::where('date_added','>=',$startDate)->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('customer_group_id',0)->count();
-
+            $guest_customer_count_query = Orders::where('date_added','>=',$startDate)->where('customer_group_id',0);
             // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_total_query = Orders::where('date_added','>=',$startDate)->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::where('date_added','>=',$startDate)->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$startDate)->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::where('date_added','>=',$startDate)->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+
+            // Delivery Type Query
+            if(!empty($type))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+            }
+
+
+            // Payment Type Query
+            if(!empty($orderpayment))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+            }
+
+
+            // Order Status Query
+            if(!empty($status))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+            }
+
+
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
+
 
         }
         elseif ($range == 'week')
@@ -1768,42 +1972,234 @@ function getorderdetails($range,$customDate){
 
             // Start Date
             $startDate = date("Y-m-d 00:00:00",strtotime($this_week_sd));
-
             // Enddate
             $endDate = date('Y-m-d 00:00:00', strtotime($this_week_ed . ' +1 day'));
 
+
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->get();
-
+            $orders_query = Orders::whereBetween('date_added', [$startDate, $endDate]);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->count();
-
+            $accepted_order_query = Orders::whereBetween('date_added', [$startDate, $endDate]);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->sum('total');
-
+            $total_query = Orders::whereBetween('date_added', [$startDate, $endDate]);
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',0)->count();
-
+            $guest_customer_count_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',0);
             // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_total_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::whereBetween('date_added', [$startDate, $endDate])->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+
+            // Delivery Type Query
+            if(!empty($type))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+            }
+
+
+            // Payment Type Query
+            if(!empty($orderpayment))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+            }
+
+
+            // Order Status Query
+            if(!empty($status))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+            }
+
+
         }
         elseif ($range == 'month')
         {
@@ -1813,38 +2209,230 @@ function getorderdetails($range,$customDate){
             // End Date of this Month
             $lastDate_this_month  = date('Y-m-t 23:59:59');
 
+
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->get();
-
+            $orders_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month]);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->count();
-
+            $accepted_order_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month]);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->sum('total');
-
+            $total_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month]);
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',0)->count();
-
+            $guest_customer_count_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',0);
             // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_total_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::whereBetween('date_added', [$startDate_this_month, $lastDate_this_month])->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+
+            // Delivery Type Query
+            if(!empty($type))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+            }
+
+
+            // Payment Type Query
+            if(!empty($orderpayment))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+            }
+
+
+            // Order Status Query
+            if(!empty($status))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+            }
+
 
         }
         elseif($range == 'year')
@@ -1858,38 +2446,229 @@ function getorderdetails($range,$customDate){
             $this_year_strt = $this_year_ini->format('Y-m-d 00:00:00');
             $this_year_end = $this_year_end->format('Y-m-d 23:59:59');
 
+
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->get();
-
+            $orders_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end]);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->count();
-
+            $accepted_order_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end]);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->sum('total');
-
+            $total_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end]);
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',0)->count();
-
+            $guest_customer_count_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('customer_group_id',0);
             // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_total_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$this_year_strt,  $this_year_end])->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::whereBetween('date_added', [$this_year_strt, $this_year_end])->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+
+            // Delivery Type Query
+            if(!empty($type))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($type) {
+                    $q->where("shipping_method", $type);
+                });
+            }
+
+
+            // Payment Type Query
+            if(!empty($orderpayment))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($orderpayment) {
+                    $q->where("payment_code", $orderpayment);
+                });
+            }
+
+
+            // Order Status Query
+            if(!empty($status))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($status) {
+                    $q->where("order_status_id", $status);
+                });
+            }
 
         }
     }
@@ -1913,37 +2692,90 @@ function getorderdetails($range,$customDate){
             }
 
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->get();
-
+            $orders_query = Orders::where('date_added','>=',$start_date);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->count();
-
+            $accepted_order_query = Orders::where('date_added','>=',$start_date);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->sum('total');
-
+            $total_query = Orders::where('date_added','>=',$start_date);
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::where('date_added','>=',$start_date)->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('customer_group_id',0)->count();
-
+            $guest_customer_count_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',0);
             // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_total_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->where('date_added','>=',$start_date)->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::where('date_added','>=',$start_date)->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
+
 
             // Return Start Date
             $startDate = date('00:00 d-m-Y',strtotime($start_date));
@@ -1971,37 +2803,90 @@ function getorderdetails($range,$customDate){
             }
 
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->get();
-
+            $orders_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->count();
-
+            $accepted_order_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->sum('total');
-
+            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->sum('total');
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0)->count();
-
-            // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0);
+          // Total of Guest Customers
+            $guest_customer_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
+
 
             // Return Start Date
             $startDate = date('00:00 d-m-Y',strtotime($start_date));
@@ -2026,98 +2911,95 @@ function getorderdetails($range,$customDate){
             }
 
             // Order Details
-            $orders = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->get();
-
+            $orders_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Total Accepted Orders
-            $accepted_order = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->count();
-
+            $accepted_order_query = Orders::whereBetween('date_added', [$start_date, $end_date]);
             // Order Total
-            $total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->sum('total');
-
+            $total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->sum('total');
             // Total Collections Order
-            $collection_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection')->count();
-
+            $collection_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total of Collection Orders
-            $collection_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection')->sum('total');
-
+            $collection_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','collection');
             // Total Delivery Order
-            $delivery_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery')->count();
-
+            $delivery_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery');
             // Total of Delivery Orders
-            $delivery_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery')->sum('total');
-
+            $delivery_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('flag_post_code','delivery');
             // Total Guest Customers
-            $guest_customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0)->count();
-
-            // Total of Guest Customers
-            $guest_customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0)->sum('total');
-
+            $guest_customer_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0);
+          // Total of Guest Customers
+            $guest_customer_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',0);
             // Total Customers
-            $customer_count = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1)->count();
-
+            $customer_count_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1);
             // Total of Customers
-            $customer_total = Orders::where('store_id',$current_store_id)->whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1)->sum('total');
+            $customer_total_query = Orders::whereBetween('date_added', [$start_date, $end_date])->where('customer_group_id',1);
+
+
+            // Store ID Query
+            if($current_store_id != 0 || $current_store_id != '' || !empty($current_store_id))
+            {
+                // Order Details
+                $orders_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Accepted Orders
+                $accepted_order_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Order Total
+                $total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Collections Order
+                $collection_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Collection Orders
+                $collection_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Delivery Order
+                $delivery_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Delivery Orders
+                $delivery_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Guest Customers
+                $guest_customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Guest Customers
+                $guest_customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total Customers
+                $customer_count_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+                // Total of Customers
+                $customer_total_query->where(function ($q) use ($current_store_id) {
+                    $q->where("store_id", $current_store_id);
+                });
+            }
+
+            $orders = $orders_query->get();
+            $accepted_order = $accepted_order_query->count();
+            $total = $total_query->sum('total');
+            $collection_count = $collection_count_query->count();
+            $collection_total = $collection_total_query->sum('total');
+            $delivery_count = $delivery_count_query->count();
+            $delivery_total = $delivery_total_query->sum('total');
+            $guest_customer_count = $guest_customer_count_query->count();
+            $guest_customer_total = $guest_customer_total_query->sum('total');
+            $customer_count = $customer_count_query->count();
+            $customer_total = $customer_total_query->sum('total');
 
             // Return Start Date
             $startDate = date('00:00 d-m-Y',strtotime($start_date));
             $endDate = date('23:59 d-m-Y',strtotime($end_date));
 
         }
-        // elseif($range == 'year')
-        // {
-        //     if($dateType == 'next')
-        //     {
-        //         // Start Date
-        //         $start_date = date('Y-m-d 00:00:00', strtotime("+1 year", strtotime($start_d)));
-        //         // End Date
-        //         $end_date = date('Y-m-d 23:59:00', strtotime("+1 year - 1 day", strtotime($start_date)));
-        //     }
-        //     elseif($dateType == 'pre')
-        //     {
-        //         // Start Date
-        //         $start_date = date('Y-m-d 00:00:00', strtotime("-1 year", strtotime($start_d)));
-        //         // End Date
-        //         $end_date = date('Y-m-d 23:59:00', strtotime("+1 year - 1 day", strtotime($start_date)));
-        //     }
-
-        //     // Order Details
-        //     $orders = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,$end_date])->get();
-
-        //     // Total Accepted Orders
-        //     $accepted_order = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->count();
-
-        //     // Order Total
-        //     $total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->sum('total');
-
-        //     // Total Collections Order
-        //     $collection_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('shipping_method','collection')->count();
-
-        //     // Total of Collection Orders
-        //     $collection_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('shipping_method','collection')->sum('total');
-
-        //     // Total Delivery Order
-        //     $delivery_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('shipping_method','delivery')->count();
-
-        //     // Total of Delivery Orders
-        //     $delivery_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('shipping_method','delivery')->sum('total');
-
-        //     // Total Guest Customers
-        //     $guest_customer_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('customer_group_id',0)->count();
-
-        //     // Total of Guest Customers
-        //     $guest_customer_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('customer_group_id',0)->sum('total');
-
-        //     // Total Customers
-        //     $customer_count = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('customer_group_id',1)->count();
-
-        //     // Total of Customers
-        //     $customer_total = Orders::where('order_status_id','=',15)->whereBetween('date_added', [$start_date,  $end_date])->where('customer_group_id',1)->sum('total');
-
-        //     // Return Start Date
-        //     $startDate = date('00:00 d-m-Y',strtotime($start_date));
-        //     $endDate = date('23:59 d-m-Y',strtotime($end_date));
-
-        // }
 
     }
 
