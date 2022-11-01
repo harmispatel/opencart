@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ImportCategoryProduct;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductDescription;
@@ -17,6 +18,7 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Topping;
 use App\Models\ToppingCatOption;
 use App\Models\ToppingOption;
+use Maatwebsite\Excel\Facades\Excel;
 use DataTables;
 
 use Illuminate\Support\Facades\DB;
@@ -357,7 +359,16 @@ class ProductController extends Controller
 
         if($file_extension == 'csv' || $file_extension == 'xlsx' || $file_extension == 'xls')
         {
+            try
+            {
+                Excel::import(new ImportCategoryProduct, $request->file('csvFile')->store('files'));
 
+                return redirect()->route('importproducts')->with('success','Category and Products has been Imported SuccessFully..');
+            }
+            catch (\Exception $e)
+            {
+                return redirect()->route('importproducts')->with('file_error',$e->getMessage()." Please Check Demo File !");
+            }
         }
         else
         {

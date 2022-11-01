@@ -1,0 +1,4 @@
+model,sku,price,delivery_price,collection_price,name,description,caregory_name
+AB10,ITEM10,100,120,100,Onion Uttapam,,DEMOCAT
+AB11,ITEM11,150,170,150,Tomato Uttapam,,
+AB12,ITEM12,170,200,170,Mix Uttapam,,
