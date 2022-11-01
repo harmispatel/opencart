@@ -45,7 +45,14 @@
                         {{-- Card Start --}}
                         <div class="card card-primary ">
                             <div class="card-header" style="background: #f6f6f6">
-                                <h3 class="card-title pt-2 m-0 text-dark"><i class="fa fa-image"></i> &nbsp;Import CSV</h3>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h3 class="card-title pt-2 m-0 text-dark"><i class="fa fa-image"></i> &nbsp;Import CSV</h3>
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <a href="{{ public_url().'public/admin/demo_csv/demo.csv' }}" style="color: blue;"><i class="fa fa-download"></i download> (Download Demo File)</a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 @if(Session::has('file_error'))
