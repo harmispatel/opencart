@@ -47,6 +47,7 @@ class NewOrderController extends Controller
 
         session()->put('range',$currentRange);
 
+        $current_store_id = currentStoreId();
 
         $type = isset($request->type) ? $request->type : '';
         $orderpayment = isset($request->orderpayment) ? $request->orderpayment : '';
@@ -249,28 +250,28 @@ class NewOrderController extends Controller
             $html .='<div class="small-box bg-light">';
                 $html .=' <div class="inner">';
                     $html .='<div class="d-flex justify-content-between box-title">';
-                        $html .='<h3 style="color: #2c9ea9"> £ '.$total_accepted_orders.'</h3>';
+                        $html .='<h3 style="color: #2c9ea9">'.$total_accepted_orders.'</h3>';
                         $html .='<i class="fa fa-shopping-basket"></i>';
                     $html .='</div>';
                     $html .='<div class="row">';
                         $html .='<div class="col-md-6">';
                             $html .='<p style="font-size: 12px; margin: 0">';
-                                $html .='Delivery: £ '.$total_deliver_orders;
+                                $html .='Delivery: '.$total_deliver_orders;
                             $html .='</p>';
                         $html .='</div>';
                         $html .='<div class="col-md-6">';
                             $html .='<p style="font-size: 12px; margin: 0">';
-                                $html .='Cash Order: £ '.$total_accepted_orders;
+                                $html .='Cash Order: '.$total_accepted_orders;
                             $html .='</p>';
                         $html .='</div>';
                         $html .='<div class="col-md-6">';
                             $html .='<p style="font-size: 12px; margin: 0">';
-                                $html .='Collection: £ '.$total_collection_orders;
+                                $html .='Collection: '.$total_collection_orders;
                             $html .='</p>';
                         $html .='</div>';
                         $html .='<div class="col-md-6">';
                             $html .='<p style="font-size: 12px; margin: 0">';
-                                $html .='Card Order:£ 0.00';
+                                $html .='Card Order : 0.00';
                             $html .='</p>';
                         $html .='</div>';
                     $html .='</div>';
@@ -339,10 +340,10 @@ class NewOrderController extends Controller
                 $html .='</div>';
                 $html .='<div class="small-box-footer" style="background: #2c9ea9">';
                     $html .=' <div class="row">';
-                        $html .='<div class="col-md-6">';
-                            $html .='Top '.$total_customer_orders.' Customer';
+                        $html .='<div class="col-md-7">';
+                            $html .='Top 5 Customer';
                         $html .='</div>';
-                        $html .='<div class="col-md-6">';
+                        $html .='<div class="col-md-5">';
                             $html .='<i class="fa fa-arrow-circle-up"></i> 100.00%';
                         $html .='</div>';
                     $html .='</div>';
