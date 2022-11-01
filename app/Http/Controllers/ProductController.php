@@ -346,6 +346,27 @@ class ProductController extends Controller
 
 
 
+    // Import Product and Category
+    function impProductCategory(Request $request)
+    {
+        $request->validate([
+            'csvFile' => 'required'
+        ]);
+
+        $file_extension = $request->file('csvFile')->getClientOriginalExtension();
+
+        if($file_extension == 'csv' || $file_extension == 'xlsx' || $file_extension == 'xls')
+        {
+
+        }
+        else
+        {
+            return redirect()->route('importproducts')->with('file_error','The csv file must be a file of type of : csv, xls or xlsx.');
+        }
+
+    }
+
+
 
    //  Insert Products
     function add()

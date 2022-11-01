@@ -44,17 +44,64 @@
                     <div class="col-md-12">
                         {{-- Card Start --}}
                         <div class="card card-primary ">
-                            <h1><i class="fa fa-image"></i>Csv Import</h1>
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <div class="card-header" style="background: #f6f6f6">
+                                <h3 class="card-title pt-2 m-0 text-dark"><i class="fa fa-image"></i> &nbsp;Import CSV</h3>
+                            </div>
+                            <div class="card-body">
+                                @if(Session::has('file_error'))
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
+                                                {{ Session::get('file_error') }}
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
 
-                                <div class="form-group">
-                                    <label for="csvfile" class="form-label">Choose CSV File</label>
-                                    <input type="file" name="csvfile" id="csvfile" class="form-control">
+                                @if(Session::has('success'))
+                                    <div class="row mt-1 mb-1">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
+                                                {{ Session::get('success') }}
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="row mt-2">
+                                    <div class="col-md-12">
+                                        <form action="{{ route('imp_product_category') }}" method="POST" enctype="multipart/form-data">
+                                            {{ csrf_field() }}
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Upload Your CSV</label>
+                                                        <input type="file" name="csvFile" class="form-control p-1 {{ ($errors->has('csvFile')) ? 'is-invalid' : '' }}">
+                                                        @if($errors->has('csvFile'))
+                                                            <span class="text-danger mt-0">
+                                                                {{ $errors->first('csvFile') }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary"><i class="fa fa-arrow-down"></i> &nbsp;IMPORT</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <button type="submit" id="submit" name="import"class="btn btn-primary">Import</button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                         {{-- <h1>Coming Soon..</h1> --}}
                         {{-- End Card --}}
