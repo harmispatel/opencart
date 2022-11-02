@@ -46,8 +46,9 @@ class CheckoutController extends Controller
         $cart_rule = FreeRule::where('id_store', $front_store_id)->first();
 
         // loyality
-        $loyality = Settings::where('store_id', $front_store_id)->where('group','loyality')->where('key','money')->where('serialized',1)->first();
-
+        $loyality = Settings::where('store_id', $front_store_id)->where('group','loyality')->where('key','rewardtype')->first();
+        $loyality_val =$loyality->value;
+        $loyality_data = Settings::where('store_id', $front_store_id)->where('group','loyality')->where('key',$loyality_val)->first();
 
         $delivery_setting = [];
 
@@ -636,7 +637,7 @@ class CheckoutController extends Controller
         }
         $minimum_spend = $deliverysettings->last()->toArray();
 
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule', 'minimum_spend','loyality'));
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule', 'minimum_spend','loyality_data'));
     }
 
 

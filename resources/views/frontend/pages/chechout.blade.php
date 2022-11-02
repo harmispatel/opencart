@@ -929,28 +929,39 @@
                                                                             <td><span><b id="total_pay">{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
                                                                         </tr>
                                                                         @php
-                                                                           $loyalitys =unserialize($loyality->value);
-                                                                           if($loyality->key == 'point'){
-                                                                                if(isset($loyalitys['availibleday']) && in_array($current_day,$loyalitys['availibleday'])){
-                                                                                    if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
-                                                                                        $award_point = ($total/0.01) * ($point_setting['rewardsevery']);
-                                                                                    }
+                                                                            $loyalitys =unserialize($loyality_data->value);
+                                                                            $award_point = '';
+                                                                            $keys =isset($loyality_data->key) ? $loyality_data->key : '';
+                                                                            $award_money = '';
 
+                                                                            if($keys == 'point'){
+                                                                                if($loyalitys['availibleday'] > 0){
+                                                                                    $days =in_array($current_day,$loyalitys['availibleday']);
+                                                                                    if(isset($loyalitys['availibleday']) && ($days)){
+                                                                                        if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
+                                                                                            $award_point = ($total/0.01) * ($loyalitys['rewardsevery']);
+                                                                                        }
+                                                                                        echo "<tr><td> <b>points you will earn from this order: $award_point  Point</b></td></tr>" ;
+                                                                                    }
                                                                                 }
-                                                                           }
-                                                                           if($loyality->key == 'money'){
-                                                                                if(isset($loyalitys['availibleday']) && in_array($current_day,$loyalitys['availibleday'])){
-                                                                                    if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
-                                                                                        if ($userdeliverytype == 'delivery') {
-                                                                                            $award_money = ($total/100) * ($loyalitys['deliveryaward']);
-                                                                                        } else {
-                                                                                            $award_money = ($total/100) * ($loyalitys['collectionaward']);
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if($loyalitys['availibleday'] > 0){
+                                                                                    $days =in_array($current_day,$loyalitys['availibleday']);
+                                                                                    if((isset($loyalitys['availibleday'])) && ($days)){
+                                                                                        if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
+                                                                                            if ($userdeliverytype == 'delivery') {
+                                                                                                $award_money = ($total/100) * ($loyalitys['deliveryaward']);
+                                                                                            } else {
+                                                                                                $award_money = ($total/100) * ($loyalitys['collectionaward']);
+                                                                                            }
+                                                                                          echo "<tr><td><b>money you will earn from this order: £  $award_money </b></td></tr>" ;
                                                                                         }
                                                                                     }
                                                                                 }
-                                                                           }
+                                                                            }
                                                                         @endphp
-
                                                                     </tbody>
                                                                 </table>
                                                             </div>
