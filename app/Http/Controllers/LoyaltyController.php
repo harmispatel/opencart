@@ -46,16 +46,27 @@ class LoyaltyController extends Controller
         // return $request->rewardtype;
         $current_store_id = currentStoreId();
         $rewardtype=isset($request->rewardtype) ? $request->rewardtype : '';
-         if(!empty($rewardtype) || $rewardtype != ''){
 
-             $setting = new Settings();
-             $setting->store_id = $current_store_id;
-             $setting->group = 'loyality';
-             $setting->key = 'rewardtype';
-             $setting->value = $request->rewardtype;
-             $setting->serialized = 0;
-             $setting->save();
-         }
+
+        $loyality=Settings::where('store_id', $current_store_id)->where('key','rewardtype')->first();
+
+        $setting_id = isset($loyality->setting_id) ? $loyality->setting_id : '';
+
+        if(!empty($setting_id ) || $setting_id  != ''){
+            $loyality_setting = Settings::find($setting_id);
+            $loyality_setting->value = $request->rewardtype;
+            $loyality_setting->update();
+        }
+        else
+        {
+            $loyality_setting = new Settings();
+            $loyality_setting->store_id = $current_store_id;
+            $loyality_setting->group = 'loyality';
+            $loyality_setting->key = 'rewardtype';
+            $loyality_setting->value = $request->rewardtype;
+            $loyality_setting->serialized = 0;
+            $loyality_setting->save();
+        }
 
         if($rewardtype == 'money'){
             $query = Settings::where('store_id', $current_store_id)->where('key',$rewardtype)->first();
