@@ -67,13 +67,26 @@
         <section class="content">
             <div class="container-fluid">
                     @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong>Warning: Please check the form carefully for errors!</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endif
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>Warning: Please check the form carefully for errors!</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+
+                    @if(Session::has('empty_error'))
+                        <div class="row mt-1 mb-1">
+                            <div class="col-md-12">
+                                <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
+                                    {{ Session::get('empty_error') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Card -->
@@ -481,60 +494,67 @@
                                                             </thead>
                                                             <tbody class="tbody">
                                                                 @if(isset($admincartdata))
-                                                                @php
-                                                                    $total = 0;
-                                                                @endphp
-                                                                    @foreach ($admincartdata as $value)
-                                                                    <tr>
-                                                                        <td>
-                                                                            <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
-                                                                            <i class="fa fa-trash" ></i>
-                                                                            </a>
-                                                                       </td>
-                                                                        <td>{{$value['p_name']}}</td>
-                                                                        <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
-                                                                        <td>{{ $value['p_quantity'] }}</td>
-                                                                        <td>{{ $value['p_price'] }}</td>
-                                                                        <td>{{ $value['total'] }}</td>
-                                                                    </tr>
                                                                     @php
-                                                                         $total +=$value['total'];
+                                                                        $total = 0;
                                                                     @endphp
+
+                                                                    @foreach ($admincartdata as $value)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
+                                                                                <i class="fa fa-trash" ></i>
+                                                                                </a>
+                                                                        </td>
+                                                                            <td>{{$value['p_name']}}</td>
+                                                                            <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
+                                                                            <td>{{ $value['p_quantity'] }}</td>
+                                                                            <td>{{ $value['p_price'] }}</td>
+                                                                            <td>{{ $value['total'] }}</td>
+                                                                        </tr>
+
+                                                                        @php
+                                                                            $total +=$value['total'];
+                                                                        @endphp
+
                                                                     @endforeach
+
                                                                     <tr>
                                                                         <td colspan="4"></td>
                                                                         <td><b>SubTotal</b></td>
                                                                         <td>{{$total}}</td>
                                                                     </tr>
+
                                                                     @if(!empty($admin_couponcode) || $admin_couponcode != '' &&  !empty($admin_couponcode_name) || $admin_couponcode_name != '')
-                                                                    <tr class="coupon">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Coupon({{$admin_couponcode_name}})</b></td>
-                                                                        <td> - {{  $admin_couponcode}}</td>
-                                                                    </tr>
-                                                                    @endif
-                                                                    @if(!empty($admin_vouchers_amount) || $admin_vouchers_amount != '' &&  !empty($admin_vouchers_name) || $admin_vouchers_name != '')
-                                                                    <tr class="voucher">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Voucher({{$admin_vouchers_name}})</b></td>
-                                                                        <td> - {{  $admin_vouchers_amount}}</td>
-                                                                    </tr>
-                                                                    @endif
-                                                                    @if(!empty($service) || $service != '')
-                                                                    <tr class="service_charge">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Service_Charge</b></td>
-                                                                        <td> {{  $service}}</td>
-                                                                    </tr>
-                                                                    @endif
-                                                                    @if(!empty($totals) || $totals != '')
-                                                                    <tr class="Total">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Total</b></td>
-                                                                        <td>{{  $totals}}</td>
-                                                                    </tr>
+                                                                        <tr class="coupon">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Coupon({{$admin_couponcode_name}})</b></td>
+                                                                            <td> - {{  $admin_couponcode}}</td>
+                                                                        </tr>
                                                                     @endif
 
+                                                                    @if(!empty($admin_vouchers_amount) || $admin_vouchers_amount != '' &&  !empty($admin_vouchers_name) || $admin_vouchers_name != '')
+                                                                        <tr class="voucher">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Voucher({{$admin_vouchers_name}})</b></td>
+                                                                            <td> - {{  $admin_vouchers_amount}}</td>
+                                                                        </tr>
+                                                                    @endif
+
+                                                                    @if(!empty($service) || $service != '')
+                                                                        <tr class="service_charge">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Service_Charge</b></td>
+                                                                            <td> {{  $service}}</td>
+                                                                        </tr>
+                                                                    @endif
+
+                                                                    @if(!empty($totals) || $totals != '')
+                                                                        <tr class="Total">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Total</b></td>
+                                                                            <td>{{  $totals}}</td>
+                                                                        </tr>
+                                                                    @endif
                                                                 @else
                                                                     <tr>
                                                                         <td colspan="6" class="text-center">
@@ -572,7 +592,7 @@
                                                                 <tr>
                                                                     <td>Quantity</td>
                                                                     <td>
-                                                                        <input class="form-control" name="quantity" type="text"  placeholder="Qty.">
+                                                                        <input class="form-control" name="quantity" id="quantity" type="text"  placeholder="Qty.">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -767,62 +787,66 @@
                                                             </thead>
                                                             <tbody class="tbody">
                                                                 @if(isset($admincartdata))
-                                                                @php
-                                                                    $total = 0;
-                                                                @endphp
-                                                                    @foreach ($admincartdata as $value)
-                                                                    <tr>
-                                                                            <td>
-                                                                            <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
-                                                                            <i class="fa fa-trash" ></i>
-                                                                            </a>
-                                                                       </td>
-                                                                        <td>{{$value['p_name']}}</td>
-                                                                        <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
-                                                                        <td>{{ $value['p_quantity'] }}</td>
-                                                                        <td>{{ $value['p_price'] }}</td>
-                                                                        <td>{{ $value['total'] }}</td>
-                                                                    </tr>
                                                                     @php
-                                                                         $total +=$value['total'];
+                                                                        $total = 0;
                                                                     @endphp
+
+                                                                    @foreach ($admincartdata as $value)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <a class="btn btn-sm btn-danger ml-1 deletesellected" onclick="deleteproductcart({{$value['product_id']}})" >
+                                                                                    <i class="fa fa-trash" ></i>
+                                                                                </a>
+                                                                            </td>
+                                                                            <td>{{$value['p_name']}}</td>
+                                                                            <td>{{ $value['p_model'] ? $value['p_model'] : '-'}}</td>
+                                                                            <td>{{ $value['p_quantity'] }}</td>
+                                                                            <td>{{ $value['p_price'] }}</td>
+                                                                            <td>{{ $value['total'] }}</td>
+                                                                        </tr>
+
+                                                                        @php
+                                                                            $total +=$value['total'];
+                                                                        @endphp
                                                                     @endforeach
+
                                                                     <tr class="subtotal">
                                                                         <td colspan="4"></td>
                                                                         <td><b>SubTotal</b></td>
                                                                         <td>{{$total}}</td>
                                                                     </tr>
+
                                                                     @if(!empty($admin_couponcode) || $admin_couponcode != '' &&  !empty($admin_couponcode_name) || $admin_couponcode_name != '')
-                                                                    <tr class="coupon">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Coupon({{$admin_couponcode_name}})</b></td>
-                                                                        <td> - {{  $admin_couponcode}}</td>
-                                                                    </tr>
+                                                                        <tr class="coupon">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Coupon({{$admin_couponcode_name}})</b></td>
+                                                                            <td> - {{  $admin_couponcode}}</td>
+                                                                        </tr>
                                                                     @endif
+
                                                                     @if(!empty($admin_vouchers_amount) || $admin_vouchers_amount != '' &&  !empty($admin_vouchers_name) || $admin_vouchers_name != '')
-                                                                    <tr class="voucher">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Voucher({{$admin_vouchers_name}})</b></td>
-                                                                        <td> - {{  $admin_vouchers_amount}}</td>
-                                                                    </tr>
+                                                                        <tr class="voucher">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Voucher({{$admin_vouchers_name}})</b></td>
+                                                                            <td> - {{  $admin_vouchers_amount}}</td>
+                                                                        </tr>
                                                                     @endif
+
                                                                     @if(!empty($service) || $service != '')
-                                                                    <tr class="service_charge">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Service_Charge</b></td>
-                                                                        <td> {{  $service}}</td>
-                                                                    </tr>
+                                                                        <tr class="service_charge">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Service_Charge</b></td>
+                                                                            <td> {{  $service}}</td>
+                                                                        </tr>
                                                                     @endif
+
                                                                     @if(!empty($totals) || $totals != '')
-                                                                    <tr class="Total">
-                                                                        <td colspan="4"></td>
-                                                                        <td><b>Total</b></td>
-                                                                        <td>{{  $totals}}</td>
-                                                                    </tr>
+                                                                        <tr class="Total">
+                                                                            <td colspan="4"></td>
+                                                                            <td><b>Total</b></td>
+                                                                            <td>{{  $totals}}</td>
+                                                                        </tr>
                                                                     @endif
-
-
-
                                                                 @else
                                                                     <tr>
                                                                         <td colspan="6" class="text-center">
@@ -846,8 +870,8 @@
                                                                     <td>
                                                                         <select name="shipping_method" id="shipping_method" class="form-control">
                                                                             <option value=""> -- Select -- </option>
-                                                                            <option value="collection">collection</option>
-                                                                            <option value="delivery">delivery</option>
+                                                                            <option value="collection" {{ (old('shipping_method') == 'collection') ? 'selected' : "" }}>collection</option>
+                                                                            <option value="delivery" {{ (old('shipping_method') == 'delivery') ? 'selected' : "" }}>delivery</option>
                                                                         </select>
                                                                     </td>
                                                                 </tr>
@@ -856,9 +880,9 @@
                                                                     <td>
                                                                         <select name="payment_method" id="payment_method" class="form-control {{ ($errors->has('payment_method')) ? 'is-invalid' : '' }}">
                                                                             <option value=""> -- Select -- </option>
-                                                                            <option value="3">cod</option>
-                                                                            <option value="2">paypal</option>
-                                                                            <option value="1">stripe</option>
+                                                                            <option value="3" {{ (old('payment_method') == 3) ? 'selected' : "" }}>cod</option>
+                                                                            <option value="2" {{ (old('payment_method') == 2) ? 'selected' : "" }}>paypal</option>
+                                                                            <option value="1" {{ (old('payment_method') == 1) ? 'selected' : "" }}>stripe</option>
                                                                         </select>
                                                                         @if($errors->has('payment_method'))
                                                                             <div class="invalid-feedback">
@@ -894,7 +918,7 @@
                                                                     <td>
                                                                         <select name="theme" id="theme" class="form-control">
                                                                         @foreach ($orderstatus as $status)
-                                                                            <option value="{{ $status->order_status_id }}">{{ $status->name }}</option>
+                                                                            <option value="{{ $status->order_status_id }}" {{ (old('theme') == $status->order_status_id) ? 'selected' : '' }}>{{ $status->name }}</option>
                                                                         @endforeach
                                                                         </select>
                                                                     </td>
@@ -1040,31 +1064,41 @@
     // Get Customer Details
     $('#cname').autocomplete({
         source: function(requete, reponse) {
+            var select_store_id = $('#store :selected').val();
 
-            $.ajax({
-                url: "{{ url('autocomplete') }}",
-                data: {
-                    term: requete.term
-                },
-                dataType: 'json',
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                success: function(data) {
-                    $('#loader').hide();
-                    reponse($.map(data, function(object) {
-                        return {
-                            customer_id: object.customer_id,
-                            label: object.firstname + " " + object.lastname,
-                            fname: object.firstname,
-                            lname: object.lastname,
-                            email: object.email,
-                            fax: object.fax,
-                            phone: object.telephone,
-                        };
-                    }));
-                }
-            });
+            if(select_store_id != '' || select_store_id != 0)
+            {
+                $.ajax({
+                    url: "{{ url('autocomplete') }}",
+                    data: {
+                        term: requete.term,
+                        select_store_id: select_store_id
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(data) {
+                        $('#loader').hide();
+                        reponse($.map(data, function(object) {
+                            return {
+                                customer_id: object.customer_id,
+                                label: object.firstname + " " + object.lastname,
+                                fname: object.firstname,
+                                lname: object.lastname,
+                                email: object.email,
+                                fax: object.fax,
+                                phone: object.telephone,
+                            };
+                        }));
+                    }
+                });
+            }
+            else
+            {
+                alert('Please Select Store To find Customers !');
+                return false;
+            }
         },
 
         minLength: 1,
@@ -1117,27 +1151,38 @@
     $('#productname').autocomplete({
         source: function(requete, reponse) {
 
-            $.ajax({
-                url: "{{ url('autocompleteproduct') }}",
-                data: {
-                    product: requete.term
-                },
-                dataType: 'json',
-                beforeSend: function() {
-                    $('#loader2').show();
-                },
-                success: function(data) {
-                    $('#loader2').hide();
-                    reponse($.map(data, function(object) {
-                        return {
-                            // customer_id: object.,
-                            label: htmlDecode(object.name),
-                            proid: object.product_id
+            var select_store_id = $('#store :selected').val();
 
-                        };
-                    }));
-                }
-            });
+            if(select_store_id != '' || select_store_id != 0)
+            {
+                $.ajax({
+                    url: "{{ url('autocompleteproduct') }}",
+                    data: {
+                        product: requete.term,
+                        select_store_id: select_store_id
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#loader2').show();
+                    },
+                    success: function(data) {
+                        $('#loader2').hide();
+                        reponse($.map(data, function(object) {
+                            return {
+                                // customer_id: object.,
+                                label: htmlDecode(object.name),
+                                proid: object.product_id
+
+                            };
+                        }));
+                    }
+                });
+            }
+            else
+            {
+                alert('Please Select Store To find Store Products !');
+                return false;
+            }
         },
 
         minLength: 1,
@@ -1154,14 +1199,17 @@
         }
     });
 
-      function add_product(){
-          var product_id =$("#productid").val();
-          var store_id =$("#store_id").val();
-          var quantity = $("input[name=quantity]").val();
 
-          if (product_id != '' && quantity != '') {
+    // Add Product
+    function add_product()
+    {
+        var product_id =$("#productid").val();
+        var store_id =$("#store_id").val();
+        var quantity = $("input[name=quantity]").val();
 
-              $.ajax({
+        if (product_id != '' && quantity != '')
+        {
+            $.ajax({
                 type: "post",
                 url: "{{ route('adminaddtocart') }}",
                 data: {
@@ -1170,15 +1218,19 @@
                     store_id   : store_id,
                 },
                 dataType: "json",
-                success: function (response) {
-                  $('.tbody').html('');
-                  $('.tbody').html(response.html);
+                success: function (response)
+                {
+                    $('.tbody').html('');
+                    $('.tbody').html(response.html);
+                    $('#productname').val('');
+                    $('#productid').val('');
+                    $('#quantity').val('');
                 }
-              });
-          }else{
-            alert('Product and quantity has been required')
-          }
-      }
+            });
+        }else{
+        alert('Product and quantity has been required')
+        }
+    }
 
       function deleteproductcart(id){
         var pro_id =id;
@@ -1217,8 +1269,8 @@
                 servicecharge : servicecharge,
             },
             dataType: "json",
-            success: function (response) {
-
+            success: function (response)
+            {
                 if(response.error == 1)
                 {
                     $('#couponError').html('');
@@ -1246,8 +1298,6 @@
                 $('.service_charge').html(response.service);
                 $('.Total').html('');
                 $('.Total').html(response.totals);
-
-
 
             }
           });
