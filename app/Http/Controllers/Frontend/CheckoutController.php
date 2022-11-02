@@ -45,6 +45,10 @@ class CheckoutController extends Controller
         // Get Cart Rule
         $cart_rule = FreeRule::where('id_store', $front_store_id)->first();
 
+        // loyality
+        $loyality = Settings::where('store_id', $front_store_id)->where('group','loyality')->where('key','money')->where('serialized',1)->first();
+
+
         $delivery_setting = [];
 
         $key = ([
@@ -632,7 +636,7 @@ class CheckoutController extends Controller
         }
         $minimum_spend = $deliverysettings->last()->toArray();
 
-        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule', 'minimum_spend'));
+        return view('frontend.pages.chechout', compact('delivery_setting', 'Coupon', 'areas', 'cart_rule', 'minimum_spend','loyality'));
     }
 
 

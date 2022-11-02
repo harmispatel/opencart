@@ -194,21 +194,21 @@
                                                 $day = isset($rewardtype['unserializemoney']['availibleday']) ? $rewardtype['unserializemoney']['availibleday'] : '';
                                             @endphp
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="2"
+                                                <input type="checkbox" name="money[availibleday][]" value="1"
                                                     id="money_day_2" {{ in_array(2, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_2" class="day_available"> MON </label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="2"
+                                                <input type="checkbox" name="money[availibleday][]" value="1"
                                                     id="money_day_2" />
                                                 <label for="money_day_2" class="day_available"> MON </label>
                                             @endif
 
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="3"
+                                                <input type="checkbox" name="money[availibleday][]" value="2"
                                                     id="money_day_3" {{ in_array(3, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_3" class="day_available">TUE</label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="3"
+                                                <input type="checkbox" name="money[availibleday][]" value="2"
                                                     id="money_day_3" />
                                                 <label for="money_day_3" class="day_available">TUE</label>
                                             @endif
@@ -217,53 +217,53 @@
 
 
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="4"
+                                                <input type="checkbox" name="money[availibleday][]" value="3"
                                                     id="money_day_4" {{ in_array(4, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_4" class="day_available">WED</label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="4"
+                                                <input type="checkbox" name="money[availibleday][]" value="3"
                                                     id="money_day_4" />
                                                 <label for="money_day_4" class="day_available">WED</label>
                                             @endif
 
 
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="5"
+                                                <input type="checkbox" name="money[availibleday][]" value="4"
                                                     id="money_day_5" {{ in_array(5, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_5" class="day_available">THU</label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="5"
+                                                <input type="checkbox" name="money[availibleday][]" value="4"
                                                     id="money_day_5" />
                                                 <label for="money_day_5" class="day_available">THU</label>
                                             @endif
 
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="6"
+                                                <input type="checkbox" name="money[availibleday][]" value="5"
                                                     id="money_day_6" {{ in_array(6, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_6" class="day_available">FRI</label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="6"
+                                                <input type="checkbox" name="money[availibleday][]" value="5"
                                                     id="money_day_6" />
                                                 <label for="money_day_6" class="day_available">FRI</label>
                                             @endif
 
 
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="7"
+                                                <input type="checkbox" name="money[availibleday][]" value="6"
                                                     id="money_day_7" {{ in_array(7, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_7" class="day_available">SAT</label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="7"
+                                                <input type="checkbox" name="money[availibleday][]" value="6"
                                                     id="money_day_7" />
                                                 <label for="money_day_7" class="day_available">SAT</label>
                                             @endif
 
                                             @if (!empty($day) || $day != '')
-                                                <input type="checkbox" name="money[availibleday][]" value="8"
+                                                <input type="checkbox" name="money[availibleday][]" value="7"
                                                     id="money_day_8" {{ in_array(8, $day) ? 'checked' : '' }} />
                                                 <label for="money_day_8" class="day_available">SUN</label>
                                             @else
-                                                <input type="checkbox" name="money[availibleday][]" value="8"
+                                                <input type="checkbox" name="money[availibleday][]" value="7"
                                                     id="money_day_8" />
                                                 <label for="money_day_8" class="day_available">SUN</label>
                                             @endif

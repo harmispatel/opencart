@@ -151,6 +151,8 @@
         $session_free_item = '';
     }
 
+    // Get Current Day
+    $current_day = date("N");
 
 @endphp
 
@@ -926,6 +928,29 @@
                                                                             <td><b>Total to pay:</b></td>
                                                                             <td><span><b id="total_pay">{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
                                                                         </tr>
+                                                                        @php
+                                                                           $loyalitys =unserialize($loyality->value);
+                                                                           if($loyality->key == 'point'){
+                                                                                if(isset($loyalitys['availibleday']) && in_array($current_day,$loyalitys['availibleday'])){
+                                                                                    if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
+                                                                                        $award_point = ($total/0.01) * ($point_setting['rewardsevery']);
+                                                                                    }
+
+                                                                                }
+                                                                           }
+                                                                           if($loyality->key == 'money'){
+                                                                                if(isset($loyalitys['availibleday']) && in_array($current_day,$loyalitys['availibleday'])){
+                                                                                    if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
+                                                                                        if ($userdeliverytype == 'delivery') {
+                                                                                            $award_money = ($total/100) * ($loyalitys['deliveryaward']);
+                                                                                        } else {
+                                                                                            $award_money = ($total/100) * ($loyalitys['collectionaward']);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                           }
+                                                                        @endphp
+
                                                                     </tbody>
                                                                 </table>
                                                             </div>
