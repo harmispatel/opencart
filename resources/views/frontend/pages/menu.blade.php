@@ -293,8 +293,8 @@ It's used for View Menu.
                                     <div class="product-list-innr">
                                         @foreach ($data['category'] as $key => $value)
                                             @php
-                                                $available_day = isset($value->availibleday) ? explode(',',$value->availibleday) : '';
-                                                $cat_id = $value->category_id;
+                                                $available_day = (isset($value->availibleday)) ? explode(',',$value->availibleday) : '';
+                                                $cat_id = isset($value->category_id) ? $value->category_id : '';
                                                 $product = getproduct($front_store_id, $cat_id);
                                                 $catvalue = strtolower($value->hasOneCategory->name);
                                                 $get_cat_top_status = getCatTopStatus($cat_id);
@@ -307,190 +307,208 @@ It's used for View Menu.
                                                         <div class="accordion-item">
                                                             <h2 class="accordion-header" id="headingOne">
                                                                 <button class="accordion-button" id="{{ str_replace(' ', '', $catvalue) }}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1{{ $key }}" aria-expanded="true" aria-controls="collapse1{{ $key }}">
-                                                                    <span>{{ isset($value->hasOneCategory->name) ? $value->hasOneCategory->name : '' }}</span>
+                                                                    <span>{{ (isset($value->hasOneCategory->name)) ? $value->hasOneCategory->name : '' }}</span>
                                                                     <i class="fa fa-angle-down"></i>
                                                                 </button>
                                                             </h2>
                                                             <div id="collapse1{{ $key }}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                                @foreach ($product as $values)
-                                                                    @php
-                                                                        $product_available_day = isset($values->hasOneProduct['availibleday']) ? explode(',',$values->hasOneProduct['availibleday']) : '';
-                                                                        if($get_cat_top_status['enable_option'] == 1)
-                                                                        {
-                                                                            $proID = isset($values->product_id) ? $values->product_id : 0;
-                                                                            $get_product_top_opt = getProductTopOpt($proID);
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            $get_product_top_opt = '';
-                                                                        }
+                                                                @if (count($product) > 0)
+                                                                    @foreach ($product as $values)
+                                                                        @php
+                                                                            $product_available_day = (isset($values->hasOneProduct['availibleday'])) ? explode(',',$values->hasOneProduct['availibleday']) : '';
+                                                                            if(isset($get_cat_top_status['enable_option']))
+                                                                            {
+                                                                                if($get_cat_top_status['enable_option'] == 1)
+                                                                                {
+                                                                                    $proID = isset($values->product_id) ? $values->product_id : 0;
+                                                                                    $get_product_top_opt = getProductTopOpt($proID);
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    $get_product_top_opt = '';
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                $get_product_top_opt = '';
+                                                                            }
 
 
-                                                                        $producticon = explode(',',$values->hasOneProduct['product_icons']);
-                                                                        // echo '<pre>';
-                                                                        // print_r($producticon);
-                                                                    @endphp
+                                                                            $producticon = explode(',',$values->hasOneProduct['product_icons']);
+                                                                        @endphp
 
-                                                                    @if (!empty($product_available_day) || $product_available_day != '')
-                                                                        @if (in_array($current_day,$product_available_day))
-                                                                            <div class="accordion-body">
-                                                                                <div class="acc-body-inr">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-7">
-                                                                                            <div class="acc-body-inr-title">
-                                                                                                <div style="display: flex;align-items:center;flex-wrap: wrap;">
-                                                                                                    <h4>
-                                                                                                        {{ $values->hasOneDescription['name'] }}
-                                                                                                    </h4>
-                                                                                                    <div>
-                                                                                                        @foreach ($producticon as $icon)
-                                                                                                            @php
-                                                                                                                $proicon = DB::table('oc_product_icons')->select('icon_url')->where('id', $icon)->first();
-                                                                                                            @endphp
-                                                                                                            <img src="{{ isset($proicon->icon_url) ? $proicon->icon_url : '' }}" style="width: 25px !important;margin:0 !important;">
-                                                                                                        @endforeach
+                                                                        @if (!empty($product_available_day) || $product_available_day != '')
+                                                                            @if (in_array($current_day,$product_available_day))
+                                                                                <div class="accordion-body">
+                                                                                    <div class="acc-body-inr">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-7">
+                                                                                                <div class="acc-body-inr-title">
+                                                                                                    <div style="display: flex;align-items:center;flex-wrap: wrap;">
+                                                                                                        <h4>
+                                                                                                            {{ $values->hasOneDescription['name'] }}
+                                                                                                        </h4>
+                                                                                                        <div>
+                                                                                                            @foreach ($producticon as $icon)
+                                                                                                                @php
+                                                                                                                    $proicon = DB::table('oc_product_icons')->select('icon_url')->where('id', $icon)->first();
+                                                                                                                @endphp
+                                                                                                                <img src="{{ isset($proicon->icon_url) ? $proicon->icon_url : '' }}" style="width: 25px !important;margin:0 !important;">
+                                                                                                            @endforeach
+                                                                                                        </div>
                                                                                                     </div>
+                                                                                                    @php
+                                                                                                        $prodesc = html_entity_decode($values->hasOneDescription['description']);
+                                                                                                    @endphp
+                                                                                                    <p>
+                                                                                                        {{ strip_tags($prodesc) }}
+                                                                                                    </p>
+                                                                                                    <img src="{{  $values->hasOneProduct['image'] }}" width="80" height="80" class="mt-2 mb-2">
                                                                                                 </div>
-                                                                                                @php
-                                                                                                    $prodesc = html_entity_decode($values->hasOneDescription['description']);
-                                                                                                @endphp
-                                                                                                <p>
-                                                                                                    {{ strip_tags($prodesc) }}
-                                                                                                </p>
-                                                                                                <img src="{{  $values->hasOneProduct['image'] }}" width="80" height="80" class="mt-2 mb-2">
                                                                                             </div>
-                                                                                        </div>
-                                                                                        <div class="col-md-5">
-                                                                                            <div class="options-bt-main">
+                                                                                            <div class="col-md-5">
+                                                                                                <div class="options-bt-main">
 
-                                                                                                @php
-                                                                                                    $sizes = getsize($values->product_id);
-                                                                                                @endphp
+                                                                                                    @php
+                                                                                                        $sizes = getsize($values->product_id);
+                                                                                                    @endphp
 
-                                                                                                @if (count($sizes) > 0)
-                                                                                                    @foreach ($sizes as $size)
-                                                                                                        @php
-                                                                                                            $sizeprice_id = $size->id_product_price_size;
-                                                                                                            $productsize = $values->hasOneProduct['product_id'];
+                                                                                                    @if (count($sizes) > 0)
+                                                                                                        @foreach ($sizes as $size)
+                                                                                                            @php
+                                                                                                                $sizeprice_id = $size->id_product_price_size;
+                                                                                                                $productsize = $values->hasOneProduct['product_id'];
 
-                                                                                                            if($userdeliverytype == 'delivery')
-                                                                                                            {
-                                                                                                                $setsizeprice = $size->delivery_price;
-                                                                                                            }
-                                                                                                            elseif ($userdeliverytype == 'collection')
-                                                                                                            {
-                                                                                                                $setsizeprice = $size->collection_price;
-                                                                                                            }
-                                                                                                            else
-                                                                                                            {
-                                                                                                                $setsizeprice = $size->price;
-                                                                                                            }
-                                                                                                        @endphp
+                                                                                                                if($userdeliverytype == 'delivery')
+                                                                                                                {
+                                                                                                                    $setsizeprice = $size->delivery_price;
+                                                                                                                }
+                                                                                                                elseif ($userdeliverytype == 'collection')
+                                                                                                                {
+                                                                                                                    $setsizeprice = $size->collection_price;
+                                                                                                                }
+                                                                                                                else
+                                                                                                                {
+                                                                                                                    $setsizeprice = $size->price;
+                                                                                                                }
+                                                                                                            @endphp
 
-                                                                                                        <div class="options-bt">
-                                                                                                            <div class="row align-items-center">
-                                                                                                                <div class="col-md-5">
-                                                                                                                    <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
-                                                                                                                </div>
-                                                                                                                <div class="col-md-7">
-                                                                                                                    @if($store_open_close == 'open')
-                                                                                                                        @if ($get_cat_top_status['enable_option'] == 1)
-                                                                                                                            @if ($setsizeprice == 0)
-                                                                                                                                <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                </button>
-                                                                                                                            @else
-                                                                                                                                @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
-                                                                                                                                    {{-- <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
+                                                                                                            <div class="options-bt">
+                                                                                                                <div class="row align-items-center">
+                                                                                                                    <div class="col-md-5">
+                                                                                                                        <span>{{ html_entity_decode(isset($size->hasOneToppingSize['size']) ? $size->hasOneToppingSize['size'] : '') }}</span>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-7">
+                                                                                                                        @if($store_open_close == 'open')
+                                                                                                                            @if ($get_cat_top_status['enable_option'] == 1)
+                                                                                                                                @if ($setsizeprice == 0)
+                                                                                                                                    <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
                                                                                                                                         <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                    </a> --}}
-                                                                                                                                    @if ($session_flag_code != '' || !empty($session_flag_code))
-                                                                                                                                        <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
+                                                                                                                                    </button>
+                                                                                                                                @else
+                                                                                                                                    @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
+                                                                                                                                        {{-- <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
                                                                                                                                             <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                        </a>
-                                                                                                                                    @else
-                                                                                                                                        {{-- <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus"> --}}
-                                                                                                                                        <a onclick="$('#Modal').modal('show');" class="btn options-btn cartstatus">
-                                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                        </a>
-                                                                                                                                    @endif
+                                                                                                                                        </a> --}}
+                                                                                                                                        @if ($session_flag_code != '' || !empty($session_flag_code))
+                                                                                                                                            <a data-bs-toggle="modal" data-bs-target="#freeItem_{{ $sizeprice_id }}" class="btn options-btn cartstatus">
+                                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                            </a>
+                                                                                                                                        @else
+                                                                                                                                            {{-- <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus"> --}}
+                                                                                                                                            <a onclick="$('#Modal').modal('show');" class="btn options-btn cartstatus">
+                                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                            </a>
+                                                                                                                                        @endif
 
-                                                                                                                                    {{-- Dynamic Model --}}
-                                                                                                                                    <div class="modal fade free-item-modal_{{ $sizeprice_id }}" id="freeItem_{{ $sizeprice_id }}" tabindex="-1" aria-labelledby="freeItem_{{ $sizeprice_id }}Label" aria-hidden="true">
-                                                                                                                                        <div class="modal-dialog">
-                                                                                                                                            <div class="modal-content" id="item-modal">
-                                                                                                                                                <div class="modal-header">
-                                                                                                                                                    <h5 class="modal-title text-center" id="freeItem_{{ $sizeprice_id }}Label">{{ $values->hasOneDescription['name'] }}</h5>
-                                                                                                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                                                                                </div>
-                                                                                                                                                <div class="modal-body">
-                                                                                                                                                    <form id="top_form_{{ $sizeprice_id }}">
-                                                                                                                                                        @csrf
-                                                                                                                                                        @foreach ($get_product_top_opt as $proTop)
-                                                                                                                                                            @php
-                                                                                                                                                                $topcount = $loop->iteration;
-                                                                                                                                                                $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
-                                                                                                                                                                $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
-                                                                                                                                                                $top_pro_id = $proTop->id;
-                                                                                                                                                                $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
+                                                                                                                                        {{-- Dynamic Model --}}
+                                                                                                                                        <div class="modal fade free-item-modal_{{ $sizeprice_id }}" id="freeItem_{{ $sizeprice_id }}" tabindex="-1" aria-labelledby="freeItem_{{ $sizeprice_id }}Label" aria-hidden="true">
+                                                                                                                                            <div class="modal-dialog">
+                                                                                                                                                <div class="modal-content" id="item-modal">
+                                                                                                                                                    <div class="modal-header">
+                                                                                                                                                        <h5 class="modal-title text-center" id="freeItem_{{ $sizeprice_id }}Label">{{ $values->hasOneDescription['name'] }}</h5>
+                                                                                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="modal-body">
+                                                                                                                                                        <form id="top_form_{{ $sizeprice_id }}">
+                                                                                                                                                            @csrf
+                                                                                                                                                            @foreach ($get_product_top_opt as $proTop)
+                                                                                                                                                                @php
+                                                                                                                                                                    $topcount = $loop->iteration;
+                                                                                                                                                                    $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
+                                                                                                                                                                    $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
+                                                                                                                                                                    $top_pro_id = $proTop->id;
+                                                                                                                                                                    $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
 
-                                                                                                                                                                $get_sub_topping = getSubTopping($id_group_topping);
+                                                                                                                                                                    $get_sub_topping = getSubTopping($id_group_topping);
 
-                                                                                                                                                                $toppingreq = unserialize($get_cat_top_status->group);  // required
+                                                                                                                                                                    $toppingreq = unserialize($get_cat_top_status->group);  // required
 
-                                                                                                                                                            @endphp
+                                                                                                                                                                @endphp
 
-                                                                                                                                                            <div class="accordion{{ $top_pro_id }}" id="accordionExample{{ $top_pro_id }}">
-                                                                                                                                                                <div class="accordion-item{{ $top_pro_id }}">
-                                                                                                                                                                    <h2 class="accordion-header{{ $top_pro_id }}" id="headingOne{{ $top_pro_id }}">
-                                                                                                                                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree{{ $top_pro_id }}" aria-expanded="true" aria-controls="collapsefree{{ $top_pro_id }}">
-                                                                                                                                                                            <span style="width: 100%!important">{{ $tName }}</span>
-                                                                                                                                                                        </button>
-                                                                                                                                                                    </h2>
-                                                                                                                                                                    <div id="collapsefree{{ $top_pro_id }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ $top_pro_id }}"
-                                                                                                                                                                        data-bs-parent="#accordionExample{{ $top_pro_id }}">
-                                                                                                                                                                        <div class="accordion-body">
-                                                                                                                                                                            @if ($typeTopping == 'select')
-                                                                                                                                                                                {{-- <select class="form-control" name="select_top[]" {{ ($toppingreq[1]['set_require'] == 1) ? 'required' : ''}}>  required --}}
-                                                                                                                                                                                <select class="form-control" name="select_top[]">
-                                                                                                                                                                                    @if (!empty($get_sub_topping) || $get_sub_topping != '')
-                                                                                                                                                                                        <option value=""> -- --</option>
-                                                                                                                                                                                        @foreach ($get_sub_topping as $stop)
-                                                                                                                                                                                            <option value="{{ $stop->name }}">{{ $stop->name }}</option>
-                                                                                                                                                                                        @endforeach
-                                                                                                                                                                                    @endif
-                                                                                                                                                                                </select>
-                                                                                                                                                                            @else
-                                                                                                                                                                                <div class="row">
-                                                                                                                                                                                    @if (!empty($get_sub_topping) || $get_sub_topping != '')
-                                                                                                                                                                                        @foreach ($get_sub_topping as $key=> $stop)
-                                                                                                                                                                                            <div class="col-md-6">
-                                                                                                                                                                                                <label>{{ $stop->name }}</label>
-                                                                                                                                                                                                <input type="checkbox" name="check_top" id="{{ $stop->name }}" value="{{ $stop->name }}">
-                                                                                                                                                                                            </div>
-                                                                                                                                                                                        @endforeach
-                                                                                                                                                                                    @endif
-                                                                                                                                                                                </div>
-                                                                                                                                                                            @endif
+                                                                                                                                                                <div class="accordion{{ $top_pro_id }}" id="accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                    <div class="accordion-item{{ $top_pro_id }}">
+                                                                                                                                                                        <h2 class="accordion-header{{ $top_pro_id }}" id="headingOne{{ $top_pro_id }}">
+                                                                                                                                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree{{ $top_pro_id }}" aria-expanded="true" aria-controls="collapsefree{{ $top_pro_id }}">
+                                                                                                                                                                                <span style="width: 100%!important">{{ $tName }}</span>
+                                                                                                                                                                            </button>
+                                                                                                                                                                        </h2>
+                                                                                                                                                                        <div id="collapsefree{{ $top_pro_id }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ $top_pro_id }}"
+                                                                                                                                                                            data-bs-parent="#accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                            <div class="accordion-body">
+                                                                                                                                                                                @if ($typeTopping == 'select')
+                                                                                                                                                                                    {{-- <select class="form-control" name="select_top[]" {{ ($toppingreq[1]['set_require'] == 1) ? 'required' : ''}}>  required --}}
+                                                                                                                                                                                    <select class="form-control" name="select_top[]">
+                                                                                                                                                                                        @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                            <option value=""> -- --</option>
+                                                                                                                                                                                            @foreach ($get_sub_topping as $stop)
+                                                                                                                                                                                                <option value="{{ $stop->name }}">{{ $stop->name }}</option>
+                                                                                                                                                                                            @endforeach
+                                                                                                                                                                                        @endif
+                                                                                                                                                                                    </select>
+                                                                                                                                                                                @else
+                                                                                                                                                                                    <div class="row">
+                                                                                                                                                                                        @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                            @foreach ($get_sub_topping as $key=> $stop)
+                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                    <label>{{ $stop->name }}</label>
+                                                                                                                                                                                                    <input type="checkbox" name="check_top" id="{{ $stop->name }}" value="{{ $stop->name }}">
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                            @endforeach
+                                                                                                                                                                                        @endif
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                @endif
+                                                                                                                                                                            </div>
                                                                                                                                                                         </div>
                                                                                                                                                                     </div>
+                                                                                                                                                                    {{-- <div class="">
+                                                                                                                                                                        <b>Add your special request?</b><br>
+                                                                                                                                                                        <textarea  name="request" rows="5" style="width: 465px"></textarea>
+                                                                                                                                                                    </div> --}}
                                                                                                                                                                 </div>
-                                                                                                                                                                {{-- <div class="">
-                                                                                                                                                                    <b>Add your special request?</b><br>
-                                                                                                                                                                    <textarea  name="request" rows="5" style="width: 465px"></textarea>
-                                                                                                                                                                </div> --}}
-                                                                                                                                                            </div>
-                                                                                                                                                        @endforeach
-                                                                                                                                                    </form>
-                                                                                                                                                </div>
-                                                                                                                                                <div class="modal-footer text-center">
-                                                                                                                                                    <button type="button" onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }},'model');" class="btn">Add To Cart</button>
+                                                                                                                                                            @endforeach
+                                                                                                                                                        </form>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="modal-footer text-center">
+                                                                                                                                                        <button type="button" onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }},'model');" class="btn">Add To Cart</button>
+                                                                                                                                                    </div>
                                                                                                                                                 </div>
                                                                                                                                             </div>
                                                                                                                                         </div>
-                                                                                                                                    </div>
-                                                                                                                                    {{-- End Dynamic Model --}}
+                                                                                                                                        {{-- End Dynamic Model --}}
 
+                                                                                                                                    @else
+                                                                                                                                        <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
+                                                                                                                                            class="btn options-btn cartstatus">
+                                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                        </a>
+                                                                                                                                    @endif
+                                                                                                                                @endif
+                                                                                                                            @else
+                                                                                                                                @if ($setsizeprice == 0)
+                                                                                                                                    <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
+                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </button>
                                                                                                                                 @else
                                                                                                                                     <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
                                                                                                                                         class="btn options-btn cartstatus">
@@ -499,175 +517,176 @@ It's used for View Menu.
                                                                                                                                 @endif
                                                                                                                             @endif
                                                                                                                         @else
-                                                                                                                            @if ($setsizeprice == 0)
-                                                                                                                                <button class="btn options-btn" style="cursor: not-allowed;pointer-events: auto;opacity:0.5" disabled>
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                </button>
+                                                                                                                            <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
+                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                            </a>
+                                                                                                                        @endif
+
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        @endforeach
+                                                                                                    @else
+                                                                                                        @php
+                                                                                                            if($userdeliverytype == 'delivery')
+                                                                                                            {
+                                                                                                                $setprice = $values->hasOneProduct['delivery_price'];
+                                                                                                            }
+                                                                                                            elseif ($userdeliverytype == 'collection')
+                                                                                                            {
+                                                                                                                $setprice = $values->hasOneProduct['collection_price'];
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                $setprice = $values->hasOneProduct['price'];
+                                                                                                            }
+                                                                                                        @endphp
+                                                                                                        <div class="options-bt">
+                                                                                                            <div class="row align-items-center">
+                                                                                                                <div class="col-md-5">
+                                                                                                                    <span>price</span>
+                                                                                                                </div>
+                                                                                                                <div class="col-md-7">
+                                                                                                                    @if($store_open_close == 'open')
+                                                                                                                        @if (isset($get_cat_top_status['enable_option']))
+                                                                                                                            @if ($get_cat_top_status['enable_option'] == 1)
+                                                                                                                                @if ($setprice != 0)
+                                                                                                                                    @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
+                                                                                                                                        @if ($session_flag_code != '' || !empty($session_flag_code))
+                                                                                                                                            <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus">
+                                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                            </a>
+                                                                                                                                        @else
+                                                                                                                                            {{-- <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus"> --}}
+                                                                                                                                            <a onclick="$('#Modal').modal('show');" class="btn options-btn cartstatus">
+                                                                                                                                                <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                            </a>
+                                                                                                                                        @endif
+
+                                                                                                                                        {{-- Dynamic Model --}}
+                                                                                                                                        <div class="modal fade newfree-item-modal_{{ $proID }}" id="newfreeItem_{{ $proID }}" tabindex="-1" aria-labelledby="newfreeItem_{{ $proID }}Label" aria-hidden="true">
+                                                                                                                                            <div class="modal-dialog">
+                                                                                                                                                <div class="modal-content" id="item-modal">
+                                                                                                                                                    <div class="modal-header">
+                                                                                                                                                        <h5 class="modal-title text-center" id="newfreeItem_{{ $proID }}Label">{{ $values->hasOneDescription['name'] }}</h5>
+                                                                                                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="modal-body">
+                                                                                                                                                        <form id="new_top_form_{{ $proID }}">
+                                                                                                                                                            @csrf
+                                                                                                                                                            @foreach ($get_product_top_opt as $proTop)
+                                                                                                                                                                @php
+
+                                                                                                                                                                    $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
+                                                                                                                                                                    $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
+                                                                                                                                                                    $top_pro_id = $proTop->id;
+                                                                                                                                                                    $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
+
+                                                                                                                                                                    $get_sub_topping = getSubTopping($id_group_topping);
+
+                                                                                                                                                                @endphp
+
+                                                                                                                                                                <div class="accordion{{ $top_pro_id }}" id="accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                    <div class="accordion-item{{ $top_pro_id }}">
+                                                                                                                                                                        <h2 class="accordion-header{{ $top_pro_id }}" id="headingOne{{ $top_pro_id }}">
+                                                                                                                                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree{{ $top_pro_id }}" aria-expanded="true" aria-controls="collapsefree{{ $top_pro_id }}">
+                                                                                                                                                                                <span style="width: 100%!important">{{ $tName }}</span>
+                                                                                                                                                                            </button>
+                                                                                                                                                                        </h2>
+                                                                                                                                                                        <div id="collapsefree{{ $top_pro_id }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ $top_pro_id }}"
+                                                                                                                                                                            data-bs-parent="#accordionExample{{ $top_pro_id }}">
+                                                                                                                                                                            <div class="accordion-body">
+                                                                                                                                                                                @if ($typeTopping == 'select')
+                                                                                                                                                                                    <select class="form-control" name="select_top[]">
+                                                                                                                                                                                        @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                            <option value=""> -- --</option>
+                                                                                                                                                                                            @foreach ($get_sub_topping as $stop)
+                                                                                                                                                                                                <option value="{{ $stop->name }}">{{ $stop->name }}</option>
+                                                                                                                                                                                            @endforeach
+                                                                                                                                                                                        @endif
+                                                                                                                                                                                    </select>
+                                                                                                                                                                                @else
+                                                                                                                                                                                    <div class="row">
+                                                                                                                                                                                        @if (!empty($get_sub_topping) || $get_sub_topping != '')
+                                                                                                                                                                                            @foreach ($get_sub_topping as $key=> $stop)
+                                                                                                                                                                                                <div class="col-md-6">
+                                                                                                                                                                                                    <label>{{ $stop->name }}</label>
+                                                                                                                                                                                                    <input type="checkbox" name="check_top" id="{{ $stop->name }}" value="{{ $stop->name }}">
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                            @endforeach
+                                                                                                                                                                                        @endif
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                @endif
+                                                                                                                                                                            </div>
+                                                                                                                                                                        </div>
+                                                                                                                                                                    </div>
+                                                                                                                                                                    {{-- <div class="">
+                                                                                                                                                                        <b>Add your special request?</b><br>
+                                                                                                                                                                        <textarea  name="request" rows="5" style="width: 465px"></textarea>
+                                                                                                                                                                    </div> --}}
+                                                                                                                                                                </div>
+                                                                                                                                                            @endforeach
+                                                                                                                                                        </form>
+                                                                                                                                                    </div>
+                                                                                                                                                    <div class="modal-footer text-center">
+                                                                                                                                                        <button type="button" onclick="addToCart({{ $values->product_id }},0,{{ $userid }},'model');" class="btn">Add To Cart</button>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                        {{-- End Dynamic Model --}}
+
+                                                                                                                                    @else
+                                                                                                                                        <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
+                                                                                                                                            <span class="sizeprice hide-carttext text-white 8">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                        </a>
+                                                                                                                                    @endif
+                                                                                                                                @else
+                                                                                                                                    <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
+                                                                                                                                        <span class="sizeprice hide-carttext text-white 9">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+                                                                                                                                @endif
                                                                                                                             @else
-                                                                                                                                <a onclick="addToCart({{ $values->product_id }},{{ $sizeprice_id }},{{ $userid }});"
-                                                                                                                                    class="btn options-btn cartstatus">
-                                                                                                                                    <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                @if ($setprice != 0)
+                                                                                                                                    <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
+                                                                                                                                        <span class="sizeprice hide-carttext text-white 10">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+                                                                                                                                @else
+                                                                                                                                    <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
+                                                                                                                                        <span class="sizeprice hide-carttext text-white 11">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                    </a>
+                                                                                                                                @endif
+                                                                                                                            @endif
+                                                                                                                        @else
+                                                                                                                            @if ($setprice != 0)
+                                                                                                                                <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
+                                                                                                                                    <span class="sizeprice hide-carttext text-white 10">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
+                                                                                                                                </a>
+                                                                                                                            @else
+                                                                                                                                <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
+                                                                                                                                    <span class="sizeprice hide-carttext text-white 11">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                                 </a>
                                                                                                                             @endif
                                                                                                                         @endif
                                                                                                                     @else
                                                                                                                         <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                            <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
+                                                                                                                            <span class="sizeprice hide-carttext text-white 12">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
                                                                                                                         </a>
                                                                                                                     @endif
-
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                    @endforeach
-                                                                                                @else
-                                                                                                    @php
-                                                                                                        if($userdeliverytype == 'delivery')
-                                                                                                        {
-                                                                                                            $setprice = $values->hasOneProduct['delivery_price'];
-                                                                                                        }
-                                                                                                        elseif ($userdeliverytype == 'collection')
-                                                                                                        {
-                                                                                                            $setprice = $values->hasOneProduct['collection_price'];
-                                                                                                        }
-                                                                                                        else
-                                                                                                        {
-                                                                                                            $setprice = $values->hasOneProduct['price'];
-                                                                                                        }
-                                                                                                    @endphp
-                                                                                                    <div class="options-bt">
-                                                                                                        <div class="row align-items-center">
-                                                                                                            <div class="col-md-5">
-                                                                                                                <span>price</span>
-                                                                                                            </div>
-                                                                                                            <div class="col-md-7">
-                                                                                                                @if($store_open_close == 'open')
-                                                                                                                    @if ($get_cat_top_status['enable_option'] == 1)
-                                                                                                                        @if ($setprice != 0)
-                                                                                                                            @if (count($get_product_top_opt) > 0 && $get_product_top_opt != '')
-                                                                                                                                @if ($session_flag_code != '' || !empty($session_flag_code))
-                                                                                                                                    <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus">
-                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                    </a>
-                                                                                                                                @else
-                                                                                                                                    {{-- <a data-bs-toggle="modal" data-bs-target="#newfreeItem_{{ $proID }}" class="btn options-btn cartstatus"> --}}
-                                                                                                                                    <a onclick="$('#Modal').modal('show');" class="btn options-btn cartstatus">
-                                                                                                                                        <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                    </a>
-                                                                                                                                @endif
-
-                                                                                                                                {{-- Dynamic Model --}}
-                                                                                                                                <div class="modal fade newfree-item-modal_{{ $proID }}" id="newfreeItem_{{ $proID }}" tabindex="-1" aria-labelledby="newfreeItem_{{ $proID }}Label" aria-hidden="true">
-                                                                                                                                    <div class="modal-dialog">
-                                                                                                                                        <div class="modal-content" id="item-modal">
-                                                                                                                                            <div class="modal-header">
-                                                                                                                                                <h5 class="modal-title text-center" id="newfreeItem_{{ $proID }}Label">{{ $values->hasOneDescription['name'] }}</h5>
-                                                                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="modal-body">
-                                                                                                                                                <form id="new_top_form_{{ $proID }}">
-                                                                                                                                                    @csrf
-                                                                                                                                                    @foreach ($get_product_top_opt as $proTop)
-                                                                                                                                                        @php
-
-                                                                                                                                                            $tName = isset($proTop->hasOneTopping['name_topping']) ? $proTop->hasOneTopping['name_topping'] : '';
-                                                                                                                                                            $typeTopping = isset($proTop->typetopping) ? $proTop->typetopping : '';
-                                                                                                                                                            $top_pro_id = $proTop->id;
-                                                                                                                                                            $id_group_topping = isset($proTop->id_group_topping) ? $proTop->id_group_topping : '';
-
-                                                                                                                                                            $get_sub_topping = getSubTopping($id_group_topping);
-
-                                                                                                                                                        @endphp
-
-                                                                                                                                                        <div class="accordion{{ $top_pro_id }}" id="accordionExample{{ $top_pro_id }}">
-                                                                                                                                                            <div class="accordion-item{{ $top_pro_id }}">
-                                                                                                                                                                <h2 class="accordion-header{{ $top_pro_id }}" id="headingOne{{ $top_pro_id }}">
-                                                                                                                                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefree{{ $top_pro_id }}" aria-expanded="true" aria-controls="collapsefree{{ $top_pro_id }}">
-                                                                                                                                                                        <span style="width: 100%!important">{{ $tName }}</span>
-                                                                                                                                                                    </button>
-                                                                                                                                                                </h2>
-                                                                                                                                                                <div id="collapsefree{{ $top_pro_id }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ $top_pro_id }}"
-                                                                                                                                                                    data-bs-parent="#accordionExample{{ $top_pro_id }}">
-                                                                                                                                                                    <div class="accordion-body">
-                                                                                                                                                                        @if ($typeTopping == 'select')
-                                                                                                                                                                            <select class="form-control" name="select_top[]">
-                                                                                                                                                                                @if (!empty($get_sub_topping) || $get_sub_topping != '')
-                                                                                                                                                                                    <option value=""> -- --</option>
-                                                                                                                                                                                    @foreach ($get_sub_topping as $stop)
-                                                                                                                                                                                        <option value="{{ $stop->name }}">{{ $stop->name }}</option>
-                                                                                                                                                                                    @endforeach
-                                                                                                                                                                                @endif
-                                                                                                                                                                            </select>
-                                                                                                                                                                        @else
-                                                                                                                                                                            <div class="row">
-                                                                                                                                                                                @if (!empty($get_sub_topping) || $get_sub_topping != '')
-                                                                                                                                                                                    @foreach ($get_sub_topping as $key=> $stop)
-                                                                                                                                                                                        <div class="col-md-6">
-                                                                                                                                                                                            <label>{{ $stop->name }}</label>
-                                                                                                                                                                                            <input type="checkbox" name="check_top" id="{{ $stop->name }}" value="{{ $stop->name }}">
-                                                                                                                                                                                        </div>
-                                                                                                                                                                                    @endforeach
-                                                                                                                                                                                @endif
-                                                                                                                                                                            </div>
-                                                                                                                                                                        @endif
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                            </div>
-                                                                                                                                                            {{-- <div class="">
-                                                                                                                                                                <b>Add your special request?</b><br>
-                                                                                                                                                                <textarea  name="request" rows="5" style="width: 465px"></textarea>
-                                                                                                                                                            </div> --}}
-                                                                                                                                                        </div>
-                                                                                                                                                    @endforeach
-                                                                                                                                                </form>
-                                                                                                                                            </div>
-                                                                                                                                            <div class="modal-footer text-center">
-                                                                                                                                                <button type="button" onclick="addToCart({{ $values->product_id }},0,{{ $userid }},'model');" class="btn">Add To Cart</button>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                {{-- End Dynamic Model --}}
-
-                                                                                                                            @else
-                                                                                                                                <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
-                                                                                                                                    <span class="sizeprice hide-carttext text-white 8">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                </a>
-                                                                                                                            @endif
-                                                                                                                        @else
-                                                                                                                            <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
-                                                                                                                                <span class="sizeprice hide-carttext text-white 9">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            </a>
-                                                                                                                        @endif
-                                                                                                                    @else
-                                                                                                                        @if ($setprice != 0)
-                                                                                                                            <a onclick="addToCart({{ $values->product_id }},0,{{ $userid }});" class="btn options-btn cartstatus">
-                                                                                                                                <span class="sizeprice hide-carttext text-white 10">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            </a>
-                                                                                                                        @else
-                                                                                                                            <a class="btn options-btn" style="cursor: not-allowed;pointer-events: auto; opacity:0.5;" disabled>
-                                                                                                                                <span class="sizeprice hide-carttext text-white 11">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                            </a>
-                                                                                                                        @endif
-                                                                                                                    @endif
-                                                                                                                @else
-                                                                                                                    <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
-                                                                                                                        <span class="sizeprice hide-carttext text-white 12">{{ $currency }}{{ $setprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                    </a>
-                                                                                                                @endif
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                @endif
+                                                                                                    @endif
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
+                                                                            @endif
                                                                         @endif
-                                                                    @endif
-                                                                @endforeach
+                                                                    @endforeach
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
