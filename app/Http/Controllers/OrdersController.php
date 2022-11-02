@@ -1221,9 +1221,14 @@ class OrdersController extends Controller
     public function deleteproductcart(Request $request)
     {
         $pro_id = $request->pro_id;
-        $productid  = session()->get('admincart_product_id');
 
-        if (in_array($productid, $pro_id)) {
+        if (session()->has('admincart_product_id')) {
+            $productid  = session()->get('admincart_product_id');
+
+        }
+
+
+        if (in_array($pro_id,$productid)) {
             unset($productid[$pro_id]);
             session()->put('admincart_product_id', $pro_id);
             session()->save();

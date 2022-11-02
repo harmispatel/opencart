@@ -157,7 +157,7 @@ Route::group(['middleware' => 'AuthUser'], function () {
     Route::post('storebulkproduct',[ProductController::class, 'storebulkproduct'])->name('storebulkproduct');
     Route::post('getcategoryproduct', [ProductController::class, 'getcategoryproduct'])->name('getcategoryproduct');
     Route::get('importproducts', [ProductController::class, 'importproducts'])->name('importproducts');
-    Route::post('imp_pro_cat', [ProductController::class, 'impProductCategory'])->name('imp_pro_cat');
+    Route::post('imp_product_category', [ProductController::class, 'impProductCategory'])->name('imp_product_category');
     Route::post('getproduct', [ProductController::class, 'getproduct'])->name('getproduct');
     Route::post('getproductbycategory', [ProductController::class, 'getproductbycategory'])->name('getproductbycategory');
     Route::get('addproduct', [ProductController::class, 'add'])->name('addproduct');

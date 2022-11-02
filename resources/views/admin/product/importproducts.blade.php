@@ -43,16 +43,20 @@
                 <div class="row">
                     <div class="col-md-12">
                         {{-- Card Start --}}
-                        <div class="card">
+                        <div class="card card-primary ">
                             <div class="card-header" style="background: #f6f6f6">
-                                <div class="card-title pt-0 m-0" style="color: black;">
-                                    <h4><i class="fa fa-image"></i> Import CSV</h4>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h3 class="card-title pt-2 m-0 text-dark"><i class="fa fa-image"></i> &nbsp;Import CSV</h3>
+                                    </div>
+                                    <div class="col-md-4 text-right">
+                                        <a href="{{ public_url().'public/admin/demo_csv/demo.csv' }}" style="color: blue;"><i class="fa fa-download"></i download> (Download Demo File)</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">
-
                                 @if(Session::has('file_error'))
-                                    <div class="row mt-2 mb-2">
+                                    <div class="row mt-1 mb-1">
                                         <div class="col-md-12">
                                             <div class="alert alert-danger del-alert alert-dismissible" id="alert" role="alert">
                                                 {{ Session::get('file_error') }}
@@ -65,7 +69,7 @@
                                 @endif
 
                                 @if(Session::has('success'))
-                                    <div class="row mt-2 mb-2">
+                                    <div class="row mt-1 mb-1">
                                         <div class="col-md-12">
                                             <div class="alert alert-success del-alert alert-dismissible" id="alert" role="alert">
                                                 {{ Session::get('success') }}
@@ -77,38 +81,27 @@
                                     </div>
                                 @endif
 
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-12">
-                                        <form action="{{ route('imp_pro_cat') }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('imp_product_category') }}" method="POST" enctype="multipart/form-data">
                                             {{ csrf_field() }}
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Import Type</label> <br>
-                                                            <input type="radio" name="imp_type" value="categories" checked> Categories
-                                                            <input type="radio" name="imp_type" value="products"> Products
-                                                        </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Upload Your CSV</label>
+                                                        <input type="file" name="csvFile" class="form-control p-1 {{ ($errors->has('csvFile')) ? 'is-invalid' : '' }}">
+                                                        @if($errors->has('csvFile'))
+                                                            <span class="text-danger mt-0">
+                                                                {{ $errors->first('csvFile') }}
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label">Choose CSV File</label>
-                                                            <input type="file" class="form-control p-1 {{ ($errors->has('csvFile')) ? 'is-invalid' : '' }}" name="csvFile">
-                                                            @if($errors->has('csvFile'))
-                                                                <div class="invalid-feedback">
-                                                                    {{ $errors->first('csvFile') }}
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <button class="btn btn-success">Import &nbsp;<i class="fa fa-arrow-down"></i></button>
-                                                        </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary"><i class="fa fa-arrow-down"></i> &nbsp;IMPORT</button>
                                                     </div>
                                                 </div>
                                             </div>

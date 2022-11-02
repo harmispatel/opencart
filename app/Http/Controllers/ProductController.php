@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ImportCategoryProduct;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductDescription;
@@ -17,6 +18,7 @@ use App\Models\ToppingProductPriceSize;
 use App\Models\Topping;
 use App\Models\ToppingCatOption;
 use App\Models\ToppingOption;
+use Maatwebsite\Excel\Facades\Excel;
 use DataTables;
 
 use Illuminate\Support\Facades\DB;
@@ -346,11 +348,9 @@ class ProductController extends Controller
 
 
 
-    // Import Products & Category
-    public function impProductCategory(Request $request)
+    // Import Product and Category
+    function impProductCategory(Request $request)
     {
-        $import_type = $request->imp_type;
-
         $request->validate([
             'csvFile' => 'required'
         ]);
@@ -361,22 +361,21 @@ class ProductController extends Controller
         {
             try
             {
-                if($import_type == 'categories')
-                {
+                Excel::import(new ImportCategoryProduct, $request->file('csvFile')->store('files'));
 
-                }
+                return redirect()->route('importproducts')->with('success','Category and Products has been Imported SuccessFully..');
             }
-            catch (\Exception $e) {
-                return redirect()->route('importproducts')->with('file_error','Select Valid File Format, Please See First Demo File Format Then Import Your Products or Categories !');
+            catch (\Exception $e)
+            {
+                return redirect()->route('importproducts')->with('file_error',$e->getMessage()." Please Check Demo File !");
             }
         }
         else
         {
-            return redirect()->route('importproducts')->with('file_error','Please Choose a Valid Format File Like : csv,xls,xlsx.');
+            return redirect()->route('importproducts')->with('file_error','The csv file must be a file of type of : csv, xls or xlsx.');
         }
 
     }
-
 
 
 

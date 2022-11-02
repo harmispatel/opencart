@@ -7,6 +7,11 @@ use App\Models\CategoryDetail;
 use App\Models\CategoryLayout;
 use App\Models\CategoryPath;
 use App\Models\CategorytoStore;
+use App\Models\Product;
+use App\Models\Product_to_category;
+use App\Models\ProductDescription;
+use App\Models\ProductStore;
+use App\Models\Reward;
 use App\Models\Topping;
 use App\Models\ToppingCatOption;
 use App\Models\ToppingProductPriceSize;
@@ -774,6 +779,7 @@ class CategoryController extends Controller
 
         $ids = $request['id'];
 
+
         if (count($ids) > 0) {
             // Delete Category Image & Banner Image
             foreach ($ids as $id) {
@@ -812,10 +818,43 @@ class CategoryController extends Controller
             // Delete Category to Path
             CategoryPath::whereIn('category_id', $ids)->delete();
 
-            return response()->json([
-                'success' => 1,
-            ]);
         }
+
+        // Categories Products
+        $categories_product = Product_to_category::select('product_id')->whereIn('category_id',$ids)->get()->toArray();
+
+        if(count($categories_product) > 0)
+        {
+            $product_ids = array();
+            foreach($categories_product as $product)
+            {
+                $product_ids[] = $product['product_id'];
+            }
+
+            if(count($product_ids) > 0)
+            {
+                // Delete Product To Store
+                ProductStore::whereIn('product_id',$product_ids)->delete();
+
+                // Reward
+                Reward::whereIn('product_id',$product_ids)->delete();
+
+                // Product Description
+                ProductDescription::whereIn('product_id',$product_ids)->delete();
+
+                // Product
+                Product::whereIn('product_id',$product_ids)->delete();
+
+                // Delete Product to Category
+                Product_to_category::whereIn('product_id',$product_ids)->delete();
+            }
+
+        }
+
+        return response()->json([
+            'success' => 1,
+        ]);
+
     }
 
 
