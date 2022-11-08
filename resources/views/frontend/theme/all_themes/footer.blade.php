@@ -279,21 +279,35 @@
                 <img class="img-fluid" src="{{ $store_logo }}" alt="footer_logo" style="max-width: 125px;" />
             </a>
             <ul class="social-links">
-                <li>
-                    <a class="fab fa-facebook" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fab fa-google" href="mailto:{{ isset($social_site['polianna_gplus_id']) ? $social_site['polianna_gplus_id'] : '' }}" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.linkedin.com' }}" target="_blank"></a>
-                </li>
-                <li>
-                    <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.youtube.com' }}" target="_blank"></a>
-                </li>
+                @if (isset($social_site['polianna_facebook_id']) && !empty($social_site['polianna_facebook_id']))
+                    <li>
+                        <a class="fab fa-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                    </li>
+                @endif  
+
+                @if (isset($social_site['polianna_twitter_username']) && !empty($social_site['polianna_twitter_username']))
+                    <li>
+                        <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                    </li>
+                @endif
+
+                @if (isset($social_site['polianna_gplus_id']) && !empty($social_site['polianna_gplus_id']))
+                    <li>
+                        <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                    </li>
+                @endif
+
+                @if (isset($social_site['polianna_linkedin_id']) && !empty($social_site['polianna_linkedin_id']))
+                    <li>
+                        <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                    </li>
+                @endif
+
+                @if (isset($social_site['polianna_youtube_id']) && !empty($social_site['polianna_youtube_id']))                                
+                    <li>
+                        <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                    </li>
+                @endif
             </ul>
             <div class="copyright">
                 <p>{{ $copyright }}</p>
@@ -316,10 +330,25 @@
                             <p class="foot_link">Pizza is the topmost liked food in the world. Today you can find pizza in almost every corner of the world.</p>
 
                             <div class="social-links">
-                                <a class="fab fa-facebook-f" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}" target="_blank"></a>
-                                <a class="fab fa-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}" target="_blank"></a>
-                                <a class="fab fa-youtube" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.youtube.com' }}" target="_blank"></a>
-                                <a class="fab fa-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.linkedin.com' }}" target="_blank"></a>
+                                @if (isset($social_site['polianna_facebook_id']) && !empty($social_site['polianna_facebook_id']))                                    
+                                    <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                                @endif
+                                
+                                @if (isset($social_site['polianna_twitter_username']) && !empty($social_site['polianna_twitter_username']))
+                                    <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                                @endif
+
+                                @if (isset($social_site['polianna_youtube_id']) && !empty($social_site['polianna_youtube_id']))
+                                    <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                                @endif
+
+                                @if (isset($social_site['polianna_linkedin_id']) && !empty($social_site['polianna_linkedin_id']))
+                                    <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                                @endif
+
+                                @if (isset($social_site['polianna_gplus_id']) && !empty($social_site['polianna_gplus_id']))
+                                    <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                                @endif
                             </div>
                         </div>
 
@@ -397,10 +426,25 @@
                                     <div class="__info-item">
                                         <strong>Online Follow Us</strong>
                                         <div class="__social-links">
-                                            <a href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}" target="_blank" class="fab fa-facebook-f"></a>
-                                            <a  href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}" target="_blank" class="fab fa-twitter"></a>
-                                            <a  href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.linkedin.com' }}" target="_blank" class="fab fa-linkedin"></a>
-                                            <a href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.youtube.com' }}" target="_blank" class="fab fa-youtube"></a>
+                                            @if (isset($social_site['polianna_facebook_id']) && !empty($social_site['polianna_facebook_id']))                                    
+                                                <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                                            @endif
+                                            
+                                            @if (isset($social_site['polianna_twitter_username']) && !empty($social_site['polianna_twitter_username']))
+                                                <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                                            @endif
+
+                                            @if (isset($social_site['polianna_youtube_id']) && !empty($social_site['polianna_youtube_id']))
+                                                <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                                            @endif
+
+                                            @if (isset($social_site['polianna_linkedin_id']) && !empty($social_site['polianna_linkedin_id']))
+                                                <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                                            @endif
+
+                                            @if (isset($social_site['polianna_gplus_id']) && !empty($social_site['polianna_gplus_id']))
+                                                <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -440,10 +484,25 @@
                     </ul>
 
                     <div class="__social-links">
-                        <a class="fab fa-facebook-f foot_link" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}"></a>
-                        <a class="fab fa-twitter foot_link" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}"></a>
-                        <a class="fab fa-linkedin foot_link" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.linkedin.com' }}"></a>
-                        <a class="fab fa-youtube foot_link" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.youtube.com' }}"></a>
+                        @if (isset($social_site['polianna_facebook_id']) && !empty($social_site['polianna_facebook_id']))                                    
+                            <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                        @endif
+                        
+                        @if (isset($social_site['polianna_twitter_username']) && !empty($social_site['polianna_twitter_username']))
+                            <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                        @endif
+
+                        @if (isset($social_site['polianna_youtube_id']) && !empty($social_site['polianna_youtube_id']))
+                            <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                        @endif
+
+                        @if (isset($social_site['polianna_linkedin_id']) && !empty($social_site['polianna_linkedin_id']))
+                            <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                        @endif
+
+                        @if (isset($social_site['polianna_gplus_id']) && !empty($social_site['polianna_gplus_id']))
+                            <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                        @endif
                     </div>
                 </div>
                 <a class="f-logo" href="{{ route('home') }}">
@@ -499,18 +558,29 @@
                                 </div>
                                 <div class="col-12 col-sm-12 col-md-4">
                                     <div class="__social-links mb-4">
-                                        <a class="bg-facebook" href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.facebook.com' }}">
-                                            <i  class="fab fa-facebook-f"></i><span>Facebook</span>
-                                        </a>
-                                        <a class="bg-twitter" href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}">
-                                            <i class="fab fa-twitter"></i><span>Twitter</span>
-                                        </a>
-                                        <a class="bg-linkedin" href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}">
-                                            <i class="fab fa-linkedin"></i><span>Linkedin</span>
-                                        </a>
-                                        <a class="bg-instagram" href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}">
-                                            <i class="fab fa-youtube"></i><span>Youtube</span>
-                                        </a>
+                                        @if (isset($social_site['polianna_facebook_id']) && !empty($social_site['polianna_facebook_id']))                                    
+                                            <a class="bg-facebook" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank">
+                                                <i  class="fab fa-facebook-f"></i><span>Facebook</span>
+                                            </a>
+                                        @endif
+                                        
+                                        @if (isset($social_site['polianna_twitter_username']) && !empty($social_site['polianna_twitter_username']))
+                                            <a class="bg-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank">
+                                                <i class="fab fa-twitter"></i><span>Twitter</span>
+                                            </a>
+                                        @endif
+
+                                        @if (isset($social_site['polianna_youtube_id']) && !empty($social_site['polianna_youtube_id']))
+                                            <a class="bg-instagram" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank">
+                                                <i class="fab fa-youtube"></i><span>Youtube</span>
+                                            </a>
+                                        @endif
+
+                                        @if (isset($social_site['polianna_linkedin_id']) && !empty($social_site['polianna_linkedin_id']))
+                                            <a class="bg-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank">
+                                                <i class="fab fa-linkedin"></i><span>Linkedin</span>
+                                            </a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -540,10 +610,25 @@
                     <img class="img-fluid" src="{{ $store_logo }}" alt="footer_logo" style="max-width: 125px;"/>
                 </a>
                 <div class="__social-links">
-                    <a href="{{ isset($social_site['polianna_facebook_id']) ? $social_site['polianna_facebook_id'] : 'https://www.twitter.com' }}" target="_blank" class="fab fa-facebook"></a>
-                    <a href="{{ isset($social_site['polianna_twitter_username']) ? $social_site['polianna_twitter_username'] : 'https://www.twitter.com' }}" target="_blank" class="fab fa-twitter"></a>
-                    <a href="{{ isset($social_site['polianna_linkedin_id']) ? $social_site['polianna_linkedin_id'] : 'https://www.twitter.com' }}" target="_blank" class="fab fa-linkedin"></a>
-                    <a href="{{ isset($social_site['polianna_youtube_id']) ? $social_site['polianna_youtube_id'] : 'https://www.twitter.com' }}" target="_blank" class="fab fa-youtube"></a>
+                    @if (isset($social_site['polianna_facebook_id']) && !empty($social_site['polianna_facebook_id']))                                    
+                        <a class="fab fa-facebook-f" href="{{ $social_site['polianna_facebook_id'] }}" target="_blank"></a>
+                    @endif
+                    
+                    @if (isset($social_site['polianna_twitter_username']) && !empty($social_site['polianna_twitter_username']))
+                        <a class="fab fa-twitter" href="{{ $social_site['polianna_twitter_username'] }}" target="_blank"></a>
+                    @endif
+
+                    @if (isset($social_site['polianna_youtube_id']) && !empty($social_site['polianna_youtube_id']))
+                        <a class="fab fa-youtube" href="{{ $social_site['polianna_youtube_id'] }}" target="_blank"></a>
+                    @endif
+
+                    @if (isset($social_site['polianna_linkedin_id']) && !empty($social_site['polianna_linkedin_id']))
+                        <a class="fab fa-linkedin" href="{{ $social_site['polianna_linkedin_id'] }}" target="_blank"></a>
+                    @endif
+
+                    @if (isset($social_site['polianna_gplus_id']) && !empty($social_site['polianna_gplus_id']))
+                        <a class="fab fa-google" href="mailto:{{ $social_site['polianna_gplus_id'] }}" target="_blank"></a>
+                    @endif
                 </div>
             </div>
         </footer>
