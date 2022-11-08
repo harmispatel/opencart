@@ -381,11 +381,11 @@ It's used for View Menu.
 
                                                                                                                 if($userdeliverytype == 'delivery')
                                                                                                                 {
-                                                                                                                    $setsizeprice = $size->delivery_price;
+                                                                                                                    $setsizeprice = ($size->delivery_price == 0) ? $size->price : $size->delivery_price;
                                                                                                                 }
                                                                                                                 elseif ($userdeliverytype == 'collection')
                                                                                                                 {
-                                                                                                                    $setsizeprice = $size->collection_price;
+                                                                                                                    $setsizeprice = ($size->collection_price == 0) ? $size->price : $size->collection_price;
                                                                                                                 }
                                                                                                                 else
                                                                                                                 {
@@ -519,7 +519,6 @@ It's used for View Menu.
                                                                                                                         @else
                                                                                                                             <a class="btn options-btn" data-bs-toggle="modal" data-bs-target="#pricemodel">
                                                                                                                                 <span class="sizeprice hide-carttext text-white">{{ $currency }}{{ $setsizeprice }}<i class="fa fa-shopping-basket"></i></span>
-                                                                                                                                <span class="show-carttext sizeprice" style="display: none;">Added<i class="fa fa-check"></i></span>
                                                                                                                             </a>
                                                                                                                         @endif
 
@@ -531,11 +530,11 @@ It's used for View Menu.
                                                                                                         @php
                                                                                                             if($userdeliverytype == 'delivery')
                                                                                                             {
-                                                                                                                $setprice = $values->hasOneProduct['delivery_price'];
+                                                                                                                $setprice = ($values->hasOneProduct['delivery_price'] == 0) ? $values->hasOneProduct['price'] : $values->hasOneProduct['delivery_price'];
                                                                                                             }
                                                                                                             elseif ($userdeliverytype == 'collection')
                                                                                                             {
-                                                                                                                $setprice = $values->hasOneProduct['collection_price'];
+                                                                                                                $setprice = ($values->hasOneProduct['collection_price'] == 0) ? $values->hasOneProduct['price'] : $values->hasOneProduct['collection_price'];
                                                                                                             }
                                                                                                             else
                                                                                                             {

@@ -339,21 +339,26 @@ class CouponController extends Controller
     // Get All Coupons History
     public function getallcouponhistory(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax())
+        {
             $couponid = $request->couponid;
             $data = CouponHistory::with(['hasOnecustomersorder'])->where('coupon_id', $couponid)->get();
 
-            return DataTables::of($data)->addIndexColumn()
-                ->addColumn('date_added', function ($row) {
-                    $date_added = date('d-m-Y', strtotime($row->date_added));
-                    return $date_added;
-                })
-                ->addColumn('customer_name', function ($row) {
-                    $cname = $row->hasOnecustomersorder['firstname'] . ' ' . $row->hasOnecustomersorder['lastname'];
-                    return $cname;
-                })
-                ->rawColumns(['date_added'])
-                ->make(true);
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('date_added', function ($row) {
+                $date_added = date('d-m-Y', strtotime($row->date_added));
+                return $date_added;
+            })
+            ->addColumn('customer_name', function ($row)
+            {
+                $firstname = isset($row->hasOnecustomersorder['firstname']) ? $row->hasOnecustomersorder['firstname'] : "";
+                $lastname = isset($row->hasOnecustomersorder['lastname']) ? $row->hasOnecustomersorder['lastname'] : "";
+                $cname =  $firstname." ".$lastname;
+                return $cname;
+            })
+            ->rawColumns(['date_added','customer_name'])
+            ->make(true);
         }
     }
 
