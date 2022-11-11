@@ -62,7 +62,7 @@ It's used for View Menu.
     }
 
     // User Delivery Type (Collection/Delivery)
-    $userdeliverytype = session()->has('flag_post_code') ? session('flag_post_code') : '';
+    $userdeliverytype = (session()->has('flag_post_code')) ? session('flag_post_code') : '';
     // End User Delivery Type
 
     // Get Customer Cart
@@ -134,10 +134,30 @@ It's used for View Menu.
         $session_free_item = '';
     }
 
-    $session_flag_code = (session()->get('flag_post_code')) ? (session()->get('flag_post_code')) : '';
-    // echo '<pre>';
-    // print_r(session()->all());
-    // exit();
+    // Current Delivery Type From Session
+    $session_flag_code = (session()->has('flag_post_code')) ? (session()->get('flag_post_code')) : '';
+
+
+    // Get Minimum Spend
+    if(isset($minimum_spend_setting) && count($minimum_spend_setting) > 0)
+    {
+        $minimum_spend_total = isset($minimum_spend_setting['min_spend']) ? $minimum_spend_setting['min_spend'] : 0;
+    }
+    else
+    {
+        $minimum_spend_total = 0;
+    }
+
+
+    if(session()->has('delivery_charge'))
+    {
+        $delivery_charge = session()->get('delivery_charge');
+    }
+    else
+    {
+        $delivery_charge = 0;
+    }
+
 @endphp
 
 
@@ -151,6 +171,9 @@ It's used for View Menu.
 </head>
 <body>
 
+    <style>
+        .ui-autocomplete { z-index:2147483647; }
+    </style>
 
     <!-- Store Open Close Message Modal -->
     <div class="modal fade" id="pricemodel" tabindex="-1" aria-labelledby="pricemodelLabel" aria-hidden="true">
@@ -852,11 +875,16 @@ It's used for View Menu.
                                                         @endif
                                                     </div>
                                                 </li>
-                                                <?php
-                                                //    echo '<pre>';
-                                                //    print_r($couponcode);
-                                                //    exit();
-                                                ?>
+
+                                                @if ($userdeliverytype == 'delivery')
+                                                    <li class="minicart-list-item">
+                                                        <div class="minicart-list-item-innr">
+                                                            <label>Delivery</label>
+                                                                <span class="del-charge">{{ $currency }} {{ $delivery_charge }}</span>
+                                                        </div>
+                                                    </li>
+                                                @endif
+
                                                 @if (($Coupon != '' || !empty($Coupon)) && (isset($mycart['size']) && !empty($mycart['size'])) || (isset($mycart['withoutSize']) && !empty($mycart['withoutSize'])) && ($couponcode != 0))
                                                     <li class="minicart-list-item">
                                                         {{-- @if (($Coupon != '' || !empty($Coupon)))
@@ -994,17 +1022,16 @@ It's used for View Menu.
                                             </ul>
                                         </div>
                                         <div id="order_type_top" class="order-type">
+                                            {{-- If Select Collection and Both --}}
                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
                                                 <div class="form-check m-auto">
+                                                    {{-- When Only Collection Method Then Show this Btn --}}
                                                     @if ($delivery_setting['enable_delivery'] == 'collection')
-                                                        <input class="form-check-input" type="radio"
-                                                            name="delivery_type" id="collection"
-                                                            {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }}
-                                                            value="collection">
+                                                        <input class="form-check-input collection_delivery_button" uriFrom="menu" type="radio" name="delivery_type" id="collection" {{ $delivery_setting['enable_delivery'] == 'collection' ? 'checked' : '' }} value="collection" typeAttr="collection">
+
+                                                    {{-- When Both Method and collection and Delivery Then show this button --}}
                                                     @else
-                                                        <input class="form-check-input" type="radio"
-                                                            name="delivery_type" id="collection" value="collection"
-                                                            {{ $userdeliverytype == 'collection' ? 'checked' : '' }}>
+                                                        <input class="form-check-input collection_delivery_button" uriFrom="menu" type="radio" name="delivery_type" id="collection" value="collection" {{ ($userdeliverytype == 'collection') ? 'checked' : '' }} typeAttr="collection">
                                                     @endif
                                                     <label class="form-check-label" for="collection">
                                                         <h6>Collection</h6>
@@ -1012,6 +1039,8 @@ It's used for View Menu.
                                                     <span>{{ $collection_gap }}  Min</span>
                                                 </div>
                                             @endif
+
+                                            {{-- If Select Delivery and Both --}}
                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                 <div class="form-check m-auto">
                                                     {{-- <input class="form-check-input" type="radio" name="delivery_type" id="delivery" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }}> --}}
@@ -1032,40 +1061,43 @@ It's used for View Menu.
                             </div>
 
                             @if($store_open_close == 'open')
-                                @if (!empty($mycart['size']))
-                                    {{-- <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a> --}}
+                                @if (!empty($mycart) && count($mycart) > 0)
                                     @if ($userdeliverytype == 'delivery')
-                                        @if ($minimum_spend['min_spend'] >= $total)
-                                            <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
-                                            <div class="closed-now minimum_spend">
-                                                    <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}.</span>
-                                                    {{-- <span class="closing-text 6" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}, you must spend {{ $currency }}{{number_format($minimum_spend['min_spend'],2) - $total}} more for the chekout.</span> --}}
-                                            </div>
+                                        @if ($total >= $minimum_spend_total)
+                                            <a href="{{ route('checkout') }}" class="btn checkbt" style="cursor: pointer">Checkout</a>
                                         @else
-                                            <div class="closed-now pt-0">
-                                                <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
-                                            </div>
-                                            <div class="closed-now minimum_spend">
-                                                <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}.</span>
-                                                {{-- <span class="closing-text 6" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}, you must spend {{ $currency }}{{number_format($minimum_spend['min_spend'],2) - $total}} more for the chekout.</span> --}}
+                                            <div class="disable-cls">
+                                                <div class="closed-now pt-0">
+                                                    <a class="btn checkbt" style="pointer-events: auto;
+                                                    cursor: not-allowed; opacity: 0.5!important;" disabled>Checkout</a>
+                                                </div>
+                                                <div class="closed-now minimum_spend">
+                                                    <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend_total,2)}}.</span>
+                                                </div>
                                             </div>
                                         @endif
                                     @else
                                         <a href="{{ route('checkout') }}" class="btn checkbt">Checkout</a>
                                         <div class="closed-now">
-                                            <span class="closing-text 2" style="color: green !important;">We are open now!</span>
+                                            <span class="closing-text 2" style="color: green !important;">WE ARE OPEN NOW!</span>
                                         </div>
                                     @endif
                                 @else
                                     @if ($userdeliverytype == 'delivery')
-                                        <a href="{{ route('checkout') }}" class="btn checkbt disabled_checkout_btn disabled">Checkout</a>
-                                        <div class="closed-now minimum_spend">
-                                            <span class="closing-text 3" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}} </span>
+                                        <div class="disable-cls">
+                                            <div class="closed-now pt-0">
+                                                <a class="btn checkbt" style="pointer-events: auto;
+                                                cursor: not-allowed; opacity: 0.5!important;" disabled>Checkout</a>
+                                            </div>
+                                            <div class="closed-now minimum_spend">
+                                                <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend_total,2)}}.</span>
+                                            </div>
                                         </div>
                                     @else
-                                        <a href="{{ route('checkout') }}" type="button" class="btn checkbt">Checkout</a>
-                                        <div class="closed-now">
-                                            <span class="closing-text 4" style="color: green !important;">We are open now!</span>
+                                        <div class="closed-now pt-0">
+                                           <div class="disable-cls">
+                                                <a class="btn checkbt" style="pointer-events: auto; cursor: not-allowed; opacity: 0.5!important;" disabled>Checkout</a>
+                                           </div>
                                         </div>
                                     @endif
                                 @endif
@@ -1119,7 +1151,6 @@ It's used for View Menu.
                 <form action="">
                     <div class="modal-body">
                         <h5 class="modal-title" id="ModalLabel">Please Enter Your Post Code</h5>
-                        <span>Minimum delivery is {{ $currency }}{{number_format($minimum_spend['min_spend'],2)}}</span>
                         <div class="controls">
                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                 <div class="srch-input">
@@ -1131,11 +1162,12 @@ It's used for View Menu.
                                             @endforeach
                                         </select>
                                     @else
-                                        <input id="search_input1" oninput="this.value = this.value.toUpperCase()" placeholder="AB10 1BW" type="text" />
-                                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}"
-                                            style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
+                                        <input id="search_input1" placeholder="AB10 1BW" type="text" />
+                                        <img id="loading_icon1" src="{{ get_css_url().'public/admin/gif/gif4.gif' }}" style="float: left; position: absolute; top: 50%; left: 48%; display: none;" />
                                     @endif
+
                                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
+
                                 </div>
                                 <div class="enter_postcode">
                                     <p>Please enter your postcode to view our menu and place an order</p>
@@ -1143,10 +1175,14 @@ It's used for View Menu.
                             @endif
                         </div>
                         @if ($delivery_setting['enable_delivery'] != 'delivery')
-                            <a class="btn csmodal-btn collection_button2">I will come and Collect</a>
+                            <a class="btn csmodal-btn collection_delivery_button" uriFrom="menu" typeAttr="collection">I will come and Collect</a>
                         @endif
                         @if ($delivery_setting['enable_delivery'] != 'collection')
-                            <a class="btn csmodal-btn delivery_button2">Deliver my order</a><br>
+                            @if($delivery_setting['delivery_option'] == 'area')
+                                <a class="btn csmodal-btn collection_delivery_button" typeAttr="delivery" uriFrom="menu" delOpt="areaname">Deliver my order</a><br>
+                            @else
+                                <a class="btn csmodal-btn collection_delivery_button" typeAttr="delivery" uriFrom="menu" delOpt="postcodes">Deliver my order</a><br>
+                            @endif
                         @endif
                         <button type="button" class="btn csmodal-btn-close" id="tested" data-bs-dismiss="modal">Cancel and go back</button>
                     </div>
@@ -1165,81 +1201,19 @@ It's used for View Menu.
     <!-- JS -->
     @include('frontend.include.script')
     <!-- End JS -->
-    {{-- <script type="text/javascript">
-        $(window).load(function() {
-            alert("Image loaded.");
-            console.log("Image loaded.");
-        });
-  </script> --}}
+
+
+
+
 
     <!-- Custom JS -->
     <script type="text/javascript">
 
         var ordertype = $("input[name='delivery_type']:checked").val();
 
-        $(function() {
-            $.ajax({
-                type: "post",
-                url: "{{ route('updatecart')}}",
-                dataType: "json",
-                data: {"_token": "{{ csrf_token() }}",
-                        'ordertype': ordertype,
-                    },
-                success: function (response) {
-                    // alert(response.min_spend)
-                    // console.log(response.cart_products);
-                    $('.empty-box').html('');
-                    $('.empty-box').html(response.cart_products);
-
-                    // Sub Total
-                    $('.sub-total').html('');
-                    $('.sub-total').append(response.subtotal);
-
-                    // $('.empty-box').html('');
-                    // $('.empty-box').append(result.html);
-
-                    // Sub Total
-                    $('.sub-total').html('');
-                    $('.sub-total').append(response.subtotal);
-
-                    $('.total').html('');
-                    $('.total').append(response.total);
-
-                    // Header Total
-                    $('.pirce-value').text('');
-                    $('.pirce-value').append(response.headertotal);
-
-                    if (response.couponcode_name != '' && response.couponcode_amount != '')
-                    {
-
-                        $('.coupon_code').html('');
-                        $('.coupon_code').css('display','block');
-                        $('.coupon_code').html('<label id="coupontext">Coupon('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
-                        // $('.Applynew_coupon').css('display','block');
-                    }
-                    else{
-                        // alert('h2')
-                        // $('.coupon_code').css('display','none');
-                        $('.addnewcoupon').css('display','block');
-                    }
-
-                    if (response.min_spend == 'true') {
-                        // checkeout button status
-                        $('.disabled_checkout_btn').removeClass('disabled');
-                        $('.minimum_spend').html('');
-                    } else{
-                        // $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ response.minimum_spend +'.</span>');
-                        // $('.disabled_checkout_btn').addClass('disabled');
-                        $('.disabled_checkout_btn').addClass('disabled');
-                        $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
-                    }
-
-                }
-            });
-        });
+        var coll1 = $("input[name='delivery_type']:checked").val();
 
 
-     var coll1 = $("input[name='delivery_type']:checked").val();
         // Document Script
         $(document).ready(function()
         {
@@ -1256,8 +1230,14 @@ It's used for View Menu.
             {
                 $('#Modal').modal('show');
             }
+
+            updateCart(ordertype);
+
         });
         // End Document Script
+
+
+
 
 
         // Show Modal
@@ -1329,8 +1309,6 @@ It's used for View Menu.
                             success: function(result)
                             {
 
-                                console.log(result);
-
                                 // Cart Data
                                 $('.empty-box').html('');
                                 $('.empty-box').append(result.html);
@@ -1353,24 +1331,8 @@ It's used for View Menu.
                                 $('.pirce-value').text('');
                                 $('.pirce-value').append(result.headertotal);
 
-                                // Coupon
-                                // $('.coupon_code').html('');
-                                // $('.coupon_code').append(result.couponcode);
-
-                                // if (result.couponcode_name != '' && result.couponcode_amount != '') {
-                                //     $('.coupon_code').html('');
-                                //     // $('.coupon_code').css('display','block');
-                                //     $('.Applynew_coupon').css('display','none');
-                                //     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                                //     $('.addnewcoupon').css('display','block');
-                                //     // $('.changecoupon').css('display','block');
-                                // }
-                                // else{
-                                //     // $('.coupon_code').css('display','none');
-                                //     $('.addnewcoupon').css('display','block');
-                                // }
-
-                                if (result.couponcode_name != '' && result.couponcode_amount != '') {
+                                if (result.couponcode_name != '' && result.couponcode_amount != '')
+                                {
                                     $('.coupon_code').html('');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
                                     $('.Applynew_coupon').css('display','block');
@@ -1378,14 +1340,12 @@ It's used for View Menu.
                                     $('.addnewcoupon').css('display','block');
 
                                 }
-                                else{
+                                else
+                                {
                                     $('.coupon_code').css('display','none');
                                     $('.addnewcoupon').css('display','block');
                                 }
 
-                                // Modal
-                                // $('#item-modal').html('');
-                                // $('#item-modal').append(result.modal);
 
                                 // Free Items
                                 $('#freeItem').html('');
@@ -1394,15 +1354,34 @@ It's used for View Menu.
                                 $('#top_form_'+sizeprice).trigger("reset");
                                 $('#freeItem_'+sizeprice).modal('hide');
 
-                                if (result.min_spend == 'true') {
-                                    // checkeout button status
-                                    $('.disabled_checkout_btn').removeClass('disabled');
-                                    $('.minimum_spend').html('');
+                                if (result.min_spend == 'true')
+                                {
+                                    var newBtn = '<a href="{{ route("checkout") }}" class="btn checkbt" style="cursor: pointer">Checkout</a>';
+                                    $('.disable-cls').html('');
+                                    $('.disable-cls').html(newBtn);
                                 }
-                                else{
-                                    $('.disabled_checkout_btn').addClass('disabled');
-                                    $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
+                                else if(result.min_spend == 'false')
+                                {
+                                    var html = `<div class="closed-now pt-0">
+                                        <a class="btn checkbt" style="pointer-events: auto;
+                                        cursor: not-allowed; opacity: 0.5!important;" disabled>Checkout</a>
+                                    </div>
+                                    <div class="closed-now minimum_spend">
+                                        <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend_total,2)}}.</span>
+                                    </div>`;
+                                    $('.disable-cls').html('');
+                                    $('.disable-cls').html(html);
                                 }
+                                else
+                                {
+                                    var newBtn = '<a href="{{ route("checkout") }}" class="btn checkbt" style="cursor: pointer">Checkout</a>';
+                                    $('.disable-cls').html('');
+                                    $('.disable-cls').html(newBtn);
+                                }
+
+                                // Delivery Charge
+                                $('.del-charge').html('');
+                                $('.del-charge').append(result.delivery_charge);
                             }
                         });
                     }
@@ -1461,29 +1440,12 @@ It's used for View Menu.
                                 $('.pirce-value').text('');
                                 $('.pirce-value').append(result.headertotal);
 
-                                // Coupon
-                                // $('.coupon_code').html('');
-                                // $('.coupon_code').append(result.couponcode);
+                                 // Delivery Charge
+                                $('.del-charge').html('');
+                                $('.del-charge').append(result.delivery_charge);
 
-                                // if (result.couponcode_name != '' && result.couponcode_amount != '') {
-
-                                //     // $('.coupon_code').html('');
-                                //     // $('.coupon_code').html('<label id="coupontext">Coupon2('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                                //     // $('.Applynew_coupon').css('display','none');
-                                //     // $('.coupon_code').css('display','block');
-                                //     $('.coupon_code').html('');
-                                //     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                                //     $('.Applynew_coupon').css('display','none');
-                                //     $('.addnewcoupon').css('display','block');
-                                //     // $('.changecoupon').css('display','block');
-
-                                // }
-                                // else{
-                                //     // $('.coupon_code').css('display','none');
-                                //     $('.addnewcoupon').css('display','block');
-                                // }
-
-                                if (result.couponcode_name != '' && result.couponcode_amount != '') {
+                                if (result.couponcode_name != '' && result.couponcode_amount != '')
+                                {
                                     $('.coupon_code').html('');
                                     $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
                                     $('.Applynew_coupon').css('display','block');
@@ -1491,14 +1453,11 @@ It's used for View Menu.
                                     $('.addnewcoupon').css('display','block');
 
                                 }
-                                else{
+                                else
+                                {
                                     $('.coupon_code').css('display','none');
                                     $('.addnewcoupon').css('display','block');
                                 }
-
-                                // Modal
-                                // $('#item-modal').html('');
-                                // $('#item-modal').append(result.modal);
 
                                 // Free Items
                                 $('#freeItem').html('');
@@ -1507,14 +1466,29 @@ It's used for View Menu.
                                 $('#new_top_form_'+product).trigger("reset");
                                 $('#newfreeItem_'+product).modal('hide');
 
-                                if (result.min_spend == 'true') {
-                                    // checkeout button status
-                                    $('.disabled_checkout_btn').removeClass('disabled');
-                                    $('.minimum_spend').html('');
+                                if (result.min_spend == 'true')
+                                {
+                                    var newBtn = '<a href="{{ route("checkout") }}" class="btn checkbt" style="cursor: pointer">Checkout</a>';
+                                    $('.disable-cls').html('');
+                                    $('.disable-cls').html(newBtn);
                                 }
-                                else{
-                                    $('.disabled_checkout_btn').addClass('disabled');
-                                    $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
+                                else if(result.min_spend == 'false')
+                                {
+                                    var html = `<div class="closed-now pt-0">
+                                        <a class="btn checkbt" style="pointer-events: auto;
+                                        cursor: not-allowed; opacity: 0.5!important;" disabled>Checkout</a>
+                                    </div>
+                                    <div class="closed-now minimum_spend">
+                                        <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend_total,2)}}.</span>
+                                    </div>`;
+                                    $('.disable-cls').html('');
+                                    $('.disable-cls').html(html);
+                                }
+                                else
+                                {
+                                    var newBtn = '<a href="{{ route("checkout") }}" class="btn checkbt" style="cursor: pointer">Checkout</a>';
+                                    $('.disable-cls').html('');
+                                    $('.disable-cls').html(newBtn);
                                 }
                             }
                         });
@@ -1542,7 +1516,6 @@ It's used for View Menu.
                 dataType: 'json',
                 success: function(result)
                 {
-                    console.log(result.subtotal);
                     // Cart Data
                     $('.empty-box').html('');
                     $('.empty-box').append(result.html);
@@ -1565,71 +1538,56 @@ It's used for View Menu.
                     $('.pirce-value').text('');
                     $('.pirce-value').append(result.headertotal);
 
-                    // Coupon
-                    // $('.coupon_code').html('');
-                    // $('.coupon_code').append(result.couponcode);
+                    // Delivery Charge
+                    $('.del-charge').html('');
+                    $('.del-charge').append(result.delivery_charge);
 
-                        if (result.couponcode_name != '' && result.couponcode_amount != '') {
-                            $('.coupon_code').html('');
-                            $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                            $('.Applynew_coupon').css('display','block');
-                            // $('.changecoupon').css('display','block');
-                            $('.addnewcoupon').css('display','block');
-
-                        }
-                        else{
-                            $('.coupon_code').css('display','none');
-                            $('.addnewcoupon').css('display','block');
-                        }
-
-                    // Modal
-                    // $('#item-modal').html('');
-                    // $('#item-modal').append(result.modal);
+                    if (result.couponcode_name != '' && result.couponcode_amount != '')
+                    {
+                        $('.coupon_code').html('');
+                        $('.coupon_code').html('<label id="coupontext">Coupon('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
+                        $('.Applynew_coupon').css('display','block');
+                        $('.addnewcoupon').css('display','block');
+                    }
+                    else
+                    {
+                        $('.coupon_code').css('display','none');
+                        $('.addnewcoupon').css('display','block');
+                    }
 
                     // Free Items
                     $('#freeItem').html('');
                     $('#freeItem').append(result.cart_rule_html);
 
-                    if (result.min_spend == 'true') {
-                        // checkeout button status
-                        $('.disabled_checkout_btn').removeClass('disabled');
-                        $('.minimum_spend').html('');
+                    if (result.min_spend == 'true')
+                    {
+                        var newBtn = '<a href="{{ route("checkout") }}" class="btn checkbt" style="cursor: pointer">Checkout</a>';
+                        $('.disable-cls').html('');
+                        $('.disable-cls').html(newBtn);
                     }
-                    else{
-                        $('.disabled_checkout_btn').addClass('disabled');
-                        $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
+                    else if(result.min_spend == 'false')
+                    {
+                        var html = `<div class="closed-now pt-0">
+                            <a class="btn checkbt" style="pointer-events: auto;
+                            cursor: not-allowed; opacity: 0.5!important;" disabled>Checkout</a>
+                        </div>
+                        <div class="closed-now minimum_spend">
+                            <span class="closing-text 1" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend_total,2)}}.</span>
+                        </div>`;
+                        $('.disable-cls').html('');
+                        $('.disable-cls').html(html);
+                    }
+                    else
+                    {
+                        var newBtn = '<a href="{{ route("checkout") }}" class="btn checkbt" style="cursor: pointer">Checkout</a>';
+                        $('.disable-cls').html('');
+                        $('.disable-cls').html(newBtn);
                     }
                 }
             });
         }
         // End Add to Cart
 
-
-        // Collection Button
-        $('#collection').on('click', function()
-        {
-            var d_type = $(this).val();
-            $.ajax({
-                type: "POST",
-                url: "{{ url('setDeliveyType') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'd_type': d_type,
-                },
-                dataType: "json",
-                success: function(response) {
-                    location.reload();
-                }
-            });
-        });
-        // End Collection Button
-
-
-        // Delivery Button
-        // $('#delivery').on('click', function()
-        // {
-        //     $('#Modal').modal('show');
-        // });
 
         $('#delivery').on('click', function()
         {
@@ -1643,15 +1601,7 @@ It's used for View Menu.
         });
         // End Delivery Button
 
-        // Cancel and go back
-        // $('#tested').click(function() {
-        //        location.reload();
-        // });
-        // End Cancel and go back
 
-        // $('#delete').click(function() {
-        //        location.reload();
-        // });
         // Delete Cart Product
         function deletecartproduct(prod_id, size_id, uid)
         {
@@ -1672,49 +1622,11 @@ It's used for View Menu.
                 success: function(result)
                 {
                     location.reload();
-                    // console.log(result);
-                    // $('.empty-box').html('');
-                    // $('.empty-box').append(result.html);
-
-                    // // Sub Total
-                    // $('.sub-total').html('');
-                    // $('.sub-total').append(result.subtotal);
-
-                    // $('.total').html('');
-                    // $('.total').append(result.total);
-
-                    // // Header Total
-                    // $('.pirce-value').text('');
-                    // $('.pirce-value').append(result.headertotal);
-
-                    // if (result.couponcode_name == '' && result.couponcode_amount == '')
-                    //  {
-                    //     $('.coupon_code').html('');
-                    //     $('.coupon_code').css('display','none');
-                    //     // $('.coupon_code').html('<label id="coupontext">Coupon3('+ result.couponcode_name +')</label><span>-'+ result.couponcode_amount +'</span>');
-                    //     $('.changecoupon').css('display','none');
-                    //     $('.Applynew_coupon').css('display','none');
-                    //     $('.addnewcoupon').css('display','none');
-                    // }
-                    // // else{
-                    // //     // $('.coupon_code').css('display','none');
-                    // //     $('.addnewcoupon').css('display','block');
-                    // // }
-
-                    // if (result.min_spend == 'true') {
-                    //     // checkeout button status
-                    //     $('.disabled_checkout_btn').removeClass('disabled');
-                    //     $('.minimum_spend').html('');
-                    // } else{
-                    //     $('.disabled_checkout_btn').addClass('disabled');
-                    //     $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}'+ result.minimum_spend +'.</span>');
-                    //     // $('.disabled_checkout_btn').addClass('disabled');
-                    // }
-
                 }
             });
         }
         // End Delete Cart Product
+
 
 
         // Show & Hide Coupon Toggle
@@ -1772,14 +1684,8 @@ It's used for View Menu.
                             else{
 
                                     $('.disabled_checkout_btn').addClass('disabled');
-                                    $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format($minimum_spend["min_spend"],2)}}.</span>');
-
-                                // $('.disabled_checkout_btn').addClass('disabled');
+                                    // $('.minimum_spend').html('<span class="closing-text" style="color: red !important;">Minimum delivery is {{ $currency }}{{number_format(0,2)}}.</span>');
                             }
-                            // if (result.headertotal >= result.min_spend) {
-                            //     $('.disabled_checkout_btn').removeClass('disabled');
-                            //     $('.minimum_spend').html('');
-                            // }
 
 
                         // console.log(result);
@@ -1834,6 +1740,7 @@ It's used for View Menu.
             myFunction();
         });
         // End Mobile View
+
 
         function TestsFunction()
         {

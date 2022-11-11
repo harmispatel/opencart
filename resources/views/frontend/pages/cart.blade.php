@@ -69,6 +69,18 @@
     }
     // End Get Customer Cart
 
+
+    // Delivery Charge
+    if(session()->has('delivery_charge'))
+    {
+        $delivery_charge = session()->get('delivery_charge');
+    }
+    else
+    {
+        $delivery_charge = 0;
+    }
+
+
 @endphp
 
 
@@ -89,6 +101,7 @@
 
    {{-- Header  --}}
    @include('frontend.theme.all_themes.header')
+
 
 
     {{-- Cart Section --}}
@@ -256,6 +269,9 @@
                                         }
                                     @endphp
 
+                                    @php
+                                        $total = $total + $delivery_charge;
+                                    @endphp
                                 </tbody>
                             </table>
                         </form>
@@ -276,6 +292,14 @@
                                         @endif
                                     @endif
                                 </tr>
+
+                                @if ($userdeliverytype == 'delivery')
+                                    <tr>
+                                        <td><b>Delivery : </b></td>
+                                        <td><span><b>{{ $currency }}{{ $delivery_charge }}</b></span></td>
+                                    </tr>
+                                @endif
+
                                 <tr>
                                     <td><b>Total to pay:</b></td>
                                     <td><span><b>{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
@@ -322,6 +346,9 @@
     {{-- Custom JS --}}
     <script type="text/javascript">
 
+        // Get User Delivery Type
+        deli_type = $('#user_delivery_val').val();
+
         // Update Customer Cart
         function updatecart(product, sizeprice, uid)
         {
@@ -362,7 +389,6 @@
                         alert('Sorry, You can\'t Order More Then 50 Quantity of This Product');
                         location.reload();
                     }
-
                     location.reload();
                 }
             });
@@ -387,8 +413,14 @@
                     'user_id': userid,
                 },
                 dataType: 'json',
-                success: function(result) {
-                    location.reload();
+                success: function(result)
+                {
+                    updateCart(deli_type);
+
+                    setTimeout(() =>
+                    {
+                        location.reload();
+                    }, 2000);
                 }
             });
         }

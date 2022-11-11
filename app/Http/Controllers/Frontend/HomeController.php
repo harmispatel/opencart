@@ -139,223 +139,333 @@ class HomeController extends Controller
     // Function For ZipCode
     public function checkZipCode(Request $request)
     {
-
         $currentURL = URL::to("/");
         $current_theme = layoutID($currentURL,'header_id');
-        $current_theme_id = $current_theme['header_id'];
         $front_store_id =  $current_theme['store_id'];
 
-        $type = $request->type;
+        $checkout_type = $request->type;
+
+        $delCheckout = isset($request->delCheckout) ? $request->delCheckout : 0;
+
 
         // Check User ID
-        if (session()->has('userid')) {
+        if (session()->has('userid'))
+        {
             $userid = session()->get('userid');
         } else {
             $userid = 0;
         }
 
-        if ($type == 'collection') {
+        // Get Checkout type from session();
+        if(session()->has('flag_post_code'))
+        {
+            $flag_post_code = session()->get('flag_post_code');
+        }
+        else
+        {
+            $flag_post_code = '';
+        }
 
-            if ($userid == 0) {
-                if (session()->has('cart1')) {
+
+        // When User Change type collection to delivery from checkout page
+        if($delCheckout == 1)
+        {
+            $current_type = 'delivery';
+
+            if($current_type != $flag_post_code)
+            {
+                // Remove Cart Date
+                if (session()->has('cart1'))
+                {
                     session()->forget('cart1');
-                    $a = 1;
-                    // Change ortder type change price delevery and collection session
-                    // $cart = session()->get('cart1');
-
-                    // if (!empty($cart) || isset($cart)) {
-                    //     if (isset($cart['size']) && !empty($cart['size'])) {
-                    //         foreach ($cart['size'] as $key => $value) {
-                    //             $cart['size'][$key]['del_price'] = 0.00;
-                    //             session()->put('cart1', $cart);
-                    //         }
-                    //     }
-
-                    //     if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                    //         foreach ($cart['withoutSize'] as $key => $value) {
-                    //             $cart['withoutSize'][$key]['del_price'] = 0.00;
-                    //             session()->put('cart1', $cart);
-                    //         }
-                    //     }
-                    // }
                 }
-            } else {
-                if (!empty($userid)) {
+
+                // Remove Subtotal
+                if(session()->has('subtotal'))
+                {
+                    session()->forget('subtotal');
+                }
+
+                // Remove Coupon
+                if(session()->has('currentcoupon'))
+                {
+                    session()->forget('currentcoupon');
+                }
+
+                // Remove Products ID
+                if(session()->has('product_id'))
+                {
+                    session()->forget('product_id');
+                }
+
+                // Remove Coupon Code
+                if(session()->has('couponcode'))
+                {
+                    session()->forget('couponcode');
+                }
+
+                // Remove Coupon Name
+                if(session()->has('couponname'))
+                {
+                    session()->forget('couponname');
+                }
+
+                // Remove Header Total
+                if(session()->has('headertotal'))
+                {
+                    session()->forget('headertotal');
+                }
+
+                // Remove Free Items
+                if(session()->has('free_item'))
+                {
+                    session()->forget('free_item');
+                }
+            }
+
+            // Get Delivery Setting
+            $del_key = ([
+                'enable_delivery',
+                'delivery_option',
+            ]);
+            $delivery_setting = [];
+
+            foreach ($del_key as $row) {
+                $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+
+                $delivery_setting[$row] = isset($query->value) ? $query->value : '';
+            }
+
+            if(!empty($delivery_setting))
+            {
+                if(isset($delivery_setting['delivery_option']) && !empty($delivery_setting['delivery_option']))
+                {
+                    if($delivery_setting['delivery_option'] == 'area')
+                    {
+                        $current_delivery_option = 'areaname';
+                    }
+                    else
+                    {
+                        $current_delivery_option = 'postcodes';
+                    }
+                }
+                else
+                {
+                    $current_delivery_option = '';
+                }
+            }
+            else
+            {
+                $current_delivery_option = '';
+            }
+
+            if(!empty($current_delivery_option))
+            {
+                session()->put('delivery_code_option',$current_delivery_option);
+            }
+
+            session()->put('flag_post_code',$current_type);
+
+            return response()->json([
+                'success'=>1,
+            ]);
+
+        }
+
+        // When Checkout Type is Collection
+        if($checkout_type == 'collection')
+        {
+            if($checkout_type != $flag_post_code)
+            {
+                // Remove Cart Date
+                if (session()->has('cart1'))
+                {
                     session()->forget('cart1');
-                    $a = 2;
+                }
 
-                    // =========----------===========
-                    // $user = Customer::find($userid);
-                    // $user->cart = '';
-                    // $user->update();
-                    // =========----------===========
+                // Remove Subtotal
+                if(session()->has('subtotal'))
+                {
+                    session()->forget('subtotal');
+                }
 
+                // Remove Coupon
+                if(session()->has('currentcoupon'))
+                {
+                    session()->forget('currentcoupon');
+                }
 
-                    // Change ortder type change price delevery and collection Database
-                    // $customer_cart = getuserCart($userid);
+                // Remove Products ID
+                if(session()->has('product_id'))
+                {
+                    session()->forget('product_id');
+                }
 
-                    // if (isset($customer_cart) && !empty($customer_cart)) {
-                    //     if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                    //         foreach ($customer_cart['size'] as $key => $value) {
-                    //             $customer_cart['size'][$key]['del_price'] = 0.00;
+                // Remove Coupon Code
+                if(session()->has('couponcode'))
+                {
+                    session()->forget('couponcode');
+                }
 
-                    //             $serial = serialize($customer_cart);
-                    //             $base64 = base64_encode($serial);
-                    //             $user = Customer::find($userid);
-                    //             $user->cart = $base64;
-                    //             $user->update();
-                    //         }
-                    //     }
+                // Remove Coupon Name
+                if(session()->has('couponname'))
+                {
+                    session()->forget('couponname');
+                }
 
-                    //     if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                    //         foreach ($customer_cart['withoutSize'] as $key => $value) {
-                    //             $customer_cart['withoutSize'][$key]['del_price'] = 0.00;
+                // Remove Header Total
+                if(session()->has('headertotal'))
+                {
+                    session()->forget('headertotal');
+                }
 
-                    //             $serial = serialize($customer_cart);
-                    //             $base64 = base64_encode($serial);
-                    //             $user = Customer::find($userid);
-                    //             $user->cart = $base64;
-                    //             $user->update();
-                    //         }
-                    //     }
-                    // }
+                // Remove Free Items
+                if(session()->has('free_item'))
+                {
+                    session()->forget('free_item');
+                }
+
+                // Remove Selected Postcode
+                if(session()->has('selected_postcode'))
+                {
+                    session()->forget('selected_postcode');
+                }
+
+                // Remove DeliveryCode Option
+                if(session()->has('delivery_code_option'))
+                {
+                    session()->forget('delivery_code_option');
                 }
             }
 
             session()->put('flag_post_code', 'collection');
-            $json['success'] = 'collection';
-            return response()->json($json);
+
+            return response()->json([
+                'success' => 1,
+                'checkout_type' => 'collection'
+            ]);
         }
+        else
+        {
+            if($checkout_type != $flag_post_code)
+            {
+                // Remove Cart Date
+                if (session()->has('cart1'))
+                {
+                    session()->forget('cart1');
+                }
 
-        if (isset($request->keyword)) {
-            $keyword = trim($request->keyword);
-        } else {
-            $keyword = '';
-        }
+                // Remove Subtotal
+                if(session()->has('subtotal'))
+                {
+                    session()->forget('subtotal');
+                }
 
-        if ($keyword != '' || !empty($keyword)) {
-            $d_type = 'delivery';
-        }
+                // Remove Coupon
+                if(session()->has('currentcoupon'))
+                {
+                    session()->forget('currentcoupon');
+                }
 
-        $keyword = str_replace(' ', '', $keyword);
-        // $keyword = strtoupper($keyword);
+                // Remove Products ID
+                if(session()->has('product_id'))
+                {
+                    session()->forget('product_id');
+                }
 
-        $json = array();
+                // Remove Coupon Code
+                if(session()->has('couponcode'))
+                {
+                    session()->forget('couponcode');
+                }
 
-        $json['error'] = 'Sorry!!!! We don\'t do delivery to your area';
+                // Remove Coupon Name
+                if(session()->has('couponname'))
+                {
+                    session()->forget('couponname');
+                }
 
-        if ($keyword != '') {
-            $sql = Settings::where('key', 'available_zones')->get();
-            $stores = array();
-            if ($sql) {
-                foreach ($sql as $row) {
+                // Remove Header Total
+                if(session()->has('headertotal'))
+                {
+                    session()->forget('headertotal');
+                }
 
-                    if ($row['value'] != '') {
-                        $isValid = false;
-                        $temp = explode(',', $row['value']);
-                        if ($temp) {
-                            foreach ($temp as $t) {
-                                $t = str_replace(' ', '', $t);
-                                if ($t != '' && strlen($keyword) >= strlen($t) && (substr($keyword, 0, strlen($t)) == $t)) {
-                                    $isValid = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if ($isValid && $row['store_id'] == $front_store_id) {
-
-                            // Guest User
-                            if ($userid == 0) {
-                                session()->forget('cart1');
-                                // if (session()->has('cart1')) {
-                                //     $cart = session()->get('cart1');
-
-                                //     if (!empty($cart) || isset($cart)) {
-                                //         // For Delivery Price
-                                //         if ($d_type == 'delivery') {
-                                //             if (isset($cart['size']) && !empty($cart['size'])) {
-                                //                 foreach ($cart['size'] as $key => $value) {
-                                //                     $size_id = $key;
-                                //                     $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                //                     $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                //                     $cart['size'][$key]['del_price'] = $del_price;
-                                //                     session()->put('cart1', $cart);
-                                //                 }
-                                //             }
-
-                                //             if (isset($cart['withoutSize']) && !empty($cart['withoutSize'])) {
-                                //                 foreach ($cart['withoutSize'] as $key => $value) {
-                                //                     $prod_id = $key;
-                                //                     $prod = Product::where('product_id', $prod_id)->first();
-                                //                     $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                //                     $cart['withoutSize'][$key]['del_price'] = $del_price;
-                                //                     session()->put('cart1', $cart);
-                                //                 }
-                                //             }
-                                //         }
-                                //     }
-                                // }
-                            } else {
-                                if (!empty($userid)) {
-
-                                    session()->forget('cart1'); //Session
-
-                                    // Database
-                                    // $customer_cart = getuserCart($userid);
-                                    // $user = Customer::find($userid);
-                                    // $user->cart = '';
-                                    // $user->update();
-
-                                    // if (isset($customer_cart) && !empty($customer_cart)) {
-                                    //     // For Delivery Price
-                                    //     if ($d_type == 'delivery') {
-                                    //         if (isset($customer_cart['size']) && !empty($customer_cart['size'])) {
-                                    //             foreach ($customer_cart['size'] as $key => $value) {
-                                    //                 $size_id = $key;
-                                    //                 $prod = ToppingProductPriceSize::where('id_product_price_size', $size_id)->first();
-                                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                    //                 $customer_cart['size'][$key]['del_price'] = $del_price;
-
-                                    //                 $serial = serialize($customer_cart);
-                                    //                 $base64 = base64_encode($serial);
-                                    //                 $user = Customer::find($userid);
-                                    //                 $user->cart = $base64;
-                                    //                 $user->update();
-                                    //             }
-                                    //         }
-
-                                    //         if (isset($customer_cart['withoutSize']) && !empty($customer_cart['withoutSize'])) {
-                                    //             foreach ($customer_cart['withoutSize'] as $key => $value) {
-                                    //                 $prod_id = $key;
-                                    //                 $prod = Product::where('product_id', $prod_id)->first();
-                                    //                 $del_price = isset($prod->delivery_price) ? $prod->delivery_price : 0.00;
-                                    //                 $customer_cart['withoutSize'][$key]['del_price'] = $del_price;
-
-                                    //                 $serial = serialize($customer_cart);
-                                    //                 $base64 = base64_encode($serial);
-                                    //                 $user = Customer::find($userid);
-                                    //                 $user->cart = $base64;
-                                    //                 $user->update();
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // }
-                                }
-                            }
-
-                            session()->put('checedStoreId', $front_store_id);
-                            session()->put('flag_post_code', 'delivery');
-                            session()->put('ets_post_code', $keyword);
-                            $json['success'] = 'EXIST';
-                        }
-                    }
+                // Remove Free Items
+                if(session()->has('free_item'))
+                {
+                    session()->forget('free_item');
                 }
             }
-        } else {
-            $json['error'] = 'Sorry!!!! We don\'t do delivery to your area';
+
+            $delivery_option = isset($request->delivery_option) ? $request->delivery_option : '';
+            $keyword = isset($request->keyword) ? trim($request->keyword) : '';
+            $new_keyword = str_replace(' ', '', $keyword);
+
+            if(!empty($new_keyword))
+            {
+                $sql = Settings::where('key', 'available_zones')->where('store_id',$front_store_id)->first();
+                if(isset($sql) && !empty($sql))
+                {
+                    $all_zones = isset($sql->value) ? $sql->value : '';
+
+                    if(!empty($all_zones))
+                    {
+                        $zones_array = explode(',',$all_zones);
+                    }
+                    else
+                    {
+                        $zones_array = [];
+                    }
+
+                    if(count($zones_array) > 0)
+                    {
+                        if(in_array($new_keyword,$zones_array))
+                        {
+                            session()->put('flag_post_code', 'delivery');
+                            session()->put('selected_postcode',$new_keyword);
+                            session()->put('delivery_code_option',$delivery_option);
+
+                            return response()->json([
+                                'success'=>1,
+                                'checkout_type'=>'delivery'
+                            ]);
+                        }
+                        else
+                        {
+                            return response()->json([
+                                'error'=>1,
+                                'message'=>'Sorry!!!! We don\'t do delivery to your area'
+                            ]);
+                        }
+                    }
+                    else
+                    {
+                        return response()->json([
+                            'error'=>1,
+                            'message'=>'Sorry!!!! We don\'t do delivery to your area'
+                        ]);
+                    }
+
+                }
+                else
+                {
+                    return response()->json([
+                        'error'=>1,
+                        'message'=>'Sorry!!!! We don\'t do delivery to your area'
+                    ]);
+                }
+            }
+            else
+            {
+                return response()->json([
+                    'error'=>1,
+                    'message'=>'Sorry!!!! We don\'t do delivery to your area'
+                ]);
+            }
+
         }
-        if (!isset($json['success'])) $json['error'] = $json['error'];
-        return response()->json($json);
+
     }
 
 
@@ -364,13 +474,16 @@ class HomeController extends Controller
     {
         $keyword = $request->keyword;
 
-        $sql1 = Postcodes::where('Postcode', 'LIKE', "%{$keyword}%")->limit(8)->get();
+        $sql1 = Postcodes::where('Postcode', 'LIKE', "%{$keyword}%")->limit(10)->get();
 
-        if (count($sql1) > 0) {
+        if (count($sql1) > 0)
+        {
             $json['postcodes'] = $sql1;
             $json['success'] = true;
-        } else {
-            $json['error'] = '<div style="padding-top: 15px;"><div class="store_list wrap_row" style="padding: 15px;">Sorry! We don\'t do delivery to your area</div></div>';
+        }
+        else
+        {
+            $json['error'] = '<div style="padding-top: 15px;"><div class="store_list wrap_row" style="padding: 15px;">Sorry Postcode Not Available Enter Valid Postcode!</div></div>';
         }
         return response()->json($json);
     }

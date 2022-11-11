@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
    <head>
+      <!-- CSS -->
+      @include('frontend.include.head')
       <title>Checkout</title>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
       <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -46,86 +48,98 @@
         $paypal_charge = $servicecharge["paypal"]["pp_charge_payment"] ? $servicecharge["paypal"]["pp_charge_payment"] : '0.00';
         $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
 
-
-        $ordertotal = session()->has('total') ? session('total') : '';
-        $total = $ordertotal;
+        $ordertotal = session()->has('total') ? session('total') : 0.00;
+        $total = $ordertotal + $stripe_charge;
     @endphp
+
+   {{-- Header --}}
+   @include('frontend.theme.all_themes.header')
+
+
+   <section class="contact-main">
       <div class="container">
-         <div class="row justify-content-center h-100 align-item-center">
-            <div class="col-md-6 col-md-offset-3">
-               <div class="panel panel-default credit-card-box">
-                  <div class="panel-heading display-table" >
-                     <div class="row display-tr" >
-                        <h3 class="panel-title display-td" >Payment Details</h3>
+         <div class="contact-inr">
+            <div class="container">
+               <div class="row justify-content-center h-100 align-item-center">
+                  <div class="col-md-6 col-md-offset-3">
+                     <div class="panel panel-default credit-card-box">
+                        <div class="panel-heading display-table" >
+                           <div class="row display-tr">
+                              <h3 class="panel-title display-td">Payment Details</h3>
+                           </div>
+                        </div>
+                        <div class="panel-body">
+                           @if (Session::has('success'))
+                              <div class="alert alert-success text-center">
+                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                                 <p>{{ Session::get('success') }}</p>
+                              </div>
+                           @endif
+                           <form role="form" action="{{ route('stripe.post') }}" method="post" class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="{{ $stripekey }}" id="payment-form">
+                              @csrf
+                              <div class='form-row row'>
+                                 <div class='col-xs-12 form-group required'>
+                                    <label class='control-label'>Name on Card</label> <input
+                                       class='form-control' size='4' type='text'>
+                                 </div>
+                              </div>
+                              <div class='form-row row'>
+                                 <div class='col-xs-12 form-group required'>
+                                    <label class='control-label'>Card Number</label> <input
+                                       autocomplete='off' class='form-control card-number' size='20'
+                                       type='text'>
+                                 </div>
+                              </div>
+                              <div class='form-row row'>
+                                 <div class='col-xs-12 col-md-4 form-group cvc required'>
+                                    <label class='control-label'>CVC</label> <input autocomplete='off'
+                                       class='form-control card-cvc' placeholder='ex. 311' size='4'
+                                       type='text'>
+                                 </div>
+                                 <div class='col-xs-12 col-md-4 form-group expiration required'>
+                                    <label class='control-label'>Expiration Month</label> <input
+                                       class='form-control card-expiry-month' placeholder='MM' size='2'
+                                       type='text'>
+                                 </div>
+                                 <div class='col-xs-12 col-md-4 form-group expiration required'>
+                                    <label class='control-label'>Expiration Year</label> <input
+                                       class='form-control card-expiry-year' placeholder='YYYY' size='4'
+                                       type='text'>
+                                       <input type="hidden" value="{{ $total }}" name="total">
+                                       <input type="hidden" value="{{ $store_setting['config_currency'] }}" name="currency_code">
+                                       <input type="hidden" value="{{ $stripe_charge }}" name="stripe_service_charge">
+                                 </div>
+                              </div>
+                              <div class='form-row row'>
+                                 <div class='col-md-12 error form-group hide'>
+                                    {{-- <div class='alert-danger alert'>Please correct the errors and try again.</div> --}}
+                                    <div class='alert-danger alert' style="display:none;"></div>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-xs-12">
+                                    <button class="btn btn-primary btn-lg btn-block" type="submit">Pay {{ $currency }} {{ $total }}</button>
+                                 </div>
+                              </div>
+                           </form>
+                        </div>
                      </div>
-                  </div>
-                  <div class="panel-body">
-                     @if (Session::has('success'))
-                     <div class="alert alert-success text-center">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                        <p>{{ Session::get('success') }}</p>
-                     </div>
-                     @endif
-                     <form
-                        role="form"
-                        action="{{ route('stripe.post') }}"
-                        method="post"
-                        class="require-validation"
-                        data-cc-on-file="false"
-                        data-stripe-publishable-key="{{ $stripekey }}"
-                        id="payment-form">
-                        @csrf
-                        <div class='form-row row'>
-                           <div class='col-xs-12 form-group required'>
-                              <label class='control-label'>Name on Card</label> <input
-                                 class='form-control' size='4' type='text'>
-                           </div>
-                        </div>
-                        <div class='form-row row'>
-                           <div class='col-xs-12 form-group card required'>
-                              <label class='control-label'>Card Number</label> <input
-                                 autocomplete='off' class='form-control card-number' size='20'
-                                 type='text'>
-                           </div>
-                        </div>
-                        <div class='form-row row'>
-                           <div class='col-xs-12 col-md-4 form-group cvc required'>
-                              <label class='control-label'>CVC</label> <input autocomplete='off'
-                                 class='form-control card-cvc' placeholder='ex. 311' size='4'
-                                 type='text'>
-                           </div>
-                           <div class='col-xs-12 col-md-4 form-group expiration required'>
-                              <label class='control-label'>Expiration Month</label> <input
-                                 class='form-control card-expiry-month' placeholder='MM' size='2'
-                                 type='text'>
-                           </div>
-                           <div class='col-xs-12 col-md-4 form-group expiration required'>
-                              <label class='control-label'>Expiration Year</label> <input
-                                 class='form-control card-expiry-year' placeholder='YYYY' size='4'
-                                 type='text'>
-                                 <input type="hidden" value="{{ $total }}" name="total">
-                                 <input type="hidden" value="{{ $store_setting['config_currency'] }}" name="currency_code">
-                                 <input type="hidden" value="{{ $stripe_charge }}" name="stripe_service_charge">
-                           </div>
-                        </div>
-                        <div class='form-row row'>
-                           <div class='col-md-12 error form-group hide'>
-                              {{-- <div class='alert-danger alert'>Please correct the errors and try again.</div> --}}
-                              <div class='alert-danger alert'></div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-xs-12">
-                              <button class="btn btn-primary btn-lg btn-block" type="submit">Pay {{ $currency }} {{ $total }}</button>
-                           </div>
-                        </div>
-                     </form>
                   </div>
                </div>
             </div>
          </div>
       </div>
-   </body>
+   </section>
+
+
+   {{-- Footer --}}
+   @include('frontend.theme.all_themes.footer')
+
+   <!-- JS -->
+   @include('frontend.include.script')
+   <!-- End JS -->
+
+
    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
    <script type="text/javascript">
       $(function() {
@@ -167,6 +181,7 @@
                 .removeClass('hide')
                 .find('.alert')
                 .text(response.error.message);
+            $('.alert').show();
         } else {
             /* token contains id, last4, and card type */
             var token = response['id'];
@@ -177,4 +192,3 @@
     }
 });
    </script>
-</html>

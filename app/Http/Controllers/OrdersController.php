@@ -9,6 +9,7 @@ use App\Models\CouponHistory;
 use App\Models\CouponProduct;
 use App\Models\Currency;
 use App\Models\Customer;
+use App\Models\CustomerOrder;
 use App\Models\CustomerAddress;
 use App\Models\CustomerGroupDescription;
 use App\Models\OrderCart;
@@ -868,6 +869,19 @@ class OrdersController extends Controller
         $orderhisins->comment = isset($request->comment) ? $request->comment : "";
         $orderhisins->date_added = date("Y-m-d h:i:s");
         $orderhisins->save();
+
+        // Update Customer Order Status
+        $custOrder = CustomerOrder::where('order_id',$request->order_id)->first();
+        if(!empty($custOrder))
+        {
+            $cust_ord_id = isset($custOrder->id) ? $custOrder->id : '';
+            if(!empty($cust_ord_id))
+            {
+                $cust_ord_upt = CustomerOrder::find($cust_ord_id);
+                $cust_ord_upt->order_status = isset($request->order_status_id) ? $request->order_status_id : 2;
+                $cust_ord_upt->update();
+            }
+        }
 
         // Update order Status
         $order = Orders::find($request->order_id);

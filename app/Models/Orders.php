@@ -73,35 +73,57 @@ class Orders extends Model
     {
 
         $currentURL = URL::to("/");
-
-
         // Get Store Settings & Other Settings
         $store_data = frontStoreID($currentURL);
-
-
         // Get Current Front Store ID
         $front_store_id =  $store_data['store_id'];
-
         // Store Settings
         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] : '';
 
+
         // Free Item
         $f_item = $request->free_item;
-
-        if (!empty($f_item) || $f_item != '') {
+        if (!empty($f_item) || $f_item != '') 
+        {
             $free_item = $f_item;
-        } else {
-            if (session()->has('free_item')) {
+        } 
+        else 
+        {
+            if (session()->has('free_item')) 
+            {
                 $free_item = session()->get('free_item');
-            } else {
+            } 
+            else 
+            {
                 $free_item = '';
             }
         }
 
-        $couponname = session()->get('couponname');
+
+        // Get Coupon Name
+        if(session()->has('couponname'))
+        {
+            $couponname = session()->get('couponname');
+        }
+        else
+        {
+            $couponname = "";
+        }
+
+
+        // Get Coupon Amont
+        if(session()->has('couponcode'))
+        {
+            $couponcode = session()->get('couponcode');
+        }
+        else
+        {
+            $couponcode = 0.00;
+        }
+
+        // Current Applied Coupon
         $currentcoupon = session()->get('currentcoupon');
         $code =isset($currentcoupon['code']) ? $currentcoupon['code'] : $couponname ;
-
         if(!empty($code))
         {
             $cpn_dt = Coupon::where('code',$code)->where('store_id',$front_store_id)->first();
@@ -114,16 +136,38 @@ class Orders extends Model
         // Get Currency Details
         $currency_code = $store_setting['config_currency'];
         $currency_details = Currency::where('code', $currency_code)->first();
+        
 
-        $delivery_type = session()->get('flag_post_code');
-
-        $total = $request->total;
+        // Get Service Charge
         $servicecharge = isset($request->service_charge) ? $request->service_charge : 0.00;
-        $subtotal = $request->subtotal;
-        $delivery_charge = isset($request->delivery_charge) ? $request->delivery_charge : 0.00;
-        // $couponcode = isset($request->couponcode) ? $request->couponcode : '';
-        $couponname = $request->couponname;
 
+
+        // Get SubTotal From Session
+        if(session()->has('subtotal'))
+        {
+            $subtotal =  session()->get('subtotal');
+        }
+        else
+        {
+            $subtotal = 0.00;
+        }
+
+
+        // Get Total From Session
+        if(session()->has('total'))
+        {
+            $total =  session()->get('total');
+        }
+        else
+        {
+            $total = 0.00;
+        }
+        $total = $total + $servicecharge;
+
+
+        // Delivery Type
+        $delivery_type = session()->get('flag_post_code');
+        
 
         // Store Details
         $store = Store::where('store_id', $front_store_id)->first();
@@ -131,44 +175,79 @@ class Orders extends Model
         $data['store_name'] = getStoreDetails($front_store_id, 'config_name');
         // End Store Details
 
-        if (session()->has('userid')) {
+
+        // Check Is User or Guest
+        if (session()->has('userid')) 
+        {
             $user_id = session()->get('userid');
-        } else {
+        } 
+        else 
+        {
             $user_id = 0;
         }
 
+
+        // Get Delivery Charge
+        if (session()->has('delivery_charge')) 
+        {
+            $delivery_charge = session()->get('delivery_charge');
+        } 
+        else 
+        {
+            $delivery_charge = 0.00;
+        }
+
+
         // Customer Details
-        if ($user_id != 0) {
+        if ($user_id != 0) 
+        {
             $customer = Customer::where('customer_id', $user_id)->first();
-
             $cust_address_id = isset($customer->address_id) ? $customer->address_id : '';
-
             $customer_def_address = CustomerAddress::where('address_id', $cust_address_id)->first();
+
+            // Get customer Country
+            $cust_country_id = isset($customer_def_address->country_id) ? $customer_def_address->country_id : '';
+            $country = Country::select('name')->where('country_id',$cust_country_id)->first();
+            $cust_country_name = isset($country->name) ? $country->name : '';
+
+            // Get customer Zone
+            $cust_zone_id = isset($customer_def_address->zone_id) ? $customer_def_address->zone_id : '';
+            $zone = Region::select('name')->where('zone_id',$cust_zone_id)->first();
+            $cust_zone_name = isset($zone->name) ? $zone->name : '';
+
         }
         // End Customer Details
 
+
         // Get Time Method
-        if (session()->has('time_method')) {
+        if (session()->has('time_method')) 
+        {
             $time_method = session()->get('time_method');
-        } else {
+        } 
+        else 
+        {
             $time_method = '';
         }
         // End Time Method
 
+
+        // This Payment Method
         $payment_method = 2;
 
+
         // Check Delivery Type
-        if ($delivery_type == 'collection')  // Collection
+        if ($delivery_type == 'collection')
         {
             // Check Payment Method
-            if ($payment_method == 2) //Cash On Delivery
+            if ($payment_method == 2) //Pay Online On Collection
             {
                 // Check User Type
                 if ($user_id == 0) //Guest User
                 {
                     $guest_user = session()->get('guest_user');
 
-                    if (!empty($guest_user)) {
+                    if (!empty($guest_user)) 
+                    {
                         $guestUserCart = session()->get('cart1');
 
                         // Guest Order
@@ -186,7 +265,7 @@ class Orders extends Model
                         $gorder->telephone = isset($guest_user['phone']) ? $guest_user['phone'] : '';
                         $gorder->fax = '';
                         $gorder->payment_firstname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
-                        $gorder->payment_lastname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                        $gorder->payment_lastname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
                         $gorder->payment_company = '';
                         $gorder->payment_company_id = 0;
                         $gorder->payment_tax_id = 0;
@@ -240,13 +319,16 @@ class Orders extends Model
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+                        // Last Inserted Order Id
                         $last_order_id = $gorder->order_id;
+
+                        // Coupon Info
                         $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                         $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                         $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                        $subtotal = $request->subtotal;
 
 
+                        // Add Coupon History
                         if(!empty($cpn_id) && $cpn_id != 0)
                         {
                             $coupon_history = new CouponHistory;
@@ -258,27 +340,33 @@ class Orders extends Model
                             $coupon_history->save();
                         }
 
+
                         session()->put('last_order_id', $gorder->order_id);
 
                         // Guest Order Product
-                        if (isset($guestUserCart)) {
-                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
-                                foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                        if (isset($guestUserCart)) 
+                        {
+                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) 
+                            {
+                                foreach ($guestUserCart['withoutSize'] as $key => $cart) 
+                                {
+                                    $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $col_price;
+                                    $gorder_product->total = $col_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -289,23 +377,27 @@ class Orders extends Model
                                 }
                             }
 
-                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
-                                foreach ($guestUserCart['size'] as $key => $cart) {
+                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) 
+                            {
+                                foreach ($guestUserCart['size'] as $key => $cart) 
+                                {
+                                    $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $col_price;
+                                    $gorder_product->total = $col_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -338,24 +430,15 @@ class Orders extends Model
                         $gorderhistory->date_added = date('Y-m-d h:i:s');
                         $gorderhistory->save();
 
-                        // Order Delivery
-                        $gorderdelivery = new OrderTotal;
-                        $gorderdelivery->order_id = $gorder->order_id;
-                        $gorderdelivery->code = 'delivery';
-                        $gorderdelivery->title = 'Delivery';
-                        $gorderdelivery->text = $currency_details['symbol_left'] . ' 0.00';
-                        $gorderdelivery->value = 0.00;
-                        $gorderdelivery->sort_order = 0;
-                        $gorderdelivery->save();
-
                         // Coupon Code
-                        if ($cpn_dt['code'] != 0) {
+                        if (isset($cpn_dt['code']) && $cpn_dt['code'] != 0) 
+                        {
                             $gordercoupon = new OrderTotal;
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
                             $gordercoupon->title = 'Coupon(' . $couponname . ')';
-                            $gordercoupon->text = $currency_details['symbol_left'] . ' -' . $cpn_dt['code'];
-                            $gordercoupon->value = '-' . $cpn_dt['code'];
+                            $gordercoupon->text = $currency_details['symbol_left'] . ' -' . $couponcode;
+                            $gordercoupon->value = '-' . $couponcode;
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
                         }
@@ -372,7 +455,8 @@ class Orders extends Model
 
 
                         // service charge
-                        if ($servicecharge != "") {
+                        if ($servicecharge != "") 
+                        {
                             $gordertotal = new OrderTotal;
                             $gordertotal->order_id = $gorder->order_id;
                             $gordertotal->code = 'credit';
@@ -393,19 +477,56 @@ class Orders extends Model
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
 
+
+                        // Guest Name
+                        $fname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                        $lname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                        $full_name = "$fname $lname";
+
+
+                        // Order Details Array
+                        $orderserialize = $gorder->toArray();
+
+                        // Insert Guest Customer Order
+                        $guest_customer_order = new CustomerOrder;
+                        $guest_customer_order->store_id = $front_store_id;
+                        $guest_customer_order->order_id = $last_order_id;
+                        $guest_customer_order->customer_name = $full_name;
+                        $guest_customer_order->billing_address = "";
+                        $guest_customer_order->delivery_address = "";
+                        $guest_customer_order->order_status = 7; //Rejected. paypal success trnnsaction after order prossesing.
+                        $guest_customer_order->order_type = "collection";
+                        $guest_customer_order->order_amount = $total;
+                        $guest_customer_order->commission_fee = "";
+                        $guest_customer_order->balance = "";
+                        $guest_customer_order->refunded_amount = null;
+                        $guest_customer_order->value = serialize($orderserialize);
+                        $guest_customer_order->is_order = "";
+                        $guest_customer_order->is_full_refund = 0;
+                        $guest_customer_order->old_order_amount = null;
+                        $guest_customer_order->order_date = date('Y-m-d h:i:s');
+                        $guest_customer_order->date_added = date('Y-m-d h:i:s');
+                        $guest_customer_order->refunded_date = null;
+                        $guest_customer_order->save();
+
                         session()->forget('couponcode');
                         session()->forget('couponname');
-                        session()->forget('cart1');
                         session()->forget('guest_user');
+                        session()->forget('guest_user_address');
+                        session()->forget('currentcoupon');
+                        session()->forget('cart1');
                         session()->forget('free_item');
                         session()->forget('headertotal');
                         session()->forget('total');
-                        session()->forget('product_id');
-                        session()->forget('currentcoupon');
+                        session()->forget('subtotal');
+                        session()->forget('delivery_charge');
+                        session()->forget('product_id'); 
                     }
-                } else // Customer
+                } 
+                else // Customer
                 {
-                    $usercart = getuserCart($user_id);
+                    // $usercart = getuserCart($user_id);
+                    $usercart = session()->get('cart1'); // Session
 
                     // New Order
                     $order = new Orders;
@@ -430,9 +551,9 @@ class Orders extends Model
                     $order->payment_address_2 = '';
                     $order->payment_city = '';
                     $order->payment_postcode = '';
-                    $order->payment_country = 0;
+                    $order->payment_country = isset($cust_country_name) ? $cust_country_name : '';
                     $order->payment_country_id = 0;
-                    $order->payment_zone = 0;
+                    $order->payment_zone = isset($cust_zone_name) ? $cust_zone_name : '';
                     $order->payment_zone_id = 0;
                     $order->payment_address_format = '';
                     $order->payment_method = 'Pay Online';
@@ -476,13 +597,15 @@ class Orders extends Model
                     $order->is_delete = 0;
                     $order->save();
 
+                    // Last Inserted Order ID
                     $last_order_id = $order->order_id;
+
+                    // Coupon Info
                     $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                     $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                     $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                    $subtotal = $request->subtotal;
 
-
+                    // Create Coupon History
                     if(!empty($cpn_id) && $cpn_id != 0)
                     {
                         $coupon_history = new CouponHistory;
@@ -495,12 +618,16 @@ class Orders extends Model
                     }
 
                     session()->put('last_order_id', $order->order_id);
-                    session()->forget('free_item');
 
                     // Order Product
-                    if (isset($usercart)) {
-                        if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
-                            foreach ($usercart['withoutSize'] as $key => $cart) {
+                    if (isset($usercart)) 
+                    {
+                        if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) 
+                        {
+                            foreach ($usercart['withoutSize'] as $key => $cart) 
+                            {
+                                $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                 // Order Product without size
                                 $order_product = new OrderProduct;
                                 $order_product->order_id = $last_order_id;
@@ -508,18 +635,21 @@ class Orders extends Model
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['main_price'];
-                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->price = $col_price;
+                                $order_product->total = $col_price *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
-                                if (isset($cart['topping']) && !empty($cart['topping'])) {
+                                if (isset($cart['topping']) && !empty($cart['topping'])) 
+                                {
                                     foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                        $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                     }
                                     $order_product->toppings = implode('', $toppings);
-                                } else {
+                                } 
+                                else 
+                                {
                                     $order_product->toppings = '';
                                 }
                                 $order_product->request = '';
@@ -532,18 +662,22 @@ class Orders extends Model
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['main_price'];
-                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->price = $col_price;
+                                $order_product->total = $col_price *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
-                                if (isset($cart['topping']) && !empty($cart['topping'])) {
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                if (isset($cart['topping']) && !empty($cart['topping'])) 
+                                {
+                                    foreach ($cart['topping'] as $topping) 
+                                    {
+                                        $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                     }
                                     $order_product->toppings = implode('', $toppings);
-                                } else {
+                                } 
+                                else 
+                                {
                                     $order_product->toppings = '';
                                 }
                                 $order_product->request = '';
@@ -551,8 +685,12 @@ class Orders extends Model
                             }
                         }
 
-                        if (isset($usercart['size']) && count($usercart['size']) > 0) {
-                            foreach ($usercart['size'] as $key => $cart) {
+                        if (isset($usercart['size']) && count($usercart['size']) > 0) 
+                        {
+                            foreach ($usercart['size'] as $key => $cart) 
+                            {
+                                $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                 // Order Product without size
                                 $order_product = new OrderProduct;
                                 $order_product->order_id = $last_order_id;
@@ -560,18 +698,22 @@ class Orders extends Model
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['main_price'];
-                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->price = $col_price;
+                                $order_product->total = $col_price *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
-                                if (isset($cart['topping']) && !empty($cart['topping'])) {
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                if (isset($cart['topping']) && !empty($cart['topping'])) 
+                                {
+                                    foreach ($cart['topping'] as $topping) 
+                                    {
+                                        $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                     }
                                     $order_product->toppings = implode('', $toppings);
-                                } else {
+                                } 
+                                else 
+                                {
                                     $order_product->toppings = '';
                                 }
                                 $order_product->request = '';
@@ -584,18 +726,22 @@ class Orders extends Model
                                 $payment_order_product->name = $cart['name'];
                                 $payment_order_product->model = '';
                                 $payment_order_product->quantity = $cart['quantity'];
-                                $payment_order_product->price = $cart['main_price'];
-                                $payment_order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $payment_order_product->price = $col_price;
+                                $payment_order_product->total = $col_price *  $cart['quantity'];
                                 $payment_order_product->tax = 0.00;
                                 $payment_order_product->reward = 0;
                                 $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
-                                if (isset($cart['topping']) && !empty($cart['topping'])) {
-                                    foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                if (isset($cart['topping']) && !empty($cart['topping'])) 
+                                {
+                                    foreach ($cart['topping'] as $topping) 
+                                    {
+                                        $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                     }
                                     $payment_order_product->toppings = implode('', $toppings);
-                                } else {
+                                }
+                                else 
+                                {
                                     $payment_order_product->toppings = '';
                                 }
                                 $payment_order_product->request = '';
@@ -606,7 +752,6 @@ class Orders extends Model
 
                     //Order to Cart
                     $cart = isset($customer->cart) ? $customer->cart : '';
-
                     $order_to_cart = new OrderCart;
                     $order_to_cart->order_id = $last_order_id;
                     $order_to_cart->session_order = $cart;
@@ -625,24 +770,15 @@ class Orders extends Model
                     $orderhistory->date_added = date('Y-m-d h:i:s');
                     $orderhistory->save();
 
-                    // Order Delivery
-                    $orderdelivery = new OrderTotal;
-                    $orderdelivery->order_id = $order->order_id;
-                    $orderdelivery->code = 'delivery';
-                    $orderdelivery->title = 'Delivery';
-                    $orderdelivery->text = $currency_details['symbol_left'] . '0.00';
-                    $orderdelivery->value = 0.00;
-                    $orderdelivery->sort_order = 0;
-                    $orderdelivery->save();
-
                     // Coupon Code
-                    if ($cpn_dt['code'] != 0) {
+                    if (isset($cpn_dt['code']) && $cpn_dt['code'] != 0) 
+                    {
                         $ordercoupon = new OrderTotal;
                         $ordercoupon->order_id = $order->order_id;
                         $ordercoupon->code = 'coupon';
                         $ordercoupon->title = 'Coupon(' . $couponname . ')';
-                        $ordercoupon->text = $currency_details['symbol_left'] . ' -' . $cpn_dt['code'];
-                        $ordercoupon->value = '-' . $cpn_dt['code'];
+                        $ordercoupon->text = $currency_details['symbol_left'] . ' -' . $couponcode;
+                        $ordercoupon->value = '-' . $couponcode;
                         $ordercoupon->sort_order = 0;
                         $ordercoupon->save();
                     }
@@ -658,7 +794,8 @@ class Orders extends Model
                     $ordersubtotal->save();
 
                     // service charge
-                    if ($servicecharge != "") {
+                    if ($servicecharge != "") 
+                    {
                         $orderservicecharge = new OrderTotal;
                         $orderservicecharge->order_id = $order->order_id;
                         $orderservicecharge->code = 'credit';
@@ -685,6 +822,7 @@ class Orders extends Model
                     $cfname = isset($customer->firstname) ? $customer->firstname : '';
                     $clname = isset($customer->lastname) ? $customer->lastname : '';
                     $cfullname = $cfname . ' ' . $clname;
+
                     $customer_order = new CustomerOrder;
                     $customer_order->store_id = $front_store_id;
                     $customer_order->order_id = $last_order_id;
@@ -706,16 +844,16 @@ class Orders extends Model
                     $customer_order->refunded_date = null;
                     $customer_order->save();
 
-
                     session()->forget('couponcode');
                     session()->forget('couponname');
+                    session()->forget('currentcoupon');
                     session()->forget('cart1');
-                    session()->forget('guest_user');
                     session()->forget('free_item');
                     session()->forget('headertotal');
                     session()->forget('total');
-                    session()->forget('product_id');
-                    session()->forget('currentcoupon');
+                    session()->forget('subtotal');
+                    session()->forget('delivery_charge');
+                    session()->forget('product_id');                    
                 }
             }
         }
@@ -723,7 +861,7 @@ class Orders extends Model
         if ($delivery_type == 'delivery') // Delivery
         {
             // Check Payment Method
-            if ($payment_method == 2) //Cash On Delivery
+            if ($payment_method == 2) //Pay Online Delivery
             {
                 // Check User Type
                 if ($user_id == 0) //Guest User
@@ -731,7 +869,8 @@ class Orders extends Model
                     $guest_user = session()->get('guest_user');
                     $guest_user_address = session()->get('guest_user_address');
 
-                    if (!empty($guest_user)) {
+                    if (!empty($guest_user)) 
+                    {
                         $guestUserCart = session()->get('cart1');
 
                         // Guest Order
@@ -803,13 +942,16 @@ class Orders extends Model
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+                        // Last Inserted Order ID
                         $last_order_id = $gorder->order_id;
+
+                        // Coupon Info
                         $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                         $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                         $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                        $subtotal = $request->subtotal;
 
 
+                        // Insert Coupon History
                         if(!empty($cpn_id) && $cpn_id != 0)
                         {
                             $coupon_history = new CouponHistory;
@@ -826,7 +968,10 @@ class Orders extends Model
                         // Guest Order Product
                         if (isset($guestUserCart)) {
                             if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
-                                foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                                foreach ($guestUserCart['withoutSize'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     // Order Product without size
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
@@ -834,15 +979,15 @@ class Orders extends Model
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $del_price;
+                                    $gorder_product->total = $del_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -858,15 +1003,15 @@ class Orders extends Model
                                     $payment_gorder_product->name = $cart['name'];
                                     $payment_gorder_product->model = '';
                                     $payment_gorder_product->quantity = $cart['quantity'];
-                                    $payment_gorder_product->price = $cart['main_price'];
-                                    $payment_gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $payment_gorder_product->price = $del_price;
+                                    $payment_gorder_product->total = $del_price *  $cart['quantity'];
                                     $payment_gorder_product->tax = 0.00;
                                     $payment_gorder_product->reward = 0;
                                     $payment_gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $payment_gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -878,7 +1023,10 @@ class Orders extends Model
                             }
 
                             if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
-                                foreach ($guestUserCart['size'] as $key => $cart) {
+                                foreach ($guestUserCart['size'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     // Order Product with size
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
@@ -886,15 +1034,15 @@ class Orders extends Model
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $del_price;
+                                    $gorder_product->total = $del_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -910,19 +1058,19 @@ class Orders extends Model
                                     $payment_gorder_product->name = $cart['name'];
                                     $payment_gorder_product->model = '';
                                     $payment_gorder_product->quantity = $cart['quantity'];
-                                    $payment_gorder_product->price = $cart['main_price'];
-                                    $payment_gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $payment_gorder_product->price = $del_price;
+                                    $payment_gorder_product->total = $del_price *  $cart['quantity'];
                                     $payment_gorder_product->tax = 0.00;
                                     $payment_gorder_product->reward = 0;
                                     $payment_gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
-                                        $payment_order_product->toppings = implode('', $toppings);
+                                        $payment_gorder_product->toppings = implode('', $toppings);
                                     } else {
-                                        $payment_order_product->toppings = '';
+                                        $payment_gorder_product->toppings = '';
                                     }
                                     $payment_gorder_product->request = '';
                                     $payment_gorder_product->save();
@@ -961,13 +1109,14 @@ class Orders extends Model
                         $gorderdelivery->save();
 
                         // Coupon Code
-                        if ($cpn_dt['code'] != 0) {
+                        if (isset($cpn_dt['code']) && $cpn_dt['code'] != 0) 
+                        {
                             $gordercoupon = new OrderTotal;
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
                             $gordercoupon->title = 'Coupon(' . $couponname . ')';
-                            $gordercoupon->text = $currency_details['symbol_left'] . ' -' . $cpn_dt['code'];
-                            $gordercoupon->value = '-' . $cpn_dt['code'];
+                            $gordercoupon->text = $currency_details['symbol_left'] . ' -' . $couponcode;
+                            $gordercoupon->value = '-' . $couponcode;
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
                         }
@@ -983,7 +1132,8 @@ class Orders extends Model
                         $gordersubtotal->save();
 
                         // service charge
-                        if ($servicecharge != "") {
+                        if ($servicecharge != "") 
+                        {
                             $gordertotal = new OrderTotal;
                             $gordertotal->order_id = $gorder->order_id;
                             $gordertotal->code = 'credit';
@@ -1004,22 +1154,58 @@ class Orders extends Model
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
 
-                        session()->forget('guest_user_address');
-                        session()->forget('couponcode');
-                        session()->forget('couponname');
-                        session()->forget('cart1');
-                        session()->forget('guest_user');
-                        session()->forget('free_item');
-                        session()->forget('headertotal');
-                        session()->forget('total');
-                        session()->forget('product_id');
-                        session()->forget('currentcoupon');
-                    }
-                } else //Customer
-                {
-                    $usercart = getuserCart($user_id);
+                        // Guest Name
+                        $fname = isset($guest_user['fname']) ? $guest_user['fname'] : '';
+                        $lname = isset($guest_user['lname']) ? $guest_user['lname'] : '';
+                        $full_name = "$fname $lname";
 
-                    if (!empty($usercart)) {
+
+                        // Order Details Array
+                        $orderserialize = $gorder->toArray();
+
+                        // Insert Guest Customer Order
+                        $guest_customer_order = new CustomerOrder;
+                        $guest_customer_order->store_id = $front_store_id;
+                        $guest_customer_order->order_id = $last_order_id;
+                        $guest_customer_order->customer_name = $full_name;
+                        $guest_customer_order->billing_address = "";
+                        $guest_customer_order->delivery_address = "";
+                        $guest_customer_order->order_status = 7; //Rejected. paypal success trnnsaction after order prossesing.
+                        $guest_customer_order->order_type = "collection";
+                        $guest_customer_order->order_amount = $total;
+                        $guest_customer_order->commission_fee = "";
+                        $guest_customer_order->balance = "";
+                        $guest_customer_order->refunded_amount = null;
+                        $guest_customer_order->value = serialize($orderserialize);
+                        $guest_customer_order->is_order = "";
+                        $guest_customer_order->is_full_refund = 0;
+                        $guest_customer_order->old_order_amount = null;
+                        $guest_customer_order->order_date = date('Y-m-d h:i:s');
+                        $guest_customer_order->date_added = date('Y-m-d h:i:s');
+                        $guest_customer_order->refunded_date = null;
+                        $guest_customer_order->save();
+
+                        session()->forget('couponname');
+                        session()->forget('couponcode');
+                        session()->forget('currentcoupon');
+                        session()->forget('cart1');
+                        session()->forget('total');
+                        session()->forget('subtotal');
+                        session()->forget('headertotal');
+                        session()->forget('free_item');
+                        session()->forget('guest_user');
+                        session()->forget('guest_user_address');
+                        session()->forget('product_id');
+                        session()->forget('delivery_charge');
+                    }
+                } 
+                else //Customer
+                {
+                    // $usercart = getuserCart($user_id);
+                    $usercart = session()->get('cart1');;
+
+                    if (!empty($usercart)) 
+                    {
                         // New Order
                         $order = new Orders;
                         $order->invoice_no = 0;
@@ -1036,31 +1222,31 @@ class Orders extends Model
                         $order->fax = isset($customer->fax) ? $customer->fax : '';
                         $order->payment_firstname = isset($customer->firstname) ? $customer->firstname : '';
                         $order->payment_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                        $order->payment_company = '';
-                        $order->payment_company_id = 0;
+                        $order->payment_company = isset($customer_def_address->company) ? $customer_def_address->company : '';
+                        $order->payment_company_id = isset($customer_def_address->company_id) ? $customer_def_address->company_id : '';
                         $order->payment_tax_id = 0;
                         $order->payment_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
                         $order->payment_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
                         $order->payment_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
                         $order->payment_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
-                        $order->payment_country = 0;
-                        $order->payment_country_id = 0;
-                        $order->payment_zone = 0;
-                        $order->payment_zone_id = 0;
+                        $order->payment_country = isset($cust_country_name) ? $cust_country_name : '';;
+                        $order->payment_country_id = isset($customer_def_address->country_id) ? $customer_def_address->country_id : '';
+                        $order->payment_zone = isset($cust_zone_name) ? $cust_zone_name : '';;
+                        $order->payment_zone_id = isset($customer_def_address->zone_id) ? $customer_def_address->zone_id : '';
                         $order->payment_address_format = '';
                         $order->payment_method = 'Pay Online';
                         $order->payment_code = 'pp_express';
                         $order->shipping_firstname = isset($customer->firstname) ? $customer->firstname : '';
                         $order->shipping_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                        $order->shipping_company = '';
+                        $order->shipping_company = isset($customer_def_address->company) ? $customer_def_address->company : '';
                         $order->shipping_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
                         $order->shipping_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
                         $order->shipping_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
                         $order->shipping_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
-                        $order->shipping_country = 0;
-                        $order->shipping_country_id = 0;
-                        $order->shipping_zone = 0;
-                        $order->shipping_zone_id = 0;
+                        $order->shipping_country = isset($cust_country_name) ? $cust_country_name : '';;
+                        $order->shipping_country_id = isset($customer_def_address->country_id) ? $customer_def_address->country_id : '';
+                        $order->shipping_zone = isset($cust_zone_name) ? $cust_zone_name : '';
+                        $order->shipping_zone_id = isset($customer_def_address->zone_id) ? $customer_def_address->zone_id : '';
                         $order->shipping_address_format = '';
                         $order->shipping_method = 'delivery';
                         $order->shipping_code = '';
@@ -1088,14 +1274,16 @@ class Orders extends Model
                         $order->clear_history = 0;
                         $order->is_delete = 0;
                         $order->save();
+
+                        // Last Inserted Order ID
                         $last_order_id = $order->order_id;
 
+                        // Coupon Info
                         $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                         $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                         $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                        $subtotal = $request->subtotal;
 
-
+                        // Insert Coupon History
                         if(!empty($cpn_id) && $cpn_id != 0)
                         {
                             $coupon_history = new CouponHistory;
@@ -1108,12 +1296,15 @@ class Orders extends Model
                         }
 
                         session()->put('last_order_id', $last_order_id);
-                        session()->forget('free_item');
 
                         // Order Product
-                        if (isset($usercart)) {
+                        if (isset($usercart)) 
+                        {
                             if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
-                                foreach ($usercart['withoutSize'] as $key => $cart) {
+                                foreach ($usercart['withoutSize'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     // Order Product without size
                                     $order_product = new OrderProduct;
                                     $order_product->order_id = $order->order_id;
@@ -1121,15 +1312,15 @@ class Orders extends Model
                                     $order_product->name = $cart['name'];
                                     $order_product->model = '';
                                     $order_product->quantity = $cart['quantity'];
-                                    $order_product->price = $cart['main_price'];
-                                    $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $order_product->price = $del_price;
+                                    $order_product->total = $del_price *  $cart['quantity'];
                                     $order_product->tax = 0.00;
                                     $order_product->reward = 0;
                                     $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $order_product->toppings = implode('', $toppings);
                                     } else {
@@ -1145,15 +1336,15 @@ class Orders extends Model
                                     $payment_order_product->name = $cart['name'];
                                     $payment_order_product->model = '';
                                     $payment_order_product->quantity = $cart['quantity'];
-                                    $payment_order_product->price = $cart['main_price'];
-                                    $payment_order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $payment_order_product->price = $del_price;
+                                    $payment_order_product->total = $del_price *  $cart['quantity'];
                                     $payment_order_product->tax = 0.00;
                                     $payment_order_product->reward = 0;
                                     $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $order_product->toppings = implode('', $toppings);
                                     } else {
@@ -1165,7 +1356,10 @@ class Orders extends Model
                             }
 
                             if (isset($usercart['size']) && count($usercart['size']) > 0) {
-                                foreach ($usercart['size'] as $key => $cart) {
+                                foreach ($usercart['size'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     // Order Product with size
                                     $order_product = new OrderProduct;
                                     $order_product->order_id = $order->order_id;
@@ -1173,15 +1367,15 @@ class Orders extends Model
                                     $order_product->name = $cart['name'];
                                     $order_product->model = '';
                                     $order_product->quantity = $cart['quantity'];
-                                    $order_product->price = $cart['main_price'];
-                                    $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $order_product->price = $del_price;
+                                    $order_product->total = $del_price *  $cart['quantity'];
                                     $order_product->tax = 0.00;
                                     $order_product->reward = 0;
                                     $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $order_product->toppings = implode('', $toppings);
                                     } else {
@@ -1197,15 +1391,15 @@ class Orders extends Model
                                     $payment_order_product->name = $cart['name'];
                                     $payment_order_product->model = '';
                                     $payment_order_product->quantity = $cart['quantity'];
-                                    $payment_order_product->price = $cart['main_price'];
-                                    $payment_order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $payment_order_product->price = $del_price;
+                                    $payment_order_product->total = $del_price *  $cart['quantity'];
                                     $payment_order_product->tax = 0.00;
                                     $payment_order_product->reward = 0;
                                     $payment_order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $payment_order_product->toppings = implode('', $toppings);
                                     } else {
@@ -1219,7 +1413,6 @@ class Orders extends Model
 
                         //Order to Cart
                         $cart = isset($customer->cart) ? $customer->cart : '';
-
                         $order_to_cart = new OrderCart;
                         $order_to_cart->order_id = $order->order_id;
                         $order_to_cart->session_order = $cart;
@@ -1249,7 +1442,8 @@ class Orders extends Model
                         $orderdelivery->save();
 
                         // Coupon Code
-                        if ($couponcode != 0) {
+                        if ($couponcode != 0) 
+                        {
                             $ordercoupon = new OrderTotal;
                             $ordercoupon->order_id = $order->order_id;
                             $ordercoupon->code = 'coupon';
@@ -1271,7 +1465,8 @@ class Orders extends Model
                         $ordersubtotal->save();
 
                         // service charge
-                        if ($servicecharge != "") {
+                        if ($servicecharge != "") 
+                        {
                             $orderservisecharge = new OrderTotal;
                             $orderservisecharge->order_id = $order->order_id;
                             $orderservisecharge->code = 'credit';
@@ -1295,6 +1490,7 @@ class Orders extends Model
                         // Order Details Array
                         $orderserialize = $order->toArray();
 
+                        // Insert New Customer Order
                         $cfname = isset($customer->firstname) ? $customer->firstname : '';
                         $clname = isset($customer->lastname) ? $customer->lastname : '';
                         $cfullname = $cfname . ' ' . $clname;
@@ -1321,13 +1517,14 @@ class Orders extends Model
 
                         session()->forget('couponcode');
                         session()->forget('couponname');
+                        session()->forget('currentcoupon');
                         session()->forget('cart1');
-                        session()->forget('guest_user');
                         session()->forget('free_item');
                         session()->forget('headertotal');
                         session()->forget('total');
                         session()->forget('product_id');
-                        session()->forget('currentcoupon');
+                        session()->forget('subtotal');
+                        session()->forget('delivery_charge');
                     }
 
                 }
@@ -1335,23 +1532,19 @@ class Orders extends Model
         }
     }
 
+
     // Stripe payment gateway order store
     public static function stripestoreOrder(Request $request)
     {
-
         $currentURL = URL::to("/");
-
-
         // Get Store Settings & Other Settings
         $store_data = frontStoreID($currentURL);
-
-
         // Get Current Front Store ID
         $front_store_id =  $store_data['store_id'];
 
+
         // Free Item
         $f_item = $request->free_item;
-
         if (!empty($f_item) || $f_item != '') {
             $free_item = $f_item;
         } else {
@@ -1362,10 +1555,15 @@ class Orders extends Model
             }
         }
 
-        $couponname = session()->get('couponname');
-        $currentcoupon = session()->get('currentcoupon');
-        $code =isset($currentcoupon['code']) ? $currentcoupon['code'] : $couponname ;
+        // Coupon Name
+        $couponname = (session()->has('couponname')) ? session()->get('couponname') : '';
 
+        // Current Coupon Array
+        $currentcoupon = session()->get('currentcoupon');
+
+        // Coupon Amount
+        $couponcode = (session()->has('couponcode')) ? session()->get('couponcode') : 0.00;
+        $code =isset($currentcoupon['code']) ? $currentcoupon['code'] : $couponname ;
         if(!empty($code))
         {
             $cpn_dt = Coupon::where('code',$code)->where('store_id',$front_store_id)->first();
@@ -1375,28 +1573,31 @@ class Orders extends Model
             $cpn_dt = '';
         }
 
+
         // Store Settings
         $store_setting = isset($store_data['store_settings']) ? $store_data['store_settings'] : '';
+
 
         // Get Currency Details
         $currency_code = $store_setting['config_currency'];
         $currency_details = Currency::where('code', $currency_code)->first();
 
+        // Delivery Type
         $delivery_type = session()->get('flag_post_code');
-        $total = session()->get('total');
-        $subtotal = session()->get('subtotal');
-        $delivery_charges = session()->get('delivery_charge');
-        $delivery_charge = isset($delivery_charges) ? $delivery_charges : 0.00;
-        $couponcode = session()->get('couponcode');
-        $couponname = session()->get('couponname');
+
+        // Total
+        $total = (session()->has('total')) ? session()->get('total') : 0.00;
+
+        // Get Subtotal
+        $subtotal = (session()->has('subtotal')) ? session()->get('subtotal') : 0.00;
+
+        // Get Delivery Charge
+        $delivery_charge = (session()->has('delivery_charge')) ? session()->get('delivery_charge') : 0.00;
+        
+        // Service Charge
         $servicecharge = isset($request->stripe_service_charge) ? $request->stripe_service_charge : 0.00;
 
-        $total = $request->total;
-        //  $subtotal = $request->subtotal;
-        //  $delivery_charge = $request->delivery_charge;
-        //  $couponcode = isset($request->couponcode) ? $request->couponcode : 0;
-        //  $couponname = $request->couponname;
-
+        $total += $servicecharge;
 
         // Store Details
         $store = Store::where('store_id', $front_store_id)->first();
@@ -1404,21 +1605,35 @@ class Orders extends Model
         $data['store_name'] = getStoreDetails($front_store_id, 'config_name');
         // End Store Details
 
-        if (session()->has('userid')) {
+
+        // Customer ID
+        if (session()->has('userid')) 
+        {
             $user_id = session()->get('userid');
         } else {
             $user_id = 0;
         }
 
         // Customer Details
-        if ($user_id != 0) {
+        if ($user_id != 0) 
+        {
             $customer = Customer::where('customer_id', $user_id)->first();
-
             $cust_address_id = isset($customer->address_id) ? $customer->address_id : '';
-
             $customer_def_address = CustomerAddress::where('address_id', $cust_address_id)->first();
+
+            // Get customer Country
+            $cust_country_id = isset($customer_def_address->country_id) ? $customer_def_address->country_id : '';
+            $country = Country::select('name')->where('country_id',$cust_country_id)->first();
+            $cust_country_name = isset($country->name) ? $country->name : '';
+
+            // Get customer Zone
+            $cust_zone_id = isset($customer_def_address->zone_id) ? $customer_def_address->zone_id : '';
+            $zone = Region::select('name')->where('zone_id',$cust_zone_id)->first();
+            $cust_zone_name = isset($zone->name) ? $zone->name : '';
+
         }
         // End Customer Details
+
 
         // Get Time Method
         if (session()->has('time_method')) {
@@ -1428,7 +1643,9 @@ class Orders extends Model
         }
         // End Time Method
 
+
         $payment_method = 1;
+
 
         // Check Delivery Type
         if ($delivery_type == 'collection')  // Collection
@@ -1513,11 +1730,12 @@ class Orders extends Model
                         $gorder->is_delete = 0;
                         $gorder->save();
 
+
                         $last_order_id = $gorder->order_id;
+
                         $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                         $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                         $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                        $subtotal = $request->subtotal;
 
 
                         if(!empty($cpn_id) && $cpn_id != 0)
@@ -1534,24 +1752,29 @@ class Orders extends Model
                         session()->put('last_order_id', $gorder->order_id);
 
                         // Guest Order Product
-                        if (isset($guestUserCart)) {
-                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
-                                foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                        if (isset($guestUserCart)) 
+                        {
+                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) 
+                            {
+                                foreach ($guestUserCart['withoutSize'] as $key => $cart) 
+                                {
+                                    $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $col_price;
+                                    $gorder_product->total = $col_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -1562,23 +1785,27 @@ class Orders extends Model
                                 }
                             }
 
-                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
-                                foreach ($guestUserCart['size'] as $key => $cart) {
+                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) 
+                            {
+                                foreach ($guestUserCart['size'] as $key => $cart) 
+                                {
+                                    $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $col_price;
+                                    $gorder_product->total = $col_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -1611,18 +1838,9 @@ class Orders extends Model
                         $gorderhistory->date_added = date('Y-m-d h:i:s');
                         $gorderhistory->save();
 
-                        // Order Delivery
-                        $gorderdelivery = new OrderTotal;
-                        $gorderdelivery->order_id = $gorder->order_id;
-                        $gorderdelivery->code = 'delivery';
-                        $gorderdelivery->title = 'Delivery';
-                        $gorderdelivery->text = $currency_details['symbol_left'] . ' 0.00';
-                        $gorderdelivery->value = 0.00;
-                        $gorderdelivery->sort_order = 0;
-                        $gorderdelivery->save();
-
                         // Coupon Code
-                        if ($couponcode != 0) {
+                        if ($couponcode != 0 || $couponcode != '') 
+                        {
                             $gordercoupon = new OrderTotal;
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
@@ -1632,6 +1850,7 @@ class Orders extends Model
                             $gordercoupon->sort_order = 0;
                             $gordercoupon->save();
                         }
+
 
                         // Subtotal
                         $gordersubtotal = new OrderTotal;
@@ -1644,7 +1863,8 @@ class Orders extends Model
                         $gordersubtotal->save();
 
                         // service charge
-                        if ($servicecharge != "") {
+                        if ($servicecharge != "") 
+                        {
                             $gordertotal = new OrderTotal;
                             $gordertotal->order_id = $gorder->order_id;
                             $gordertotal->code = 'credit';
@@ -1665,13 +1885,21 @@ class Orders extends Model
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
 
-                        session()->forget('cart1');
                         session()->forget('guest_user');
+                        session()->forget('headertotal');
+                        session()->forget('total');
+                        session()->forget('subtotal');
+                        session()->forget('product_id');
+                        session()->forget('couponcode');
+                        session()->forget('currentcoupon');
+                        session()->forget('couponname');
+                        session()->forget('cart1');
                         session()->forget('free_item');
                     }
-                } else // Customer
+                } 
+                else // Customer
                 {
-                    $usercart = getuserCart($user_id);
+                    $usercart = session()->get('cart1');
 
                     // New Order
                     $order = new Orders;
@@ -1742,11 +1970,13 @@ class Orders extends Model
                     $order->is_delete = 0;
                     $order->save();
 
+                    // Last Inserted Order ID
                     $last_order_id = $order->order_id;
+
+
                     $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                     $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                     $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                    $subtotal = $request->subtotal;
 
 
                     if(!empty($cpn_id) && $cpn_id != 0)
@@ -1762,27 +1992,31 @@ class Orders extends Model
 
 
                     session()->put('last_order_id', $order->order_id);
-                    session()->forget('free_item');
 
                     // Order Product
-                    if (isset($usercart)) {
-                        if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
-                            foreach ($usercart['withoutSize'] as $key => $cart) {
+                    if (isset($usercart)) 
+                    {
+                        if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) 
+                        {
+                            foreach ($usercart['withoutSize'] as $key => $cart) 
+                            {
+                                $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+
                                 $order_product = new OrderProduct;
                                 $order_product->order_id = $last_order_id;
                                 $order_product->product_id = $cart['product_id'];
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['main_price'];
-                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->price = $col_price;
+                                $order_product->total = $col_price *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
                                 if (isset($cart['topping']) && !empty($cart['topping'])) {
                                     foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                        $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                     }
                                     $order_product->toppings = implode('', $toppings);
                                 } else {
@@ -1793,23 +2027,27 @@ class Orders extends Model
                             }
                         }
 
-                        if (isset($usercart['size']) && count($usercart['size']) > 0) {
-                            foreach ($usercart['size'] as $key => $cart) {
+                        if (isset($usercart['size']) && count($usercart['size']) > 0) 
+                        {
+                            foreach ($usercart['size'] as $key => $cart) 
+                            {
+                                $col_price = (isset($cart['col_price']) && !empty($cart['col_price']) && $cart['col_price'] != 0) ? $cart['col_price'] : $cart['main_price'];
+                                
                                 $order_product = new OrderProduct;
                                 $order_product->order_id = $last_order_id;
                                 $order_product->product_id = $cart['product_id'];
                                 $order_product->name = $cart['name'];
                                 $order_product->model = '';
                                 $order_product->quantity = $cart['quantity'];
-                                $order_product->price = $cart['main_price'];
-                                $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                $order_product->price = $col_price;
+                                $order_product->total = $col_price *  $cart['quantity'];
                                 $order_product->tax = 0.00;
                                 $order_product->reward = 0;
                                 $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                 $toppings = [];
                                 if (isset($cart['topping']) && !empty($cart['topping'])) {
                                     foreach ($cart['topping'] as $topping) {
-                                        $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                        $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                     }
                                     $order_product->toppings = implode('', $toppings);
                                 } else {
@@ -1842,18 +2080,8 @@ class Orders extends Model
                     $orderhistory->date_added = date('Y-m-d h:i:s');
                     $orderhistory->save();
 
-                    // Order Delivery
-                    $orderdelivery = new OrderTotal;
-                    $orderdelivery->order_id = $order->order_id;
-                    $orderdelivery->code = 'delivery';
-                    $orderdelivery->title = 'Delivery';
-                    $orderdelivery->text = $currency_details['symbol_left'] . '0.00';
-                    $orderdelivery->value = 0.00;
-                    $orderdelivery->sort_order = 0;
-                    $orderdelivery->save();
-
                     // Coupon Code
-                    if ($couponcode != 0) {
+                    if ($couponcode != 0 || $couponcode != '') {
                         $ordercoupon = new OrderTotal;
                         $ordercoupon->order_id = $order->order_id;
                         $ordercoupon->code = 'coupon';
@@ -1875,7 +2103,8 @@ class Orders extends Model
                     $ordersubtotal->save();
 
                     // service charge
-                    if ($servicecharge != "") {
+                    if ($servicecharge != "") 
+                    {
                         $ordertservicecharge = new OrderTotal;
                         $ordertservicecharge->order_id = $order->order_id;
                         $ordertservicecharge->code = 'credit';
@@ -1902,6 +2131,7 @@ class Orders extends Model
                     $cfname = isset($customer->firstname) ? $customer->firstname : '';
                     $clname = isset($customer->lastname) ? $customer->lastname : '';
                     $cfullname = $cfname . ' ' . $clname;
+
                     $customer_order = new CustomerOrder;
                     $customer_order->store_id = $front_store_id;
                     $customer_order->order_id = $last_order_id;
@@ -1922,6 +2152,18 @@ class Orders extends Model
                     $customer_order->date_added = date('Y-m-d h:i:s');
                     $customer_order->refunded_date = null;
                     $customer_order->save();
+
+
+                    session()->forget('headertotal');
+                    session()->forget('total');
+                    session()->forget('subtotal');
+                    session()->forget('product_id');
+                    session()->forget('couponcode');
+                    session()->forget('currentcoupon');
+                    session()->forget('couponname');
+                    session()->forget('cart1');
+                    session()->forget('free_item');
+
                 }
             }
         }
@@ -1937,7 +2179,8 @@ class Orders extends Model
                     $guest_user = session()->get('guest_user');
                     $guest_user_address = session()->get('guest_user_address');
 
-                    if (!empty($guest_user)) {
+                    if (!empty($guest_user)) 
+                    {
                         $guestUserCart = session()->get('cart1');
 
                         // Guest Order
@@ -2009,12 +2252,13 @@ class Orders extends Model
                         $gorder->is_delete = 0;
                         $gorder->save();
 
-
+                        // Last Inserted Order ID
                         $last_order_id = $gorder->order_id;
+
+                        // Coupon Info
                         $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                         $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                         $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                        $subtotal = $request->subtotal;
 
 
                         if(!empty($cpn_id) && $cpn_id != 0)
@@ -2028,28 +2272,32 @@ class Orders extends Model
                             $coupon_history->save();
                         }
 
-
                         session()->put('last_order_id', $gorder->order_id);
 
                         // Guest Order Product
-                        if (isset($guestUserCart)) {
-                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) {
-                                foreach ($guestUserCart['withoutSize'] as $key => $cart) {
+                        if (isset($guestUserCart)) 
+                        {
+                            if (isset($guestUserCart['withoutSize']) && count($guestUserCart['withoutSize']) > 0) 
+                            {
+                                foreach ($guestUserCart['withoutSize'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $del_price;
+                                    $gorder_product->total = $del_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -2060,23 +2308,27 @@ class Orders extends Model
                                 }
                             }
 
-                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) {
-                                foreach ($guestUserCart['size'] as $key => $cart) {
+                            if (isset($guestUserCart['size']) && count($guestUserCart['size']) > 0) 
+                            {
+                                foreach ($guestUserCart['size'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     $gorder_product = new OrderProduct;
                                     $gorder_product->order_id = $gorder->order_id;
                                     $gorder_product->product_id = $cart['product_id'];
                                     $gorder_product->name = $cart['name'];
                                     $gorder_product->model = '';
                                     $gorder_product->quantity = $cart['quantity'];
-                                    $gorder_product->price = $cart['main_price'];
-                                    $gorder_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $gorder_product->price = $del_price;
+                                    $gorder_product->total = $del_price *  $cart['quantity'];
                                     $gorder_product->tax = 0.00;
                                     $gorder_product->reward = 0;
                                     $gorder_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $gorder_product->toppings = implode('', $toppings);
                                     } else {
@@ -2088,6 +2340,7 @@ class Orders extends Model
                             }
                         }
 
+
                         //Guest Order to Cart
                         $gcart = $guestUserCart;
                         $serial = serialize($gcart);
@@ -2097,7 +2350,6 @@ class Orders extends Model
                         $gorder_to_cart->order_id = $gorder->order_id;
                         $gorder_to_cart->session_order = $base64;
                         $gorder_to_cart->save();
-
 
                         // Guest Order History
                         $gorderhistory = new OrderHistory;
@@ -2119,7 +2371,8 @@ class Orders extends Model
                         $gorderdelivery->save();
 
                         // Coupon Code
-                        if ($couponcode != 0) {
+                        if ($couponcode != 0 || !empty($couponcode)) 
+                        {
                             $gordercoupon = new OrderTotal;
                             $gordercoupon->order_id = $gorder->order_id;
                             $gordercoupon->code = 'coupon';
@@ -2141,7 +2394,8 @@ class Orders extends Model
                         $gordersubtotal->save();
 
                         // service charge
-                        if ($servicecharge != "") {
+                        if ($servicecharge != "") 
+                        {
                             $gordertotal = new OrderTotal;
                             $gordertotal->order_id = $gorder->order_id;
                             $gordertotal->code = 'credit';
@@ -2162,17 +2416,27 @@ class Orders extends Model
                         $gordertotal->sort_order = 0;
                         $gordertotal->save();
 
-                        session()->forget('cart1');
                         session()->forget('guest_user');
                         session()->forget('guest_user_address');
+                        session()->forget('headertotal');
+                        session()->forget('total');
+                        session()->forget('subtotal');
+                        session()->forget('product_id');
+                        session()->forget('couponcode');
+                        session()->forget('currentcoupon');
+                        session()->forget('couponname');
+                        session()->forget('cart1');
                         session()->forget('free_item');
+                        session()->forget('delivery_charge');
 
                     }
-                } else //Customer
+                } 
+                else //Customer
                 {
-                    $usercart = getuserCart($user_id);
+                    $usercart = session()->get('cart1');
 
-                    if (!empty($usercart)) {
+                    if (!empty($usercart)) 
+                    {
                         // New Order
                         $order = new Orders;
                         $order->invoice_no = 0;
@@ -2189,31 +2453,31 @@ class Orders extends Model
                         $order->fax = isset($customer->fax) ? $customer->fax : '';
                         $order->payment_firstname = isset($customer->firstname) ? $customer->firstname : '';
                         $order->payment_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                        $order->payment_company = '';
-                        $order->payment_company_id = 0;
+                        $order->payment_company = isset($customer_def_address->company) ? $customer_def_address->company : '';
+                        $order->payment_company_id = isset($customer_def_address->company_id) ? $customer_def_address->company_id : '' ;
                         $order->payment_tax_id = 0;
                         $order->payment_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
                         $order->payment_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
                         $order->payment_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
                         $order->payment_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
-                        $order->payment_country = 0;
-                        $order->payment_country_id = 0;
-                        $order->payment_zone = 0;
-                        $order->payment_zone_id = 0;
+                        $order->payment_country = isset($cust_country_name) ? $cust_country_name : '';
+                        $order->payment_country_id = isset($customer_def_address->country_id) ? $customer_def_address->country_id : '';
+                        $order->payment_zone = isset($cust_zone_name) ? $cust_zone_name : '';
+                        $order->payment_zone_id = isset($customer_def_address->zone_id) ? $customer_def_address->zone_id : '';
                         $order->payment_address_format = '';
                         $order->payment_method = 'CARD';
                         $order->payment_code = 'stripe_gateway';
                         $order->shipping_firstname = isset($customer->firstname) ? $customer->firstname : '';
                         $order->shipping_lastname = isset($customer->lastname) ? $customer->lastname : '';
-                        $order->shipping_company = '';
+                        $order->shipping_company = isset($customer_def_address->company) ? $customer_def_address->company : '';
                         $order->shipping_address_1 = isset($customer_def_address->address_1) ? $customer_def_address->address_1 : '';
                         $order->shipping_address_2 = isset($customer_def_address->address_2) ? $customer_def_address->address_2 : '';
                         $order->shipping_city = isset($customer_def_address->city) ? $customer_def_address->city : '';
                         $order->shipping_postcode = isset($customer_def_address->postcode) ? $customer_def_address->postcode : '';
-                        $order->shipping_country = 0;
-                        $order->shipping_country_id = 0;
-                        $order->shipping_zone = 0;
-                        $order->shipping_zone_id = 0;
+                        $order->shipping_country = isset($cust_country_name) ? $cust_country_name : '';
+                        $order->shipping_country_id = isset($customer_def_address->country_id) ? $customer_def_address->country_id : '';
+                        $order->shipping_zone = isset($cust_zone_name) ? $cust_zone_name : '';
+                        $order->shipping_zone_id = isset($customer_def_address->zone_id) ? $customer_def_address->zone_id : '';
                         $order->shipping_address_format = '';
                         $order->shipping_method = 'delivery';
                         $order->shipping_code = '';
@@ -2242,12 +2506,13 @@ class Orders extends Model
                         $order->is_delete = 0;
                         $order->save();
 
+                        // Last Inserted Order ID
                         $last_order_id = $order->order_id;
 
+                        // Coupon Info
                         $cpn_id = isset($cpn_dt->coupon_id) ? $cpn_dt->coupon_id : 0;
                         $cpn_type = isset($cpn_dt->type) ? $cpn_dt->type : '';
                         $cpn_discount = isset($cpn_dt->discount) ? $cpn_dt->discount : '';
-                        $subtotal = $request->subtotal;
 
 
                         if(!empty($cpn_id) && $cpn_id != 0)
@@ -2262,27 +2527,31 @@ class Orders extends Model
                         }
 
                         session()->put('last_order_id', $last_order_id);
-                        session()->forget('free_item');
 
                         // Order Product
-                        if (isset($usercart)) {
-                            if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) {
-                                foreach ($usercart['withoutSize'] as $key => $cart) {
+                        if (isset($usercart)) 
+                        {
+                            if (isset($usercart['withoutSize']) && count($usercart['withoutSize']) > 0) 
+                            {
+                                foreach ($usercart['withoutSize'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     $order_product = new OrderProduct;
                                     $order_product->order_id = $order->order_id;
                                     $order_product->product_id = $cart['product_id'];
                                     $order_product->name = $cart['name'];
                                     $order_product->model = '';
                                     $order_product->quantity = $cart['quantity'];
-                                    $order_product->price = $cart['main_price'];
-                                    $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $order_product->price = $del_price;
+                                    $order_product->total = $del_price *  $cart['quantity'];
                                     $order_product->tax = 0.00;
                                     $order_product->reward = 0;
                                     $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $order_product->toppings = implode('', $toppings);
                                     } else {
@@ -2294,22 +2563,25 @@ class Orders extends Model
                             }
 
                             if (isset($usercart['size']) && count($usercart['size']) > 0) {
-                                foreach ($usercart['size'] as $key => $cart) {
+                                foreach ($usercart['size'] as $key => $cart) 
+                                {
+                                    $del_price = (isset($cart['del_price']) && !empty($cart['del_price']) && $cart['del_price'] != 0) ? $cart['del_price'] : $cart['main_price'];
+
                                     $order_product = new OrderProduct;
                                     $order_product->order_id = $order->order_id;
                                     $order_product->product_id = $cart['product_id'];
                                     $order_product->name = $cart['name'];
                                     $order_product->model = '';
                                     $order_product->quantity = $cart['quantity'];
-                                    $order_product->price = $cart['main_price'];
-                                    $order_product->total = $cart['main_price'] *  $cart['quantity'];
+                                    $order_product->price = $del_price;
+                                    $order_product->total = $del_price *  $cart['quantity'];
                                     $order_product->tax = 0.00;
                                     $order_product->reward = 0;
                                     $order_product->name_size_base = isset($cart['size']) ? $cart['size'] : '';
                                     $toppings = [];
                                     if (isset($cart['topping']) && !empty($cart['topping'])) {
                                         foreach ($cart['topping'] as $topping) {
-                                            $toppings[] = '<span class="bg" style="display:block"><br/>+' . $topping . '</span>';
+                                            $toppings[] = '<span class="bg" style="display:block">+' . $topping . '</span>';
                                         }
                                         $order_product->toppings = implode('', $toppings);
                                     } else {
@@ -2353,7 +2625,8 @@ class Orders extends Model
                         $orderdelivery->save();
 
                         // Coupon Code
-                        if ($couponcode != 0) {
+                        if ($couponcode != 0 || !empty($couponcode)) 
+                        {
                             $ordercoupon = new OrderTotal;
                             $ordercoupon->order_id = $order->order_id;
                             $ordercoupon->code = 'coupon';
@@ -2375,7 +2648,8 @@ class Orders extends Model
                         $ordersubtotal->save();
 
                         // service charge
-                        if ($servicecharge != "") {
+                        if ($servicecharge != "") 
+                        {
                             $orderservicecharge = new OrderTotal;
                             $orderservicecharge->order_id = $order->order_id;
                             $orderservicecharge->code = 'credit';
@@ -2396,9 +2670,9 @@ class Orders extends Model
                         $ordertotal->sort_order = 0;
                         $ordertotal->save();
 
+
                         // Order Details Array
                         $orderserialize = $order->toArray();
-
                         $cfname = isset($customer->firstname) ? $customer->firstname : '';
                         $clname = isset($customer->lastname) ? $customer->lastname : '';
                         $cfullname = $cfname . ' ' . $clname;
@@ -2422,9 +2696,23 @@ class Orders extends Model
                         $customer_order->date_added = date('Y-m-d h:i:s');
                         $customer_order->refunded_date = null;
                         $customer_order->save();
+
+                        session()->forget('couponname');
+                        session()->forget('couponcode');
+                        session()->forget('currentcoupon');
+                        session()->forget('cart1');
+                        session()->forget('total');
+                        session()->forget('subtotal');
+                        session()->forget('headertotal');
+                        session()->forget('free_item');
+                        session()->forget('product_id');
+                        session()->forget('delivery_charge');
+
                     }
                 }
             }
         }
     }
+
+
 }

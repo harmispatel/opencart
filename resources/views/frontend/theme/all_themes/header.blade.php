@@ -12,7 +12,7 @@
     
     // Current URL
     $currentURL = URL::to("/");
-
+    
     // Get Store Settings & Other Settings
     $store_data = frontStoreID($currentURL);
 
@@ -56,9 +56,15 @@
         $working_to_time = isset($openclose['to_time']) ? date('H:i',$openclose['to_time']) : '0:00';
         $working_time = $working_from_time.' - '.$working_to_time;
     }
+    elseif($store_open_close == 'close') 
+    {
+        $working_from_time = isset($openclose['from_time']) ? date('H:i',$openclose['from_time']) : '0:00';
+        $working_to_time = isset($openclose['to_time']) ? date('H:i',$openclose['to_time']) : '0:00';
+        $working_time = $working_from_time.' - '.$working_to_time;
+    }
     else 
     {
-        $working_time = '0:00 - 0:00';
+        $working_time = "00:00 - 00:00";
     }
 
 
@@ -80,7 +86,6 @@
 //    exit();
 
     $html = '';
-    $headertotal = 0;
     $delivery_charge = 0;
     $price = 0;
 
@@ -135,28 +140,6 @@
                 // $delivery_charge += isset($mycart['del_price']) ? $mycart['del_price'] : 0;
                 $cart_products += $mycart['quantity'];
             }
-        }
-
-        if (!empty($Coupon) || $Coupon != '')
-        {
-           $couponcode =0;
-                if ( $Coupon['total'] <= $price)
-                {
-                    if ($Coupon['type'] == 'P')
-                    {
-                        $couponcode = ($price * $Coupon['discount']) / 100;
-                    }
-                    if ($Coupon['type'] == 'F')
-                    {
-                        $couponcode = $Coupon['discount'];
-                    }
-                }
-            $headertotal += $price - $couponcode + $delivery_charge;
-            
-        }
-        else
-        {
-            $headertotal += $price + $delivery_charge;
         }
     }
     else 
@@ -213,43 +196,18 @@
                 $cart_products += $mycart['quantity'];
             }
         }
-       
-        // echo '<pre>';
-        // print_r($price);
-     
-    
-        if(!empty($cart) || $cart != ''){
-            if (!empty($Coupon) || $Coupon != '')
-            {
-               $couponcode =0;
-                if ( $Coupon['total'] <= $price)
-                {
-                    if ($Coupon['type'] == 'P')
-                    {
-                        $couponcode = ($price * $Coupon['discount']) / 100;
-                    }
-                    if ($Coupon['type'] == 'F')
-                    {
-                        $couponcode = $Coupon['discount'];
-                    }
-                }
-               
-
-                    $headertotal = $price - $couponcode + $delivery_charge;
-                 
-                   
-            }
-            else
-            {
-                $headertotal = $price + $delivery_charge;
-            }
-        }
     
     }
     // End Cart Details
-        // $sessiontotal = session()->put('total',$headertotal);
-        $sessionsubtotal = session()->put('subtotal',$price);
-          
+
+    if(session()->has('total'))
+    {
+        $total = session()->get('total');
+    }
+    else 
+    {
+        $total = 0;    
+    }
 
     $currentdate = strtotime(date("Y-m-d")); 
 @endphp
@@ -739,7 +697,7 @@
                         <div class="price-box">
                             <strong>Shopping Cart</strong>
                             <div class="price">
-                                <h3 style="color: black">{{ $currency }} <span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></h3>
+                                <h3 style="color: black">{{ $currency }} <span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></h3>
                             </div>
                         </div>
                     </a>
@@ -893,7 +851,7 @@
                             <div class="price-box">
                                 <strong>Shopping Cart</strong>
                                 <div class="price">
-                                    <i class="fas fa-pound-sign"></i> <span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span>
+                                    <i class="fas fa-pound-sign"></i> <span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span>
                                 </div>
                             </div>
                         </a>
@@ -950,7 +908,7 @@
                             <a class="menu-shopping-cart" href="{{ route('cart') }}">
                                 <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                                 <div class="price-box"><strong>Shopping Cart:</strong>
-                                    <div class="price">{{$currency}}<span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></div>
+                                    <div class="price">{{$currency}}<span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></div>
                                 </div>
                             </a>
                         </div>
@@ -993,7 +951,7 @@
                             <a class="menu-shopping-cart" href="{{ route('cart') }}">
                                 <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                                 <div class="price-box"><strong>Shopping Cart:</strong>
-                                    <div class="price">{{$currency}}<span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></div>
+                                    <div class="price">{{$currency}}<span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></div>
                                 </div>
                             </a>
                         </div>
@@ -1036,7 +994,7 @@
                             <a class="menu-shopping-cart" href="{{ route('cart') }}">
                                 <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                                 <div class="price-box"><strong>Shopping Cart:</strong>
-                                    <div class="price">{{$currency}}<span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></div>
+                                    <div class="price">{{$currency}}<span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></div>
                                 </div>
                             </a>
                         </div>
@@ -1419,7 +1377,7 @@
                             <i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span>
                         </div>
                         <div class="price-box"><strong>Shopping Cart:</strong>
-                            <div class="price"><i class="fas fa-pound-sign"></i><span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></div>
+                            <div class="price"><i class="fas fa-pound-sign"></i><span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></div>
                         </div>
                     </a>
                     <a class="open-mobile-menu" href="javascript:void(0)"><span class="text-uppercase">menu</span><i class="fas fa-bars"></i></a>
@@ -1466,7 +1424,7 @@
                         <a class="menu-shopping-cart" href="{{ route('cart') }}">
                             <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                             <div class="price-box"><strong>Shopping Cart:</strong>
-                                <div class="price">{{$currency}}<span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></div>
+                                <div class="price">{{$currency}}<span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></div>
                             </div>
                         </a>
                     @endif
@@ -1502,7 +1460,7 @@
                         <a class="menu-shopping-cart" href="{{ route('cart') }}">
                             <div class="number"><i class="fas fa-shopping-basket"></i><span id="cart_products">{{ ($cart_products) }}</span></div>
                             <div class="price-box"><strong>Shopping Cart:</strong>
-                                <div class="price">{{$currency}}<span class="pirce-value">{{ (($headertotal <= 0) ? 0 : $headertotal) }}</span></div>
+                                <div class="price">{{$currency}}<span class="pirce-value">{{ (($total <= 0) ? 0 : $total) }}</span></div>
                             </div>
                         </a>
                     @endif

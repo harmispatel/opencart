@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OrderHistory;
 use App\Models\Orders;
 use App\Models\OrderTransaction;
+use App\Models\CustomerOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
@@ -30,22 +31,38 @@ class PayPalController extends Controller
      */
     public function processTransaction(Request $request)
     {
+        $total = 0.00;
+        if(session()->has('total'))
+        {
+            $total = session()->get('total');
+        }
+        else
+        {
+            return redirect()->back()->with('error',"Transaction Declained, Total is $total");
+        }
+        
+        
+        // Service Charge
+        $service_charge = isset($request->service_charge) ? $request->service_charge : 0.00;
+        
+        $total = $total + $service_charge;
 
-        $paypal         = paymentdetails();
-        $paypalmod    = $paypal['paypal']['pp_express_test'];
-
+        $paypal = paymentdetails();
+        $paypalmod  = $paypal['paypal']['pp_express_test'];
         $paypalClint    = $paypal['paypal']['pp_sandbox_clint'];
         $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
 
         // Paypal Live Mod
-        if ($paypalmod == 1) {
+        if ($paypalmod == 1) 
+        {
             Config::set('paypal.mode', "live");
-            // Config::set('paypal.live.client_id', $paypalClint);
-            // Config::set('paypal.live.client_secret', $paypalSecret);
+            Config::set('paypal.live.client_id', $paypalClint);
+            Config::set('paypal.live.client_secret', $paypalSecret);
         }
 
         // Paypal Sandbox Mod
-        if ($paypalmod == 0) {
+        if ($paypalmod == 0) 
+        {
             Config::set('paypal.mode', "sandbox");
             Config::set('paypal.sandbox.client_id', $paypalClint);
             Config::set('paypal.sandbox.client_secret', $paypalSecret);
@@ -55,6 +72,7 @@ class PayPalController extends Controller
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
 
+        
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [
@@ -65,7 +83,7 @@ class PayPalController extends Controller
                 0 => [
                     "amount" => [
                         "currency_code" => $request->currency_code,
-                        "value" => round($request->total,2),
+                        "value" => round($total,2),
                     ]
                 ]
             ]
@@ -74,21 +92,20 @@ class PayPalController extends Controller
         if (isset($response['id']) && $response['id'] != null) {
 
             // redirect to approve href
-            foreach ($response['links'] as $links) {
+            foreach ($response['links'] as $links) 
+            {
                 if ($links['rel'] == 'approve') {
                     Orders::paypalstoreOrder($request);
                     return redirect()->away($links['href']);
                 }
             }
 
-            return redirect()
-                ->route('checkout')
-                ->with('error', 'Something went wrong.');
+            return redirect()->route('checkout')->with('error', 'Something went wrong.');
 
-        } else {
-            return redirect()
-                ->route('checkout')
-                ->with('error', $response['error']['message'] ?? 'Something went wrong.');
+        } 
+        else 
+        {
+            return redirect()->route('checkout')->with('error', $response['error']['message'] ?? 'Something went wrong.');
         }
     }
 
@@ -106,13 +123,16 @@ class PayPalController extends Controller
         $paypalSecret   = $paypal['paypal']['pp_sandbox_secret'];
 
         // Paypal Live Mod
-        if ($paypalmod == 1) {
+        if ($paypalmod == 1) 
+        {
             Config::set('paypal.mode', "live");
-            // Config::set('paypal.live.client_id', $paypalClint);
-            // Config::set('paypal.live.client_secret', $paypalSecret);
+            Config::set('paypal.live.client_id', $paypalClint);
+            Config::set('paypal.live.client_secret', $paypalSecret);
         }
+
         // Paypal Sandbox Mod
-        if ($paypalmod == 0) {
+        if ($paypalmod == 0) 
+        {
             Config::set('paypal.mode', "sandbox");
             Config::set('paypal.sandbox.client_id', $paypalClint);
             Config::set('paypal.sandbox.client_secret', $paypalSecret);
@@ -158,17 +178,31 @@ class PayPalController extends Controller
             $ordertransaction->order_status_id = 2; // 2 Order Prossesing
             $ordertransaction->save();
 
+            $custOrder = CustomerOrder::where('order_id',$lastorderid)->first();
+
+            if(!empty($custOrder))
+            {
+                $cust_ord_id = isset($custOrder->id) ? $custOrder->id : '';
+                if(!empty($cust_ord_id))
+                {
+                    $cust_ord_upt = CustomerOrder::find($cust_ord_id);
+                    $cust_ord_upt->order_status = 2;
+                    $cust_ord_upt->update();
+                }
+            }
+
+
             return redirect()
                 ->route('success')
                 ->with('success', 'Transaction complete.');
         }
-        else {
+        else 
+        {
             Orders::where('order_id',$lastorderid)->update([
                 'order_status_id' => 7, // 7 Order Rejected
             ]);
-            return redirect()
-                ->route('checkout')
-                ->with('error', $response['message'] ?? 'Something went wrong.');
+
+            return redirect()->route('checkout')->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
 
@@ -178,7 +212,7 @@ class PayPalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function cancelTransaction(Request $request)
-    {
+    {        
         return redirect()
             ->route('checkout')
             ->with('error', $response['message'] ?? 'You have canceled the transaction.');

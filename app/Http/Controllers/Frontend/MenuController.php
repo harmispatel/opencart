@@ -33,15 +33,6 @@ class MenuController extends Controller
 
     public function servicecharge(Request $req)
     {
-        // Get Current URL
-        $currentURL = URL::to("/");
-
-        // Get Store Settings & Other Settings
-        $store_data = frontStoreID($currentURL);
-
-        // Get Current Front Store ID
-        $front_store_id =  $store_data['store_id'];
-
         $servicecharge = paymentdetails();
 
         $stripe_charge = $servicecharge["stripe"]["stripe_charge_payment"] ? $servicecharge["stripe"]["stripe_charge_payment"] : '0.00';
@@ -49,150 +40,125 @@ class MenuController extends Controller
         $cod_charge = $servicecharge["cod"]["cod_charge_payment"] ? $servicecharge["cod"]["cod_charge_payment"] : '0.00';
 
 
+        // Get Total From Session
+        if(session()->has('total') && !empty(session()->get('total')))
+        {
+            $total = session()->get('total');
+        }
+        else
+        {
+            $total = 0;
+        }
 
-        $s_subtotal = session()->get('subtotal');
-        $s_coupon = session()->get('currentcoupon');
+
+        // Delivery Type
         $ordertype = session()->get('flag_post_code');
-        $coupon_name = session()->get('couponname');
-        $delivery_type = session()->get('flag_post_code');
-        $current_date = strtotime(date('Y-m-d'));
-        $couponcode_name = isset($s_coupon['code']) ? $s_coupon['code'] : $coupon_name;
-        $Coupon_code = coupon::where('code', $couponcode_name)->where('store_id', $front_store_id)->first();
-        if(session()->has('userid')){
-            $user_id = session()->get('userid');
-        }else{
-            $user_id = 0;
+
+
+        // Get Minimum Spend
+        if(session()->has('min_spend_array'))
+        {
+            $min_spend_array = session()->get('min_spend_array');
+        }
+        else
+        {
+            $min_spend_array = array();
         }
 
-        $couponcode = 0;
-        if (!empty($Coupon_code) || $Coupon_code != '') {
-            if ($Coupon_code['total'] <= $s_subtotal) {
-                if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'P') : 0) {
-                    $couponcode = ($s_subtotal * $Coupon_code['discount']) / 100;
-                }
-                if (isset($Coupon_code['type']) ? ($Coupon_code['type'] == 'F') : 0) {
-                    $couponcode = $Coupon_code['discount'];
-                }
+        if(count($min_spend_array) > 0)
+        {
+            if(isset($min_spend_array['min_spend']) && !empty($min_spend_array['min_spend']))
+            {
+                $minimum_spend = $min_spend_array['min_spend'];
+            }
+            else
+            {
+                $minimum_spend = 0;
             }
         }
-
-
-        $discount = isset($couponcode) ? $couponcode : (session()->get('couponcode'));
-
-        //  Minimum Spend
-        $key = ([
-            'enable_delivery',
-            'delivery_option',
-        ]);
-
-        $delivery_setting = [];
-
-        foreach ($key as $row) {
-            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
-
-            $delivery_setting[$row] = isset($query->value) ? $query->value : '';
+        else
+        {
+            $minimum_spend = 0;
         }
 
 
+        if ($req->method_type == 1)
+        {
+            $order_total = $total + $stripe_charge;
 
-        if ($delivery_setting['delivery_option'] == 'area') {
-            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
-        } else {
-            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
-        }
-        $minimum_spend = $deliverysettings->last()->toArray();
-        //  End Minimum Spend
-
-        if ($req->method_type == 1) {
-            if (!empty($discount) || $discount != '') {
-                $total = $s_subtotal - $discount;
-            } else {
-                $total = $s_subtotal;
-            }
-            $row_total = ($total <= 0) ? 0 : $total;
-            $order_total = $row_total + $stripe_charge;
-            session()->put('total', $order_total);
-            if ($ordertype == 'delivery' && $row_total < $minimum_spend['min_spend']) {
-                $amount_due = $minimum_spend['min_spend'] - $row_total;
+            if ($ordertype == 'delivery' && $order_total < $minimum_spend)
+            {
+                $amount_due = $minimum_spend - $order_total;
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend['min_spend'] . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the Chekout this order.",
                     'total' => number_format($order_total,2),
-                    'subtotal' => $s_subtotal,
                     'headertotal' => number_format($order_total,2),
                     'service_charge' => $stripe_charge,
                 ]);
-            } else {
+            }
+            else
+            {
                 return response()->json([
                     'success' => 1,
                     'total' => number_format($order_total,2),
-                    'subtotal' => $s_subtotal,
                     'headertotal' => number_format($order_total,2),
                     'service_charge' => $stripe_charge
                 ]);
             }
         }
-        if ($req->method_type == 2) {
-            if (!empty($discount) || $discount != '') {
-                $total = $s_subtotal - $discount;
-            } else {
-                $total = $s_subtotal;
-            }
-            $row_total = ($total <= 0) ? 0 : $total;
-            $order_total = $row_total  + $paypal_charge;
-            session()->put('total', $order_total);
 
-            if ($ordertype == 'delivery' && $row_total < $minimum_spend['min_spend']) {
-                $amount_due = $minimum_spend['min_spend'] - $row_total;
+
+        if ($req->method_type == 2)
+        {
+            $order_total = $total  + $paypal_charge;
+
+            if ($ordertype == 'delivery' && $order_total < $minimum_spend)
+            {
+                $amount_due = $minimum_spend - $order_total;
+
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend['min_spend'] . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the Checkout this order.",
                     'total' => number_format($order_total,2),
-                    'subtotal' => $s_subtotal,
                     'headertotal' => number_format($order_total,2),
                     'service_charge' => $paypal_charge,
-
                 ]);
-            } else {
+            }
+            else
+            {
                 return response()->json([
                     'success' => 2,
                     'total' => number_format($order_total,2),
-                    'subtotal' => $s_subtotal,
                     'headertotal' => number_format($order_total,2),
                     'service_charge' => $paypal_charge,
                 ]);
             }
         }
-        if ($req->method_type == 3) {
-            if (!empty($discount) || $discount != '') {
-                $total = $s_subtotal - $discount;
-            } else {
-                $total = $s_subtotal;
-            }
-            $row_total = ($total <= 0) ? 0 : $total;
-            $order_total = $row_total + $cod_charge;
-
-            session()->put('total', $order_total);
 
 
+        if ($req->method_type == 3)
+        {
+            $order_total = $total + $cod_charge;
 
-            if ($ordertype == 'delivery' && $row_total < $minimum_spend['min_spend']) {
+            if ($ordertype == 'delivery' && $order_total < $minimum_spend)
+            {
+                $amount_due = $minimum_spend - $order_total;
 
-                $amount_due = $minimum_spend['min_spend'] - $row_total;
                 return response()->json([
                     'error' => 1,
-                    'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend['min_spend'] . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the chekout.",
+                    'message' => "Minimum delivery is " . session()->get('currency') . " " . $minimum_spend . ", you must spend " . session()->get('currency') . " " . $amount_due . " more for the Checkout this order.",
                     'total' => number_format($order_total,2),
-                    'subtotal' => $s_subtotal,
                     'headertotal' => number_format($order_total,2),
                     'service_charge' => $cod_charge
 
                 ]);
-            } else {
+            }
+            else
+            {
                 return response()->json([
                     'success' => 3,
                     'total' => number_format($order_total,2),
-                    'subtotal' => $s_subtotal,
                     'headertotal' => number_format($order_total,2),
                     'service_charge' => $cod_charge
                 ]);
@@ -226,17 +192,25 @@ class MenuController extends Controller
         // Get Cart Rule
         $cart_rule = FreeRule::where('id_store', $front_store_id)->first();
 
+        // Today's Date
         $current_date = strtotime(date('Y-m-d'));
+
         $Coupon = '';
+
+        // Get Delivery Type from Session
         $delivery_type = session()->get('flag_post_code');
-        if (session()->has('userid')) {
+
+        if (session()->has('userid'))
+        {
             $user_id = session()->get('userid');
-        } else {
+        }
+        else
+        {
             $user_id = 0;
         }
-        $get_cpn = session()->get('currentcoupon');
 
 
+        // Coupon Functionality
         if (session()->has('currentcoupon'))
         {
             $coupon_name = session()->get('currentcoupon');
@@ -811,55 +785,8 @@ class MenuController extends Controller
 
                                         if(($get_coupon->uses_total == 0 || $get_coupon->uses_total == '') && ($get_coupon->uses_customer == 0 || $get_coupon->uses_customer == ''))
                                         {
-                                            if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
-
-                                                if ($apply_shipping == $delivery_type) {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                        $Coupon = $get_coupon;
-                                                    } else {
-                                                        $Coupon = '';
-                                                    }
-                                                } elseif ($apply_shipping == 'both') {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                        $Coupon = $get_coupon;
-                                                    } else {
-                                                        $Coupon = '';
-                                                    }
-                                                }
-                                            } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
-
-                                                if ($apply_shipping == $delivery_type) {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                        $Coupon = $get_coupon;
-                                                    } else {
-                                                        $Coupon = '';
-                                                    }
-                                                } elseif ($apply_shipping == 'both') {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                        $Coupon = $get_coupon;
-                                                    } else {
-                                                        $Coupon = '';
-                                                    }
-                                                }
-                                            } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
-                                                if ($apply_shipping == $delivery_type) {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                        $Coupon = $get_coupon;
-                                                    } else {
-                                                        $Coupon = '';
-                                                    }
-                                                } elseif ($apply_shipping == 'both') {
-                                                    if ($current_date >= $start_date && $current_date < $end_date) {
-                                                        $Coupon = $get_coupon;
-                                                    } else {
-                                                        $Coupon = '';
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if ($get_coupon->uses_customer > $uses_per_cpn) {
+                                            if(!empty($session_proid))
+                                            {
                                                 if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
 
                                                     if ($apply_shipping == $delivery_type) {
@@ -902,6 +829,59 @@ class MenuController extends Controller
                                                             $Coupon = $get_coupon;
                                                         } else {
                                                             $Coupon = '';
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if ($get_coupon->uses_customer > $uses_per_cpn) {
+                                                if(!empty($session_proid))
+                                                {
+                                                    if (array_intersect($product_check, $session_proid) && count($product_check) != 0) {
+
+                                                        if ($apply_shipping == $delivery_type) {
+                                                            if ($current_date >= $start_date && $current_date < $end_date) {
+                                                                $Coupon = $get_coupon;
+                                                            } else {
+                                                                $Coupon = '';
+                                                            }
+                                                        } elseif ($apply_shipping == 'both') {
+                                                            if ($current_date >= $start_date && $current_date < $end_date) {
+                                                                $Coupon = $get_coupon;
+                                                            } else {
+                                                                $Coupon = '';
+                                                            }
+                                                        }
+                                                    } elseif (array_intersect($cat_to_pro, $session_proid) && count($cat_to_pro) != 0) {
+
+                                                        if ($apply_shipping == $delivery_type) {
+                                                            if ($current_date >= $start_date && $current_date < $end_date) {
+                                                                $Coupon = $get_coupon;
+                                                            } else {
+                                                                $Coupon = '';
+                                                            }
+                                                        } elseif ($apply_shipping == 'both') {
+                                                            if ($current_date >= $start_date && $current_date < $end_date) {
+                                                                $Coupon = $get_coupon;
+                                                            } else {
+                                                                $Coupon = '';
+                                                            }
+                                                        }
+                                                    } elseif (count($product_check) == 0 && count($cat_to_pro) == 0) {
+                                                        if ($apply_shipping == $delivery_type) {
+                                                            if ($current_date >= $start_date && $current_date < $end_date) {
+                                                                $Coupon = $get_coupon;
+                                                            } else {
+                                                                $Coupon = '';
+                                                            }
+                                                        } elseif ($apply_shipping == 'both') {
+                                                            if ($current_date >= $start_date && $current_date < $end_date) {
+                                                                $Coupon = $get_coupon;
+                                                            } else {
+                                                                $Coupon = '';
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -1394,41 +1374,240 @@ class MenuController extends Controller
             }
         }
 
+        // Put Coupon in session
         session()->put('currentcoupon',$Coupon);
 
+        // Get Categories
         $category = CategoryDetail::with(['hasManyCategoryStore', 'hasOneCategory'])->whereHas('hasManyCategoryStore', function ($query) use ($front_store_id) {
             $query->where('store_id', $front_store_id);
         })->orderBy('sort_order', 'ASC')->get();
-
         $data['category'] = $category;
 
+        // Get Areas of Current Store
         $get_areas = DeliverySettings::select('area', 'id_delivery_settings')->where('id_store', $front_store_id)->where('delivery_type', 'area')->first();
         $area_explode = explode(',', isset($get_areas->area) ? $get_areas->area : '');
         $areas = array_filter($area_explode);
 
+
+        // Get Delivery Settings of Current Store
         $key = ([
             'enable_delivery',
             'delivery_option',
         ]);
-
         $delivery_setting = [];
-
-        foreach ($key as $row) {
+        foreach ($key as $row)
+        {
             $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
 
             $delivery_setting[$row] = isset($query->value) ? $query->value : '';
         }
 
+         // Update Current Delivery Code Option
+         if(session()->has('delivery_code_option'))
+         {
+             $d_code_opt = session()->get('delivery_code_option');
+             if(!empty($d_code_opt))
+             {
+                 if(isset($delivery_setting) && !empty($delivery_setting))
+                 {
+                     if(isset($delivery_setting['delivery_option']) && !empty($delivery_setting['delivery_option']))
+                     {
+                         $cur_d_code_opt = $delivery_setting['delivery_option'];
 
-        // minimum spend
-        if ($delivery_setting['delivery_option'] == 'area') {
-            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
-        } else {
-            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+                         if($cur_d_code_opt == 'area')
+                         {
+                             $new_cur_d_code_opt = 'areaname';
+                         }
+                         else
+                         {
+                             $new_cur_d_code_opt = 'postcodes';
+                         }
+
+                         if($new_cur_d_code_opt != $d_code_opt)
+                         {
+                             // Remove Flag Post Code
+                             if(session()->has('flag_post_code'))
+                             {
+                                 session()->forget('flag_post_code');
+                             }
+
+                             // Remove Cart Date
+                             if (session()->has('cart1'))
+                             {
+                                 session()->forget('cart1');
+                             }
+
+                             // Remove Subtotal
+                             if(session()->has('subtotal'))
+                             {
+                                 session()->forget('subtotal');
+                             }
+
+                             // Remove Coupon
+                             if(session()->has('currentcoupon'))
+                             {
+                                 session()->forget('currentcoupon');
+                             }
+
+                             // Remove Products ID
+                             if(session()->has('product_id'))
+                             {
+                                 session()->forget('product_id');
+                             }
+
+                             // Remove Coupon Code
+                             if(session()->has('couponcode'))
+                             {
+                                 session()->forget('couponcode');
+                             }
+
+                             // Remove Coupon Name
+                             if(session()->has('couponname'))
+                             {
+                                 session()->forget('couponname');
+                             }
+
+                             // Remove Header Total
+                             if(session()->has('headertotal'))
+                             {
+                                 session()->forget('headertotal');
+                             }
+
+                             // Remove Free Items
+                             if(session()->has('free_item'))
+                             {
+                                 session()->forget('free_item');
+                             }
+
+                             // Remove Selected Postcode
+                             if(session()->has('selected_postcode'))
+                             {
+                                 session()->forget('selected_postcode');
+                             }
+
+                             // Remove DeliveryCode Option
+                             if(session()->has('delivery_code_option'))
+                             {
+                                 session()->forget('delivery_code_option');
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+
+        // get minimum spend of current postcode
+        if(isset($delivery_setting['delivery_option']) && !empty($delivery_setting['delivery_option']))
+        {
+            if ($delivery_setting['delivery_option'] == 'area')
+            {
+                $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
+            }
+            else
+            {
+                $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+            }
         }
-        $minimum_spend = $deliverysettings->last()->toArray();
+        else
+        {
+            $deliverysettings = array();
+        }
 
-        return view('frontend.pages.menu', ['minimum_spend' => $minimum_spend, 'data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
+        $data_arr_min_spend = [];
+
+        if(isset($deliverysettings) && count($deliverysettings) > 0)
+        {
+            foreach($deliverysettings as $del_settings)
+            {
+                $delivery_type = isset($del_settings->delivery_type) ? $del_settings->delivery_type : '';
+
+                if(!empty($delivery_type))
+                {
+                    if($delivery_type == 'area')
+                    {
+                        $p_codes = isset($del_settings->area) ? $del_settings->area : '';
+                        $p_codes_arr = (!empty($p_codes)) ? array_filter(explode(',',$p_codes)) : [];
+                    }
+                    else
+                    {
+                        $p_codes = isset($del_settings->post_codes) ? $del_settings->post_codes : '';
+                        $p_codes_arr = (!empty($p_codes)) ? array_filter(explode(',',$p_codes)) : [];
+                    }
+                }
+                else
+                {
+                    $p_codes_arr = array();
+                }
+
+                if(count($p_codes_arr) > 0)
+                {
+                    if(session()->has('selected_postcode') && !empty(session()->get('selected_postcode')))
+                    {
+                        $sesion_p_code = session()->get('selected_postcode');
+
+                        //If Valid Post code then get his group settings
+                        if(in_array($sesion_p_code,$p_codes_arr))
+                        {
+                            $data_arr_min_spend['set_id'] = isset($del_settings->id_delivery_settings) ? $del_settings->id_delivery_settings : '';
+                            $data_arr_min_spend['group_name'] = isset($del_settings->name) ? $del_settings->name : '';
+                            $data_arr_min_spend['min_spend'] = isset($del_settings->min_spend) ? $del_settings->min_spend : '';
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!empty($data_arr_min_spend) && count($data_arr_min_spend) > 0)
+        {
+            session()->put('min_spend_array',$data_arr_min_spend);
+        }
+        else
+        {
+            session()->put('min_spend_array',$data_arr_min_spend);
+        }
+
+        if(session()->has('min_spend_array'))
+        {
+            $minimum_spend_setting = session()->get('min_spend_array');
+        }
+        else
+        {
+            $minimum_spend_setting = array();
+        }
+
+
+        if(session()->has('subtotal'))
+        {
+            $subtotal = session()->get('subtotal');
+            if($subtotal == 0 || $subtotal == 0.00)
+            {
+                session()->forget('couponcode');
+                session()->forget('couponname');
+                session()->forget('headertotal');
+            }
+        }
+        else
+        {
+            $subtotal = 0;
+        }
+
+        if(session()->has('couponcode'))
+        {
+            $couponcode = session()->get('couponcode');
+        }
+        else
+        {
+            $couponcode = 0;
+        }
+
+        // Get Delivery Charge
+        $delivery_charge = getDeliveryCharge($subtotal - $couponcode);
+
+        session()->put('delivery_charge',$delivery_charge);
+
+
+        return view('frontend.pages.menu', ['minimum_spend_setting' => $minimum_spend_setting, 'data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
     }
 
 
@@ -1463,19 +1642,30 @@ class MenuController extends Controller
         $drpdwn = isset($request->drpdwn) ? array_filter($request->drpdwn) : '';
 
 
-        if ($is_topping != 0) {
-            if (!empty($checkbox)  && !empty($drpdwn)) {
+        if ($is_topping != 0)
+        {
+            if (!empty($checkbox)  && !empty($drpdwn))
+            {
                 $checkbox = array_merge($checkbox, $drpdwn);
-            } else {
-                if (!empty($checkbox)) {
+            }
+            else
+            {
+                if (!empty($checkbox))
+                {
                     $checkbox = $checkbox;
-                } elseif (!empty($drpdwn)) {
+                }
+                elseif (!empty($drpdwn))
+                {
                     $checkbox = $drpdwn;
-                } else {
+                }
+                else
+                {
                     $checkbox = '';
                 }
             }
-        } else {
+        }
+        else
+        {
             $checkbox = '';
         }
 
@@ -1513,23 +1703,31 @@ class MenuController extends Controller
         session()->put('product_id', $arr);
         session()->save();
 
-        // $category_id = Product_to_category::where('product_id',  $productid)->first();
-
-        // $pro_name = ProductDescription::where('product_id', $productid)->first();
         $cat_id = Product_to_category::where('product_id', $productid)->first();
         $toppingType = ToppingCatOption::where('id_category', $cat_id->category_id)->first();
         $group = unserialize(isset($toppingType->group) ? $toppingType->group : '');
         unset($group['number_group']);
 
-        // minimum spend
-        $DeliveryCollectionSettings = Settings::select('value')->where('store_id', $front_store_id)->where('key', 'delivery_option')->first();
 
-        if ($DeliveryCollectionSettings['value'] == 'area') {
-            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'area')->get();
-        } else {
-            $deliverysettings = DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_store', $front_store_id)->where('delivery_type', 'post_codes')->get();
+        // Minimum Spend
+        if(session()->has('min_spend_array'))
+        {
+            $minimum_spend_setting = session()->get('min_spend_array');
         }
-        $minimum_spend = $deliverysettings->last()->toArray();
+        else
+        {
+            $minimum_spend_setting = array();
+        }
+
+        if(isset($minimum_spend_setting) && count($minimum_spend_setting) > 0)
+        {
+            $minimum_spend_total = isset($minimum_spend_setting['min_spend']) ? $minimum_spend_setting['min_spend'] : 0;
+        }
+        else
+        {
+            $minimum_spend_total = 0;
+        }
+
 
         $delivery_type = session()->get('flag_post_code');
 
@@ -2701,8 +2899,10 @@ class MenuController extends Controller
         }
 
 
-        if (!empty($loopid) || $loopid != '') {
-            if ($loopid <= 0) {
+        if (!empty($loopid) || $loopid != '')
+        {
+            if ($loopid <= 0)
+            {
                 return response()->json([
                     'required_1' => 1,
                 ]);
@@ -2765,7 +2965,9 @@ class MenuController extends Controller
                     ]);
                 }
             }
-        } else {
+        }
+        else
+        {
             if ($userid == 0) {
                 addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
             } else {
@@ -2876,6 +3078,7 @@ class MenuController extends Controller
 
 
         $coupon_html = '';
+        $couponcode = 0;
 
         // Coupon Code
         if (isset($Coupon) && !empty($Coupon)) {
@@ -2915,11 +3118,6 @@ class MenuController extends Controller
             $couponcode_amount = '';
         }
 
-        session()->put('headertotal', $total);
-        // $coupon_html .= '<label>Coupon(' . $Coupon['code'] . ')</label><span> -' . $currency . ' ' . (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) . '</span>';
-        // $sessioncouponcode = session()->put('couponcode', isset($couponcode) ? $couponcode : '');
-        // $sessioncouponname = session()->put('couponname', isset($Coupon['code']) ? $Coupon['code'] : '');
-        // $sessioncurrency = session()->put('currency', $store_setting['config_currency']);
 
         // Get Cart Rule
         $cart_rule = FreeRule::where('id_store', $front_store_id)->first();
@@ -2929,10 +3127,9 @@ class MenuController extends Controller
         } else {
             $cart_rule_total = '';
         }
-
         $cart_rule_html = '';
-
-        if (!empty($cart_rule_total) || $cart_rule_total != '') {
+        if (!empty($cart_rule_total) || $cart_rule_total != '')
+        {
             if ($subtotal >= $cart_rule_total) {
                 $free_explode = isset($cart_rule['id_item']) ? explode(':', $cart_rule['id_item']) : '';
                 $free_items = getFreeItems($free_explode);
@@ -2955,6 +3152,17 @@ class MenuController extends Controller
             }
         }
 
+        // Get Delivery Charge
+        $delivery_charge = getDeliveryCharge($subtotal - $couponcode);
+
+        session()->put('delivery_charge',$delivery_charge);
+        session()->save();
+
+        $total = $total + $delivery_charge;
+        session()->put('headertotal', $total);
+        session()->put('subtotal', $subtotal);
+        session()->put('total', $total);
+
         $subtotl_html = '';
         $headertotal = 0;
         $total_html = '';
@@ -2965,10 +3173,20 @@ class MenuController extends Controller
 
 
 
-        if ($total >= $minimum_spend['min_spend']) {
-            $min_spend = 'true';
-        } else {
-            $min_spend = 'false';
+        if($delivery_type == 'delivery')
+        {
+            if ($total >= $minimum_spend_total)
+            {
+                $min_spend = 'true';
+            }
+            else
+            {
+                $min_spend = 'false';
+            }
+        }
+        else
+        {
+            $min_spend = '';
         }
 
 
@@ -2983,13 +3201,13 @@ class MenuController extends Controller
             'couponcode_amount' => $couponcode_amount,
             'cart_rule_html' => $cart_rule_html,
             'min_spend' => $min_spend,
+            'delivery_charge'=> "$currency $delivery_charge",
         ]);
     }
 
 
     public function updatecart(Request $request)
     {
-
         // Get Current URL
         $currentURL = URL::to("/");
 
@@ -3007,13 +3225,39 @@ class MenuController extends Controller
 
         $mycart = session()->get('cart1');
 
-        // if (session()->has('userid')) {
-        //     $userid = session()->get('userid');
-        // } else {
-        //     $userid = 0;
-        // }
 
+        // Get Delivery Setting
+        $del_key = ([
+            'enable_delivery',
+            'delivery_option',
+        ]);
+        $delivery_setting = [];
+        foreach ($del_key as $row) {
+            $query = Settings::select('value')->where('store_id', $front_store_id)->where('key', $row)->first();
+
+            $delivery_setting[$row] = isset($query->value) ? $query->value : '';
+        }
+
+
+        // Check Flagpostcode Update
+        if(isset($delivery_setting['enable_delivery']) && !empty($delivery_setting['enable_delivery']))
+        {
+            if($delivery_setting['enable_delivery'] == 'collection')
+            {
+                if(session()->has('flag_post_code'))
+                {
+
+                }
+                else
+                {
+                    session()->put('flag_post_code','collection');
+                }
+            }
+        }
         $delivery_type = $request->ordertype;
+
+
+
 
         // minimum spend
         $DeliveryCollectionSettings = Settings::select('value')->where('store_id', $front_store_id)->where('key', 'delivery_option')->first();
@@ -4325,6 +4569,8 @@ class MenuController extends Controller
         }
         $html .= '</table>';
 
+        $couponcode = 0;
+
         // Coupon Code
         if (isset($Coupon) && !empty($Coupon)) {
             $couponcode = 0;
@@ -4353,8 +4599,17 @@ class MenuController extends Controller
             $total = $subtotal + $delivery_charge;
         }
 
+        // Get Delivery Charge
+        $delivery_charge = getDeliveryCharge($subtotal - $couponcode);
 
+        session()->put('delivery_charge',$delivery_charge);
+        session()->save();
 
+        $total = $total + $delivery_charge;
+
+        session()->put('headertotal', $total);
+        session()->put('subtotal', $subtotal);
+        session()->put('total', $total);
 
         $subtotl_html = '';
         $total_html = '';
@@ -4378,10 +4633,8 @@ class MenuController extends Controller
         }
 
 
-
         return response()->json([
-             'cart_products' => $html,
-            // 'cart_products'=> $cart_products,
+            'cart_products' => $html,
             'min_spend' => $min_spend,
             'minimum_spend' => $minimum_spend,
             'subtotal' => $subtotl_html,
@@ -4391,6 +4644,8 @@ class MenuController extends Controller
             'headertotal' => (round($headertotal, 2) <= 0) ? 0 : round($headertotal, 2),
             'couponcode_name' => $couponcode_name,
             'couponcode_amount' => $couponcode_amount,
+            'delivery_charge'=> "$currency $delivery_charge",
+            'total_2'=>"$currency $total",
         ]);
     }
 
@@ -4407,9 +4662,7 @@ class MenuController extends Controller
         $store_data = frontStoreID($currentURL);
         $front_store_id =  $store_data['store_id'];
 
-        //  if(in_array($productid,$pro_id)){
-        //     unset($pro_id['s_'.$productid]);
-        //  }
+
         if ($sizeid == 0) {
             if (in_array($productid, $pro_id)) {
                 unset($pro_id[$productid]);
@@ -4498,6 +4751,26 @@ class MenuController extends Controller
         // } else {
         //     $user_id = 0;
         // }
+
+        if(session()->has('cart1'))
+        {
+            $cart = session()->get('cart1');
+            if(!empty($cart) && count($cart) > 0)
+            {
+                if(isset($cart['size']) && count($cart['size']) == 0)
+                {
+                    unset($cart['size']);
+                }
+
+                if(isset($cart['withoutSize']) && count($cart['withoutSize']) == 0)
+                {
+                    unset($cart['withoutSize']);
+                }
+
+                session()->put('cart1',$cart);
+                session()->save();
+            }
+        }
 
         if(session()->has('currentcoupon'))
         {

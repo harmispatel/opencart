@@ -434,6 +434,7 @@
             @if ($slider_online_searchbox_permission == 1)
                 <div class="order-online wow animate__fadeInUp" data-wow-duration="1s">
                     <strong class="title text-uppercase">order online</strong>
+                    {{-- When Enabled Delivery Method --}}
                     @if ($delivery_setting['enable_delivery'] != 'collection')
                         <div class="srch-input">
                             @if($delivery_setting['delivery_option'] == 'area')
@@ -452,14 +453,24 @@
                             <p>{{ isset($store_slider_settings['slider_online_searchbox_text']) ? $store_slider_settings['slider_online_searchbox_text'] : '' }}</p>
                         </div>
                     @endif
+                    {{-- End When Enabled Delivery Method --}}
+
                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
+
                     <div class="button_content1" style ="">
+                        {{-- If Enable Collection and Both Method --}}
                         @if ($delivery_setting['enable_delivery'] != 'delivery')
-                            <a class="btn btn-green text-uppercase collection_button1">collection</a>
+                            <a class="btn btn-green text-uppercase collection_delivery_button" typeAttr="collection" uriFrom="home">collection</a>
                         @endif
 
+                        {{-- If Enable Delivery and Both Method --}}
                         @if ($delivery_setting['enable_delivery'] != 'collection')
-                            <a class="btn btn-green text-uppercase delivery_button1">delivery</a>
+                            {{-- If Delivery Type is Area --}}
+                            @if($delivery_setting['delivery_option'] == 'area')
+                                <a class="btn btn-green text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="areaname">delivery</a>
+                            @else
+                                <a class="btn btn-green text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="postcodes">delivery</a>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -526,11 +537,17 @@
                                 <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
                                 <div class="button_content1" style ="">
                                     @if ($delivery_setting['enable_delivery'] != 'delivery')
-                                        <a class="btn btn-red text-uppercase collection_button1">collection</a>
+                                        <a class="btn btn-red text-uppercase collection_delivery_button" typeAttr="collection" uriFrom="home">collection</a>
                                     @endif
 
+                                    {{-- If Enable Delivery and Both Method --}}
                                     @if ($delivery_setting['enable_delivery'] != 'collection')
-                                        <a class="btn btn-red text-uppercase delivery_button1">delivery</a>
+                                        {{-- If Delivery Type is Area --}}
+                                        @if($delivery_setting['delivery_option'] == 'area')
+                                            <a class="btn btn-red text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="areaname">delivery</a>
+                                        @else
+                                            <a class="btn btn-red text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="postcodes">delivery</a>
+                                        @endif
                                     @endif
                                 </div>
                             @endif
@@ -621,11 +638,16 @@
                                     <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
                                     <div class="button_content1" style ="">
                                         @if ($delivery_setting['enable_delivery'] != 'delivery')
-                                            <a class="btn btn-green text-uppercase collection_button1">collection</a>
+                                            <a class="btn btn-green text-uppercase collection_delivery_button" typeAttr="collection" uriFrom="home">collection</a>
                                         @endif
 
                                         @if ($delivery_setting['enable_delivery'] != 'collection')
-                                            <a class="btn btn-green text-uppercase delivery_button1">delivery</a>
+                                            {{-- If Delivery Type is Area --}}
+                                            @if($delivery_setting['delivery_option'] == 'area')
+                                                <a class="btn btn-green text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="areaname">delivery</a>
+                                            @else
+                                                <a class="btn btn-green text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="postcodes">delivery</a>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
@@ -674,11 +696,16 @@
 
                                     <div class="button_content1" style ="">
                                         @if ($delivery_setting['enable_delivery'] != 'delivery')
-                                            <a class="btn btn-yellow text-uppercase collection_button1">collection</a>
+                                            <a class="btn btn-yellow text-uppercase collection_delivery_button" typeAttr="collection" uriFrom="home">collection</a>
                                         @endif
 
                                         @if ($delivery_setting['enable_delivery'] != 'collection')
-                                            <a class="btn btn-yellow text-uppercase delivery_button1">delivery</a>
+                                            {{-- If Delivery Type is Area --}}
+                                            @if($delivery_setting['delivery_option'] == 'area')
+                                                <a class="btn btn-yellow text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="areaname">delivery</a>
+                                            @else
+                                                <a class="btn btn-yellow text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="postcodes">delivery</a>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
@@ -748,11 +775,16 @@
                         <div class="text-danger mb-3" style="display: none;" id="search_result1"></div>
                         <div class="button_content1" style ="">
                             @if ($delivery_setting['enable_delivery'] != 'delivery')
-                                <a class="btn btn-red text-uppercase collection_button1">collection</a>
+                                <a class="btn btn-red text-uppercase collection_delivery_button" typeAttr="collection" uriFrom="home">collection</a>
                             @endif
 
                             @if ($delivery_setting['enable_delivery'] != 'collection')
-                                <a class="btn btn-red text-uppercase delivery_button1">delivery</a>
+                                {{-- If Delivery Type is Area --}}
+                                @if($delivery_setting['delivery_option'] == 'area')
+                                    <a class="btn btn-red text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="areaname">delivery</a>
+                                @else
+                                    <a class="btn btn-red text-uppercase collection_delivery_button" typeAttr="delivery" uriFrom="home" delOpt="postcodes">delivery</a>
+                                @endif
                             @endif
                         </div>
                     @endif

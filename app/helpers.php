@@ -20,6 +20,7 @@ use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\CustomerBanIp;
 use App\Models\CustomerIP;
+use App\Models\DeliverySettings;
 use App\Models\Footers;
 use App\Models\FreeItem;
 use App\Models\FreeItemadd;
@@ -45,11 +46,8 @@ use App\Models\Reviews;
 use App\Models\SlidersLayouts;
 use App\Models\ToppingCatOption;
 use App\Models\ToppingOption;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
-
-
-
-
 
 // Function for Get user Details
 function user_details()
@@ -5425,6 +5423,107 @@ function getCoupon()
     return $Coupon;
 }
 
+
+
+// Get Delivery Charge
+function getDeliveryCharge($total)
+{
+    if(session()->has('min_spend_array'))
+    {
+        $min_spend_array = session()->get('min_spend_array');
+    }
+    else
+    {
+        $min_spend_array = array();
+    }
+
+    if($total != 0 || $total != 0.00)
+    {
+        if(!empty($min_spend_array) && count($min_spend_array) > 0)
+        {
+            $group_id = isset($min_spend_array['set_id']) ? $min_spend_array['set_id'] : '';
+
+            if(!empty($group_id))
+            {
+                $get_settings =  DeliverySettings::with(['hasManyDeliveryFeeds'])->where('id_delivery_settings',$group_id)->first();
+
+                if(isset($get_settings['hasManyDeliveryFeeds']) && count($get_settings['hasManyDeliveryFeeds']) > 0)
+                {
+                    $arr_price = array();
+                    foreach($get_settings['hasManyDeliveryFeeds'] as $del_fees)
+                    {
+                        $price_shipping = isset($del_fees->price_shipping) ? $del_fees->price_shipping : '';
+                        $price_upto = isset($del_fees->price_upto) ? $del_fees->price_upto : '';
+
+                        $arr_price[$price_upto] = $price_shipping;
+
+                    }
+
+                    if(isset($arr_price) && count($arr_price) > 0)
+                    {
+                        $last_key = '';
+                        foreach($arr_price as $key => $price)
+                        {
+                            $condition = $key;
+                            $f_price = $price;
+
+                            if(empty($last_key))
+                            {
+                                if($total <= $condition)
+                                {
+                                    $del_price = $f_price;
+                                    break;
+                                }
+                                else
+                                {
+                                    $del_price = 0;
+                                    $last_key = $condition;
+                                }
+                            }
+                            else
+                            {
+                                if($total >= $last_key && $total <= $condition)
+                                {
+                                    $del_price = $f_price;
+                                    break;
+                                }
+                                else
+                                {
+                                    $del_price = 0;
+                                    $last_key = $condition;
+                                }
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        $del_price = 0;
+                    }
+                }
+                else
+                {
+                    $del_price = 0;
+                }
+            }
+            else
+            {
+                $del_price = 0;
+            }
+        }
+        else
+        {
+            $del_price = 0;
+        }
+    }
+    else
+    {
+        $del_price = 0;
+    }
+
+    return number_format($del_price,2);
+
+}
 
 
 

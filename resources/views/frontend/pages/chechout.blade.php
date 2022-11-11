@@ -68,10 +68,6 @@
     if (session()->has('userid'))
     {
         $userid = session()->get('userid');
-
-        // Database cart
-        // $mycart = getuserCart(session()->get('userid'));
-
         $mycart = session()->get('cart1'); // Session
     }
     else
@@ -153,6 +149,16 @@
 
     // Get Current Day
     $current_day = date("N");
+
+
+    if(session()->has('delivery_charge'))
+    {
+        $delivery_charge = session()->get('delivery_charge');
+    }
+    else
+    {
+        $delivery_charge = 0;
+    }
 
 @endphp
 
@@ -480,7 +486,7 @@
                                                         <div class="login-details w-100">
                                                             @if ($delivery_setting['enable_delivery'] != 'delivery')
                                                                 <div class="mb-1">
-                                                                    <input class="form-check-input collection_type" type="radio" name="order" id="collect" {{ $userdeliverytype == 'collection' ? 'checked' : '' }} value="collection">
+                                                                    <input class="form-check-input collection_type collection_delivery_button" type="radio" name="order" id="collect" {{ $userdeliverytype == 'collection' ? 'checked' : '' }} value="collection" typeAttr="collection" uriFrom="checkout">
                                                                     <label class="form-check-label" for="collect">
                                                                         I will collect my order
                                                                     </label>
@@ -489,13 +495,12 @@
 
                                                             @if ($delivery_setting['enable_delivery'] != 'collection')
                                                                 <div>
-                                                                    <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery">
+                                                                    @if ($userdeliverytype == 'delivery')
+                                                                        <input class="form-check-input collection_type" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery" disabled>
+                                                                    @else
+                                                                        <input class="form-check-input collection_type collection_delivery_button" delCheckout="1" type="radio" name="order" id="deliver" {{ $userdeliverytype == 'delivery' ? 'checked' : '' }} value="delivery">
+                                                                    @endif
                                                                     <label class="form-check-label" for="deliver">Deliver to my address</label><br>
-                                                                    {{-- @if ($userdeliverytype == 'delivery')
-                                                                        @if ($store_open_close == 'open' && $session_total <= $minimum_spend['min_spend'])
-                                                                            <span class="text-danger">Minimum delivery is {{ $currency }}{{ $minimum_spend['min_spend'] }}, you must spend {{ $currency }}{{ $minimum_spend['min_spend']-$session_total }} more for the chekout.</span>
-                                                                        @endif
-                                                                    @endif --}}
                                                                 </div>
                                                             @endif
                                                         </div>
@@ -571,15 +576,23 @@
                                                                     <input placeholder="Address line 2:" type="text" id="address_2" name="address_2" value="{{ isset($customer_addr['address_2']) ? $customer_addr['address_2'] : '' }}" class="w-100">
                                                                 </div>
                                                                 <div class="login-details-inr fas fa-address-card w-100">
+                                                                    @php
+                                                                        if(session()->has('selected_postcode'))
+                                                                        {
+                                                                            $session_selected_area = session()->get('selected_postcode');
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            $session_selected_area = "";
+                                                                        }
+                                                                    @endphp
+
                                                                     @if ($delivery_setting['delivery_option'] == 'area')
                                                                         <div class="w-50 d-inline-block float-start">
                                                                             <select name="area" id="area" class="w-100">
                                                                                 <option value="">Select Area</option>
-                                                                                @php
-                                                                                    $old_area = isset($customer_addr['area']) ? $customer_addr['area'] : '';
-                                                                                @endphp
                                                                                 @foreach ($areas as $area)
-                                                                                    <option value="{{ $area }}" {{ $area == $old_area ? 'selected' : '' }}>{{ $area }}</option>
+                                                                                    <option value="{{ $area }}" {{ $area == $session_selected_area ? 'selected' : '' }}>{{ $area }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                             <div class="invalid-feedback" id="areaerr"
@@ -594,7 +607,17 @@
                                                                         </div>
                                                                     @endif
                                                                     <div class="w-50 d-inline-block float-end">
-                                                                        <input placeholder="Postcode" type="text" id="postcode" name="postcode" value="{{ isset($customer_addr['postcode']) ? $customer_addr['postcode'] : '' }}" class="w-100">
+                                                                        @php
+                                                                            if(session()->has('selected_postcode'))
+                                                                            {
+                                                                                $session_postcode = session()->get('selected_postcode');
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                $session_postcode = "";
+                                                                            }
+                                                                        @endphp
+                                                                        <input placeholder="Postcode" type="text" id="postcode" name="postcode" value="{{  $session_postcode }}" class="w-100">
                                                                         <div class="invalid-feedback" id="postcodeerr" style="display: none;text-align: left;">
                                                                         </div>
                                                                     </div>
@@ -756,12 +779,6 @@
                                                                                                             $couponcode = $Coupon['discount'];
                                                                                                         }
                                                                                                     }
-                                                                                                //      else {
-                                                                                                //     session()->forget('couponname');
-                                                                                                //     session()->forget('currentcoupon');
-                                                                                                //     session()->forget('couponcode');
-                                                                                                //     session()->save();
-                                                                                                // }
                                                                                                 $total = $subtotal - $couponcode;
                                                                                             }
                                                                                         } else {
@@ -839,12 +856,6 @@
                                                                                                         $couponcode = $Coupon['discount'];
                                                                                                     }
                                                                                                 }
-                                                                                                // else{
-                                                                                                //     session()->forget('couponname');
-                                                                                                //     session()->forget('currentcoupon');
-                                                                                                //     session()->forget('couponcode');
-                                                                                                //     session()->save();
-                                                                                                // }
                                                                                             $total = $subtotal - $couponcode;
                                                                                         }
                                                                                         else
@@ -855,6 +866,10 @@
                                                                                     @endphp
                                                                                 @endforeach
                                                                             @endif
+
+                                                                            @php
+                                                                                $total = $total + $delivery_charge;
+                                                                            @endphp
                                                                         </tbody>
                                                                     </table>
                                                                 </form>
@@ -900,14 +915,14 @@
                                                                 <table class="table table-responsive">
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td><b>Sub-Total:</b></td>
-                                                                            <td><span><b>{{ $currency }} {{ $subtotal }}</b></span></td>
+                                                                            <td style="text-align: left;"><b>Sub-Total:</b></td>
+                                                                            <td style="text-align:right"><span><b>{{ $currency }} {{ $subtotal }}</b></span></td>
                                                                         </tr>
                                                                         @if (!empty($Coupon) || $Coupon != '')
                                                                             @if ($couponcode != 0)
-                                                                                <tr class="coupon_code">
-                                                                                    <td><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
-                                                                                    <td>
+                                                                                <tr class="CouponCode">
+                                                                                    <td style="text-align: left;"><b>Coupon({{ isset($Coupon['code']) ? $Coupon['code'] : '' }}):</b></td>
+                                                                                    <td style="text-align:right">
                                                                                         <span>
                                                                                             <b>{{ $currency }} -{{ (($couponcode >= $subtotal) ?  $subtotal : number_format($couponcode,2)) }}</b>
                                                                                         </span>
@@ -915,18 +930,24 @@
                                                                                 </tr>
                                                                             @endif
                                                                         @endif
+                                                                        @if ($userdeliverytype == 'delivery')
+                                                                            <tr>
+                                                                                <td style="text-align: left;"><b>Delivery : </b></td>
+                                                                                <td style="text-align:right"><span><b class="del-charge">{{ $currency }}{{ $delivery_charge }}</b></span></td>
+                                                                            </tr>
+                                                                        @endif
                                                                         <tr class="voucher"></tr>
                                                                         <tr id="servicecharge" style="display: none">
-                                                                            <td><b>Service Charge :</b></td>
-                                                                            <td>
+                                                                            <td style="text-align: left;"><b>Service Charge :</b></td>
+                                                                            <td style="text-align:right">
                                                                                 <span id="servicechargeammout">
 
                                                                                 </span>
                                                                             </td>
                                                                         </tr>
-                                                                        <tr class="total">
-                                                                            <td><b>Total to pay:</b></td>
-                                                                            <td><span><b id="total_pay">{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
+                                                                        <tr class="totalCls">
+                                                                            <td style="text-align: left;"><b>Total to pay:</b></td>
+                                                                            <td style="text-align:right"><span><b id="total_pay">{{ $currency }}{{ ($total <= 0) ? 0 : $total }}</b></span></td>
                                                                         </tr>
                                                                         @php
                                                                             $loyalitys =unserialize($loyality_data->value);
@@ -941,7 +962,7 @@
                                                                                         if (isset($loyalitys['minimum']) && ($total >= $loyalitys['minimum'])) {
                                                                                             $award_point = ($total/0.01) * ($loyalitys['rewardsevery']);
                                                                                         }
-                                                                                        echo "<tr><td> <b>points you will earn from this order: $award_point  Point</b></td></tr>" ;
+                                                                                        echo "<tr><td colspan='2'><b>points you will earn from this order: $award_point  Point</b></td></tr>" ;
                                                                                     }
                                                                                 }
                                                                             }
@@ -956,7 +977,7 @@
                                                                                             } else {
                                                                                                 $award_money = ($total/100) * ($loyalitys['collectionaward']);
                                                                                             }
-                                                                                          echo "<tr><td><b>money you will earn from this order: £  $award_money </b></td></tr>" ;
+                                                                                          echo "<tr><td colspan='2'><b>money you will earn from this order: £  $award_money </b></td></tr>" ;
                                                                                         }
                                                                                     }
                                                                                 }
@@ -993,10 +1014,8 @@
                                                             @csrf
                                                             <div style="display: none;">Enter your gift voucher code
                                                                 here:&nbsp;</div>
-                                                            {{-- <div class="login-details-inr fa fa-caret-up w-100 vouchercode d-flex"> --}}
                                                             <div class="login-details-inr w-100 vouchercode d-flex">
                                                                 <input type="text" name="voucher" value="" placeholder="Voucher Code" class="w-75">
-                                                                {{-- <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger"> --}}
                                                                 <button class="ms-2 btn" style="text-transform: uppercase;display: inline-block;" type="submit  ">
                                                                     Apply
                                                                   <span class="spinner-border spinner-border-sm ms-2" id="voucherload" role="status" aria-hidden="true" style="display: none"></span>
@@ -1012,7 +1031,6 @@
                                                             <div style="display: none;">Enter your coupon here:&nbsp;</div>
                                                             <div class="login-details-inr w-100 vouchercode d-flex">
                                                                 <input type="text" name="coupon" value="" placeholder="Coupon Code" class="w-75">
-                                                                {{-- <input style="text-transform: uppercase;" type="submit" value="Apply" class="ms-2 btn btn-danger"> --}}
                                                                 <button class="ms-2 btn" style="text-transform: uppercase;display: inline-block;" type="submit">
                                                                     Apply
                                                                   <span class="spinner-border spinner-border-sm ms-2" id="couponload" role="status" aria-hidden="true" style="display: none"></span>
@@ -1077,14 +1095,13 @@
                             </button>
                              <form action="{{ route('processTransaction') }}" method="post">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}">
+                                {{-- <input type="hidden" name="subtotal" id="subtotal" value="{{ isset($subtotal) ? $subtotal : '' }}"> --}}
                                 <input type="hidden" name="service_charge" id="service_charge">
                                 <input type="hidden" name="couponcode" id="couponcode" value="{{ isset($couponcode) ? $couponcode : '' }}">
                                 <input type="hidden" name="couponname" id="couponname" value="{{ isset($Coupon['code']) ? $Coupon['code'] : '' }}">
                                 <input type="button" value="Pay {{ $currency }} {{ ((round($total , 2) <= 0) ? 0 : round($total , 2)) }}" id="button-payment-method" class="btn back-bt" disabled>
-                                {{-- <a type="hidden" href="{{ route('stripe') }}">Pay {{ $currency }} {{ isset($total) ? $total : '' }}</a> --}}
                                 <input type="hidden" name="currency_code" value="{{ $store_setting['config_currency'] }}">
-                                <input type="hidden" name="total" id="total" value="{{$subtotal}}">
+                                {{-- <input type="hidden" name="total" id="total" value="{{$total}}"> --}}
                             </form>
                         </div>
                     </div>
@@ -1104,14 +1121,10 @@
     {{-- End JS --}}
 
     @php
-    // echo '<pre>';
-    // // print_r($mycart['size']);
-    // echo "<br>";
-    // print_r($mycart);
-    // exit();
         $cart_size_session = isset($mycart['size']) ? $mycart['size'] : '';
         $cart_withoutsize_session = isset($mycart['withoutSize']) ? $mycart['withoutSize'] : '';
-        if(empty($cart_size_session) && empty($cart_withoutsize_session)){
+        if(empty($cart_size_session) && empty($cart_withoutsize_session))
+        {
             $emptycarturl = route('cart');
             echo "<script type='text/javascript'>
                     window.location.replace('".$emptycarturl."');
@@ -1122,11 +1135,13 @@
     {{-- Custom JS --}}
     <script type="text/javascript">
 
+        var d_type = $('input[name="order"]:checked').val();
+        updateCart(d_type);
+
         // Document Script
         $('document').ready(function()
         {
 
-            var d_type = $('input[name="order"]:checked').val();
             if (d_type == 'delivery')
             {
                 $('#deliveryaddress').show();
@@ -1136,7 +1151,6 @@
             {
                 $('#deliveryaddress').hide();
             }
-
 
             // Time Method
             var time = $('.time_select :selected').val();
@@ -1408,32 +1422,6 @@
         // End Delivery Address
 
 
-        // Change Delivery Type
-        $('.collection_type').click(function()
-        {
-            var d_type = $('input[name="order"]:checked').val();
-
-            $.ajax({
-                type: "post",
-                url: "{{ url('setDeliveyType') }}",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    'd_type': d_type,
-                },
-                dataType: "json",
-                success: function(response)
-                {
-                    if (response.success == 1)
-                    {
-                        $('#total_pay').text('');
-                        $('#total_pay').text(response.total_pay);
-                        location.reload();
-                    }
-                }
-            });
-        });
-        // End Change Delivery Type
-
 
         $('#login').click(function(e)
         {
@@ -1446,12 +1434,13 @@
         // Payment Button JS
         $('.pay_btn').on('click', function()
         {
-            // var method_type = $('input[name="payment_method"]:checked').val();
-
             var method_type = $(this).val();
+
             // Uncheck others
             $(this).prop('checked', false);
+
             $('#button-payment-method').prop('disabled', true);
+
             $.ajax({
                 type: "post",
                 url: "{{ route('servicecharge') }}",
@@ -1460,88 +1449,97 @@
                     "method_type" : method_type,
                 },
                 dataType: "json",
-                success: function (response) {
-                    //  alert(response.total)
-                    if (response.error == 1) {
+                success: function (response)
+                {
+                    if (response.error == 1)
+                    {
                         $(this).prop('checked', false);
                         $('#servicecharge').css("display", "none");
                         $('#min_delivery').css('display', 'block');
                         $('.min_delivery').html(response.message);
 
-                        // $('.pirce-value').text('');
-                        $('#button-payment-method').val('');
-                        // $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
-                        $('#button-payment-method').val("CONFIRM");
-                        // $('#button-payment-method').removeAttr("type");
-                        // $('#total').val(response.subtotal);
-                        // $('#service_charge').val(response.service_charge);
-                        $('#button-payment-method').prop('disabled', true);
+                        alert(response.message)
 
+                        $('#button-payment-method').val('');
+                        $('#button-payment-method').val("CONFIRM");
+                        $('#button-payment-method').prop('disabled', true);
 
                         let total = response.total-response.service_charge;
                         $('.pirce-value').text('');
 
                         $('#total_pay').text('');
                         $('#total_pay').text("{{ $currency }} "+ total +"");
-                        // $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
 
                         $('.pirce-value').append(total);
                     }
-                    else{
-                        // alert(response.service_charge);
-                        if (method_type == 3) {
+                    else
+                    {
+                        if (method_type == 3)
+                        {
                             $('#cod').prop('checked',true);
+
                             $('#min_delivery').css('display', 'none');
+
                             $('.pirce-value').text('');
                             $('.pirce-value').append(response.headertotal);
+
                             $('#button-payment-method').val('');
                             $('#button-payment-method').val('CONFIRM');
                             $('#button-payment-method').removeAttr("type").attr("type", "button");
+
                             $('#servicecharge').css("display", "contents");
                             $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+
                             $('#total_pay').text('');
                             $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                            $('#total').val(response.subtotal);
                             $('#service_charge').val(response.service_charge);
                             $('#button-payment-method').prop('disabled', false);
                         }
-                        else if (method_type == 2) { // paypal
-                            // $('#myfoodbasketpayments_gateway1').prop('checked',true);
+                        else if (method_type == 2) // paypal
+                        {
                             $('#myfoodbasketpayments_gateway1').prop('checked', true);
                             $('#min_delivery').css('display', 'none');
+
                             $('.pirce-value').text('');
                             $('.pirce-value').append(response.headertotal);
+
                             $('#button-payment-method').val('');
                             $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
                             $('#button-payment-method').removeAttr("type").attr("type", "submit");
                             $('#button-payment-method').html("<a href='#'>Pay {{ $currency }} "+ response.total +"</a>");
+
                             $('#servicecharge').css("display", "contents");
                             $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+
                             $('#total_pay').text('');
                             $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                            $('#total').val(response.subtotal);
+
                             $('#service_charge').val(response.service_charge)
                             $('#button-payment-method').prop('disabled', false);
                         }
-                        else if (method_type == 1) {  // stripe
-                            // $('#myfoodbasketpayments_gateway').prop('checked',true);
+                        else if (method_type == 1) // stripe
+                        {
                             $('#myfoodbasketpayments_gateway').prop('checked', true);
                             $('#min_delivery').css('display', 'none');
+
                             $('.pirce-value').text('');
                             $('.pirce-value').append(response.headertotal);
+
                             $('#button-payment-method').val('');
                             $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
                             $('#button-payment-method').removeAttr("type").attr("type", "button");
+
                             $('#servicecharge').css("display", "contents");
                             $('#servicechargeammout').html('<b id="del_charge">{{ $currency }} '+ response.service_charge +'</b>');
+
                             $('#total_pay').text('');
                             $('#total_pay').text("{{ $currency }} "+ response.total +"");
-                            $('#total').val(response.subtotal);
+
                             $('#service_charge').val(response.service_charge);
-                            // $.session.set('total', "+ response.total +");
                             $('#button-payment-method').prop('disabled', false);
                         }
-                        else{
+                        else
+                        {
                             $('#button-payment-method').val('');
                             $('#button-payment-method').val("Pay {{ $currency }} "+ response.total +"");
                         }
@@ -1612,49 +1610,6 @@
                 window.location.href = "{{ route('stripe') }}";
             }
 
-            // if (method_type == 1)
-            // {
-            //     $.ajax({
-            //         type: "post",
-            //         url: "{{ url('confirmorder') }}",
-            //         data: {
-            //             "_token": "{{ csrf_token() }}",
-            //             'p_method': method_type,
-            //             'total': total,
-            //             'subtotal': subtotal,
-            //             'couponcode': couponcode,
-            //             'couponname': couponname,
-            //         },
-            //         dataType: "json",
-            //         success: function(response)
-            //         {
-            //             if (response.success == 1)
-            //             {
-            //                 var new_url = response.success_url;
-            //                 window.location = new_url;
-            //             }
-            //         }
-            //     });
-            // }
-
-            // Paypal Payment Getway
-            // if (method_type == 2) {
-            //     // window.location.replace("{{ route('processTransaction') }}");
-            //     $.ajax({
-            //         type: "post",
-            //         url: "{{ route('processTransaction') }}",
-            //         data: {
-            //             "_token": "{{ csrf_token() }}",
-            //             'currencycode' : "{{ $store_setting['config_currency'] }}",
-            //             'total': total,
-            //         },
-            //         dataType: "json",
-            //         success: function (response) {
-            //             alert("Success");
-            //         }
-            //     });
-            // }
-
 
             if (method_type == 3)
             {
@@ -1712,7 +1667,7 @@
                 {
                     $('#address_1').val(response.address_1);
                     $('#address_2').val(response.address_2);
-                    $('#postcode').val(response.postcode);
+                    // $('#postcode').val(response.postcode);
                     $('#city').val(response.city);
                     $('#phone_no').val(response.phone);
                 }
@@ -1831,8 +1786,8 @@
                         $('#voucherSuccess').append(result.success_message);
                         $('.voucher').html('');
                         $('.voucher').append(result.voucher);
-                        $('.total').html('');
-                        $('.total').append(result.total);
+                        $('.totalCls').html('');
+                        $('.totalCls').append(result.total);
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.total);
                         setTimeout(() => {
@@ -1921,22 +1876,22 @@
                         $('#couponError').html('');
                         $('#couponSuccess').html('');
                         $('#couponSuccess').append(result.success_message);
-                        $('.coupon_code').html('');
-                        if ( $(".coupon_code").length ) {
+                        $('.CouponCode').html('');
+                        if ( $(".CouponCode").length ) {
                             /*EXISTS (greater than 0) */
-                            // $('.coupon_code').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
-                            $('.coupon_code').html('');
+                            // $('.CouponCode').html('<td colspan="2"><span style="justify-content: space-around;display:flex;"><b>'+result.couponcode+'</b></span></td>');
+                            $('.CouponCode').html('');
                             if (result.couponcode_name != '' && result.couponcode_amount != '') {
-                                $('.coupon_code').html('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>');
+                                $('.CouponCode').html('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>');
                             }
                         }else{
                             if (result.couponcode != '') {
-                                $('.coupon_code').html('');
+                                $('.CouponCode').html('');
                                 $('<td><b>Coupon('+ result.couponcode_name +'):</b></td><td><span><b>{{ $currency }}-'+ result.couponcode_amount +'</b></span></td>').insertBefore(".voucher");
                             }
                         }
-                        $('.total').html('');
-                        $('.total').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
+                        $('.totalCls').html('');
+                        $('.totalCls').append('<td colspan="2"><b style="justify-content: space-around;display:flex;">'+result.total+'</b></td>');
                         $('.pirce-value').text('');
                         $('.pirce-value').append(result.headertotal);
                         setTimeout(() => {

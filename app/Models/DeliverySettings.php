@@ -15,7 +15,7 @@ class DeliverySettings extends Model
     // Has Many Relation with "oc_delivery_feeds" table
     public function hasManyDeliveryFeeds()
     {
-        return $this->hasMany(DeliverySettingFeeds::class,'id_delivery_settings','id_delivery_settings');
+        return $this->hasMany(DeliverySettingFeeds::class,'id_delivery_settings','id_delivery_settings')->orderBy('price_upto','ASC');
     }
 
 }

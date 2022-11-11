@@ -27,14 +27,28 @@ class StripeController extends Controller
      */
     public function stripePost(Request $request)
     {
-        $servicecharge = paymentdetails();
+        $payment_details = paymentdetails();
+
+        if(session()->has('total'))
+        {
+            $total = session()->get('total');
+        }
+        else
+        {
+            $total = 0.00;
+        }
+
+        $service_charge = isset($request->stripe_service_charge) ? $request->stripe_service_charge : 0.00;
+
+        $total += $service_charge;
+
         // dynamic stripe secret key
-        $stripesecret = $servicecharge["stripe"]["stripe_secretkey"] ? $servicecharge["stripe"]["stripe_secretkey"] : '';
+        $stripesecret = $payment_details["stripe"]["stripe_secretkey"] ? $payment_details["stripe"]["stripe_secretkey"] : '';
+        
+
         Stripe\Stripe::setApiKey($stripesecret);
         Stripe\Charge::create ([
-                // "amount" => 100 * 100,
-                // "amount" => ceil($request->total) * 100,
-                "amount" => round($request->total,2) * 100,
+                "amount" => round($total,2) * 100,
                 "currency" => $request->currency_code,
                 "source" => $request->stripeToken,
                 "description" => "This payment is tested purpose"

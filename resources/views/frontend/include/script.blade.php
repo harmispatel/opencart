@@ -153,221 +153,159 @@
     // Document Script
     $(document).ready(function()
     {
-
-        // Collection Button 1
-        $('.collection_button1').click(function()
+        // Collection & Delivery Button
+        $('.collection_delivery_button').click(function()
         {
-            var catpath = location.href + 'menu';
-            var type = 'collection';
+            var delCheckout = $(this).attr('delCheckout');
 
-            $.ajax({
-                type: "POST",
-                url: "{{ url('checkZipCode') }}",
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    'type' : type,
-                },
-                dataType: "json",
-                success: function (data){
-                    if(data.success == 'collection')
-                    window.location = catpath;
-                }
-            });
-        });
-        // End Collection Button 1
+            var redirect_url = $(this).attr('uriFrom');
+            var type = $(this).attr('typeAttr');
+            var menuredirecturl = location.href + 'menu';
 
-
-        // Collection Button 2
-        $('.collection_button2').click(function()
-        {
-            var catpath = location.href;
-            var type = 'collection';
-
-            $.ajax({
-                type: "POST",
-                url: "{{ url('checkZipCode') }}",
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    'type' : type,
-                },
-                dataType: "json",
-                success: function (data){
-                    location.reload();
-                    // alert('HI')
-                    // if(data.success == 'collection'){
-                    //     window.location = catpath;
-
-                    // }
-                }
-            });
-        });
-        // End Collection Button 2
-
-
-        // Delivery Button 1
-        $('.delivery_button1').click(function()
-        {
-            $('#search_result1').css('display','none');
-
-            var keyword = $('#search_input1').val() == undefined ? $('select[name=search_input2] option').filter(':selected').val() : $('#search_input1').val().trim();
-
-            var checkbox = 1;
-
-            if((keyword.length > 0) || (checkbox == 0))
+            if(delCheckout == 1)
             {
-                $('#search_input1').removeClass('postcode-input-error');
-                $('div.enter_postcode p').removeClass('postcode-error');
-                $('#loading_icon1').css('display','block');
-
                 $.ajax({
                     type: "POST",
                     url: "{{ url('checkZipCode') }}",
-                    data:
-                    {
+                    data:{
                         "_token": "{{ csrf_token() }}",
-                        'keyword' : keyword,
-                        'checkbox' : checkbox,
+                        'delCheckout' : delCheckout,
                     },
                     dataType: "json",
-                    success: function (data)
+                    success: function (response)
                     {
-                        if($('.store_list').length > 0)
-                        {
-                            $('.store_list').remove();
-                            $('#loading_icon1').css('display','none');
-                        }
-
-                        if(data.success != 'EXIST')
-                        {
-                            $('#search_result1').html(data.error);
-                            $('#search_result1').css('display','block');
-                            $('.store_list').css('color','red');
-                            $('div.enter_postcode p').css('display','none');
-                            $('.store_list').removeClass('wrap_row');
-                            setTimeout(function ()
-                            {
-                                $('div.enter_postcode p').css('display','block');
-                                $('#search_result1').css('display','none');
-                            }, 5000);
-                        }
-                        else
-                        {
-                            var catpath = location.href + 'menu';
-                            window.location = catpath;
-                        }
-                    },
-                    error: function()
-                    {
-                        $('#search_result1').css('display','none');
-                        $('#loading_icon1').css('display','none');
-                        $('.store_list').css('color','red');
-                        $('div.enter_postcode p').css('display','none');
-                        $('.store_list').removeClass('wrap_row');
-                    }
-                });
-            }
-            else
-            {
-                $('div.enter_postcode p').addClass('postcode-error');
-                $('#loading_icon1').css('display','none');
-
-                if($('.store_list').length > 0)
-                {
-                    $('.store_list').remove();
-                }
-
-                if(keyword.length <= 0)
-                {
-                    $('#search_input1').addClass('postcode-input-error');
-                }
-            }
-        });
-        // End Delivery Button 1
-
-
-        // Delivery Button 2
-        $('.delivery_button2').click(function()
-        {
-            $('#search_result1').css('display','none');
-
-            var keyword = $('#search_input1').val() == undefined ? $('select[name=search_input2] option').filter(':selected').val() : $('#search_input1').val().trim();
-
-            var checkbox = 1;
-
-            if((keyword.length > 0) || (checkbox == 0))
-            {
-                $('#search_input1').removeClass('postcode-input-error');
-                $('div.enter_postcode p').removeClass('postcode-error');
-                $('#loading_icon1').css('display','block');
-
-                $.ajax({
-                    type: "POST",
-                    url: "{{ url('checkZipCode') }}",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        'keyword' : keyword,
-                        'checkbox' : checkbox,
-                    },
-                    dataType: "json",
-                    success: function (data)
-                    {
-                        if($('.store_list').length > 0)
-                        {
-                            $('.store_list').remove();
-                            $('#loading_icon1').css('display','none');
-                        }
-
-                        if(data.success != 'EXIST')
-                        {
-                            $('#search_result1').html(data.error);
-                            $('#search_result1').css('display','block');
-                            $('.store_list').css('color','red');
-                            $('div.enter_postcode p').css('display','none');
-                            $('.store_list').removeClass('wrap_row');
-                            $('#loading_icon1').css('display','none');
-                            setTimeout(function ()
-                            {
-                                $('div.enter_postcode p').css('display','block');
-                                $('#search_result1').css('display','none');
-                            }, 5000);
-
-                        }
-                        else
+                        if(response.success == 1)
                         {
                             location.reload();
                         }
+                    }
+                });
+                return false;
+            }
+
+            if(type == 'collection')
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('checkZipCode') }}",
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        'type' : type,
                     },
-                    error: function()
+                    dataType: "json",
+                    success: function (response)
                     {
-                        $('#search_result1').css('display','none');
-                        $('#loading_icon1').css('display','none');
-                        $('.store_list').css('color','red');
-                        $('div.enter_postcode p').css('display','none');
-                        $('.store_list').removeClass('wrap_row');
+                        if(response.success == 1)
+                        {
+                            if(response.checkout_type == 'collection')
+                            {
+                                if(redirect_url == 'home')
+                                {
+                                    window.location = menuredirecturl;
+                                }
+                                else
+                                {
+                                    location.reload();
+                                }
+                            }
+                        }
                     }
                 });
             }
-            else
+            else if(type == 'delivery')
             {
-                $('div.enter_postcode p').addClass('postcode-error');
-                $('#loading_icon1').css('display','none');
-                if($('.store_list').length > 0)
+                $('#search_result1').css('display','none');
+
+                // Get Delivery Option
+                var delivery_option = $(this).attr('delOpt');
+
+                // Get Post Code or Area Name
+                if(delivery_option == 'areaname')
                 {
-                    $('.store_list').remove();
+                    var keyword = $('select[name=search_input2] option').filter(':selected').val();
+                }
+                else
+                {
+                    var keyword = $('#search_input1').val().trim();
                 }
 
-                if(keyword.length <= 0)
+                if(keyword == '')
                 {
+                    $('div.enter_postcode p').addClass('postcode-error');
+                    $('#loading_icon1').css('display','none');
                     $('#search_input1').addClass('postcode-input-error');
+                    $('#search_store').addClass('postcode-input-error');
+                    return false;
+
                 }
+                else
+                {
+                    $('div.enter_postcode p').removeClass('postcode-error');
+                    $('#loading_icon1').css('display','block');
+                    $('#search_input1').removeClass('postcode-input-error');
+                    $('#search_store').removeClass('postcode-input-error');
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('checkZipCode') }}",
+                        data:{
+                            "_token": "{{ csrf_token() }}",
+                            'type' : type,
+                            'delivery_option': delivery_option,
+                            'keyword': keyword,
+                        },
+                        dataType: "json",
+                        success: function (response)
+                        {
+                            if(response.success == 1)
+                            {
+                                $('#loading_icon1').css('display','none');
+
+                                if(response.checkout_type == 'delivery')
+                                {
+                                    if(redirect_url == 'home')
+                                    {
+                                        window.location = menuredirecturl;
+                                    }
+                                    else
+                                    {
+                                        location.reload();
+                                    }
+                                }
+                            }
+
+                            if(response.error == 1)
+                            {
+                                $('#loading_icon1').css('display','none');
+                                $('#search_result1').html('');
+                                $('#search_result1').html(response.message);
+                                $('#search_result1').css('display','block');
+                                $('.store_list').css('color','red');
+                                $('div.enter_postcode p').css('display','none');
+                                $('.store_list').removeClass('wrap_row');
+
+                                setTimeout(function ()
+                                {
+                                    $('div.enter_postcode p').css('display','block');
+                                    $('#search_result1').css('display','none');
+                                    $('#search_input1').val('');
+                                }, 7000);
+                            }
+                        }
+                    });
+
+                }
+
             }
+
+
         });
-        // End Delivery Button 2
+        // End Collection & Delivery Button
 
 
         // Auto Complete for Postcode
         $('#search_input1').autocomplete({
-            delay: 500,
+            delay: 200,
             minLength: 2,
             source: function(request, response)
             {
@@ -412,8 +350,8 @@
                             $('.store_list').removeClass('wrap_row');
                             setTimeout(function ()
                             {
-                                    $('div.enter_postcode p').css('display','block');
-                                    $('#search_result1').css('display','none');
+                                $('div.enter_postcode p').css('display','block');
+                                $('#search_result1').css('display','none');
                             }, 5000);
                         }
                     }
@@ -617,6 +555,59 @@
         });
     });
     // End Customer Login
+
+
+    // UpdateCart
+    function updateCart(oType)
+    {
+        $.ajax({
+            type: "post",
+            url: "{{ route('updatecart')}}",
+            dataType: "json",
+            data:
+            {
+                "_token": "{{ csrf_token() }}",
+                'ordertype': oType,
+            },
+            success: function (response)
+            {
+                $('.empty-box').html('');
+                $('.empty-box').html(response.cart_products);
+
+                // Sub Total
+                $('.sub-total').html('');
+                $('.sub-total').append(response.subtotal);
+
+                // Total
+                $('.total').html('');
+                $('.total').append(response.total);
+
+                // Total 2
+                $('#total_pay').html('');
+                $('#total_pay').append(response.total_2);
+
+                // Header Total
+                $('.pirce-value').text('');
+                $('.pirce-value').append(response.headertotal);
+
+                // Delivery Charge
+                $('.del-charge').html('');
+                $('.del-charge').append(response.delivery_charge);
+
+
+                if (response.couponcode_name != '' && response.couponcode_amount != '')
+                {
+                    $('.coupon_code').html('');
+                    $('.coupon_code').css('display','block');
+                    $('.coupon_code').html('<label id="coupontext">Coupon('+ response.couponcode_name +')</label><span>-'+ response.couponcode_amount +'</span>');
+                }
+                else
+                {
+                    $('.addnewcoupon').css('display','block');
+                }
+            }
+        });
+    }
 
 
 </script>
