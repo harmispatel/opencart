@@ -624,11 +624,11 @@ class CategoryController extends Controller
 
 
 
-        if(!empty($chk_dup_sort_order) || $chk_dup_sort_order != ''){
-            $request->validate([
-                'sortorder' => 'required|unique:oc_category,sort_order',
-            ]);
-        }
+        // if(!empty($chk_dup_sort_order) || $chk_dup_sort_order != ''){
+        //     $request->validate([
+        //         'sortorder' => 'required|unique:oc_category,sort_order',
+        //     ]);
+        // }
 
         $currentURL = public_url();
         // update Category Details

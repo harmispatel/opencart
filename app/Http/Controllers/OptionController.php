@@ -197,6 +197,7 @@ class OptionController extends Controller
         else
         {
             Settings::where('key',$key)->delete();
+
             $html = '';
             $html .= '<button class="btn btn-xs btn-secondary" onclick="newModel(1)">Enabled</button>';
             $html .= '<button class="btn btn-xs btn-danger" onclick="newModel(0)">Disabled</button>';
@@ -348,28 +349,72 @@ class OptionController extends Controller
     // Get Product By Category
     public function toppinggetproduct($id)
     {
-        $cat_product = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $id)->orderBy('product_id','DESC')->get();
+        // Current Store ID
 
-        $productsize = ToppingSize::where('id_category', $id)->get();
+        $current_store_id = currentStoreId();
 
-        $html = '';
-        $html .= '<option value="" disabled selected> -- Select Product -- </option>';
-        foreach ($cat_product as $product) {
-            $html .= '<option value="'.$product->product_id.'">'.$product->pname.'</option>';
+        $user_details = user_details();
+        if(isset($user_details))
+        {
+            $user_group_id = $user_details['user_group_id'];
+        }
+        $user_shop_id = $user_details['user_shop'];
+
+        if($id != 0){
+            // $cat_product = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $id)->orderBy('product_id','DESC')->get();
+            // $cat_product = Product_to_category::with(['hasManyProduct','hasOneDescription'])->where('category_id', $id)->orderBy('product_id','DESC')->get();
+            $cat_product = Product_to_category::with(['hasOneProductDescription'])->where('category_id', $id)->orderBy('product_id','DESC')->get();
+
+            // $productsize = ToppingSize::where('id_category', $id)->get();
+
+            // Get Topping Size By Current Store
+            $productsize = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->where('category_id', $id)->whereHas('hasManyToppingSize',function ($q)
+            {
+                $q->where('id_size','!=','');
+            })->get();
+        }
+        else{
+
+            // $cat_product = Product_to_category::with(['hasManyProduct','hasOneDescription','hasOneProductToStore'])->orderBy('product_id','DESC')->first();
+            // $cat_product = Product_to_category::select('p.*', 'pd.name as pname')->join('oc_product as p', 'p.product_id', '=', 'oc_product_to_category.product_id')->join('oc_product_description as pd', 'pd.product_id', '=', 'p.product_id')->where('category_id', $id)->orderBy('product_id','DESC')->get();
+            $cat_product = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$current_store_id)->get();
+
+            // $productsize = ToppingSize::where('id_category', $id)->get();
+
+            // Get Topping Size By Current Store
+            $productsize = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->whereHas('hasManyToppingSize',function ($q)
+            {
+                $q->where('id_size','!=','');
+            })->get();
+
         }
 
-        $productSize = '';
-        $productSize .= '<option value="" disabled selected> -- Select Product Size -- </option>';
-        foreach ($productsize as $size) {
-            $productSize .= '<option value="'.$size->id_size.'">'.$size->size.'</option>';
-        }
 
 
-        return response()->json([
-            'success' => 1,
-            'products' => $html,
-            'productsize' => $productSize,
-        ]);
+
+            $html = '';
+            $html .= '<option value="" selected> * </option>';
+            foreach ($cat_product as $product) {
+                $html .= '<option value="'.$product->product_id.'">'.$product['hasOneProductDescription']['pname'].'</option>';
+            }
+
+            $productSize = '';
+            $productSize .= '<option value="" selected> * </option>';
+            foreach ($productsize as $product)
+            {
+                foreach ($product['hasManyToppingSize'] as $size)
+                {
+                    $productSize .= '<option value="'.$size->id_size.'">'.$size->size.'</option>';
+                }
+            }
+
+
+            return response()->json([
+                'success' => 1,
+                'products' => $html,
+                'productsize' => $productSize,
+            ]);
+
     }
     // End Get Product By Category
 
@@ -764,7 +809,7 @@ class OptionController extends Controller
 
         $html .= '<td class="align-middle"><select name="order_type" id="order_type_'.$map_id.'"><option value="*"'; ($map_details->order_type == '*') ? $html .= 'selected' : ''; $html .='>*</option><option value="delivery"'; ($map_details->order_type == 'delivery') ? $html .= 'selected' : ''; $html .='>Delivery</option><option value="collection"'; ($map_details->order_type == 'collection') ? $html .= 'selected' : ''; $html .='>Collection</option></select><input type="hidden" name="map_id" id="map_id_'.$map_id.'" value="'.$map_details->id.'">';
 
-        $html .= '<td class="align-middle"><select onchange="getproduct(this);" name="category" id="category_'.$map_id.'"><option value=""> -- Select Category -- </option>';
+        $html .= '<td class="align-middle"><select onchange="getproduct(this);" name="category" id="category_'.$map_id.'"><option value=""> * </option>';
         foreach($categoriesbystore as $category)
         {
             $html .= '<option value="'.$category->hasOneCategoryDescription->category_id.'"';
@@ -773,7 +818,7 @@ class OptionController extends Controller
         }
         $html .= '</select></td>';
 
-        $html .= '<td class="align-middle"><select class="product" name="product" id="product_'.$map_id.'"><option value=""> -- Select Product -- </option>';
+        $html .= '<td class="align-middle"><select class="product" name="product" id="product_'.$map_id.'"><option value=""> * </option>';
         foreach($productsbystore as $product)
         {
             $html .= '<option value="'.$product->hasOneProductDescription->product_id.'"';
@@ -784,7 +829,7 @@ class OptionController extends Controller
 
         $html .= '<td class="align-middle"><input type="text" value="'.$map_details->topping_rename.'" name="topping_rename" id="topping_rename_'.$map_id.'"></td>';
 
-        $html .= '<td class="align-middle"><select class="productsize" name="size" id="size_'.$map_id.'"><option value=""> -- Select Size -- </option>';
+        $html .= '<td class="align-middle"><select class="productsize" name="size" id="size_'.$map_id.'"><option value=""> * </option>';
         foreach($toppingsizebystore as $size)
         {
             foreach($size->hasManyToppingSize as $tsize)

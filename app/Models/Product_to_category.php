@@ -45,10 +45,21 @@ class Product_to_category extends Model
         return $this->hasOne(Product::class,'product_id','product_id');
     }
 
+    // public function hasOneProductToStore()
+    // {
+    //     return $this->hasOne(ProductStore::class,'product_id','product_id');
+    // }
+
     // Has One Relation with "oc_product_description" table
     public function hasOneDescription()
     {
         return $this->hasOne(ProductDescription::class,'product_id','product_id');
+    }
+
+    // Has One Relation with "oc_product_description" table
+    public function hasOneProductDescription()
+    {
+        return $this->hasOne(ProductDescription::class,'product_id','product_id')->select(['product_id','name as pname']);
     }
 
     // Has One Relation with "oc_topping_product_price_size" table

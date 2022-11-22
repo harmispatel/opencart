@@ -293,16 +293,16 @@
                                                                                     {{ $omapping->order_type }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ isset($omapping->hasOneCategoryDescription->cname) ? $omapping->hasOneCategoryDescription->cname : '' }}
+                                                                                    {{ isset($omapping->hasOneCategoryDescription->cname) ? $omapping->hasOneCategoryDescription->cname : '*' }}
                                                                                 </td>
                                                                                 <td>
-                                                                                    {{ isset($omapping->hasOneProductDescription->pname) ? $omapping->hasOneProductDescription->pname : '' }}
+                                                                                    {{ isset($omapping->hasOneProductDescription->pname) ? $omapping->hasOneProductDescription->pname : '*' }}
                                                                                 </td>
                                                                                 <td>
                                                                                     {{ $omapping->topping_rename }}
                                                                                 </td>
                                                                                 @php
-                                                                                    $toppingname = isset($omapping->hasOneToppingSize->sizename) ? $omapping->hasOneToppingSize->sizename : '';
+                                                                                    $toppingname = isset($omapping->hasOneToppingSize->sizename) ? $omapping->hasOneToppingSize->sizename : '*';
                                                                                     $sizename = html_entity_decode($toppingname);
                                                                                 @endphp
                                                                                 <td>
@@ -465,9 +465,9 @@
 
         html += '<td class="align-middle"><select name="order_type"><option value="*">*</option><option value="delivery">Delivery</option><option value="collection">Collection</option></select><input type="hidden" name="top_id" value="{{ $topping->id_topping }}"></td>';
 
-        html += '<td class="align-middle"><select name="category" onchange="getproduct(this);"><option value=""> -- Select Category -- </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select name="category" onchange="getproduct(this);"><option value=""> * </option>@foreach($categoriesbystore as $category)<option value="{{ isset($category->hasOneCategoryDescription->category_id) ? $category->hasOneCategoryDescription->category_id : '' }}">{{ isset($category->hasOneCategoryDescription->cname) ? $category->hasOneCategoryDescription->cname : '' }}</option>@endforeach</select></td>';
 
-        html += '<td class="align-middle"><select class="product" name="product"><option value=""> -- Select Product -- </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ isset($product->hasOneProductDescription->pname) ? $product->hasOneProductDescription->pname : '' }}</option>@endforeach</select></td>';
+        html += '<td class="align-middle"><select class="product" name="product"><option value=""> * </option>@foreach($productsbystore as $product)<option value="{{ $product->hasOneProductDescription->product_id }}">{{ isset($product->hasOneProductDescription->pname) ? $product->hasOneProductDescription->pname : '' }}</option>@endforeach</select></td>';
 
         html += '<td class="align-middle"><input type="text" name="topping_rename"></td>';
 
@@ -509,9 +509,11 @@
     function getproduct(elem) {
         let cat_id = $(elem).val();
 
+        let categoryId = (cat_id != '') ? cat_id : 0;
+
         $.ajax({
             type: "get",
-            url: "{{ url('toppinggetproduct') }}/" + cat_id,
+            url: "{{ url('toppinggetproduct') }}/" + categoryId,
             dataType: "json",
             success: function (response) {
                 $('.product').empty().append(response.products);

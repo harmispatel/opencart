@@ -14,6 +14,18 @@ class ProductOptionMapping extends Model
     protected $primaryKey = 'id';
     public $timestamps=false;
 
+     // Has One Relation with "oc_topping" table
+    function hasOneTopping()
+    {
+        return $this->hasOne(Topping::class,'id_topping','topping_id');
+    }
+
+    // Has One Relation with "oc_topping_option" table
+    public function hasManySubTopping()
+    {
+        return $this->hasMany(ToppingOption::class,'id_group_topping','topping_id');
+    }
+
     // Has One Relation with "oc_category_description" table
     public function hasOneCategoryDescription()
     {
