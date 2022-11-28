@@ -49,6 +49,8 @@ use App\Models\ToppingOption;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
 
+use function PHPUnit\Framework\isNan;
+
 // Function for Get user Details
 function user_details()
 {
@@ -5534,6 +5536,11 @@ function addtoCart($request,$productid,$qty,$sizeid, $is_topping, $checkbox,$ext
 {
     $delivery_type = session()->get('flag_post_code');
 
+    if(!is_numeric($extra_price))
+    {
+        $extra_price = 0.00;
+    }
+
     if(session()->has('cart1'))
     {
         $arr = session()->get('cart1');
@@ -5639,13 +5646,12 @@ function addtoCart($request,$productid,$qty,$sizeid, $is_topping, $checkbox,$ext
     {
         if(isset($arr['size'][$sizeid]))
         {
-            $arr['size'][$sizeid]['quantity'] = $qty;
-
             if($mul_qty != 1)
             {
+                $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + $qty;
                 if(isset($arr['size'][$sizeid]['del_price']))
                 {
-                    $arr['size'][$sizeid]['del_price'] = $arr['size'][$sizeid]['del_price'] * $arr['size'][$sizeid]['quantity'];
+                    $arr['size'][$sizeid]['del_price'] = isset($data['del_price']) ? $data['del_price'] : 0.00;
                 }
 
                 if(isset($arr['size'][$sizeid]['col_price']))
@@ -5657,6 +5663,10 @@ function addtoCart($request,$productid,$qty,$sizeid, $is_topping, $checkbox,$ext
                 {
                     $arr['size'][$sizeid]['main_price'] = isset($data['main_price']) ? $data['main_price'] : 0.00;
                 }
+            }
+            else
+            {
+                $arr['size'][$sizeid]['quantity'] = $qty;
             }
 
             if(isset($data['topping']))
@@ -5676,10 +5686,11 @@ function addtoCart($request,$productid,$qty,$sizeid, $is_topping, $checkbox,$ext
     {
         if(isset($arr['withoutSize'][$productid]))
         {
-            $arr['withoutSize'][$productid]['quantity'] =  $qty;
 
             if($mul_qty != 1)
             {
+                $arr['withoutSize'][$productid]['quantity'] =  $arr['withoutSize'][$productid]['quantity'] + $qty;
+
                 if(isset($arr['withoutSize'][$productid]['del_price']))
                 {
                     $arr['withoutSize'][$productid]['del_price'] = isset($data['del_price']) ? $data['del_price'] : 0.00;
@@ -5694,6 +5705,10 @@ function addtoCart($request,$productid,$qty,$sizeid, $is_topping, $checkbox,$ext
                 {
                     $arr['withoutSize'][$productid]['main_price'] = isset($data['main_price']) ? $data['main_price'] : 0.00;
                 }
+            }
+            else
+            {
+                $arr['withoutSize'][$productid]['quantity'] =  $qty;
             }
 
             if(isset($data['topping']))

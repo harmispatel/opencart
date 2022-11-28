@@ -2311,7 +2311,7 @@ It's used for View Menu.
             var total_price = parseFloat($('.total_pay_price').attr('base_price').substr(1));
             var checked_checkbox = $('.item-option-popup input[type="checkbox"]:checked');
             var checked_radio = $('.item-option-popup input[type="radio"]:checked');
-            var extra_price = 0.00;
+            var extra_price = 0;
 
             $(checked_checkbox).each(function(i, e)
             {
@@ -2325,7 +2325,7 @@ It's used for View Menu.
                     {
                         price = $(e).attr('price');
                         total_price += parseFloat(price);
-                        extra_price += price;
+                        extra_price +=  parseFloat(price);
                     }
                 }
             });
@@ -2339,7 +2339,7 @@ It's used for View Menu.
                 {
                     var to_add_price = price * (count_no - no_free) ;
                     total_price += parseFloat(to_add_price);
-                    extra_price += to_add_price;
+                    extra_price += parseFloat(to_add_price);
                 }
             });
 
