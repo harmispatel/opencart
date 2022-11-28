@@ -654,14 +654,14 @@ class OptionController extends Controller
         }
         $mapping->topping_id = isset($topping_id) ? $topping_id : '';
         $mapping->topping_rename = isset($topping_rename) ? $topping_rename : '';
-        $mapping->order_type = isset($order_type) ? $order_type : '';
-        $mapping->category_id = isset($category_id) ? $category_id : 0;
-        $mapping->product_id = isset($product_id) ? $product_id : 0;
+        $mapping->order_type = !empty($order_type) ? $order_type : '*';
+        $mapping->category_id = !empty($category_id) ? $category_id : '*';
+        $mapping->product_id = !empty($product_id) ? $product_id : '*';
         $mapping->min_item = isset($min_item) ? $min_item : '';
         $mapping->max_item = isset($max_item) ? $max_item : '';
         $mapping->days = isset($days) ? $days : '';
-        $mapping->start_time = isset($start) ? $start : '00:00:00';
-        $mapping->end_time = isset($end) ? $end : '00:00:00';
+        $mapping->start_time = !empty($start) ? $start : '0:00';
+        $mapping->end_time = !empty($end) ? $end : '0:00';
         $mapping->no_free = isset($numFree) ? $numFree : 0;
         $mapping->price = isset($price) ? $price : 0;
         $mapping->style = isset($style) ? $style : '';
@@ -701,14 +701,14 @@ class OptionController extends Controller
         // Update Mapping
         $mapping = ProductOptionMapping::find($map_id);
         $mapping->topping_rename = isset($topping_rename) ? $topping_rename : '';
-        $mapping->order_type = isset($order_type) ? $order_type : '';
-        $mapping->category_id = isset($category_id) ? $category_id : 0;
-        $mapping->product_id = isset($product_id) ? $product_id : 0;
+        $mapping->order_type = !empty($order_type) ? $order_type : '*';
+        $mapping->category_id = !empty($category_id) ? $category_id : '*';
+        $mapping->product_id = !empty($product_id) ? $product_id : '*';
         $mapping->min_item = isset($min_item) ? $min_item : '';
         $mapping->max_item = isset($max_item) ? $max_item : '';
         $mapping->days = isset($days) ? $days : '';
-        $mapping->start_time = isset($start) ? $start : '00:00:00';
-        $mapping->end_time = isset($end) ? $end : '00:00:00';
+        $mapping->start_time = !empty($start) ? $start : '0:00';
+        $mapping->end_time = !empty($end) ? $end : '0:00';
         $mapping->no_free = isset($numFree) ? $numFree : 0;
         $mapping->price = isset($price) ? $price : 0;
         $mapping->style = isset($style) ? $style : '';
@@ -769,15 +769,26 @@ class OptionController extends Controller
         {
             // Get Categories By Current Store
             $categoriesbystore = CategorytoStore::with(['hasOneCategoryDescription'])->where('store_id','=',$current_store_id)->get();
+            // dd($categoriesbystore->toArray());
 
             // Get Products By Current Store
-            $productsbystore = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$current_store_id)->get();
+            if ($map_details->category_id != 0) {
+                $productsbystore = Product_to_category::with(['hasOneProductDescription'])->where('category_id', $map_details->category_id)->orderBy('product_id','DESC')->get();
 
-            // Get Topping Size By Current Store
-            $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->whereHas('hasManyToppingSize',function ($q)
-            {
-                $q->where('id_size','!=','');
-            })->get();
+                // Get Topping Size By Current Store
+                $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->where('category_id', $map_details->category_id)->whereHas('hasManyToppingSize',function ($q)
+                {
+                    $q->where('id_size','!=','');
+                })->get();
+            }
+            else{
+                $productsbystore = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$current_store_id)->get();
+
+                $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->whereHas('hasManyToppingSize',function ($q)
+                {
+                    $q->where('id_size','!=','');
+                })->get();
+            }
 
             //    Get Sub Options
             $suboptions = Topping::where('store_topping',$current_store_id)->where('id_topping','!=',$map_details->topping_id)->get();
@@ -788,13 +799,37 @@ class OptionController extends Controller
             $categoriesbystore = CategorytoStore::with(['hasOneCategoryDescription'])->where('store_id','=',$user_shop_id)->get();
 
             // Get Products By Current Store
-            $productsbystore = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$user_shop_id)->get();
+            // $productsbystore = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$user_shop_id)->get();
+            // if ($map_details->category_id != 0) {
+            //     $productsbystore = Product_to_category::with(['hasOneProductDescription'])->where('category_id', $map_details->category_id)->orderBy('product_id','DESC')->get();
+            // }
+            // else{
+            //     $productsbystore = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$user_shop_id)->get();
+            // }
 
-            // Get Topping Size By Current Store
-            $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$user_shop_id)->whereHas('hasManyToppingSize',function ($q)
-            {
-                $q->where('id_size','!=','');
-            })->get();
+            if ($map_details->category_id != 0) {
+                $productsbystore = Product_to_category::with(['hasOneProductDescription'])->where('category_id', $map_details->category_id)->orderBy('product_id','DESC')->get();
+
+                // Get Topping Size By Current Store
+                $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->where('category_id', $map_details->category_id)->whereHas('hasManyToppingSize',function ($q)
+                {
+                    $q->where('id_size','!=','');
+                })->get();
+            }
+            else{
+                $productsbystore = ProductStore::with(['hasOneProductDescription'])->where('store_id','=',$current_store_id)->get();
+
+                $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$current_store_id)->whereHas('hasManyToppingSize',function ($q)
+                {
+                    $q->where('id_size','!=','');
+                })->get();
+            }
+
+            // // Get Topping Size By Current Store
+            // $toppingsizebystore = CategorytoStore::with(['hasManyToppingSize'])->where('store_id','=',$user_shop_id)->whereHas('hasManyToppingSize',function ($q)
+            // {
+            //     $q->where('id_size','!=','');
+            // })->get();
 
             //    Get Sub Options
             $suboptions = Topping::where('store_topping',$user_shop_id)->where('id_topping','!=',$map_details->topping_id)->get();
@@ -809,16 +844,18 @@ class OptionController extends Controller
 
         $html .= '<td class="align-middle"><select name="order_type" id="order_type_'.$map_id.'"><option value="*"'; ($map_details->order_type == '*') ? $html .= 'selected' : ''; $html .='>*</option><option value="delivery"'; ($map_details->order_type == 'delivery') ? $html .= 'selected' : ''; $html .='>Delivery</option><option value="collection"'; ($map_details->order_type == 'collection') ? $html .= 'selected' : ''; $html .='>Collection</option></select><input type="hidden" name="map_id" id="map_id_'.$map_id.'" value="'.$map_details->id.'">';
 
-        $html .= '<td class="align-middle"><select onchange="getproduct(this);" name="category" id="category_'.$map_id.'"><option value=""> * </option>';
+        $html .= '<td class="align-middle"><select onchange="getproduct(this);" name="category" id="category_'.$map_id.'"><option value="*"> * </option>';
         foreach($categoriesbystore as $category)
         {
-            $html .= '<option value="'.$category->hasOneCategoryDescription->category_id.'"';
-            ($category->hasOneCategoryDescription->category_id == $map_details->category_id) ? $html .= 'selected' : '';
-            $html .='>'.$category->hasOneCategoryDescription->cname.'</option>';
+            if (isset($category->hasOneCategoryDescription) && $category->hasOneCategoryDescription != '') {
+                $html .= '<option value="'.$category->hasOneCategoryDescription->category_id.'"';
+                ($category->hasOneCategoryDescription->category_id == $map_details->category_id) ? $html .= 'selected' : '';
+                $html .='>'.$category->hasOneCategoryDescription->cname.'</option>';
+            }
         }
         $html .= '</select></td>';
 
-        $html .= '<td class="align-middle"><select class="product" name="product" id="product_'.$map_id.'"><option value=""> * </option>';
+        $html .= '<td class="align-middle"><select class="product" name="product" id="product_'.$map_id.'"><option value="*"> * </option>';
         foreach($productsbystore as $product)
         {
             $html .= '<option value="'.$product->hasOneProductDescription->product_id.'"';
@@ -829,7 +866,7 @@ class OptionController extends Controller
 
         $html .= '<td class="align-middle"><input type="text" value="'.$map_details->topping_rename.'" name="topping_rename" id="topping_rename_'.$map_id.'"></td>';
 
-        $html .= '<td class="align-middle"><select class="productsize" name="size" id="size_'.$map_id.'"><option value=""> * </option>';
+        $html .= '<td class="align-middle"><select class="productsize" name="size" id="size_'.$map_id.'"><option value="*"> * </option>';
         foreach($toppingsizebystore as $size)
         {
             foreach($size->hasManyToppingSize as $tsize)

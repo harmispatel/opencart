@@ -20,6 +20,7 @@ use App\Models\Customer;
 use App\Models\FreeItem;
 use App\Models\FreeRule;
 use App\Models\ProductDescription;
+use App\Models\ProductOptionMapping;
 use App\Models\ToppingProductPriceSize;
 use App\Models\ToppingCatOption;
 use App\Models\Topping;
@@ -27,6 +28,7 @@ use App\Models\ToppingOption;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
@@ -170,8 +172,6 @@ class MenuController extends Controller
     // Function For Show Menu Page
     public function index()
     {
-
-
         $prod_id = session()->get('product_id');
         // if(isset($prod_id)){
         $cat_id = Product_to_category::where('product_id', $prod_id)->first();
@@ -1607,10 +1607,133 @@ class MenuController extends Controller
         session()->put('delivery_charge',$delivery_charge);
 
 
-        return view('frontend.pages.menu', ['minimum_spend_setting' => $minimum_spend_setting, 'data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule]);
+        // categories array for New Module
+        $cat_sql = DB::table('oc_topping_cat_option')->select('*')->join('oc_product_to_category','id_category','=','category_id');
+
+        $mode_setting = Settings::where('group','config')->where('key','new_module_status')->where('store_id',$front_store_id)->first();
+
+		$new_module_status = isset($mode_setting['value']) ? $mode_setting['value'] : 0;
+
+        if($new_module_status == 1)
+        {
+            $catArr = $this->getCatIdMapping();
+            $cat_sql->whereIn('id_category',$catArr);
+        }
+        else
+        {
+            $cat_sql->whereIn('id_category',(function ($query) use ($front_store_id)
+            {
+                $query->from('oc_category_to_store')
+                    ->select('category_id')
+                    ->where('store_id','=',$front_store_id);
+            }));
+        }
+
+	    $cat_res = $cat_sql->get();
+        $categories_arr = [];
+
+        foreach($cat_res as $row)
+        {
+            $row->group = unserialize($row->group);
+            $categories_arr[$row->product_id] = $row ;
+        }
+
+        // Get Store Toppings
+        $store_top = DB::table('oc_topping')->select('*')->join('oc_topping_option','oc_topping.id_topping','=','oc_topping_option.id_group_topping')->where('store_topping','=',$front_store_id);
+        $store_top_result = $store_top->get();
+
+        $p_toppings = [];
+
+        foreach($store_top_result as $t)
+        {
+            $t->sub_option = unserialize($t->sub_option);
+            $p_toppings[$t->id_topping][] = $t;
+        }
+
+        return view('frontend.pages.menu', ['minimum_spend_setting' => $minimum_spend_setting, 'data' => $data, 'delivery_setting' => $delivery_setting, 'areas' => $areas, 'Coupon' => $Coupon, 'cart_rule' => $cart_rule,'categories_arr'=>$categories_arr,'p_toppings'=>$p_toppings]);
     }
 
 
+
+    // Get Cat Mapping
+    public function getCatIdMapping()
+    {
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Front Store ID
+        $store_id = $store_data['store_id'];
+
+        // Order Type
+        $order_type = (session()->has('flag_post_code')) ? session()->get('flag_post_code') : '';
+
+        $cat_array = array();
+
+        // Current Time
+        $current_time = date("G:i", strtotime(date("h:i:sa")));
+
+        $weekday = date("l");
+        $weekday = strtolower($weekday);
+
+        switch($weekday)
+        {
+            case 'monday':
+                $weekday = "Mon";
+                break;
+            case 'tuesday':
+                $weekday = "Tue";
+                break;
+            case 'wednesday':
+                $weekday = "Wed";
+                break;
+            case 'thursday':
+                $weekday = "Thurs";
+                break;
+            case 'friday':
+                $weekday = "Fri";
+                break;
+            case 'saturday':
+                $weekday = "Sat";
+                break;
+            default:
+                $weekday = "Sun";
+                break;
+        }
+
+        $sql = DB::table('oc_product_options_mapping')->select('category_id')->where('store_id',$store_id)
+                ->where(function ($query)  use ($current_time)
+                {
+                    $query->where('start_time','<',$current_time)->orWhere('start_time','=','00:00:00');
+                })
+                ->where(function ($query) use ($current_time)
+                {
+                    $query->where('end_time','>=',$current_time)->orWhere('end_time','=','00:00:00');
+                });
+
+        if($order_type != '')
+        {
+            $sql->where(function ($query) use ($order_type)
+            {
+                $query->where('order_type','=','*')->orWhere('order_type','=',$order_type);
+            });
+        }
+        $sql->orderBy('sort_order','ASC');
+
+        $cat_query = $sql->get();
+
+        if(count($cat_query) > 0)
+        {
+            foreach($cat_query as $key =>$catdata)
+            {
+               $cat_array  [] = $catdata->category_id;
+            }
+            $cat_array = array_unique($cat_array);
+        }
+        return $cat_array;
+    }
 
 
     // Chnage Free Item
@@ -1636,31 +1759,47 @@ class MenuController extends Controller
     // Function For Add To Cart
     public function addToCart(Request $request)
     {
-
         $is_topping = isset($request->topping) ? $request->topping : 0;
+        $new_model = isset($request->new_model) ? $request->new_model : 0;
         $checkbox = isset($request->checkbox) ? array_filter($request->checkbox) : '';
         $drpdwn = isset($request->drpdwn) ? array_filter($request->drpdwn) : '';
-
+        $select_check_array = isset($request->select_check_array) ? $request->select_check_array : [];
+        $extra_price = isset($request->extra_price) ? $request->extra_price : 0.00;
+        $mul_qty = 1;
 
         if ($is_topping != 0)
         {
-            if (!empty($checkbox)  && !empty($drpdwn))
+            if($new_model == 1)
             {
-                $checkbox = array_merge($checkbox, $drpdwn);
-            }
-            else
-            {
-                if (!empty($checkbox))
+                if(count($select_check_array) > 0)
                 {
-                    $checkbox = $checkbox;
-                }
-                elseif (!empty($drpdwn))
-                {
-                    $checkbox = $drpdwn;
+                    $checkbox = $select_check_array;
                 }
                 else
                 {
                     $checkbox = '';
+                }
+            }
+            else
+            {
+                if (!empty($checkbox)  && !empty($drpdwn))
+                {
+                    $checkbox = array_merge($checkbox, $drpdwn);
+                }
+                else
+                {
+                    if (!empty($checkbox))
+                    {
+                        $checkbox = $checkbox;
+                    }
+                    elseif (!empty($drpdwn))
+                    {
+                        $checkbox = $drpdwn;
+                    }
+                    else
+                    {
+                        $checkbox = '';
+                    }
                 }
             }
         }
@@ -1694,9 +1833,12 @@ class MenuController extends Controller
             $arr = array();
         }
 
-        if ($sizeid != 0) {
+        if ($sizeid != 0)
+        {
             $arr['s_' . $sizeid] = $productid;
-        } else {
+        }
+        else
+        {
             $arr[$productid] = $productid;
         }
 
@@ -2906,31 +3048,31 @@ class MenuController extends Controller
                 return response()->json([
                     'required_1' => 1,
                 ]);
-            } else {
-                if ($loopid <= 50) {
-                    if ($userid == 0) {
-                        if ($sizeid == 0) {
-                            session()->forget('cart1.withoutSize.' . $productid);
-                            for ($i = 1; $i <= $loopid; $i++) {
-                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
-                            }
-                        } else {
-                            session()->forget('cart1.size.' . $sizeid);
-                            for ($i = 1; $i <= $loopid; $i++) {
-                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
-                            }
+            }
+            else
+            {
+                if ($loopid <= 50)
+                {
+                    if ($userid == 0)
+                    {
+                        if ($sizeid == 0)
+                        {
+                            addtoCart($request, $productid,$loopid, $sizeid, $is_topping, $checkbox,$extra_price,$mul_qty);
                         }
-                    } else {
-                        if ($sizeid == 0) {
-                            session()->forget('cart1.withoutSize.' . $productid);
-                            for ($i = 1; $i <= $loopid; $i++) {
-                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
-                            }
-                        } else {
-                            session()->forget('cart1.size.' . $sizeid);
-                            for ($i = 1; $i <= $loopid; $i++) {
-                                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
-                            }
+                        else
+                        {
+                            addtoCart($request, $productid,$loopid, $sizeid, $is_topping, $checkbox,$extra_price,$mul_qty);
+                        }
+                    }
+                    else
+                    {
+                        if ($sizeid == 0)
+                        {
+                            addtoCart($request, $productid,$loopid, $sizeid, $is_topping, $checkbox,$extra_price,$mul_qty);
+                        }
+                        else
+                        {
+                            addtoCart($request, $productid,$loopid, $sizeid, $is_topping, $checkbox,$extra_price,$mul_qty);
                         }
                         // $cart = getuserCart($userid);
                         // if ($sizeid == 0) {
@@ -2969,9 +3111,9 @@ class MenuController extends Controller
         else
         {
             if ($userid == 0) {
-                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox);
+                addtoCart($request, $productid, 1,$sizeid, $is_topping, $checkbox,$extra_price,0);
             } else {
-                addtoCart($request, $productid, $sizeid, $is_topping, $checkbox); //Session
+                addtoCart($request, $productid, 1,$sizeid, $is_topping, $checkbox,$extra_price,0); //Session
 
                 // Database
                 // $cart = getuserCart($userid);
@@ -4768,6 +4910,15 @@ class MenuController extends Controller
                 }
 
                 session()->put('cart1',$cart);
+                session()->save();
+            }
+
+            $check_cart = session()->get('cart1');
+
+            if(isset($check_cart) && count($check_cart) == 0)
+            {
+                session()->forget('subtotal');
+                session()->forget('total');
                 session()->save();
             }
         }
@@ -8052,5 +8203,197 @@ class MenuController extends Controller
         $filterResult = Coupon::select('code')->where('code', 'LIKE', '%' . $coupon . '%')->where('store_id', $front_store_id)->get();
         return response()->json($filterResult);
     }
+
+
+    // Get Topping Option for New Module
+    public  function get_topping_options(Request $request)
+	{
+        // Check User ID
+        if (session()->has('userid'))
+        {
+            $userid = session()->get('userid');
+        }
+        else
+        {
+            $userid = 0;
+        }
+
+        // Get Current URL
+        $currentURL = URL::to("/");
+
+        // Get Store Settings & Other Settings
+        $store_data = frontStoreID($currentURL);
+
+        // Get Current Front Store ID
+        $front_store_id =  $store_data['store_id'];
+
+        // Product ID
+        $id = $request->product_id;
+
+        // Category ID
+        $cat_id = $request->category_id;
+
+        // Size ID
+        $size_id = $request->size_id;
+
+        if($size_id == 'undefined')
+        {
+            $size = '*';
+        }
+        else
+        {
+            $size = $size_id;
+        }
+
+        // Order Type
+        $order_type = (session()->has('flag_post_code')) ? session('flag_post_code') : '';
+
+        // Get Current Time
+        $current_time = date("G:i", strtotime(date("h:i:sa")));
+
+        $mapping = ProductOptionMapping::
+        select('sub_option', 'id', 'topping_id')
+        ->where(function ($query) use ($order_type)
+        {
+            $query->where('order_type','=','*')->orWhere('order_type','=',$order_type);
+        })
+        ->where(function ($query) use ($id)
+        {
+            $query->where('product_id','=',$id)->orWhere('product_id','=','*');
+        })
+        ->where(function ($query) use ($cat_id)
+        {
+            $query->where('category_id','=',$cat_id)->orWhere('category_id','=','*');
+        })
+        ->where(function ($query) use ($size)
+        {
+            $query->where('size','=','')->orWhere('size','=','*')->orWhere('size','=',$size);
+        })
+        ->where(function ($query)
+        {
+            $query->where('days','=','*')->orWhere('days','=','null')->orWhere('days','like','%'.date('D').'%');
+        })
+        ->where(function ($query) use ($current_time)
+        {
+            $query->where('start_time','<=',$current_time)->orWhere('start_time','=','00:00:00');
+        })
+        ->where(function ($query) use ($current_time)
+        {
+            $query->where('end_time','>=',$current_time)->orWhere('end_time','=','00:00:00');
+        })
+        ->where('store_id','=',$front_store_id)
+        ->orderBy('sort_order','ASC');
+
+        $mappingq = $mapping->get();
+        $mappingrowid = [];
+
+        if(count($mappingq) > 0)
+        {
+            foreach($mappingq as $mappingrow)
+            {
+
+                $mappingrowid[] = $mappingrow['id'];
+                $mappingtoppingid[] = $mappingrow['topping_id'];
+            }
+        }
+
+        if(empty($mappingrowid))
+        {
+            $result['noresults'] = true;
+        }
+        else
+        {
+            $mappingtoppingid  = array_unique($mappingtoppingid);
+            $mappingtoppingid = implode(',',$mappingtoppingid);
+
+
+            $sql = Product::select('*', 'oc_product_description.name as product_name')->join('oc_product_description','oc_product.product_id','=','oc_product_description.product_id')->join('oc_product_to_category','oc_product.product_id','=','oc_product_to_category.product_id')->join('oc_category_description','oc_category_description.category_id','=',   'oc_product_to_category.category_id')->join('oc_topping_cat_option','oc_topping_cat_option.id_category','=','oc_product_to_category.category_id')->where('oc_product.product_id','=',$id);
+            $result = $sql->first();
+            $result['topping_ids'] = $mappingtoppingid;
+            $result['size_base']   = $size_id;
+
+            $opt_groups = [];
+            $opt_group = DB::table('oc_product_options_mapping')->select('id', 'topping_id as id_group_option', 'min_item as min_check', 'max_item as  max_check', 'no_free', 'price', 'style as set_type', 'sort_order', 'size', 'sub_option',  DB::raw("IF(min_item != 0, 1, 0) as set_require"), 'topping_rename')->whereIn('id',$mappingrowid);
+            $opt_group_result = $opt_group->get();
+            foreach($opt_group_result as $options_group)
+            {
+                $opt_groups[$options_group->sort_order][] = $options_group;
+            }
+            $result['options_group'] = $opt_groups;
+
+
+            $topping_sql = ToppingOption::whereIn('id_group_topping',explode(',',$mappingtoppingid));
+            $toppings = $topping_sql->get();
+            $toppings_arr = [];
+            foreach($toppings as $key => $topping)
+            {
+                $topping['sub_option'] = unserialize($topping['sub_option']);
+                $toppings_arr[$topping['id_group_topping']][]=$topping;
+            }
+            $result['toppings'] = $toppings_arr;
+
+
+            $toppings_detail_arr = [];
+            $topping_detail_sql = Topping::whereIn('id_topping',explode(',',$mappingtoppingid));
+            $toppings_detail = $topping_detail_sql->get();
+            foreach($toppings_detail as $key => $topping)
+            {
+                $toppings_detail_arr[$topping['id_topping']] = $topping;
+            }
+            $result['toppings_detail'] = $toppings_detail_arr;
+        }
+
+        return response()->json($result);
+	}
+
+
+    function addToCartTest(Request $request)
+    {
+        $toppings = isset($request->topping) ? $request->topping : '';
+        $extra_price = isset($request->extra_price) ? $request->extra_price : 0.00;
+        $tp_array = [];
+
+        foreach($toppings as $topping)
+        {
+            foreach($topping as $key => $tp)
+            {
+                if($key != 'qty')
+                {
+                    $tp_array[] = $tp;
+                }
+            }
+        }
+
+        $final_tp_array = array_filter($tp_array);
+
+        $topping_opt_name_array = [];
+
+        if(count($final_tp_array) > 0)
+        {
+            foreach($final_tp_array as $tp_name_id)
+            {
+                $oc_tp_option = ToppingOption::where('id_topping_option',$tp_name_id)->first();
+                $tp_name = isset($oc_tp_option['name']) ? $oc_tp_option['name'] : '';
+                $topping_opt_name_array[] = $tp_name;
+            }
+        }
+
+        if(count($topping_opt_name_array) > 0)
+        {
+            $name_arr = $topping_opt_name_array;
+        }
+        else
+        {
+            $name_arr = '';
+        }
+
+        return response()->json([
+            'success' => 1,
+            'extra_price' => $extra_price,
+            'topping_names'=>$name_arr,
+        ]);
+
+    }
+
 }
 

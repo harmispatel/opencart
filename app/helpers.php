@@ -4034,6 +4034,7 @@ function frontStoreID($currentURL)
         'suspend_description',
         'suspend_permanently',
         'suspend_logo',
+        'new_module_status'
     ]);
     $data['store_settings'] = [];
     foreach($store_key as $row)
@@ -5529,7 +5530,7 @@ function getDeliveryCharge($total)
 
 
 // Function for Add to Cart
-function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
+function addtoCart($request,$productid,$qty,$sizeid, $is_topping, $checkbox,$extra_price=0,$mul_qty)
 {
     $delivery_type = session()->get('flag_post_code');
 
@@ -5545,7 +5546,7 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
     if ($sizeid != 0)
     {
         $product = Product::with(['hasOneToppingProductPriceSize' => function ($q) use ($sizeid) {
-            $q->where('id_product_price_size', $sizeid);
+            $q->where('id_product_price_size',$sizeid);
         }])->where('product_id', $productid)->first();
 
         if($delivery_type == 'delivery')
@@ -5554,11 +5555,11 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
 
             if($del_price == 0 || $del_price == 0.00)
             {
-                $data['del_price'] = $product->hasOneToppingProductPriceSize['price'];
+                $data['del_price'] = $product->hasOneToppingProductPriceSize['price'] + $extra_price;
             }
             else
             {
-                $data['del_price'] = $del_price;
+                $data['del_price'] = $del_price + $extra_price;
             }
 
         }
@@ -5568,14 +5569,14 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
 
             if($col_price == 0 || $col_price == 0.00)
             {
-                $data['col_price'] = $product->hasOneToppingProductPriceSize['price'];
+                $data['col_price'] = $product->hasOneToppingProductPriceSize['price'] + $extra_price;
             }
             else
             {
-                $data['col_price'] = $col_price;
+                $data['col_price'] = $col_price + $extra_price;
             }
         }
-        $data['main_price'] = $product->hasOneToppingProductPriceSize['price'];
+        $data['main_price'] = $product->hasOneToppingProductPriceSize['price'] + $extra_price;
         $data['size'] = isset($product->hasOneToppingProductPriceSize->hasOneToppingSize['size']) ? $product->hasOneToppingProductPriceSize->hasOneToppingSize['size'] : '';
 
         if($is_topping == 1)
@@ -5597,11 +5598,11 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
 
             if($del_price == 0 || $del_price == 0.00)
             {
-                $data['del_price'] = $product->price;
+                $data['del_price'] = $product->price + $extra_price;
             }
             else
             {
-                $data['del_price'] = $del_price;
+                $data['del_price'] = $del_price + $extra_price;
             }
         }
         elseif($delivery_type == 'collection')
@@ -5610,14 +5611,14 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
 
             if($col_price == 0 || $col_price == 0.00)
             {
-                $data['col_price'] = $product->price;
+                $data['col_price'] = $product->price + $extra_price;
             }
             else
             {
-                $data['col_price'] = $col_price;
+                $data['col_price'] = $col_price + $extra_price;
             }
         }
-        $data['main_price'] = $product->price;
+        $data['main_price'] = $product->price + $extra_price;
 
         if($is_topping == 1)
         {
@@ -5631,14 +5632,32 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
     $data['description'] = $product->hasOneProductDescription['description'];
     $data['image'] = $product->image;
     $data['model'] = $product->model;
-    $data['quantity'] = 1;
+    $data['quantity'] = $qty;
     $data['product_id'] = $productid;
 
     if ($sizeid != 0)
     {
         if(isset($arr['size'][$sizeid]))
         {
-            $arr['size'][$sizeid]['quantity'] = $arr['size'][$sizeid]['quantity'] + 1;
+            $arr['size'][$sizeid]['quantity'] = $qty;
+
+            if($mul_qty != 1)
+            {
+                if(isset($arr['size'][$sizeid]['del_price']))
+                {
+                    $arr['size'][$sizeid]['del_price'] = $arr['size'][$sizeid]['del_price'] * $arr['size'][$sizeid]['quantity'];
+                }
+
+                if(isset($arr['size'][$sizeid]['col_price']))
+                {
+                    $arr['size'][$sizeid]['col_price'] = isset($data['col_price']) ? $data['col_price'] : 0.00;
+                }
+
+                if(isset($arr['size'][$sizeid]['main_price']))
+                {
+                    $arr['size'][$sizeid]['main_price'] = isset($data['main_price']) ? $data['main_price'] : 0.00;
+                }
+            }
 
             if(isset($data['topping']))
             {
@@ -5657,7 +5676,25 @@ function addtoCart($request,$productid,$sizeid, $is_topping, $checkbox)
     {
         if(isset($arr['withoutSize'][$productid]))
         {
-            $arr['withoutSize'][$productid]['quantity'] = $arr['withoutSize'][$productid]['quantity'] + 1;
+            $arr['withoutSize'][$productid]['quantity'] =  $qty;
+
+            if($mul_qty != 1)
+            {
+                if(isset($arr['withoutSize'][$productid]['del_price']))
+                {
+                    $arr['withoutSize'][$productid]['del_price'] = isset($data['del_price']) ? $data['del_price'] : 0.00;
+                }
+
+                if(isset($arr['withoutSize'][$productid]['col_price']))
+                {
+                    $arr['withoutSize'][$productid]['col_price'] = isset($data['col_price']) ? $data['col_price'] : 0.00;
+                }
+
+                if(isset($arr['withoutSize'][$productid]['main_price']))
+                {
+                    $arr['withoutSize'][$productid]['main_price'] = isset($data['main_price']) ? $data['main_price'] : 0.00;
+                }
+            }
 
             if(isset($data['topping']))
             {

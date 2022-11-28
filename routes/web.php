@@ -418,6 +418,8 @@ Route::get('filemanager',[FilemanagerController::class,'index'])->name('filemana
 Route::group(['middleware' => 'Suspend'], function () {
     Route::get('/', [HomeControllerFront::class, 'index'])->name('home');
     Route::get('menu', [MenuController::class, 'index'])->name('menu');
+    Route::post('newModulegetTopping', [MenuController::class, 'get_topping_options'])->name('newModulegetTopping');
+    Route::post('addToCartTests', [MenuController::class, 'addToCartTest'])->name('addToCartTests');
     Route::get('contact',[ContactUsController::class, 'index'])->name('contact');
     Route::post('changeFreeItem', [MenuController::class, 'changeFreeItem'])->name('changeFreeItem');
     Route::post('setDeliveyType', [MenuController::class, 'setDeliveyType'])->name('setDeliveyType');
